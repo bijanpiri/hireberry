@@ -1,4 +1,8 @@
-var express = require("express");
+var express = require("express")
+	, passport = require('passport')
+ 	, util = require('util')
+  	, TwitterStrategy = require('passport-twitter').Strategy;
+
 var app = express();
 
 app.use(express.logger());
