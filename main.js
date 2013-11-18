@@ -54,8 +54,8 @@ var express = require('express')
   , util = require('util')
   , TwitterStrategy = require('passport-twitter').Strategy;
 
-var TWITTER_CONSUMER_KEY = "--insert-twitter-consumer-key-here--";
-var TWITTER_CONSUMER_SECRET = "--insert-twitter-consumer-secret-here--";
+var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
+var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
 
 
 // Passport session setup.
@@ -81,7 +81,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitterStrategy({
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
-    callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+    callbackURL: "http://booltin.heroku.com/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
     // asynchronous verification, for effect...
