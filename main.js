@@ -1,24 +1,7 @@
 var express = require("express");
 var app = express();
+
 app.use(express.logger());
-
-app.get('/', function(request, response) {
-  response.send('Hello World!');
-});
-
-var port = process.env.PORT || 5000;
-app.listen(port, function() {
-  console.log("Listening on " + port);
-});
-/*
-// These two lines are required to initialize Express in Cloud Code.
-var express = require('express');
-
-var app = express();
- 
-// Global app configuration section
-app.set('views', 'cloud/views');  // Specify the folder to find templates
-app.set('view engine', 'ejs');    // Set the template engine
 app.use(express.bodyParser());    // Middleware for reading request body
 app.use(express.session({ secret: 'keyboard cat' }));
 
@@ -34,6 +17,23 @@ passport.use(new TwitterStrategy({
       done(null, user);
   }
 ));
+
+app.get('/', function(request, response) {
+  response.send('Hello World!');
+});
+
+app.get('/auth/twitter', passport.authenticate('twitter'));
+
+app.get('/auth/twitter/callback', 
+  passport.authenticate('twitter', { successRedirect: '/',
+                                     failureRedirect: '/login' }));
+
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});
+/*
+
 
 // Redirect the user to Twitter for authentication.  When complete, Twitter
 // will redirect the user back to the application at
