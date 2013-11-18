@@ -74,8 +74,16 @@ passport.use(new TwitterStrategy({
   function(token, tokenSecret, profile, done) {
     process.nextTick(function () {
       return done(null, profile);
-    }
-    });
+  	});
+  }));
+
+passport.use(new TwitterStrategy({
+    consumerKey: 'IrzgMx7fEYybvrN25eiv1w',
+    consumerSecret: 'gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0',
+    callbackURL: "http://www.example.com/auth/twitter/callback"
+  },
+  function(token, tokenSecret, profile, done) {
+      done(null, user);
   }
 ));
 
