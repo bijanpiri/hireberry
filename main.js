@@ -4,6 +4,12 @@ var app = express();
 app.use(express.logger());
 app.use(express.bodyParser());    // Middleware for reading request body
 app.use(express.session({ secret: 'keyboard cat' }));
+app.use(express.cookieParser());
+app.use(express.methodOverride());
+app.use(express.session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(app.router);
 
 var passport = require('passport')
 var TwitterStrategy = require('passport-twitter').Strategy;
