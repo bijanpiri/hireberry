@@ -1,54 +1,3 @@
-/*
-var express = require("express")
-	, passport = require('passport')
- 	, util = require('util')
-  	, TwitterStrategy = require('passport-twitter').Strategy;
-
-var app = express();
-
-app.use(express.logger());
-app.use(express.bodyParser());    // Middleware for reading request body
-app.use(express.session({ secret: 'keyboard cat' }));
-app.use(express.cookieParser());
-app.use(express.methodOverride());
-app.use(express.session({ secret: 'keyboard cat' }));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(app.router);
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-passport.use(new TwitterStrategy({
-    consumerKey: 'IrzgMx7fEYybvrN25eiv1w',
-    consumerSecret: 'gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0',
-    callbackURL: "http://www.example.com/auth/twitter/callback"
-  },
-  function(token, tokenSecret, profile, done) {
-      done(null, user);
-  }
-));
-
-app.get('/', function(request, response) {
-  response.send('Hello World!');
-});
-
-app.get('/auth/twitter', passport.authenticate('twitter'));
-
-app.get('/auth/twitter/callback', 
-  passport.authenticate('twitter', { successRedirect: '/',
-                                     failureRedirect: '/login' }));
-
-var port = process.env.PORT || 5000;
-app.listen(port, function() {
-  console.log("Listening on " + port);
-});
-*/
 var express = require('express')
   , passport = require('passport')
   , util = require('util')
@@ -76,16 +25,6 @@ passport.use(new TwitterStrategy({
       return done(null, profile);
   	});
   }));
-
-passport.use(new TwitterStrategy({
-    consumerKey: 'IrzgMx7fEYybvrN25eiv1w',
-    consumerSecret: 'gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0',
-    callbackURL: "http://www.example.com/auth/twitter/callback"
-  },
-  function(token, tokenSecret, profile, done) {
-      done(null, user);
-  }
-));
 
 var app = express();
 
