@@ -1,12 +1,15 @@
-
-var express = require('express');
+var express = require("express");
 var app = express();
+app.use(express.logger());
 
-app.get('/info', function(req, res) {
-	res.send('Hi!');
+app.get('/', function(request, response) {
+  response.send('Hello World!');
 });
 
-app.listen(2020);
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});
 /*
 // These two lines are required to initialize Express in Cloud Code.
 var express = require('express');
