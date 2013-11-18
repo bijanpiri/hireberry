@@ -15,8 +15,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 
-var passport = require('passport')
-var TwitterStrategy = require('passport-twitter').Strategy;
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
 
 passport.use(new TwitterStrategy({
     consumerKey: 'IrzgMx7fEYybvrN25eiv1w',
