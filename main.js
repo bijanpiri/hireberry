@@ -6,7 +6,7 @@ app.get('/info', function(req, res) {
 	res.send('Hi!');
 });
 
-app.listen();
+app.listen(2020);
 /*
 // These two lines are required to initialize Express in Cloud Code.
 var express = require('express');
