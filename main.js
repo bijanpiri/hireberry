@@ -1,67 +1,11 @@
 
-var express = require('express')
-  , passport = require('passport')
-  , util = require('util')
-  , TwitterStrategy = require('passport-twitter').Strategy;
-
-//   and deserialized.
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-passport.use(new TwitterStrategy({
-    consumerKey: 'IrzgMx7fEYybvrN25eiv1w',
-    consumerSecret: 'gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0',
-    callbackURL: "booltin.heroku.com:3000/auth/twitter/callback"
-  },
-  function(token, tokenSecret, profile, done) {
-    process.nextTick(function () {
-      return done(null, profile);
-    });
-  }
-));
-
+var express = require('express');
 var app = express();
-
-// configure Express
-app.configure(function() {
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-});
 
 app.get('/info', function(req, res) {
 	res.send('Hi!');
 });
 
-app.get('/auth/twitter',
-  passport.authenticate('twitter'),
-  function(req, res){});
-
-app.get('/auth/twitter/callback', 
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-
-app.listen(3000);
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login')
-}
 /*
 // These two lines are required to initialize Express in Cloud Code.
 var express = require('express');
