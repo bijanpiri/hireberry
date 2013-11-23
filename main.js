@@ -46,6 +46,10 @@ app.configure(function() {
 
 app.get('/auth/twitter',passport.authenticate('twitter'),function(req, res){});
 
+app.get('/info'), function(req,res) {
+	res.send('Version 1.0.0');
+});
+
 app.get('/openapp'), function(req,res) {
 	res.redirect("booltin://Yah");
 });
