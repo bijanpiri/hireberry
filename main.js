@@ -51,7 +51,7 @@ app.get('/info', function(req,res) {
 });
 
 app.get('/openapp', function(req,res) {
-	res.redirect("booltin://Yah");
+	res.redirect("booltin://?");
 });
 
 app.get('tweet/:message', function(req,res) {
