@@ -51,7 +51,7 @@ app.get('/info', function(req,res) {
 });
 
 app.get('/openapp', function(req,res) {
-	res.redirect("booltin://?");
+	res.send('<script type="text/javascript">window.location = "http://www.google.com/"</script>');
 });
 
 app.get('tweet/:message', function(req,res) {
