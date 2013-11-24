@@ -54,7 +54,9 @@ app.configure(function() {
 });
 
 
-app.get('/auth/twitter/:uid',passport.authenticate('twitter'),function(req, res){});
+app.get('/auth/twitter/:uid',passport.authenticate('twitter'),function(req, res){
+    req.session.uid = req.param.uid;
+});
 
 app.get('/info', function(req,res) {
 	res.send('Version 2.0.0');
@@ -84,7 +86,8 @@ app.get('/auth/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/');
+    //res.redirect('/');
+      res.send('UID is: ' + req.session.uid)
  });
 
 var port = process.env.PORT || 5000;
