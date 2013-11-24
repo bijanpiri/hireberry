@@ -30,7 +30,7 @@ passport.use(new TwitterStrategy({
   	//parseApp.insert('twitter', { foo: token }, function (err, response) {
   	//	console.log(response);
 	//});
-      console.log('$$$$$$$$$$$$$$$' + req);
+      console.log('$$$$$$$$$$$$$$$[' + req.param('uid') + ']$$$$$$$$$$$$$$$' );
     return done(null, profile);
   }));
 
