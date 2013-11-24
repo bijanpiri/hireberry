@@ -75,12 +75,12 @@ app.get('/auth/twitter/user/:uid', function(req, res, next) {
     passport.authenticate('twitter', function(err, user, info) {
         if (err) { return next(err); }
         if (!user) { return res.redirect('/login'); }
-        else { /*res.send( req.param('uid') + '...' + user.username + '...');*/ }
+        else { res.send( req.param('uid') + '...' + user.username + '...'); }
     })(req, res, next);
 });
 
 app.get('/auth/twitter/callback', function(req, res) {
-    res.send( req.param('uid') + '...' + user.username + '...');
+    /*res.send( req.param('uid') + '...' + user.username + '...');*/
  });
 
 app.get('tweet/:message', function(req,res) {
