@@ -81,7 +81,7 @@ app.get('/auth/twitter/callback', function(req, res) {
     res.send('CALL BACK PAGE');
  });
 
-app.get('tweet/:message', assport.authenticate('twitter'), function(req,res) {
+app.get('tweet/:message', function(req,res) {
     var msg = req.params['message'];
 
     twitter.statuses("update", { status: msg },
