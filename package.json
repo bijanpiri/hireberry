@@ -6,7 +6,9 @@
     "ejs":	">= 0.0.0",
     "passport": ">= 0.0.0",
     "passport-twitter": ">= 0.0.0",
-    "passport-twitter": ">= 0.0.0"
+    "passport-twitter": ">= 0.0.0",
+    "node-twitter-api": ">= 0.0.0",
+    "parse-api": ">= 0.0.0"
   },
   "engines": {
     "node": "0.10.x",
