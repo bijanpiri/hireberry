@@ -1,15 +1,16 @@
+var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
+var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
+var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
+var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
+
 var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , TwitterStrategy = require('passport-twitter').Strategy;
 var Parse = require('parse-api').Parse;
-
-var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
-var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-
-var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
-var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
 var parseApp = new Parse(APP_ID, MASTER_KEY);
+var app = express();
+
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -19,24 +20,17 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-
 passport.use(new TwitterStrategy({
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
     callbackURL: "http://booltin.heroku.com/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
-
   	parseApp.insert('twitter', { foo: token }, function (err, response) {
   		console.log(response);
 	});
-
-    process.nextTick(function () {
-      return done(null, profile);
-  	});
+    return done(null, profile);
   }));
-
-var app = express();
 
 // configure Express
 app.configure(function() {
@@ -53,33 +47,24 @@ app.configure(function() {
   app.use(express.static(__dirname + '/public'));
 });
 
-
-app.get('/auth/twitter/:uid',passport.authenticate('twitter'),function(req, res){
-    req.session.uid = req.param.uid;
+// Start server
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+    console.log("Listening on " + port);
 });
 
+/*** Routers ***/
+
 app.get('/info', function(req,res) {
-	res.send('Version 2.0.0');
+    res.send('Version 2.0.0');
 });
 
 app.get('/openapp', function(req,res) {
-	res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+    res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
-app.get('tweet/:message', function(req,res) {
-	var msg = req.params['message'];
-
-	twitter.statuses("update", { status: msg },
-	    accessToken,
-	    accessTokenSecret,
-	    function(error, data, response) {
-	        if (error) {
-	            // something went wrong
-	        } else {
-	            // data contains the data sent by twitter
-	        }
-	    }
-	);
+app.get('/auth/twitter/:uid', passport.authenticate('twitter'), function(req, res){
+    res.send(uid + '...' + req.user.username + '...');
 });
 
 app.get('/auth/twitter/callback', 
@@ -87,12 +72,23 @@ app.get('/auth/twitter/callback',
   function(req, res) {
     // Successful authentication, redirect home.
     //res.redirect('/');
-      res.send('UID is: ' + req.session.uid)
+      //res.send('UID is: ' + req.session.uid)
  });
 
-var port = process.env.PORT || 5000;
-app.listen(port, function() {
-  console.log("Listening on " + port);
+app.get('tweet/:message', function(req,res) {
+    var msg = req.params['message'];
+
+    twitter.statuses("update", { status: msg },
+        accessToken,
+        accessTokenSecret,
+        function(error, data, response) {
+            if (error) {
+                // something went wrong
+            } else {
+                // data contains the data sent by twitter
+            }
+        }
+    );
 });
 
 function ensureAuthenticated(req, res, next) {
