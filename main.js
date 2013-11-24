@@ -63,8 +63,18 @@ app.get('/openapp', function(req,res) {
     res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
+/*
 app.get('/auth/twitter/:uid', passport.authenticate('twitter'), function(req, res){
     res.send( req.params.uid + '...' + req.user.username + '...');
+});
+*/
+
+app.get('/auth/twitter/:uid', function(req, res, next) {
+    passport.authenticate('twitter', function(err, user, info) {
+        if (err) { return next(err); }
+        if (!user) { return res.redirect('/login'); }
+        else { res.send( req.params.uid + '...' + req.user.username + '...'); }
+    })(req, res, next);
 });
 
 app.get('/auth/twitter/callback', 
