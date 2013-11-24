@@ -73,7 +73,7 @@ app.get('/auth/twitter/:uid', function(req, res, next) {
     passport.authenticate('twitter', function(err, user, info) {
         if (err) { return next(err); }
         if (!user) { return res.redirect('/login'); }
-        else { res.send( info + '...' + user.username + '...'); }
+        else { res.send( req.param + req.params + '...' + user.username + '...'); }
     })(req, res, next);
 });
 
