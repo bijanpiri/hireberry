@@ -64,7 +64,7 @@ app.get('/openapp', function(req,res) {
 });
 
 app.get('/auth/twitter/:uid', passport.authenticate('twitter'), function(req, res){
-    res.send(uid + '...' + req.user.username + '...');
+    res.send( req.params.uid + '...' + req.user.username + '...');
 });
 
 app.get('/auth/twitter/callback', 
