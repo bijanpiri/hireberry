@@ -73,16 +73,12 @@ app.get('/auth/twitter/:uid', function(req, res, next) {
     passport.authenticate('twitter', function(err, user, info) {
         if (err) { return next(err); }
         if (!user) { return res.redirect('/login'); }
-        else { res.send( req.params.uid + '...' + user.username + '...'); }
+        else { res.send( info + '...' + user.username + '...'); }
     })(req, res, next);
 });
 
-app.get('/auth/twitter/callback', 
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    //res.redirect('/');
-      //res.send('UID is: ' + req.session.uid)
+app.get('/auth/twitter/callback', function(req, res) {
+    res.send('CALL BACK PAGE');
  });
 
 app.get('tweet/:message', function(req,res) {
