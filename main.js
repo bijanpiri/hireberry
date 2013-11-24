@@ -79,9 +79,10 @@ app.get('/auth/twitter/user/:uid', function(req, res, next) {
     })(req, res, next);
 });
 
-app.get('/auth/twitter/callback', function(req, res) {
-    /*res.send( req.param('uid') + '...' + user.username + '...');*/
- });
+app.get('/auth/twitter/callback', passport.authenticate('twitter', {
+    successRedirect: '/',
+    failureRedirect: '/auth/twitter'
+}));
 
 app.get('tweet/:message', function(req,res) {
     var msg = req.params['message'];
