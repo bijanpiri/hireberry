@@ -23,12 +23,14 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitterStrategy({
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
-    callbackURL: "http://booltin.heroku.com/auth/twitter/callback"
+    callbackURL: "http://booltin.heroku.com/auth/twitter/callback",
+    passReqToCallback: true
   },
-  function(token, tokenSecret, profile, done) {
-  	parseApp.insert('twitter', { foo: token }, function (err, response) {
-  		console.log(response);
-	});
+  function(req, token, tokenSecret, profile, done) {
+  	//parseApp.insert('twitter', { foo: token }, function (err, response) {
+  	//	console.log(response);
+	//});
+      console.log('$$$$$$$$$$$$$$$' + req);
     return done(null, profile);
   }));
 
@@ -69,7 +71,7 @@ app.get('/auth/twitter/:uid', passport.authenticate('twitter'), function(req, re
 });
 */
 
-app.get('/auth/twitter/:uid', function(req, res, next) {
+app.get('/auth/twitter/user/:uid', function(req, res, next) {
     passport.authenticate('twitter', function(err, user, info) {
         if (err) { return next(err); }
         if (!user) { return res.redirect('/login'); }
@@ -78,7 +80,7 @@ app.get('/auth/twitter/:uid', function(req, res, next) {
 });
 
 app.get('/auth/twitter/callback', function(req, res) {
-    res.send('CALL BACK PAGE');
+    res.send( req.param('uid') + '...' + user.username + '...');
  });
 
 app.get('tweet/:message', function(req,res) {
