@@ -9,7 +9,7 @@ var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
 
 var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
 var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
-var app = new Parse(APP_ID, MASTER_KEY);
+var parseApp = new Parse(APP_ID, MASTER_KEY);
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -27,7 +27,7 @@ passport.use(new TwitterStrategy({
   },
   function(token, tokenSecret, profile, done) {
 
-  	app.insert('twitter', { foo: token }, function (err, response) {
+  	parseApp.insert('twitter', { foo: token }, function (err, response) {
   		console.log(response);
 	});
 
