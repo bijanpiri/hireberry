@@ -30,7 +30,7 @@ passport.use(new TwitterStrategy({
   	app.insert('twitter', { foo: token }, function (err, response) {
   		console.log(response);
 	});
-	
+
     process.nextTick(function () {
       return done(null, profile);
   	});
@@ -54,7 +54,7 @@ app.configure(function() {
 });
 
 
-app.get('/auth/twitter',passport.authenticate('twitter'),function(req, res){});
+app.get('/auth/twitter/:uid',passport.authenticate('twitter'),function(req, res){});
 
 app.get('/info', function(req,res) {
 	res.send('Version 1.0.0');
