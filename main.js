@@ -91,7 +91,7 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/auth/twitter'
 }));
 
-app.get('tweet/:uid/:message', function(req,res) {
+app.get('/tweet/:uid/:message', function(req,res) {
     var msg = req.params['message'];
     var uid = req.params['uid'];
 
@@ -108,7 +108,7 @@ app.get('tweet/:uid/:message', function(req,res) {
             if (err) {
                 cb("Error verifying credentials: " + err);
             } else {
-                twit.updateStatus('TEST from my new app', function (err, data) {
+                twit.updateStatus(msg, function (err, data) {
                     if (err) {
                         cb('Tweeting failed: ' + err);
                     } else {
