@@ -30,7 +30,6 @@ passport.use(new TwitterStrategy({
   	//parseApp.insert('twitter', { foo: token }, function (err, response) {
   	//	console.log(response);
 	//});
-      console.log('$$$$$$$$$$$$$$$[' + req.uid + ']$$$$$$$$$$$$$$$' );
     return done(null, profile);
   }));
 
@@ -72,6 +71,10 @@ app.get('/auth/twitter/:uid', passport.authenticate('twitter'), function(req, re
 */
 
 app.get('/auth/twitter/user/:uid', function(req, res, next) {
+
+    console.log('$$$$$$$$$$$$$$$[' + req.uid + ']$$$$$$$$$$$$$$$' );
+    res.cookie('uid',req.uid);
+
     passport.authenticate('twitter', function(err, user, info) {
         if (err) { return next(err); }
         if (!user) { return res.redirect('/login'); }
