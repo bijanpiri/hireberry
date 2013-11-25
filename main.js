@@ -95,9 +95,8 @@ app.get('tweet/:uid/:message', function(req,res) {
     var msg = req.params['message'];
     var uid = req.params['uid'];
 
-    parseApp.find('Foo', { uid:req.params['uid'] , function (err, response) {
+    parseApp.find('Foo', { uid:req.params['uid'] } , function (err, response) {
         console.log('>>>>>>>>>>>>>' + response );
-
         var twit = new twitter({
                 consumer_key: TWITTER_CONSUMER_KEY,
                 consumer_secret: TWITTER_CONSUMER_SECRET,
@@ -118,6 +117,7 @@ app.get('tweet/:uid/:message', function(req,res) {
                 });
             }
         });
+    });
 });
 
 function ensureAuthenticated(req, res, next) {
