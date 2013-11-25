@@ -7,6 +7,7 @@ var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , TwitterStrategy = require('passport-twitter').Strategy;
+var twitter = require('ntwitter');
 var Parse = require('parse-api').Parse;
 var parseApp = new Parse(APP_ID, MASTER_KEY);
 var app = express();
@@ -90,20 +91,33 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/auth/twitter'
 }));
 
-app.get('tweet/:message', function(req,res) {
+app.get('tweet/:uid/:message', function(req,res) {
     var msg = req.params['message'];
+    var uid = req.params['uid'];
 
-    twitter.statuses("update", { status: msg },
-        accessToken,
-        accessTokenSecret,
-        function(error, data, response) {
-            if (error) {
-                // something went wrong
+    parseApp.find('Foo', { uid:req.params['uid'] , function (err, response) {
+        console.log('>>>>>>>>>>>>>' + response );
+
+        var twit = new twitter({
+                consumer_key: TWITTER_CONSUMER_KEY,
+                consumer_secret: TWITTER_CONSUMER_SECRET,
+                access_token_key: response.accessToken,
+                access_token_secret: response.accessTokenSecret
+        });
+
+        twit.verifyCredentials(function (err, data) {
+            if (err) {
+                cb("Error verifying credentials: " + err);
             } else {
-                // data contains the data sent by twitter
+                twit.updateStatus('TEST from my new app', function (err, data) {
+                    if (err) {
+                        cb('Tweeting failed: ' + err);
+                    } else {
+                        cb('Success!')
+                    }
+                });
             }
-        }
-    );
+        });
 });
 
 function ensureAuthenticated(req, res, next) {

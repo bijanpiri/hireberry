@@ -7,7 +7,7 @@
     "passport": ">= 0.0.0",
     "passport-twitter": ">= 0.0.0",
     "passport-twitter": ">= 0.0.0",
-    "node-twitter-api": ">= 0.0.0",
+    "ntwitter": ">= 0.0.0",
     "parse-api": ">= 0.0.0"
   },
   "engines": {
