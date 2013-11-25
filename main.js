@@ -27,11 +27,13 @@ passport.use(new TwitterStrategy({
     passReqToCallback: true
   },
   function(req, token, tokenSecret, profile, done) {
-  	//parseApp.insert('twitter', { foo: token }, function (err, response) {
-  	//	console.log(response);
-	//});
-      console.log('@@@@@@@@@@@@[' + req.cookies.uid + ']@@@@@@@@@@@@[' );
-
+  	parseApp.insert('twitter', {
+        uid: req.cookies.uid,
+        accessToken: token,
+        accessTokenSecret: tokenSecret
+        }, function (err, response) {
+  		    console.log(response);
+	    });
     return done(null, profile);
   }));
 
@@ -74,7 +76,6 @@ app.get('/auth/twitter/:uid', passport.authenticate('twitter'), function(req, re
 
 app.get('/auth/twitter/user/:uid', function(req, res, next) {
 
-    console.log('$$$$$$$$$$$$$$$[' + req.params.uid + ']$$$$$$$$$$$$$$$' );
     res.cookie('uid',req.params.uid);
 
     passport.authenticate('twitter', function(err, user, info) {
