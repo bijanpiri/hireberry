@@ -94,8 +94,10 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', {
 app.get('/tweet/:uid/:message', function(req,res) {
     var msg = req.params['message'];
     var uid = req.params['uid'];
+    
+    console.log('<<<<<<<<<<<<<<' );
 
-    parseApp.find('Foo', { uid:req.params['uid'] } , function (err, response) {
+    parseApp.find('twitter', { uid:req.params['uid'] } , function (err, response) {
         console.log('>>>>>>>>>>>>>' + response );
         var twit = new twitter({
                 consumer_key: TWITTER_CONSUMER_KEY,
