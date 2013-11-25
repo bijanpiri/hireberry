@@ -72,7 +72,7 @@ app.get('/auth/twitter/:uid', passport.authenticate('twitter'), function(req, re
 
 app.get('/auth/twitter/user/:uid', function(req, res, next) {
 
-    console.log('$$$$$$$$$$$$$$$[' + req.uid + ']$$$$$$$$$$$$$$$' );
+    console.log('$$$$$$$$$$$$$$$[' + req.params.uid + ']$$$$$$$$$$$$$$$' );
     res.cookie('uid',req.uid);
 
     passport.authenticate('twitter', function(err, user, info) {
