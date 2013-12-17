@@ -28,7 +28,9 @@ var BUsers = mongoose.model( 'users', {email: String, password: String, salt: St
 
 everyauth.everymodule
     .findUserById( function (id, callback) {
-        callback(null, usersById[id]);
+        BUsers.findOne({_id:id}, function(err,user) {
+            callback(null, user);
+        });
     });
 
 everyauth.twitter
@@ -97,7 +99,7 @@ everyauth.password
         });
        return promise;
     })
-    .loginSuccessRedirect('/')
+    .loginSuccessRedirect('/profile')
 
     .getRegisterPath('/register')
     .postRegisterPath('/register')
@@ -117,7 +119,7 @@ everyauth.password
         user.save();
         return user;*/
     })
-    .registerSuccessRedirect('/');
+    .registerSuccessRedirect('/profile');
 
 // configure Express
 app.configure(function() {
@@ -144,19 +146,35 @@ module.exports = app;
 /************** Application Routers ****************/
 
 app.get('/info', function(req,res) {
-	res.send('Version 2.1.0');
+	res.send('Version ?.?.? - 920926-15:23');
 });
 
 app.get('/openapp', function(req,res) {
 	res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
-app.get('/email/register', function(req,res) {
-   res.render('register');
+app.get('/profile', function(req,res) {
+    if( req.user )
+        res.render('profile',{email:req.user})
+    else
+        res.redirect('/login');
 });
 
-app.get('/email/login', function(req,res) {
-    res.render('login');
-});
+app.post('/profile', function(req,res) {
+    var newPassword = req.body.newpassword;
 
+    if( req.body.newpassword != req.body.confirmnewpassword)
+        res.send('Not matched!');
+    if( req.user ){
+        console.log(req.user);
+        BUsers.update( { email: req.user.email, password: req.body.oldpassword },
+            { $set: { password: newPassword }},
+            function (err, numberAffected, raw) {
+                if (err)
+                    return handleError(err);
+                else
+                    res.send('Password is changed successfuly!');
+        });
+    }
+});
 /*************************************/

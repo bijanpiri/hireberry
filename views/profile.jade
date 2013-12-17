@@ -1,0 +1,18 @@
+- if ('undefined' !== typeof errors && errors.length)
+  ul#errors
+    - each error in errors
+      li.error= error
+form(action='/profile', method='post')
+  #login
+    label #{everyauth.user.email}
+  #password
+    label Old Password
+    input(type='password', name='oldpassword')
+  #NewPassword
+    label NewPassword
+    input(type='password', name='newpassword')
+  #ConfirmNewPassword
+    label ConfirmNewPassword
+    input(type='password', name='confirmnewpassword')
+  #submit
+    input(type='submit') Save
