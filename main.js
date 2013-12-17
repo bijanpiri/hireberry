@@ -64,7 +64,7 @@ everyauth.password
     .loginWith('email')
     .getLoginPath('/login')
     .postLoginPath('/login')
-    .loginView('login.jade')
+    .loginView('login.ejs')
     .loginLocals( function (req, res, done) {
         setTimeout( function () {
             done(null, {
@@ -101,7 +101,7 @@ everyauth.password
 
     .getRegisterPath('/register')
     .postRegisterPath('/register')
-    .registerView('register.jade')
+    .registerView('register.ejs')
     .registerLocals( function (req, res, done) {
         setTimeout( function () {
             done(null, {
@@ -164,9 +164,5 @@ app.get('/email/register', function(req,res) {
 app.get('/email/login', function(req,res) {
     res.render('login');
 });
-app.get('/',function(req,res){
-    res.render('login.ejs',{title:'title2'});
-
-})
 
 /*************************************/
