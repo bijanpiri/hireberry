@@ -1,0 +1,65 @@
+<html>
+<head>
+
+    <title>Profile</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row ">
+        <div class="span6">
+            <form class="form-horizontal" action="/profile" method="post">
+
+                <div class="control-group">
+                    <div class="control-label"> Email:</div>
+                    <div class="controls ">
+                        <div class="input-prepend input-append">
+                            <%=everyauth.email%>
+                        </div>
+                        <label class="help-inline">example@mail.com</label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label"> Enter Old Password:</div>
+                    <div class="controls ">
+                        <div class="input-prepend input-append">
+                            <input type="password"  name="oldpassword" placeholder="Enter password">
+                        </div>
+                        <label class="help-inline">Passwords must match</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label"> Enter New Password:</div>
+                    <div class="controls ">
+                        <div class="input-prepend input-append">
+                            <input type="password"  name="newpassword" placeholder="Enter password">
+                        </div>
+                        <label class="help-inline">Password must contains at least 6 characters</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label"> Enter Password again:</div>
+                    <div class="controls ">
+                        <div class="input-prepend input-append">
+                            <input type="password" name="confirmnewpassword" placeholder="Enter password">
+                        </div>
+                        <label class="help-inline">Passwords must match</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="submit" class="btn input-medium btn-primary" value="Save Changes">
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
