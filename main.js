@@ -112,10 +112,10 @@ everyauth.password
     .validateRegistration( function (newUserAttributes) {
         return null;
     })
-    .registerUser( function (newUserAttributes) {/*
+    .registerUser( function (newUserAttributes) {
         var user = BUsers({email: newUserAttributes.email, password: newUserAttributes.password, salt: ''});
         user.save();
-        return user;*/
+        return user;
     })
     .registerSuccessRedirect('/');
 

@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row ">
         <div class="span2">
-            <form class="form-horizontal">
+            <form class="form-horizontal" action="/login" method="post">
 
                 <fieldset>
                     <div class="control-group">
@@ -19,7 +19,7 @@
                         <div class="controls ">
                             <div class="input-prepend input-append">
 
-                                <input type="text" placeholder="Enter Email address">
+                                <input type="text" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                             </div>
                             <label class="help-inline">example@mail.com</label>
                         </div>
@@ -27,16 +27,14 @@
                     <div class="control-group">
                         <div class="control-label"> Password:</div>
                         <div class="controls ">
-                            <div class="input-prepend input-append">
-
-                                <input type="password" placeholder="Enter password">
-                            </div>
-                            <label class="help-inline"></label>
+                          <input type="password" name=<%=everyauth.password.passwordFormFieldName%> placeholder="Enter password">
                         </div>
+                        <label class="help-inline"></label>
                     </div>
                     <div class="control-group">
                         <div class="controls">
-                            <a class="btn btn-primary">Login</a>
+                            <a class="btn">Register</a>
+                            <input type="submit" class="btn btn-primary" value="login">
                             <h2>OR</h2>
                         </div>
                     </div>
