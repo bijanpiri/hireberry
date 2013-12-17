@@ -25,6 +25,25 @@ everyauth.twitter
     })
     .redirectPath('/');
 
+everyauth.google
+    .appId('105806305660-2k8f0sr0mg8a36rn8fmn0fsh9ls85iio.apps.googleusercontent.com')
+    .appSecret('uFr61pADo3O5b1uyaEk5Cmuh')
+    .scope('https://www.google.com/m8/feeds') // What you want access to
+    .handleAuthCallbackError( function (req, res) {
+        // If a user denies your app, Google will redirect the user to
+        // /auth/facebook/callback?error=access_denied
+        // This configurable route handler defines how you want to respond to
+        // that.
+        // If you do not configure this, everyauth renders a default fallback
+        // view notifying the user that their authentication failed and why.
+    })
+    .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
+        // find or create user logic goes here
+        // Return a user or Promise that promises a user
+        // Promises are created via
+        //     var promise = this.Promise();
+    })
+    .redirectPath('/');
 
 // configure Express
 app.configure(function() {
@@ -39,7 +58,7 @@ app.configure(function() {
   app.use(everyauth.middleware());
 });
 
-/************** Application Launching ****************/
+/************** Starting Server ****************/
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
@@ -57,8 +76,5 @@ app.get('/info', function(req,res) {
 app.get('/openapp', function(req,res) {
 	res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
-/*
-app.get('/login/twitter', function(req,res) {
-});
-*/
+
 /*************************************/
