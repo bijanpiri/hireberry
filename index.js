@@ -12,17 +12,19 @@ var app = express();
 //        .use(nib())
 //}
 app.configure(function(){
-    app.use(express.static('public'))
-//    app.use(express.static(__dirname + '/bootstrap'))
-    app.set('views', __dirname + '/views')
-    app.set('view engine', 'ejs')
-    app.use(express.logger('dev'))
+//    app.use(express.static('public'))
+    app.use(express.static(__dirname + '/public'));
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'ejs');
+    app.use(express.logger('dev'));
+
 
 });
 
 app.get('/', function (req, res) {
-    res.render('login.ejs',{title:'title'});
-})
+    res.render('login.ejs',{title:'title2'});
+});
+
 
 app.listen(3000);
 
