@@ -5,8 +5,11 @@
     "express": "3.1.x",
     "ejs":	"*",
     "everyauth": "*",
-    "stylus":"*"
-
+    "stylus":"*",
+    "jade":	"*",
+    "everyauth": "*",
+    "mongoose": "*",
+    "promise": "*"
   },
   "engines": {
     "node": "0.10.x",
