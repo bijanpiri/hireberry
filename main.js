@@ -29,7 +29,7 @@ app.listen(port, function() {
     console.log("Listening on " + port);
 });
 
-/************** Appication Routers ****************/
+/************** Application Routers ****************/
 
 app.get('/info', function(req,res) {
 	res.send('Version 2.1.0');
@@ -39,3 +39,15 @@ app.get('/openapp', function(req,res) {
 	res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
+app.get('/login/twitter', function(req,res) {
+    everyauth.twitter
+        .consumerKey(TWITTER_CONSUMER_KEY)
+        .consumerSecret(TWITTER_CONSUMER_KEY)
+        .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitterUserMetadata) {
+            // find or create user logic goes here
+            Console.log('Logged In With Twitter')
+        })
+        .redirectPath('/');
+});
+
+/*************************************/
