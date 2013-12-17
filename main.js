@@ -66,7 +66,7 @@ everyauth.password
     .loginWith('email')
     .getLoginPath('/login')
     .postLoginPath('/login')
-    .loginView('login.jade')
+    .loginView('login.ejs')
     .loginLocals( function (req, res, done) {
         setTimeout( function () {
             done(null, {
@@ -103,7 +103,7 @@ everyauth.password
 
     .getRegisterPath('/register')
     .postRegisterPath('/register')
-    .registerView('register.jade')
+    .registerView('register.ejs')
     .registerLocals( function (req, res, done) {
         setTimeout( function () {
             done(null, {
@@ -123,9 +123,15 @@ everyauth.password
 
 // configure Express
 app.configure(function() {
+    app.set('view engine', 'ejs');
+    app.use(express.logger('dev'));
+
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.static(process.cwd() + '/public'));
+
+  app.set('views engine', 'ejs');
+  app.use(express.static(__dirname + '/public'));
+
+//  app.set('view engine', 'jade');
   app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
