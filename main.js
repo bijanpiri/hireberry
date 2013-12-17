@@ -121,6 +121,9 @@ everyauth.password
 
 // configure Express
 app.configure(function() {
+    app.set('view engine', 'ejs');
+    app.use(express.logger('dev'));
+
   app.set('views', __dirname + '/views');
 
   app.set('views engine', 'ejs');
@@ -161,5 +164,9 @@ app.get('/email/register', function(req,res) {
 app.get('/email/login', function(req,res) {
     res.render('login');
 });
+app.get('/',function(req,res){
+    res.render('login.ejs',{title:'title2'});
+
+})
 
 /*************************************/
