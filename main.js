@@ -192,6 +192,7 @@ app.post('/profile', function(req,res) {
 });
 
 app.get('/board/new', function(req,res){
+
     res.render('boardnew.ejs');
 });
 /*************************************/
