@@ -156,7 +156,7 @@ module.exports = app;
 
 app.get('/', function(req,res) {
     if( req.user )
-        res.render('profile',{email:req.user})
+        res.redirect('/profile');
     else
         res.redirect('/login');
 });
@@ -175,7 +175,7 @@ app.get('/profile', function(req,res) {
         var bcount = BUsersBoards.find({user:req.user._id}).count(function (err, count) {
             if (err)
                 return handleError(err);
-            res.render('profile',{email:req.user,boardsCount:count});
+            res.render('profile.ejs',{email:req.user,boardsCount:count});
         });
     }
     else

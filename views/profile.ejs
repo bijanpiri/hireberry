@@ -20,16 +20,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="#">booltin</a>
+            <a class="brand" href="/">booltin</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li class="active"><a href="#"><i class="icon-home icon-white"></i> Home</a></li>
+                    <li><a href="#"><i class="icon-home icon-white"></i> Home</a></li>
                 </ul>
                 <ul class="nav pull-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello <%= everyauth.user.email%> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Profile</a></li>
+                            <li><a href="/profile">Profile</a></li>
                             <li><a href="/logout">Logout</a></li>
                         </ul>
                     </li>
@@ -48,9 +48,9 @@
         <h2>Profile</h2>
     </div>
     <div class="row ">
-        <div class="span5">
+        <div>
 
-            <div style="background-color: #bfbfbf; padding: 10px">
+            <div style="background-color: #fff4be; padding: 5px">
                 <b>You have <%= boardsCount %> board(s).</b>
             </div>
             <form class="form-horizontal" action="/profile" method="post">
