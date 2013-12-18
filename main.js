@@ -4,6 +4,7 @@ var util = require('util');
 var everyauth = require('everyauth');
 var mongoose =  require('mongoose');
 var Promise = require('promise');
+var engine = require('ejs-locals');
 
 /*
     /auth/twitter
@@ -126,15 +127,11 @@ everyauth.password
 
 // configure Express
 app.configure(function() {
-    app.set('view engine', 'ejs');
-    app.use(express.logger('dev'));
-
+  app.engine('ejs',engine);
+  app.set('view engine', 'ejs');
   app.set('views', __dirname + '/views');
-
-  app.set('views engine', 'ejs');
+  app.use(express.logger('dev'));
   app.use(express.static(__dirname + '/public'));
-
-//  app.set('view engine', 'jade');
   app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
@@ -175,7 +172,7 @@ app.get('/profile', function(req,res) {
         var bcount = BUsersBoards.find({user:req.user._id}).count(function (err, count) {
             if (err)
                 return handleError(err);
-            res.render('profile.ejs',{email:req.user,boardsCount:count});
+            res.render('profile.ejs',{title:'Profile', email:req.user,boardsCount:count});
         });
     }
     else
@@ -201,7 +198,7 @@ app.post('/profile', function(req,res) {
 });
 
 app.get('/board/new', function(req,res){
-    res.render('boardnew.ejs');
+    res.render('boardnew.ejs',{title:'new flyer'});
 });
 
 app.post('/board/new', function(req,res){
@@ -232,5 +229,9 @@ app.post('/board/new', function(req,res){
     });
 
     res.send('OK');
+});
+
+app.get('/flyer/new', function(req,res){
+   res.render('flyernew.ejs',{title:'new flyer'});
 });
 /*************************************/
