@@ -255,9 +255,9 @@ app.post('/flyer/new', function(req,res){
 
     var newflyer = BFlyers({text:flyerText, owner:req.user._id});
     newflyer.save(function (err, product, numberAffected) {
-        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save();
+        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(function (err, product, numberAffected) {
+            res.redirect('/profile');
+        });
     });
-
-
 });
 /*************************************/
