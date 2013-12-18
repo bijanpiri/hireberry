@@ -28,7 +28,8 @@ mongoose.connect(mongoHQConenctionString);
 var BUsers = mongoose.model( 'users', {email: String, password: String, salt: String} );
 var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-
+var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
+var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 
 everyauth.everymodule
     .findUserById( function (id, callback) {
@@ -169,10 +170,17 @@ app.get('/openapp', function(req,res) {
 app.get('/profile', function(req,res) {
     if( req.user ){
 
-        var bcount = BUsersBoards.find({user:req.user._id}).count(function (err, count) {
-            if (err)
-                return handleError(err);
-            res.render('profile.ejs',{title:'Profile', email:req.user,boardsCount:count});
+        BUsersBoards.find({user:req.user._id}).count(function (err, bcount) {
+            if (err)    return handleError(err);
+
+            BFlyers.find({owner:req.user._id}).count(function (err, fcount) {
+                res.render('profile.ejs',{
+                    title:'Profile',
+                    email:req.user,
+                    boardsCount:bcount,
+                    flyersCount:fcount
+                });
+            });
         });
     }
     else
@@ -232,6 +240,24 @@ app.post('/board/new', function(req,res){
 });
 
 app.get('/flyer/new', function(req,res){
-   res.render('flyernew.ejs',{title:'new flyer'});
+
+    BBoards.find({}, function (err, boards){
+        res.render('flyernew.ejs',{
+                title:'new flyer',
+                boards:boards
+        });
+    });
+});
+
+app.post('/flyer/new', function(req,res){
+    var flyerText = req.body.flyertext;
+    var flyerBoard = req.body.board;
+
+    var newflyer = BFlyers({text:flyerText, owner:req.user._id});
+    newflyer.save(function (err, product, numberAffected) {
+        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save();
+    });
+
+
 });
 /*************************************/
