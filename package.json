@@ -2,7 +2,7 @@
   "name": "booltin-herokunode-app",
   "version": "0.0.1",
   "dependencies": {
-    "mongoose": "*",
+    "mongoose": "3.8.1",
     "express": "3.1.x",
     "ejs":	"*",
     "jade":	"*",
