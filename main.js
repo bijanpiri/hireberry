@@ -1,6 +1,6 @@
-var express = require('express')
-var passport = require('passport')
-var util = require('util')
+var express = require('express');
+var passport = require('passport');
+var util = require('util');
 var everyauth = require('everyauth');
 var mongoose =  require('mongoose');
 var Promise = require('promise');
@@ -25,6 +25,9 @@ var app = express();
 mongoose.connect(mongoHQConenctionString);
 
 var BUsers = mongoose.model( 'users', {email: String, password: String, salt: String} );
+var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
+var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
+
 
 everyauth.everymodule
     .findUserById( function (id, callback) {
@@ -167,8 +170,14 @@ app.get('/openapp', function(req,res) {
 });
 
 app.get('/profile', function(req,res) {
-    if( req.user )
-        res.render('profile',{email:req.user})
+    if( req.user ){
+
+        var bcount = BUsersBoards.find({user:req.user._id}).count(function (err, count) {
+            if (err)
+                return handleError(err);
+            res.render('profile',{email:req.user,boardsCount:count});
+        });
+    }
     else
         res.redirect('/login');
 });
@@ -193,5 +202,35 @@ app.post('/profile', function(req,res) {
 
 app.get('/board/new', function(req,res){
     res.render('boardnew.ejs');
+});
+
+app.post('/board/new', function(req,res){
+
+    //req.body.name
+    //req.body.category
+    //req.body.locationlng
+    //req.body.locationlat
+
+    // Add to Boards collection
+    var newboard = BBoards({
+        name: 'test',
+        category: 'sport',
+        locationlng: '100',
+        locationlat: '200'
+    });
+    newboard.save(function (err, product, numberAffected) {
+        if (err)
+            res.send('Failed 01');
+        else{
+            // Add to Boards-Users collection
+            var newboarduser = BUsersBoards({
+                board: newboard._id,
+                user: req.user._id
+            });
+            newboarduser.save();
+        }
+    });
+
+    res.send('OK');
 });
 /*************************************/

@@ -49,15 +49,15 @@
     </div>
     <div class="row ">
         <div class="span5">
-            <form class="form-horizontal" action="/profile" method="post">
 
+            <div style="background-color: #bfbfbf; padding: 10px">
+                <b>You have <%= boardsCount %> board(s).</b>
+            </div>
+            <form class="form-horizontal" action="/profile" method="post">
                 <div class="control-group">
                     <div class="control-label"> Email:</div>
                     <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <%=everyauth.email%>
-                        </div>
-                        <label class="help-inline">example@mail.com</label>
+                         <%=everyauth.user.email%>
                     </div>
                 </div>
 
