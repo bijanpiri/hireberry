@@ -40,10 +40,12 @@
                     </li>
                     <%}%>
                 </ul>
+                <% if(everyauth.loggedIn){ %>
                 <ul class="nav pull-right">
                     <li><a href="/board/new" class="">Create Board</a></li>
                     <li><a href="/flyer/new" class="">Create Flyer</a></li>
                 </ul>
+                <%}%>
             </div><!-- /.nav-collapse -->
         </div><!-- /.container -->
     </div><!-- /.navbar-inner -->
