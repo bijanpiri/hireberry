@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <html>
 <head>
     <title>Profile</title>
@@ -44,22 +45,28 @@
         </div><!-- /.container -->
     </div><!-- /.navbar-inner -->
 </div><!-- /.navbar -->
+=======
+<% layout('layout') -%>
+>>>>>>> 50db5ea9793978502405f0bd7fed8625678eb3e6
 
 <div class="container">
     <div class="row">
         <h2>Profile</h2>
     </div>
     <div class="row ">
-        <div class="span5">
-            <form class="form-horizontal" action="/profile" method="post">
+        <div>
 
+            <div style="background-color: #fff4be; padding: 5px">
+                <b>You have <%= boardsCount %> board(s).</b>
+            </div>
+            <div style="background-color: #fff4be; padding: 5px">
+                <b>You have <%= flyersCount %> flyer(s).</b>
+            </div>
+            <form class="form-horizontal" action="/profile" method="post">
                 <div class="control-group">
                     <div class="control-label"> Email:</div>
                     <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <%=everyauth.email%>
-                        </div>
-                        <label class="help-inline">example@mail.com</label>
+                         <%=everyauth.user.email%>
                     </div>
                 </div>
 
@@ -101,5 +108,3 @@
         </div>
     </div>
 </div>
-</body>
-</html>

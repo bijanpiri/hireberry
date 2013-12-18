@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
+<<<<<<< HEAD
     <file url="file://$PROJECT_DIR$/public/script/newboard.js" libraries="{mapbox}" />
     <file url="file://$PROJECT_DIR$/views/boardnew.ejs" libraries="{jquery-1.10.2, mapbox}" />
+=======
+    <file url="file://$PROJECT_DIR$/views/boardnew.ejs" libraries="{mapbox}" />
+    <file url="PROJECT" libraries="{Node.js v0.8.22 Core Modules}" />
+>>>>>>> 50db5ea9793978502405f0bd7fed8625678eb3e6
   </component>
 </project>
 

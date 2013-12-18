@@ -1,0 +1,22 @@
+<% layout('layout') -%>
+
+<div class="container">
+    <div class="row"><h4>Creating New Flyer</h4></div>
+    <div class="row">
+        <form method="post" action="/flyer/new">
+            <div>
+                Enter a phrase:
+                <input type="text" name="flyertext"/>
+            </div>
+            <div>Board:
+                <select name="board" class="form-control">
+                    <% for(i=0;i<boards.length;i++){%>
+                    <option value=<%=boards[i]._id%>><%=boards[i].name%></option>
+                    <%}%>
+                </select></div>
+            <div>
+                <button type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
