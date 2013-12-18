@@ -206,10 +206,7 @@ app.post('/profile', function(req,res) {
 });
 
 app.get('/board/new', function(req,res){
-<<<<<<< HEAD
 
-    res.render('boardnew.ejs');
-=======
     res.render('boardnew.ejs',{title:'new flyer'});
 });
 
@@ -267,11 +264,5 @@ app.post('/flyer/new', function(req,res){
             res.redirect('/profile');
         });
     });
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 50db5ea9793978502405f0bd7fed8625678eb3e6
->>>>>>> be95bf8f158896f382782675d1d43055ae130407
 });
 /*************************************/
