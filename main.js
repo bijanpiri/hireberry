@@ -151,6 +151,13 @@ module.exports = app;
 
 /************** Application Routers ****************/
 
+app.get('/', function(req,res) {
+    if( req.user )
+        res.render('profile',{email:req.user})
+    else
+        res.redirect('/login');
+});
+
 app.get('/info', function(req,res) {
 	res.send('Version ?.?.? - 920926-15:23');
 });

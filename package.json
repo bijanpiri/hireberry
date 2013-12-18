@@ -7,7 +7,6 @@
     "everyauth": "*",
     "stylus":"*",
     "jade":	"*",
-    "everyauth": "*",
     "mongoose": "*",
     "promise": "*"
   },
