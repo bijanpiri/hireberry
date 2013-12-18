@@ -2,12 +2,12 @@
   "name": "booltin-herokunode-app",
   "version": "0.0.1",
   "dependencies": {
+    "mongoose": "*",
     "express": "3.1.x",
     "ejs":	"*",
+    "jade":	"*",
     "everyauth": "*",
     "stylus":"*",
-    "jade":	"*",
-    "mongoose": "*",
     "promise": "*"
   },
   "engines": {
