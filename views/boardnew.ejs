@@ -2,55 +2,79 @@
 <html>
 <head>
     <meta charset=utf-8 />
-    <title>New Board</title>
+    <title>Boarder</title>
 
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
     <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.js'></script>
     <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.css' rel='stylesheet' />
-
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
     <style>
-        body { margin:0; padding:0; }
-        #map { top:0; bottom:0; width:30%; height: 500px;}
+
+
     </style>
 </head>
 <body>
-<div>Creating New Board</div>
-<div id='map'></div>
-<script>
-    var map = L.mapbox.map('map', 'coybit.gj1c3kom')
-            .setView([40, -74.50], 9);
-    map.on('click', function(e) {
-        //window[e.type].innerHTML = e.containerPoint.toString() + ', ' + e.latlng.toString();
-/*
-        var marker = L.marker(e.latlng, {
-            icon: L.mapbox.marker.icon({'marker-color': 'CC0033'}),
-            draggable: true
-        }).addTo(map);
-*/
-        L.mapbox.markerLayer({
-            // this feature is in the GeoJSON format: see geojson.org
-            // for the full specification
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                // coordinates here are in longitude, latitude order because
-                // x, y is the standard for GeoJSON and many formats
-                coordinates: [e.latlng.lat, e.latlng.lng]
-            },
-            properties: {
-                title: 'A Single Marker',
-                description: 'Just one of me',
-                // one can customize markers by adding simplestyle properties
-                // http://mapbox.com/developers/simplestyle/
-                'marker-size': 'large',
-                'marker-color': '#f0a'
-            }
-        }).addTo(map);
-    });
+
+<div class="container">
+    <div class="row">
+        <div class="span6">
+            <div class="control-group">
+                <div class="control-label"> Board Name:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+
+                        <input type="text" name='name' placeholder="Enter your new board name here">
+                    </div>
+                    <label class="help-inline"></label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label"> Category:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+                        <select>
+                            <option>cat1</option>
+                            <option>cat2</option>
+                            <option>cat3</option>
+                        </select>
+                    </div>
+                    <label class="help-inline"></label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label"> Board Name:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+
+                        <input type="text" name='name' placeholder="Enter your new board name here">
+                    </div>
+                    <label class="help-inline"></label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label"> Board Name:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+
+                        <input type="text" name='name' placeholder="Enter your new board name here">
+                    </div>
+                    <label class="help-inline"></label>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div id='map'>
+
+</div>
+
+<script src='/script/newboard.js'>
+
 </script>
 
-<form method="post" action="/board/new">
-    <button type="submit" value="Create">Create</button>
-</form>
 </body>
 </html>
