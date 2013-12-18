@@ -239,6 +239,10 @@ app.post('/board/new', function(req,res){
     res.send('OK');
 });
 
+app.get('/board/categories', function(req,res){
+   res.send(['event','sell/buy','school/university','general','other']);
+});
+
 app.get('/flyer/new', function(req,res){
 
     BBoards.find({}, function (err, boards){
