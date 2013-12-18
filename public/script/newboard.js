@@ -15,7 +15,11 @@ map.on('click',
         marker.setLatLng(e.latlng);
     });
 marker.bindPopup('Locate your board in map');
-marker.on('drag',function(e){
+marker.on('drag',
+    function(e){
+        var latlng=marker.getLatLng();
+        $('#lat')[0].value=(JSON.stringify( latlng.lat));
+        $('#lng')[0].value=(JSON.stringify( latlng.lng));
     }
 );
 
