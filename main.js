@@ -68,16 +68,16 @@ everyauth.twitter
                     if(err)
                         return promise.fulfill([err]);
                     else
-                        promise.fulfill(newUser);
+                        return promise.fulfill(newUser);
                 });
            } else {
-                console.log("User Exist ... Returning ");
-                promise.fulfill(user);
+                console.log("User Exist ... Returning " + user);
+                return promise.fulfill(user);
            }
         });
 
         Console.log('Logged In With Twitter')
-        return promise;
+        //return promise;
     })
     .redirectPath('/');
 
