@@ -25,7 +25,14 @@ var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10
 var app = express();
 mongoose.connect(mongoHQConenctionString);
 
-var BUsers = mongoose.model( 'users', {email: String, password: String, salt: String} );
+var BUsers = mongoose.model( 'users', {
+    email: String,
+    password: String,
+    salt: String,
+    twitterid:String,
+    twitterAccessToken:String,
+    twitterAccessSecretToken:String});
+
 var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
@@ -43,27 +50,34 @@ everyauth.twitter
     .consumerSecret(TWITTER_CONSUMER_SECRET)
     .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitterUserMetadata) {
         // find or create user logic goes here
+        var promise = this.Promise();
+
         BUsers.findOne({twitterid:twitterUserMetadata.id}, function(err,user){
 
-            console.log(twitterUserMetadata);
-            /*
             if(err)
-                return 'Oh-Oh!';
+                promise.fulfill([err]);
 
             if(!user){
+               console.log("User Not Exist ... Creating ");
                var newUser = BUsers({
                    twitterid:twitterUserMetadata.id,
                    twitterAccessToken:accessToken,
                    twitterAccessSecretToken:accessTokenSecret
                });
-                newUser.save();
-                return newUser;
+                newUser.save(function(err){
+                    if(err)
+                        promise.fulfill([err]);
+                    else
+                        promise.fulfill(newuser);
+                });
            } else {
-                return user;
+                console.log("User Exist ... Returning ");
+                promise.fulfill(user);
            }
-           */
         });
+
         Console.log('Logged In With Twitter')
+        return promise;
     })
     .redirectPath('/');
 
