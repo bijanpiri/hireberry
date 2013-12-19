@@ -19,7 +19,10 @@
                 <b><a href="/profile/flyers">You have <%= flyers.length %> flyer(s).</a></b>
                 <ul>
                     <% for(i=0;i<flyers.length;i++){%>
-                    <li><a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a></li>
+                    <li>
+                        <a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a>
+                        <a href="/flyer/remove/<%=flyers[i]._id%>">[X]</a>
+                    </li>
                     <%}%>
                 </ul>
             </div>

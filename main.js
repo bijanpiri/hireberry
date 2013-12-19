@@ -313,8 +313,15 @@ app.get('/board/:id', function(req,res){
         if(err)
             res.send('Oh oh error');
 
-        if(board)
-            res.render('board.ejs',{title:board.name,board:board});
+        if(board){
+            BFlyersBoards.find({board:boardid}, function(err,flyers){
+                res.render('board.ejs',{
+                    title:board.name,
+                    board:board,
+                    flyers:flyers
+                });
+            })
+        }
         else
             res.send('404, Not Found! Yah!');
     });
@@ -351,6 +358,19 @@ app.post('/flyer/new', function(req,res){
     });
 });
 
+app.get('/flyer/remove/:id', function(req,res){
+    var flyerid = req.params.id;
+
+    BFlyersBoards.remove({flyer:flyerid}, function(err){
+        if(!err){
+            BFlyers.remove({_id:flyerid}, function(err){
+                if(!err)
+                    res.redirect('/profile');
+            });
+        }
+    });
+});
+
 app.get('/flyer/:id', function(req,res){
    var flyerid = req.params.id;
 
@@ -364,4 +384,5 @@ app.get('/flyer/:id', function(req,res){
             res.send('404, Not Found! Yah!');
     });
 });
+
 /*************************************/
