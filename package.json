@@ -6,7 +6,6 @@
     "express": "3.1.x",
     "ejs":	"*",
     "ejs-locals": "*",
-    "jade":	"*",
     "everyauth": "0.4.5",
     "stylus":"*",
     "promise": "*"
