@@ -43,6 +43,26 @@ everyauth.twitter
     .consumerSecret(TWITTER_CONSUMER_SECRET)
     .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitterUserMetadata) {
         // find or create user logic goes here
+        BUsers.findOne({twitterid:twitterUserMetadata.id}, function(err,user){
+
+            console.log(twitterUserMetadata);
+            /*
+            if(err)
+                return 'Oh-Oh!';
+
+            if(!user){
+               var newUser = BUsers({
+                   twitterid:twitterUserMetadata.id,
+                   twitterAccessToken:accessToken,
+                   twitterAccessSecretToken:accessTokenSecret
+               });
+                newUser.save();
+                return newUser;
+           } else {
+                return user;
+           }
+           */
+        });
         Console.log('Logged In With Twitter')
     })
     .redirectPath('/');
