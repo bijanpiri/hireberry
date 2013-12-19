@@ -130,6 +130,7 @@ everyauth.google
                         promise.resolve(newUser);
                 });
             } else {
+                console.log("User Exist ... Returning ");
                 promise.resolve(user);
             }
         });
