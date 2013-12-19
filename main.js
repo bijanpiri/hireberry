@@ -94,8 +94,9 @@ everyauth.google
         //googleUser.expiresIn = extra.expires_in;
 
         var promise = this.Promise();
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata);
         var newUser = BUsers({
+            id:'123gsfsdf',
             email:'dude@dudes.com',
             googleid:googleUserMetadata.id,
             googleAccessToken:accessToken,
