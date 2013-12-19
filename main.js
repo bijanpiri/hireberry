@@ -100,11 +100,13 @@ everyauth.google
     })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
-        googleUser.refreshToken = extra.refresh_token;
-        googleUser.expiresIn = extra.expires_in;
+        //googleUser.refreshToken = extra.refresh_token;
+        //googleUser.expiresIn = extra.expires_in;
 
         var promise = this.Promise();
-
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+        return ['NoNoNo'];
+/*
         console.log('@@@@@@@@@@@@@$$$$$$$$$$$$ Finding User ...' + googleUserMetadata + '$$$$$$$$$$$$');
 
         BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
@@ -133,6 +135,7 @@ everyauth.google
         });
 
         return promise;
+        */
     })
     .redirectPath('/');
 
