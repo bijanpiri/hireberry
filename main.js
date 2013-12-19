@@ -73,10 +73,10 @@ everyauth.twitter
                     if(err)
                         promise.fail([err]);
                     else
-                        promise.resolve(newUser);
+                        promise.fulfill(newUser);
                 });
             } else {
-                promise.resolve(user);
+                promise.fulfill(user);
             }
         });
 
