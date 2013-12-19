@@ -6,6 +6,8 @@ var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
 
+everyauth.debug = true;
+
 /*
     /auth/twitter
     /auth/google
@@ -18,8 +20,8 @@ var engine = require('ejs-locals');
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-var GOOGLE_CLIENT_ID = '892388590141.apps.googleusercontent.com';
-var GOOGLE_CLIENT_SECRET = 'RgOgbduF2FXkgVjnne5dC93B';
+var GOOGLE_CLIENT_ID = "892388590141.apps.googleusercontent.com";
+var GOOGLE_CLIENT_SECRET = "As0tpiRqHmPK942RD8YLoVXn";
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
 var app = express();
@@ -85,7 +87,7 @@ everyauth.twitter
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.google.com/m8/feeds') // What you want access to
+    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
     .handleAuthCallbackError( function (req, res) {
         // private keys secret: notasecret
         // If a user denies your app, Google will redirect the user to
