@@ -55,7 +55,7 @@ everyauth.twitter
         BUsers.findOne({twitterid:twitterUserMetadata.id}, function(err,user){
 
             if(err)
-                promise.fulfill([err]);
+                return promise.fulfill([err]);
 
             if(!user){
                console.log("User Not Exist ... Creating ");
@@ -66,9 +66,9 @@ everyauth.twitter
                });
                 newUser.save(function(err){
                     if(err)
-                        promise.fulfill([err]);
+                        return promise.fulfill([err]);
                     else
-                        promise.fulfill(newuser);
+                        promise.fulfill(newUser);
                 });
            } else {
                 console.log("User Exist ... Returning ");
