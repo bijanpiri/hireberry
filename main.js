@@ -127,11 +127,11 @@ everyauth.google
                     if(err)
                         promise.fail([err]);
                     else
-                        promise.resolve(newUser);
+                        promise.fulfill(newUser);
                 });
             } else {
                 console.log("User Exist ... Returning ");
-                promise.resolve(user);
+                promise.fulfill(user);
             }
         });
 
