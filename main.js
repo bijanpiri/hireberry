@@ -87,7 +87,7 @@ everyauth.twitter
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.googleapis.com/auth/userinfo.profile')
+    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
     .handleAuthCallbackError( function (req, res) {
         // private keys secret: notasecret
         // If a user denies your app, Google will redirect the user to
