@@ -8,10 +8,20 @@
         <div>
 
             <div style="background-color: #fff4be; padding: 5px">
-                <b>You have <%= boardsCount %> board(s).</b>
+                <b><a href="/profile/flyers">You have <%= boards.length %> board(s).</a></b>
+                <ul>
+                    <% for(i=0;i<boards.length;i++){%>
+                    <li><a href="/board/<%=boards[i].board%>"><%=boards[i].board%></a></li>
+                    <%}%>
+                </ul>
             </div>
             <div style="background-color: #fff4be; padding: 5px">
-                <b>You have <%= flyersCount %> flyer(s).</b>
+                <b><a href="/profile/flyers">You have <%= flyers.length %> flyer(s).</a></b>
+                <ul>
+                    <% for(i=0;i<flyers.length;i++){%>
+                    <li><a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a></li>
+                    <%}%>
+                </ul>
             </div>
             <form class="form-horizontal" action="/profile" method="post">
                 <div class="control-group">

@@ -236,15 +236,16 @@ app.get('/openapp', function(req,res) {
 app.get('/profile', function(req,res) {
     if( req.user ){
 
-        BUsersBoards.find({user:req.user._id}).count(function (err, bcount) {
-            if (err)    return handleError(err);
+        BUsersBoards.find({user:req.user._id}, function (err, boards) {
+            if (err)
+                return handleError(err);
 
-            BFlyers.find({owner:req.user._id}).count(function (err, fcount) {
+            BFlyers.find({owner:req.user._id}, function (err, flyers) {
                 res.render('profile.ejs',{
                     title:'Profile',
                     email:req.user,
-                    boardsCount:bcount,
-                    flyersCount:fcount
+                    boards:boards,
+                    flyers:flyers
                 });
             });
         });
@@ -305,6 +306,20 @@ app.post('/board/new', function(req,res){
     res.send('OK');
 });
 
+app.get('/board/:id', function(req,res){
+    var boardid = req.params.id;
+
+    BBoards.findOne({_id:boardid}, function(err,board){
+        if(err)
+            res.send('Oh oh error');
+
+        if(board)
+            res.render('board.ejs',{title:board.name,board:board});
+        else
+            res.send('404, Not Found! Yah!');
+    });
+});
+
 app.get('/board/categories', function(req,res){
    res.send([
        {name:'event',id:1},
@@ -333,6 +348,20 @@ app.post('/flyer/new', function(req,res){
         BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(function (err, product, numberAffected) {
             res.redirect('/profile');
         });
+    });
+});
+
+app.get('/flyer/:id', function(req,res){
+   var flyerid = req.params.id;
+
+    BFlyers.findOne({_id:flyerid}, function(err,flyer){
+        if(err)
+            res.send('Oh oh error');
+
+        if(flyer)
+            res.render('flyer.ejs',{title:flyer.text,flyer:flyer});
+        else
+            res.send('404, Not Found! Yah!');
     });
 });
 /*************************************/
