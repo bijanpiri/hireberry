@@ -105,7 +105,7 @@ everyauth.google
 
         var promise = this.Promise();
 
-        console.log('Finding User ...');
+        console.log('Finding User ...' + googleUserMetadata);
 
         BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
 
