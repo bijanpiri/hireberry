@@ -20,8 +20,8 @@ everyauth.debug = true;
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-var GOOGLE_CLIENT_ID = "892388590141.apps.googleusercontent.com";
-var GOOGLE_CLIENT_SECRET = "As0tpiRqHmPK942RD8YLoVXn";
+var GOOGLE_CLIENT_ID = "892388590141-dr24r06tuumvl3cr58ha35ihiev4toeu.apps.googleusercontent.com";
+var GOOGLE_CLIENT_SECRET = "_30G4HgAnq8Ud7X0YWZLFg8R";
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
 var app = express();
@@ -87,7 +87,7 @@ everyauth.twitter
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
+    .scope('https://www.googleapis.com/auth/userinfo.profile')
     .handleAuthCallbackError( function (req, res) {
         // private keys secret: notasecret
         // If a user denies your app, Google will redirect the user to
@@ -100,6 +100,9 @@ everyauth.google
     })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
+        googleUser.refreshToken = extra.refresh_token;
+        googleUser.expiresIn = extra.expires_in;
+
         var promise = this.Promise();
 
         console.log('Finding User ...');
