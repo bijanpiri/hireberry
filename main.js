@@ -83,7 +83,17 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
-
+/*
+everyauth.googlehybrid
+    .myHostname('http://local.host:3000')
+    .consumerKey(conf.googlehybrid.consumerKey)
+    .consumerSecret(conf.googlehybrid.consumerSecret)
+    .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
+    .findOrCreateUser( function(session, userAttributes) {
+        return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
+    })
+    .redirectPath('/');
+*/
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -97,18 +107,7 @@ everyauth.google
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + session + '&&' + extra.expires_in + extra.refresh_token);
-
-        var newUser = BUsers({
-            id:'123gsfsdf',
-            email:'dude@dudes.com',
-            googleid:googleUserMetadata.id,
-            googleAccessToken:accessToken,
-            googleAccessSecretToken:accessTokenExtra});
-
-        return newUser;
-/*
-        console.log('@@@@@@@@@@@@@$$$$$$$$$$$$ Finding User ...' + googleUserMetadata + '$$$$$$$$$$$$');
+        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + session + '&&' + extra.expires_in + extra.refresh_token);
 
         BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
 
@@ -122,7 +121,7 @@ everyauth.google
                 var newUser = BUsers({
                     googleid:googleUserMetadata.id,
                     googleAccessToken:accessToken,
-                    googleAccessSecretToken:accessTokenSecret
+                    googleAccessSecretToken:accessTokenExtra
                 });
                 newUser.save(function(err){
                     if(err)
