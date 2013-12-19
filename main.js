@@ -18,8 +18,8 @@ var engine = require('ejs-locals');
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-var GOOGLE_CLIENT_ID = '105806305660-2k8f0sr0mg8a36rn8fmn0fsh9ls85iio.apps.googleusercontent.com';
-var GOOGLE_CLIENT_SECRET = 'uFr61pADo3O5b1uyaEk5Cmuh';
+var GOOGLE_CLIENT_ID = '892388590141.apps.googleusercontent.com';
+var GOOGLE_CLIENT_SECRET = '892388590141@developer.gserviceaccount.com';
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
 var app = express();
@@ -301,7 +301,12 @@ app.post('/board/new', function(req,res){
 });
 
 app.get('/board/categories', function(req,res){
-   res.send(['event','sell/buy','school/university','general','other']);
+   res.send([
+       {name:'event',id:1},
+       {name:'sell/buy',id:2},
+       {name:'school/university',id:3},
+       {name:'general',id:4},
+       {name:'other',id:5}]);
 });
 
 app.get('/flyer/new', function(req,res){
