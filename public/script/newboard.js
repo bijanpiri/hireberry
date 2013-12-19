@@ -24,6 +24,10 @@ function createBoard(){
 function privacyChanged(){
     $('#privacy').val($(this).text());
 }
+var eventType;
+function mapEvent(e){
+    eventType=e.type;
+}
 var clickTimeout;
 var clickDetected = true;
 
@@ -33,22 +37,26 @@ function main(){
 
     $('div.btn-group>button').click(privacyChanged);
     $('button#createBoard').click(createBoard);
-    $('#map').dblclick();
+    $('#map').dblclick(mapEvent);
+    $('#map').click(mapEvent);
     var map = L.mapbox.map('map', 'coybit.gj1c3kom',{
         doubleClickZoom: false
         })
         .setView([37.9, -77],4)
         .on('dblclick', function(e) {
+//            alert('double clicked map');
             clickDetected = false;
             clearTimeout(clickTimeout);
             map.setView(e.latlng, map.getZoom() + 1);
         })
         .on('click', function(e) {
-            clickDetected = true;
-            clickTimeout = setTimeout(function(){
-                if(clickDetected)
+            if(eventType='click');
+
+//            clickDetected = true;
+//            clickTimeout = setTimeout(function(){
+//                if(clickDetected)
                     marker.setLatLng(e.latlng);
-            },250);
+//            },250);
         });
 
     var marker = L.marker(new L.LatLng(37.9, -77), {
