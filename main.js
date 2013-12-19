@@ -18,14 +18,24 @@ var engine = require('ejs-locals');
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-var GOOGLE_CLIENT_ID = '105806305660-2k8f0sr0mg8a36rn8fmn0fsh9ls85iio.apps.googleusercontent.com';
-var GOOGLE_CLIENT_SECRET = 'uFr61pADo3O5b1uyaEk5Cmuh';
+var GOOGLE_CLIENT_ID = '892388590141.apps.googleusercontent.com';
+var GOOGLE_CLIENT_SECRET = '892388590141@developer.gserviceaccount.com';
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
 var app = express();
 mongoose.connect(mongoHQConenctionString);
 
-var BUsers = mongoose.model( 'users', {email: String, password: String, salt: String} );
+var BUsers = mongoose.model( 'users', {
+    email: String,
+    password: String,
+    salt: String,
+    twitterid:String,
+    twitterAccessToken:String,
+    twitterAccessSecretToken:String,
+    googleid:String,
+    googleAccessToken:String,
+    googleAccessSecretToken:String});
+
 var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
@@ -43,7 +53,32 @@ everyauth.twitter
     .consumerSecret(TWITTER_CONSUMER_SECRET)
     .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitterUserMetadata) {
         // find or create user logic goes here
-        Console.log('Logged In With Twitter')
+        var promise = this.Promise();
+
+        BUsers.findOne({twitterid:twitterUserMetadata.id}, function(err,user){
+
+            if(err)
+                return promise.fail([err]);
+
+            if(!user){
+               console.log("User Not Exist ... Creating ");
+               var newUser = BUsers({
+                   twitterid:twitterUserMetadata.id,
+                   twitterAccessToken:accessToken,
+                   twitterAccessSecretToken:accessTokenSecret
+               });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.resolve(newUser);
+                });
+           } else {
+                 promise.resolve(user);
+           }
+        });
+
+        return promise;
     })
     .redirectPath('/');
 
@@ -58,12 +93,40 @@ everyauth.google
         // that.
         // If you do not configure this, everyauth renders a default fallback
         // view notifying the user that their authentication failed and why.
+        console.log('What The Hell?');
     })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
-        // Return a user or Promise that promises a user
-        // Promises are created via
-        //     var promise = this.Promise();
+        var promise = this.Promise();
+
+        console.log('Finding User ...');
+
+        BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
+
+            if(err)
+                return promise.fail([err]);
+
+            console.log(googleUserMetadata);
+
+            if(!user){
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    googleid:googleUserMetadata.id,
+                    googleAccessToken:accessToken,
+                    googleAccessSecretToken:accessTokenSecret
+                });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.resolve(newUser);
+                });
+            } else {
+                promise.resolve(user);
+            }
+        });
+
+        return promise;
     })
     .redirectPath('/');
 
@@ -240,7 +303,12 @@ app.post('/board/new', function(req,res){
 });
 
 app.get('/board/categories', function(req,res){
-   res.send(['event','sell/buy','school/university','general','other']);
+   res.send([
+       {name:'event',id:1},
+       {name:'sell/buy',id:2},
+       {name:'school/university',id:3},
+       {name:'general',id:4},
+       {name:'other',id:5}]);
 });
 
 app.get('/flyer/new', function(req,res){
