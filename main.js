@@ -31,7 +31,10 @@ var BUsers = mongoose.model( 'users', {
     salt: String,
     twitterid:String,
     twitterAccessToken:String,
-    twitterAccessSecretToken:String});
+    twitterAccessSecretToken:String,
+    googleid:String,
+    googleAccessToken:String,
+    googleAccessSecretToken:String});
 
 var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
@@ -68,11 +71,10 @@ everyauth.twitter
                     if(err)
                         promise.fail([err]);
                     else
-                        promise.fulfill(newUser);
+                        promise.resolve(newUser);
                 });
            } else {
-                console.log("User Exist ... Returning " + user);
-                promise.fulfill(user);
+                 promise.resolve(user);
            }
         });
 
@@ -94,9 +96,34 @@ everyauth.google
     })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
-        // Return a user or Promise that promises a user
-        // Promises are created via
-        //     var promise = this.Promise();
+        var promise = this.Promise();
+
+        BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
+
+            if(err)
+                return promise.fail([err]);
+
+            console.log(googleUserMetadata);
+
+            if(!user){
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    googleid:googleUserMetadata.id,
+                    googleAccessToken:accessToken,
+                    googleAccessSecretToken:accessTokenSecret
+                });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.resolve(newUser);
+                });
+            } else {
+                promise.resolve(user);
+            }
+        });
+
+        return promise;
     })
     .redirectPath('/');
 
