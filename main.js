@@ -88,16 +88,6 @@ everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
     .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
-    .handleAuthCallbackError( function (req, res) {
-        // private keys secret: notasecret
-        // If a user denies your app, Google will redirect the user to
-        // /auth/facebook/callback?error=access_denied
-        // This configurable route handler defines how you want to respond to
-        // that.
-        // If you do not configure this, everyauth renders a default fallback
-        // view notifying the user that their authentication failed and why.
-        console.log('What The Hell?');
-    })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
         //googleUser.refreshToken = extra.refresh_token;
@@ -105,7 +95,13 @@ everyauth.google
 
         var promise = this.Promise();
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-        return ['NoNoNo'];
+        var newUser = BUsers({
+            email:'dude@dudes.com',
+            googleid:googleUserMetadata.id,
+            googleAccessToken:accessToken,
+            googleAccessSecretToken:accessTokenExtra});
+
+        return newUser;
 /*
         console.log('@@@@@@@@@@@@@$$$$$$$$$$$$ Finding User ...' + googleUserMetadata + '$$$$$$$$$$$$');
 
