@@ -6,22 +6,36 @@
     </div>
     <div class="row ">
         <div>
-
-            <div style="background-color: #fff4be; padding: 5px">
-                <b><a href="/profile/flyers">You have <%= boards.length %> board(s).</a></b>
-                <ul>
+            <div style="background-color: #c9e8ff; padding-bottom: 2px">
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active">
+                        <a href="/profile/boards">
+                            <span class="badge pull-right"><%= boards.length %></span>
+                            Boards
+                        </a>
+                    </li>
+                </ul>
+               <ul>
                     <% for(i=0;i<boards.length;i++){%>
                     <li><a href="/board/<%=boards[i].board%>"><%=boards[i].board%></a></li>
                     <%}%>
                 </ul>
             </div>
-            <div style="background-color: #fff4be; padding: 5px">
-                <b><a href="/profile/flyers">You have <%= flyers.length %> flyer(s).</a></b>
+            <div style="background-color: #c9e8ff; padding-bottom: 2px">
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active">
+                        <a href="/profile/flyers">
+                            <span class="badge pull-right"><%= flyers.length %></span>
+                            Flyers
+                        </a>
+                    </li>
+                </ul>
                 <ul>
                     <% for(i=0;i<flyers.length;i++){%>
                     <li>
                         <a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a>
                         <a href="/flyer/remove/<%=flyers[i]._id%>">[X]</a>
+                        <a href="/flyer/remove/<%=flyers[i]._id%>">[PutUp]</a>
                     </li>
                     <%}%>
                 </ul>
@@ -68,7 +82,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </div>

@@ -9,11 +9,11 @@ var engine = require('ejs-locals');
 everyauth.debug = true;
 
 /*
-    /auth/twitter
-    /auth/google
-    /logout
-    /register
-    /login
+ /auth/twitter
+ /auth/google
+ /logout
+ /register
+ /login
  */
 
 /************** Initialization ****************/
@@ -63,21 +63,21 @@ everyauth.twitter
                 return promise.fail([err]);
 
             if(!user){
-               console.log("User Not Exist ... Creating ");
-               var newUser = BUsers({
-                   twitterid:twitterUserMetadata.id,
-                   twitterAccessToken:accessToken,
-                   twitterAccessSecretToken:accessTokenSecret
-               });
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    twitterid:twitterUserMetadata.id,
+                    twitterAccessToken:accessToken,
+                    twitterAccessSecretToken:accessTokenSecret
+                });
                 newUser.save(function(err){
                     if(err)
                         promise.fail([err]);
                     else
                         promise.resolve(newUser);
                 });
-           } else {
-                 promise.resolve(user);
-           }
+            } else {
+                promise.resolve(user);
+            }
         });
 
         return promise;
@@ -156,8 +156,8 @@ everyauth.password
 
         var promise = this.Promise()
         BUsers.findOne({ email: login}, function (err, user) {
-          if (err)
-              return promise.fulfill([err]);
+            if (err)
+                return promise.fulfill([err]);
 
             console.log(user);
 
@@ -166,9 +166,9 @@ everyauth.password
             if (user.password !== password)
                 return ['Login failed'];
 
-          promise.fulfill(user);
+            promise.fulfill(user);
         });
-       return promise;
+        return promise;
     })
     .loginSuccessRedirect('/profile')
 
@@ -194,17 +194,17 @@ everyauth.password
 
 // configure Express
 app.configure(function() {
-  app.engine('ejs',engine);
-  app.set('view engine', 'ejs');
-  app.set('views', __dirname + '/views');
-  app.use(express.logger('dev'));
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(everyauth.middleware());
+    app.engine('ejs',engine);
+    app.set('view engine', 'ejs');
+    app.set('views', __dirname + '/views');
+    app.use(express.logger('dev'));
+    app.use(express.static(__dirname + '/public'));
+    app.use(express.logger());
+    app.use(express.cookieParser());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.session({ secret: 'keyboard cat' }));
+    app.use(everyauth.middleware());
 });
 
 /************** Starting Server ****************/
@@ -226,11 +226,11 @@ app.get('/', function(req,res) {
 });
 
 app.get('/info', function(req,res) {
-	res.send('Version ?.?.? - 920926-15:23');
+    res.send('Version ?.?.? - 920926-15:23');
 });
 
 app.get('/openapp', function(req,res) {
-	res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+    res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
 app.get('/profile', function(req,res) {
@@ -268,7 +268,7 @@ app.post('/profile', function(req,res) {
                     return handleError(err);
                 else
                     res.send('Password is changed successfuly!');
-        });
+            });
     }
 });
 
@@ -328,20 +328,20 @@ app.get('/board/:id', function(req,res){
 });
 
 app.get('/board/categories', function(req,res){
-   res.send([
-       {name:'event',id:1},
-       {name:'sell/buy',id:2},
-       {name:'school/university',id:3},
-       {name:'general',id:4},
-       {name:'other',id:5}]);
+    res.send([
+        {name:'event',id:1},
+        {name:'sell/buy',id:2},
+        {name:'school/university',id:3},
+        {name:'general',id:4},
+        {name:'other',id:5}]);
 });
 
 app.get('/flyer/new', function(req,res){
 
     BBoards.find({}, function (err, boards){
         res.render('flyernew.ejs',{
-                title:'new flyer',
-                boards:boards
+            title:'new flyer',
+            boards:boards
         });
     });
 });
@@ -372,7 +372,7 @@ app.get('/flyer/remove/:id', function(req,res){
 });
 
 app.get('/flyer/:id', function(req,res){
-   var flyerid = req.params.id;
+    var flyerid = req.params.id;
 
     BFlyers.findOne({_id:flyerid}, function(err,flyer){
         if(err)
