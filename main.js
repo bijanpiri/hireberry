@@ -93,10 +93,13 @@ everyauth.google
         // that.
         // If you do not configure this, everyauth renders a default fallback
         // view notifying the user that their authentication failed and why.
+        console.log('What The Hell?');
     })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
         var promise = this.Promise();
+
+        console.log('Finding User ...');
 
         BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
 
