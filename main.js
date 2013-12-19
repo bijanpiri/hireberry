@@ -20,7 +20,7 @@ everyauth.debug = true;
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-var GOOGLE_CLIENT_ID = "8892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googleusercontent.com";
+var GOOGLE_CLIENT_ID = '3335216477.apps.googleusercontent.com';
 var GOOGLE_CLIENT_SECRET = "YzysmahL5LX4GLIydqBXN1zz";
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
