@@ -135,7 +135,7 @@ everyauth.google
         });
 
         return promise;
-        */
+
     })
     .redirectPath('/');
 
