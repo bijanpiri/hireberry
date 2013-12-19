@@ -11,7 +11,7 @@ function fillCategory(){
                 function(i,cat){
                     options.append(
                         $('<option>').append(
-                            cat
+                            cat.name
                         )
                     );
 
