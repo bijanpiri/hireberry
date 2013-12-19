@@ -11,7 +11,11 @@
     <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.css' rel='stylesheet' />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="/bootstrap/js/bootstrap.js"></script>
+    <script src="/bootstrap/tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script src="/bootstrap/tagsinput/bootstrap-tagsinput-angular.js/"></script>
+    <link rel="stylesheet" href="/bootstrap/tagsinput/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
 
     <style>
         #mapcontainer{
@@ -26,10 +30,10 @@
 
 <body>
 
-<div class="container">
-    <div class="row">
-        <div class="span3">
-            <form>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span5">
+            <form class="form-horizontal" action="/board/new" method="post">
                 <fieldset>
                     <div class="control-group">
                         <div class="control-label"> Board Name:</div>
@@ -54,13 +58,19 @@
                     </div>
                     <div class="control-group">
 
-                        <div class="control-label"> Board Location:</div>
+                        <div class="control-label"> Latitude:</div>
                         <div class="controls ">
-                            <div class="control-label"> Latitude:</div>
+
                             <div class="input-prepend input-append">
                                 <input type="text" id="lat" name='lat' placeholder="">
                             </div>
-                            <div class="control-label"> Longitude:</div>
+                            <label class="help-inline"></label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+
+                        <div class="control-label"> Longitude:</div>
+                        <div class="controls ">
                             <div class="input-prepend input-append">
                                 <input type="text" id="lng" name='lng' placeholder="">
                             </div>
@@ -70,27 +80,38 @@
                     <div class="control-group">
                         <div class="control-label"> Tags:</div>
                         <div class="controls ">
-                            <div class="input-prepend input-append">
+                            <input type="text" data-role="tagsinput" />
 
-                                <input type="text" name='tags' placeholder="Enter tags here to search faster">
-                            </div>
                             <label class="help-inline"></label>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="control-label"> Privacy:</div>
-                        <div class="btn"></div>
+                        <div class="controls">
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <input type="hidden" id="privacy" name="privacy" value="" />
 
-                        <div>
-
+                                <button type="button" class="btn active">Public</button>
+                                <button type="button" class="btn ">Private</button>
+                            </div>
                         </div>
 
                     </div>
 
+                    <div class="control-group">
+                        <div class="controls">
+
+                            <button id="createBoard" type="submit" class="btn btn-primary input-large" data-loading-text="Saving board...">
+                                Create Board
+                            </button>
+                        </div>
+                    </div>
+
+
                 </fieldset>
             </form>
         </div>
-        <div class="span9" id="mapcontainer">
+        <div class="span5 offset1" id="mapcontainer">
             <div id="map"></div>
         </div>
     </div>
