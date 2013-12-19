@@ -95,6 +95,7 @@ everyauth.google
 
         var promise = this.Promise();
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata);
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
         var newUser = BUsers({
             id:'123gsfsdf',
             email:'dude@dudes.com',
