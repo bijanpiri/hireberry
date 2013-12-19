@@ -7,12 +7,8 @@
     "ejs":	"*",
     "ejs-locals": "*",
     "jade":	"*",
-    "everyauth": "*",
+    "everyauth": "0.4.5",
     "stylus":"*",
     "promise": "*"
-  },
-  "engines": {
-    "node": "0.10.x",
-    "npm": "1.2.x"
   }
 }
