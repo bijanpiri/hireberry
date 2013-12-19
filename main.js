@@ -85,8 +85,9 @@ everyauth.twitter
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.google.com/m8/feeds') // What you want access to
+    //.scope('https://www.google.com/m8/feeds') // What you want access to
     .handleAuthCallbackError( function (req, res) {
+        // private keys secret: notasecret
         // If a user denies your app, Google will redirect the user to
         // /auth/facebook/callback?error=access_denied
         // This configurable route handler defines how you want to respond to
