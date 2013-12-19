@@ -6,20 +6,22 @@ var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
 
+everyauth.debug = true;
+
 /*
-    /auth/twitter
-    /auth/google
-    /logout
-    /register
-    /login
+ /auth/twitter
+ /auth/google
+ /logout
+ /register
+ /login
  */
 
 /************** Initialization ****************/
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-var GOOGLE_CLIENT_ID = '892388590141.apps.googleusercontent.com';
-var GOOGLE_CLIENT_SECRET = 'RgOgbduF2FXkgVjnne5dC93B';
+var GOOGLE_CLIENT_ID = "892388590141.apps.googleusercontent.com";
+var GOOGLE_CLIENT_SECRET = "As0tpiRqHmPK942RD8YLoVXn";
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
 var app = express();
@@ -61,21 +63,21 @@ everyauth.twitter
                 return promise.fail([err]);
 
             if(!user){
-               console.log("User Not Exist ... Creating ");
-               var newUser = BUsers({
-                   twitterid:twitterUserMetadata.id,
-                   twitterAccessToken:accessToken,
-                   twitterAccessSecretToken:accessTokenSecret
-               });
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    twitterid:twitterUserMetadata.id,
+                    twitterAccessToken:accessToken,
+                    twitterAccessSecretToken:accessTokenSecret
+                });
                 newUser.save(function(err){
                     if(err)
                         promise.fail([err]);
                     else
                         promise.resolve(newUser);
                 });
-           } else {
-                 promise.resolve(user);
-           }
+            } else {
+                promise.resolve(user);
+            }
         });
 
         return promise;
@@ -85,7 +87,7 @@ everyauth.twitter
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.google.com/m8/feeds') // What you want access to
+    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
     .handleAuthCallbackError( function (req, res) {
         // private keys secret: notasecret
         // If a user denies your app, Google will redirect the user to
@@ -154,8 +156,8 @@ everyauth.password
 
         var promise = this.Promise()
         BUsers.findOne({ email: login}, function (err, user) {
-          if (err)
-              return promise.fulfill([err]);
+            if (err)
+                return promise.fulfill([err]);
 
             console.log(user);
 
@@ -164,9 +166,9 @@ everyauth.password
             if (user.password !== password)
                 return ['Login failed'];
 
-          promise.fulfill(user);
+            promise.fulfill(user);
         });
-       return promise;
+        return promise;
     })
     .loginSuccessRedirect('/profile')
 
@@ -192,17 +194,17 @@ everyauth.password
 
 // configure Express
 app.configure(function() {
-  app.engine('ejs',engine);
-  app.set('view engine', 'ejs');
-  app.set('views', __dirname + '/views');
-  app.use(express.logger('dev'));
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(everyauth.middleware());
+    app.engine('ejs',engine);
+    app.set('view engine', 'ejs');
+    app.set('views', __dirname + '/views');
+    app.use(express.logger('dev'));
+    app.use(express.static(__dirname + '/public'));
+    app.use(express.logger());
+    app.use(express.cookieParser());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.session({ secret: 'keyboard cat' }));
+    app.use(everyauth.middleware());
 });
 
 /************** Starting Server ****************/
@@ -224,25 +226,26 @@ app.get('/', function(req,res) {
 });
 
 app.get('/info', function(req,res) {
-	res.send('Version ?.?.? - 920926-15:23');
+    res.send('Version ?.?.? - 920926-15:23');
 });
 
 app.get('/openapp', function(req,res) {
-	res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+    res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
 app.get('/profile', function(req,res) {
     if( req.user ){
 
-        BUsersBoards.find({user:req.user._id}).count(function (err, bcount) {
-            if (err)    return handleError(err);
+        BUsersBoards.find({user:req.user._id}, function (err, boards) {
+            if (err)
+                return handleError(err);
 
-            BFlyers.find({owner:req.user._id}).count(function (err, fcount) {
+            BFlyers.find({owner:req.user._id}, function (err, flyers) {
                 res.render('profile.ejs',{
                     title:'Profile',
                     email:req.user,
-                    boardsCount:bcount,
-                    flyersCount:fcount
+                    boards:boards,
+                    flyers:flyers
                 });
             });
         });
@@ -265,7 +268,7 @@ app.post('/profile', function(req,res) {
                     return handleError(err);
                 else
                     res.send('Password is changed successfuly!');
-        });
+            });
     }
 });
 
@@ -303,21 +306,42 @@ app.post('/board/new', function(req,res){
     res.send('OK');
 });
 
+app.get('/board/:id', function(req,res){
+    var boardid = req.params.id;
+
+    BBoards.findOne({_id:boardid}, function(err,board){
+        if(err)
+            res.send('Oh oh error');
+
+        if(board){
+            BFlyersBoards.find({board:boardid}, function(err,flyers){
+                res.render('board.ejs',{
+                    title:board.name,
+                    board:board,
+                    flyers:flyers
+                });
+            })
+        }
+        else
+            res.send('404, Not Found! Yah!');
+    });
+});
+
 app.get('/board/categories', function(req,res){
-   res.send([
-       {name:'event',id:1},
-       {name:'sell/buy',id:2},
-       {name:'school/university',id:3},
-       {name:'general',id:4},
-       {name:'other',id:5}]);
+    res.send([
+        {name:'event',id:1},
+        {name:'sell/buy',id:2},
+        {name:'school/university',id:3},
+        {name:'general',id:4},
+        {name:'other',id:5}]);
 });
 
 app.get('/flyer/new', function(req,res){
 
     BBoards.find({}, function (err, boards){
         res.render('flyernew.ejs',{
-                title:'new flyer',
-                boards:boards
+            title:'new flyer',
+            boards:boards
         });
     });
 });
@@ -333,4 +357,32 @@ app.post('/flyer/new', function(req,res){
         });
     });
 });
+
+app.get('/flyer/remove/:id', function(req,res){
+    var flyerid = req.params.id;
+
+    BFlyersBoards.remove({flyer:flyerid}, function(err){
+        if(!err){
+            BFlyers.remove({_id:flyerid}, function(err){
+                if(!err)
+                    res.redirect('/profile');
+            });
+        }
+    });
+});
+
+app.get('/flyer/:id', function(req,res){
+    var flyerid = req.params.id;
+
+    BFlyers.findOne({_id:flyerid}, function(err,flyer){
+        if(err)
+            res.send('Oh oh error');
+
+        if(flyer)
+            res.render('flyer.ejs',{title:flyer.text,flyer:flyer});
+        else
+            res.send('404, Not Found! Yah!');
+    });
+});
+
 /*************************************/
