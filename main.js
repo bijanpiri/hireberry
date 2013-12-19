@@ -21,7 +21,7 @@ everyauth.debug = true;
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
 var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googleusercontent.com';
-var GOOGLE_CLIENT_SECRET = 'PJMW_uP39nogdu0WpBuqMhtB';
+var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
 var app = express();
@@ -83,29 +83,31 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
-
+/*
+everyauth.googlehybrid
+    .myHostname('http://local.host:3000')
+    .consumerKey(conf.googlehybrid.consumerKey)
+    .consumerSecret(conf.googlehybrid.consumerSecret)
+    .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
+    .findOrCreateUser( function(session, userAttributes) {
+        return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
+    })
+    .redirectPath('/');
+*/
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.googleapis.com/auth/userinfo.profile')
-    .handleAuthCallbackError( function (req, res) {
-        // private keys secret: notasecret
-        // If a user denies your app, Google will redirect the user to
-        // /auth/facebook/callback?error=access_denied
-        // This configurable route handler defines how you want to respond to
-        // that.
-        // If you do not configure this, everyauth renders a default fallback
-        // view notifying the user that their authentication failed and why.
-        console.log('What The Hell?');
-    })
+    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
-        googleUser.refreshToken = extra.refresh_token;
-        googleUser.expiresIn = extra.expires_in;
+        //googleUser.refreshToken = extra.refresh_token;
+        //googleUser.expiresIn = extra.expires_in;
 
         var promise = this.Promise();
-
-        console.log('Finding User ...');
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
+        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + session + '&&' + extra.expires_in + extra.refresh_token);
 
         BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
 
@@ -119,20 +121,22 @@ everyauth.google
                 var newUser = BUsers({
                     googleid:googleUserMetadata.id,
                     googleAccessToken:accessToken,
-                    googleAccessSecretToken:accessTokenSecret
+                    googleAccessSecretToken:accessTokenExtra
                 });
                 newUser.save(function(err){
                     if(err)
                         promise.fail([err]);
                     else
-                        promise.resolve(newUser);
+                        promise.fulfill(newUser);
                 });
             } else {
-                promise.resolve(user);
+                console.log("User Exist ... Returning ");
+                promise.fulfill(user);
             }
         });
 
         return promise;
+
     })
     .redirectPath('/');
 
