@@ -21,19 +21,32 @@ function fillCategory(){
 function main(){
 
     fillCategory();
+    var clickTimeout;
+    var clickDetected = true;
 
-    var map = L.mapbox.map('map', 'coybit.gj1c3kom').setView([37.9, -77],4);
+    var map = L.mapbox.map('map', 'coybit.gj1c3kom',{
+        doubleClickZoom: false
+        })
+        .setView([37.9, -77],4)
+        .on('dblclick', function(e) {
+            clickDetected = false;
+            clearTimeout(clickTimeout);
+            map.setView(e.latlng, map.getZoom() + 1);
+        })
+        .on('click', function(e) {
+            clickDetected = true;
+            clickTimeout = setTimeout(function(){
+                if(clickDetected)
+                    marker.setLatLng(e.latlng);
+            },250);
+        });
 
     var marker = L.marker(new L.LatLng(37.9, -77), {
         icon: L.mapbox.marker.icon({'marker-color': 'CC0033'}),
         draggable: true
-    });
+    }).addTo(map);
 
-    map.on('click',
-        function(e) {
-            //window[e.type].innerHTML = e.containerPoint.toString() + ', ' + e.latlng.toString();
-            marker.setLatLng(e.latlng);
-        });
+    /*
     marker.bindPopup('Locate your board in map');
     marker.on('drag',
         function(e){
@@ -42,6 +55,6 @@ function main(){
             $('#lng')[0].value=(JSON.stringify( latlng.lng));
         }
     );
+    */
 
-    marker.addTo(map);
 }
