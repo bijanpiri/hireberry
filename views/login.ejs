@@ -1,5 +1,17 @@
 <% layout('layout') -%>
+<script language="javascript" type="text/javascript">
 
+    /* document.getElementById()*/
+    function isEmailAddress() {
+        var email = document.getElementById("email").value;
+        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        if(!email.match(pattern))
+            alert("Email not valid");
+        else
+            alert("Email valid");
+        return pattern.test(email);
+    }
+</script>
 <div class="container">
     <div class="row ">
         <div class="span2">
@@ -11,7 +23,7 @@
                         <div class="controls ">
                             <div class="input-prepend input-append">
 
-                                <input type="text" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                                <input type="text" id="email" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                             </div>
                             <label class="help-inline">example@mail.com</label>
                         </div>
@@ -28,7 +40,7 @@
                     <div class="control-group">
                         <div class="controls">
                             <a href="/register" class="btn input-medium">Register</a>
-                            <input type="submit" class="btn btn-primary input-medium " value="login">
+                            <input type="submit" class="btn btn-primary input-medium " value="login" onclick="isEmailAddress()">
                             <h2>OR</h2>
                         </div>
                     </div>

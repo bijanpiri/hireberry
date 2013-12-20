@@ -1,5 +1,90 @@
 <% layout('layout') -%>
+<script language="javascript" type="text/javascript">
 
+    /* document.getElementById()*/
+    function isEmailAddress() {
+        var email = document.getElementById("email").value;
+        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        if(!email.match(pattern))
+            alert("Email not valid");
+        return pattern.test(email);
+    }
+    function isEqual(){
+        var em1 = document.getElementById("email").value;
+        var em2 = document.getElementById("remail").value;
+        if(em1!=em2)
+            alert("E-mail not Equal.");
+    }
+
+</script>
+<script type="text/javascript">
+    function check(pass)
+    {
+        var level = 0;
+        var p1 = /[a-z]/;
+        var p2 = /[A-Z]/;
+        var p3 = /[0-9]/;
+        var p4 = /[\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\{\]\}\|\\\;\:\'\"\,\<\.\>\/\?\`\~]/;
+        if(pass.length>=6)
+            level++;
+        if(p1.test(pass))
+            level++;
+        if(p2.test(pass))
+            level++;
+        if(p3.test(pass))
+            level++;
+        if(p4.test(pass))
+            level++;
+        prog_bar(level,0,5,150,7,"#0066FF","#99FFFF");
+
+    }
+    function prog_bar(cur_val,min_val,max_val,width,height,border,fill)
+    {
+        var str = "",res = 0;
+        if(cur_val>=min_val && cur_val<=max_val)
+        {
+            if(min_val<max_val)
+            {
+                res = ((cur_val-min_val)/(max_val-min_val))*100;
+                res = Math.floor(res);
+            }
+            else
+            {
+                res = 0;
+            }
+        }
+        else
+        {
+            res = 0;
+        }
+        if(res<=30)
+            fill = "#FF0000";
+        if(res<=45)
+            fill = "#FF9900";
+        else if(res<=75)
+            fill = "#FFFF00";
+        else
+            fill = "#33CC33";
+        str = str + "<div style=\"border:"+border+" solid thin; width:"+width+"px; height:"+height+"px;\">";
+        str = str + "<div style=\"background-color:"+fill+"; width:"+res+"%; height:"+height+"px;\">";
+        str = str + "</div></div>";
+        if(res<=30)
+            str = str + "Weak";
+        else if(res<=45)
+            str = str + "Good";
+        else if(res<=75)
+            str = str + "Strong";
+        else
+            str = str + "Excellent";
+        document.getElementById("prog_bar").innerHTML = str;
+    }
+    function isPassEqual(){
+        var pass1 = document.getElementById("password1").value;
+        var pass2 = document.getElementById("password2").value;
+        if (pass1!=pass2)
+            alert("pass not equal");
+    }
+</script>
 <div class="container">
     <div class="row ">
         <div class="span6">
@@ -9,7 +94,7 @@
                     <div class="control-label"> Email:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="text"  name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                            <input type="text" id="email" onblur="isEmailAddress()" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                         </div>
                         <label class="help-inline">example@mail.com</label>
                     </div>
@@ -19,7 +104,7 @@
                     <div class="control-label"> Re-enter Email:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="text"  placeholder="Repeat Email address">
+                            <input type="text" id="remail" onblur="isEqual()" placeholder="Repeat Email address">
                         </div>
                         <label class="help-inline">Enter your address again</label>
                     </div>
@@ -29,8 +114,9 @@
                     <div class="control-label"> Enter New Password:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="password"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Enter password">
+                            <input type="password" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Enter password">
                         </div>
+                        <div id="prog_bar"></div>
                         <label class="help-inline">Password must contains at least 6 characters</label>
                     </div>
                 </div>
@@ -38,14 +124,14 @@
                     <div class="control-label"> Enter Password again:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="password"  placeholder="Enter password">
+                            <input type="password" id="password2" onblur="isPassEqual()"  placeholder="Enter password">
                         </div>
                         <label class="help-inline">Passwords must match</label>
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <input type="submit" class="btn input-medium btn-primary" value="Register">
+                        <input type="submit" class="btn input-medium btn-primary" value="Register" onclick="isEmailAddress()">
 
                     </div>
                 </div>
