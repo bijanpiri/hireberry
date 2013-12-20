@@ -38,6 +38,7 @@
 
             <form class="form-horizontal" action="/board/new" method="post">
                 <fieldset>
+                    <legend>Enter new board specification:</legend>
                     <div class="control-group">
                         <div class="control-label"> Board Name:</div>
                         <div class="controls ">
@@ -101,12 +102,14 @@
 
                     </div>
 
+                    <button id="createBoard" type="submit" class="btn btn-primary btn-block" data-loading-text="Saving board...">
+                        Create Board
+                    </button>
+
                     <div class="control-group">
                         <div class="controls">
 
-                            <button id="createBoard" type="submit" class="btn btn-primary input-large" data-loading-text="Saving board...">
-                                Create Board
-                            </button>
+
                         </div>
                     </div>
 
@@ -119,8 +122,8 @@
                 <button class="close" data-dismiss="alert">&times;</button>
                 <span class="msg"></span>
             </div>
-            <button id="locate" class="btn " style="width: 100%;">Find my location</button>
-            <div id="map"></div>
+            <button id="locate" class="btn btn-block btn-warning" >Find my location</button>
+            <div id="map" class="img-polaroid"></div>
         </div>
     </div>
 </div>
