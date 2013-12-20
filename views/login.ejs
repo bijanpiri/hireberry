@@ -1,6 +1,6 @@
 <% layout('layout') -%>
 
-<div class="container">
+<div class="container" xmlns="http://www.w3.org/1999/html">
     <div class="row ">
         <div class="span12">
             <form class="form-horizontal" action="/login" method="post">
@@ -9,9 +9,9 @@
                     <div class="control-group">
                         <div class="control-label"> Email:</div>
                         <div class="controls ">
-                            <div class="input-prepend input-append">
-
-                                <input type="text" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon-envelope"></i></span>
+                                <input type="text" class="form-control" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                             </div>
                             <label class="help-inline">example@mail.com</label>
                         </div>
@@ -19,19 +19,23 @@
                     <div class="control-group">
                         <div class="control-label"> Password:</div>
                         <div class="controls ">
-                          <input type="password"
-                                 name=<%=everyauth.password.passwordFormFieldName%>
-                                 placeholder='Enter password'>
+                            <div class="input-prepend">
+                                <span class="add-on">#</span>
+                                <input type="password"
+                                     name=<%=everyauth.password.passwordFormFieldName%>
+                                     placeholder='Enter password'>
+                            </div>
                         </div>
                         <label class="help-inline"></label>
                     </div>
                     <div class="control-group">
                         <div class="controls">
-                            <a href="/register" class="btn input-medium">Register</a>
-                            <input type="submit" class="btn btn-primary input-medium " value="login">
-                            <h2>OR</h2>
+                            <a href='/register' class="btn input-small">Sign up</a>
+                            <button type="submit" class="btn btn-primary input-small " >Sign in</button>
                         </div>
                     </div>
+                    <h2>OR</h2>
+
                     <div class="control-group">
                         <div class="controls">
                             <a href="/auth/twitter">
