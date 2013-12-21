@@ -392,4 +392,48 @@ app.get('/flyer/:id', function(req,res){
     });
 });
 
-/*************************************/
+/***************** RESTful API ********************/
+
+/*
+    GET
+        /ison
+        /profile
+        /flyers/:id
+        /boards/:id
+    POST
+        /register
+        /login
+        /logout
+        /flyers
+        /boards
+    PUT
+        /profile/:id
+    DELETE
+        /flyers/:id
+ */
+
+app.get('/api/1.0/ison', function(req,res){
+   res.send(200,{status:'is on'});
+});
+
+app.post('/api/1.0/login', function(req,res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    // Authentication
+    var promise = this.Promise()
+    BUsers.findOne({ email: email, password: password}, function (err, user) {
+        if (err)    return ['Error'];
+        if (!user)  return ['Login failed'];
+
+        // Generate TempToken
+        // Return TempToken
+    });
+});
+
+app.post('/api/1.0/logout', function(req,res) {
+    var username = req.body.temptoken;
+
+    // Clear TempToken
+    res.send('OK');
+});
