@@ -24,10 +24,6 @@ function createBoard(){
 function privacyChanged(){
     $('#privacy').val($(this).text());
 }
-var eventType;
-function mapEvent(e){
-    eventType=e.type;
-}
 var clickTimeout;
 var clickDetected = true;
 var map;
@@ -48,8 +44,6 @@ function main(){
 
     $('div.btn-group>button').click(privacyChanged);
     $('button#createBoard').click(createBoard);
-    $('#map').dblclick(mapEvent);
-    $('#map').click(mapEvent);
     $('#locate').click( locate);
     map = L.mapbox.map('map', 'coybit.gj1c3kom',{
         doubleClickZoom: false
@@ -63,7 +57,7 @@ function main(){
             e.stopPropagation();
         })
         .on('click', function(e) {
-            if(eventType='click');
+
             clickDetected = true;
             clickTimeout = setTimeout(function(){
                 if(clickDetected)
@@ -100,8 +94,9 @@ function main(){
 function locationError(msg) {
 //    if(msg==null)
 //        msg='Failed to find location. Allow your browser to access your location.';
-    $('#msgLocationError').text(msg.message).show();
+    $('#msgLocationError>.msg').text(msg.message).parent().show();
 }
+
 
 function ErrorMsg(msg) {
     $('.message-error').show();
