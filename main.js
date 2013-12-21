@@ -5,6 +5,7 @@ var everyauth = require('everyauth');
 var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
+var crypto = require('crypto');
 
 everyauth.debug = true;
 
@@ -36,7 +37,8 @@ var BUsers = mongoose.model( 'users', {
     twitterAccessSecretToken:String,
     googleid:String,
     googleAccessToken:String,
-    googleAccessSecretToken:String});
+    googleAccessSecretToken:String,
+    tempToken:String});
 
 var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
@@ -313,6 +315,15 @@ app.post('/board/new', function(req,res){
     res.send('OK');
 });
 
+app.get('/board/categories', function(req,res){
+    res.send([
+        {name:'event',id:1},
+        {name:'sell/buy',id:2},
+        {name:'school/university',id:3},
+        {name:'general',id:4},
+        {name:'other',id:5}]);
+});
+
 app.get('/board/:id', function(req,res){
     var boardid = req.params.id;
 
@@ -332,15 +343,6 @@ app.get('/board/:id', function(req,res){
         else
             res.send('404, Not Found! Yah!');
     });
-});
-
-app.get('/board/categories', function(req,res){
-    res.send([
-        {name:'event',id:1},
-        {name:'sell/buy',id:2},
-        {name:'school/university',id:3},
-        {name:'general',id:4},
-        {name:'other',id:5}]);
 });
 
 app.get('/flyer/new', function(req,res){
@@ -416,24 +418,56 @@ app.get('/api/1.0/ison', function(req,res){
    res.send(200,{status:'is on'});
 });
 
+function login(res,email,password){
+    BUsers.findOne({email:email,password:password}, function(err,user){
+        if(err) res.send('Faild');
+        else if(!user) res.send('Wrong');
+        else {
+            crypto.randomBytes(48, function(ex, buf) {
+                var token = buf.toString('hex');
+                user.tempToken = token;
+
+                console.log(token);
+                console.log(user);
+
+                BUsers.update(
+                    {email:email,password:password},
+                    {$set:{tempToken:token}},
+                    function (err, numberAffected, raw) {
+                        if (err)    return handleError(err);
+                        else res.send(200,user);
+                    });
+            });
+        }
+    });
+}
+
+app.post('/api/1.0/register', function(req,res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    console.log('>>>>>>>>>>'+email+password);
+
+    var newUser = BUsers({email:email,password:password});
+    newUser.save(function(err){
+        if(err) res.send('Error in stroing!');
+        else login(res,email,password);
+    });
+});
+
 app.post('/api/1.0/login', function(req,res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    // Authentication
-    var promise = this.Promise()
-    BUsers.findOne({ email: email, password: password}, function (err, user) {
-        if (err)    return ['Error'];
-        if (!user)  return ['Login failed'];
+    console.log('>>>>>>>>>>Login: '+email);
 
-        // Generate TempToken
-        // Return TempToken
-    });
+    login(res,email,password);
 });
 
 app.post('/api/1.0/logout', function(req,res) {
-    var username = req.body.temptoken;
+    var temptoken = req.body.temptoken;
 
+    console.log('>>>>>>>>>>Logout: '+temptoken);
     // Clear TempToken
-    res.send('OK');
+    res.send(200,{});
 });
