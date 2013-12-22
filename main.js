@@ -537,8 +537,8 @@ app.post('/api/1.0/board', function(req,res) {
     var boardname = req.body.boardname;
     var boardcategory = req.body.boardcategory;
     var boardtags = req.body.boardtags;
-    var boardlocationLng = req.body.lng;
-    var boardlocationLat = req.body.lat;
+    var boardlocationLng = req.body.boardlocationLng;
+    var boardlocationLat = req.body.boardlocationLat;
     var boardPrivacy = req.body.boardprivacy;
 
     console.log('>>>>>>>>>>Creating Board for  '+tempToken);
