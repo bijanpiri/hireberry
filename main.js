@@ -40,7 +40,7 @@ var BUsers = mongoose.model( 'users', {
     googleAccessSecretToken:String,
     tempToken:String});
 
-var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
+var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
@@ -109,7 +109,6 @@ everyauth.google
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
-        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + session + '&&' + extra.expires_in + extra.refresh_token);
 
         BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
 
@@ -394,7 +393,7 @@ app.get('/flyer/:id', function(req,res){
     });
 });
 
-/***************** RESTful API ********************/
+/***************** Low Level API ********************/
 
 /*
     GET
@@ -464,6 +463,37 @@ function changePassword(res,tempToken,oldpassword,newpassword) {
     });
 }
 
+function createBoard(res,tempToken,userid,name,category,tags,privacy,lng,lat) {
+    
+    var newboard = BBoards({
+        name: name,
+        category: category,
+        privacy:privacy,
+        locationlng: lng,
+        locationlat: lat
+    });
+    newboard.save(function (err,board,affectedRowNum) {
+        if (err) return handleError(err);
+        else{
+            // Add to Boards-Users collection
+            var newboarduser = BUsersBoards({
+                board: newboard._id,
+                user: userid
+            });
+            newboarduser.save(function(err){
+                if(!err){
+                    
+                    // ToDo: Add Tags To BoardsTags Collection
+
+                    res.send(200,{});
+                }
+            });
+        }
+    });
+}
+
+/****************** RESTful API *********************/
+
 app.post('/api/1.0/register', function(req,res) {
     var email = req.body.email;
     var password = req.body.password;
@@ -501,3 +531,31 @@ app.post('/api/1.0/profile/password', function(req,res) {
 
     changePassword(res,tempToken,oldpassword,newpassword);
 });
+
+app.post('/api/1.0/board', function(req,res) {
+    var tempToken = req.body.temptoken;
+    var boardname = req.body.boardname;
+    var boardcategory = req.body.boardcategory;
+    var boardtags = req.body.boardtags;
+    var boardlocationLng = req.body.lng;
+    var boardlocationLat = req.body.lat;
+    var boardPrivacy = req.body.boardprivacy;
+
+    console.log('>>>>>>>>>>Creating Board for  '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            createBoard(res,tempToken,user._id,
+                boardname,
+                boardcategory,
+                boardtags,
+                boardPrivacy,
+                boardlocationLng,
+                boardlocationLat);
+        }
+    });
+
+});
+
