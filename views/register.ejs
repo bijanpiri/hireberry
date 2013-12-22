@@ -1,5 +1,5 @@
 <% layout('layout') -%>
-<script language="javascript" type="text/javascript">
+<script>
     function validateEmail(email){
         var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
         return pattern.test(email);
@@ -13,12 +13,13 @@
             $('#loginid').removeClass('error');
     }
 
-
     function isEqual(){
-        var em1 = document.getElementById("email").value;
-        var em2 = document.getElementById("remail").value;
+        var em1 = $('#email')[0].value;
+        var em2 = $('#remail')[0].value;
         if(em1!=em2)
-            alert("E-mail not Equal.");
+            $('#emval').addClass('error');
+        else
+            $('#emval').removeClass('error');
     }
 
 </script>
@@ -95,7 +96,7 @@
         <div class="span6">
             <form class="form-horizontal" action="/register" method="post">
 
-                <div class="control-group">
+                <div id="loginid" class="control-group">
                     <div class="control-label"> Email:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
@@ -105,7 +106,7 @@
                     </div>
                 </div>
 
-                <div class="control-group">
+                <div id="emval" class="control-group">
                     <div class="control-label">  Re-enter Email:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
