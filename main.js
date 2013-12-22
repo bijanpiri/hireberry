@@ -298,7 +298,7 @@ app.post('/board/new', function(req,res){
         locationlng: '100',
         locationlat: '200'
     });
-    newboard.save(function (err, product, numberAffected) {
+    newboard.save(function (err) {
         if (err)
             res.send('Failed 01');
         else{
@@ -359,8 +359,11 @@ app.post('/flyer/new', function(req,res){
     var flyerBoard = req.body.board;
 
     var newflyer = BFlyers({text:flyerText, owner:req.user._id});
-    newflyer.save(function (err, product, numberAffected) {
-        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(function (err, product, numberAffected) {
+    newflyer.save(function (err) {
+        BFlyersBoards({
+            flyer:newflyer._id,
+            board:flyerBoard})
+        .save(function (err) {
             res.redirect('/profile');
         });
     });
@@ -492,6 +495,14 @@ function createBoard(res,tempToken,userid,name,category,tags,privacy,lng,lat) {
     });
 }
 
+function createFlyer(res,tempToken,userid,flyerText) {
+    var newflyer = BFlyers({text:flyerText, owner:userid});
+    newflyer.save(function (err) {
+        if(err)  handleError(err);
+        else res.send(200,{});
+    });
+}
+
 /****************** RESTful API *********************/
 
 app.post('/api/1.0/register', function(req,res) {
@@ -554,6 +565,22 @@ app.post('/api/1.0/board', function(req,res) {
                 boardPrivacy,
                 boardlocationLng,
                 boardlocationLat);
+        }
+    });
+
+});
+
+app.post('/api/1.0/flyer', function(req,res) {
+    var tempToken = req.body.temptoken;
+    var flyerText = req.body.flyertext;
+
+    console.log('>>>>>>>>>>Creating Flyer for  '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            createFlyer(res,tempToken,user._id,flyerText);
         }
     });
 
