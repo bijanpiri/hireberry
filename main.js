@@ -504,9 +504,32 @@ function createFlyer(res,userid,flyerText) {
 }
 
 function getFlyers(res,userid) {
-    var newflyer = BFlyers.find({owner:userid}, function(err,flyers){
+    BFlyers.find({owner:userid}, function(err,flyers){
          if(err)  handleError(err);
         else { console.log(flyers); res.send(200,flyers); }
+    });
+}
+
+function getBoards(res,userid) {
+    BUsersBoards.find({user:userid}, function (err, userBoards) {
+        if (err) 
+            return handleError(err);
+        else{
+
+            var boardIDList = [];
+            for(var userBoard in userBoards){
+                boardIDList.push(userBoard.board);
+            }
+
+            BBoards.find({id:{$in:boardIDList}}, function(err,boards){
+                if(err) 
+                    return handleError(err);
+                else { 
+                    console.log(boards); 
+                    res.send(200,boards); 
+                }
+            });
+        } 
     });
 }
 
@@ -594,7 +617,7 @@ app.post('/api/1.0/flyer', function(req,res) {
 });
 
 app.get('/api/1.0/flyer', function(req,res) {
-    var tempToken = req.body.temptoken;
+    var tempToken = req.query.tempToken;
 
     console.log('>>>>>>>>>>Getting Flyers of '+tempToken);
 
@@ -602,7 +625,22 @@ app.get('/api/1.0/flyer', function(req,res) {
         if(err) return handleError(err);
         if(!user) res.send(500,'Unauthorized')
         else {
-            getFlyers(res,tempToken,user._id);
+            getFlyers(res,user._id);
+        }
+    });
+
+});
+
+app.get('/api/1.0/board', function(req,res) {
+    var tempToken = req.query.tempToken;
+
+    console.log('>>>>>>>>>>Getting Boards of '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            getBoards(res,user._id);
         }
     });
 
