@@ -85,10 +85,12 @@
         document.getElementById("prog_bar").innerHTML = str;
     }
     function isPassEqual(){
-        var pass1 = document.getElementById("password1").value;
-        var pass2 = document.getElementById("password2").value;
+        var pass1 = $('password1')[0].value;
+        var pass2 = $('password2')[0].value;
         if (pass1!=pass2)
-            alert("pass not equal");
+            $('chkpasseq').addClass('error');
+        else
+            $('chkpasseq').removeClass('error');
     }
 </script>
 <div class="container">
@@ -100,7 +102,7 @@
                     <div class="control-label"> Email:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="text" id="email" onblur="isEmailAddress()" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                            <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                         </div>
                         <label class="help-inline">example@mail.com</label>
                     </div>
@@ -110,7 +112,7 @@
                     <div class="control-label">  Re-enter Email:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="text" id="remail" onblur="isEqual()" placeholder="Repeat Email address">
+                            <input type="text" id="remail" onblur="isEqual();" placeholder="Repeat Email address">
                         </div>
                         <label class="help-inline">Enter your address again</label>
                     </div>
@@ -126,18 +128,18 @@
                         <label class="help-inline">Password must contains at least 6 characters</label>
                     </div>
                 </div>
-                <div class="control-group">
+                <div id="chkpasseq" class="control-group">
                     <div class="control-label"> Enter Password again:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="password" id="password2" onblur="isPassEqual()"  placeholder="Enter password">
+                            <input type="password" id="password2"  placeholder="Enter password">
                         </div>
                         <label class="help-inline">Passwords must match</label>
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <input type="submit" class="btn input-medium btn-primary" value="Register" onclick="isEmailAddress()">
+                        <input type="submit" class="btn input-medium btn-primary" value="Register" onclick="isEmailAddress();isPassEqual();">
 
                     </div>
                 </div>
