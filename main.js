@@ -495,11 +495,18 @@ function createBoard(res,tempToken,userid,name,category,tags,privacy,lng,lat) {
     });
 }
 
-function createFlyer(res,tempToken,userid,flyerText) {
+function createFlyer(res,userid,flyerText) {
     var newflyer = BFlyers({text:flyerText, owner:userid});
     newflyer.save(function (err) {
         if(err)  handleError(err);
         else res.send(200,{});
+    });
+}
+
+function getFlyers(res,userid) {
+    var newflyer = BFlyers.find({owner:userid}, function(err,flyers){
+         if(err)  handleError(err);
+        else { console.log(flyers); res.send(200,flyers); }
     });
 }
 
@@ -586,3 +593,17 @@ app.post('/api/1.0/flyer', function(req,res) {
 
 });
 
+app.get('/api/1.0/flyer', function(req,res) {
+    var tempToken = req.body.temptoken;
+
+    console.log('>>>>>>>>>>Getting Flyers of '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            getFlyers(res,tempToken,user._id);
+        }
+    });
+
+});
