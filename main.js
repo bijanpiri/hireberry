@@ -455,6 +455,15 @@ function logout(res,tempToken) {
         });
 }
 
+function changePassword(res,tempToken,oldpassword,newpassword) {
+    BUsers.update( { tempToken: tempToken, password: oldpassword },
+    { $set: { password: newpassword }},
+    function (err, numberAffected, raw) {
+        if (err) return handleError(err);
+        else res.send(200,{});
+    });
+}
+
 app.post('/api/1.0/register', function(req,res) {
     var email = req.body.email;
     var password = req.body.password;
@@ -481,4 +490,14 @@ app.post('/api/1.0/login', function(req,res) {
 app.post('/api/1.0/logout', function(req,res) {
     var tempToken = req.body.tempToken;
     logout(res,tempToken)
+});
+
+app.post('/api/1.0/profile/password', function(req,res) {
+    var tempToken = req.body.temptoken;
+    var oldpassword = req.body.oldpassword;
+    var newpassword = req.body.newpassword;
+
+    console.log('>>>>>>>>>>ChanginPassword: '+tempToken);
+
+    changePassword(res,tempToken,oldpassword,newpassword);
 });
