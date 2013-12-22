@@ -1,7 +1,7 @@
 <% layout('layout') -%>
 <script language="javascript" type="text/javascript">
 
-<<<<<<< HEAD
+
     /* document.getElementById()*/
     function isEmailAddress() {
         var email = document.getElementById("email").value;
@@ -14,26 +14,16 @@
     }
 </script>
 <div class="container">
-=======
-<div class="container" xmlns="http://www.w3.org/1999/html">
->>>>>>> 343f1a882a7d41387fc3f00b6cd1b62699da1126
     <div class="row ">
         <div class="span12">
             <form class="form-horizontal" action="/login" method="post">
-
                 <fieldset>
                     <div class="control-group">
                         <div class="control-label"> Email:</div>
                         <div class="controls ">
-<<<<<<< HEAD
-                            <div class="input-prepend input-append">
-
-                                <input type="text" id="email" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
-=======
                             <div class="input-prepend">
                                 <span class="add-on"><i class="icon-envelope"></i></span>
-                                <input type="text" class="form-control" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
->>>>>>> 343f1a882a7d41387fc3f00b6cd1b62699da1126
+                                <input type="text" id="email" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                             </div>
                             <label class="help-inline">example@mail.com</label>
                         </div>
@@ -52,20 +42,13 @@
                     </div>
                     <div class="control-group">
                         <div class="controls">
-<<<<<<< HEAD
-<<<<<<< HEAD
                             <a href="/register" class="btn input-medium">Register</a>
-                            <input type="submit" class="btn btn-primary input-medium " value="login" onclick="isEmailAddress()">
+                            <input type="submit" class="btn btn-primary input-medium " value="login" >
                             <h2>OR</h2>
-=======
-                            <a href='/register' class="btn input-small">Sign up</a>
-=======
                             <!--<a href='/register' class="btn input-small btn-warning">Sign up</a>-->
                             <button type="button" onclick="location.href='/register';"
                                     class="btn btn-warning input-small " >Sign Up</button>
->>>>>>> 80eeca5883b76d2da8fa85a59b0578bf75a13da9
-                            <button type="submit" class="btn btn-primary input-small " >Sign in</button>
->>>>>>> 343f1a882a7d41387fc3f00b6cd1b62699da1126
+                            <button type="submit" class="btn btn-primary input-small " onclick="isEmailAddress()" >Sign in</button>
                         </div>
                     </div>
                     <h2>OR</h2>
