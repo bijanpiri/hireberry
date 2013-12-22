@@ -427,31 +427,45 @@ function login(res,email,password){
                 var token = buf.toString('hex');
                 user.tempToken = token;
 
-                console.log(token);
-                console.log(user);
-
                 BUsers.update(
                     {email:email,password:password},
                     {$set:{tempToken:token}},
                     function (err, numberAffected, raw) {
                         if (err)    return handleError(err);
-                        else res.send(200,user);
+                        else{ 
+                            console.log('>>>>>>>>>>Login Request for '+email+' is accepeted.');
+                            res.send(200,user);
+                        }
                     });
             });
         }
     });
 }
 
+function logout(res,tempToken) {
+    BUsers.update(
+        {tempToken:tempToken},
+        {$set:{tempToken:''}},
+        function (err, numberAffected, raw) {
+            if (err)    return handleError(err);
+            else {
+                console.log('>>>>>>>>>>Logout Request for tempToken: '+tempToken+' is accepeted.');
+                res.send(200,{});
+            }
+        });
+}
+
 app.post('/api/1.0/register', function(req,res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    console.log('>>>>>>>>>>'+email+password);
-
     var newUser = BUsers({email:email,password:password});
     newUser.save(function(err){
         if(err) res.send('Error in stroing!');
-        else login(res,email,password);
+        else{
+            console.log('>>>>>>>>>>Register Request for '+email+' is accpeted');
+            login(res,email,password);
+        }
     });
 });
 
@@ -465,9 +479,6 @@ app.post('/api/1.0/login', function(req,res) {
 });
 
 app.post('/api/1.0/logout', function(req,res) {
-    var temptoken = req.body.temptoken;
-
-    console.log('>>>>>>>>>>Logout: '+temptoken);
-    // Clear TempToken
-    res.send(200,{});
+    var tempToken = req.body.tempToken;
+    logout(res,tempToken)
 });
