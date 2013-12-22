@@ -6,15 +6,40 @@
     </div>
     <div class="row ">
         <div>
+            <div style="background-color: #c9e8ff; padding: 5px">
+                <div>
+                    <a href="/profile/boards">
+                        Boards
+                        <span class="badge"><%= boards.length %></span>
+                    </a>
+                    <ul>
+                        <% for(i=0;i<boards.length;i++){%>
+                        <li><a href="/board/<%=boards[i].board%>"><%=boards[i].board%></a></li>
+                        <%}%>
+                    </ul>
+                </div>
+                <div>
+                    <a href="/profile/flyers">
+                        Flyers
+                        <span class="badge"><%= flyers.length %></span>
 
-            <div style="background-color: #fff4be; padding: 5px">
-                <b>You have <%= boardsCount %> board(s).</b>
+                    </a>
+                    <ul>
+                        <% for(i=0;i<flyers.length;i++){%>
+                        <li>
+                            <a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a>
+                            <a href="/flyer/remove/<%=flyers[i]._id%>">[X]</a>
+                            <a href="/flyer/remove/<%=flyers[i]._id%>">[PutUp]</a>
+                        </li>
+                        <%}%>
+                    </ul>
+                </div>
             </div>
             <form class="form-horizontal" action="/profile" method="post">
                 <div class="control-group">
                     <div class="control-label"> Email:</div>
                     <div class="controls ">
-                         <%=everyauth.user.email%>
+                        <%=everyauth.user.email%>
                     </div>
                 </div>
 
@@ -52,7 +77,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </div>

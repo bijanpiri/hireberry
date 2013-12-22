@@ -6,29 +6,42 @@ var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
 
+everyauth.debug = true;
+
 /*
-    /auth/twitter
-    /auth/google
-    /logout
-    /register
-    /login
+ /auth/twitter
+ /auth/google
+ /logout
+ /register
+ /login
  */
 
 /************** Initialization ****************/
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
-var GOOGLE_CLIENT_ID = '105806305660-2k8f0sr0mg8a36rn8fmn0fsh9ls85iio.apps.googleusercontent.com';
-var GOOGLE_CLIENT_SECRET = 'uFr61pADo3O5b1uyaEk5Cmuh';
+var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googleusercontent.com';
+var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
 var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10064/booltindb';
 
 var app = express();
 mongoose.connect(mongoHQConenctionString);
 
-var BUsers = mongoose.model( 'users', {email: String, password: String, salt: String} );
+var BUsers = mongoose.model( 'users', {
+    email: String,
+    password: String,
+    salt: String,
+    twitterid:String,
+    twitterAccessToken:String,
+    twitterAccessSecretToken:String,
+    googleid:String,
+    googleAccessToken:String,
+    googleAccessSecretToken:String});
+
 var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-
+var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
+var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 
 everyauth.everymodule
     .findUserById( function (id, callback) {
@@ -42,27 +55,88 @@ everyauth.twitter
     .consumerSecret(TWITTER_CONSUMER_SECRET)
     .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitterUserMetadata) {
         // find or create user logic goes here
-        Console.log('Logged In With Twitter')
+        var promise = this.Promise();
+
+        BUsers.findOne({twitterid:twitterUserMetadata.id}, function(err,user){
+
+            if(err)
+                return promise.fail([err]);
+
+            if(!user){
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    twitterid:twitterUserMetadata.id,
+                    twitterAccessToken:accessToken,
+                    twitterAccessSecretToken:accessTokenSecret
+                });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.fulfill(newUser);
+                });
+            } else {
+                promise.fulfill(user);
+            }
+        });
+
+        return promise;
     })
     .redirectPath('/');
-
+/*
+everyauth.googlehybrid
+    .myHostname('http://local.host:3000')
+    .consumerKey(conf.googlehybrid.consumerKey)
+    .consumerSecret(conf.googlehybrid.consumerSecret)
+    .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
+    .findOrCreateUser( function(session, userAttributes) {
+        return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
+    })
+    .redirectPath('/');
+*/
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.google.com/m8/feeds') // What you want access to
-    .handleAuthCallbackError( function (req, res) {
-        // If a user denies your app, Google will redirect the user to
-        // /auth/facebook/callback?error=access_denied
-        // This configurable route handler defines how you want to respond to
-        // that.
-        // If you do not configure this, everyauth renders a default fallback
-        // view notifying the user that their authentication failed and why.
-    })
+    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
-        // Return a user or Promise that promises a user
-        // Promises are created via
-        //     var promise = this.Promise();
+        //googleUser.refreshToken = extra.refresh_token;
+        //googleUser.expiresIn = extra.expires_in;
+
+        var promise = this.Promise();
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
+        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + session + '&&' + extra.expires_in + extra.refresh_token);
+
+        BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
+
+            if(err)
+                return promise.fail([err]);
+
+            console.log(googleUserMetadata);
+
+            if(!user){
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    googleid:googleUserMetadata.id,
+                    googleAccessToken:accessToken,
+                    googleAccessSecretToken:accessTokenExtra
+                });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.fulfill(newUser);
+                });
+            } else {
+                console.log("User Exist ... Returning ");
+                promise.fulfill(user);
+            }
+        });
+
+        return promise;
+
     })
     .redirectPath('/');
 
@@ -89,8 +163,8 @@ everyauth.password
 
         var promise = this.Promise()
         BUsers.findOne({ email: login}, function (err, user) {
-          if (err)
-              return promise.fulfill([err]);
+            if (err)
+                return promise.fulfill([err]);
 
             console.log(user);
 
@@ -99,9 +173,9 @@ everyauth.password
             if (user.password !== password)
                 return ['Login failed'];
 
-          promise.fulfill(user);
+            promise.fulfill(user);
         });
-       return promise;
+        return promise;
     })
     .loginSuccessRedirect('/profile')
 
@@ -127,17 +201,17 @@ everyauth.password
 
 // configure Express
 app.configure(function() {
-  app.engine('ejs',engine);
-  app.set('view engine', 'ejs');
-  app.set('views', __dirname + '/views');
-  app.use(express.logger('dev'));
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(everyauth.middleware());
+    app.engine('ejs',engine);
+    app.set('view engine', 'ejs');
+    app.set('views', __dirname + '/views');
+    app.use(express.logger('dev'));
+    app.use(express.static(__dirname + '/public'));
+    app.use(express.logger());
+    app.use(express.cookieParser());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.session({ secret: 'keyboard cat' }));
+    app.use(everyauth.middleware());
 });
 
 /************** Starting Server ****************/
@@ -159,20 +233,28 @@ app.get('/', function(req,res) {
 });
 
 app.get('/info', function(req,res) {
-	res.send('Version ?.?.? - 920926-15:23');
+    res.send('Version ?.?.? - 920926-15:23');
 });
 
 app.get('/openapp', function(req,res) {
-	res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+    res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
 app.get('/profile', function(req,res) {
     if( req.user ){
 
-        var bcount = BUsersBoards.find({user:req.user._id}).count(function (err, count) {
+        BUsersBoards.find({user:req.user._id}, function (err, boards) {
             if (err)
                 return handleError(err);
-            res.render('profile.ejs',{title:'Profile', email:req.user,boardsCount:count});
+
+            BFlyers.find({owner:req.user._id}, function (err, flyers) {
+                res.render('profile.ejs',{
+                    title:'Profile',
+                    email:req.user,
+                    boards:boards,
+                    flyers:flyers
+                });
+            });
         });
     }
     else
@@ -193,7 +275,7 @@ app.post('/profile', function(req,res) {
                     return handleError(err);
                 else
                     res.send('Password is changed successfuly!');
-        });
+            });
     }
 });
 
@@ -231,7 +313,83 @@ app.post('/board/new', function(req,res){
     res.send('OK');
 });
 
-app.get('/flyer/new', function(req,res){
-   res.render('flyernew.ejs',{title:'new flyer'});
+app.get('/board/:id', function(req,res){
+    var boardid = req.params.id;
+
+    BBoards.findOne({_id:boardid}, function(err,board){
+        if(err)
+            res.send('Oh oh error');
+
+        if(board){
+            BFlyersBoards.find({board:boardid}, function(err,flyers){
+                res.render('board.ejs',{
+                    title:board.name,
+                    board:board,
+                    flyers:flyers
+                });
+            })
+        }
+        else
+            res.send('404, Not Found! Yah!');
+    });
 });
+
+app.get('/board/categories', function(req,res){
+    res.send([
+        {name:'event',id:1},
+        {name:'sell/buy',id:2},
+        {name:'school/university',id:3},
+        {name:'general',id:4},
+        {name:'other',id:5}]);
+});
+
+app.get('/flyer/new', function(req,res){
+
+    BBoards.find({}, function (err, boards){
+        res.render('flyernew.ejs',{
+            title:'new flyer',
+            boards:boards
+        });
+    });
+});
+
+app.post('/flyer/new', function(req,res){
+    var flyerText = req.body.flyertext;
+    var flyerBoard = req.body.board;
+
+    var newflyer = BFlyers({text:flyerText, owner:req.user._id});
+    newflyer.save(function (err, product, numberAffected) {
+        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(function (err, product, numberAffected) {
+            res.redirect('/profile');
+        });
+    });
+});
+
+app.get('/flyer/remove/:id', function(req,res){
+    var flyerid = req.params.id;
+
+    BFlyersBoards.remove({flyer:flyerid}, function(err){
+        if(!err){
+            BFlyers.remove({_id:flyerid}, function(err){
+                if(!err)
+                    res.redirect('/profile');
+            });
+        }
+    });
+});
+
+app.get('/flyer/:id', function(req,res){
+    var flyerid = req.params.id;
+
+    BFlyers.findOne({_id:flyerid}, function(err,flyer){
+        if(err)
+            res.send('Oh oh error');
+
+        if(flyer)
+            res.render('flyer.ejs',{title:flyer.text,flyer:flyer});
+        else
+            res.send('404, Not Found! Yah!');
+    });
+});
+
 /*************************************/
