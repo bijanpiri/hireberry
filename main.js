@@ -322,6 +322,15 @@ app.get('/board/categories', function(req,res){
         {name:'general',id:4},
         {name:'other',id:5}]);
 });
+app.get('/board/get',function(req,res){
+    if( req.user ){
+
+        BUsersBoards.find({user:req.user._id}, function (err, boards) {
+            res.json(boards);
+        });
+    }else
+        res.write('log in please');
+});
 
 app.get('/board/:id', function(req,res){
     var boardid = req.params.id;
@@ -360,12 +369,21 @@ app.post('/flyer/new', function(req,res){
 
     var newflyer = BFlyers({text:flyerText, owner:req.user._id});
     newflyer.save(function (err, product, numberAffected) {
-        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(function (err, product, numberAffected) {
-            res.redirect('/profile');
-        });
+        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(
+            function (err, product, numberAffected) {
+                res.redirect('/profile');
+            });
     });
 });
-
+app.get('/flyer/putup', function(req,res){
+    var flyerid=req.body.flyerid;
+    var boardid=req.body.boardid;
+    var BFB=BFlyersBoards({flyer:flyerid,board:boardid}).save(
+        function(err){
+            res.redirect('/board/'+boardid);
+        }
+    )
+});
 app.get('/flyer/remove/:id', function(req,res){
     var flyerid = req.params.id;
 

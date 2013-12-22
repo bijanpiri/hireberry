@@ -2,7 +2,9 @@
  * Created by bijan on 12/18/13.
  */
 $(document).ready(main);
-
+function submit(){
+    $("input#tag").tagsinput('items');
+}
 function fillCategory(){
     $.get('/board/categories',
         function(cats){
