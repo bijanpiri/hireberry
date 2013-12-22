@@ -1,31 +1,30 @@
 <% layout('layout') -%>
-<script language="javascript" type="text/javascript">
+<script>
 
 
     /* document.getElementById()*/
-    function isEmailAddress() {
-        var email = document.getElementById("email").value;
-        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    $(document).ready( isEmailAddress(){
+        $(".input-prepend").onblur(function(){
+        var email = $('#email').value;
+        var pattern = new regul(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
         if(!email.match(pattern))
-            alert("Email not valid");
-        else
-            alert("Email valid");
-        return pattern.test(email);
-    }
-</script>
+            email.addClass('error');
+        });
+    });
+  </script>
 <div class="container">
     <div class="row ">
         <div class="span12">
             <form class="form-horizontal" action="/login" method="post">
                 <fieldset>
-                    <div class="control-group">
+                    <div id="loginid" class="control-group">
                         <div class="control-label"> Email:</div>
                         <div class="controls ">
                             <div class="input-prepend">
                                 <span class="add-on"><i class="icon-envelope"></i></span>
-                                <input type="text" id="email" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                                <input type="text" id="email"  name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                             </div>
-                            <label class="help-inline">example@mail.com</label>
+                            <label class="help-block">id@mail.com</label>
                         </div>
                     </div>
                     <div class="control-group">
@@ -42,9 +41,6 @@
                     </div>
                     <div class="control-group">
                         <div class="controls">
-                            <a href="/register" class="btn input-medium">Register</a>
-                            <input type="submit" class="btn btn-primary input-medium " value="login" >
-                            <h2>OR</h2>
                             <!--<a href='/register' class="btn input-small btn-warning">Sign up</a>-->
                             <button type="button" onclick="location.href='/register';"
                                     class="btn btn-warning input-small " >Sign Up</button>
