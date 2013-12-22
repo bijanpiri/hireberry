@@ -1,16 +1,21 @@
 <% layout('layout') -%>
 <script>
+    function validateEmail(email){
+        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        return pattern.test(email);
 
+    }
+    function isEmailAddress(){
+        var emailStr = $('#email')[0].value;
+        if(!validateEmail(emailStr))
+            $('#loginid').addClass('error');
+        else
+            $('#loginid').removeClass('error');
+    }
 
     /* document.getElementById()*/
-    $(document).ready( isEmailAddress(){
-        $(".input-prepend").onblur(function(){
-        var email = $('#email').value;
-        var pattern = new regul(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
-        if(!email.match(pattern))
-            email.addClass('error');
-        });
-    });
+//    $(document).ready();
+
   </script>
 <div class="container">
     <div class="row ">
@@ -22,7 +27,9 @@
                         <div class="controls ">
                             <div class="input-prepend">
                                 <span class="add-on"><i class="icon-envelope"></i></span>
-                                <input type="text" id="email"  name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                                <input type="text" id="email"
+                                       onblur="isEmailAddress();"
+                                       name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
                             </div>
                             <label class="help-block">id@mail.com</label>
                         </div>

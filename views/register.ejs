@@ -1,14 +1,19 @@
 <% layout('layout') -%>
 <script language="javascript" type="text/javascript">
-
-    /* document.getElementById()*/
-    function isEmailAddress() {
-        var email = document.getElementById("email").value;
+    function validateEmail(email){
         var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-        if(!email.match(pattern))
-            alert("Email not valid");
         return pattern.test(email);
+
     }
+    function isEmailAddress(){
+        var emailStr = $('#email')[0].value;
+        if(!validateEmail(emailStr))
+            $('#loginid').addClass('error');
+        else
+            $('#loginid').removeClass('error');
+    }
+
+
     function isEqual(){
         var em1 = document.getElementById("email").value;
         var em2 = document.getElementById("remail").value;
