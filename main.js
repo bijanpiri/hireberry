@@ -5,6 +5,7 @@ var everyauth = require('everyauth');
 var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
+var crypto = require('crypto');
 
 everyauth.debug = true;
 
@@ -36,7 +37,8 @@ var BUsers = mongoose.model( 'users', {
     twitterAccessSecretToken:String,
     googleid:String,
     googleAccessToken:String,
-    googleAccessSecretToken:String});
+    googleAccessSecretToken:String,
+    tempToken:String});
 
 var BBoards = mongoose.model( 'boards', {name: String, category: String, locationlng: Number, locationlat: Number});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
@@ -313,6 +315,15 @@ app.post('/board/new', function(req,res){
     res.send('OK');
 });
 
+app.get('/board/categories', function(req,res){
+    res.send([
+        {name:'event',id:1},
+        {name:'sell/buy',id:2},
+        {name:'school/university',id:3},
+        {name:'general',id:4},
+        {name:'other',id:5}]);
+});
+
 app.get('/board/:id', function(req,res){
     var boardid = req.params.id;
 
@@ -332,15 +343,6 @@ app.get('/board/:id', function(req,res){
         else
             res.send('404, Not Found! Yah!');
     });
-});
-
-app.get('/board/categories', function(req,res){
-    res.send([
-        {name:'event',id:1},
-        {name:'sell/buy',id:2},
-        {name:'school/university',id:3},
-        {name:'general',id:4},
-        {name:'other',id:5}]);
 });
 
 app.get('/flyer/new', function(req,res){
@@ -392,4 +394,91 @@ app.get('/flyer/:id', function(req,res){
     });
 });
 
-/*************************************/
+/***************** RESTful API ********************/
+
+/*
+    GET
+        /ison
+        /profile
+        /flyers/:id
+        /boards/:id
+    POST
+        /register
+        /login
+        /logout
+        /flyers
+        /boards
+    PUT
+        /profile/:id
+    DELETE
+        /flyers/:id
+ */
+
+app.get('/api/1.0/ison', function(req,res){
+   res.send(200,{status:'is on'});
+});
+
+function login(res,email,password){
+    BUsers.findOne({email:email,password:password}, function(err,user){
+        if(err) res.send('Faild');
+        else if(!user) res.send('Wrong');
+        else {
+            crypto.randomBytes(48, function(ex, buf) {
+                var token = buf.toString('hex');
+                user.tempToken = token;
+
+                BUsers.update(
+                    {email:email,password:password},
+                    {$set:{tempToken:token}},
+                    function (err, numberAffected, raw) {
+                        if (err)    return handleError(err);
+                        else{ 
+                            console.log('>>>>>>>>>>Login Request for '+email+' is accepeted.');
+                            res.send(200,user);
+                        }
+                    });
+            });
+        }
+    });
+}
+
+function logout(res,tempToken) {
+    BUsers.update(
+        {tempToken:tempToken},
+        {$set:{tempToken:''}},
+        function (err, numberAffected, raw) {
+            if (err)    return handleError(err);
+            else {
+                console.log('>>>>>>>>>>Logout Request for tempToken: '+tempToken+' is accepeted.');
+                res.send(200,{});
+            }
+        });
+}
+
+app.post('/api/1.0/register', function(req,res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    var newUser = BUsers({email:email,password:password});
+    newUser.save(function(err){
+        if(err) res.send('Error in stroing!');
+        else{
+            console.log('>>>>>>>>>>Register Request for '+email+' is accpeted');
+            login(res,email,password);
+        }
+    });
+});
+
+app.post('/api/1.0/login', function(req,res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    console.log('>>>>>>>>>>Login: '+email);
+
+    login(res,email,password);
+});
+
+app.post('/api/1.0/logout', function(req,res) {
+    var tempToken = req.body.tempToken;
+    logout(res,tempToken)
+});

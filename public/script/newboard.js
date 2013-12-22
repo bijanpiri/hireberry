@@ -94,8 +94,9 @@ function main(){
 function locationError(msg) {
 //    if(msg==null)
 //        msg='Failed to find location. Allow your browser to access your location.';
-    $('#msgLocationError>.msg').text(msg.message).show();
+    $('#msgLocationError>.msg').text(msg.message).parent().show();
 }
+
 
 function ErrorMsg(msg) {
     $('.message-error').show();
