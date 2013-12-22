@@ -323,13 +323,13 @@ app.get('/board/categories', function(req,res){
         {name:'other',id:5}]);
 });
 app.get('/board/get',function(req,res){
-    if( req.user ){
+//    if( req.user ){
 
-        BUsersBoards.find({user:req.user._id}, function (err, boards) {
+        BBoards.find({user:req.user._id}, function (err, boards) {
             res.json(boards);
         });
-    }else
-        res.write('log in please');
+//    }else
+//        res.write('log in please');
 });
 
 app.get('/board/:id', function(req,res){
