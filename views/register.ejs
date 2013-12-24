@@ -10,7 +10,10 @@
         if(!validateEmail(emailStr))
             $('#loginid').addClass('error');
         else
+        {
             $('#loginid').removeClass('error');
+            return true;
+        }
     }
 
     function isEqual(){
@@ -19,7 +22,11 @@
         if(em1!=em2)
             $('#emval').addClass('error');
         else
+        {
             $('#emval').removeClass('error');
+            return true;
+        }
+
     }
 
 </script>
@@ -42,6 +49,7 @@
         if(p4.test(pass))
             level++;
         prog_bar(level,0,5,150,7,"#0066FF","#99FFFF");
+
 
     }
     function prog_bar(cur_val,min_val,max_val,width,height,border,fill)
@@ -83,20 +91,48 @@
         else
             str = str + "Excellent";
         document.getElementById("prog_bar").innerHTML = str;
+
     }
     function isPassEqual(){
-        var pass1 = $('password1')[0].value;
-        var pass2 = $('password2')[0].value;
-        if (pass1!=pass2)
-            $('chkpasseq').addClass('error');
+        var pass1 = document.getElementById('password1');
+        var pass2 = document.getElementById('password2');
+        if (pass1.value!=pass2.value)
+            return false;
         else
-            $('chkpasseq').removeClass('error');
+            return true;
+    }
+
+    function isPassEqual2(){
+       if(!isPassEqual())
+           $('#chkpasseq').addClass('error');
+       else
+           $('#chkpasseq').removeClass('error');
+    }
+    function chcknotepty(){
+       // var pass1 = $('password1').val();
+        if(document.getElementById('password1').value.length<6)
+            return false;
+        else
+            return true;
+    }
+    function errorchcknotepty(){
+        if(!chcknotepty())
+            $('#checkNotEmpty').addClass('error');
+        else
+            $('#checkNotEmpty').removeClass('error');
+    }
+
+    function registerstate(){
+        if(isEmailAddress() && isEqual() && isPassEqual() && chcknotepty())
+            return true;
+        else
+            return false;
     }
 </script>
 <div class="container">
     <div class="row ">
         <div class="span6">
-            <form class="form-horizontal" action="/register" method="post">
+            <form class="form-horizontal" action="/register" method="post" onsubmit="return registerstate();">
 
                 <div id="loginid" class="control-group">
                     <div class="control-label"> Email:</div>
@@ -118,11 +154,11 @@
                     </div>
                 </div>
 
-                <div class="control-group">
+                <div id="checkNotEmpty" class="control-group">
                     <div class="control-label"> Enter New Password:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="password" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Enter password">
+                            <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Enter password">
                         </div>
                         <div id="prog_bar"></div>
                         <label class="help-inline">Password must contains at least 6 characters</label>
@@ -132,14 +168,14 @@
                     <div class="control-label"> Enter Password again:</div>
                     <div class="controls ">
                         <div class="input-prepend input-append">
-                            <input type="password" id="password2"  placeholder="Enter password">
+                            <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Enter password">
                         </div>
                         <label class="help-inline">Passwords must match</label>
                     </div>
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <input type="submit" class="btn input-medium btn-primary" value="Register" onclick="isEmailAddress();isPassEqual();">
+                        <input type="submit" class="btn input-medium btn-primary" value="Register">
 
                     </div>
                 </div>
