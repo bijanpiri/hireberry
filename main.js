@@ -303,8 +303,12 @@ app.post('/board/new', function(req,res){
 
 
     });
+<<<<<<< HEAD
     var tags=JSON.parse(req.body.tags);
     newboard.save(function (err, product, numberAffected) {
+=======
+    newboard.save(function (err) {
+>>>>>>> ca12d3b701e7c55a76a7c0ec36f007dad2392184
         if (err)
             res.send('Failed 01');
         else{
@@ -390,11 +394,21 @@ app.post('/flyer/new', function(req,res){
     var flyerBoard = req.body.board;
 
     var newflyer = BFlyers({text:flyerText, owner:req.user._id});
+<<<<<<< HEAD
     newflyer.save(function (err, product, numberAffected) {
         BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(
             function (err, product, numberAffected) {
                 res.redirect('/profile');
             });
+=======
+    newflyer.save(function (err) {
+        BFlyersBoards({
+            flyer:newflyer._id,
+            board:flyerBoard})
+        .save(function (err) {
+            res.redirect('/profile');
+        });
+>>>>>>> ca12d3b701e7c55a76a7c0ec36f007dad2392184
     });
 });
 app.get('/flyer/putup', function(req,res){
@@ -532,6 +546,44 @@ function createBoard(res,tempToken,userid,name,category,tags,privacy,lng,lat) {
     });
 }
 
+function createFlyer(res,userid,flyerText) {
+    var newflyer = BFlyers({text:flyerText, owner:userid});
+    newflyer.save(function (err) {
+        if(err)  handleError(err);
+        else res.send(200,{});
+    });
+}
+
+function getFlyers(res,userid) {
+    BFlyers.find({owner:userid}, function(err,flyers){
+         if(err)  handleError(err);
+        else { console.log(flyers); res.send(200,flyers); }
+    });
+}
+
+function getBoards(res,userid) {
+    BUsersBoards.find({user:userid}, function (err, userBoards) {
+        if (err) 
+            return handleError(err);
+        else{
+
+            var boardIDList = [];
+            for(var userBoard in userBoards){
+                boardIDList.push(userBoard.board);
+            }
+
+            BBoards.find({id:{$in:boardIDList}}, function(err,boards){
+                if(err) 
+                    return handleError(err);
+                else { 
+                    console.log(boards); 
+                    res.send(200,boards); 
+                }
+            });
+        } 
+    });
+}
+
 /****************** RESTful API *********************/
 
 app.post('/api/1.0/register', function(req,res) {
@@ -599,3 +651,48 @@ app.post('/api/1.0/board', function(req,res) {
 
 });
 
+app.post('/api/1.0/flyer', function(req,res) {
+    var tempToken = req.body.temptoken;
+    var flyerText = req.body.flyertext;
+
+    console.log('>>>>>>>>>>Creating Flyer for  '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            createFlyer(res,tempToken,user._id,flyerText);
+        }
+    });
+
+});
+
+app.get('/api/1.0/flyer', function(req,res) {
+    var tempToken = req.query.tempToken;
+
+    console.log('>>>>>>>>>>Getting Flyers of '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            getFlyers(res,user._id);
+        }
+    });
+
+});
+
+app.get('/api/1.0/board', function(req,res) {
+    var tempToken = req.query.tempToken;
+
+    console.log('>>>>>>>>>>Getting Boards of '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            getBoards(res,user._id);
+        }
+    });
+
+});
