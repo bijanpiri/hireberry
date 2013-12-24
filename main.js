@@ -517,15 +517,15 @@ function getBoards(res,userid) {
         else{
 
             var boardIDList = [];
-            for(var userBoard in userBoards){
-                boardIDList.push(userBoard.board);
+            for(var i=0; i<userBoards.length; i++){
+                boardIDList.push(userBoards[i].board);
             }
 
-            BBoards.find({id:{$in:boardIDList}}, function(err,boards){
+            BBoards.find({_id:{$in:boardIDList}}, function(err,boards){
                 if(err) 
                     return handleError(err);
                 else { 
-                    console.log(boards); 
+                    console.log('>>>>>>>>>>> boards numbers: ' + boards.length );
                     res.send(200,boards); 
                 }
             });
