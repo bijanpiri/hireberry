@@ -645,3 +645,38 @@ app.get('/api/1.0/board', function(req,res) {
     });
 
 });
+
+app.delete('/api/1.0/flyer', function(req,res) {
+    var tempToken = req.query.tempToken;
+    var flyerid = req.query.flyerid;
+
+    console.log('>>>>>>>>>>Removing flyer '+tempToken);
+
+    // ToDo: Check ownership of flyer
+
+    // Remove It
+    BFlyersBoards.remove({flyer:flyerid}, function(err){
+        if(!err){
+            BFlyers.remove({_id:flyerid}, function(err){
+                if(!err) res.send(200,{});
+            });
+        }
+    });
+
+});
+
+app.post('/api/1.0/board/putup', function(req,res) {
+    var tempToken = req.body.tempToken;
+    var flyerid = req.body.flyerid;
+    var boardid = req.body.boardid;
+
+    console.log('>>>>>>>>>> Puting Up Flyer of '+tempToken);
+
+    BFlyersBoards({
+        flyer:flyerid,
+        board:boardid})
+        .save(function (err) {
+            if(!err) res.send(200,{})
+        });
+
+});
