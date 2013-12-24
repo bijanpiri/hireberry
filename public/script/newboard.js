@@ -39,6 +39,9 @@ function locate(){
     }
 
 }
+$('button[type=submit]').click(function(){
+       $('input.htags').val($('input.tags').val());
+});
 var marker;
 function main(){
 

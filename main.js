@@ -40,7 +40,9 @@ var BUsers = mongoose.model( 'users', {
     googleAccessSecretToken:String,
     tempToken:String});
 
-var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number});
+var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
+var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
+var Tags= mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
@@ -293,11 +295,15 @@ app.post('/board/new', function(req,res){
 
     // Add to Boards collection
     var newboard = BBoards({
-        name: 'test',
-        category: 'sport',
-        locationlng: '100',
-        locationlat: '200'
+        name: req.body.name,
+        category: req.body.category,
+
+        locationlat: req.body.lat,
+        locationlng: req.body.lng,
+
+
     });
+    var tags=JSON.parse(req.body.tags);
     newboard.save(function (err, product, numberAffected) {
         if (err)
             res.send('Failed 01');
@@ -307,7 +313,23 @@ app.post('/board/new', function(req,res){
                 board: newboard._id,
                 user: req.user._id
             });
-            newboarduser.save();
+            newboarduser.save(function(err){
+                var tag=BTag();
+                for(var i=0;i<tags.length;i++){
+                    var tag=BTag.findOne({name:tags[i]})
+                    if(tag){
+                        BBoardsTags({board:newboard._id,tag:tag._id}).save();
+
+                    }else{
+                        var newtag=BTag({name:tags[i]});
+                        newtag.save(function(){
+                            var boardTag=BBoardsTags({board:newboard._id,tag:newtag._id});
+                            boardTag.save();
+
+                        });
+                    }
+                }
+            });
         }
     });
 
@@ -322,10 +344,10 @@ app.get('/board/categories', function(req,res){
         {name:'general',id:4},
         {name:'other',id:5}]);
 });
-app.get('/board/get',function(req,res){
+app.get('/board/get/public',function(req,res){
 //    if( req.user ){
 
-        BBoards.find({user:req.user._id}, function (err, boards) {
+        BBoards.find({privacy:'public'}, function (err, boards) {
             res.json(boards);
         });
 //    }else
