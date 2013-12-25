@@ -490,6 +490,14 @@ function logout(res,tempToken) {
         });
 }
 
+function findTempTokenOwner(res,temptoken){
+    BUsers.findOne({tempToken:temptoken}, function(err,user){
+        if(err) res.send(500,'{}');
+        else if(!user) res.send(404,'{}');
+        else res.send(200,user);
+    });
+}
+
 function changePassword(res,tempToken,oldpassword,newpassword) {
     BUsers.update( { tempToken: tempToken, password: oldpassword },
     { $set: { password: newpassword }},
@@ -595,6 +603,12 @@ app.post('/api/1.0/logout', function(req,res) {
     var tempToken = req.body.tempToken;
     logout(res,tempToken)
 });
+
+app.post('/api/1.0/temptokenOwner', function(req,res) {
+    var tempToken = req.body.tempToken;
+    findTempTokenOwner(res,tempToken);
+});
+
 
 app.post('/api/1.0/profile/password', function(req,res) {
     var tempToken = req.body.temptoken;
