@@ -85,17 +85,54 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
-/*
-everyauth.googlehybrid
-    .myHostname('http://local.host:3000')
-    .consumerKey(conf.googlehybrid.consumerKey)
-    .consumerSecret(conf.googlehybrid.consumerSecret)
-    .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
-    .findOrCreateUser( function(session, userAttributes) {
-        return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
+
+everyauth.google
+    .entryPath('/idevice/auth/google')
+    .appId(GOOGLE_CLIENT_ID)
+    .appSecret(GOOGLE_CLIENT_SECRET)
+    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
+    .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
+        // find or create user logic goes here
+        //googleUser.refreshToken = extra.refresh_token;
+        //googleUser.expiresIn = extra.expires_in;
+
+        var promise = this.Promise();
+        console.log('Login request from iDevice')
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
+
+        BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
+
+            if(err)
+                return promise.fail([err]);
+
+            console.log(googleUserMetadata);
+
+            if(!user){
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    googleid:googleUserMetadata.id,
+                    googleAccessToken:accessToken,
+                    googleAccessSecretToken:accessTokenExtra
+                });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.fulfill(newUser);
+                });
+            } else {
+                console.log("User Exist ... Returning ");
+                promise.fulfill(user);
+            }
+        });
+
+        return promise;
+
     })
-    .redirectPath('/');
-*/
+    .redirectPath('/openapp');
+
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
