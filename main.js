@@ -91,7 +91,7 @@ everyauth.google
     .appSecret(GOOGLE_CLIENT_SECRET)
     .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
     .handleAuthCallbackError( function (req, res) {
-        res.redirect('/openapp');
+        res.redirect('/afterLoginWithGoolge');
     })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
@@ -99,7 +99,6 @@ everyauth.google
         //googleUser.expiresIn = extra.expires_in;
 
         var promise = this.Promise();
-        console.log('Login request from iDevice')
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
@@ -128,62 +127,12 @@ everyauth.google
                 console.log("User Exist ... Returning ");
                 promise.fulfill(user);
             }
-
-            //this.redirect('/openapp');
         });
 
         return promise;
 
     })
-    //.sendResponse( function (res, data) {
-    //    return this.redirect(res, '/afterLoginWithGoolge');
-    //})
     .redirectPath('/afterLoginWithGoolge');
-
-everyauth.google
-    .appId(GOOGLE_CLIENT_ID)
-    .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
-    .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
-        // find or create user logic goes here
-        //googleUser.refreshToken = extra.refresh_token;
-        //googleUser.expiresIn = extra.expires_in;
-
-        var promise = this.Promise();
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
-
-        BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
-
-            if(err)
-                return promise.fail([err]);
-
-            console.log(googleUserMetadata);
-
-            if(!user){
-                console.log("User Not Exist ... Creating ");
-                var newUser = BUsers({
-                    googleid:googleUserMetadata.id,
-                    googleAccessToken:accessToken,
-                    googleAccessSecretToken:accessTokenExtra
-                });
-                newUser.save(function(err){
-                    if(err)
-                        promise.fail([err]);
-                    else
-                        promise.fulfill(newUser);
-                });
-            } else {
-                console.log("User Exist ... Returning ");
-                promise.fulfill(user);
-            }
-        });
-
-        return promise;
-
-    })
-    .redirectPath('/');
 
 
 
