@@ -85,21 +85,14 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
-/*
-everyauth.googlehybrid
-    .myHostname('http://local.host:3000')
-    .consumerKey(conf.googlehybrid.consumerKey)
-    .consumerSecret(conf.googlehybrid.consumerSecret)
-    .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
-    .findOrCreateUser( function(session, userAttributes) {
-        return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
-    })
-    .redirectPath('/');
-*/
+
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
     .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
+    .handleAuthCallbackError( function (req, res) {
+        res.redirect('/afterLoginWithGoolge');
+    })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
         //googleUser.refreshToken = extra.refresh_token;
@@ -139,7 +132,9 @@ everyauth.google
         return promise;
 
     })
-    .redirectPath('/');
+    .redirectPath('/afterLoginWithGoolge');
+
+
 
 everyauth.password
     .loginWith('email')
@@ -233,12 +228,50 @@ app.get('/', function(req,res) {
         res.redirect('/login');
 });
 
+app.get('/afterLoginWithGoolge', function(req,res){
+    if(req.cookies.iDevice == 1)
+        res.redirect('/openapp');
+    else
+        res.redirect('/');
+})
+
+app.get('/web/auth/google', function(req,res){
+    res.cookie('iDevice',0);
+    //res.redirect('/afterLoginWithGoolge');
+    res.redirect('/auth/google');
+});
+
+app.get('/idevice/auth/google', function(req,res){
+    res.cookie('iDevice',1);
+    //res.redirect('/afterLoginWithGoolge');
+    res.redirect('/auth/google');
+});
+
 app.get('/info', function(req,res) {
     res.send('Version ?.?.? - 920926-15:23');
 });
 
 app.get('/openapp', function(req,res) {
-    res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+
+    if( req.user ){
+        crypto.randomBytes(48, function(ex, buf) {
+            var token = buf.toString('hex');
+
+            BUsers.update(
+                {_id:req.user.id},
+                {$set:{tempToken:token}},
+                function (err) {
+                    if (err)
+                        return handleError(err);
+                    else {
+                        var url = '"booltin://?temptoken=' + token +'"';
+                        res.send('<script type="text/javascript">window.location = ' + url + '</script><a href=' + url + '>Successed - open</a>');
+                    }
+                });
+        });
+    }
+    else
+        res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">Faild - open</a>');
 });
 
 app.get('/profile', function(req,res) {
@@ -457,6 +490,14 @@ function logout(res,tempToken) {
         });
 }
 
+function findTempTokenOwner(res,temptoken){
+    BUsers.findOne({tempToken:temptoken}, function(err,user){
+        if(err) res.send(200,'{}');
+        else if(!user) res.send(200,'{}');
+        else res.send(200,user);
+    });
+}
+
 function changePassword(res,tempToken,oldpassword,newpassword) {
     BUsers.update( { tempToken: tempToken, password: oldpassword },
     { $set: { password: newpassword }},
@@ -517,15 +558,15 @@ function getBoards(res,userid) {
         else{
 
             var boardIDList = [];
-            for(var userBoard in userBoards){
-                boardIDList.push(userBoard.board);
+            for(var i=0; i<userBoards.length; i++){
+                boardIDList.push(userBoards[i].board);
             }
 
-            BBoards.find({id:{$in:boardIDList}}, function(err,boards){
+            BBoards.find({_id:{$in:boardIDList}}, function(err,boards){
                 if(err) 
                     return handleError(err);
                 else { 
-                    console.log(boards); 
+                    console.log('>>>>>>>>>>> boards numbers: ' + boards.length );
                     res.send(200,boards); 
                 }
             });
@@ -562,6 +603,12 @@ app.post('/api/1.0/logout', function(req,res) {
     var tempToken = req.body.tempToken;
     logout(res,tempToken)
 });
+
+app.post('/api/1.0/temptokenOwner', function(req,res) {
+    var tempToken = req.body.tempToken;
+    findTempTokenOwner(res,tempToken);
+});
+
 
 app.post('/api/1.0/profile/password', function(req,res) {
     var tempToken = req.body.temptoken;
