@@ -2,7 +2,9 @@
  * Created by bijan on 12/18/13.
  */
 $(document).ready(main);
-
+function submit(){
+    $("input#tag").tagsinput('items');
+}
 function fillCategory(){
     $.get('/board/categories',
         function(cats){
@@ -22,7 +24,7 @@ function createBoard(){
     $(this).button('loading');
 }
 function privacyChanged(){
-    $('#privacy').val($(this).text());
+    $('#privacy').val($(this).text().toLowerCase());
 }
 var clickTimeout;
 var clickDetected = true;
@@ -37,6 +39,9 @@ function locate(){
     }
 
 }
+$('button[type=submit]').click(function(){
+       $('input.htags').val($('input.tags').val());
+});
 var marker;
 function main(){
 

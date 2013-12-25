@@ -6,6 +6,7 @@ var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
+var $=require('jquery');
 
 everyauth.debug = true;
 
@@ -40,7 +41,9 @@ var BUsers = mongoose.model( 'users', {
     googleAccessSecretToken:String,
     tempToken:String});
 
-var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number});
+var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
+var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
+var BTag= mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
@@ -85,7 +88,21 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
+<<<<<<< HEAD
+/*
+ everyauth.googlehybrid
+ .myHostname('http://local.host:3000')
+ .consumerKey(conf.googlehybrid.consumerKey)
+ .consumerSecret(conf.googlehybrid.consumerSecret)
+ .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
+ .findOrCreateUser( function(session, userAttributes) {
+ return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
+ })
+ .redirectPath('/');
+ */
+=======
 
+>>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -282,11 +299,15 @@ app.get('/profile', function(req,res) {
                 return handleError(err);
 
             BFlyers.find({owner:req.user._id}, function (err, flyers) {
-                res.render('profile.ejs',{
-                    title:'Profile',
-                    email:req.user,
-                    boards:boards,
-                    flyers:flyers
+                BBoards.find({privacy:'public'},function(err,pBoards){
+                    res.render('profile.ejs',{
+                        title:'Profile',
+                        email:req.user,
+                        boards:boards,
+                        pBoards:pBoards,
+                        flyers:flyers
+                    });
+
                 });
             });
         });
@@ -314,7 +335,8 @@ app.post('/profile', function(req,res) {
 });
 
 app.get('/board/new', function(req,res){
-    res.render('boardnew.ejs',{title:'new flyer'});
+    if(checkUser(req,res))
+        res.render('boardnew.ejs',{title:'new flyer'});
 });
 
 app.post('/board/new', function(req,res){
@@ -324,13 +346,17 @@ app.post('/board/new', function(req,res){
     //req.body.locationlng
     //req.body.locationlat
 
+    if(!checkUser(req,res)) return;
     // Add to Boards collection
     var newboard = BBoards({
-        name: 'test',
-        category: 'sport',
-        locationlng: '100',
-        locationlat: '200'
+        name: req.body.name,
+        category: req.body.category,
+        privacy:req.body.privacy,
+        locationlat: req.body.lat,
+        locationlng: req.body.lng
     });
+
+    var tags=req.body.tags.split(',');
     newboard.save(function (err) {
         if (err)
             res.send('Failed 01');
@@ -340,9 +366,26 @@ app.post('/board/new', function(req,res){
                 board: newboard._id,
                 user: req.user._id
             });
-            newboarduser.save();
+            newboarduser.save(boardSaved);
         }
     });
+    function boardSaved(err){
+        tags.forEach(function(tg,i){
+            BTag.findOne({name:tg},
+                function(err, tag){
+                    if(tag){
+                        BBoardsTags({board:newboard._id,tag:tag._id}).save();
+                    }else{
+                        var newtag=BTag({name:tg});
+                        newtag.save(function(){
+                            var boardTag=BBoardsTags({board:newboard._id,tag:newtag._id});
+                            boardTag.save();
+                        });
+                    } });
+        });
+    }
+
+
 
     res.send('OK');
 });
@@ -354,6 +397,15 @@ app.get('/board/categories', function(req,res){
         {name:'school/university',id:3},
         {name:'general',id:4},
         {name:'other',id:5}]);
+});
+app.get('/board/get/public',function(req,res){
+//    if( req.user ){
+
+    BBoards.find({privacy:'public'}, function (err, boards) {
+        res.json(boards);
+    });
+//    }else
+//        res.write('log in please');
 });
 
 app.get('/board/:id', function(req,res){
@@ -393,15 +445,21 @@ app.post('/flyer/new', function(req,res){
 
     var newflyer = BFlyers({text:flyerText, owner:req.user._id});
     newflyer.save(function (err) {
-        BFlyersBoards({
-            flyer:newflyer._id,
-            board:flyerBoard})
-        .save(function (err) {
-            res.redirect('/profile');
-        });
+        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(
+            function (err, product, numberAffected) {
+                res.redirect('/profile');
+            });
     });
 });
-
+app.post('/flyer/putup', function(req,res){
+    var flyerid=req.body.flyerid;
+    var boardid=req.body.boardid;
+    var BFB=BFlyersBoards({flyer:flyerid,board:boardid}).save(
+        function(err){
+            res.redirect('/board/'+boardid);
+        }
+    )
+});
 app.get('/flyer/remove/:id', function(req,res){
     var flyerid = req.params.id;
 
@@ -432,25 +490,25 @@ app.get('/flyer/:id', function(req,res){
 /***************** Low Level API ********************/
 
 /*
-    GET
-        /ison
-        /profile
-        /flyers/:id
-        /boards/:id
-    POST
-        /register
-        /login
-        /logout
-        /flyers
-        /boards
-    PUT
-        /profile/:id
-    DELETE
-        /flyers/:id
+ GET
+ /ison
+ /profile
+ /flyers/:id
+ /boards/:id
+ POST
+ /register
+ /login
+ /logout
+ /flyers
+ /boards
+ PUT
+ /profile/:id
+ DELETE
+ /flyers/:id
  */
 
 app.get('/api/1.0/ison', function(req,res){
-   res.send(200,{status:'is on'});
+    res.send(200,{status:'is on'});
 });
 
 function login(res,email,password){
@@ -467,7 +525,7 @@ function login(res,email,password){
                     {$set:{tempToken:token}},
                     function (err, numberAffected, raw) {
                         if (err)    return handleError(err);
-                        else{ 
+                        else{
                             console.log('>>>>>>>>>>Login Request for '+email+' is accepeted.');
                             res.send(200,user);
                         }
@@ -500,15 +558,15 @@ function findTempTokenOwner(res,temptoken){
 
 function changePassword(res,tempToken,oldpassword,newpassword) {
     BUsers.update( { tempToken: tempToken, password: oldpassword },
-    { $set: { password: newpassword }},
-    function (err, numberAffected, raw) {
-        if (err) return handleError(err);
-        else res.send(200,{});
-    });
+        { $set: { password: newpassword }},
+        function (err, numberAffected, raw) {
+            if (err) return handleError(err);
+            else res.send(200,{});
+        });
 }
 
 function createBoard(res,tempToken,userid,name,category,tags,privacy,lng,lat) {
-    
+
     var newboard = BBoards({
         name: name,
         category: category,
@@ -526,7 +584,7 @@ function createBoard(res,tempToken,userid,name,category,tags,privacy,lng,lat) {
             });
             newboarduser.save(function(err){
                 if(!err){
-                    
+
                     // ToDo: Add Tags To BoardsTags Collection
 
                     res.send(200,{});
@@ -546,14 +604,14 @@ function createFlyer(res,userid,flyerText) {
 
 function getFlyers(res,userid) {
     BFlyers.find({owner:userid}, function(err,flyers){
-         if(err)  handleError(err);
+        if(err)  handleError(err);
         else { console.log(flyers); res.send(200,flyers); }
     });
 }
 
 function getBoards(res,userid) {
     BUsersBoards.find({user:userid}, function (err, userBoards) {
-        if (err) 
+        if (err)
             return handleError(err);
         else{
 
@@ -562,15 +620,24 @@ function getBoards(res,userid) {
                 boardIDList.push(userBoards[i].board);
             }
 
+<<<<<<< HEAD
+            BBoards.find({id:{$in:boardIDList}}, function(err,boards){
+                if(err)
+                    return handleError(err);
+                else {
+                    console.log(boards);
+                    res.send(200,boards);
+=======
             BBoards.find({_id:{$in:boardIDList}}, function(err,boards){
                 if(err) 
                     return handleError(err);
                 else { 
                     console.log('>>>>>>>>>>> boards numbers: ' + boards.length );
                     res.send(200,boards); 
+>>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34
                 }
             });
-        } 
+        }
     });
 }
 
@@ -693,6 +760,13 @@ app.get('/api/1.0/board', function(req,res) {
 
 });
 
+<<<<<<< HEAD
+function checkUser(req,res){
+    if(!req.user)
+        res.redirect('/login');
+    return req.user!=null;
+}
+=======
 app.delete('/api/1.0/flyer', function(req,res) {
     var tempToken = req.query.tempToken;
     var flyerid = req.query.flyerid;
@@ -727,3 +801,4 @@ app.post('/api/1.0/board/putup', function(req,res) {
         });
 
 });
+>>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34
