@@ -278,7 +278,24 @@ app.get('/info', function(req,res) {
 });
 
 app.get('/openapp', function(req,res) {
-    res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+
+    crypto.randomBytes(48, function(ex, buf) {
+        var token = buf.toString('hex');
+        user.tempToken = 'He has a iDevice!';//token;
+
+        BUsers.update(
+            {_id:req.user.id},
+            {$set:{tempToken:token}},
+            function (err, numberAffected, raw) {
+                if (err)
+                    return handleError(err);
+                else
+                    res.send('<script type="text/javascript">window.location = "booltin://?temotoken="' + token + '</script><a href="booltin://?">open</a>');
+            });
+    });
+
+
+    //res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
 app.get('/profile', function(req,res) {
