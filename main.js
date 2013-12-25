@@ -6,7 +6,7 @@ var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
-var $=require('jquery');
+
 
 everyauth.debug = true;
 
