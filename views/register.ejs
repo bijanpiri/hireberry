@@ -129,6 +129,16 @@
         else
             return false;
     }
+    function showResult(){
+        var datastring= $("form").serialize();
+        $.ajax({
+            url: '/register',
+            type: 'post',
+            dataType: 'json',
+            data: datastring
+        });
+        return false;
+    }
 </script>
 <div class="container">
     <div class="row ">
