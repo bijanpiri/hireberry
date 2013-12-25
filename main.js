@@ -260,16 +260,18 @@ app.get('/openapp', function(req,res) {
             BUsers.update(
                 {_id:req.user.id},
                 {$set:{tempToken:token}},
-                function (err, numberAffected, raw) {
+                function (err) {
                     if (err)
                         return handleError(err);
-                    else
-                        res.send('<script type="text/javascript">window.location = "booltin://?temotoken="' + token + '</script><a href="booltin://?">open</a>');
+                    else {
+                        var url = '"booltin://?temptoken=' + token +'"';
+                        res.send('<script type="text/javascript">window.location = ' + url + '</script><a href=' + url + '>Successed - open</a>');
+                    }
                 });
         });
     }
     else
-        res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+        res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">Faild - open</a>');
 });
 
 app.get('/profile', function(req,res) {
