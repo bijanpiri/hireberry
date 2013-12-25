@@ -87,7 +87,6 @@ everyauth.twitter
     .redirectPath('/');
 
 everyauth.google
-    .entryPath('/idevice/auth/google')
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
     .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
@@ -136,10 +135,10 @@ everyauth.google
         return promise;
 
     })
-    .sendResponse( function (res, data) {
-        return this.redirect(res, '/openapp');
-    })
-    .redirectPath('/openapp');
+    //.sendResponse( function (res, data) {
+    //    return this.redirect(res, '/afterLoginWithGoolge');
+    //})
+    .redirectPath('/afterLoginWithGoolge');
 
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
@@ -278,6 +277,18 @@ app.get('/', function(req,res) {
         res.redirect('/profile');
     else
         res.redirect('/login');
+});
+
+app.get('/afterLoginWithGoolge', function(req,res){
+    if(req.cookies.iDevice == 1)
+        res.redirect('/openapp');
+    else
+        res.redirect('/');
+})
+
+app.get('/idevice/auth/google', function(req,res){
+    res.cookie('iDevice',1);
+    res.redirect('/auth/google');
 });
 
 app.get('/info', function(req,res) {
