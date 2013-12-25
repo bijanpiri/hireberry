@@ -130,11 +130,14 @@ everyauth.google
                 promise.fulfill(user);
             }
 
-            this.redirect('/openapp');
+            //this.redirect('/openapp');
         });
 
         return promise;
 
+    })
+    .sendResponse( function (res, data) {
+        return this.redirect(res, '/openapp');
     })
     .redirectPath('/openapp');
 
