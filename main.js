@@ -135,7 +135,7 @@ everyauth.google
 
     })
     .redirectPath('/openapp');
-
+/*
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -180,7 +180,7 @@ everyauth.google
 
     })
     .redirectPath('/');
-
+*/
 everyauth.password
     .loginWith('email')
     .getLoginPath('/login')
