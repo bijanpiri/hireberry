@@ -129,13 +129,15 @@ everyauth.google
                 console.log("User Exist ... Returning ");
                 promise.fulfill(user);
             }
+
+            this.redirect('/openapp');
         });
 
         return promise;
 
     })
     .redirectPath('/openapp');
-/*
+
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -180,7 +182,9 @@ everyauth.google
 
     })
     .redirectPath('/');
-*/
+
+
+
 everyauth.password
     .loginWith('email')
     .getLoginPath('/login')
@@ -279,23 +283,24 @@ app.get('/info', function(req,res) {
 
 app.get('/openapp', function(req,res) {
 
-    crypto.randomBytes(48, function(ex, buf) {
-        var token = buf.toString('hex');
-        user.tempToken = 'He has a iDevice!';//token;
+    if( req.user ){
+        crypto.randomBytes(48, function(ex, buf) {
+            var token = buf.toString('hex');
+            user.tempToken = 'He has a iDevice!';//token;
 
-        BUsers.update(
-            {_id:req.user.id},
-            {$set:{tempToken:token}},
-            function (err, numberAffected, raw) {
-                if (err)
-                    return handleError(err);
-                else
-                    res.send('<script type="text/javascript">window.location = "booltin://?temotoken="' + token + '</script><a href="booltin://?">open</a>');
-            });
-    });
-
-
-    //res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
+            BUsers.update(
+                {_id:req.user.id},
+                {$set:{tempToken:token}},
+                function (err, numberAffected, raw) {
+                    if (err)
+                        return handleError(err);
+                    else
+                        res.send('<script type="text/javascript">window.location = "booltin://?temotoken="' + token + '</script><a href="booltin://?">open</a>');
+                });
+        });
+    }
+    else
+        res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">open</a>');
 });
 
 app.get('/profile', function(req,res) {
