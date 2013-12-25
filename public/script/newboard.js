@@ -24,7 +24,7 @@ function createBoard(){
     $(this).button('loading');
 }
 function privacyChanged(){
-    $('#privacy').val($(this).text());
+    $('#privacy').val($(this).text().toLowerCase());
 }
 var clickTimeout;
 var clickDetected = true;
