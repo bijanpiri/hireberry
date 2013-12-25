@@ -88,21 +88,7 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
-<<<<<<< HEAD
-/*
- everyauth.googlehybrid
- .myHostname('http://local.host:3000')
- .consumerKey(conf.googlehybrid.consumerKey)
- .consumerSecret(conf.googlehybrid.consumerSecret)
- .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
- .findOrCreateUser( function(session, userAttributes) {
- return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
- })
- .redirectPath('/');
- */
-=======
 
->>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -620,26 +606,7 @@ function getBoards(res,userid) {
                 boardIDList.push(userBoards[i].board);
             }
 
-<<<<<<< HEAD
-            BBoards.find({id:{$in:boardIDList}}, function(err,boards){
-                if(err)
-                    return handleError(err);
-                else {
-                    console.log(boards);
-                    res.send(200,boards);
-=======
-            BBoards.find({_id:{$in:boardIDList}}, function(err,boards){
-                if(err) 
-                    return handleError(err);
-                else { 
-                    console.log('>>>>>>>>>>> boards numbers: ' + boards.length );
-                    res.send(200,boards); 
->>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34
-                }
-            });
-        }
-    });
-}
+
 
 /****************** RESTful API *********************/
 
@@ -761,13 +728,13 @@ app.get('/api/1.0/board', function(req,res) {
 });
 
 <<<<<<< HEAD
-function checkUser(req,res){
-    if(!req.user)
+    function checkUser(req,res){
+        if(!req.user)
         res.redirect('/login');
-    return req.user!=null;
-}
-=======
-app.delete('/api/1.0/flyer', function(req,res) {
+        return req.user!=null;
+        }
+    =======
+    app.delete('/api/1.0/flyer', function(req,res) {
     var tempToken = req.query.tempToken;
     var flyerid = req.query.flyerid;
 
