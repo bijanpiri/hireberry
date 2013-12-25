@@ -255,7 +255,7 @@ app.get('/openapp', function(req,res) {
 
     if( req.user ){
         crypto.randomBytes(48, function(ex, buf) {
-            var token = 'He has a iDevice!';//buf.toString('hex');
+            var token = buf.toString('hex');
 
             BUsers.update(
                 {_id:req.user.id},
