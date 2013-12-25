@@ -492,8 +492,8 @@ function logout(res,tempToken) {
 
 function findTempTokenOwner(res,temptoken){
     BUsers.findOne({tempToken:temptoken}, function(err,user){
-        if(err) res.send(500,'{}');
-        else if(!user) res.send(404,'{}');
+        if(err) res.send(200,'{}');
+        else if(!user) res.send(200,'{}');
         else res.send(200,user);
     });
 }
