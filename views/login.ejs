@@ -11,16 +11,45 @@
             $('#loginid').addClass('error');
         else
             $('#loginid').removeClass('error');
+        //$('.alert').show();
     }
 
-    /* document.getElementById()*/
-//    $(document).ready();
+    function showResult(){
+        var datastring= $("#form").serialize();
+        $.ajax({
+            url: '/login',
+            type: 'post',
+            dataType: 'json',
+            data: datastring,
+             function(data){
+                alert("success");
+            }
+        });
+/*
+        $.post('/login',$('#form').serialize(),function(data){alert("succeed");}, 'json');
+*/
+    }
+
+    /*function showValue()
+    {
+        var str = $("form").serialize();
+        $("#result").text(str);
+
+    }
+    $("button[type='submit']").on("click",showValue());
+    showValue();*/
 
   </script>
 <div class="container">
     <div class="row ">
         <div class="span12">
-            <form class="form-horizontal" action="/login" method="post">
+            <form id="form" class="form-horizontal" onsubmit="return false;" >
+                <div class="alert alert-error hide">
+                    <button class="close" data-dismiss="alert">
+                        &times;
+                    </button>
+                    <span class="msg">Invalid Email or password</span>
+                </div>
                 <fieldset>
                     <div id="loginid" class="control-group">
                         <div class="control-label"> Email:</div>
@@ -51,7 +80,7 @@
                             <!--<a href='/register' class="btn input-small btn-warning">Sign up</a>-->
                             <button type="button" onclick="location.href='/register';"
                                     class="btn btn-warning input-small " >Sign Up</button>
-                            <button type="submit" class="btn btn-primary input-small " onclick="isEmailAddress()" >Sign in</button>
+                            <button type="submit" class="btn btn-primary input-small " onclick="isEmailAddress(); showResult();" >Sign in</button>
                         </div>
                     </div>
                     <h2>OR</h2>
