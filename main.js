@@ -91,6 +91,9 @@ everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
     .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
+    .handleAuthCallbackError( function (req, res) {
+        res.redirect('/openapp');
+    })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
         // find or create user logic goes here
         //googleUser.refreshToken = extra.refresh_token;
