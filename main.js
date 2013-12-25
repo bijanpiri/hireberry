@@ -286,9 +286,16 @@ app.get('/afterLoginWithGoolge', function(req,res){
         res.redirect('/');
 })
 
+app.get('/web/auth/google', function(req,res){
+    res.cookie('iDevice',0);
+    res.redirect('/afterLoginWithGoolge');
+    //res.redirect('/auth/google');
+});
+
 app.get('/idevice/auth/google', function(req,res){
     res.cookie('iDevice',1);
-    res.redirect('/auth/google');
+    res.redirect('/afterLoginWithGoolge');
+    //res.redirect('/auth/google');
 });
 
 app.get('/info', function(req,res) {
