@@ -88,21 +88,6 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
-<<<<<<< HEAD
-/*
- everyauth.googlehybrid
- .myHostname('http://local.host:3000')
- .consumerKey(conf.googlehybrid.consumerKey)
- .consumerSecret(conf.googlehybrid.consumerSecret)
- .scope(['http://docs.google.com/feeds/','http://spreadsheets.google.com/feeds/'])
- .findOrCreateUser( function(session, userAttributes) {
- return usersByGoogleHybridId[userAttributes.claimedIdentifier] || (usersByGoogleHybridId[userAttributes.claimedIdentifier] = addUser('googlehybrid', userAttributes));
- })
- .redirectPath('/');
- */
-=======
-
->>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -161,9 +146,18 @@ everyauth.password
     .loginLocals( function (req, res, done) {
         setTimeout( function () {
             done(null, {
-                title: 'Async login'
+                title: 'Login'
             });
         }, 200);
+    })
+    .respondToLoginSucceed( function (res, user) {
+        if (user) { /* Then the login was successful */
+            res.json({ success: true }, 200);
+        }
+    })
+    .respondToLoginFail( function (req, res, errors, login) {
+        if (!errors || !errors.length) return;
+        return res.json({ success: false, errors: errors });
     })
     .authenticate( function (login, password) {
         var errors = [];
@@ -177,14 +171,16 @@ everyauth.password
         var promise = this.Promise()
         BUsers.findOne({ email: login}, function (err, user) {
             if (err)
-                return promise.fulfill([err]);
+                return promise.fail([err]);
 
             console.log(user);
 
             if (!user)
-                return ['Login failed'];
+                return promis.fail(['invalid user']);
+//                return ['invalid user'];
             if (user.password !== password)
-                return ['Login failed'];
+                return promise.fail(['Login failed']);
+//                return (['Login failed']);
 
             promise.fulfill(user);
         });
@@ -198,7 +194,7 @@ everyauth.password
     .registerLocals( function (req, res, done) {
         setTimeout( function () {
             done(null, {
-                title: 'Async Register'
+                title: 'Register'
             });
         }, 200);
     })
@@ -206,9 +202,18 @@ everyauth.password
         return null;
     })
     .registerUser( function (newUserAttributes) {
-        var user = BUsers({email: newUserAttributes.email, password: newUserAttributes.password, salt: ''});
-        user.save();
-        return user;
+        var promise = this.Promise();
+        BUsers.count({email:newUserAttributes.email}, function(err,count){
+            if(count>0)
+                return promise.fail(['Another User Exist With This Email']);
+            else{
+                var user = BUsers(
+                    {email: newUserAttributes.email, password: newUserAttributes.password, salt: ''});
+                user.save(function(err){return promise.fulfill(user);});
+            }
+        });
+
+        return promise;
     })
     .registerSuccessRedirect('/profile');
 
@@ -620,21 +625,12 @@ function getBoards(res,userid) {
                 boardIDList.push(userBoards[i].board);
             }
 
-<<<<<<< HEAD
-            BBoards.find({id:{$in:boardIDList}}, function(err,boards){
-                if(err)
-                    return handleError(err);
-                else {
-                    console.log(boards);
-                    res.send(200,boards);
-=======
             BBoards.find({_id:{$in:boardIDList}}, function(err,boards){
                 if(err) 
                     return handleError(err);
                 else { 
                     console.log('>>>>>>>>>>> boards numbers: ' + boards.length );
                     res.send(200,boards); 
->>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34
                 }
             });
         }
@@ -760,13 +756,13 @@ app.get('/api/1.0/board', function(req,res) {
 
 });
 
-<<<<<<< HEAD
+
 function checkUser(req,res){
     if(!req.user)
         res.redirect('/login');
     return req.user!=null;
 }
-=======
+
 app.delete('/api/1.0/flyer', function(req,res) {
     var tempToken = req.query.tempToken;
     var flyerid = req.query.flyerid;
@@ -801,4 +797,3 @@ app.post('/api/1.0/board/putup', function(req,res) {
         });
 
 });
->>>>>>> 35a255b83d62890557c1b77a8aaae64f3efd8f34

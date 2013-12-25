@@ -21,8 +21,11 @@
             type: 'post',
             dataType: 'json',
             data: datastring,
-             function(data){
-                alert("success");
+            error: function(data){
+                alert('error '+data.status);
+            },
+            success: function(data){
+                window.location='/profile';
             }
         });
 /*
