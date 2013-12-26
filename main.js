@@ -7,8 +7,6 @@ var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
 
-var client = loggly.createClient(logglyConfig);
-
 //region Initialization
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
