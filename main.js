@@ -175,11 +175,11 @@ everyauth.password
             console.log(user);
 
             if (!user)
-                return promis.fail(['invalid user']);
-//                return ['invalid user'];
+//                return promis.fail(['invalid user']);
+                return ['invalid user'];
             if (user.password !== password)
-                return promise.fail(['Login failed']);
-//                return (['Login failed']);
+//                return promise.fail(['Login failed']);
+                return (['Login failed']);
 
             promise.fulfill(user);
         });
