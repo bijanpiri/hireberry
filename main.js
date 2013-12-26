@@ -7,6 +7,7 @@ var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
 
+var client = loggly.createClient(logglyConfig);
 
 //region Initialization
 
@@ -646,7 +647,7 @@ function checkUser(req,res){
     return req.user!=null;
 }
 
-function BLog(var text){
+function BLog(text){
     console.log('<<<<<BOOLTIN LOG>>>>>:' + text);
 }
 
