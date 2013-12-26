@@ -19,6 +19,12 @@ var app = express();
 mongoose.connect(mongoHQConenctionString);
 everyauth.debug = true;
 
+// For Sending Logs to Client Console Output
+var server = require('http').createServer(app)
+var io = require('socket.io').listen(server);
+server.listen(5001);
+
+
 //endregion
 
 //region Mongose Models
@@ -318,7 +324,6 @@ app.get('/profile', function(req,res) {
                         pBoards:pBoards,
                         flyers:flyers
                     });
-
                 });
             });
         });
@@ -330,6 +335,8 @@ app.get('/profile', function(req,res) {
 app.post('/profile', function(req,res) {
     var newPassword = req.body.newpassword;
 
+
+
     if( req.body.newpassword != req.body.confirmnewpassword)
         res.send('Not matched!');
     if( req.user ){
@@ -337,10 +344,12 @@ app.post('/profile', function(req,res) {
         BUsers.update( { email: req.user.email, password: req.body.oldpassword },
             { $set: { password: newPassword }},
             function (err, numberAffected, raw) {
-                if (err)
+                if (err){
+                    BLog('WWWW');
                     return handleError(err);
-                else
-                    res.send('Password is changed successfuly!');
+                }
+                else{BLog('WWWW');}
+                    //res.send('Password is changed successfuly!');
             });
     }
 });
@@ -646,7 +655,11 @@ function checkUser(req,res){
 }
 
 function BLog(text){
+    // Server side output
     console.log('<<<<<BOOLTIN LOG>>>>>:' + text);
+
+    // Client side output
+    io.sockets.emit('newlog', { log: text });
 }
 
 //endregion
