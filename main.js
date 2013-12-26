@@ -150,11 +150,14 @@ everyauth.password
         }, 200);
     })
     .respondToLoginSucceed( function (res, user) {
+        console.log('login succeeded');
         if (user) { /* Then the login was successful */
             res.json({ success: true }, 200);
         }
     })
     .respondToLoginFail( function (req, res, errors, login) {
+        console.log('login failed');
+
         if (!errors || !errors.length) return;
         return res.json({ success: false, errors: errors });
     })

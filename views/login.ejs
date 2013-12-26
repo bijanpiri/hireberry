@@ -86,9 +86,6 @@
             url: '/login',
             type: 'post',
             dataType: 'json',
-
-
-
             data: datastring,
             error: function(data){
                 alert('error '+data.status);
@@ -97,11 +94,7 @@
                 window.location='/profile';
             }
         });
-
-/*
-        $.post('/login',$('#form').serialize(),function(data){alert("succeed");}, 'json');
-*/
-
+        return false;
     }
 
     /*function showValue()
