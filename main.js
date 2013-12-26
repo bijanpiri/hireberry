@@ -156,11 +156,14 @@ everyauth.password
         }, 200);
     })
     .respondToLoginSucceed( function (res, user) {
+        console.log('login succeeded');
         if (user) { /* Then the login was successful */
             res.json({ success: true }, 200);
         }
     })
     .respondToLoginFail( function (req, res, errors, login) {
+        console.log('login failed');
+
         if (!errors || !errors.length) return;
         return res.json({ success: false, errors: errors });
     })
@@ -181,11 +184,11 @@ everyauth.password
             console.log(user);
 
             if (!user)
-                return promis.fail(['invalid user']);
-//                return ['invalid user'];
+//                return promis.fail(['invalid user']);
+                return ['invalid user'];
             if (user.password !== password)
-                return promise.fail(['Login failed']);
-//                return (['Login failed']);
+//                return promise.fail(['Login failed']);
+                return (['Login failed']);
 
             promise.fulfill(user);
         });
