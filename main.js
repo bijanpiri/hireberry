@@ -8,7 +8,7 @@ var engine = require('ejs-locals');
 var crypto = require('crypto');
 
 
-/************** Initialization ****************/
+//region Initialization
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
@@ -20,7 +20,9 @@ var app = express();
 mongoose.connect(mongoHQConenctionString);
 everyauth.debug = true;
 
-// Mongoose Models
+//endregion
+
+//region Mongose Models
 var BUsers = mongoose.model( 'users', {
     email: String,
     password: String,
@@ -38,16 +40,18 @@ var BTag= mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
+//endregion
 
-// Configure every modules in everyauth
+//region Configure every modules in everyauth
 everyauth.everymodule
     .findUserById( function (id, callback) {
         BUsers.findOne({_id:id}, function(err,user) {
             callback(null, user);
         });
     });
+//endregion
 
-// Twitter Authentication Configuration
+//region Twitter Authentication Configuration
 everyauth.twitter
     .consumerKey(TWITTER_CONSUMER_KEY)
     .consumerSecret(TWITTER_CONSUMER_SECRET)
@@ -81,8 +85,9 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
+//endregion
 
-// Google  Authentication Configuration
+//region Google  Authentication Configuration
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -130,8 +135,9 @@ everyauth.google
 
     })
     .redirectPath('/afterLoginWithGoolge');
+//endregion
 
-// Local Username/Password Registration and Authentication Configuration
+//region Local Username/Password Registration and Authentication Configuration
 everyauth.password
     .loginWith('email')
     .getLoginPath('/login')
@@ -210,8 +216,9 @@ everyauth.password
         return promise;
     })
     .registerSuccessRedirect('/profile');
+//endregion
 
-// Configure Express
+//region Configure Express
 app.configure(function() {
     app.engine('ejs',engine);
     app.set('view engine', 'ejs');
@@ -225,17 +232,18 @@ app.configure(function() {
     app.use(express.session({ secret: 'keyboard cat' }));
     app.use(everyauth.middleware());
 });
+//endregion
 
-/************** Starting Server ****************/
-
+//region Starting Server
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
     console.log("Listening on " + port);
 });
 
 module.exports = app;
+//endregion
 
-/************** Application Routers ****************/
+//region Application Routers
 /* Router Guide:
     /auth/twitter
     /auth/google
@@ -490,7 +498,9 @@ app.get('/flyer/:id', function(req,res){
     });
 });
 
-/***************** Low Level API ********************/
+//endregion
+
+//region Low Level API
 /*
  GET
      /ison
@@ -636,7 +646,23 @@ function checkUser(req,res){
     return req.user!=null;
 }
 
-/****************** RESTful API *********************/
+function BLog(var text){
+    console.log('<<<<<BOOLTIN LOG>>>>>:' + text);
+}
+
+//endregion
+
+//region RESTful API
+/*
+    About Login From iDevice:
+    0- User Touch "Login With Google" button
+    1- App Open This URL In The Default Browser: /idevice/auth/google
+    2- Server Save a Cookie and Redirect Him To /auth/google
+    3- Server Send Him to Google To Accept Our App Access
+    4- Google Send Him to /auth/callback with A.T (Authentication Token)
+    5- Server Save A.T, Generates a tempToken for Him and Re-Open App for Him and Send tempToken to App
+    6- App Save tempToken and uses it to further access
+ */
 
 app.get('/api/1.0/ison', function(req,res){
     res.send(200,{status:'is on'});
@@ -792,3 +818,5 @@ app.post('/api/1.0/board/putup', function(req,res) {
         });
 
 });
+
+//endregion
