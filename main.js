@@ -8,16 +8,6 @@ var engine = require('ejs-locals');
 var crypto = require('crypto');
 
 
-everyauth.debug = true;
-
-/*
- /auth/twitter
- /auth/google
- /logout
- /register
- /login
- */
-
 /************** Initialization ****************/
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
@@ -28,7 +18,9 @@ var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10
 
 var app = express();
 mongoose.connect(mongoHQConenctionString);
+everyauth.debug = true;
 
+// Mongoose Models
 var BUsers = mongoose.model( 'users', {
     email: String,
     password: String,
@@ -40,7 +32,6 @@ var BUsers = mongoose.model( 'users', {
     googleAccessToken:String,
     googleAccessSecretToken:String,
     tempToken:String});
-
 var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
 var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
 var BTag= mongoose.model( 'tags', {name:String});
@@ -48,6 +39,7 @@ var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 
+// Configure every modules in everyauth
 everyauth.everymodule
     .findUserById( function (id, callback) {
         BUsers.findOne({_id:id}, function(err,user) {
@@ -55,6 +47,7 @@ everyauth.everymodule
         });
     });
 
+// Twitter Authentication Configuration
 everyauth.twitter
     .consumerKey(TWITTER_CONSUMER_KEY)
     .consumerSecret(TWITTER_CONSUMER_SECRET)
@@ -88,6 +81,8 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
+
+// Google  Authentication Configuration
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -136,8 +131,7 @@ everyauth.google
     })
     .redirectPath('/afterLoginWithGoolge');
 
-
-
+// Local Username/Password Registration and Authentication Configuration
 everyauth.password
     .loginWith('email')
     .getLoginPath('/login')
@@ -217,7 +211,7 @@ everyauth.password
     })
     .registerSuccessRedirect('/profile');
 
-// configure Express
+// Configure Express
 app.configure(function() {
     app.engine('ejs',engine);
     app.set('view engine', 'ejs');
@@ -242,6 +236,13 @@ app.listen(port, function() {
 module.exports = app;
 
 /************** Application Routers ****************/
+/* Router Guide:
+    /auth/twitter
+    /auth/google
+    /logout
+    /register
+    /login
+*/
 
 app.get('/', function(req,res) {
     if( req.user )
@@ -259,13 +260,11 @@ app.get('/afterLoginWithGoolge', function(req,res){
 
 app.get('/web/auth/google', function(req,res){
     res.cookie('iDevice',0);
-    //res.redirect('/afterLoginWithGoolge');
     res.redirect('/auth/google');
 });
 
 app.get('/idevice/auth/google', function(req,res){
     res.cookie('iDevice',1);
-    //res.redirect('/afterLoginWithGoolge');
     res.redirect('/auth/google');
 });
 
@@ -403,14 +402,11 @@ app.get('/board/categories', function(req,res){
         {name:'general',id:4},
         {name:'other',id:5}]);
 });
-app.get('/board/get/public',function(req,res){
-//    if( req.user ){
 
+app.get('/board/get/public',function(req,res){
     BBoards.find({privacy:'public'}, function (err, boards) {
         res.json(boards);
     });
-//    }else
-//        res.write('log in please');
 });
 
 app.get('/board/:id', function(req,res){
@@ -456,6 +452,7 @@ app.post('/flyer/new', function(req,res){
             });
     });
 });
+
 app.post('/flyer/putup', function(req,res){
     var flyerid=req.body.flyerid;
     var boardid=req.body.boardid;
@@ -465,6 +462,7 @@ app.post('/flyer/putup', function(req,res){
         }
     )
 });
+
 app.get('/flyer/remove/:id', function(req,res){
     var flyerid = req.params.id;
 
@@ -493,28 +491,23 @@ app.get('/flyer/:id', function(req,res){
 });
 
 /***************** Low Level API ********************/
-
 /*
  GET
- /ison
- /profile
- /flyers/:id
- /boards/:id
+     /ison
+     /profile
+     /flyers/:id
+     /boards/:id
  POST
- /register
- /login
- /logout
- /flyers
- /boards
+     /register
+     /login
+     /logout
+     /flyers
+     /boards
  PUT
- /profile/:id
+     /profile/:id
  DELETE
- /flyers/:id
+     /flyers/:id
  */
-
-app.get('/api/1.0/ison', function(req,res){
-    res.send(200,{status:'is on'});
-});
 
 function login(res,email,password){
     BUsers.findOne({email:email,password:password}, function(err,user){
@@ -637,7 +630,17 @@ function getBoards(res,userid) {
     });
 }
 
+function checkUser(req,res){
+    if(!req.user)
+        res.redirect('/login');
+    return req.user!=null;
+}
+
 /****************** RESTful API *********************/
+
+app.get('/api/1.0/ison', function(req,res){
+    res.send(200,{status:'is on'});
+});
 
 app.post('/api/1.0/register', function(req,res) {
     var email = req.body.email;
@@ -671,7 +674,6 @@ app.post('/api/1.0/temptokenOwner', function(req,res) {
     var tempToken = req.body.tempToken;
     findTempTokenOwner(res,tempToken);
 });
-
 
 app.post('/api/1.0/profile/password', function(req,res) {
     var tempToken = req.body.temptoken;
@@ -755,13 +757,6 @@ app.get('/api/1.0/board', function(req,res) {
     });
 
 });
-
-
-function checkUser(req,res){
-    if(!req.user)
-        res.redirect('/login');
-    return req.user!=null;
-}
 
 app.delete('/api/1.0/flyer', function(req,res) {
     var tempToken = req.query.tempToken;
