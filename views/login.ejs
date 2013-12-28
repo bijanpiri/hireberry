@@ -88,7 +88,8 @@
             dataType: 'json',
             data: datastring,
             error: function(data){
-                alert('error '+data.status);
+                if(data.status != 0)
+                    alert('error '+data.status);
             },
             success: function(data){
                 window.location='/profile';

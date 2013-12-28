@@ -41,7 +41,7 @@ var BUsers = mongoose.model( 'users', {
     tempToken:String});
 var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
 var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
-var BTag= mongoose.model( 'tags', {name:String});
+var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
@@ -314,18 +314,24 @@ app.get('/openapp', function(req,res) {
 app.get('/profile', function(req,res) {
     if( req.user ){
 
-        BUsersBoards.find({user:req.user._id}, function (err, boards) {
+        BUsersBoards.find({user:req.user._id}, function (err, userBoards) {
             if (err)
                 return handleError(err);
 
-            BFlyers.find({owner:req.user._id}, function (err, flyers) {
-                BBoards.find({privacy:'public'},function(err,pBoards){
-                    res.render('profile.ejs',{
-                        title:'Profile',
-                        email:req.user,
-                        boards:boards,
-                        pBoards:pBoards,
-                        flyers:flyers
+            var boardsIDList = [];
+            for(var i=0; i<userBoards.length; i++)
+                boardsIDList.push(userBoards[i].board);
+
+            BBoards.find({_id:{$in:boardsIDList}}, function(err, boards) {
+                BFlyers.find({owner:req.user._id}, function (err, flyers) {
+                    BBoards.find({privacy:'public'},function(err,pBoards){
+                        res.render('profile.ejs',{
+                            title:'Profile',
+                            email:req.user,
+                            boards:boards,
+                            pBoards:pBoards,
+                            flyers:flyers
+                        });
                     });
                 });
             });
@@ -658,10 +664,10 @@ function checkUser(req,res){
 }
 
 function BLog(text){
-    // Server side output
-    console.log('<<<<<BOOLTIN LOG>>>>>:' + text);
 
     // Client side output
+    // Server side output
+    console.log('<<<<<BOOLTIN LOG>>>>>:' + text);
     io.sockets.emit('newlog', { log: text });
 }
 

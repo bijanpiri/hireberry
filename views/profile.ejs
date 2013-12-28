@@ -14,7 +14,7 @@
                     </a>
                     <ul>
                         <% for(i=0;i<boards.length;i++){%>
-                        <li><a href="/board/<%=boards[i].board%>"><%=boards[i].board%></a></li>
+                        <li><a href="/board/<%=boards[i]._id%>"><%=boards[i].name%></a></li>
                         <%}%>
                     </ul>
                 </div>
@@ -31,7 +31,10 @@
                                 <div class="control-group">
                                     <div class="control-label">
                                         <a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a>
-                                        <a href="/flyer/remove/<%=flyers[i]._id%>">&times;</a>
+                                    </div>
+
+                                    <div class="control-label">
+                                        <a  class="btn input-mini btn-danger"  href="/flyer/remove/<%=flyers[i]._id%>">Remove</a>
                                     </div>
 
                                     <div class="controls">
