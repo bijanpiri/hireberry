@@ -2,23 +2,22 @@
 <html>
 <head>
     <title><%=title%></title>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
-    <script src="/bootstrap/js/jquery.js"></script>
-    <script src="/bootstrap/js/bootstrap.js"></script>
+
     <meta charset=utf-8 />
-    <title>Boarder</title>
-
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
-    <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.js'></script>
-    <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.css' rel='stylesheet' />
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.js"></script>
 
-    <script src="/bootstrap/tagsinput/bootstrap-tagsinput.min.js"></script>
-    <script src="/bootstrap/tagsinput/bootstrap-tagsinput-angular.js/"></script>
     <link rel="stylesheet" href="/bootstrap/tagsinput/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
+    <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.css' rel='stylesheet' />
+
+    <script src="/bootstrap/js/jquery.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+    <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.js'></script>
+    <script src="/bootstrap/tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script src="/bootstrap/tagsinput/bootstrap-tagsinput-angular.js/"></script>
+
+
 
     <style>
         #map{
@@ -38,7 +37,6 @@
 
         ga('create', 'UA-45875480-3', 'booltin.herokuapp.com');
         ga('send', 'pageview');
-
     </script>
 
     <script type="text/javascript">
@@ -52,6 +50,7 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
+
     <script src="/socket.io.min.js"></script>
     <script>
         var socket = io.connect('http://localhost:5001/');
