@@ -50,11 +50,11 @@
     </div>
     <div class="row">
         <div>
-            <div style="background-color: #c9e8ff; padding: 5px">
+            <div style="background-color: #ffffff; padding: 5px">
                 <div>
                     <a href="/profile/boards">
                         <h2 class="caption">Boards
-                        <span class="badge"><%= boards.length %></span></h2>
+                            <span class="badge"><%= boards.length %></span></h2>
                     </a>
                     <ul class="thumbnails">
                         <% for(i=0;i<boards.length;i++){%>
@@ -69,35 +69,35 @@
                     </ul>
                 </div>
                 <div>
-                    <a href="/profile/flyers">
-                        Flyers
-                        <span class="badge"><%= flyers.length %></span>
-
+                    <a href="/profile/boards">
+                        <h2 class="caption">Flyers
+                            <span class="badge"><%= flyers.length %></span></h2>
                     </a>
-                    <ul style="list-style: none;margin: 0;padding: 0;">
+
+                    <ul class="thumbnails">
                         <% for(var i=0;i<flyers.length;i++){%>
-                        <li>
-                            <form action="/flyer/putup" method="post" class="form-inline form-horizontal">
-                                <div class="control-group">
-                                    <div class="control-label">
-                                        <a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a>
-                                    </div>
+                        <li class="span4">
+                            <div class="thumbnail" href="/board/<%=boards[i]._id%>">
+                                <div class="caption">
 
-                                    <div class="control-label">
-                                        <a  class="btn input-mini btn-danger"  href="/flyer/remove/<%=flyers[i]._id%>">Remove</a>
-                                    </div>
+                                    <h3><%=flyers[i].text%></h3>
 
-                                    <div class="controls">
-                                        <input type="hidden" name="flyerid" value="<%=flyers[i]._id%>">
-                                        <select name="boardid">
-                                            <%for(var j=0;j<pBoards.length;j++){%>
-                                            <option value="<%=pBoards[j]._id%>"> <%=pBoards[j].name%> </option>
-                                            <%}%>
-                                        </select>
-                                        <button class="btn input-mini btn-danger" type="submit">pin it</button>
-                                    </div>
+                                    <form action="/flyer/putup" method="post" class="form-inline">
+                                        <div class="controls">
+                                            <a href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
+                                            <input type="hidden" name="flyerid" value="<%=flyers[i]._id%>">
+                                            <select name="boardid">
+                                                <%for(var j=0;j<pBoards.length;j++){%>
+                                                <option value="<%=pBoards[j]._id%>"> <%=pBoards[j].name%> </option>
+                                                <%}%>
+                                            </select>
+                                            <button class="btn input-mini btn-danger" type="submit">pin it</button>
+                                        </div>
+                                    </form>
+
+
                                 </div>
-                            </form>
+                            </div>
                         </li>
                         <%}%>
                     </ul>
