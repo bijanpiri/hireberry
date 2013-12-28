@@ -16,8 +16,8 @@
     <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.js'></script>
     <script src="/bootstrap/tagsinput/bootstrap-tagsinput.min.js"></script>
     <script src="/bootstrap/tagsinput/bootstrap-tagsinput-angular.js/"></script>
-
-
+    <script src="/bootstrap/js/typeahead.js"></script>
+    <script src="/bootstrap/js/hogan-2.0.0.js"></script>
 
     <style>
         #map{
@@ -58,6 +58,41 @@
             console.log(data);
         });
     </script>
+
+    <script language="javascript">
+        $(document).ready(function() {
+            $("#searchInput").typeahead({
+                name: 'twitter-oss',
+                valueKey: 'link',
+                remote: '/search?q=%QUERY',
+                template: [
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;"><span class="badge">{{rtype}}</span><b>{{display}}</b></div>',
+                ].join(''),
+                engine: Hogan,
+                limit: 10
+            });
+        });
+
+        function search()
+        {
+            var datastring= $("#searchform").serialize();
+            $.ajax({
+                url: '/search',
+                type: 'get',
+                dataType: 'json',
+                data: datastring,
+                error: function(data){
+                    alert('error '+data.status);
+                },
+                success: function(data){
+                    alert('success '+data.status);
+                    $('browsers').append('<option value="coyBIT">');
+                }
+            });
+            return false;
+        }
+    </script>
+
 </head>
 <body>
 
@@ -72,7 +107,15 @@
             <a class="brand" href="/">Booltin</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li><a href="/" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);"><i class="icon-home icon-white"></i> Home</a></li>
+                    <li>
+                        <a href="/" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);">
+                        <i class="icon-home icon-white"></i>Home</a>
+                    </li>
+                    <li>
+                        <form id="searchform" class="navbar-search pull-left" method="get" action="/search" onsubmit="return search()">
+                            <input type="text" class="search-query2" placeholder="for ex. coybit@gmail.com" name="query" id="searchInput"/>
+                        </form>
+                    </li>
                 </ul>
                 <ul class="nav pull-right">
                     <% if(everyauth.loggedIn){ %>
@@ -100,13 +143,18 @@
     </div><!-- /.navbar-inner -->
 </nav><!-- /.navbar -->
 
+
 <%-body %>
+<div class="row">
+    <span class="span6 pull-right">
+    </span>
+</div>
 
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
     <div style="background-color: #353535; height: 50px;color: #cccccc;">
-    <div style="margin: 5px">
-        Copyright Folan-Folan
-    </div>
+        <div style="margin: 5px">
+            Copyright Folan-Folan
+        </div>
     </div>
 </nav>
 </body>

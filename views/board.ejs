@@ -2,10 +2,9 @@
 
 <div class="container">
     <div class="row" style="padding: 5px">
-        <h2><b><%=board.name%></b></h2>
+        <h2><%=board.name%><span class="badge" style="margin-left: 10px;"><%= flyers.length %></span></h2>
     </div>
     <div class="row" style="padding: 5px">
-
         <ul class="thumbnails">
             <% for(i=0;i<flyers.length;i++){%>
             <li class="span3">

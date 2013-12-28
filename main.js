@@ -523,6 +523,30 @@ app.get('/flyer/:id', function(req,res){
     });
 });
 
+app.get('/search', function(req,res){
+   var query = req.query.q;
+
+    // ToDo: Protect against SQLInjection Attack
+    // ToDo: Complete Search Mechanics
+
+    BUsers.find({email:query}, function(err,users){
+        if(err) return res.send('Error');
+        if(!users) return req.send('Not Found');
+
+        var results = [];
+
+        for(var i=0; i<users.length; i++){
+            results.push({
+                rtype:'user',
+                display:users[i].email,
+                link:users[i]._id
+            });
+        }
+
+        res.send(results);
+    });
+});
+
 //endregion
 
 //region Low Level API
