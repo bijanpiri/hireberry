@@ -4,17 +4,67 @@
     <div class="row">
         <h2>Profile</h2>
     </div>
-    <div class="row ">
+    <div class="row">
+        <form class="form-horizontal" action="/profile" method="post">
+            <div class="control-group">
+                <div class="control-label"> Email:</div>
+                <div class="controls ">
+                    <%=everyauth.user.email%>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label"> Enter Old Password:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+                        <input type="password"  name="oldpassword" placeholder="Enter password">
+                    </div>
+                    <label class="help-inline">Passwords must match</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label"> Enter New Password:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+                        <input type="password"  name="newpassword" placeholder="Enter password">
+                    </div>
+                    <label class="help-inline">Password must contains at least 6 characters</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label"> Enter Password again:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+                        <input type="password" name="confirmnewpassword" placeholder="Enter password">
+                    </div>
+                    <label class="help-inline">Passwords must match</label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="submit" class="btn input-medium btn-primary" value="Save Changes">
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
         <div>
             <div style="background-color: #c9e8ff; padding: 5px">
                 <div>
                     <a href="/profile/boards">
-                        Boards
-                        <span class="badge"><%= boards.length %></span>
+                        <h2 class="caption">Boards
+                        <span class="badge"><%= boards.length %></span></h2>
                     </a>
-                    <ul>
+                    <ul class="thumbnails">
                         <% for(i=0;i<boards.length;i++){%>
-                        <li><a href="/board/<%=boards[i]._id%>"><%=boards[i].name%></a></li>
+                        <li class="span2">
+                            <a class="thumbnail" href="/board/<%=boards[i]._id%>">
+                                <h3 class="caption"><%=boards[i].name%></h3>
+                                <h5 class="caption"><%=boards[i].category%></h5>
+                                <h5 class="caption"><%=boards[i].privacy||''%></h5>
+                            </a>
+                        </li>
                         <%}%>
                     </ul>
                 </div>
@@ -53,48 +103,8 @@
                     </ul>
                 </div>
             </div>
-            <form class="form-horizontal" action="/profile" method="post">
-                <div class="control-group">
-                    <div class="control-label"> Email:</div>
-                    <div class="controls ">
-                        <%=everyauth.user.email%>
-                    </div>
-                </div>
 
-                <div class="control-group">
-                    <div class="control-label"> Enter Old Password:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password"  name="oldpassword" placeholder="Enter password">
-                        </div>
-                        <label class="help-inline">Passwords must match</label>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="control-label"> Enter New Password:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password"  name="newpassword" placeholder="Enter password">
-                        </div>
-                        <label class="help-inline">Password must contains at least 6 characters</label>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="control-label"> Enter Password again:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password" name="confirmnewpassword" placeholder="Enter password">
-                        </div>
-                        <label class="help-inline">Passwords must match</label>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <input type="submit" class="btn input-medium btn-primary" value="Save Changes">
-
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
+
 </div>
