@@ -529,7 +529,7 @@ app.get('/search', function(req,res){
     // ToDo: Protect against SQLInjection Attack
     // ToDo: Complete Search Mechanics
 
-    BUsers.find({email:query}, function(err,users){
+    BUsers.find({email:{$regex : '.*'+ query +'.*'}}, function(err,users){
         if(err) return res.send('Error');
         if(!users) return req.send('Not Found');
 
