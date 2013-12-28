@@ -434,24 +434,32 @@ app.get('/board/get/public',function(req,res){
     });
 });
 
-app.get('/board/:id', function(req,res){
+app.get('/board/:id',function(req,res) {
     var boardid = req.params.id;
 
+    // Find Board
     BBoards.findOne({_id:boardid}, function(err,board){
         if(err)
-            res.send('Oh oh error');
+            return res.send('Oh oh error');
+        if(!board)
+            return res.send('404, Not Found! Yah!');
 
-        if(board){
-            BFlyersBoards.find({board:boardid}, function(err,flyers){
+        // Find Flyers ID on this Board
+        BFlyersBoards.find({board:boardid}, function(err,boardflyers){
+
+            var flyersIDList = [];
+            for(var i=0; i<boardflyers.length; i++)
+                flyersIDList.push(boardflyers[i].flyer);
+
+            // Find Flyers on this this Board
+            BFlyers.find({_id: {$in:flyersIDList}}, function(err,flyers){
                 res.render('board.ejs',{
                     title:board.name,
                     board:board,
                     flyers:flyers
                 });
-            })
-        }
-        else
-            res.send('404, Not Found! Yah!');
+            });
+        });
     });
 });
 

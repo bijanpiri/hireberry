@@ -1,18 +1,20 @@
 <% layout('layout') -%>
 
 <div class="container">
-    <div class="row" style="background-color: #f8b9b7;padding: 5px">
-        <h1>Board ID:<%=board._id%></h1>
+    <div class="row" style="padding: 5px">
+        <h2><b><%=board.name%></b></h2>
     </div>
-    <div class="row" style="background-color: #f8b9b7;padding: 5px">
-        <b><%=board.name%></b>
-    </div>
-    <div class="row" style="background-color: #f8b9b7;padding: 5px">
-        Flyer(s) on this board:
-        <ul>
-        <% for(i=0;i<flyers.length;i++){%>
-        <li><a href="/flyer/<%=flyers[i].flyer%>"><%=flyers[i].flyer%></a></li>
-        <%}%>
+    <div class="row" style="padding: 5px">
+
+        <ul class="thumbnails">
+            <% for(i=0;i<flyers.length;i++){%>
+            <li class="span3">
+                <a class="thumbnail" href="/flyer/<%=flyers[i]._id%>">
+                    <h4 class="caption"><%=flyers[i].text%></h4>
+                </a>
+            </li>
+            <%}%>
         </ul>
+
         </div>
 </div>

@@ -81,8 +81,6 @@
     <div class="row">
         <div>
             <div style="background-color: #ffffff; padding: 5px">
-
-
             </div>
             <div class="tabbable"> <!-- Only required for left/right tabs -->
                 <ul class="nav nav-tabs">
@@ -119,11 +117,9 @@
                             <ul class="thumbnails">
                                 <% for(var i=0;i<flyers.length;i++){%>
                                 <li class="span5">
-                                    <div class="thumbnail" href="/board/<%=boards[i]._id%>">
-                                        <div class="caption">
-
+                                    <div class="thumbnail">
+                                        <a href="/flyer/<%=flyers[i]._id%>">
                                             <h3><%=flyers[i].text%></h3>
-
                                             <form action="/flyer/putup" method="post" class="form-inline">
                                                 <div class="controls">
                                                     <a href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
@@ -136,9 +132,7 @@
                                                     <button class="btn input-mini btn-danger" type="submit">pin it</button>
                                                 </div>
                                             </form>
-
-
-                                        </div>
+                                        </a>
                                     </div>
                                 </li>
                                 <%}%>
