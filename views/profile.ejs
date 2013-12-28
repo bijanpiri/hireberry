@@ -1,5 +1,35 @@
 <% layout('layout') -%>
+<script>
+    var boardsIsHidden = true;
+    var flyersIsHidden = true;
 
+    $(function(){
+        $('#flyersPartTitle').next().hide();
+        $('#boardsPartTitle').next().hide();
+        
+        $('#boardsPartTitle').click( function(){
+            var boards = $('#boardsPartTitle').next();
+
+            if(boardsIsHidden)
+                boards.show();
+            else
+                boards.hide();
+
+            boardsIsHidden = !boardsIsHidden;
+        })
+
+        $('#flyersPartTitle').click( function(){
+            var flyers = $('#flyersPartTitle').next();
+
+            if(flyersIsHidden)
+                flyers.show();
+            else
+                flyers.hide();
+
+            flyersIsHidden = !flyersIsHidden;
+        })
+    });
+</script>
 <div class="container">
     <div class="row">
         <h2>Profile</h2>
@@ -52,7 +82,7 @@
         <div>
             <div style="background-color: #ffffff; padding: 5px">
                 <div>
-                    <a href="/profile/boards">
+                    <a id="boardsPartTitle">
                         <h2 class="caption">Boards
                             <span class="badge"><%= boards.length %></span></h2>
                     </a>
@@ -69,7 +99,7 @@
                     </ul>
                 </div>
                 <div>
-                    <a href="/profile/boards">
+                    <a id="flyersPartTitle">
                         <h2 class="caption">Flyers
                             <span class="badge"><%= flyers.length %></span></h2>
                     </a>
