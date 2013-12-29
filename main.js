@@ -45,6 +45,8 @@ var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
+var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
+
 //endregion
 
 //region Configure every modules in everyauth
@@ -441,9 +443,36 @@ app.post('/board/follow', function(req,res){
     var boardid = req.body.boardid;
     var userid = req.user._id;
 
-    // ToDo: Store Following Board
+    // Store Following Relationship Board
+    BBoardsFollwoing.findOne({follower:userid,board:boardid}, function(err,row) {
+        if(err) return res.send(500,{result:'DB Error'});
+        if(!row)
+            BBoardsFollwoing({follower:userid,board:boardid}).save(function(err){
+                if(err) return res.send(500,{result:'DB Error'});
+                else return res.send(200,{result:'OK'});
+            });
+        else
+            BBoardsFollwoing.remove({follower:userid,board:boardid}, function(err){
+                if(err) return res.send(500,{result:'DB Error'});
+                else return res.send(200,{result:'OK'});
+            });
+    });
+});
 
-    res.send(200,{result:'OK'});
+app.get('/board/follow', function(req,res){
+
+    if( !req.user )
+        return res.send(501,{result:'Login first!'});
+
+    var boardid = req.query.boardid;
+    var userid = req.user._id;
+
+    // Store Following Relationship Board
+    BBoardsFollwoing.findOne({follower:userid,board:boardid}, function(err,row) {
+        if(err) return res.send(500,{result:'DB Error'});
+        if(!row) return res.send(200,{following:false});
+        else return res.send(200,{following:true});
+    });
 });
 
 app.get('/board/:id',function(req,res) {
@@ -467,6 +496,7 @@ app.get('/board/:id',function(req,res) {
             // Find Flyers on this this Board
             BFlyers.find({_id: {$in:flyersIDList}}, function(err,flyers){
 
+                // Check Owner Of Board is User Or Not
                 BUsersBoards.count({board:board._id,user:userid}, function(err,count){
                     if( err ) return res.send('error');
 

@@ -2,6 +2,29 @@
 
 <script language="JavaScript">
     $( function(){
+
+        FollowingState();
+
+        function FollowingState() {
+            var boardID= $("#FollowButton").val();
+
+            $.ajax({
+                url: '/board/follow',
+                type: 'get',
+                dataType: 'json',
+                data: {boardid:boardID},
+                error: function(data){
+                    alert('error '+data.result);
+                },
+                success: function(data){
+                    if( data.following==true )
+                        $("#FollowButton").text('Unfollow');
+                    else
+                        $("#FollowButton").text('Follow Board');
+                }
+            });
+        }
+
         $('#FollowButton').click( function(){
             var boardID= $("#FollowButton").val();
 
@@ -15,10 +38,7 @@
                 },
                 success: function(data){
                     // ToDo: User A Better Method For Storing Following State
-                    if( $("#FollowButton").text()=='Follow Board' )
-                        $("#FollowButton").text('Unfollow');
-                    else
-                        $("#FollowButton").text('Follow Board');
+                    FollowingState();
                 }
             });
         });
