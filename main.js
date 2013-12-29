@@ -164,9 +164,7 @@ everyauth.password
             res.json({ success: false }, 501);
     })
     .respondToLoginFail( function (req, res, errors, login) {
-        if (!errors || !errors.length)
-            res.json({ success: false }, 501);
-        return
+        if (errors && errors.length)
             res.json({ success: false, errors: errors });
     })
     .authenticate( function (login, password) {
