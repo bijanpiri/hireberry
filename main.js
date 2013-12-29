@@ -95,7 +95,7 @@ everyauth.twitter
     .redirectPath('/');
 //endregion
 
-//region Google  Authentication Configuration
+//region Google Authentication Configuration
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
