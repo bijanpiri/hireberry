@@ -1,8 +1,42 @@
 <% layout('layout') -%>
 
+<script language="JavaScript">
+    $( function(){
+        $('#FollowButton').click( function(){
+            var boardID= $("#FollowButton").val();
+
+            $.ajax({
+                url: '/board/follow',
+                type: 'post',
+                dataType: 'json',
+                data: {boardid:boardID},
+                error: function(data){
+                    alert('error '+data.result);
+                },
+                success: function(data){
+                    // ToDo: User A Better Method For Storing Following State
+                    if( $("#FollowButton").text()=='Follow Board' )
+                        $("#FollowButton").text('Unfollow');
+                    else
+                        $("#FollowButton").text('Follow Board');
+                }
+            });
+        });
+    });
+</script>
+
 <div class="container">
     <div class="row" style="padding: 5px">
+        <div class="span6">
         <h2><%=board.name%><span class="badge" style="margin-left: 10px;"><%= flyers.length %></span></h2>
+        </div>
+        <div class="span3 pull-right">
+            <% if(isOthersBoard==true){ %>
+            <button class="btn btn-small btn-danger" type="button" id="FollowButton" value="<%=board._id%>">Follow Board</button>
+            <% } else { %>
+            <button class="btn btn-small btn-danger disabled" type="button">Your Board</button>
+            <% } %>
+        </div>
     </div>
     <div class="row" style="padding: 5px">
         <ul class="thumbnails">
@@ -15,5 +49,5 @@
             <%}%>
         </ul>
 
-        </div>
+    </div>
 </div>

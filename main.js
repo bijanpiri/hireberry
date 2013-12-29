@@ -434,8 +434,21 @@ app.get('/board/get/public',function(req,res){
     });
 });
 
+app.post('/board/follow', function(req,res){
+
+    checkUser(req,res);
+
+    var boardid = req.body.boardid;
+    var userid = req.user._id;
+
+    // ToDo: Store Following Board
+
+    res.send(200,{result:'OK'});
+});
+
 app.get('/board/:id',function(req,res) {
     var boardid = req.params.id;
+    var userid = (req.user) ? req.user._id : 'Unknow';
 
     // Find Board
     BBoards.findOne({_id:boardid}, function(err,board){
@@ -453,10 +466,19 @@ app.get('/board/:id',function(req,res) {
 
             // Find Flyers on this this Board
             BFlyers.find({_id: {$in:flyersIDList}}, function(err,flyers){
-                res.render('board.ejs',{
-                    title:board.name,
-                    board:board,
-                    flyers:flyers
+
+                BUsersBoards.count({board:board._id,user:userid}, function(err,count){
+                    if( err ) return res.send('error');
+
+                    var isOthersBoard = (count==0);
+
+                    res.render('board.ejs',{
+                        title:board.name,
+                        board:board,
+                        flyers:flyers,
+                        isOthersBoard: isOthersBoard
+                    });
+
                 });
             });
         });
@@ -529,22 +551,43 @@ app.get('/search', function(req,res){
     // ToDo: Protect against SQLInjection Attack
     // ToDo: Complete Search Mechanics
 
+    // Search in Users
     BUsers.find({email:{$regex : '.*'+ query +'.*'}}, function(err,users){
         if(err) return res.send('Error');
         if(!users) return req.send('Not Found');
 
-        var results = [];
+        // Search in Boards
+        BBoards.find({name:{$regex : '.*'+ query +'.*'}}, function(err,boards){
+            if(err) return res.send('Error');
+            if(!boards) return req.send('Not Found');
 
-        for(var i=0; i<users.length; i++){
-            results.push({
-                rtype:'user',
-                display:users[i].email,
-                link:users[i]._id
-            });
-        }
+            var results = [];
+            for(var i=0; i<users.length; i++){
+                results.push({
+                    rtype:'user',
+                    display:users[i].email,
+                    link:users[i]._id
+                });
+            }
 
-        res.send(results);
+            for(var i=0; i<boards.length; i++){
+                results.push({
+                    rtype:'board',
+                    display:boards[i].name,
+                    link:boards[i]._id
+                });
+            }
+
+            res.send(results);
+
+        });
     });
+});
+
+app.get('/timeline', function(req,res){
+   checkUser(req,res);
+
+   res.render('timeline.ejs', {title:'Timeline'});
 });
 
 //endregion

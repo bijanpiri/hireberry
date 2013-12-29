@@ -66,7 +66,7 @@
                 valueKey: 'link',
                 remote: '/search?q=%QUERY',
                 template: [
-                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;"><span class="badge">{{rtype}}</span><b>{{display}}</b></div>',
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;"><span class="badge badge-info">{{rtype}}</span><b>{{display}}</b></div>',
                 ].join(''),
                 engine: Hogan,
                 limit: 10
@@ -122,6 +122,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello <%= (everyauth.user) ? everyauth.user.email : 'dude' %> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li><a href="/timeline">Timeline</a></li>
                             <li><a href="/profile">Profile</a></li>
                             <li><a href="/logout">Logout</a></li>
                         </ul>
