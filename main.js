@@ -316,6 +316,7 @@ app.get('/openapp', function(req,res) {
 app.get('/profile', function(req,res) {
     if( req.user ){
 
+        // Find User's boards
         BUsersBoards.find({user:req.user._id}, function (err, userBoards) {
             if (err)
                 return handleError(err);
@@ -324,15 +325,36 @@ app.get('/profile', function(req,res) {
             for(var i=0; i<userBoards.length; i++)
                 boardsIDList.push(userBoards[i].board);
 
+            // Find details of User's Boards
             BBoards.find({_id:{$in:boardsIDList}}, function(err, boards) {
+
+                // Find User's flyers
                 BFlyers.find({owner:req.user._id}, function (err, flyers) {
-                    BBoards.find({privacy:'public'},function(err,pBoards){
-                        res.render('profile.ejs',{
-                            title:'Profile',
-                            email:req.user,
-                            boards:boards,
-                            pBoards:pBoards,
-                            flyers:flyers
+
+                    // Find Boards which User follows
+                    BBoardsFollwoing.find({follower:req.user._id}, function(err,followingBoardRows){
+                        if(err) return res.send(500,{result:'DB Error'});
+
+                        var followingBoardsIDList = [];
+                        for(var i=0; i<followingBoardRows.length; i++)
+                            followingBoardsIDList.push(followingBoardRows[i].board);
+
+                        BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
+
+                            // Find public boards list
+                            BBoards.find({privacy:'public'},function(err,pBoards){
+
+                                res.render('profile.ejs',{
+                                    title:'Profile',
+                                    email:req.user,
+                                    boards:boards,
+                                    pBoards:pBoards,
+                                    flyers:flyers,
+                                    followingBoards:followingBoards
+                                });
+
+                            });
+
                         });
                     });
                 });

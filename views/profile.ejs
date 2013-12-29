@@ -86,7 +86,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active">
                         <a href="#tab1" data-toggle="tab">
-                                Boards<span class="badge"><%= boards.length %></span>
+                            Boards<span class="badge"><%= boards.length %></span>
                         </a>
                     </li>
                     <li>
@@ -94,11 +94,15 @@
                             Flyers<span class="badge"><%= flyers.length %></span>
                         </a>
                     </li>
+                    <li>
+                        <a href="#tab3" data-toggle="tab">
+                            Following<span class="badge"><%= followingBoards.length %></span>
+                        </a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                         <div>
-
                             <ul class="thumbnails">
                                 <% for(i=0;i<boards.length;i++){%>
                                 <li class="span3">
@@ -134,6 +138,21 @@
                                             </form>
                                         </a>
                                     </div>
+                                </li>
+                                <%}%>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab3">
+                        <div>
+                            <ul class="thumbnails">
+                                <% for(i=0;i<followingBoards.length;i++){%>
+                                <li class="span3">
+                                    <a class="thumbnail" href="/board/<%=followingBoards[i]._id%>">
+                                        <h3 class="caption"><%=followingBoards[i].name%></h3>
+                                        <h5 class="caption"><%=followingBoards[i].category%></h5>
+                                        <h5 class="caption"><%=followingBoards[i].privacy||''%></h5>
+                                    </a>
                                 </li>
                                 <%}%>
                             </ul>
