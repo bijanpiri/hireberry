@@ -20,7 +20,7 @@
             url: '/login',
             type: 'post',
             dataType: 'json',
-<<<<<<< HEAD
+
             data: datastring,
             error: function(data){
                 alert('error '+data.status);
@@ -29,16 +29,12 @@
                 window.location='/profile';
             }
         });
+    }
 /*
         $.post('/login',$('#form').serialize(),function(data){alert("succeed");}, 'json');
 */
-=======
-            data: datastring
-            });
-        return false;
-        //$.post('/login',$('#form').serialize(),function(data){alert("succeed");}, 'json');
->>>>>>> 77359e95a937a8c0c0c89bb80452a3ed1dba88a6
-    }
+
+
 
     /*function showValue()
     {
