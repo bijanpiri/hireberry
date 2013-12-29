@@ -1,0 +1,15 @@
+<% layout('layout') -%>
+<div class="row">
+    <div class="span6" style="float: none;margin: 0 auto;">
+        <h2 class="caption">Timeline<span class="badge badge-warning"><%= flyers.length %></span></h2>
+        <div>
+            <% for(i=0;i<flyers.length;i++){%>
+            <div class="span5">
+                <a class="thumbnail" href="/board/<%=flyers[i]._id%>">
+                    <h3 class="caption"><%=flyers[i].text%></h3>
+                </a>
+            </div>
+            <%}%>
+        </div>
+    </div>
+</div>

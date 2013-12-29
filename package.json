@@ -8,8 +8,8 @@
     "ejs-locals": "*",
     "everyauth": "0.4.5",
     "stylus":"*",
-    "promise": "*"
-
-
+    "promise": "*",
+    "jquery":"*",
+    "socket.io": "*"
   }
 }

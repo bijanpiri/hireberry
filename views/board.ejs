@@ -1,18 +1,73 @@
 <% layout('layout') -%>
 
+<script language="JavaScript">
+    $( function(){
+
+        FollowingState();
+
+        function FollowingState() {
+            var boardID= $("#FollowButton").val();
+
+            $.ajax({
+                url: '/board/follow',
+                type: 'get',
+                dataType: 'json',
+                data: {boardid:boardID},
+                error: function(data){
+                    alert('error '+data.result);
+                },
+                success: function(data){
+                    if( data.following==true )
+                        $("#FollowButton").text('Unfollow');
+                    else
+                        $("#FollowButton").text('Follow Board');
+                }
+            });
+        }
+
+        $('#FollowButton').click( function(){
+            var boardID= $("#FollowButton").val();
+
+            $.ajax({
+                url: '/board/follow',
+                type: 'post',
+                dataType: 'json',
+                data: {boardid:boardID},
+                error: function(data){
+                    alert('error '+data.result);
+                },
+                success: function(data){
+                    // ToDo: User A Better Method For Storing Following State
+                    FollowingState();
+                }
+            });
+        });
+    });
+</script>
+
 <div class="container">
-    <div class="row" style="background-color: #f8b9b7;padding: 5px">
-        <h1>Board ID:<%=board._id%></h1>
-    </div>
-    <div class="row" style="background-color: #f8b9b7;padding: 5px">
-        <b><%=board.name%></b>
-    </div>
-    <div class="row" style="background-color: #f8b9b7;padding: 5px">
-        Flyer(s) on this board:
-        <ul>
-        <% for(i=0;i<flyers.length;i++){%>
-        <li><a href="/flyer/<%=flyers[i].flyer%>"><%=flyers[i].flyer%></a></li>
-        <%}%>
-        </ul>
+    <div class="row" style="padding: 5px">
+        <div class="span6">
+        <h2><%=board.name%><span class="badge" style="margin-left: 10px;"><%= flyers.length %></span></h2>
         </div>
+        <div class="span3 pull-right">
+            <% if(isOthersBoard==true){ %>
+            <button class="btn btn-small btn-danger" type="button" id="FollowButton" value="<%=board._id%>">Follow Board</button>
+            <% } else { %>
+            <button class="btn btn-small btn-danger disabled" type="button">Your Board</button>
+            <% } %>
+        </div>
+    </div>
+    <div class="row" style="padding: 5px">
+        <ul class="thumbnails">
+            <% for(i=0;i<flyers.length;i++){%>
+            <li class="span3">
+                <a class="thumbnail" href="/flyer/<%=flyers[i]._id%>">
+                    <h4 class="caption"><%=flyers[i].text%></h4>
+                </a>
+            </li>
+            <%}%>
+        </ul>
+
+    </div>
 </div>

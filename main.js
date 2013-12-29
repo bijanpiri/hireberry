@@ -7,18 +7,7 @@ var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
 
-
-everyauth.debug = true;
-
-/*
- /auth/twitter
- /auth/google
- /logout
- /register
- /login
- */
-
-/************** Initialization ****************/
+//region Initialization
 
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
@@ -28,7 +17,17 @@ var mongoHQConenctionString = 'mongodb://admin:admin124578@dharma.mongohq.com:10
 
 var app = express();
 mongoose.connect(mongoHQConenctionString);
+everyauth.debug = true;
 
+// For Sending Logs to Client Console Output
+var server = require('http').createServer(app)
+var io = require('socket.io').listen(server);
+server.listen(5001);
+
+
+//endregion
+
+//region Mongose Models
 var BUsers = mongoose.model( 'users', {
     email: String,
     password: String,
@@ -40,21 +39,26 @@ var BUsers = mongoose.model( 'users', {
     googleAccessToken:String,
     googleAccessSecretToken:String,
     tempToken:String});
-
 var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
 var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
-var BTag= mongoose.model( 'tags', {name:String});
+var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
+var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
 
+//endregion
+
+//region Configure every modules in everyauth
 everyauth.everymodule
     .findUserById( function (id, callback) {
         BUsers.findOne({_id:id}, function(err,user) {
             callback(null, user);
         });
     });
+//endregion
 
+//region Twitter Authentication Configuration
 everyauth.twitter
     .consumerKey(TWITTER_CONSUMER_KEY)
     .consumerSecret(TWITTER_CONSUMER_SECRET)
@@ -88,6 +92,9 @@ everyauth.twitter
         return promise;
     })
     .redirectPath('/');
+//endregion
+
+//region Google  Authentication Configuration
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
@@ -135,9 +142,9 @@ everyauth.google
 
     })
     .redirectPath('/afterLoginWithGoolge');
+//endregion
 
-
-
+//region Local Username/Password Registration and Authentication Configuration
 everyauth.password
     .loginWith('email')
     .getLoginPath('/login')
@@ -151,11 +158,14 @@ everyauth.password
         }, 200);
     })
     .respondToLoginSucceed( function (res, user) {
+        console.log('login succeeded');
         if (user) { /* Then the login was successful */
             res.json({ success: true }, 200);
         }
     })
     .respondToLoginFail( function (req, res, errors, login) {
+        console.log('login failed');
+
         if (!errors || !errors.length) return;
         return res.json({ success: false, errors: errors });
     })
@@ -176,11 +186,11 @@ everyauth.password
             console.log(user);
 
             if (!user)
-                return promis.fail(['invalid user']);
-//                return ['invalid user'];
+//                return promis.fail(['invalid user']);
+                return ['invalid user'];
             if (user.password !== password)
-                return promise.fail(['Login failed']);
-//                return (['Login failed']);
+//                return promise.fail(['Login failed']);
+                return (['Login failed']);
 
             promise.fulfill(user);
         });
@@ -216,8 +226,9 @@ everyauth.password
         return promise;
     })
     .registerSuccessRedirect('/profile');
+//endregion
 
-// configure Express
+//region Configure Express
 app.configure(function() {
     app.engine('ejs',engine);
     app.set('view engine', 'ejs');
@@ -231,17 +242,25 @@ app.configure(function() {
     app.use(express.session({ secret: 'keyboard cat' }));
     app.use(everyauth.middleware());
 });
+//endregion
 
-/************** Starting Server ****************/
-
+//region Starting Server
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
     console.log("Listening on " + port);
 });
 
 module.exports = app;
+//endregion
 
-/************** Application Routers ****************/
+//region Application Routers
+/* Router Guide:
+    /auth/twitter
+    /auth/google
+    /logout
+    /register
+    /login
+*/
 
 app.get('/', function(req,res) {
     if( req.user )
@@ -259,13 +278,11 @@ app.get('/afterLoginWithGoolge', function(req,res){
 
 app.get('/web/auth/google', function(req,res){
     res.cookie('iDevice',0);
-    //res.redirect('/afterLoginWithGoolge');
     res.redirect('/auth/google');
 });
 
 app.get('/idevice/auth/google', function(req,res){
     res.cookie('iDevice',1);
-    //res.redirect('/afterLoginWithGoolge');
     res.redirect('/auth/google');
 });
 
@@ -299,20 +316,47 @@ app.get('/openapp', function(req,res) {
 app.get('/profile', function(req,res) {
     if( req.user ){
 
-        BUsersBoards.find({user:req.user._id}, function (err, boards) {
+        // Find User's boards
+        BUsersBoards.find({user:req.user._id}, function (err, userBoards) {
             if (err)
                 return handleError(err);
 
-            BFlyers.find({owner:req.user._id}, function (err, flyers) {
-                BBoards.find({privacy:'public'},function(err,pBoards){
-                    res.render('profile.ejs',{
-                        title:'Profile',
-                        email:req.user,
-                        boards:boards,
-                        pBoards:pBoards,
-                        flyers:flyers
-                    });
+            var boardsIDList = [];
+            for(var i=0; i<userBoards.length; i++)
+                boardsIDList.push(userBoards[i].board);
 
+            // Find details of User's Boards
+            BBoards.find({_id:{$in:boardsIDList}}, function(err, boards) {
+
+                // Find User's flyers
+                BFlyers.find({owner:req.user._id}, function (err, flyers) {
+
+                    // Find Boards which User follows
+                    BBoardsFollwoing.find({follower:req.user._id}, function(err,followingBoardRows){
+                        if(err) return res.send(500,{result:'DB Error'});
+
+                        var followingBoardsIDList = [];
+                        for(var i=0; i<followingBoardRows.length; i++)
+                            followingBoardsIDList.push(followingBoardRows[i].board);
+
+                        BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
+
+                            // Find public boards list
+                            BBoards.find({privacy:'public'},function(err,pBoards){
+
+                                res.render('profile.ejs',{
+                                    title:'Profile',
+                                    email:req.user,
+                                    boards:boards,
+                                    pBoards:pBoards,
+                                    flyers:flyers,
+                                    followingBoards:followingBoards
+                                });
+
+                            });
+
+                        });
+                    });
                 });
             });
         });
@@ -324,6 +368,8 @@ app.get('/profile', function(req,res) {
 app.post('/profile', function(req,res) {
     var newPassword = req.body.newpassword;
 
+
+
     if( req.body.newpassword != req.body.confirmnewpassword)
         res.send('Not matched!');
     if( req.user ){
@@ -331,10 +377,12 @@ app.post('/profile', function(req,res) {
         BUsers.update( { email: req.user.email, password: req.body.oldpassword },
             { $set: { password: newPassword }},
             function (err, numberAffected, raw) {
-                if (err)
+                if (err){
+                    BLog('WWWW');
                     return handleError(err);
-                else
-                    res.send('Password is changed successfuly!');
+                }
+                else{BLog('WWWW');}
+                    //res.send('Password is changed successfuly!');
             });
     }
 });
@@ -403,34 +451,89 @@ app.get('/board/categories', function(req,res){
         {name:'general',id:4},
         {name:'other',id:5}]);
 });
-app.get('/board/get/public',function(req,res){
-//    if( req.user ){
 
+app.get('/board/get/public',function(req,res){
     BBoards.find({privacy:'public'}, function (err, boards) {
         res.json(boards);
     });
-//    }else
-//        res.write('log in please');
 });
 
-app.get('/board/:id', function(req,res){
-    var boardid = req.params.id;
+app.post('/board/follow', function(req,res){
 
+    checkUser(req,res);
+
+    var boardid = req.body.boardid;
+    var userid = req.user._id;
+
+    // Store Following Relationship Board
+    BBoardsFollwoing.findOne({follower:userid,board:boardid}, function(err,row) {
+        if(err) return res.send(500,{result:'DB Error'});
+        if(!row)
+            BBoardsFollwoing({follower:userid,board:boardid}).save(function(err){
+                if(err) return res.send(500,{result:'DB Error'});
+                else return res.send(200,{result:'OK'});
+            });
+        else
+            BBoardsFollwoing.remove({follower:userid,board:boardid}, function(err){
+                if(err) return res.send(500,{result:'DB Error'});
+                else return res.send(200,{result:'OK'});
+            });
+    });
+});
+
+app.get('/board/follow', function(req,res){
+
+    if( !req.user )
+        return res.send(501,{result:'Login first!'});
+
+    var boardid = req.query.boardid;
+    var userid = req.user._id;
+
+    // Store Following Relationship Board
+    BBoardsFollwoing.findOne({follower:userid,board:boardid}, function(err,row) {
+        if(err) return res.send(500,{result:'DB Error'});
+        if(!row) return res.send(200,{following:false});
+        else return res.send(200,{following:true});
+    });
+});
+
+app.get('/board/:id',function(req,res) {
+    var boardid = req.params.id;
+    var userid = (req.user) ? req.user._id : 'Unknow';
+
+    // Find Board
     BBoards.findOne({_id:boardid}, function(err,board){
         if(err)
-            res.send('Oh oh error');
+            return res.send('Oh oh error');
+        if(!board)
+            return res.send('404, Not Found! Yah!');
 
-        if(board){
-            BFlyersBoards.find({board:boardid}, function(err,flyers){
-                res.render('board.ejs',{
-                    title:board.name,
-                    board:board,
-                    flyers:flyers
+        // Find Flyers ID on this Board
+        BFlyersBoards.find({board:boardid}, function(err,boardflyers){
+
+            var flyersIDList = [];
+            for(var i=0; i<boardflyers.length; i++)
+                flyersIDList.push(boardflyers[i].flyer);
+
+            // Find Flyers on this this Board
+            BFlyers.find({_id: {$in:flyersIDList}}, function(err,flyers){
+
+                // Check Owner Of Board is User Or Not
+                BUsersBoards.count({board:board._id,user:userid}, function(err,count){
+                    if( err ) return res.send('error');
+
+                    var isOthersBoard = (count==0);
+
+                    res.render('board.ejs',{
+                        title:board.name,
+                        board:board,
+                        flyers:flyers,
+                        isOthersBoard: isOthersBoard
+                    });
+
                 });
-            })
-        }
-        else
-            res.send('404, Not Found! Yah!');
+            });
+        });
     });
 });
 
@@ -456,6 +559,7 @@ app.post('/flyer/new', function(req,res){
             });
     });
 });
+
 app.post('/flyer/putup', function(req,res){
     var flyerid=req.body.flyerid;
     var boardid=req.body.boardid;
@@ -465,6 +569,7 @@ app.post('/flyer/putup', function(req,res){
         }
     )
 });
+
 app.get('/flyer/remove/:id', function(req,res){
     var flyerid = req.params.id;
 
@@ -492,29 +597,98 @@ app.get('/flyer/:id', function(req,res){
     });
 });
 
-/***************** Low Level API ********************/
+app.get('/search', function(req,res){
+   var query = req.query.q;
 
+    // ToDo: Protect against SQLInjection Attack
+    // ToDo: Complete Search Mechanics
+
+    // Search in Users
+    BUsers.find({email:{$regex : '.*'+ query +'.*'}}, function(err,users){
+        if(err) return res.send('Error');
+        if(!users) return req.send('Not Found');
+
+        // Search in Boards
+        BBoards.find({name:{$regex : '.*'+ query +'.*'}}, function(err,boards){
+            if(err) return res.send('Error');
+            if(!boards) return req.send('Not Found');
+
+            var results = [];
+            for(var i=0; i<users.length; i++){
+                results.push({
+                    rtype:'user',
+                    display:users[i].email,
+                    link:users[i]._id
+                });
+            }
+
+            for(var i=0; i<boards.length; i++){
+                results.push({
+                    rtype:'board',
+                    display:boards[i].name,
+                    link:boards[i]._id
+                });
+            }
+
+            res.send(results);
+
+        });
+    });
+});
+
+app.get('/timeline', function(req,res){
+
+    if(checkUser(req,res)==false)
+        return;
+
+    var userid = req.user._id;
+
+    // Find Board Which User Follows
+    BBoardsFollwoing.find({follower:userid}, function(err,followingBoardRows){
+        if(err) return res.send(500,{result:'DB Error'});
+
+        var followingBoardsIDList = [];
+        for(var i=0; i<followingBoardRows.length; i++)
+            followingBoardsIDList.push(followingBoardRows[i].board);
+
+        // Find flyers on following boards
+        BFlyersBoards.find({board:{$in:followingBoardsIDList}}, function(err, flyerboardRows) {
+            if(err) return res.send(500,{result:'DB Error'});
+
+            var flyerIDList = [];
+            for(var i=0; i<flyerboardRows.length; i++)
+                flyerIDList.push(flyerboardRows[i].flyer);
+
+            BFlyers.find({_id:{$in:flyerIDList}}, function (err, flyers) {
+                res.render('timeline.ejs', {
+                    title:'Timeline',
+                    flyers:flyers
+                });
+            });
+        });
+    });
+});
+
+//endregion
+
+//region Low Level API
 /*
  GET
- /ison
- /profile
- /flyers/:id
- /boards/:id
+     /ison
+     /profile
+     /flyers/:id
+     /boards/:id
  POST
- /register
- /login
- /logout
- /flyers
- /boards
+     /register
+     /login
+     /logout
+     /flyers
+     /boards
  PUT
- /profile/:id
+     /profile/:id
  DELETE
- /flyers/:id
+     /flyers/:id
  */
-
-app.get('/api/1.0/ison', function(req,res){
-    res.send(200,{status:'is on'});
-});
 
 function login(res,email,password){
     BUsers.findOne({email:email,password:password}, function(err,user){
@@ -637,7 +811,37 @@ function getBoards(res,userid) {
     });
 }
 
-/****************** RESTful API *********************/
+function checkUser(req,res){
+    if(!req.user)
+        res.redirect('/login');
+    return req.user!=null;
+}
+
+function BLog(text){
+
+    // Client side output
+    // Server side output
+    console.log('<<<<<BOOLTIN LOG>>>>>:' + text);
+    io.sockets.emit('newlog', { log: text });
+}
+
+//endregion
+
+//region RESTful API
+/*
+    About Login From iDevice:
+    0- User Touch "Login With Google" button
+    1- App Open This URL In The Default Browser: /idevice/auth/google
+    2- Server Save a Cookie and Redirect Him To /auth/google
+    3- Server Send Him to Google To Accept Our App Access
+    4- Google Send Him to /auth/callback with A.T (Authentication Token)
+    5- Server Save A.T, Generates a tempToken for Him and Re-Open App for Him and Send tempToken to App
+    6- App Save tempToken and uses it to further access
+ */
+
+app.get('/api/1.0/ison', function(req,res){
+    res.send(200,{status:'is on'});
+});
 
 app.post('/api/1.0/register', function(req,res) {
     var email = req.body.email;
@@ -671,7 +875,6 @@ app.post('/api/1.0/temptokenOwner', function(req,res) {
     var tempToken = req.body.tempToken;
     findTempTokenOwner(res,tempToken);
 });
-
 
 app.post('/api/1.0/profile/password', function(req,res) {
     var tempToken = req.body.temptoken;
@@ -756,13 +959,6 @@ app.get('/api/1.0/board', function(req,res) {
 
 });
 
-
-function checkUser(req,res){
-    if(!req.user)
-        res.redirect('/login');
-    return req.user!=null;
-}
-
 app.delete('/api/1.0/flyer', function(req,res) {
     var tempToken = req.query.tempToken;
     var flyerid = req.query.flyerid;
@@ -797,3 +993,5 @@ app.post('/api/1.0/board/putup', function(req,res) {
         });
 
 });
+
+//endregion

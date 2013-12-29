@@ -1,97 +1,166 @@
 <% layout('layout') -%>
+<script>
+    var boardsIsHidden = true;
+    var flyersIsHidden = true;
 
+    $(function(){
+        $('#flyersPartTitle').next().hide();
+        $('#boardsPartTitle').next().hide();
+
+        $('#boardsPartTitle').click( function(){
+            var boards = $('#boardsPartTitle').next();
+
+            if(boardsIsHidden)
+                boards.show();
+            else
+                boards.hide();
+
+            boardsIsHidden = !boardsIsHidden;
+        })
+
+        $('#flyersPartTitle').click( function(){
+            var flyers = $('#flyersPartTitle').next();
+
+            if(flyersIsHidden)
+                flyers.show();
+            else
+                flyers.hide();
+
+            flyersIsHidden = !flyersIsHidden;
+        })
+    });
+</script>
 <div class="container">
     <div class="row">
         <h2>Profile</h2>
     </div>
-    <div class="row ">
-        <div>
-            <div style="background-color: #c9e8ff; padding: 5px">
-                <div>
-                    <a href="/profile/boards">
-                        Boards
-                        <span class="badge"><%= boards.length %></span>
-                    </a>
-                    <ul>
-                        <% for(i=0;i<boards.length;i++){%>
-                        <li><a href="/board/<%=boards[i].board%>"><%=boards[i].board%></a></li>
-                        <%}%>
-                    </ul>
-                </div>
-                <div>
-                    <a href="/profile/flyers">
-                        Flyers
-                        <span class="badge"><%= flyers.length %></span>
-
-                    </a>
-                    <ul style="list-style: none;margin: 0;padding: 0;">
-                        <% for(var i=0;i<flyers.length;i++){%>
-                        <li>
-                            <form action="/flyer/putup" method="post" class="form-inline form-horizontal">
-                                <div class="control-group">
-                                    <div class="control-label">
-                                        <a href="/flyer/<%=flyers[i]._id%>"><%=flyers[i].text%></a>
-                                        <a href="/flyer/remove/<%=flyers[i]._id%>">&times;</a>
-                                    </div>
-
-                                    <div class="controls">
-                                        <input type="hidden" name="flyerid" value="<%=flyers[i]._id%>">
-                                        <select name="boardid">
-                                            <%for(var j=0;j<pBoards.length;j++){%>
-                                            <option value="<%=pBoards[j]._id%>"> <%=pBoards[j].name%> </option>
-                                            <%}%>
-                                        </select>
-                                        <button class="btn input-mini btn-danger" type="submit">pin it</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </li>
-                        <%}%>
-                    </ul>
+    <div class="row">
+        <form class="form-horizontal" action="/profile" method="post">
+            <div class="control-group">
+                <div class="control-label"> Email:</div>
+                <div class="controls ">
+                    <%=everyauth.user.email%>
                 </div>
             </div>
-            <form class="form-horizontal" action="/profile" method="post">
-                <div class="control-group">
-                    <div class="control-label"> Email:</div>
-                    <div class="controls ">
-                        <%=everyauth.user.email%>
-                    </div>
-                </div>
 
-                <div class="control-group">
-                    <div class="control-label"> Enter Old Password:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password"  name="oldpassword" placeholder="Enter password">
-                        </div>
-                        <label class="help-inline">Passwords must match</label>
+            <div class="control-group">
+                <div class="control-label"> Enter Old Password:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+                        <input type="password"  name="oldpassword" placeholder="Enter password">
                     </div>
+                    <label class="help-inline">Passwords must match</label>
                 </div>
-                <div class="control-group">
-                    <div class="control-label"> Enter New Password:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password"  name="newpassword" placeholder="Enter password">
-                        </div>
-                        <label class="help-inline">Password must contains at least 6 characters</label>
+            </div>
+            <div class="control-group">
+                <div class="control-label"> Enter New Password:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+                        <input type="password"  name="newpassword" placeholder="Enter password">
                     </div>
+                    <label class="help-inline">Password must contains at least 6 characters</label>
                 </div>
-                <div class="control-group">
-                    <div class="control-label"> Enter Password again:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password" name="confirmnewpassword" placeholder="Enter password">
-                        </div>
-                        <label class="help-inline">Passwords must match</label>
+            </div>
+            <div class="control-group">
+                <div class="control-label"> Enter Password again:</div>
+                <div class="controls ">
+                    <div class="input-prepend input-append">
+                        <input type="password" name="confirmnewpassword" placeholder="Enter password">
                     </div>
+                    <label class="help-inline">Passwords must match</label>
                 </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <input type="submit" class="btn input-medium btn-primary" value="Save Changes">
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="submit" class="btn input-medium btn-primary" value="Save Changes">
 
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div>
+            <div style="background-color: #ffffff; padding: 5px">
+            </div>
+            <div class="tabbable"> <!-- Only required for left/right tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab1" data-toggle="tab">
+                            Boards<span class="badge"><%= boards.length %></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tab2" data-toggle="tab">
+                            Flyers<span class="badge"><%= flyers.length %></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tab3" data-toggle="tab">
+                            Following<span class="badge"><%= followingBoards.length %></span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        <div>
+                            <ul class="thumbnails">
+                                <% for(i=0;i<boards.length;i++){%>
+                                <li class="span3">
+                                    <a class="thumbnail" href="/board/<%=boards[i]._id%>">
+                                        <h3 class="caption"><%=boards[i].name%></h3>
+                                        <h5 class="caption"><%=boards[i].category%></h5>
+                                        <h5 class="caption"><%=boards[i].privacy||''%></h5>
+                                    </a>
+                                </li>
+                                <%}%>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab2">
+                        <div>
+                            <ul class="thumbnails">
+                                <% for(var i=0;i<flyers.length;i++){%>
+                                <li class="span5">
+                                    <div class="thumbnail">
+                                        <a href="/flyer/<%=flyers[i]._id%>">
+                                            <h3><%=flyers[i].text%></h3>
+                                            <form action="/flyer/putup" method="post" class="form-inline">
+                                                <div class="controls">
+                                                    <a href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
+                                                    <input type="hidden" name="flyerid" value="<%=flyers[i]._id%>">
+                                                    <select name="boardid">
+                                                        <%for(var j=0;j<pBoards.length;j++){%>
+                                                        <option value="<%=pBoards[j]._id%>"> <%=pBoards[j].name%> </option>
+                                                        <%}%>
+                                                    </select>
+                                                    <button class="btn input-mini btn-danger" type="submit">pin it</button>
+                                                </div>
+                                            </form>
+                                        </a>
+                                    </div>
+                                </li>
+                                <%}%>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab3">
+                        <div>
+                            <ul class="thumbnails">
+                                <% for(i=0;i<followingBoards.length;i++){%>
+                                <li class="span3">
+                                    <a class="thumbnail" href="/board/<%=followingBoards[i]._id%>">
+                                        <h3 class="caption"><%=followingBoards[i].name%></h3>
+                                        <h5 class="caption"><%=followingBoards[i].category%></h5>
+                                        <h5 class="caption"><%=followingBoards[i].privacy||''%></h5>
+                                    </a>
+                                </li>
+                                <%}%>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
+
 </div>

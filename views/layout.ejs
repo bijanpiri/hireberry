@@ -2,11 +2,27 @@
 <html>
 <head>
     <title><%=title%></title>
+
+    <meta charset=utf-8 />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+    <link rel="stylesheet" href="/bootstrap/tagsinput/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
+    <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.css' rel='stylesheet' />
+
     <script src="/bootstrap/js/jquery.js"></script>
     <script src="/bootstrap/js/bootstrap.js"></script>
+    <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.js'></script>
+    <script src="/bootstrap/tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script src="/bootstrap/tagsinput/bootstrap-tagsinput-angular.js/"></script>
+    <script src="/bootstrap/js/typeahead.js"></script>
+    <script src="/bootstrap/js/hogan-2.0.0.js"></script>
 
     <style>
+        #map{
+            height: 400px;
+        }
         body {
             padding-top: 60px; /* When using the navbar-top-fixed */
             padding-bottom: 150px;
@@ -21,7 +37,6 @@
 
         ga('create', 'UA-45875480-3', 'booltin.herokuapp.com');
         ga('send', 'pageview');
-
     </script>
 
     <script type="text/javascript">
@@ -34,6 +49,48 @@
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
+    </script>
+
+    <script src="/socket.io.min.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:5001/');
+        socket.on('newlog', function (data) {
+            console.log(data);
+        });
+    </script>
+
+    <script language="javascript">
+        $(document).ready(function() {
+            $("#searchInput").typeahead({
+                name: 'twitter-oss',
+                valueKey: 'link',
+                remote: '/search?q=%QUERY',
+                template: [
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;"><span class="badge badge-info">{{rtype}}</span><b>{{display}}</b></div>',
+                ].join(''),
+                engine: Hogan,
+                limit: 10
+            });
+        });
+
+        function search()
+        {
+            var datastring= $("#searchform").serialize();
+            $.ajax({
+                url: '/search',
+                type: 'get',
+                dataType: 'json',
+                data: datastring,
+                error: function(data){
+                    alert('error '+data.status);
+                },
+                success: function(data){
+                    alert('success '+data.status);
+                    $('browsers').append('<option value="coyBIT">');
+                }
+            });
+            return false;
+        }
     </script>
 
 </head>
@@ -50,13 +107,22 @@
             <a class="brand" href="/">Booltin</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li><a href="/" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);"><i class="icon-home icon-white"></i> Home</a></li>
+                    <li>
+                        <a href="/" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);">
+                        <i class="icon-home icon-white"></i>Home</a>
+                    </li>
+                    <li>
+                        <form id="searchform" class="navbar-search pull-left" method="get" action="/search" onsubmit="return search()">
+                            <input type="text" class="search-query2" placeholder="for ex. coybit@gmail.com" name="query" id="searchInput"/>
+                        </form>
+                    </li>
                 </ul>
                 <ul class="nav pull-right">
                     <% if(everyauth.loggedIn){ %>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello <%= (everyauth.user) ? everyauth.user.email : 'dude' %> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li><a href="/timeline">Timeline</a></li>
                             <li><a href="/profile">Profile</a></li>
                             <li><a href="/logout">Logout</a></li>
                         </ul>
@@ -78,13 +144,18 @@
     </div><!-- /.navbar-inner -->
 </nav><!-- /.navbar -->
 
+
 <%-body %>
+<div class="row">
+    <span class="span6 pull-right">
+    </span>
+</div>
 
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
     <div style="background-color: #353535; height: 50px;color: #cccccc;">
-    <div style="margin: 5px">
-        Copyright Folan-Folan
-    </div>
+        <div style="margin: 5px">
+            Copyright Folan-Folan
+        </div>
     </div>
 </nav>
 </body>
