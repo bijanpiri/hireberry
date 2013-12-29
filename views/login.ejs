@@ -86,11 +86,10 @@
             url: '/login',
             type: 'post',
             dataType: 'json',
-
             data: datastring,
             error: function(data){
                 if(data.status != 0)
-                    alert('error '+data.status);
+                    $('.alert').show();
             },
             success: function(data){
                 window.location='/profile';
