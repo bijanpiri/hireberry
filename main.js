@@ -181,17 +181,14 @@ everyauth.password
         var promise = this.Promise()
         BUsers.findOne({ email: login}, function (err, user) {
             if (err)
-                return promise.fail([err]);
+                return promise.fulfill([err]);
 
             console.log(user);
 
             if (!user)
-//                return promis.fail(['invalid user']);
-                return ['invalid user'];
+                return promise.fulfill(['invalid user']);
             if (user.password !== password)
-//                return promise.fail(['Login failed']);
-                return (['Login failed']);
-
+                return promise.fulfill(['Login failed']);
             promise.fulfill(user);
         });
         return promise;
