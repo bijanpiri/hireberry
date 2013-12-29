@@ -1,8 +1,61 @@
 <% layout('layout') -%>
 
+<script language="JavaScript">
+    $( function(){
+
+        TickeringState();
+
+        function TickeringState() {
+            var flyerid = $("#TicketButton").val();
+
+            $.ajax({
+                url: '/flyer/take',
+                type: 'get',
+                dataType: 'json',
+                data: {ticket:flyerid},
+                error: function(data){
+                    alert('error '+data.result);
+                },
+                success: function(data){
+                    if( data.ticketed==false )
+                        $("#TicketButton").text('Take a Ticket');
+                    else
+                        $("#TicketButton").text('Drop Ticket');
+                }
+            });
+        }
+
+        $('#TicketButton').click( function(){
+            var flyerid= $("#TicketButton").val();
+
+            $.ajax({
+                url: '/flyer/take',
+                type: 'post',
+                dataType: 'json',
+                data: {ticket:flyerid},
+                error: function(data){
+                    alert('error '+data.result);
+                },
+                success: function(data){
+                    TickeringState();
+                }
+            });
+        });
+    });
+</script>
+
 <div class="container">
     <div class="row" style="background-color: #f8b9b7;padding: 5px">
-        <h1>Flyer ID:<%=flyer._id%></h1>
+        <div class="span6">
+        ID:<%=flyer._id%>
+        </div>
+        <div class="span2 pull-right">
+            <% if(isOthersFlyer==true){ %>
+            <button class="btn btn-small btn-danger" type="button" id="TicketButton" value="<%=flyer._id%>">Take a Ticket</button>
+            <% } else { %>
+            <button class="btn btn-small btn-danger disabled" type="button">Your Flyer</button>
+            <% } %>
+        </div>
     </div>
     <div class="row" style="background-color: #f8b9b7;padding: 5px">
         <b><%=flyer.text%></b>

@@ -46,6 +46,7 @@ var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
+var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
 
 //endregion
 
@@ -336,18 +337,23 @@ app.get('/profile', function(req,res) {
 
                         BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
 
-                            // Find public boards list
-                            BBoards.find({privacy:'public'},function(err,pBoards){
+                            BFlyersTickets.find({user:req.user._id}, function(err,ticketeds){
 
-                                res.render('profile.ejs',{
-                                    title:'Profile',
-                                    email:req.user,
-                                    boards:boards,
-                                    pBoards:pBoards,
-                                    flyers:flyers,
-                                    followingBoards:followingBoards
+
+                                // Find public boards list
+                                BBoards.find({privacy:'public'},function(err,pBoards){
+
+                                    res.render('profile.ejs',{
+                                        title:'Profile',
+                                        email:req.user,
+                                        boards:boards,
+                                        pBoards:pBoards,
+                                        flyers:flyers,
+                                        followingBoards:followingBoards,
+                                        ticketeds:ticketeds
+                                    });
+
                                 });
-
                             });
 
                         });
@@ -578,15 +584,60 @@ app.get('/flyer/remove/:id', function(req,res){
     });
 });
 
+app.post('/flyer/take', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var flyerid = req.body.flyerid;
+    var userid= req.user._id;
+
+    BFlyersTickets.count({flyer:flyerid,user:userid}, function(err,count){
+
+        if(count==0)
+            BFlyersTickets({flyer:flyerid,user:userid}).save(function(err){
+                if(err) res.send(501,{result:'DB Error!'});
+                else res.send(200,{ticketed:true});
+            });
+        else
+            BFlyersTickets.remove({flyer:flyerid,user:userid}, function(err){
+                if(err) res.send(501,{result:'DB Error!'});
+                else res.send(200,{ticketed:false});
+            });
+    });
+});
+
+app.get('/flyer/take', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var flyerid = req.body.flyerid;
+    var userid= req.user._id;
+
+    BFlyersTickets.count({flyer:flyerid,user:userid}, function(err,count){
+        if(count==0)
+            res.send(200,{ticketed:false});
+        else
+            res.send(200,{ticketed:true});
+    });
+});
+
 app.get('/flyer/:id', function(req,res){
     var flyerid = req.params.id;
+    var userid = (req.user?req.user._id:'Unknow');
 
     BFlyers.findOne({_id:flyerid}, function(err,flyer){
         if(err)
             res.send('Oh oh error');
 
+        var isOthersFlyer = (flyer.owner!=userid);
+
         if(flyer)
-            res.render('flyer.ejs',{title:flyer.text,flyer:flyer});
+            res.render('flyer.ejs',{
+                title:flyer.text,flyer:flyer,
+                isOthersFlyer:isOthersFlyer
+            });
         else
             res.send('404, Not Found! Yah!');
     });
