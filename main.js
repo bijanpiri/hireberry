@@ -637,9 +637,36 @@ app.get('/search', function(req,res){
 });
 
 app.get('/timeline', function(req,res){
-   checkUser(req,res);
 
-   res.render('timeline.ejs', {title:'Timeline'});
+    if(checkUser(req,res)==false)
+        return;
+
+    var userid = req.user._id;
+
+    // Find Board Which User Follows
+    BBoardsFollwoing.find({follower:userid}, function(err,followingBoardRows){
+        if(err) return res.send(500,{result:'DB Error'});
+
+        var followingBoardsIDList = [];
+        for(var i=0; i<followingBoardRows.length; i++)
+            followingBoardsIDList.push(followingBoardRows[i].board);
+
+        // Find flyers on following boards
+        BFlyersBoards.find({board:{$in:followingBoardsIDList}}, function(err, flyerboardRows) {
+            if(err) return res.send(500,{result:'DB Error'});
+
+            var flyerIDList = [];
+            for(var i=0; i<flyerboardRows.length; i++)
+                flyerIDList.push(flyerboardRows[i].flyer);
+
+            BFlyers.find({_id:{$in:flyerIDList}}, function (err, flyers) {
+                res.render('timeline.ejs', {
+                    title:'Timeline',
+                    flyers:flyers
+                });
+            });
+        });
+    });
 });
 
 //endregion
