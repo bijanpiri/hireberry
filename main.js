@@ -158,16 +158,16 @@ everyauth.password
         }, 200);
     })
     .respondToLoginSucceed( function (res, user) {
-        console.log('login succeeded');
-        if (user) { /* Then the login was successful */
+        if (user)
             res.json({ success: true }, 200);
-        }
+        else
+            res.json({ success: false }, 501);
     })
     .respondToLoginFail( function (req, res, errors, login) {
-        console.log('login failed');
-
-        if (!errors || !errors.length) return;
-        return res.json({ success: false, errors: errors });
+        if (!errors || !errors.length)
+            res.json({ success: false }, 501);
+        return
+            res.json({ success: false, errors: errors });
     })
     .authenticate( function (login, password) {
         var errors = [];
