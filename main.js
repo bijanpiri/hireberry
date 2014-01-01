@@ -834,6 +834,18 @@ function getFlyers(res,userid) {
     });
 }
 
+function getPublicBoards(res,userid) {
+
+    BBoards.find({privacy:'public'}, function(err,boards){
+        if(err)
+            return handleError(err);
+        else {
+            console.log('>>>>>>>>>>> boards numbers: ' + boards.length );
+            res.send(200,boards);
+        }
+    });
+}
+
 function getBoards(res,userid) {
     BUsersBoards.find({user:userid}, function (err, userBoards) {
         if (err)
@@ -990,6 +1002,61 @@ app.get('/api/1.0/flyer', function(req,res) {
 
 });
 
+app.post('/api/1.0/flyer/pocket', function(req,res) {
+    var tempToken = req.body.tempToken;
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+
+            var flyerid = req.body.flyerid;
+            var userid= user._id;
+
+            BFlyersTickets.count({flyer:flyerid,user:userid}, function(err,count){
+
+                if(count==0) {
+                    console.log('>>>>>>>>>> Pocket flyer'+tempToken);
+                    BFlyersTickets({flyer:flyerid,user:userid}).save(function(err){
+                        if(err) res.send(501,{result:'DB Error!'});
+                        else res.send(200,{ticketed:true});
+                    });
+                }
+                else {
+                    console.log('>>>>>>>>>> UNPocket flyer'+tempToken);
+
+                    BFlyersTickets.remove({flyer:flyerid,user:userid}, function(err){
+                        if(err) res.send(501,{result:'DB Error!'});
+                        else res.send(200,{ticketed:false});
+                    });
+                }
+            });
+        }
+    });
+
+});
+
+app.get('/api/1.0/flyer/pocket', function(req,res) {
+    var tempToken = req.query.tempToken;
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+
+            BFlyersTickets.count({user:user._id,flyer:req.query.flyerid}, function(err,count) {
+                if(err) return handleError(err);
+
+                console.log('>>>>>>>>>> Is Flyer Pocketed? ' + count);
+
+                return res.send(200, {isPocketed:(count!=0)} );
+            })
+
+        }
+    });
+
+});
+
 app.get('/api/1.0/board', function(req,res) {
     var tempToken = req.query.tempToken;
 
@@ -1000,6 +1067,22 @@ app.get('/api/1.0/board', function(req,res) {
         if(!user) res.send(500,'Unauthorized')
         else {
             getBoards(res,user._id);
+        }
+    });
+
+});
+
+
+app.get('/api/1.0/board/public', function(req,res) {
+    var tempToken = req.query.tempToken;
+
+    console.log('>>>>>>>>>>Getting Boards of '+tempToken);
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+            getPublicBoards(res,user._id);
         }
     });
 
@@ -1037,6 +1120,64 @@ app.post('/api/1.0/board/putup', function(req,res) {
         .save(function (err) {
             if(!err) res.send(200,{})
         });
+
+});
+
+app.post('/api/1.0/board/follow', function(req,res) {
+    var tempToken = req.body.tempToken;
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+
+            var boardid = req.body.boardid;
+            var userid= user._id;
+
+            BBoardsFollwoing.count({board:boardid,follower:userid}, function(err,count){
+
+                if(count==0) {
+                    console.log('>>>>>>>>>> Follow Board'+tempToken);
+                    BBoardsFollwoing({board:boardid,follower:userid}).save(function(err){
+                        if(err) res.send(501,{result:'DB Error!'});
+                        else res.send(200,{});
+                    });
+                }
+                else {
+                    console.log('>>>>>>>>>> UNFollow Board'+tempToken);
+
+                    BBoardsFollwoing.remove({board:boardid,follower:userid}, function(err){
+                        if(err) res.send(501,{result:'DB Error!'});
+                        else res.send(200,{});
+                    });
+                }
+            });
+        }
+    });
+
+});
+
+app.get('/api/1.0/board/follow', function(req,res) {
+    var tempToken = req.query.tempToken;
+
+    BUsers.findOne({tempToken:tempToken}, function(err,user){
+        if(err) return handleError(err);
+        if(!user) res.send(500,'Unauthorized')
+        else {
+
+            var boardid = req.query.boardid;
+            var userid= user._id;
+
+            BBoardsFollwoing.count({follower:userid,board:boardid}, function(err,count) {
+                if(err) return handleError(err);
+
+                console.log('>>>>>>>>>> Is Board Following? ' + count);
+
+                return res.send(200, {isFollowing:(count!=0)} );
+            })
+
+        }
+    });
 
 });
 
