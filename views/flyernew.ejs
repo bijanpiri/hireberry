@@ -1,22 +1,61 @@
 <% layout('layout') -%>
 
 <div class="container">
-    <div class="row"><h4>Creating New Flyer</h4></div>
-    <div class="row">
-        <form method="post" action="/flyer/new">
-            <div>
-                Enter a phrase:
-                <input type="text" name="flyertext"/>
+    <div class="row-fluid"><h4>Creating New Flyer</h4></div>
+    <div class="row-fluid">
+        <div class="span4"  style="background-color: #e8eec2;">
+            <form method="post" action="/flyer/new" class="form-actions">
+                <fieldset>
+                    <div class="control-group">
+                        <legend>
+                            Settings
+                        </legend>
+                        <div class="controls">
+                            <input type="text" name="flyertext" placeholder="Enter Flyer Description"/>
+                            <span class="help-block">Select Template</span>
+                            <select name="templates" class="form-control">
+                                <option value='template01'>Template 1</option>
+                                <option value='template02'>Template 2</option>
+                                <option value='template03'>Template 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <legend>
+                            Publish
+                        </legend>
+                        <div class="controls">
+                            <span class="help-block">Select First Board For Putting Up</span>
+                            <select name="board" class="form-control">
+                                <% for(i=0;i<boards.length;i++){%>
+                                <option value=<%=boards[i]._id%>><%=boards[i].name%></option>
+                                <%}%>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Create</button>
+
+                </fieldset>
+            </form>
+        </div>
+        <div class="span8" style="background-color: #eed3d7">
+
+            <div class="column">
+
+                <div class="portlet">
+                    <div class="portlet-header">Links</div>
+                    <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+                </div>
+
+                <div class="portlet">
+                    <div class="portlet-header">Images</div>
+                    <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+                </div>
+
             </div>
-            <div>Board:
-                <select name="board" class="form-control">
-                    <% for(i=0;i<boards.length;i++){%>
-                    <option value=<%=boards[i]._id%>><%=boards[i].name%></option>
-                    <%}%>
-                </select></div>
-            <div>
-                <button type="submit">Create</button>
-            </div>
-        </form>
+
+        </div>
     </div>
+</div>
 </div>

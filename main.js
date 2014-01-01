@@ -1109,7 +1109,6 @@ app.get('/api/1.0/board', function(req,res) {
 
 });
 
-
 app.get('/api/1.0/board/public', function(req,res) {
     var tempToken = req.query.tempToken;
 
