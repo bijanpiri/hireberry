@@ -310,9 +310,12 @@ app.get('/openapp', function(req,res) {
 });
 
 app.get('/profile', function(req,res) {
-    if( req.user ){
 
-        // Find User's boards
+    var PrepareAndRender = function() {
+        FindUserBoards();
+    }
+
+    var FindUserBoards = function() {
         BUsersBoards.find({user:req.user._id}, function (err, userBoards) {
             if (err)
                 return handleError(err);
@@ -321,47 +324,81 @@ app.get('/profile', function(req,res) {
             for(var i=0; i<userBoards.length; i++)
                 boardsIDList.push(userBoards[i].board);
 
-            // Find details of User's Boards
-            BBoards.find({_id:{$in:boardsIDList}}, function(err, boards) {
-
-                // Find User's flyers
-                BFlyers.find({owner:req.user._id}, function (err, flyers) {
-
-                    // Find Boards which User follows
-                    BBoardsFollwoing.find({follower:req.user._id}, function(err,followingBoardRows){
-                        if(err) return res.send(500,{result:'DB Error'});
-
-                        var followingBoardsIDList = [];
-                        for(var i=0; i<followingBoardRows.length; i++)
-                            followingBoardsIDList.push(followingBoardRows[i].board);
-
-                        BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
-
-                            BFlyersTickets.find({user:req.user._id}, function(err,ticketeds){
-
-
-                                // Find public boards list
-                                BBoards.find({privacy:'public'},function(err,pBoards){
-
-                                    res.render('profile.ejs',{
-                                        title:'Profile',
-                                        email:req.user,
-                                        boards:boards,
-                                        pBoards:pBoards,
-                                        flyers:flyers,
-                                        followingBoards:followingBoards,
-                                        ticketeds:ticketeds
-                                    });
-
-                                });
-                            });
-
-                        });
-                    });
-                });
-            });
+            FindUserBoardsDetails(boardsIDList);
         });
     }
+
+    var FindUserBoardsDetails = function(boardsIDList) {
+        BBoards.find({_id:{$in:boardsIDList}}, function(err, userBoard) {
+            FindUserFlyers(userBoard);
+        });
+    }
+
+    var FindUserFlyers = function(userBoards) {
+        BFlyers.find({owner:req.user._id}, function (err, userFlyers) {
+            FindUserFollowingBoards(userBoards, userFlyers);
+        });
+    }
+
+    var FindUserFollowingBoards = function(userBoards,userFlyers) {
+        BBoardsFollwoing.find({follower:req.user._id}, function(err,followingBoardRows){
+            if(err) return res.send(500,{result:'DB Error'});
+
+            var followingBoardsIDList = [];
+            for(var i=0; i<followingBoardRows.length; i++)
+                followingBoardsIDList.push(followingBoardRows[i].board);
+
+            FindUserFollowingBoardsDetails(userBoards,userFlyers,followingBoardsIDList);
+        });
+    }
+
+    var FindUserFollowingBoardsDetails = function(userBoards,userFlyers,followingBoardsIDList){
+        BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
+            FindUserPocketedFlyer(userBoards,userFlyers,followingBoards);
+        });
+    }
+
+    var FindUserPocketedFlyer = function(userBoards,userFlyers,followingBoards) {
+        BFlyersTickets.find({user:req.user._id}, function(err,ticketedFlyersRows){
+
+            var ticketFlyersIDList = [];
+            for(var i=0; i<ticketedFlyersRows.length; i++)
+                if(ticketedFlyersRows[i].flyer)
+                    ticketFlyersIDList.push(ticketedFlyersRows[i].flyer);
+
+            FindUserPocketedFlyerDetails(userBoards,userFlyers,followingBoards,ticketFlyersIDList);
+        });
+    }
+
+    var FindUserPocketedFlyerDetails = function(userBoards,userFlyers,followingBoards,ticketFlyersIDList) {
+        BFlyers.find({_id:{$in:ticketFlyersIDList}}, function(err,ticketedFlyers){
+            if(err) return res.send(500,{result:'DB Error'});
+
+            FindPublicBoard(userBoards,userFlyers,followingBoards,ticketedFlyers);
+        });
+    }
+
+
+    var FindPublicBoard = function(userBoards,userFlyers,followingBoards,ticketedFlyers) {
+        BBoards.find({privacy:'public'},function(err,pBoards){
+            RenderPage(userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards);
+        });
+    }
+
+    var RenderPage = function(userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards) {
+        res.render('profile.ejs',{
+            title:'Profile',
+            email:req.user,
+            boards:userBoards,
+            pBoards:pBoards,
+            flyers:userFlyers,
+            followingBoards:followingBoards,
+            ticketedFlyers:ticketedFlyers
+        });
+    }
+
+    if( req.user )
+        PrepareAndRender();
     else
         res.redirect('/login');
 });
@@ -612,7 +649,7 @@ app.get('/flyer/take', function(req,res){
     if( !checkUser(req,res) )
         return;
 
-    var flyerid = req.body.flyerid;
+    var flyerid = req.query.flyerid;
     var userid= req.user._id;
 
     BFlyersTickets.count({flyer:flyerid,user:userid}, function(err,count){

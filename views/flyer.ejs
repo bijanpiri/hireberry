@@ -12,7 +12,7 @@
                 url: '/flyer/take',
                 type: 'get',
                 dataType: 'json',
-                data: {ticket:flyerid},
+                data: {flyerid:flyerid},
                 error: function(data){
                     alert('error '+data.result);
                 },
@@ -32,7 +32,7 @@
                 url: '/flyer/take',
                 type: 'post',
                 dataType: 'json',
-                data: {ticket:flyerid},
+                data: {flyerid:flyerid},
                 error: function(data){
                     alert('error '+data.result);
                 },

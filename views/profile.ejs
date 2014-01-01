@@ -101,7 +101,7 @@
                     </li>
                     <li>
                         <a href="#tab4" data-toggle="tab">
-                            Ticketeds<span class="badge"><%= ticketeds.length %></span>
+                            Ticketeds<span class="badge"><%= ticketedFlyers.length %></span>
                         </a>
                     </li>
                 </ul>
@@ -165,7 +165,15 @@
                     </div>
                     <div class="tab-pane" id="tab4">
                         <div>
-
+                            <ul class="thumbnails">
+                                <% for(i=0;i<ticketedFlyers.length;i++){%>
+                                <li class="span3">
+                                    <a class="thumbnail" href="/flyer/<%=ticketedFlyers[i]._id%>">
+                                        <h3 class="caption"><%=ticketedFlyers[i].text%></h3>
+                                    </a>
+                                </li>
+                                <%}%>
+                            </ul>
                         </div>
                     </div>
                 </div>
