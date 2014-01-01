@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
     <script src="/jquery-ui/js/jquery-1.9.1.js"></script>
     <script src="/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js2"></script>
 
 
     <style>
@@ -44,26 +43,51 @@
         .portlet-content { padding: 0.4em; }
         .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
         .ui-sortable-placeholder * { visibility: hidden; }
+
+        .newitem {
+            border-color: #000000;
+            border-style: solid;
+        }
+
+        .newitem:hover {
+            background-color: #ffffff;
+        }
     </style>
     <script>
         $(function() {
             $( ".column" ).sortable({
                 connectWith: ".column"
             });
-
-            $( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
-                    .find( ".portlet-header" )
-                    .addClass( "ui-widget-header ui-corner-all" )
-                    .prepend( "<span class='ui-icon ui-icon-minusthick'></span>")
-                    .end()
-                    .find( ".portlet-content" );
-
-            $( ".portlet-header .ui-icon" ).click(function() {
-                $( this ).toggleClass( "ui-icon-minusthick" ).toggleClass( "ui-icon-plusthick" );
-                $( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
-            });
-
             $( ".column" ).disableSelection();
+
+            var initPortlets = function(port) {
+                $( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+                        .find( ".portlet-header" )
+                        .addClass( "ui-widget-header ui-corner-all" )
+                        .prepend( "<span class='ui-icon ui-icon-minusthick'></span>")
+                        .end()
+                        .find( ".portlet-content" );
+
+                $( ".portlet-header .ui-icon" ).click(function() {
+                    $( this ).toggleClass( "ui-icon-minusthick" ).toggleClass( "ui-icon-plusthick" );
+                    $( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
+                });
+            }
+
+            initPortlets();
+
+            $(".newitem").click(function(e){
+                var itemType = $(e.target).attr('type');
+
+                var portlet =
+                        '<div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">'+
+                            '<div class="portlet-header ui-widget-header ui-corner-all">'+ itemType +'</div>' +
+                            '<div class="portlet-content"></div>' +
+                        '</div>';
+
+                $('.portlet').last().before(portlet);
+                //initPortlets();
+            });
         });
     </script>
 
