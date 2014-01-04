@@ -10,6 +10,7 @@
     "stylus":"*",
     "promise": "*",
     "jquery":"*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "jquery-file-upload-middleware": "*"
   }
 }

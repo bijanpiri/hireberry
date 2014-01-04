@@ -1,122 +1,26 @@
 <% layout('layout') -%>
 
+
+<script src="/jquery-ui/js/file_upload.js"></script>
+<script src="/flyer.js"></script>
 <script>
     var portletCounter = 0;
+    var flyer;
 
     $(function() {
-
-        // Widget HTML code
-        var textWidget = [
-                '<div><input type="text" name="text"></div>'
-        ].join('');
-
-        var pictureWidget = [
-            '<div><input type="file" name="picture"></div>'
-        ].join('');
-
-        //
-        var Widgets = {};
-        Widgets['Text'] = {
-            html:textWidget,
-            getContent: function(portlet) {
-                return portlet.find('input[type="text"]').val();
-            },
-            setContent: function(portlet, content) {
-                return portlet.find('input[type="text"]').val(content);
-            }
-        };
-        Widgets['Picture'] = {
-            html: pictureWidget,
-            getContent: function(portlet) {
-                return portlet.find('input[type="file"]').val();
-            }
-        };
+        flyer = new Flyer(true);
+        flyer.initPortlet( $('#portletCreator') );
+        flyer.loadLastFlyer();
 
         $( ".column" ).sortable({
             connectWith: ".column"
         }).disableSelection();
 
-        var createPortlet = function(ptype,pid,content) {
-            var portlet = $('<div class="portlet"><div class="portlet-header">'+ ptype +
-                    '</div><div class="portlet-content"></div></div>')
-                    .attr('id',pid)
-                    .attr('type',ptype)
-                    .appendTo('#portletStack');
-            initPortlets( portlet );
-
-            portlet.find('.portlet-content').append(Widgets[ptype].html);
-
-            if(content && Widgets[ptype] && Widgets[ptype].setContent )
-                Widgets[ptype].setContent(portlet, content);
-        };
-
-        var initPortlets = function(portlet) {
-            portlet.addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
-                    .find( ".portlet-header" )
-                    .addClass( "ui-widget-header ui-corner-all" )
-                    .prepend( "<span class='ui-icon ui-icon-closethick'></span>");
-
-            portlet.find( ".portlet-header .ui-icon").first().click(function(e) {
-                $(e.target).parent().parent().remove();
-            });
-        }
-
-        var json2flyer = function() {
-
-            var flyerid = $('input[name=flyerid').val();
-
-            $.get('/flyer/json/'+flyerid)
-                    .done(function(data){
-                        console.log(data)
-
-                        $('input[name=flyertext').val(data.description);
-
-                        for( var i=1; i<data.count; i++ ){
-                            if( data[i] )
-                                createPortlet(data[i].type,data[i].ID,data[i].Contents);
-                        }
-                    })
-                    .fail(function(data){
-                        console.log(data)
-                    });
-        }
-
-        var loadLastFlyer = function() {
-            json2flyer();
-        }
-
-        var flyer2json = function() {
-            var flyer = {
-                description: $('input[name=flyertext').val(),
-                flyerid: $('input[name=flyerid').val(),
-                count: $('#portletStack').children().length
-            };
-
-            $('#portletStack').children().each(function(index) {
-
-                var portlet =  $(this);
-                var ptype =  portlet.attr('type');
-                var pid =  portlet.attr('id');
-                var widget = Widgets[ptype];
-
-                flyer[index] = {
-                    "type":ptype,
-                    "ID": pid,
-                    "Contents":  ( widget && 'getContent' in widget && widget.getContent && widget.getContent(portlet))
-                };
-            });
-
-            return flyer;
-        }
-
-        initPortlets( $('#portletCreator') );
-        loadLastFlyer();
-
         $(".newitem").click(function(e){
             var itemType = $(e.target).attr('type');
             var itemID = portletCounter++;
 
-            createPortlet(itemType,itemID);
+            flyer.createPortlet(itemType,itemID);
         });
 
         var previewWindow = 0;
@@ -132,11 +36,11 @@
         })
 
         $('#buttonSave').click(function(){
-            var flyer = flyer2json();
+            var flyerjson = flyer.flyer2json();
 
             $('#buttonSave').text('Saving...').addClass('disabled');
 
-            $.post( '/flyer/new', {flyer:flyer} )
+            $.post( '/flyer/new', {flyer:flyerjson} )
                     .done(function(data){
                         $('#buttonSave').text('Save').removeClass('disabled');
                     })
@@ -146,8 +50,14 @@
 
             console.log( flyer );
         });
+
+        $('#buttonCreate').click(function(){
+            $('#buttonSave').click();
+        });
     });
 </script>
+
+
 
 <div class="container" style="width: 95%;">
     <div class="row-fluid"><h4>Creating New Flyer</h4></div>
@@ -184,7 +94,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-primary" id="buttonCreate">Create</button>
                     <button type="button" class="btn btn-success" id="buttonSave">Save</button>
                     <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
                 </fieldset>

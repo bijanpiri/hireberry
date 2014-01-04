@@ -6,6 +6,7 @@ var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
+var upload = require('jquery-file-upload-middleware');
 
 //region Initialization
 
@@ -23,6 +24,43 @@ everyauth.debug = true;
 var server = require('http').createServer(app)
 var io = require('socket.io').listen(server);
 server.listen(5001);
+
+// configure upload middleware
+upload.configure({
+    tmpDir: __dirname + '/public/tmp',
+    uploadDir: __dirname + '/public/uploads',
+    uploadUrl: '/flyer/upload',
+    imageVersions: {
+        thumbnail: {
+            width: 80,
+            height: 80
+        }
+    }
+});
+
+upload.on('begin', function (fileInfo) {
+    // fileInfo structure is the same as returned to browser
+    // {
+    //     name: '3 (3).jpg',
+    //     originalName: '3.jpg',
+    //     size: 79262,
+    //     type: 'image/jpeg',
+    //     delete_type: 'DELETE',
+    //     delete_url: 'http://yourhost/upload/3%20(3).jpg',
+    //     url: 'http://yourhost/uploads/3%20(3).jpg',
+    //     thumbnail_url: 'http://youhost/uploads/thumbnail/3%20(3).jpg'
+    // }
+
+    fileInfo.name = crypto.randomBytes(12).readUInt32LE(0) + fileInfo.name.substr(fileInfo.name.lastIndexOf('.'));
+    console.log(fileInfo);
+});
+upload.on('abort', function (fileInfo) { });
+upload.on('end', function (fileInfo) {
+});
+upload.on('delete', function (fileInfo) {  });
+upload.on('error', function (e) {
+    console.log(e.message);
+});
 
 
 //endregion
@@ -233,6 +271,9 @@ app.configure(function() {
     app.use(express.static(__dirname + '/public'));
     app.use(express.logger());
     app.use(express.cookieParser());
+    app.use('/flyer/upload', upload.fileHandler());
+    //app.use('/flyer/upload', function(req,res,next) {
+    //});
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.session({ secret: 'keyboard cat' }));
@@ -695,11 +736,11 @@ app.post('/flyer/take', function(req,res){
 
 app.get('/flyer/take', function(req,res){
 
-    if( !checkUser(req,res) )
-        return;
+    //if( !checkUser(req,res) )
+    //    return;
 
     var flyerid = req.query.flyerid;
-    var userid= req.user._id;
+    var userid=  req.user ? req.user._id : '';
 
     BFlyersTickets.count({flyer:flyerid,user:userid}, function(err,count){
         if(count==0)
@@ -711,17 +752,14 @@ app.get('/flyer/take', function(req,res){
 
 app.get('/flyer/json/:id', function(req,res){
 
-    if(!checkUser(req,res))
-        return;
+    //if(!checkUser(req,res))
+    //    return;
 
     var flyerid = req.params.id;
-    var userid = req.user._id;
 
     BFlyers.findOne({_id:flyerid}, function(err,flyer){
         if(err)
             res.send('Oh oh error');
-
-        var isOthersFlyer = (flyer.owner!=userid);
 
         if(flyer)
             res.send(flyer.flyer);
