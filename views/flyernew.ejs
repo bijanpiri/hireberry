@@ -119,8 +119,16 @@
             createPortlet(itemType,itemID);
         });
 
-        $('#previewButton').click( function() {
-            windows.location = '/flyer/' + $('input[name=flyerid').val();;
+        var previewWindow = 0;
+
+        $('#buttonPreview').click( function() {
+
+            var flyerid = $('input[name=flyerid').val();
+
+            if( previewWindow==0 )
+                previewWindow = window.open('/flyer/' + flyerid);
+            else
+                previewWindow.location = '/flyer/' + flyerid;
         })
 
         $('#buttonSave').click(function(){

@@ -742,7 +742,8 @@ app.get('/flyer/:id', function(req,res){
 
         if(flyer)
             res.render('flyer.ejs',{
-                title:flyer.text,flyer:flyer,
+                title:flyer.flyer.description,
+                flyer:flyer,
                 isOthersFlyer:isOthersFlyer
             });
         else
