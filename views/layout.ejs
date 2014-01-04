@@ -17,13 +17,14 @@
     <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.js'></script>
     <script src="/bootstrap/tagsinput/bootstrap-tagsinput.min.js"></script>
     <script src="/bootstrap/tagsinput/bootstrap-tagsinput-angular.js/"></script>
-    <script src="/bootstrap/js/typeahead.js"></script>
-    <script src="/bootstrap/js/hogan-2.0.0.js"></script>
+
 
     <link rel="stylesheet" href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
     <script src="/jquery-ui/js/jquery-1.9.1.js"></script>
     <script src="/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
 
+    <script src="/bootstrap/js/typeahead.js"></script>
+    <script src="/bootstrap/js/hogan-2.0.0.js"></script>
 
     <style>
         #map{
@@ -123,15 +124,43 @@
 
     <script language="javascript">
         $(document).ready(function() {
-            $("#searchInput").typeahead({
-                name: 'twitter-oss',
-                valueKey: 'link',
-                remote: '/search?q=%QUERY',
+            $("#searchInput").typeahead([{
+                name: 'users',
+                header: '<div style="background-color: #c4bebf;padding: 20px;"><i>Users</i></div>',
+                valueKey: 'display',
+                remote: '/search/users?q=%QUERY',
                 template: [
-                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;"><span class="badge badge-info">{{rtype}}</span><b>{{display}}</b></div>',
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;">',
+                    '<b>{{display}}</b><br>',
+                    '<i>{{link}}</i>',
+                    '</div>'
                 ].join(''),
                 engine: Hogan,
-                limit: 10
+                limit: 5
+            },{
+                name: 'boards',
+                header: '<div style="background-color: #c4bebf;padding: 20px;"><i>Boards</i></div>',
+                valueKey: 'display',
+                remote: '/search/boards?q=%QUERY',
+                template: [
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;">',
+                    '<b>{{display}}</b><br>',
+                    '<i>{{link}}</i>',
+                    '</div>'
+                ].join(''),
+                engine: Hogan,
+                limit: 5
+            }]);
+
+            $('#searchInput').on('typeahead:selected', function (object, datum) {
+                // Example: {type: "typeahead:selected", timeStamp: 1377890016108, jQuery203017338529066182673: true, isTrigger: 3, namespace: ""...}
+                console.log(object);
+
+                // Datum containg value, tokens, and custom properties
+                // Example: {value: "@JakeHarding", tokens: ['Jake', 'Harding'], name: "Jake Harding", profileImageUrl: "https://twitter.com/JakeHaridng/profile_img"}
+                console.log(datum);
+
+                window.location = datum.link;
             });
         });
 

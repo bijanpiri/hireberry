@@ -251,12 +251,12 @@ module.exports = app;
 
 //region Application Routers
 /* Router Guide:
-    /auth/twitter
-    /auth/google
-    /logout
-    /register
-    /login
-*/
+ /auth/twitter
+ /auth/google
+ /logout
+ /register
+ /login
+ */
 
 app.get('/', function(req,res) {
     if( req.user )
@@ -420,7 +420,7 @@ app.post('/profile', function(req,res) {
                     return handleError(err);
                 }
                 else{BLog('WWWW');}
-                    //res.send('Password is changed successfuly!');
+                //res.send('Password is changed successfuly!');
             });
     }
 });
@@ -680,8 +680,8 @@ app.get('/flyer/:id', function(req,res){
     });
 });
 
-app.get('/search', function(req,res){
-   var query = req.query.q;
+app.get('/search/users', function(req,res){
+    var query = req.query.q;
 
     // ToDo: Protect against SQLInjection Attack
     // ToDo: Complete Search Mechanics
@@ -691,32 +691,44 @@ app.get('/search', function(req,res){
         if(err) return res.send('Error');
         if(!users) return req.send('Not Found');
 
-        // Search in Boards
-        BBoards.find({name:{$regex : '.*'+ query +'.*'}}, function(err,boards){
-            if(err) return res.send('Error');
-            if(!boards) return req.send('Not Found');
+        var results = [];
+        for(var i=0; i<users.length; i++){
+            results.push({
+                rtype:'user',
+                display:users[i].email,
+                link:'/user/' + users[i]._id
+            });
+        }
 
-            var results = [];
-            for(var i=0; i<users.length; i++){
-                results.push({
-                    rtype:'user',
-                    display:users[i].email,
-                    link:users[i]._id
-                });
-            }
-
-            for(var i=0; i<boards.length; i++){
-                results.push({
-                    rtype:'board',
-                    display:boards[i].name,
-                    link:boards[i]._id
-                });
-            }
-
-            res.send(results);
-
-        });
+        res.send(results);
     });
+});
+
+app.get('/search/boards', function(req,res){
+    var query = req.query.q;
+
+    // ToDo: Protect against SQLInjection Attack
+    // ToDo: Complete Search Mechanics
+
+    // Search in Boards
+    BBoards.find({name:{$regex : '.*'+ query +'.*'}}, function(err,boards){
+        if(err) return res.send('Error');
+        if(!boards) return req.send('Not Found');
+
+        var results = [];
+
+        for(var i=0; i<boards.length; i++){
+            results.push({
+                rtype:'board',
+                display:boards[i].name,
+                link:'/board/' + boards[i]._id
+            });
+        }
+
+        res.send(results);
+
+    });
+
 });
 
 app.get('/timeline', function(req,res){
@@ -757,20 +769,20 @@ app.get('/timeline', function(req,res){
 //region Low Level API
 /*
  GET
-     /ison
-     /profile
-     /flyers/:id
-     /boards/:id
+ /ison
+ /profile
+ /flyers/:id
+ /boards/:id
  POST
-     /register
-     /login
-     /logout
-     /flyers
-     /boards
+ /register
+ /login
+ /logout
+ /flyers
+ /boards
  PUT
-     /profile/:id
+ /profile/:id
  DELETE
-     /flyers/:id
+ /flyers/:id
  */
 
 function login(res,email,password){
@@ -895,11 +907,11 @@ function getBoards(res,userid) {
             }
 
             BBoards.find({_id:{$in:boardIDList}}, function(err,boards){
-                if(err) 
+                if(err)
                     return handleError(err);
-                else { 
+                else {
                     console.log('>>>>>>>>>>> boards numbers: ' + boards.length );
-                    res.send(200,boards); 
+                    res.send(200,boards);
                 }
             });
         }
@@ -924,14 +936,14 @@ function BLog(text){
 
 //region RESTful API
 /*
-    About Login From iDevice:
-    0- User Touch "Login With Google" button
-    1- App Open This URL In The Default Browser: /idevice/auth/google
-    2- Server Save a Cookie and Redirect Him To /auth/google
-    3- Server Send Him to Google To Accept Our App Access
-    4- Google Send Him to /auth/callback with A.T (Authentication Token)
-    5- Server Save A.T, Generates a tempToken for Him and Re-Open App for Him and Send tempToken to App
-    6- App Save tempToken and uses it to further access
+ About Login From iDevice:
+ 0- User Touch "Login With Google" button
+ 1- App Open This URL In The Default Browser: /idevice/auth/google
+ 2- Server Save a Cookie and Redirect Him To /auth/google
+ 3- Server Send Him to Google To Accept Our App Access
+ 4- Google Send Him to /auth/callback with A.T (Authentication Token)
+ 5- Server Save A.T, Generates a tempToken for Him and Re-Open App for Him and Send tempToken to App
+ 6- App Save tempToken and uses it to further access
  */
 
 app.get('/api/1.0/ison', function(req,res){
