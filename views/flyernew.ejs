@@ -57,8 +57,6 @@
                     .prepend( "<span class='ui-icon ui-icon-closethick'></span>");
 
             portlet.find( ".portlet-header .ui-icon").first().click(function(e) {
-                //alert(e);
-                //$(e.target).parent().parent().attr('id')
                 $(e.target).parent().parent().remove();
             });
         }

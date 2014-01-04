@@ -41,13 +41,77 @@
                 }
             });
         });
+
+
+        // Widget HTML code
+        var textWidget = [
+            '<div><input type="text" name="text"></div>'
+        ].join('');
+
+        //
+        var Widgets = {};
+        Widgets['Text'] = {
+            html:textWidget,
+            getContent: function(portlet) {
+                return portlet.find('input[type="text"]').val();
+            },
+            setContent: function(portlet, content) {
+                return portlet.find('input[type="text"]').val(content);
+            }
+        };
+
+        var initPortlets = function(portlet) {
+            portlet.addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+                    .find( ".portlet-header" )
+                    .addClass( "ui-widget-header ui-corner-all" );
+        }
+
+        var createPortlet = function(ptype,pid,content) {
+            var portlet = $('<div class="portlet"><div class="portlet-header">'+ ptype +
+                    '</div><div class="portlet-content"></div></div>')
+                    .attr('id',pid)
+                    .attr('type',ptype)
+                    .appendTo('#portletStack');
+            initPortlets( portlet );
+
+            portlet.find('.portlet-content').append(Widgets[ptype].html);
+
+            if(content && Widgets[ptype] && Widgets[ptype].setContent )
+                Widgets[ptype].setContent(portlet, content);
+        };
+
+        var json2flyer = function() {
+
+            var flyerid = $('input[name=flyerid').val();
+
+            $.get('/flyer/json/'+flyerid)
+                    .done(function(data){
+                        console.log(data)
+
+                        $('input[name=flyertext').val(data.description);
+
+                        for( var i=1; i<data.count; i++ ){
+                            if( data[i] )
+                                createPortlet(data[i].type,data[i].ID,data[i].Contents);
+                        }
+                    })
+                    .fail(function(data){
+                        console.log(data)
+                    });
+        }
+
+        var loadLastFlyer = function() {
+            json2flyer();
+        }
+
+        loadLastFlyer();
     });
 </script>
 
 <div class="container">
     <div class="row" style="background-color: #f8b9b7;padding: 5px">
         <div class="span6">
-        ID:<%=flyer._id%>
+        <input type="hidden" name="flyerid" value="<%=flyer._id%>">
         </div>
         <div class="span2 pull-right">
             <% if(isOthersFlyer==true){ %>
@@ -59,5 +123,8 @@
     </div>
     <div class="row" style="background-color: #f8b9b7;padding: 5px">
         <b><%=flyer.text%></b>
+    </div>
+    <div class="row">
+        <div id="portletStack"></div>
     </div>
 </div>
