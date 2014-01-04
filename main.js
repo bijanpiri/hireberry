@@ -592,16 +592,25 @@ app.get('/flyer/new', function(req,res){
     }
 
     var getLastFlyer = function() {
-        flyerid = req.cookies.flyerid;
-        if( !flyerid ) {
-            var newflyer = BFlyers({owner:req.user._id});
-            newflyer.save(function (err) {
-                flyerid = newflyer._id;
-                res.cookie('flyerid',flyerid);
-                renderNewFlyerView();
-            });
-        } else {
+
+        flyerid = req.query.flyerid;
+
+        if( flyerid ) { // Edit Flyer
+            res.cookie('flyerid',flyerid);
             renderNewFlyerView();
+        }
+        else {          // New Flyer
+            flyerid = req.cookies.flyerid;
+            if( !flyerid ) {
+                var newflyer = BFlyers({owner:req.user._id});
+                newflyer.save(function (err) {
+                    flyerid = newflyer._id;
+                    res.cookie('flyerid',flyerid);
+                    renderNewFlyerView();
+                });
+            } else {
+                renderNewFlyerView();
+            }
         }
     };
 

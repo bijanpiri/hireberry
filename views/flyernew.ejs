@@ -119,6 +119,10 @@
             createPortlet(itemType,itemID);
         });
 
+        $('#previewButton').click( function() {
+            windows.location = '/flyer/' + $('input[name=flyerid').val();;
+        })
+
         $('#buttonSave').click(function(){
             var flyer = flyer2json();
 
@@ -174,6 +178,7 @@
 
                     <button type="submit" class="btn btn-primary">Create</button>
                     <button type="button" class="btn btn-success" id="buttonSave">Save</button>
+                    <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
                 </fieldset>
             </form>
         </div>

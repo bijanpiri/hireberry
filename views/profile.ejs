@@ -128,7 +128,7 @@
                                 <li class="span5">
                                     <div class="thumbnail">
                                         <a href="/flyer/<%=flyers[i]._id%>">
-                                            <h3><%=flyers[i].text%></h3>
+                                            <h3><%=flyers[i].flyer ? flyers[i].flyer.description : "untitled"%></h3>
                                             <form action="/flyer/putup" method="post" class="form-inline">
                                                 <div class="controls">
                                                     <a href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
@@ -169,7 +169,7 @@
                                 <% for(i=0;i<ticketedFlyers.length;i++){%>
                                 <li class="span3">
                                     <a class="thumbnail" href="/flyer/<%=ticketedFlyers[i]._id%>">
-                                        <h3 class="caption"><%=ticketedFlyers[i].text%></h3>
+                                        <h3 class="caption"><%=ticketedFlyers[i].flyer.description%></h3>
                                     </a>
                                 </li>
                                 <%}%>
