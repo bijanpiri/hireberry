@@ -1,5 +1,142 @@
 <% layout('layout') -%>
 
+<script>
+    var portletCounter = 0;
+
+    $(function() {
+
+        // Widget HTML code
+        var textWidget = [
+                '<div><input type="text" name="text"></div>'
+        ].join('');
+
+        var pictureWidget = [
+            '<div><input type="file" name="picture"></div>'
+        ].join('');
+
+        //
+        var Widgets = {};
+        Widgets['Text'] = {
+            html:textWidget,
+            getContent: function(portlet) {
+                return portlet.find('input[type="text"]').val();
+            },
+            setContent: function(portlet, content) {
+                return portlet.find('input[type="text"]').val(content);
+            }
+        };
+        Widgets['Picture'] = {
+            html: pictureWidget,
+            getContent: function(portlet) {
+                return portlet.find('input[type="file"]').val();
+            }
+        };
+
+        $( ".column" ).sortable({
+            connectWith: ".column"
+        }).disableSelection();
+
+        var createPortlet = function(ptype,pid,content) {
+            var portlet = $('<div class="portlet"><div class="portlet-header">'+ ptype +
+                    '</div><div class="portlet-content"></div></div>')
+                    .attr('id',pid)
+                    .attr('type',ptype)
+                    .appendTo('#portletStack');
+            initPortlets( portlet );
+
+            portlet.find('.portlet-content').append(Widgets[ptype].html);
+
+            if(content && Widgets[ptype] && Widgets[ptype].setContent )
+                Widgets[ptype].setContent(portlet, content);
+        };
+
+        var initPortlets = function(portlet) {
+            portlet.addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+                    .find( ".portlet-header" )
+                    .addClass( "ui-widget-header ui-corner-all" )
+                    .prepend( "<span class='ui-icon ui-icon-closethick'></span>");
+
+            portlet.find( ".portlet-header .ui-icon").first().click(function(e) {
+                alert(e.attr('id'));
+            });
+        }
+
+        var json2flyer = function() {
+
+            var flyerid = $('input[name=flyerid').val();
+
+            $.get('/flyer/json/'+flyerid)
+                    .done(function(data){
+                        console.log(data)
+
+                        $('input[name=flyertext').val(data.description);
+
+                        for( var i=1; i<data.count; i++ ){
+                            if( data[i] )
+                                createPortlet(data[i].type,data[i].ID,data[i].Contents);
+                        }
+                    })
+                    .fail(function(data){
+                        console.log(data)
+                    });
+        }
+
+        var loadLastFlyer = function() {
+            json2flyer();
+        }
+
+        var flyer2json = function() {
+            var flyer = {
+                description: $('input[name=flyertext').val(),
+                flyerid: $('input[name=flyerid').val(),
+                count: $('#portletStack').children().length
+            };
+
+            $('#portletStack').children().each(function(index) {
+
+                var portlet =  $(this);
+                var ptype =  portlet.attr('type');
+                var pid =  portlet.attr('id');
+                var widget = Widgets[ptype];
+
+                flyer[index] = {
+                    "type":ptype,
+                    "ID": pid,
+                    "Contents":  ( widget && 'getContent' in widget && widget.getContent && widget.getContent(portlet))
+                };
+            });
+
+            return flyer;
+        }
+
+        initPortlets( $('#portletCreator') );
+        loadLastFlyer();
+
+        $(".newitem").click(function(e){
+            var itemType = $(e.target).attr('type');
+            var itemID = portletCounter++;
+
+            createPortlet(itemType,itemID);
+        });
+
+        $('#buttonSave').click(function(){
+            var flyer = flyer2json();
+
+            $('#buttonSave').text('Saving...').addClass('disabled');
+
+            $.post( '/flyer/new', {flyer:flyer} )
+                    .done(function(data){
+                        $('#buttonSave').text('Save').removeClass('disabled');
+                    })
+                    .fail(function(data){
+                        $('#buttonSave').text('Save*').removeClass('disabled');
+                    });
+
+            console.log( flyer );
+        });
+    });
+</script>
+
 <div class="container" style="width: 95%;">
     <div class="row-fluid"><h4>Creating New Flyer</h4></div>
     <div class="row-fluid">
@@ -11,6 +148,7 @@
                             Settings
                         </legend>
                         <div class="controls">
+                            <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
                             <input type="text" name="flyertext" placeholder="Enter Flyer Description"/>
                             <span class="help-block">Select Template</span>
                             <select name="templates" class="form-control">
@@ -35,15 +173,15 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Create</button>
-
+                    <button type="button" class="btn btn-success" id="buttonSave">Save</button>
                 </fieldset>
             </form>
         </div>
         <div class="span7">
 
-            <div class="column">
+            <div class="column" id="portletStack">
 
-                <div class="portlet">
+                <div class="portlet" id="portletCreator">
                     <div class="portlet-header">New Item</div>
                     <div class="portlet-content" style="height: 100%;">
                         <div class="row-fluid text-center">

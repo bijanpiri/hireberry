@@ -26,71 +26,7 @@
     <script src="/bootstrap/js/typeahead.js"></script>
     <script src="/bootstrap/js/hogan-2.0.0.js"></script>
 
-    <style>
-        #map{
-            height: 400px;
-        }
-        body {
-            padding-top: 60px; /* When using the navbar-top-fixed */
-            padding-bottom: 150px;
-        }
-    </style>
-
-    <style>
-        .column { width: 100%; float: right; padding-bottom: 100px; }
-        .portlet { margin: 0px; }
-        .portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em; }
-        .portlet-header .ui-icon { float: right; }
-        .portlet-content { padding: 0.4em; }
-        .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
-        .ui-sortable-placeholder * { visibility: hidden; }
-
-        .newitem {
-            border-color: #000000;
-            border-style: solid;
-        }
-
-        .newitem:hover {
-            background-color: #ffffff;
-        }
-    </style>
-    <script>
-        $(function() {
-            $( ".column" ).sortable({
-                connectWith: ".column"
-            });
-            $( ".column" ).disableSelection();
-
-            var initPortlets = function(port) {
-                $( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
-                        .find( ".portlet-header" )
-                        .addClass( "ui-widget-header ui-corner-all" )
-                        .prepend( "<span class='ui-icon ui-icon-minusthick'></span>")
-                        .end()
-                        .find( ".portlet-content" );
-
-                $( ".portlet-header .ui-icon" ).click(function() {
-                    $( this ).toggleClass( "ui-icon-minusthick" ).toggleClass( "ui-icon-plusthick" );
-                    $( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
-                });
-            }
-
-            initPortlets();
-
-            $(".newitem").click(function(e){
-                var itemType = $(e.target).attr('type');
-
-                var portlet =
-                        '<div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">'+
-                            '<div class="portlet-header ui-widget-header ui-corner-all">'+ itemType +'</div>' +
-                            '<div class="portlet-content"></div>' +
-                        '</div>';
-
-                $('.portlet').last().before(portlet);
-                //initPortlets();
-            });
-        });
-    </script>
+    <link rel="stylesheet" href="/booltin.css">
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -153,13 +89,6 @@
             }]);
 
             $('#searchInput').on('typeahead:selected', function (object, datum) {
-                // Example: {type: "typeahead:selected", timeStamp: 1377890016108, jQuery203017338529066182673: true, isTrigger: 3, namespace: ""...}
-                console.log(object);
-
-                // Datum containg value, tokens, and custom properties
-                // Example: {value: "@JakeHarding", tokens: ['Jake', 'Harding'], name: "Jake Harding", profileImageUrl: "https://twitter.com/JakeHaridng/profile_img"}
-                console.log(datum);
-
                 window.location = datum.link;
             });
         });

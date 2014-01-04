@@ -43,7 +43,7 @@ var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy
 var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
 var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-var BFlyers = mongoose.model( 'flyers', {text: String, owner: String});
+var BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
 var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
@@ -577,25 +577,65 @@ app.get('/board/:id',function(req,res) {
 
 app.get('/flyer/new', function(req,res){
 
-    BBoards.find({}, function (err, boards){
+    var flyerid;
+    var boards = [];
+
+    if(checkUser(req,res)==false)
+        return;
+
+    var renderNewFlyerView = function() {
         res.render('flyernew.ejs',{
             title:'new flyer',
-            boards:boards
+            boards:boards,
+            flyerid:flyerid
         });
-    });
+    }
+
+    var getLastFlyer = function() {
+        flyerid = req.cookies.flyerid;
+        if( !flyerid ) {
+            var newflyer = BFlyers({owner:req.user._id});
+            newflyer.save(function (err) {
+                flyerid = newflyer._id;
+                res.cookie('flyerid',flyerid);
+                renderNewFlyerView();
+            });
+        } else {
+            renderNewFlyerView();
+        }
+    };
+
+    var getPublicBoards = function() {
+        BBoards.find({}, function (err, boardsList){
+            boards = boardsList;
+            getLastFlyer();
+        });
+    }
+
+    getPublicBoards();
 });
 
 app.post('/flyer/new', function(req,res){
-    var flyerText = req.body.flyertext;
-    var flyerBoard = req.body.board;
+    var flyer = req.body.flyer;
 
-    var newflyer = BFlyers({text:flyerText, owner:req.user._id});
+    BFlyers.update({_id:flyer.flyerid}, {$set:{flyer:flyer}}, function(err){
+        if(err) return res.send(401,{});
+
+        res.send(200,{});
+    });
+
+    /*
+     var flyerText = req.body.flyertext;
+     var flyerBoard = req.body.board;
+
+     var newflyer = BFlyers({text:flyerText, owner:req.user._id});
     newflyer.save(function (err) {
         BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(
             function (err, product, numberAffected) {
                 res.redirect('/profile');
             });
     });
+    */
 });
 
 app.post('/flyer/putup', function(req,res){
@@ -657,6 +697,27 @@ app.get('/flyer/take', function(req,res){
             res.send(200,{ticketed:false});
         else
             res.send(200,{ticketed:true});
+    });
+});
+
+app.get('/flyer/json/:id', function(req,res){
+
+    if(!checkUser(req,res))
+        return;
+
+    var flyerid = req.params.id;
+    var userid = req.user._id;
+
+    BFlyers.findOne({_id:flyerid}, function(err,flyer){
+        if(err)
+            res.send('Oh oh error');
+
+        var isOthersFlyer = (flyer.owner!=userid);
+
+        if(flyer)
+            res.send(flyer.flyer);
+        else
+            res.send('404, Not Found! Yah!');
     });
 });
 
