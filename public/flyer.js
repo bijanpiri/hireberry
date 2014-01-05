@@ -4,24 +4,56 @@ function Flyer(isInEditMode) {
 
     var widgetsType = {Unknow:0, Text:1, Picture:2};
 
+    function widget(){
+        this.onInit = function(callback){
+            this.init = callback;
+            return this;
+        };
+
+        this.onSerialize = function(callback){
+            this.serialize = callback;
+            return this;
+        };
+
+        this.onDeserialize = function(callback){
+            this.deserialize = callback;
+            return this;
+        };
+
+
+        this.init;
+        this.serialize;
+        this.deserialize;
+    }
+
+    var w = new widget().onInit(function(){
+        console.log('init');
+    }).onSerialize(function(){
+            console.log('serialize')
+    });
+
+    w.init();
+
     // Widgets Collection
     var Widgets = {};
 
     Widgets[widgetsType.Text] = {
-        html: [
-            '<div>',
-            '<input type="text" name="text">',
-            '</div>'
-        ].join(''),
+        html: '',
         init: function(portlet) {
-            if(!editMode)
-                portlet.find('input[type="text"]').prop('readonly', true);
+            if(editMode){
+                portlet.find('.portlet-content').append('<input type="text" name="text">')
+            } else {
+                portlet.find('.portlet-content').append('<span class="text"></span>');
+            }
         },
         getContent: function(portlet) {
             return portlet.find('input[type="text"]').val();
         },
         setContent: function(portlet, content) {
-            return portlet.find('input[type="text"]').val(content);
+            if(editMode)
+                return portlet.find('input[type="text"]').val(content);
+            else
+                return portlet.find('span[class="text"]').text(content);
         }
     };
 
@@ -92,11 +124,11 @@ function Flyer(isInEditMode) {
 
         portlet.find('.portlet-content').append(Widgets[ptype].html);
 
-        if(content && Widgets[ptype] && Widgets[ptype].setContent )
-            Widgets[ptype].setContent(portlet, content);
-
         if(Widgets[ptype] && Widgets[ptype].init )
             Widgets[ptype].init(portlet, pid);
+
+        if(content && Widgets[ptype] && Widgets[ptype].setContent )
+            Widgets[ptype].setContent(portlet, content);
     };
 
     var initPortlet = function(portlet) {
