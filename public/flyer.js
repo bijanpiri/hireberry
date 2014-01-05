@@ -4,7 +4,7 @@ function Flyer(isInEditMode) {
 
     var widgetsType = {Unknow:0, Text:1, Picture:2};
 
-    function widget(){
+    function Widget(widgetType){
         this.onInit = function(callback){
             this.init = callback;
             return this;
@@ -20,51 +20,53 @@ function Flyer(isInEditMode) {
             return this;
         };
 
-
+        this.widgetType = widgetType;
         this.init;
         this.serialize;
         this.deserialize;
     }
 
-    var w = new widget().onInit(function(){
-        console.log('init');
+    /******** As A Sample **********/
+    var w = new Widget().onInit(function(){
+        console.log('inited');
     }).onSerialize(function(){
-            console.log('serialize')
+            console.log('serialized')
+    }).onDeserialize(function(){
+            console.log('deserialized')
     });
-
     w.init();
+    w.serialize();
+    w.deserialize();
+    /******************************/
 
     // Widgets Collection
     var Widgets = {};
 
-    Widgets[widgetsType.Text] = {
-        html: '',
-        init: function(portlet) {
+    Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text})
+        .onInit(function(portlet) {
             if(editMode){
                 portlet.find('.portlet-content').append('<input type="text" name="text">')
             } else {
                 portlet.find('.portlet-content').append('<span class="text"></span>');
             }
-        },
-        getContent: function(portlet) {
+        })
+        .onSerialize(function(portlet) {
             return portlet.find('input[type="text"]').val();
-        },
-        setContent: function(portlet, content) {
+        })
+        .onDeserialize(function(portlet, content) {
             if(editMode)
                 return portlet.find('input[type="text"]').val(content);
             else
                 return portlet.find('span[class="text"]').text(content);
-        }
-    };
+        });
 
-    Widgets[widgetsType.Picture] = {
-        html: [
-            '<div>',
-            '<input type="file" name="picture" multiple>',
-            '<img alt="IMAGE" src="#" class="portlet-picture"></img>',
-            '</div>'
-        ].join(''),
-        init: function(portlet, elementID) {
+
+    Widgets[widgetsType.Picture] = new Widget({widgetType:widgetsType.Picture})
+        .onInit(function(portlet, elementID) {
+
+            portlet.find('.portlet-content').append(
+                '<input type="file" name="picture" multiple>' +
+                '<img alt="IMAGE" src="#" class="portlet-picture"></img>');
 
             if(editMode){
                 portlet.find('input[type=file]')
@@ -79,14 +81,14 @@ function Flyer(isInEditMode) {
             } else {
                 portlet.find('input[type=file]').remove();
             }
-        },
-        getContent: function(portlet) {
+        })
+        .onSerialize(function(portlet) {
             return portlet.find('.portlet-picture').attr('src');
-        },
-        setContent: function(portlet, content) {
+        })
+        .onDeserialize(function(portlet, content) {
             return portlet.find('.portlet-picture').attr('src', content);
-        }
-    };
+        });
+
 
     // Functions
 
@@ -122,13 +124,11 @@ function Flyer(isInEditMode) {
             .appendTo('#portletStack');
         initPortlet( portlet );
 
-        portlet.find('.portlet-content').append(Widgets[ptype].html);
-
         if(Widgets[ptype] && Widgets[ptype].init )
             Widgets[ptype].init(portlet, pid);
 
-        if(content && Widgets[ptype] && Widgets[ptype].setContent )
-            Widgets[ptype].setContent(portlet, content);
+        if(content && Widgets[ptype] && Widgets[ptype].deserialize )
+            Widgets[ptype].deserialize(portlet, content);
     };
 
     var initPortlet = function(portlet) {
@@ -160,7 +160,7 @@ function Flyer(isInEditMode) {
 
                 for( var i=1; i<data.count; i++ ){
                     if( data[i] )
-                        createPortlet(data[i].type,data[i].ID,data[i].Contents);
+                        createPortlet(parseInt(data[i].type),data[i].ID,data[i].Contents);
                 }
             })
             .fail(function(data){
@@ -189,7 +189,7 @@ function Flyer(isInEditMode) {
             flyer[index] = {
                 "type": ptype,
                 "ID": pid,
-                "Contents":  ( widget && 'getContent' in widget && widget.getContent && widget.getContent(portlet))
+                "Contents":  ( widget && 'serialize' in widget && widget.serialize && widget.serialize(portlet))
             };
         });
 
