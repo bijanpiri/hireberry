@@ -143,7 +143,8 @@ everyauth.twitter
 everyauth.google
     .appId(GOOGLE_CLIENT_ID)
     .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
+    .scope('https://www.googleapis.com/auth/userinfo.email')
+    //.scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
     .handleAuthCallbackError( function (req, res) {
         res.redirect('/afterLoginWithGoolge');
     })
@@ -167,6 +168,7 @@ everyauth.google
             if(!user){
                 console.log("User Not Exist ... Creating ");
                 var newUser = BUsers({
+                    googlename:googleUserMetadata.name,
                     googleid:googleUserMetadata.id,
                     googleAccessToken:accessToken,
                     googleAccessSecretToken:accessTokenExtra
