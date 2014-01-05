@@ -1,4 +1,18 @@
 <% layout('layout') -%>
+<script src="/flyer.js"></script>
+<script>
+    $(function(){
+
+        $('.portletStack').each(function(index){
+            var flyer = new Flyer(false);
+
+            var portletStackID = $(this).attr('id');
+            var flyerid = $(this).attr('flyerid');
+
+            flyer.loadLastFlyer( flyerid, portletStackID );
+        })
+    });
+</script>
 
 <script language="JavaScript">
     $( function(){
@@ -48,7 +62,7 @@
 <div class="container">
     <div class="row" style="padding: 5px">
         <div class="span6">
-        <h2><%=board.name%><span class="badge" style="margin-left: 10px;"><%= flyers.length %></span></h2>
+            <h2><%=board.name%><span class="badge" style="margin-left: 10px;"><%= flyers.length %></span></h2>
         </div>
         <div class="span3 pull-right">
             <% if(isOthersBoard==true){ %>
@@ -63,7 +77,12 @@
             <% for(i=0;i<flyers.length;i++){%>
             <li class="span3">
                 <a class="thumbnail" href="/flyer/<%=flyers[i]._id%>">
-                    <h4 class="caption"><%=flyers[i].text%></h4>
+                    <h4 class="caption">
+                        <%=(flyers[i].flyer&&flyers[i].flyer.description)
+                                ? flyers[i].flyer.description
+                                : "untitled"%>
+                    </h4>
+                    <div class="portletStack" id="portletStack<%=i%>" flyerid="<%=flyers[i]._id%>"></div>
                 </a>
             </li>
             <%}%>
