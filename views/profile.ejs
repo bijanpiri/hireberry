@@ -172,9 +172,13 @@
                             <ul class="thumbnails">
                                 <% for(i=0;i<ticketedFlyers.length;i++){%>
                                 <li class="span3">
-                                    <a class="thumbnail" href="/flyer/<%=ticketedFlyers[i]._id%>">
-                                        <h3 class="caption"><%=ticketedFlyers[i].flyer.description%></h3>
+                                    <% if( ticketedFlyers[i].isDeleted) { %>
+                                    <h3 class="caption">A Deleted Flyer</h3>
+                                    <% } else { %>
+                                    <a class="thumbnail" href="/flyer/<%=ticketedFlyers[i].flyer._id%>">
+                                        <h3 class="caption"><%=ticketedFlyers[i].flyer.flyer.description%></h3>
                                     </a>
+                                    <% } %>
                                 </li>
                                 <%}%>
                             </ul>

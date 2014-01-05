@@ -412,10 +412,37 @@ app.get('/profile', function(req,res) {
     }
 
     var FindUserPocketedFlyerDetails = function(userBoards,userFlyers,followingBoards,ticketFlyersIDList) {
-        BFlyers.find({_id:{$in:ticketFlyersIDList}}, function(err,ticketedFlyers){
+        BFlyers.find({_id:{$in:ticketFlyersIDList}}, function(err,existTicketedFlyers){
             if(err) return res.send(500,{result:'DB Error'});
 
-            FindPublicBoard(userBoards,userFlyers,followingBoards,ticketedFlyers);
+
+            process.nextTick( function() {
+                var ticketedFlyers = [];
+
+                for( var i=0; i<ticketFlyersIDList.length; i++ ) {
+
+                    var foundIndex = -1;
+
+                    for( var j=0; j<existTicketedFlyers.length; j++ ) {
+                        if( existTicketedFlyers[j]._id == ticketFlyersIDList[j] ){
+                            foundIndex = j;
+                            break;
+                        }
+                    }
+
+                    if( foundIndex >= 0 )
+                        ticketedFlyers.push({
+                            isDeleted:false,
+                            flyer:existTicketedFlyers[foundIndex]
+                        });
+                    else
+                        ticketedFlyers.push({
+                            isDeleted:true
+                        });
+                }
+
+                FindPublicBoard(userBoards,userFlyers,followingBoards,ticketedFlyers);
+            });
         });
     }
 
