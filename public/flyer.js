@@ -2,7 +2,7 @@ function Flyer(isInEditMode) {
 
     var editMode = isInEditMode;
 
-    var widgetsType = {Unknow:0, Text:1, Picture:2, Video:3, Button: 4};
+    var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
 
     function Widget(widgetType){
         this.onInit = function(callback){
@@ -124,6 +124,42 @@ function Flyer(isInEditMode) {
                 return portlet.find('a[class="btn"]').text(content).attr('href',content);
         });
 
+    Widgets[widgetsType.Tag] = new Widget({widgetType:widgetsType.Tag})
+        .onInit(function(portlet) {
+            if(editMode){
+                portlet.find('.portlet-content').append('<input type="text" name="tags" data-role="tagsinput" placeholder="Add tags">');
+
+                // ToDo: tagsinput doesn't work!
+                //portlet.find('input[type="text"]').tagsinput('refresh');
+            }
+            else
+                portlet.find('.portlet-content').append('<span class="tag"></span>');
+        })
+        .onSerialize(function(portlet) {
+            return portlet.find('input[name="tags"]').val()
+        })
+        .onDeserialize(function(portlet, content) {
+            if(editMode)
+                return portlet.find('input[name="tags"]').val(content);
+            else
+                return portlet.find('span[class="tag"]').text(content);
+        });
+
+    Widgets[widgetsType.Map] = new Widget({widgetType:widgetsType.Map})
+        .onInit(function(portlet) {
+            var id = 'map' + portlet.attr('id');
+
+            portlet.find('.portlet-content').append('<div style="height: 200px" id="' + id + '"></div>');
+
+            L.mapbox.map(id, 'coybit.gj1c3kom');
+        })
+        .onSerialize(function(portlet) {
+            return '';
+        })
+        .onDeserialize(function(portlet, content) {
+            return '';
+        });
+
     // Functions
 
     var portletTypeString2Type = function (strType) {
@@ -136,6 +172,10 @@ function Flyer(isInEditMode) {
                 return widgetsType.Video;
             case 'button':
                 return widgetsType.Button;
+            case 'tag':
+                return widgetsType.Tag;
+            case 'map':
+                return widgetsType.Map;
             default:
                 return widgetsType.Unknow;
         }
@@ -151,6 +191,10 @@ function Flyer(isInEditMode) {
                 return 'video';
             case widgetsType.Button:
                 return 'button';
+            case widgetsType.Tag:
+                return 'tag';
+            case widgetsType.Map:
+                return 'map';
             default:
                 return 'Unknow';
         }
