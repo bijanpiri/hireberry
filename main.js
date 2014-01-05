@@ -167,8 +167,10 @@ everyauth.google
 
             if(!user){
                 console.log("User Not Exist ... Creating ");
+                
+                // ToDo: A Problem - Sometime google returns email, sometime returns name !!!
                 var newUser = BUsers({
-                    googlename:googleUserMetadata.name,
+                    googlename:(googleUserMetadata.name || googleUserMetadata.email),
                     googleid:googleUserMetadata.id,
                     googleAccessToken:accessToken,
                     googleAccessSecretToken:accessTokenExtra
