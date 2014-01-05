@@ -459,6 +459,11 @@ app.get('/profile', function(req,res) {
 
     var FindPublicBoard = function(userBoards,userFlyers,followingBoards,ticketedFlyers) {
         BBoards.find({privacy:'public'},function(err,pBoards){
+
+            // Add User's boards to public boards list (board which user can put on theme)
+            pBoards = pBoards || [];
+            Array.prototype.push.apply(pBoards, userBoards);
+
             RenderPage(userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards);
         });
     }
