@@ -128,7 +128,11 @@
                                 <li class="span5">
                                     <div class="thumbnail">
                                         <a href="/flyer/<%=flyers[i]._id%>">
-                                            <h3><%=flyers[i].flyer ? flyers[i].flyer.description : "untitled"%></h3>
+                                            <h3>
+                                                <%=(flyers[i].flyer&&flyers[i].flyer.description)
+                                                        ? flyers[i].flyer.description
+                                                        : "untitled"%>
+                                            </h3>
                                             <form action="/flyer/putup" method="post" class="form-inline">
                                                 <div class="controls">
                                                     <a href="/flyer/remove/<%=flyers[i]._id%>">&times</a>

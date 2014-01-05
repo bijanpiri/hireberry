@@ -6,11 +6,17 @@
 <script>
     var portletCounter = 0;
     var flyer;
+    var flyerid;
+    var portletStackID;
 
     $(function() {
         flyer = new Flyer(true);
-        flyer.initPortlet( $('#portletCreator') );
-        flyer.loadLastFlyer();
+
+        flyerid = $('input[name=flyerid]').val();
+        portletStackID = 'portletStack';
+
+        flyer.initPortlet( $('#' + portletStackID) );
+        flyer.loadLastFlyer( flyerid, portletStackID );
 
         $( ".column" ).sortable({
             connectWith: ".column"
@@ -21,7 +27,7 @@
             var itemID = portletCounter++;
             var portletType = flyer.portletTypeString2Type(itemType);
 
-            flyer.createPortlet(portletType,itemID);
+            flyer.createPortlet( portletType, itemID, null, portletStackID );
         });
 
         var previewWindow = 0;
@@ -37,7 +43,7 @@
         })
 
         $('#buttonSave').click(function(){
-            var flyerjson = flyer.flyer2json();
+            var flyerjson = flyer.flyer2json('portletStack');
 
             $('#buttonSave').text('Saving...').addClass('disabled');
 
