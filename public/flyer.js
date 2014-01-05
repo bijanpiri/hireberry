@@ -2,7 +2,7 @@ function Flyer(isInEditMode) {
 
     var editMode = isInEditMode;
 
-    var widgetsType = {Unknow:0, Text:1, Picture:2};
+    var widgetsType = {Unknow:0, Text:1, Picture:2, Video:3, Button: 4};
 
     function Widget(widgetType){
         this.onInit = function(callback){
@@ -90,6 +90,40 @@ function Flyer(isInEditMode) {
         });
 
 
+    Widgets[widgetsType.Video] = new Widget({widgetType:widgetsType.Video})
+        .onInit(function(portlet) {
+            if(editMode)
+                portlet.find('.portlet-content').append('<input type="text">')
+
+            portlet.find('.portlet-content').append('<embed width="420" height="345" type="application/x-shockwave-flash"></embed>')
+        })
+        .onSerialize(function(portlet) {
+            return portlet.find('input[type="text"]').val()
+        })
+        .onDeserialize(function(portlet, content) {
+            if(editMode)
+                return portlet.find('input[type="text"]').val(content);
+
+            return portlet.find('iframe').attr('src',content);
+        });
+
+    Widgets[widgetsType.Button] = new Widget({widgetType:widgetsType.Button})
+        .onInit(function(portlet) {
+            if(editMode)
+                portlet.find('.portlet-content').append('<input type="text">');
+            else
+                portlet.find('.portlet-content').append('<a class="btn"></a>');
+        })
+        .onSerialize(function(portlet) {
+            return portlet.find('input[type="text"]').val()
+        })
+        .onDeserialize(function(portlet, content) {
+            if(editMode)
+                return portlet.find('input[type="text"]').val(content);
+            else
+                return portlet.find('a[class="btn"]').text(content).attr('href',content);
+        });
+
     // Functions
 
     var portletTypeString2Type = function (strType) {
@@ -98,6 +132,10 @@ function Flyer(isInEditMode) {
                 return widgetsType.Text;
             case 'picture':
                 return widgetsType.Picture;
+            case 'video':
+                return widgetsType.Video;
+            case 'button':
+                return widgetsType.Button;
             default:
                 return widgetsType.Unknow;
         }
@@ -109,6 +147,10 @@ function Flyer(isInEditMode) {
                 return 'text';
             case widgetsType.Picture:
                 return 'picture';
+            case widgetsType.Video:
+                return 'video';
+            case widgetsType.Button:
+                return 'button';
             default:
                 return 'Unknow';
         }
