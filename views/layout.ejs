@@ -62,11 +62,11 @@
         $(document).ready(function() {
             $("#searchInput").typeahead([{
                 name: 'users',
-                header: '<div style="background-color: #c4bebf;padding: 20px;"><i>Users</i></div>',
+                header: '<div style="background-color: #c4bebf;padding: 5px;"><i><b>User</b></i><hr></div>',
                 valueKey: 'display',
                 remote: '/search/users?q=%QUERY',
                 template: [
-                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;">',
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 5px;">',
                     '<b>{{display}}</b><br>',
                     '<i>{{link}}</i>',
                     '</div>'
@@ -74,12 +74,25 @@
                 engine: Hogan,
                 limit: 5
             },{
-                name: 'boards',
-                header: '<div style="background-color: #c4bebf;padding: 20px;"><i>Boards</i></div>',
+                name: 'boardsByName',
+                header: '<div style="background-color: #c4bebf;padding: 5px;"><i><b>Boards-ame</b></i><hr></div>',
                 valueKey: 'display',
-                remote: '/search/boards?q=%QUERY',
+                remote: '/search/boards/name?q=%QUERY',
                 template: [
-                    '<div class="repo-name" style="background-color: #c4bebf;padding: 20px;">',
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 5px;">',
+                    '<b>{{display}}</b><br>',
+                    '<i>{{link}}</i>',
+                    '</div>'
+                ].join(''),
+                engine: Hogan,
+                limit: 5
+            },{
+                name: 'boardsByTag',
+                header: '<div style="background-color: #c4bebf;padding: 5px;"><i><b>Boards-Tag</b></i><hr></div>',
+                valueKey: 'display',
+                remote: '/search/boards/tag?q=%QUERY',
+                template: [
+                    '<div class="repo-name" style="background-color: #c4bebf;padding: 5px;">',
                     '<b>{{display}}</b><br>',
                     '<i>{{link}}</i>',
                     '</div>'

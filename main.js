@@ -167,7 +167,7 @@ everyauth.google
 
             if(!user){
                 console.log("User Not Exist ... Creating ");
-                
+
                 // ToDo: A Problem - Sometime google returns email, sometime returns name !!!
                 var newUser = BUsers({
                     googlename:(googleUserMetadata.name || googleUserMetadata.email),
@@ -515,7 +515,11 @@ app.post('/board/new', function(req,res){
     //req.body.locationlng
     //req.body.locationlat
 
-    if(!checkUser(req,res)) return;
+    var tags=req.body.tags.split(',');
+
+    if(!checkUser(req,res))
+        return;
+
     // Add to Boards collection
     var newboard = BBoards({
         name: req.body.name,
@@ -525,7 +529,6 @@ app.post('/board/new', function(req,res){
         locationlng: req.body.lng
     });
 
-    var tags=req.body.tags.split(',');
     newboard.save(function (err) {
         if (err)
             res.send('Failed 01');
@@ -538,16 +541,21 @@ app.post('/board/new', function(req,res){
             newboarduser.save(boardSaved);
         }
     });
+
     function boardSaved(err){
-        tags.forEach(function(tg,i){
-            BTag.findOne({name:tg},
-                function(err, tag){
+        tags.forEach(function(tagName,i){
+            BTag.findOne({name:tagName}, function(err, tag){
                     if(tag){
-                        BBoardsTags({board:newboard._id,tag:tag._id}).save();
+                        BBoardsTags({
+                            board:newboard._id,
+                            tag:tag._id
+                        }).save();
                     }else{
-                        var newtag=BTag({name:tg});
+                        var newtag = BTag({name:tagName});
                         newtag.save(function(){
-                            var boardTag=BBoardsTags({board:newboard._id,tag:newtag._id});
+                            var boardTag = BBoardsTags({
+                                board:newboard._id,
+                                tag:newtag._id});
                             boardTag.save();
                         });
                     } });
@@ -861,7 +869,7 @@ app.get('/search/users', function(req,res){
     });
 });
 
-app.get('/search/boards', function(req,res){
+app.get('/search/boards/name', function(req,res){
     var query = req.query.q;
 
     // ToDo: Protect against SQLInjection Attack
@@ -883,6 +891,50 @@ app.get('/search/boards', function(req,res){
         }
 
         res.send(results);
+
+    });
+
+});
+
+app.get('/search/boards/tag', function(req,res) {
+
+    var tagName = req.query.q;
+
+    BTag.findOne({name:tagName}, function(err, tag){
+
+        if(tag){
+
+            // Find all the boards with this tag
+            BBoardsTags.find({tag:tag._id}, function(err, boards){
+
+                if(err)
+                    return res.send(500,{result:'DB Error'});
+
+                // Create ID list
+                var boardsIDList = [];
+                for( var i=0; i<boards.length; i++ )
+                    boardsIDList.push(boards[i].board);
+
+                // Find boards
+                BBoards.find({_id:{$in:boardsIDList}}, function(err, boardsDetail) {
+
+                    if(err)
+                        return res.send(500,{result:'DB Error'});
+
+                    var results = [];
+
+                    for(var i=0; i<boardsDetail.length; i++){
+                        results.push({
+                            rtype:'board',
+                            display:boardsDetail[i].name,
+                            link:'/board/' + boardsDetail[i]._id
+                        });
+                    }
+
+                    res.send(results);
+                })
+            });
+        }
 
     });
 
