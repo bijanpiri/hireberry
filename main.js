@@ -70,9 +70,11 @@ var BUsers = mongoose.model( 'users', {
     email: String,
     password: String,
     salt: String,
+    twittername:String,
     twitterid:String,
     twitterAccessToken:String,
     twitterAccessSecretToken:String,
+    googlename:String,
     googleid:String,
     googleAccessToken:String,
     googleAccessSecretToken:String,
@@ -110,9 +112,13 @@ everyauth.twitter
             if(err)
                 return promise.fail([err]);
 
+            BLog('hello');
+            BLog( twitterUserMetadata );
+
             if(!user){
                 console.log("User Not Exist ... Creating ");
                 var newUser = BUsers({
+                    twittername:twitterUserMetadata.name,
                     twitterid:twitterUserMetadata.id,
                     twitterAccessToken:accessToken,
                     twitterAccessSecretToken:accessTokenSecret
