@@ -19,8 +19,9 @@
         $(".newitem").click(function(e){
             var itemType = $(e.target).attr('type');
             var itemID = portletCounter++;
+            var portletType = flyer.portletTypeString2Type(itemType);
 
-            flyer.createPortlet(itemType,itemID);
+            flyer.createPortlet(portletType,itemID);
         });
 
         var previewWindow = 0;
@@ -108,12 +109,12 @@
                     <div class="portlet-header">New Item</div>
                     <div class="portlet-content" style="height: 100%;">
                         <div class="row-fluid text-center">
-                            <div class="span2 newitem" type="Picture"><i class="icon-picture"></i></div>
-                            <div class="span2 newitem" type="Text"><i class="icon-font"></i></div>
-                            <div class="span2 newitem" type="Audio"><i class="icon-play"></i></div>
-                            <div class="span2 newitem" type="BarCode"><i class="icon-barcode"></i></div>
-                            <div class="span2 newitem" type="Tag"><i class="icon-tag"></i></div>
-                            <div class="span2 newitem" type="Map"><i class="icon-map-marker"></i></div>
+                            <div class="span2 newitem" type="picture"><i class="icon-picture"></i></div>
+                            <div class="span2 newitem" type="text"><i class="icon-font"></i></div>
+                            <div class="span2 newitem" type="audio"><i class="icon-play"></i></div>
+                            <div class="span2 newitem" type="barCode"><i class="icon-barcode"></i></div>
+                            <div class="span2 newitem" type="tag"><i class="icon-tag"></i></div>
+                            <div class="span2 newitem" type="map"><i class="icon-map-marker"></i></div>
                         </div>
                     </div>
                 </div>

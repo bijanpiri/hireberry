@@ -6,7 +6,7 @@ var mongoose =  require('mongoose');
 var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
-var upload = require('jquery-file-upload-middleware');
+var upload = require('jquery-file-upload-middleware'); // Don't Forget Creating /public/tmp and /public/uploads
 
 //region Initialization
 
@@ -650,7 +650,15 @@ app.get('/flyer/new', function(req,res){
                     renderNewFlyerView();
                 });
             } else {
-                renderNewFlyerView();
+                BFlyers.count({_id:flyerid}, function(err,count){
+                    if(!err && count>0)
+                        renderNewFlyerView();
+                    else {  // Flyer Draft is deleted.
+                        // ToDo: Handle this situation better
+                        res.clearCookie('flyerid');
+                        return res.redirect('/flyer/new');
+                    }
+                });
             }
         }
     };
@@ -774,7 +782,10 @@ app.get('/flyer/:id', function(req,res){
 
     BFlyers.findOne({_id:flyerid}, function(err,flyer){
         if(err)
-            res.send('Oh oh error');
+            return res.send('Oh oh error');
+
+        if(!flyer)
+            return res.send(404,{});
 
         var isOthersFlyer = (flyer.owner!=userid);
 

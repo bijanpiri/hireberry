@@ -2,23 +2,17 @@ function Flyer(isInEditMode) {
 
     var editMode = isInEditMode;
 
-    // Widget HTML code
-    var textWidget = [
-        '<div>',
-        '<input type="text" name="text">',
-        '</div>'
-    ].join('');
-    var pictureWidget = [
-        '<div>',
-        '<input type="file" name="picture" multiple>',
-        '<img alt="IMAGE" src="#" class="portlet-picture"></img>',
-        '</div>'
-    ].join('');
+    var widgetsType = {Unknow:0, Text:1, Picture:2};
 
-    //
+    // Widgets Collection
     var Widgets = {};
-    Widgets['Text'] = {
-        html:textWidget,
+
+    Widgets[widgetsType.Text] = {
+        html: [
+            '<div>',
+            '<input type="text" name="text">',
+            '</div>'
+        ].join(''),
         init: function(portlet) {
             if(!editMode)
                 portlet.find('input[type="text"]').prop('readonly', true);
@@ -30,8 +24,14 @@ function Flyer(isInEditMode) {
             return portlet.find('input[type="text"]').val(content);
         }
     };
-    Widgets['Picture'] = {
-        html: pictureWidget,
+
+    Widgets[widgetsType.Picture] = {
+        html: [
+            '<div>',
+            '<input type="file" name="picture" multiple>',
+            '<img alt="IMAGE" src="#" class="portlet-picture"></img>',
+            '</div>'
+        ].join(''),
         init: function(portlet, elementID) {
 
             if(editMode){
@@ -57,11 +57,36 @@ function Flyer(isInEditMode) {
     };
 
     // Functions
+
+    var portletTypeString2Type = function (strType) {
+        switch(strType) {
+            case 'text':
+                return widgetsType.Text;
+            case 'picture':
+                return widgetsType.Picture;
+            default:
+                return widgetsType.Unknow;
+        }
+    }
+
+    var portletType2string = function (type) {
+        switch(type) {
+            case widgetsType.Text:
+                return 'text';
+            case widgetsType.Picture:
+                return 'picture';
+            default:
+                return 'Unknow';
+        }
+    }
+
     var createPortlet = function(ptype,pid,content) {
-        var portlet = $('<div class="portlet"><div class="portlet-header">'+ ptype +
+        var strType = portletType2string(ptype);
+
+        var portlet = $('<div class="portlet"><div class="portlet-header">'+ strType +
             '</div><div class="portlet-content"></div></div>')
             .attr('id',pid)
-            .attr('type',ptype)
+            .attr('type',strType)
             .appendTo('#portletStack');
         initPortlet( portlet );
 
@@ -125,12 +150,12 @@ function Flyer(isInEditMode) {
         $('#portletStack').children().each(function(index) {
 
             var portlet =  $(this);
-            var ptype =  portlet.attr('type');
+            var ptype =  portletTypeString2Type( portlet.attr('type') );
             var pid =  portlet.attr('id');
             var widget = Widgets[ptype];
 
             flyer[index] = {
-                "type":ptype,
+                "type": ptype,
                 "ID": pid,
                 "Contents":  ( widget && 'getContent' in widget && widget.getContent && widget.getContent(portlet))
             };
@@ -145,4 +170,6 @@ function Flyer(isInEditMode) {
     this.json2flyer = json2flyer;
     this.flyer2json = flyer2json;
     this.loadLastFlyer = loadLastFlyer;
+    this.portletTypeString2Type = portletTypeString2Type;
+    this.portletType2string = portletType2string;
 }
