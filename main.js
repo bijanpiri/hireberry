@@ -487,23 +487,23 @@ app.get('/profile', function(req,res) {
 });
 
 app.post('/profile', function(req,res) {
+
+    if( !checkUser(req,res) )
+        return res.send(401);
+
     var newPassword = req.body.newpassword;
 
-
-
     if( req.body.newpassword != req.body.confirmnewpassword)
-        res.send('Not matched!');
+        res.send(401,{error:'Not matched!'});
     if( req.user ){
-        console.log(req.user);
+
         BUsers.update( { email: req.user.email, password: req.body.oldpassword },
             { $set: { password: newPassword }},
-            function (err, numberAffected, raw) {
-                if (err){
-                    BLog('WWWW');
+            function (err) {
+                if (err)
                     return handleError(err);
-                }
-                else{BLog('WWWW');}
-                //res.send('Password is changed successfuly!');
+                else
+                    res.send(200);
             });
     }
 });
@@ -980,6 +980,43 @@ app.get('/timeline', function(req,res){
 
 //endregion
 
+//region AJAX endpoints
+app.get('/flyer/:id/boards',function(req,res) {
+    var flyerid = req.params.id;
+
+    // Find Flyers ID on this Board
+    BFlyersBoards.find({flyer:flyerid}, function(err,boards){
+         res.send(200, {boards:boards} );
+    });
+});
+
+app.get('/board/:id/flyers',function(req,res) {
+    var boardid = req.params.id;
+
+    // Find Board
+    BBoards.findOne({_id:boardid}, function(err,board){
+        if(err)
+            return res.send(502);
+        if(!board)
+            return res.send(200);
+
+        // Find Flyers ID on this Board
+        BFlyersBoards.find({board:boardid}, function(err,boardflyers){
+
+            var flyersIDList = [];
+            for(var i=0; i<boardflyers.length; i++)
+                flyersIDList.push(boardflyers[i].flyer);
+
+            // Find Flyers on this this Board
+            BFlyers.find({_id: {$in:flyersIDList}}, function(err,flyers){
+                if( err ) return res.send(501);
+                res.send(200, {flyers:flyers} );
+            });
+        });
+    });
+});
+//endregion
+
 //region Low Level API
 /*
  GET
@@ -1442,5 +1479,7 @@ app.get('/api/1.0/board/follow', function(req,res) {
     });
 
 });
+
+
 
 //endregion

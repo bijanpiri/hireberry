@@ -3,30 +3,62 @@
     var boardsIsHidden = true;
     var flyersIsHidden = true;
 
+    function showMessage(text) {
+        $('.alert').find('.msg').text(text);
+        $('.alert').show();
+    }
+
+    function hideMessage() {
+        $('.alert').hide();
+    }
+
     $(function(){
-        $('#flyersPartTitle').next().hide();
-        $('#boardsPartTitle').next().hide();
+        $('#saveButton').click(function(){
+            var datastring= $("#passwordChangingForm").serialize();
+            $.ajax({
+                url: '/profile',
+                type: 'post',
+                dataType: 'json',
+                data: datastring,
+                error: function(data){
+                    if(data.status != 200)
+                        showMessage('Invalid Email Or Password.');
+                    else
+                        showMessage('Saved Successfully');
+                },
+                success: function(data){
+                    showMessage('Saved Successfully');
+                }
+            });
 
-        $('#boardsPartTitle').click( function(){
-            var boards = $('#boardsPartTitle').next();
+        });
 
-            if(boardsIsHidden)
-                boards.show();
-            else
-                boards.hide();
+        // Load information about flyers on each board
+        $('.userboard').each(function(index){
 
-            boardsIsHidden = !boardsIsHidden;
+            var boardid = $(this).attr('board-id');
+            var thumbnail = $(this).find('.thumbnail');
+
+            $.get('/board/'+boardid+'/flyers')
+                    .done(function(data){
+                        thumbnail.append('Number Of Flyers: ' + data.flyers.length);
+                    })
+                    .fail(function(data){
+                    });
         })
 
-        $('#flyersPartTitle').click( function(){
-            var flyers = $('#flyersPartTitle').next();
+        // Load information about board of flyer
+        $('.userflyer').each(function(index){
 
-            if(flyersIsHidden)
-                flyers.show();
-            else
-                flyers.hide();
+            var flyerid = $(this).attr('flyer-id');
+            var thumbnail = $(this).find('.thumbnail');
 
-            flyersIsHidden = !flyersIsHidden;
+            $.get('/flyer/'+flyerid+'/boards')
+                    .done(function(data){
+                        thumbnail.append('Number Of Boards: ' + data.boards.length);
+                    })
+                    .fail(function(data){
+                    });
         })
     });
 </script>
@@ -34,8 +66,16 @@
     <div class="row">
         <h2>Profile</h2>
     </div>
+
+    <div class="alert alert-info hide">
+        <button class="close" data-dismiss="alert">
+            &times;
+        </button>
+        <span class="msg">Invalid Email or password</span>
+    </div>
+
     <div class="row">
-        <form class="form-horizontal" action="/profile" method="post">
+        <form class="form-horizontal" action="/profile" method="post" id="passwordChangingForm">
             <div class="control-group">
                 <div class="control-label"> Email:</div>
                 <div class="controls ">
@@ -72,8 +112,7 @@
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <input type="submit" class="btn input-medium btn-primary" value="Save Changes">
-
+                    <input type="button" id="saveButton" class="btn input-medium btn-primary" value="Save Changes">
                 </div>
             </div>
         </form>
@@ -110,7 +149,7 @@
                         <div>
                             <ul class="thumbnails">
                                 <% for(i=0;i<boards.length;i++){%>
-                                <li class="span3">
+                                <li class="span3 userboard" board-id="<%=boards[i]._id%>">
                                     <a class="thumbnail" href="/board/<%=boards[i]._id%>">
                                         <h3 class="caption"><%=boards[i].name%></h3>
                                         <h5 class="caption"><%=boards[i].category%></h5>
@@ -125,7 +164,7 @@
                         <div>
                             <ul class="thumbnails">
                                 <% for(var i=0;i<flyers.length;i++){%>
-                                <li class="span5">
+                                <li class="span5 userflyer" flyer-id="<%=flyers[i]._id%>">
                                     <div class="thumbnail">
                                         <a href="/flyer/<%=flyers[i]._id%>">
                                             <h3>
