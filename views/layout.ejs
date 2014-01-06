@@ -136,16 +136,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="/">Booltin</a>
             <div class="nav-collapse">
                 <ul class="nav">
                     <li>
-                        <a href="/" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);">
-                            <i class="icon-home icon-white"></i>Home</a>
+                        <a href="/" class="brand" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);">
+                            booltin<sup style="margin-left: 4px;color: red">beta</sup>
+                        </a>
                     </li>
                     <li>
-                        <form id="searchform" class="navbar-search pull-left" method="get" action="/search" onsubmit="return search()">
-                            <input type="text" class="search-query2" placeholder="for ex. coybit@gmail.com" name="query" id="searchInput"/>
+                        <form id="searchform" class="navbar-search" method="get" action="/search" onsubmit="return search()">
+                            <input type="text" class="search-query2" placeholder="Search in users & boards" name="query" id="searchInput"/>
                         </form>
                     </li>
                 </ul>
