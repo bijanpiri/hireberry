@@ -172,25 +172,36 @@
                                 <li class="span5 userflyer" flyer-id="<%=flyers[i]._id%>">
                                     <div class="thumbnail">
                                         <a href="/flyer/<%=flyers[i]._id%>">
-                                            <h3>
-                                                <%=(flyers[i].flyer&&flyers[i].flyer.description)
-                                                        ? flyers[i].flyer.description
-                                                        : "untitled"%>
-                                            </h3>
-                                            <form action="/flyer/putup" method="post" class="form-inline">
-                                                <div class="controls">
-                                                    <a class="btn" href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
-                                                    <input type="hidden" name="flyerid" value="<%=flyers[i]._id%>">
-                                                    <select name="boardid">
-                                                        <%for(var j=0;j<pBoards.length;j++){%>
-                                                        <option value="<%=pBoards[j]._id%>"> <%=pBoards[j].name%> </option>
-                                                        <%}%>
-                                                    </select>
-                                                    <button class="btn input-mini btn-danger" type="submit">pin it</button>
+                                            <div class="container-fluid">
+                                                <div class="row-fluid">
+                                                    <div class="span1 pull-left">
+                                                        <a class="btn" href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
+                                                    </div>
+                                                    <div class="span8 offset1">
+                                                        <h4>
+                                                        <%=(flyers[i].flyer&&flyers[i].flyer.description)
+                                                                ? flyers[i].flyer.description
+                                                                : "untitled"%>
+                                                        </h4>
+                                                    </div>
                                                 </div>
-                                            </form>
+                                                <div class="row-fluid">
+                                                    <form action="/flyer/putup" method="post" class="form-inline">
+                                                        <div class="controls">
+
+                                                            <input type="hidden" name="flyerid" value="<%=flyers[i]._id%>">
+                                                            <select name="boardid">
+                                                                <%for(var j=0;j<pBoards.length;j++){%>
+                                                                <option value="<%=pBoards[j]._id%>"> <%=pBoards[j].name%> </option>
+                                                                <%}%>
+                                                            </select>
+                                                            <button class="btn input-mini btn-danger" type="submit">pin it</button>
+                                                        </div>
+                                                    </form>
+                                                    <div id="userFlyerPreview<%=flyers[i]._id%>"></div>
+                                                </div>
+                                            </div>
                                         </a>
-                                        <div id="userFlyerPreview<%=flyers[i]._id%>"></div>
                                     </div>
                                 </li>
                                 <%}%>
