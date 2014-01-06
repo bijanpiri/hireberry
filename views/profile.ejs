@@ -1,4 +1,6 @@
 <% layout('layout') -%>
+<script src="flyer.js"></script>
+
 <script>
     var boardsIsHidden = true;
     var flyersIsHidden = true;
@@ -52,6 +54,9 @@
 
             var flyerid = $(this).attr('flyer-id');
             var thumbnail = $(this).find('.thumbnail');
+
+            flyer = new Flyer();
+            flyer.loadLastFlyer(flyerid,'userFlyerPreview'+flyerid)
 
             $.get('/flyer/'+flyerid+'/boards')
                     .done(function(data){
@@ -185,6 +190,7 @@
                                                 </div>
                                             </form>
                                         </a>
+                                        <div id="userFlyerPreview<%=flyers[i]._id%>"></div>
                                     </div>
                                 </li>
                                 <%}%>
