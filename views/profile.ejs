@@ -179,7 +179,7 @@
                                             </h3>
                                             <form action="/flyer/putup" method="post" class="form-inline">
                                                 <div class="controls">
-                                                    <a href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
+                                                    <a class="btn" href="/flyer/remove/<%=flyers[i]._id%>">&times</a>
                                                     <input type="hidden" name="flyerid" value="<%=flyers[i]._id%>">
                                                     <select name="boardid">
                                                         <%for(var j=0;j<pBoards.length;j++){%>
