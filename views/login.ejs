@@ -111,74 +111,90 @@
 <div class="container">
     <div class="row ">
         <div class="span12">
-            <form id="form" class="form-horizontal" method="post" action="/login" onsubmit="return showResult();" >
 
 
-                <!--<div class="loading hide" style="text-align: center">
-                    <span class="icon"></span>
-                    Loading...
-                </div>-->
+
+            <!--<div class="loading hide" style="text-align: center">
+                <span class="icon"></span>
+                Loading...
+            </div>-->
+            <div class="row" style="min-height: 150px;">
                 <div class="alert alert-info hide">
                     <button class="close" data-dismiss="alert">
                         &times;
                     </button>
                     <span class="msg"></span>
                 </div>
-                <fieldset>
-                    <div id="loginid" class="control-group">
-                        <div class="control-label"> Email:</div>
-                        <div class="controls ">
-                            <div class="input-prepend">
-                                <span class="add-on"><i class="icon-envelope"></i></span>
-                                <input type="text" id="email"
-                                       onblur="isEmailAddress();"
-                                       name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+            </div>
+
+
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="span4 offset2">
+                            <form id="form" class="form-inline" method="post" action="/login" onsubmit="return showResult();" >
+                                <fieldset>
+                                    <div id="loginid" class="control-group">
+                                        <div class="control-label"> Email:</div>
+                                        <div class="controls ">
+                                            <div class="input-prepend">
+                                                <span class="add-on"><i class="icon-envelope"></i></span>
+                                                <input type="text" id="email"
+                                                       onblur="isEmailAddress();"
+                                                       name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="control-label"> Password:</div>
+                                        <div class="controls ">
+                                            <div class="input-prepend">
+                                                <span class="add-on">#</span>
+                                                <input type="password"
+                                                       name=<%=everyauth.password.passwordFormFieldName%>
+                                                       placeholder='Enter password'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <button type="submit" class="btn btn-primary" >Sign in</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="controls">Don't have an acoount?
+                                            <a href="/register">Create One</a>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="span1">
+                            <h3 style="text-align: center;">OR</h3>
+                        </div>
+                        <div class="span4 offset1">
+                            <div class="control-group">
+                                <div>
+                                    <div id="fb-root"></div>
+                                    <!--Below we include the Login Button social plugin. This button uses the JavaScript SDK to
+                                        present a graphical Login button that triggers the FB.login() function when clicked. -->
+                                    <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+                                </div>
+                                <div class="controls">
+                                    <a href="/auth/twitter">
+                                        <img src="/images/sign-in-with-twitter-gray.png">
+                                    </a>
+                                </div>
+                                <div class="controls">
+                                    <a href="/auth/google">
+                                        <img src="/images/White-signin_Long_base_44dp.png" width="200px"/>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <div class="control-label"> Password:</div>
-                        <div class="controls ">
-                            <div class="input-prepend">
-                                <span class="add-on">#</span>
-                                <input type="password"
-                                       name=<%=everyauth.password.passwordFormFieldName%>
-                                       placeholder='Enter password'>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" class="btn btn-primary input-large" >Sign in</button>
-                        </div>
-                    </div>
-
-                    <h2>OR</h2>
-
-                    <div class="control-group">
-                        <div>
-                            <div id="fb-root"></div>
-                            <!--Below we include the Login Button social plugin. This button uses the JavaScript SDK to
-                                present a graphical Login button that triggers the FB.login() function when clicked. -->
-                            <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
-                        </div>
-                        <div class="controls">
-                            <button type="button" onclick="location.href='/register';"
-                                    class="btn btn-warning input-large" >Sign Up</button>
-                        </div>
-                        <div class="controls">
-                            <a href="/auth/twitter">
-                                <img src="/images/sign-in-with-twitter-gray.png">
-                            </a>
-                        </div>
-                        <div class="controls">
-                            <a href="/auth/google">
-                                <img src="/images/White-signin_Long_base_44dp.png" width="200px"/>
-                            </a>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
