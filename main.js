@@ -456,7 +456,6 @@ app.get('/profile', function(req,res) {
         });
     }
 
-
     var FindPublicBoard = function(userBoards,userFlyers,followingBoards,ticketedFlyers) {
         BBoards.find({privacy:'public'},function(err,pBoards){
 
@@ -985,8 +984,17 @@ app.get('/flyer/:id/boards',function(req,res) {
     var flyerid = req.params.id;
 
     // Find Flyers ID on this Board
-    BFlyersBoards.find({flyer:flyerid}, function(err,boards){
-         res.send(200, {boards:boards} );
+    BFlyersBoards.find({flyer:flyerid}, function(err,flyerBoards){
+
+        var boardIDList = [];
+        flyerBoards.forEach(function(board){
+            boardIDList.push(board.board)
+        });
+
+        BBoards.find({_id:{$in:boardIDList}}, function(err,boards){
+            // ToDo: Error Handling
+            res.send(200, {boards:boards} );
+        })
     });
 });
 
