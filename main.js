@@ -746,13 +746,25 @@ app.post('/flyer/new', function(req,res){
 });
 
 app.post('/flyer/putup', function(req,res){
-    var flyerid=req.body.flyerid;
-    var boardid=req.body.boardid;
-    var BFB=BFlyersBoards({flyer:flyerid,board:boardid}).save(
-        function(err){
-            res.redirect('/board/'+boardid);
-        }
-    )
+    var flyerid = req.body.flyerid;
+    var boardid = req.body.boardid;
+
+    BFlyersBoards.count({flyer:flyerid,board:boardid}, function(err, count) {
+        if( err )
+            return res.send(401,{error:'DB Error'});
+        if( count > 0 )
+            return res.send(201, {error:'This Flyer is put up on this board already.'});
+
+        BFlyersBoards({flyer:flyerid,board:boardid}).save(
+            function(err){
+                if(err)
+                    return res.send(401,{error:'DB Error'});
+
+                return res.send(200, {error:'The flyer is put up successfully.'});
+            }
+        )
+    })
+
 });
 
 app.get('/flyer/remove/:id', function(req,res){
