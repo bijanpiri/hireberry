@@ -140,58 +140,67 @@
         return false;
     }
 </script>
+
+<style>
+    .form-horizontal .controls {
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+</style>
+
 <div class="container">
-    <div class="row ">
-        <div class="span6">
-            <form class="form-horizontal" action="/register" method="post" onsubmit="return registerstate();">
-
-                <div id="loginid" class="control-group">
-                    <div class="control-label"> Email:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+    <div class="row"></div>
+    <div class="row">
+        <div class="span4 offset8" style="background-color: #e8e2e3; border: 1px solid #000000">
+            <div style="text-align: center; background-color: darkgray; line-height: 80px">
+                <p style="font-size: 25px;">
+                Register now for free :)
+                </p>
+            </div>
+            <div>
+                <form class="form-horizontal" action="/register"  method="post" onsubmit="return registerstate();">
+                    <div id="loginid" class="control-group">
+                        <div class="controls ">
+                            <div class="input-prepend input-append">
+                                <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Email address">
+                            </div>
                         </div>
-                        <label class="help-inline">example@mail.com</label>
                     </div>
-                </div>
-
-                <div id="emval" class="control-group">
-                    <div class="control-label">  Re-enter Email:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="text" id="remail" onblur="isEqual();" placeholder="Repeat Email address">
+                    <div id="emval" class="control-group">
+                        <div class="controls ">
+                            <div class="input-prepend input-append">
+                                <input type="text" id="remail" onblur="isEqual();" placeholder="Repeat Email address">
+                            </div>
                         </div>
-                        <label class="help-inline">Enter your address again</label>
                     </div>
-                </div>
-
-                <div id="checkNotEmpty" class="control-group">
-                    <div class="control-label"> Enter New Password:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Enter password">
+                    <div id="checkNotEmpty" class="control-group">
+                        <div class="controls ">
+                            <div class="input-prepend input-append">
+                                <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Enter password">
+                            </div>
+                            <div id="prog_bar"></div>
                         </div>
-                        <div id="prog_bar"></div>
-                        <label class="help-inline">Password must contains at least 6 characters</label>
                     </div>
-                </div>
-                <div id="chkpasseq" class="control-group">
-                    <div class="control-label"> Enter Password again:</div>
-                    <div class="controls ">
-                        <div class="input-prepend input-append">
-                            <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Enter password">
+                    <div id="chkpasseq" class="control-group">
+                        <div class="controls ">
+                            <div class="input-prepend input-append">
+                                <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Enter Password Agin">
+                            </div>
                         </div>
-                        <label class="help-inline">Passwords must match</label>
                     </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <input type="submit" class="btn input-medium btn-primary" value="Register">
-
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="submit" class="btn input-medium btn-primary btn-block" value="Register">
+                        </div>
                     </div>
-                </div>
-            </form>
-
+                </form>
+            </div>
+            <div>
+                <hr style="background-color: #000000; height: 2px">
+            </div>
+            <div style="min-height: 150px;padding: 10px;">
+                <b>Or Use Your Other Accounts:</b>
+            </div>
         </div>
     </div>
 </div>
