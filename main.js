@@ -778,6 +778,19 @@ app.post('/flyer/putup', function(req,res){
 
 });
 
+app.post('/flyer/putdown', function(req,res){
+    var flyerid = req.body.flyerid;
+    var boardid = req.body.boardid;
+
+    BFlyersBoards.remove({flyer:flyerid,board:boardid}, function(err){
+            if(err)
+                return res.send(401,{error:'DB Error'});
+
+            return res.send(200, {error:'The flyer is put up successfully.'});
+    });
+
+});
+
 app.get('/flyer/remove/:id', function(req,res){
     var flyerid = req.params.id;
 
