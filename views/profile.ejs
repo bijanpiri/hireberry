@@ -2,9 +2,6 @@
 <script src="flyer.js"></script>
 
 <script>
-    var boardsIsHidden = true;
-    var flyersIsHidden = true;
-
     function showMessage(text) {
         $('.alert').find('.msg').text(text);
         $('.alert').show();
@@ -16,25 +13,6 @@
     }
 
     $(function(){
-        $('#saveButton').click(function(){
-            var datastring= $("#passwordChangingForm").serialize();
-            $.ajax({
-                url: '/profile',
-                type: 'post',
-                dataType: 'json',
-                data: datastring,
-                error: function(data){
-                    if(data.status != 200)
-                        showMessage('Invalid Email Or Password.');
-                    else
-                        showMessage('Saved Successfully');
-                },
-                success: function(data){
-                    showMessage('Saved Successfully');
-                }
-            });
-
-        });
 
         var LoadBoardsInformation = function() {
 
@@ -61,14 +39,19 @@
                 var flyerid = $(this).attr('flyer-id');
                 var boardInformation = $(this).find('.thumbnail .flyerInformation');
                 boardInformation.html('');
-                
+
                 flyer = new Flyer();
                 flyer.loadLastFlyer(flyerid,'userFlyerPreview'+flyerid)
 
                 $.get('/flyer/'+flyerid+'/boards')
                         .done(function(data){
                             data.boards.forEach(function(board){
-                                boardInformation.prepend('<div>' + board.name + '</div>');
+                                boardInformation.prepend([
+                                    '<div>',
+                                    board.name,
+                                    '<a class="btn btn-danger" href="">',
+                                    'Put Down',
+                                    '</a></div>'].join(''));
                             });
                             boardInformation.prepend('Number Of Boards: ' + data.boards.length);
                         })
@@ -105,54 +88,11 @@
     </div>
 
     <div class="row">
-        <form class="form-horizontal" action="/profile" method="post" id="passwordChangingForm">
-            <div class="control-group">
-                <div class="control-label"> Email:</div>
-                <div class="controls ">
-                    <%=everyauth.user.email%>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <div class="control-label"> Enter Old Password:</div>
-                <div class="controls ">
-                    <div class="input-prepend input-append">
-                        <input type="password"  name="oldpassword" placeholder="Enter password">
-                    </div>
-                    <label class="help-inline">Passwords must match</label>
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="control-label"> Enter New Password:</div>
-                <div class="controls ">
-                    <div class="input-prepend input-append">
-                        <input type="password"  name="newpassword" placeholder="Enter password">
-                    </div>
-                    <label class="help-inline">Password must contains at least 6 characters</label>
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="control-label"> Enter Password again:</div>
-                <div class="controls ">
-                    <div class="input-prepend input-append">
-                        <input type="password" name="confirmnewpassword" placeholder="Enter password">
-                    </div>
-                    <label class="help-inline">Passwords must match</label>
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <input type="button" id="saveButton" class="btn input-medium btn-primary" value="Save Changes">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="row">
         <div>
             <div style="background-color: #ffffff; padding: 5px">
             </div>
             <div class="tabbable"> <!-- Only required for left/right tabs -->
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs" id="settingTabs">
                     <li class="active">
                         <a href="#tab1" data-toggle="tab">
                             Boards<span class="badge"><%= boards.length %></span>

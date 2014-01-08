@@ -1,0 +1,116 @@
+<% layout('layout') -%>
+<script>
+    function showMessage(text) {
+        $('.alert').find('.msg').text(text);
+        $('.alert').show();
+        setTimeout(function(){hideMessage()},7000);
+    }
+
+    function hideMessage() {
+        $('.alert').hide();
+    }
+
+    $(function(){
+        $('#saveButton').click(function(){
+            var datastring= $("#passwordChangingForm").serialize();
+            $.ajax({
+                url: '/profile',
+                type: 'post',
+                dataType: 'json',
+                data: datastring,
+                error: function(data){
+                    if(data.status != 200)
+                        showMessage('Invalid Email Or Password.');
+                    else
+                        showMessage('Saved Successfully');
+                },
+                success: function(data){
+                    showMessage('Saved Successfully');
+                }
+            });
+
+        });
+
+        $('#settingTabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+    });
+</script>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li><a href="#">Home</a> <span class="divider">/</span></li>
+                <li class="active">Setting</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="alert alert-info hide">
+                <span class="msg"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span2 tabbable">
+            <ul class="nav tabs-left" id="settingTabs" data-tabs="settingTabs">
+                <li class="active"><a href="#account" data-toggle="tab">Account</a></li>
+                <li><a href="#security" data-toggle="tab">Security</a></li>
+                <li><a href="#channels" data-toggle="tab">Channels</a></li>
+            </ul>
+        </div>
+        <div class="span10 tabbable">
+            <div class="tab-content">
+                <div class="tab-pane active" id="account">
+                    <h3>Account</h3>
+                    <form class="form-horizontal" action="/profile" method="post" id="passwordChangingForm">
+                        <div class="control-group">
+                            <div class="control-label"> Email:</div>
+                            <div class="controls ">
+                                <%=everyauth.user.email%>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label"> Enter Old Password:</div>
+                            <div class="controls ">
+                                <div class="input-prepend input-append">
+                                    <input type="password"  name="oldpassword" placeholder="Enter password">
+                                </div>
+                                <label class="help-inline">Passwords must match</label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"> Enter New Password:</div>
+                            <div class="controls ">
+                                <div class="input-prepend input-append">
+                                    <input type="password"  name="newpassword" placeholder="Enter password">
+                                </div>
+                                <label class="help-inline">Password must contains at least 6 characters</label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"> Enter Password again:</div>
+                            <div class="controls ">
+                                <div class="input-prepend input-append">
+                                    <input type="password" name="confirmnewpassword" placeholder="Enter password">
+                                </div>
+                                <label class="help-inline">Passwords must match</label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <input type="button" id="saveButton" class="btn input-medium btn-primary" value="Save Changes">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="security">789</div>
+                <div class="tab-pane" id="channels">000</div>
+            </div>
+        </div>
+    </div>
+</div>

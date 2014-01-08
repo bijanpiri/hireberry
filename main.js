@@ -360,6 +360,14 @@ app.get('/openapp', function(req,res) {
         res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">Faild - open</a>');
 });
 
+app.get('/setting', function(req,res){
+
+    if( !checkUser(req,res))
+        return;
+
+   res.render('setting.ejs',{title:'Setting'});
+});
+
 app.get('/profile', function(req,res) {
 
     var PrepareAndRender = function() {
@@ -498,9 +506,12 @@ app.post('/profile', function(req,res) {
 
         BUsers.update( { email: req.user.email, password: req.body.oldpassword },
             { $set: { password: newPassword }},
-            function (err) {
+            function (err,nAffected) {
                 if (err)
                     return handleError(err);
+
+                if(nAffected==0)
+                    res.send(401);
                 else
                     res.send(200);
             });
