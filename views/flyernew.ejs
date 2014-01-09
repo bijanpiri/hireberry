@@ -23,7 +23,7 @@
         }).disableSelection();
 
         $(".newitem").click(function(e){
-            var itemType = $(e.target).attr('type');
+            var itemType = $(this).attr('type');
             var itemID = portletCounter++;
             var portletType = flyer.portletTypeString2Type(itemType);
 
@@ -64,9 +64,13 @@
     });
 </script>
 
+<style>
+    .newitem {
+        margin: 5px;
+    }
+</style>
 
-
-<div class="container" style="width: 95%;">
+<div class="container-fluid" style="width: 95%;">
     <div class="row-fluid"><h4>Creating New Flyer</h4></div>
     <div class="row-fluid">
         <div class="span3"  style="background-color: #e8eec2;">
@@ -81,9 +85,8 @@
                             <input type="text" name="flyertext" placeholder="Enter Flyer Description"/>
                             <span class="help-block">Select Template</span>
                             <select name="templates" class="form-control">
-                                <option value='template01'>Template 1</option>
-                                <option value='template02'>Template 2</option>
-                                <option value='template03'>Template 3</option>
+                                <option value='template01'>Landscape</option>
+                                <option value='template02'>Portrait</option>
                             </select>
                         </div>
                     </div>
@@ -100,7 +103,6 @@
                             </select>
                         </div>
                     </div>
-
                     <button type="button" class="btn btn-primary" id="buttonCreate">Create</button>
                     <button type="button" class="btn btn-success" id="buttonSave">Save</button>
                     <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
@@ -108,9 +110,7 @@
             </form>
         </div>
         <div class="span7">
-
             <div class="column" id="portletStack">
-
                 <div class="portlet" id="portletCreator">
                     <div class="portlet-header">New Item</div>
                     <div class="portlet-content" style="height: 100%;">
@@ -127,22 +127,40 @@
             </div>
 
         </div>
-        <div class="span1"  style="background-color: #e8eec2;">
-            <div class="row-fluid text-center" style="background-color: rgba(196, 190, 191, 0.97)"><h4>ToolBox</h4></div>
-            <div class="row-fluid text-center">
-                <div class="span6 newitem" type="picture"><i class="icon-picture"></i></div>
-                <div class="span6 newitem" type="text"><i class="icon-font"></i></div>
-            </div>
-            <div class="row-fluid text-center">
-                <div class="span6 newitem" type="video"><i class="icon-facetime-video"></i></div>
-                <div class="span6 newitem" type="button"><i class="icon-globe"></i></div>
-            </div>
-            <div class="row-fluid text-center">
-                <div class="span6 newitem" type="tag"><i class="icon-tag"></i></div>
-                <div class="span6 newitem" type="map"><i class="icon-map-marker"></i></div>
+        <div class="span1 offset1"  style="background-color: #e8eec2;box-shadow: 2px 2px 2px #555555;">
+
+            <div class="container-fluid" style="padding: 0px;">
+                <div class="row-fluid text-center" style="background-color: rgba(196, 190, 191, 0.97)">
+                    <div class="span12">
+                        <h4>ToolBox</h4>
+                    </div>
+                </div>
+                <div class="row-fluid text-center">
+                    <div class="span12 newitem" type="picture"><i class="icon-picture"></i></div>
+                </div>
+                <div class="row-fluid text-center">
+                    <div class="span12 newitem" type="text"><i class="icon-font"></i></div>
+                </div>
+                <div class="row-fluid text-center">
+                    <div class="span12 newitem" type="video"><i class="icon-facetime-video"></i></div>
+                </div>
+                <div class="row-fluid text-center">
+                    <div class="span12 newitem" type="button"><i class="icon-globe"></i></div>
+                </div>
+                <div class="row-fluid text-center">
+
+                    <div class="span12 newitem" type="tag"><i class="icon-tag"></i></div>
+                </div>
+                <div class="row-fluid text-center">
+                    <div class="span12 newitem" type="map"><i class="icon-map-marker"></i></div>
+                </div>
+                <div class="row-fluid text-center">
+
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 </div>

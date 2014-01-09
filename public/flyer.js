@@ -95,7 +95,7 @@ function Flyer(isInEditMode) {
             if(editMode)
                 portlet.find('.portlet-content').append('<input type="text">')
 
-            portlet.find('.portlet-content').append('<embed width="420" height="345" type="application/x-shockwave-flash"></embed>')
+            portlet.find('.portlet-content').append('<iframe width="560" height="315" frameborder="0" allowfullscreen></iframe>')
         })
         .onSerialize(function(portlet) {
             return portlet.find('input[type="text"]').val()
@@ -243,7 +243,7 @@ function Flyer(isInEditMode) {
             .done(function(data){
                 console.log(data)
 
-                $('input[name=flyertext').val(data.description);
+                $('input[name=flyertext]').val(data.description);
 
                 for( var i=1; i<data.count; i++ ){
                     if( data[i] )
