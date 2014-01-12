@@ -68,6 +68,7 @@
 <script src="/gridster/jquery.gridster.min.js"></script>
 <script>
     var isDragging = false;
+    var dragingSpliter;
 
     $(function(){ //DOM Ready
 
@@ -91,26 +92,27 @@
 
             $(this).attr('lastX', e.pageX);
             isDragging = true;
+            dragingSpliter = $(this);
 
             $(document).mousemove(function(e){
 
                 if( isDragging ){
-                    var col1Width = parseInt( $('.fcolumn').first().css('width') );
-                    var col2Width = parseInt( $('.fcolumn').last().css('width') );
-                    var spliterWidth = parseInt( $('.fspliter').last().css('width') );
-                    var spliterX = $('.fspliter').attr('lastX');
+                    var col1Width = parseInt( dragingSpliter.prev().css('width') );
+                    var col2Width = parseInt( dragingSpliter.next().css('width') );
+                    var spliterWidth = parseInt( dragingSpliter.css('width') );
+                    var spliterX = dragingSpliter.attr('lastX');
 
                     var offset = e.pageX - spliterX;
                     var newCol1Width = col1Width + offset;
                     var newCol2Width = col2Width - offset
-                    var totalWidth = newCol1Width + newCol2Width + 4*spliterWidth;
+                    var totalWidth = parseInt( $('.fsheet').parent().css('width') );
                     var col1WidthPercent = (100*newCol1Width/totalWidth);
                     var col2WidthPercent = (100*newCol2Width/totalWidth);
 
-                    $('.fcolumn').first().css('width',col1WidthPercent + '%');
-                    $('.fcolumn').last().css('width',col2WidthPercent + '%');
+                    dragingSpliter.prev().css('width',col1WidthPercent + '%');
+                    dragingSpliter.next().css('width',col2WidthPercent + '%');
 
-                    $('.fspliter').attr('lastX', e.pageX);
+                    dragingSpliter.attr('lastX', e.pageX);
 
                     console.log(newCol1Width + '/' + newCol2Width + '-' + offset);
                 }
@@ -134,7 +136,7 @@
 
     .fcolumn {
         display: inline-block;
-        width: 48%;
+        width: 30%;
         font-size: 16px;
         height: 200px;
     }
@@ -182,6 +184,24 @@
     </div>
     <div class="row-fluid">
         <div class="span12 fsheet">
+            <div class="fcolumn">
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            One
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fcolumn fspliter">
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            |||
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="fcolumn">
                 <div class="container-fluid">
                     <div class="row-fluid">
