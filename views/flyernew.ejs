@@ -125,6 +125,14 @@
                     cellsState[cell.row][cell.column].content.removeClass('highlighted');
                 })
             });
+
+            $('.fsheet .fcolumn .frow .fcontent').dblclick(function(e){
+                e.preventDefault();
+                var r = $(this).attr('rown');
+                var c = $(this).attr('coln');
+                var gIdx = findGroupOfCell(r,c);
+                console.log(gIdx);
+            });
         }
 
         var updateSheet = function() {
@@ -208,8 +216,12 @@
 
                 $('.fsheet .fcontent').removeClass('highlighted');
 
-                mergeCells(selectedRegion.from,selectedRegion.to);
-                updateSheet();
+                if( selectedRegion.from.row && selectedRegion.to.row){
+                    mergeCells(selectedRegion.from,selectedRegion.to);
+                    selectedRegion = {from:{},to:{}};
+
+                    updateSheet();
+                }
             }
 
             isDraggingSpliter = false;
