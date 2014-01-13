@@ -67,237 +67,286 @@
 <link rel="stylesheet" href="/gridster/jquery.gridster.min.css">
 <script src="/gridster/jquery.gridster.min.js"></script>
 <script>
-    var isDraggingSpliter = false;
-    var isDraggingSelection = false;
-    var dragingSpliter;
-    var selectedRegion = {from:{},to:{}};
-    var cellsState = [];
-    var cellGroups = [];
+var isDraggingSpliter = false;
+var isDraggingSelection = false;
+var dragingSpliter;
+var selectedRegion = {from:{},to:{}};
+var cellsState = [];
+var cellGroups = [];
 
-    $(function(){ //DOM Ready
+$(function(){ //DOM Ready
 
-        var initCellStates = function() {
+    var initCellStates = function() {
 
-            for(var r=0; r<4; r++) {
-                cellsState[r] = [];
-                for(var c=0; c<3; c++){
-                    var content = $('.fsheet')
-                            .find('.fcolumn').eq(c)
-                            .find('.frow').eq(r)
-                            .find('.fcontent').first();
+        for(var r=0; r<4; r++) {
+            cellsState[r] = [];
+            for(var c=0; c<3; c++){
+                var content = $('.fsheet')
+                        .find('.fcolumn').eq(c)
+                        .find('.frow').eq(r)
+                        .find('.fcontent').first();
 
-                    content.attr('rown',r);
-                    content.attr('coln',c);
+                content.attr('rown',r);
+                content.attr('coln',c);
 
-                    cellsState[r][c] = {
-                        r:1,
-                        l:1,
-                        t:1,
-                        b:1,
-                        content: content
-                    };
+                cellsState[r][c] = {
+                    r:1,
+                    l:1,
+                    t:1,
+                    b:1,
+                    content: content
+                };
 
-                    // At first each cell is a group
-                    cellGroups.push( [ {row:r,column:c} ] );
-                }
+                // At first each cell is a group
+                cellGroups.push( [ {row:r,column:c} ] );
             }
+        }
 
-            // Select the merged cells all together
-            $('.fsheet .fcolumn .frow .fcontent').mouseenter(function(e){
+        // Select the merged cells all together
+        $('.fsheet .fcolumn .frow .fcontent').mouseenter(function(e){
 
-                var r = $(this).attr('rown');
-                var c = $(this).attr('coln');
-                var groupIndex = findGroupOfCell(r,c);
+            var r = $(this).attr('rown');
+            var c = $(this).attr('coln');
+            var groupIndex = findGroupOfCell(r,c);
 
-                cellGroups[groupIndex].forEach(function(cell){
-                    cellsState[cell.row][cell.column].content.addClass('highlighted');
-                })
+            cellGroups[groupIndex].forEach(function(cell){
+                cellsState[cell.row][cell.column].content.addClass('highlighted');
+            })
 
-            });
+        });
 
-            // Unselect the merged cells all together
-            $('.fsheet .fcolumn .frow .fcontent').mouseleave(function(e){
-                var r = $(this).attr('rown');
-                var c = $(this).attr('coln');
-                var groupIndex = findGroupOfCell(r,c);
+        // Unselect the merged cells all together
+        $('.fsheet .fcolumn .frow .fcontent').mouseleave(function(e){
+            var r = $(this).attr('rown');
+            var c = $(this).attr('coln');
+            var groupIndex = findGroupOfCell(r,c);
 
-                cellGroups[groupIndex].forEach(function(cell){
-                    cellsState[cell.row][cell.column].content.removeClass('highlighted');
-                })
-            });
+            cellGroups[groupIndex].forEach(function(cell){
+                cellsState[cell.row][cell.column].content.removeClass('highlighted');
+            })
+        });
 
-            $('.fsheet .fcolumn .frow .fcontent').dblclick(function(e){
+        $('.fsheet .fcolumn .frow .fcontent').dblclick(function(e){
 
-                // Open OnFly ToolBox
-                var r = $(this).attr('rown');
-                var c = $(this).attr('coln');
+            // Open OnFly ToolBox
+            var r = $(this).attr('rown');
+            var c = $(this).attr('coln');
+            var gIdx = findGroupOfCell(r,c);
+
+            var w = parseInt( $('#onFlyToolbox').css('width') );
+            var h = parseInt( $('#onFlyToolbox').css('height') );
+
+            $('#onFlyToolbox')
+                    .css('top',e.pageY - h/2)
+                    .css('left',e.pageX - w/2)
+                    .removeClass('hidden')
+                    .attr('gidx',gIdx)
+                    .mouseleave(function(e){
+                        $(this).addClass('hidden');
+                    });
+
+            console.log(gIdx);
+        });
+    }
+
+    var updateSheet = function() {
+        var sheetWidth = parseInt( $('.fsheet').css('width') );
+        $('.fsheet').css('height', sheetWidth*0.75);
+
+        // Remove border between the cells in same groups
+        for(var c=0; c<3; c++){
+            for(var r=0; r<4; r++){
+                var cell = cellsState[r][c];
                 var gIdx = findGroupOfCell(r,c);
 
-                var w = parseInt( $('#onFlyToolbox').css('width') );
-                var h = parseInt( $('#onFlyToolbox').css('height') );
+                // Remove Inside Borders
+                cell.r = (gIdx!=findGroupOfCell(r,c+1))? 1 : 0 ;
+                cell.l = (gIdx!=findGroupOfCell(r,c-1))? 1 : 0 ;
+                cell.t = (gIdx!=findGroupOfCell(r-1,c))? 1 : 0 ;
+                cell.b = (gIdx!=findGroupOfCell(r+1,c))? 1 : 0 ;
 
-                $('#onFlyToolbox')
-                        .css('top',e.pageY - h/2)
-                        .css('left',e.pageX - w/2)
-                        .removeClass('hidden')
-                        .mouseleave(function(e){
-                            $(this).addClass('hidden');
-                        });
+                var borders = {
+                    'border-left-style':(cell.l==1?'dotted':'none'),
+                    'border-right-style':(cell.r==1?'dotted':'none'),
+                    'border-top-style':(cell.t==1?'dotted':'none'),
+                    'border-bottom-style':(cell.b==1?'dotted':'none')
+                }
 
-                console.log(gIdx);
-            });
+                cell.content.css(borders);
+            }
         }
+    }
 
-        var updateSheet = function() {
-            var sheetWidth = parseInt( $('.fsheet').css('width') );
-            $('.fsheet').css('height', sheetWidth*0.75);
+    var findGroupOfCell = function(row, column){
 
-            // Remove border between the cells in same groups
-            for(var c=0; c<3; c++){
-                for(var r=0; r<4; r++){
-                    var cell = cellsState[r][c];
-                    var gIdx = findGroupOfCell(r,c);
+        var result = -1;
 
-                    // Remove Inside Borders
-                    cell.r = (gIdx!=findGroupOfCell(r,c+1))? 1 : 0 ;
-                    cell.l = (gIdx!=findGroupOfCell(r,c-1))? 1 : 0 ;
-                    cell.t = (gIdx!=findGroupOfCell(r-1,c))? 1 : 0 ;
-                    cell.b = (gIdx!=findGroupOfCell(r+1,c))? 1 : 0 ;
+        cellGroups.forEach(function(group){
+            group.forEach(function(cell) {
+                if( cell.row == row && cell.column == column )
+                    result = cellGroups.indexOf(group);
+            });
+        });
 
-                    var borders = {
-                        'border-left-style':(cell.l==1?'dotted':'none'),
-                        'border-right-style':(cell.r==1?'dotted':'none'),
-                        'border-top-style':(cell.t==1?'dotted':'none'),
-                        'border-bottom-style':(cell.b==1?'dotted':'none')
-                    }
+        return result;
+    }
 
-                    cell.content.css(borders);
+    var mergeCells = function(from,to){
+
+        var sc = Math.min(from.column, to.column);
+        var sr = Math.min(from.row, to.row);
+        var ec = Math.max(from.column, to.column);
+        var er = Math.max(from.row, to.row);
+        var mergedGroup = [];
+
+        // Put the merged cells in same group
+
+        for(var c=sc; c<=ec; c++){
+            for(var r=sr; r<=er; r++){
+
+                var foundGroupIndex = findGroupOfCell(r,c);
+                if( foundGroupIndex != -1 ){
+                    Array.prototype.push.apply( mergedGroup, cellGroups[foundGroupIndex] );
+                    cellGroups.splice( foundGroupIndex, 1 );
                 }
             }
         }
 
-        var findGroupOfCell = function(row, column){
-
-            var result = -1;
-
-            cellGroups.forEach(function(group){
-                group.forEach(function(cell) {
-                    if( cell.row == row && cell.column == column )
-                        result = cellGroups.indexOf(group);
-                });
-            });
-
-            return result;
-        }
-
-        var mergeCells = function(from,to){
-
-            var sc = Math.min(from.column, to.column);
-            var sr = Math.min(from.row, to.row);
-            var ec = Math.max(from.column, to.column);
-            var er = Math.max(from.row, to.row);
-            var mergedGroup = [];
-
-            // Put the merged cells in same group
-
-            for(var c=sc; c<=ec; c++){
-                for(var r=sr; r<=er; r++){
-
-                    var foundGroupIndex = findGroupOfCell(r,c);
-                    if( foundGroupIndex != -1 ){
-                        Array.prototype.push.apply( mergedGroup, cellGroups[foundGroupIndex] );
-                        cellGroups.splice( foundGroupIndex, 1 );
-                    }
-                }
-            }
-
-            cellGroups.push(mergedGroup);
-        }
+        cellGroups.push(mergedGroup);
+    }
 
 
-        initCellStates();
+    initCellStates();
+    updateSheet();
+
+    $(window).resize( function(e) {
         updateSheet();
+    });
 
-        $(window).resize( function(e) {
-            updateSheet();
-        });
+    $(document).mouseup( function(e){
+        $(this).unbind('mousemove');
 
-        $(document).mouseup( function(e){
-            $(this).unbind('mousemove');
+        if(isDraggingSelection){
 
-            if(isDraggingSelection){
+            $('.fsheet .fcontent').removeClass('highlighted');
 
-                $('.fsheet .fcontent').removeClass('highlighted');
+            if( selectedRegion.from.row && selectedRegion.to.row){
+                mergeCells(selectedRegion.from,selectedRegion.to);
+                selectedRegion = {from:{},to:{}};
 
-                if( selectedRegion.from.row && selectedRegion.to.row){
-                    mergeCells(selectedRegion.from,selectedRegion.to);
-                    selectedRegion = {from:{},to:{}};
-
-                    updateSheet();
-                }
+                updateSheet();
             }
+        }
 
-            isDraggingSpliter = false;
-            isDraggingSelection = false;
-        });
+        isDraggingSpliter = false;
+        isDraggingSelection = false;
+    });
 
-        $('.fspliter').mousedown(function(e){
-            e.preventDefault();
+    $('.fspliter').mousedown(function(e){
+        e.preventDefault();
 
-            isDraggingSpliter = true;
-            dragingSpliter = $(this);
-            $(this).attr('lastX', e.pageX);
+        isDraggingSpliter = true;
+        dragingSpliter = $(this);
+        $(this).attr('lastX', e.pageX);
 
-            $(document).mousemove(mouseMoveDragingSpliter);
-        });
+        $(document).mousemove(mouseMoveDragingSpliter);
+    });
 
-        $('.fcontent').mousemove(function(e){
-            if( isDraggingSelection ){
-                selectedRegion.to.row = $(this).attr('rown');
-                selectedRegion.to.column = $(this).attr('coln');
+    $('.fcontent').mousemove(function(e){
+        if( isDraggingSelection ){
+            selectedRegion.to.row = $(this).attr('rown');
+            selectedRegion.to.column = $(this).attr('coln');
 
-                // Highlight selected region
-                var sc = Math.min(selectedRegion.from.column, selectedRegion.to.column);
-                var sr = Math.min(selectedRegion.from.row, selectedRegion.to.row);
-                var ec = Math.max(selectedRegion.from.column, selectedRegion.to.column);
-                var er = Math.max(selectedRegion.from.row, selectedRegion.to.row);
+            // Highlight selected region
+            var sc = Math.min(selectedRegion.from.column, selectedRegion.to.column);
+            var sr = Math.min(selectedRegion.from.row, selectedRegion.to.row);
+            var ec = Math.max(selectedRegion.from.column, selectedRegion.to.column);
+            var er = Math.max(selectedRegion.from.row, selectedRegion.to.row);
 
-                for(var c=sc; c<=ec; c++)
-                    for(var r=sr; r<=er; r++)
-                        cellsState[r][c].content.addClass('highlighted');
-            }
-        });
-
-        $('.fcontent').mousedown(function(e){
-            e.preventDefault();
-
-            isDraggingSelection = true;
-
-            selectedRegion.from.row = $(this).attr('rown');
-            selectedRegion.from.column = $(this).attr('coln');
-        });
-
-        var mouseMoveDragingSpliter = function(e){
-
-            if( isDraggingSpliter ){
-                var col1Width = parseInt( dragingSpliter.prev().css('width') );
-                var col2Width = parseInt( dragingSpliter.next().css('width') );
-                var spliterX = dragingSpliter.attr('lastX');
-
-                var offset = e.pageX - spliterX;
-                var newCol1Width = col1Width + offset;
-                var newCol2Width = col2Width - offset
-                var totalWidth = parseInt( $('.fsheet').css('width') );
-                var col1WidthPercent = (100*newCol1Width/totalWidth);
-                var col2WidthPercent = (100*newCol2Width/totalWidth);
-
-                dragingSpliter.prev().css('width',col1WidthPercent + '%');
-                dragingSpliter.next().css('width',col2WidthPercent + '%');
-
-                dragingSpliter.attr('lastX', e.pageX);
-            }
+            for(var c=sc; c<=ec; c++)
+                for(var r=sr; r<=er; r++)
+                    cellsState[r][c].content.addClass('highlighted');
         }
     });
+
+    $('.fcontent').mousedown(function(e){
+        e.preventDefault();
+
+        isDraggingSelection = true;
+
+        selectedRegion.from.row = $(this).attr('rown');
+        selectedRegion.from.column = $(this).attr('coln');
+    });
+
+    var mouseMoveDragingSpliter = function(e){
+
+        if( isDraggingSpliter ){
+            var col1Width = parseInt( dragingSpliter.prev().css('width') );
+            var col2Width = parseInt( dragingSpliter.next().css('width') );
+            var spliterX = dragingSpliter.attr('lastX');
+
+            var offset = e.pageX - spliterX;
+            var newCol1Width = col1Width + offset;
+            var newCol2Width = col2Width - offset
+            var totalWidth = parseInt( $('.fsheet').css('width') );
+            var col1WidthPercent = (100*newCol1Width/totalWidth);
+            var col2WidthPercent = (100*newCol2Width/totalWidth);
+
+            dragingSpliter.prev().css('width',col1WidthPercent + '%');
+            dragingSpliter.next().css('width',col2WidthPercent + '%');
+
+            dragingSpliter.attr('lastX', e.pageX);
+        }
+    }
+
+    $(".newitem").click(function(e){
+        var gIdx = $('#onFlyToolbox').attr('gidx');
+
+        // Find Group Region Borders
+        var minr = cellGroups[gIdx][0].row;
+        var maxr = cellGroups[gIdx][0].row;;
+        var minc = cellGroups[gIdx][0].column;
+        var maxc = cellGroups[gIdx][0].column;
+
+        cellGroups[gIdx].forEach(function(cell){
+            minr = Math.min(cell.row, minr);
+            maxr = Math.max(cell.row, maxr);
+            minc = Math.min(cell.column, minc);
+            maxc = Math.max(cell.column, maxc);
+        });
+
+        var splitterWidth = parseInt( $('.fspliter').css('width') );
+
+        var top = 0;
+        for( var r=0; r<minr; r++)
+            top += parseInt( $('.fsheet .fcontent[rown='+r+'][coln='+minc+']').css('height') );
+
+        var left = 0;
+        for( var c=0; c<minc; c++)
+            left += parseInt( $('.fsheet .fcontent[rown='+minr+'][coln='+c+']').css('width') );
+
+        left += splitterWidth*minc; // Offset for Splitter (2px)
+
+        var height = 0;
+        for( var r=minr; r<=maxr; r++)
+            height += parseInt( $('.fsheet .fcontent[rown='+r+'][coln='+minc+']').css('height') );
+
+        var width = 0;
+        for( var c=minc; c<=maxc; c++)
+            width += parseInt( $('.fsheet .fcontent[rown='+minr+'][coln='+c+']').css('width') );
+
+        width += splitterWidth*maxc; // Offset for Splitter
+
+        $('<div></div>')
+                .css('top',top)
+                .css('left',left)
+                .css('width',width)
+                .css('height',height)
+                .css('position','absolute')
+                .css('background-color','#515151')
+                .appendTo('.fsheet');
+    });
+});
 </script>
 
 <style>
@@ -313,6 +362,7 @@
         font-size: 0; /* for removing space between inline-block elements! */
         /*border: 3px dashed #888;*/
         height: 400px;
+        position: relative;
     }
 
     .fcolumn {
