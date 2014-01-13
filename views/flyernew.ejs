@@ -70,7 +70,9 @@
     var isDraggingSpliter = false;
     var isDraggingSelection = false;
     var dragingSpliter;
+    var selectedRegion = {from:{},to:{}};
     var cellsState = [];
+    var cellGroups = [];
 
     $(function(){ //DOM Ready
 
@@ -79,41 +81,67 @@
             for(var r=0; r<4; r++) {
                 cellsState[r] = [];
                 for(var c=0; c<3; c++){
+                    var content = $('.fsheet')
+                            .find('.fcolumn').eq(c)
+                            .find('.frow').eq(r)
+                            .find('.fcontent').first();
+
+                    content.attr('rown',r);
+                    content.attr('coln',c);
+
                     cellsState[r][c] = {
                         r:1,
                         l:1,
                         t:1,
                         b:1,
-                        content: $('.fsheet')
-                                .find('.fcolumn').eq(c)
-                                .find('.frow').eq(r)
-                                .find('.fcontent').first()
+                        content: content
                     };
+
+                    // At first each cell is a group
+                    cellGroups.push( [ {row:r,column:c} ] );
                 }
             }
+
+            // Select the merged cells all together
+            $('.fsheet .fcolumn .frow .fcontent').mouseenter(function(e){
+
+                var r = $(this).attr('rown');
+                var c = $(this).attr('coln');
+                var groupIndex = findGroupOfCell(r,c);
+
+                cellGroups[groupIndex].forEach(function(cell){
+                    cellsState[cell.row][cell.column].content.addClass('highlighted');
+                })
+
+            });
+
+            // Unselect the merged cells all together
+            $('.fsheet .fcolumn .frow .fcontent').mouseleave(function(e){
+                var r = $(this).attr('rown');
+                var c = $(this).attr('coln');
+                var groupIndex = findGroupOfCell(r,c);
+
+                cellGroups[groupIndex].forEach(function(cell){
+                    cellsState[cell.row][cell.column].content.removeClass('highlighted');
+                })
+            });
         }
 
         var updateSheet = function() {
             var sheetWidth = parseInt( $('.fsheet').css('width') );
             $('.fsheet').css('height', sheetWidth*0.75);
-        }
 
-        var mergeCells = function(from,to){
-            var sc = from.column;
-            var sr = from.row;
-            var ec = to.column;
-            var er = to.row;
-
-            // Remove shared borders
-            for(var c=sc; c<=ec; c++){
-                for(var r=sr; r<=er; r++){
+            // Remove border between the cells in same groups
+            for(var c=0; c<3; c++){
+                for(var r=0; r<4; r++){
                     var cell = cellsState[r][c];
+                    var gIdx = findGroupOfCell(r,c);
 
-                    // Set Borders Visibility
-                    cell.r = ( c==ec ? 1 : 0 );
-                    cell.l = ( c==sc ? 1 : 0 );
-                    cell.t = ( r==sr ? 1 : 0 );
-                    cell.b = ( r==er ? 1 : 0 );
+                    // Remove Inside Borders
+                    cell.r = (gIdx!=findGroupOfCell(r,c+1))? 1 : 0 ;
+                    cell.l = (gIdx!=findGroupOfCell(r,c-1))? 1 : 0 ;
+                    cell.t = (gIdx!=findGroupOfCell(r-1,c))? 1 : 0 ;
+                    cell.b = (gIdx!=findGroupOfCell(r+1,c))? 1 : 0 ;
 
                     var borders = {
                         'border-left-style':(cell.l==1?'dotted':'none'),
@@ -123,29 +151,50 @@
                     }
 
                     cell.content.css(borders);
-                    cell.content.unbind('mouseenter');
-                    cell.content.unbind('mouseleave');
-
-                    // Select the merged cells all together
-                    cell.content.mouseenter(function(e){
-                        for(var c=sc; c<=ec; c++)
-                            for(var r=sr; r<=er; r++)
-                                cellsState[c][r].content.css('background-color', $(this).css('background-color'));
-                    });
-
-                    // Unselect the merged cells all together
-                    cell.content.mouseleave(function(e){
-                        for(var c=sc; c<=ec; c++)
-                            for(var r=sr; r<=er; r++)
-                                cellsState[c][r].content.css('background-color', '');
-                    });
                 }
             }
         }
 
+        var findGroupOfCell = function(row, column){
+
+            var result = -1;
+
+            cellGroups.forEach(function(group){
+                group.forEach(function(cell) {
+                    if( cell.row == row && cell.column == column )
+                        result = cellGroups.indexOf(group);
+                });
+            });
+
+            return result;
+        }
+
+        var mergeCells = function(from,to){
+
+            var sc = Math.min(from.column, to.column);
+            var sr = Math.min(from.row, to.row);
+            var ec = Math.max(from.column, to.column);
+            var er = Math.max(from.row, to.row);
+            var mergedGroup = [];
+
+            // Put the merged cells in same group
+
+            for(var c=sc; c<=ec; c++){
+                for(var r=sr; r<=er; r++){
+
+                    var foundGroupIndex = findGroupOfCell(r,c);
+                    if( foundGroupIndex != -1 ){
+                        Array.prototype.push.apply( mergedGroup, cellGroups[foundGroupIndex] );
+                        cellGroups.splice( foundGroupIndex, 1 );
+                    }
+                }
+            }
+
+            cellGroups.push(mergedGroup);
+        }
+
 
         initCellStates();
-        mergeCells({column:1,row:1},{column:2,row:2});
         updateSheet();
 
         $(window).resize( function(e) {
@@ -154,6 +203,15 @@
 
         $(document).mouseup( function(e){
             $(this).unbind('mousemove');
+
+            if(isDraggingSelection){
+
+                $('.fsheet .fcontent').removeClass('highlighted');
+
+                mergeCells(selectedRegion.from,selectedRegion.to);
+                updateSheet();
+            }
+
             isDraggingSpliter = false;
             isDraggingSelection = false;
         });
@@ -166,6 +224,32 @@
             $(this).attr('lastX', e.pageX);
 
             $(document).mousemove(mouseMoveDragingSpliter);
+        });
+
+        $('.fcontent').mousemove(function(e){
+            if( isDraggingSelection ){
+                selectedRegion.to.row = $(this).attr('rown');
+                selectedRegion.to.column = $(this).attr('coln');
+
+                // Highlight selected region
+                var sc = Math.min(selectedRegion.from.column, selectedRegion.to.column);
+                var sr = Math.min(selectedRegion.from.row, selectedRegion.to.row);
+                var ec = Math.max(selectedRegion.from.column, selectedRegion.to.column);
+                var er = Math.max(selectedRegion.from.row, selectedRegion.to.row);
+
+                for(var c=sc; c<=ec; c++)
+                    for(var r=sr; r<=er; r++)
+                        cellsState[r][c].content.addClass('highlighted');
+            }
+        });
+
+        $('.fcontent').mousedown(function(e){
+            e.preventDefault();
+
+            isDraggingSelection = true;
+
+            selectedRegion.from.row = $(this).attr('rown');
+            selectedRegion.from.column = $(this).attr('coln');
         });
 
         var mouseMoveDragingSpliter = function(e){
@@ -218,7 +302,7 @@
         display: inline-block;
         vertical-align: top;
         width: 2px;
-        height: 100%;
+        height: 105%;
     }
 
     .fspliter:hover {
@@ -248,6 +332,10 @@
 
     .frow .fcontent:hover > div {
         display: block;
+    }
+
+    .highlighted {
+        background-color: #fff4af;
     }
 
 </style>
