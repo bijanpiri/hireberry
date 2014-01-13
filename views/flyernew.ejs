@@ -67,57 +67,127 @@
 <link rel="stylesheet" href="/gridster/jquery.gridster.min.css">
 <script src="/gridster/jquery.gridster.min.js"></script>
 <script>
-    var isDragging = false;
+    var isDraggingSpliter = false;
+    var isDraggingSelection = false;
     var dragingSpliter;
+    var cellsState = [];
 
     $(function(){ //DOM Ready
 
-        $(".gridster ul").gridster({
-            widget_margins: [10, 10],
-            widget_base_dimensions: [100, 100],
-            max_cols:2
+        var initCellStates = function() {
+
+            for(var r=0; r<4; r++) {
+                cellsState[r] = [];
+                for(var c=0; c<3; c++){
+                    cellsState[r][c] = {
+                        r:1,
+                        l:1,
+                        t:1,
+                        b:1,
+                        content: $('.fsheet')
+                                .find('.fcolumn').eq(c)
+                                .find('.frow').eq(r)
+                                .find('.fcontent').first()
+                    };
+                }
+            }
+        }
+
+        var updateSheet = function() {
+            var sheetWidth = parseInt( $('.fsheet').css('width') );
+            $('.fsheet').css('height', sheetWidth*0.75);
+        }
+
+        var mergeCells = function(from,to){
+            var sc = from.column;
+            var sr = from.row;
+            var ec = to.column;
+            var er = to.row;
+
+            // Remove shared borders
+            for(var c=sc; c<=ec; c++){
+                for(var r=sr; r<=er; r++){
+                    var cell = cellsState[r][c];
+
+                    // Set Borders Visibility
+                    cell.r = ( c==ec ? 1 : 0 );
+                    cell.l = ( c==sc ? 1 : 0 );
+                    cell.t = ( r==sr ? 1 : 0 );
+                    cell.b = ( r==er ? 1 : 0 );
+
+                    var borders = {
+                        'border-left-style':(cell.l==1?'dotted':'none'),
+                        'border-right-style':(cell.r==1?'dotted':'none'),
+                        'border-top-style':(cell.t==1?'dotted':'none'),
+                        'border-bottom-style':(cell.b==1?'dotted':'none')
+                    }
+
+                    cell.content.css(borders);
+                    cell.content.unbind('mouseenter');
+                    cell.content.unbind('mouseleave');
+
+                    // Select the merged cells all together
+                    cell.content.mouseenter(function(e){
+                        for(var c=sc; c<=ec; c++)
+                            for(var r=sr; r<=er; r++)
+                                cellsState[c][r].content.css('background-color', $(this).css('background-color'));
+                    });
+
+                    // Unselect the merged cells all together
+                    cell.content.mouseleave(function(e){
+                        for(var c=sc; c<=ec; c++)
+                            for(var r=sr; r<=er; r++)
+                                cellsState[c][r].content.css('background-color', '');
+                    });
+                }
+            }
+        }
+
+
+        initCellStates();
+        mergeCells({column:1,row:1},{column:2,row:2});
+        updateSheet();
+
+        $(window).resize( function(e) {
+            updateSheet();
         });
 
         $(document).mouseup( function(e){
             $(this).unbind('mousemove');
-
-            isDragging = false;
-
-            console.log(isDragging);
+            isDraggingSpliter = false;
+            isDraggingSelection = false;
         });
 
         $('.fspliter').mousedown(function(e){
-            console.log('Down');
             e.preventDefault();
 
-            $(this).attr('lastX', e.pageX);
-            isDragging = true;
+            isDraggingSpliter = true;
             dragingSpliter = $(this);
+            $(this).attr('lastX', e.pageX);
 
-            $(document).mousemove(function(e){
+            $(document).mousemove(mouseMoveDragingSpliter);
+        });
 
-                if( isDragging ){
-                    var col1Width = parseInt( dragingSpliter.prev().css('width') );
-                    var col2Width = parseInt( dragingSpliter.next().css('width') );
-                    var spliterWidth = parseInt( dragingSpliter.css('width') );
-                    var spliterX = dragingSpliter.attr('lastX');
+        var mouseMoveDragingSpliter = function(e){
 
-                    var offset = e.pageX - spliterX;
-                    var newCol1Width = col1Width + offset;
-                    var newCol2Width = col2Width - offset
-                    var totalWidth = parseInt( $('.fsheet').css('width') );
-                    var col1WidthPercent = (100*newCol1Width/totalWidth);
-                    var col2WidthPercent = (100*newCol2Width/totalWidth);
+            if( isDraggingSpliter ){
+                var col1Width = parseInt( dragingSpliter.prev().css('width') );
+                var col2Width = parseInt( dragingSpliter.next().css('width') );
+                var spliterX = dragingSpliter.attr('lastX');
 
-                    dragingSpliter.prev().css('width',col1WidthPercent + '%');
-                    dragingSpliter.next().css('width',col2WidthPercent + '%');
+                var offset = e.pageX - spliterX;
+                var newCol1Width = col1Width + offset;
+                var newCol2Width = col2Width - offset
+                var totalWidth = parseInt( $('.fsheet').css('width') );
+                var col1WidthPercent = (100*newCol1Width/totalWidth);
+                var col2WidthPercent = (100*newCol2Width/totalWidth);
 
-                    dragingSpliter.attr('lastX', e.pageX);
+                dragingSpliter.prev().css('width',col1WidthPercent + '%');
+                dragingSpliter.next().css('width',col2WidthPercent + '%');
 
-                    console.log(newCol1Width + '/' + newCol2Width + '-' + offset);
-                }
-            })
-        })
+                dragingSpliter.attr('lastX', e.pageX);
+            }
+        }
     });
 </script>
 
@@ -169,6 +239,17 @@
         background-color: #fff4af;
     }
 
+    .frow .fcontent > div {
+        display: none;
+        margin: 5%;
+        height: 100%;
+        text-align: center;
+    }
+
+    .frow .fcontent:hover > div {
+        display: block;
+    }
+
 </style>
 
 <div class="container-fluid" style="width: 95%;">
@@ -202,10 +283,26 @@
             <div class="fsheet">
                 <div class="fcolumn">
                     <div class="frow">
-                       <div class="fcontent"></div>
+                        <div class="fcontent">
+                            <div class="content-fluid">
+                                <div class="row-fluid">
+                                    <div class="span3">A</div>
+                                    <div class="span3">B</div>
+                                    <div class="span3">C</div>
+                                    <div class="span3">D</div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span3">A</div>
+                                    <div class="span3">B</div>
+                                    <div class="span3">C</div>
+                                    <div class="span3">D</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="frow">
-                        <div class="fcontent"></div>
+                        <div class="fcontent">
+                        </div>
                     </div>
                     <div class="frow">
                         <div class="fcontent"></div>
