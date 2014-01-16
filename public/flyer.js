@@ -66,7 +66,7 @@ function Flyer(isInEditMode) {
 
             portlet.find('.portlet-content').append(
                 '<input type="file" name="picture" multiple>' +
-                '<img alt="IMAGE" src="#" class="portlet-picture"></img>');
+                '<img alt="IMAGE" src="#" class="portlet-picture">');
 
             if(editMode){
                 portlet.find('input[type=file]')
@@ -263,8 +263,8 @@ function Flyer(isInEditMode) {
         var portletStack = $('#' + portletStackID);
 
         var flyer = {
-            description: $('input[name=flyertext').val(),
-            flyerid:  $('input[name=flyerid').val(),
+            description: $('input[name=flyertext]').val(),
+            flyerid:  $('input[name=flyerid]').val(),
             count: portletStack.children().length
         };
 
