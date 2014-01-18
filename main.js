@@ -756,6 +756,10 @@ app.post('/flyer/new', function(req,res){
     */
 });
 
+app.get('/flyer/template', function(req,res){
+    res.render('flyerTemplate.ejs', {title:'Template Gallery'});
+});
+
 app.get('/flyer/publish', function(req,res){
    res.render('flyerPublish.ejs', {title:'Publish Flyer'});
 });
