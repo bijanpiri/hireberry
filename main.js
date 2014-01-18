@@ -756,6 +756,10 @@ app.post('/flyer/new', function(req,res){
     */
 });
 
+app.get('/flyer/publish', function(req,res){
+   res.render('flyerPublish.ejs', {title:'Publish Flyer'});
+});
+
 app.post('/flyer/putup', function(req,res){
     var flyerid = req.body.flyerid;
     var boardid = req.body.boardid;
