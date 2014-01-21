@@ -106,9 +106,10 @@
                 window.location = datum.link;
             });
 
-            var email = $('#avatar').attr('email');
+            var email = "<%= (everyauth.user && everyauth.user.email) ? everyauth.user.email : ''%>";
             var hash = CryptoJS.MD5( email.trim().toLowerCase() );
-            $('#avatar').attr('src','http://www.gravatar.com/avatar/' + hash );
+            $('.avatar').attr('src','http://www.gravatar.com/avatar/' + hash );
+            $('#changeAvatar').attr('href','http://www.gravatar.com/' + hash );
         });
 
         function search()
@@ -169,7 +170,7 @@
                             <% } else { %>
                                 <%= 'Dude'%>
                             <% }%>
-                            <img class="img-rounded" style="width: 24px" src="#" id="avatar" email="<%=everyauth.user.email%>">
+                            <img class="avatar img-rounded" style="width: 24px" src="#">
                             <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="/timeline">Timeline</a></li>
