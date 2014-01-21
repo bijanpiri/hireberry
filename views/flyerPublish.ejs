@@ -1,5 +1,8 @@
 <% layout('layout') -%>
 
+<link rel="stylesheet" href="http://abpetkov.github.io/switchery/dist/switchery.min.css" />
+<script src="http://abpetkov.github.io/switchery/dist/switchery.min.js"></script>
+
 <link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">
 <script src="http://welldonethings.com/managed/tagmanager.js"></script>
 
@@ -23,6 +26,15 @@
         map = L.mapbox.map('map', 'coybit.gj1c3kom',{
             doubleClickZoom: false
         }).setView([37.9, -77],4);
+
+        var switchsList = $('input[type=checkbox]')
+        switchsList.each(function(idx){
+            var s = new Switchery(switchsList[idx]);
+        })
+
+        $('.switchery').addClass('pull-right')
+
+        $('.row-fluid .switchery').css('margin-top','10px').css('text-','10px')
     });
 </script>
 
