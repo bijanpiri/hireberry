@@ -28,7 +28,7 @@
                 dataType: 'json',
                 data: {boardid:boardID},
                 error: function(data){
-                    alert('error '+data.result);
+                    console.log('error '+data.result);
                 },
                 success: function(data){
                     if( data.following==true )
@@ -40,7 +40,7 @@
         }
 
         $('#FollowButton').click( function(){
-            var boardID= $("#FollowButton").val();
+            var boardID = $("#FollowButton").val();
 
             $.ajax({
                 url: '/board/follow',
@@ -53,6 +53,32 @@
                 success: function(data){
                     // ToDo: User A Better Method For Storing Following State
                     FollowingState();
+                }
+            });
+        });
+
+        $('.putdownButton').click(function(e){
+
+            e.preventDefault();
+
+            // ToDo: Find a better and more standard way for storing flyerID and boardID in the page
+            var boardID = $(this).attr('boardid');
+            var flyerID = $(this).attr('flyerid');
+            var thumbnailElm = $(this).parent();
+
+            $.ajax({
+                url: '/flyer/putdown',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    boardid:boardID,
+                    flyerid:flyerID
+                },
+                error: function(data){
+                    console.log('error '+data.result);
+                },
+                success: function(data){
+                    thumbnailElm.hide();
                 }
             });
         });
@@ -76,12 +102,17 @@
         <ul class="thumbnails">
             <% for(i=0;i<flyers.length;i++){%>
             <li class="span3">
-                <a class="thumbnail" href="/flyer/<%=flyers[i]._id%>">
-                    <h4 class="caption">
-                        <%=(flyers[i].flyer&&flyers[i].flyer.description)
-                                ? flyers[i].flyer.description
-                                : "untitled"%>
-                    </h4>
+                <a class="thumbnail" href="/flyer/<%=flyers[i]._id%>" flyerid="<%=flyers[i]._id%>">
+                    <span>
+                            <%=(flyers[i].flyer&&flyers[i].flyer.description)
+                                    ? flyers[i].flyer.description
+                                    : "untitled"%>
+                    </span>
+                    <% if(flyers[i].putdownIsAllowed){ %>
+                    <span class="btn btn-danger btn-mini pull-right putdownButton" boardid="<%=board._id%>" flyerid="<%=flyers[i]._id%>">
+                        PutDown
+                    </span>
+                    <% } %>
                     <div class="portletStack" id="portletStack<%=i%>" flyerid="<%=flyers[i]._id%>"></div>
                 </a>
             </li>

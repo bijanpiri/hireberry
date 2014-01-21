@@ -22,3 +22,8 @@ body {
 .newitem:hover {
     background-color: #ffffff;
 }
+
+/* Top 60px of page is overlaid by navbar. It's for that !*/
+nav  ~ .container {
+    margin-top: 60px;
+}

@@ -83,7 +83,7 @@ var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy
 var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
 var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-var BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String});
+var BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusShortname: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
 var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
@@ -664,6 +664,10 @@ app.get('/board/:id',function(req,res) {
 
                     var isOthersBoard = (count==0);
 
+                    // add 'put-down' permission to flyers (board owner or flyer owner)
+                    for(var i=0; i<flyers.length; i++)
+                        flyers[i].putdownIsAllowed = (isOthersBoard==false || flyers[i].owner==userid);
+
                     res.render('board.ejs',{
                         title:board.name,
                         board:board,
@@ -795,7 +799,7 @@ app.post('/flyer/putdown', function(req,res){
             if(err)
                 return res.send(401,{error:'DB Error'});
 
-            return res.send(200, {error:'The flyer is put up successfully.'});
+            return res.send(200, {error:'The flyer is put down successfully.'});
     });
 
 });
