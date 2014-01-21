@@ -476,6 +476,7 @@ app.get('/profile', function(req,res) {
     }
 
     var RenderPage = function(userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards) {
+
         res.render('profile.ejs',{
             title:'Profile',
             email:req.user,
