@@ -55,71 +55,62 @@
         </div>
     </div>
     <div class="row-fluid">
-        <div class="span2 tabbable">
-            <ul class="nav tabs-left" id="settingTabs" data-tabs="settingTabs">
-                <li class="active"><a href="#account" data-toggle="tab">Account</a></li>
-                <li><a href="#security" data-toggle="tab">Security</a></li>
-                <li><a href="#channels" data-toggle="tab">Channels</a></li>
-            </ul>
-        </div>
-        <div class="span10 tabbable">
-            <div class="tab-content">
-                <div class="tab-pane active" id="account">
-                    <h3>Account</h3>
-                    <form class="form-horizontal" action="/profile" method="post" id="passwordChangingForm">
-                        <div class="control-group">
-                            <div class="control-label"> Avatar:</div>
-                            <div class="controls ">
-                                <a href="#" id="changeAvatar">
-                                    <img src="#" class="avatar img-rounded">
-                                </a>
-                            </div>
-                        </div>
 
-                        <div class="control-group">
-                            <div class="control-label"> Email:</div>
-                            <div class="controls ">
-                                <%=everyauth.user.email%>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div class="control-label"> Enter Old Password:</div>
-                            <div class="controls ">
-                                <div class="input-prepend input-append">
-                                    <input type="password"  name="oldpassword" placeholder="Enter password">
-                                </div>
-                                <label class="help-inline">Passwords must match</label>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="control-label"> Enter New Password:</div>
-                            <div class="controls ">
-                                <div class="input-prepend input-append">
-                                    <input type="password"  name="newpassword" placeholder="Enter password">
-                                </div>
-                                <label class="help-inline">Password must contains at least 6 characters</label>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="control-label"> Enter Password again:</div>
-                            <div class="controls ">
-                                <div class="input-prepend input-append">
-                                    <input type="password" name="confirmnewpassword" placeholder="Enter password">
-                                </div>
-                                <label class="help-inline">Passwords must match</label>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="controls">
-                                <input type="button" id="saveButton" class="btn input-medium btn-primary" value="Save Changes">
-                            </div>
-                        </div>
-                    </form>
+        <div class="span8 offset2">
+            <h3>Account</h3>
+            <form class="form-horizontal" action="/profile" method="post" id="passwordChangingForm">
+                <div class="control-group">
+                    <div class="control-label"> Avatar:</div>
+                    <div class="controls ">
+                        <a href="#" id="changeAvatar">
+                            <img src="#" class="avatar img-rounded">
+                        </a>
+                    </div>
                 </div>
-                <div class="tab-pane" id="security">789</div>
-                <div class="tab-pane" id="channels">000</div>
-            </div>
+
+                <div class="control-group">
+                    <div class="control-label"> Email:</div>
+                    <div class="controls ">
+                        <%=everyauth.user.email%>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label"> Enter Old Password:</div>
+                    <div class="controls ">
+                        <div class="input-prepend input-append">
+                            <input type="password"  name="oldpassword" placeholder="Enter password">
+                        </div>
+                        <label class="help-inline">Passwords must match</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label"> Enter New Password:</div>
+                    <div class="controls ">
+                        <div class="input-prepend input-append">
+                            <input type="password"  name="newpassword" placeholder="Enter password">
+                        </div>
+                        <label class="help-inline">Password must contains at least 6 characters</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label"> Enter Password again:</div>
+                    <div class="controls ">
+                        <div class="input-prepend input-append">
+                            <input type="password" name="confirmnewpassword" placeholder="Enter password">
+                        </div>
+                        <label class="help-inline">Passwords must match</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="button" id="saveButton" class="btn input-medium btn-primary" value="Save Changes">
+                    </div>
+                </div>
+            </form>
         </div>
+
     </div>
+</div>
+</div>
 </div>
