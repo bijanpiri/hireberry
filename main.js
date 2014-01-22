@@ -681,7 +681,7 @@ app.get('/board/:id',function(req,res) {
     });
 });
 
-app.get('/flyer/new', function(req,res){
+app.get('/flyer/editor', function(req,res){
 
     var flyerid;
     var boards = [];
@@ -690,7 +690,7 @@ app.get('/flyer/new', function(req,res){
         return;
 
     var renderNewFlyerView = function() {
-        res.render('flyernew.ejs',{
+        res.render('flyerEditor.ejs',{
             title:'new flyer',
             boards:boards,
             flyerid:flyerid
