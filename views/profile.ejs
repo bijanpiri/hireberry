@@ -88,8 +88,10 @@
 
             var flyerid = $(this).attr('flyer-id');
 
-            flyer = new Flyer();
-            flyer.loadLastFlyer(flyerid,'userFlyerPreview'+flyerid)
+            $('#userFlyerPreview'+flyerid).Flyer({
+                    editMode:false,
+                    flyerid:flyerid
+            });
         });
 
         LoadBoardsInformation();
@@ -175,7 +177,7 @@
                         <div>
                             <ul class="thumbnails">
                                 <% for(var i=0;i<flyers.length;i++){%>
-                                <li class="span5 userflyer" flyer-id="<%=flyers[i]._id%>">
+                                <li class="span5 userflyer" flyer-id="<%=flyers[i]._id%>" style="height: inherit">
                                     <div class="thumbnail">
                                         <a href="/flyer/<%=flyers[i]._id%>">
                                             <div class="container-fluid">

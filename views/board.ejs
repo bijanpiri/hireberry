@@ -4,12 +4,12 @@
     $(function(){
 
         $('.portletStack').each(function(index){
-            var flyer = new Flyer(false);
-
-            var portletStackID = $(this).attr('id');
             var flyerid = $(this).attr('flyerid');
 
-            flyer.loadLastFlyer( flyerid, portletStackID );
+            $('.portletStack[flyerid='+flyerid+']').Flyer({
+                editMode:false,
+                flyerid:flyerid
+            });
         })
     });
 </script>

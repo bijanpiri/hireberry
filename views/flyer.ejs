@@ -52,13 +52,12 @@
 <script src="/flyer.js"></script>
 <script>
     $(function(){
-        var flyer = new Flyer(false);
-
         var flyerid = $('input[name=flyerid]').val();
-        var portletStackID = 'portletStack';
+        $('#portletStack').Flyer({
+            editMode:false,
+            flyerid:flyerid
+        });
 
-        flyer.init(portletStackID);
-        flyer.loadLastFlyer(flyerid);
     });
 </script>
 
