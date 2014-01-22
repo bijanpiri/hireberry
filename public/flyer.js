@@ -162,6 +162,17 @@ function Flyer(isInEditMode) {
 
     // Functions
 
+    var init = function(portletStackID) {
+        // Set PortletStack size (A4 1.4) height/width = sqrt(2)
+        var aspect_ratio = 0.75;
+        var portletStack = $('#' + portletStackID);
+        portletStack.height( portletStack.width() * aspect_ratio );
+
+        $(window).resize(function() {
+            portletStack.height( portletStack.width() * aspect_ratio );
+        });
+    }
+
     var portletTypeString2Type = function (strType) {
         switch(strType) {
             case 'text':
@@ -200,6 +211,18 @@ function Flyer(isInEditMode) {
         }
     }
 
+    var remaindedHeight = function () {
+        var portletStack = $('#' + portletStackID);
+        var emptySpaceHeight = portletStack.height();
+
+        portletStack.children().each(function(index) {
+            var portlet =  $(this);
+            emptySpaceHeight -= portlet.height();
+        });
+
+        return emptySpaceHeight;
+    }
+
     var createPortlet = function( ptype, pid, content, portletStackID ) {
         var strType = portletType2string(ptype);
 
@@ -221,7 +244,7 @@ function Flyer(isInEditMode) {
     };
 
     var initPortlet = function(portlet) {
-        portlet.addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+        //portlet.addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
 
         // Show Close Button just In Edit Mode
         if(isInEditMode) {
@@ -289,6 +312,7 @@ function Flyer(isInEditMode) {
         json2flyer( flyerid, portletStackID );
     }
 
+    this.init = init;
     this.createPortlet = createPortlet;
     this.initPortlet = initPortlet;
     this.json2flyer = json2flyer;
@@ -296,4 +320,5 @@ function Flyer(isInEditMode) {
     this.loadLastFlyer = loadLastFlyer;
     this.portletTypeString2Type = portletTypeString2Type;
     this.portletType2string = portletType2string;
+    this.remaindedHeight = remaindedHeight;
 }
