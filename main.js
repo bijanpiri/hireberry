@@ -681,10 +681,11 @@ app.get('/board/:id',function(req,res) {
     });
 });
 
-app.get('/flyer/editor', function(req,res){
+app.get('/flyer/editor/:tid', function(req,res){
 
     var flyerid;
     var boards = [];
+    var templateID = req.params.tid;
 
     if(checkUser(req,res)==false)
         return;
@@ -693,7 +694,8 @@ app.get('/flyer/editor', function(req,res){
         res.render('flyerEditor.ejs',{
             title:'new flyer',
             boards:boards,
-            flyerid:flyerid
+            flyerid:flyerid,
+            templateID:templateID
         });
     }
 
@@ -765,8 +767,13 @@ app.get('/flyer/template', function(req,res){
     res.render('flyerTemplate.ejs', {title:'Template Gallery'});
 });
 
-app.get('/flyer/publish', function(req,res){
-   res.render('flyerPublish.ejs', {title:'Publish Flyer'});
+app.get('/flyer/publish/:flyerid', function(req,res){
+    var flyerid = req.params.flyerid;
+
+   res.render('flyerPublish.ejs', {
+       title:'Publish Flyer',
+       flyerid:flyerid
+   });
 });
 
 app.post('/flyer/putup', function(req,res){
