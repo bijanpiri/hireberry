@@ -1,6 +1,8 @@
 function Flyer(isInEditMode) {
 
     var editMode = isInEditMode;
+    var pStackID;
+    var pStack;
 
     var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
 
@@ -26,7 +28,7 @@ function Flyer(isInEditMode) {
         this.deserialize;
     }
 
-    /******** As A Sample **********/
+    /******** As A Sample **********
     var w = new Widget().onInit(function(){
         console.log('inited');
     }).onSerialize(function(){
@@ -37,7 +39,7 @@ function Flyer(isInEditMode) {
     w.init();
     w.serialize();
     w.deserialize();
-    /******************************/
+    ******************************/
 
     // Widgets Collection
     var Widgets = {};
@@ -164,12 +166,15 @@ function Flyer(isInEditMode) {
 
     var init = function(portletStackID) {
         // Set PortletStack size (A4 1.4) height/width = sqrt(2)
+
+        pStackID = portletStackID;
+        pStack = $('#' + portletStackID);
+
         var aspect_ratio = 0.75;
-        var portletStack = $('#' + portletStackID);
-        portletStack.height( portletStack.width() * aspect_ratio );
+        pStack.height( pStack.width() * aspect_ratio );
 
         $(window).resize(function() {
-            portletStack.height( portletStack.width() * aspect_ratio );
+            pStack.height( pStack.width() * aspect_ratio );
         });
     }
 
@@ -212,25 +217,24 @@ function Flyer(isInEditMode) {
     }
 
     var remaindedHeight = function () {
-        var portletStack = $('#' + portletStackID);
-        var emptySpaceHeight = portletStack.height();
+        var emptySpaceHeight = pStack.height();
 
-        portletStack.children().each(function(index) {
-            var portlet =  $(this);
-            emptySpaceHeight -= portlet.height();
+        pStack.children().each(function(index) {
+            emptySpaceHeight -= $(this).height();
         });
 
         return emptySpaceHeight;
     }
 
-    var createPortlet = function( ptype, pid, content, portletStackID ) {
+    var createPortlet = function( ptype, pid, content ) {
         var strType = portletType2string(ptype);
 
         var portlet = $('<div class="portlet"><div class="portlet-header">'+ strType +
             '</div><div class="portlet-content"></div></div>')
             .attr('id',pid)
-            .attr('type',strType)
-            .appendTo('#' + portletStackID);
+            .attr('type',strType);
+
+        pStack.append(portlet);
 
         initPortlet( portlet );
 
@@ -244,8 +248,6 @@ function Flyer(isInEditMode) {
     };
 
     var initPortlet = function(portlet) {
-        //portlet.addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
-
         // Show Close Button just In Edit Mode
         if(isInEditMode) {
             portlet.find( ".portlet-header" )
@@ -260,7 +262,7 @@ function Flyer(isInEditMode) {
         }
     }
 
-    var json2flyer = function(flyerid,portletStackID) {
+    var json2flyer = function(flyerid) {
 
         $.get('/flyer/json/'+flyerid)
             .done(function(data){
@@ -273,7 +275,7 @@ function Flyer(isInEditMode) {
                         createPortlet(
                             parseInt(data[i].type),
                             data[i].ID,
-                            data[i].Contents,portletStackID);
+                            data[i].Contents);
                 }
             })
             .fail(function(data){
@@ -281,17 +283,15 @@ function Flyer(isInEditMode) {
             });
     }
 
-    var flyer2json = function(portletStackID) {
-
-        var portletStack = $('#' + portletStackID);
+    var flyer2json = function() {
 
         var flyer = {
             description: $('input[name=flyertext]').val(),
             flyerid:  $('input[name=flyerid]').val(),
-            count: portletStack.children().length
+            count: pStack.children().length
         };
 
-        portletStack.children().each(function(index) {
+        pStack.children().each(function(index) {
 
             var portlet =  $(this);
             var ptype =  portletTypeString2Type( portlet.attr('type') );
@@ -308,8 +308,8 @@ function Flyer(isInEditMode) {
         return flyer;
     }
 
-    var loadLastFlyer = function(flyerid,portletStackID) {
-        json2flyer( flyerid, portletStackID );
+    var loadLastFlyer = function(flyerid) {
+        json2flyer( flyerid );
     }
 
     this.init = init;

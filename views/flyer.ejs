@@ -57,7 +57,8 @@
         var flyerid = $('input[name=flyerid]').val();
         var portletStackID = 'portletStack';
 
-        flyer.loadLastFlyer(flyerid, portletStackID);
+        flyer.init(portletStackID);
+        flyer.loadLastFlyer(flyerid);
     });
 </script>
 
