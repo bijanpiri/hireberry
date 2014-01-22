@@ -103,10 +103,10 @@
     }
 
     function isPassEqual2(){
-       if(!isPassEqual())
-           $('#chkpasseq').addClass('error');
-       else
-           $('#chkpasseq').removeClass('error');
+        if(!isPassEqual())
+            $('#chkpasseq').addClass('error');
+        else
+            $('#chkpasseq').removeClass('error');
     }
 
     function chcknotepty(){
@@ -154,7 +154,7 @@
         <div class="span4 offset8" style="background-color: #e8e2e3; border: 1px solid #000000">
             <div style="text-align: center; background-color: darkgray; line-height: 80px">
                 <p style="font-size: 25px;">
-                Register now for free :)
+                    Register now for free :)
                 </p>
             </div>
             <div>
@@ -200,6 +200,26 @@
             </div>
             <div style="min-height: 150px;padding: 10px;">
                 <b>Or Use Your Other Accounts:</b>
+
+                <div class="control-group">
+                    <div>
+                        <div id="fb-root"></div>
+                        <!--Below we include the Login Button social plugin. This button uses the JavaScript SDK to
+                            present a graphical Login button that triggers the FB.login() function when clicked. -->
+                        <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+                    </div>
+                    <div class="controls">
+                        <a href="/auth/twitter">
+                            <img src="/images/sign-in-with-twitter-gray.png">
+                        </a>
+                    </div>
+                    <div class="controls">
+                        <a href="/auth/google">
+                            <img src="/images/White-signin_Long_base_44dp.png" width="200px"/>
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
