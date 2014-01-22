@@ -24,6 +24,6 @@ body {
 }
 
 /* Top 60px of page is overlaid by navbar. It's for that !*/
-nav  ~ .container {
+nav  ~ .container, nav ~ .container-fluid {
     margin-top: 60px;
 }
