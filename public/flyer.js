@@ -2,7 +2,7 @@ function Flyer(options) {
 
     var editMode = options.editMode;
     var pStack = this;
-
+    var portletCounter = 0;
     var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
 
     function Widget(widgetType){
@@ -174,35 +174,8 @@ function Flyer(options) {
         });
     }
 
-    var addCreationPortlet = function() {
-        var portlet = [
-            '<div class="portlet" id="portletCreator">',
-            '   <div class="portlet-header">New Item</div>',
-            '   <div class="portlet-content">',
-            '       <div class="row-fluid text-center">',
-            '           <div class="span1 newitem" type="picture"><i class="icon-picture"></i></div>',
-            '           <div class="span1 newitem" type="text"><i class="icon-font"></i></div>',
-            '           <div class="span1 newitem" type="video"><i class="icon-facetime-video"></i></div>',
-            '           <div class="span1 newitem" type="button"><i class="icon-globe"></i></div>',
-            '           <div class="span1 newitem" type="tag"><i class="icon-tag"></i></div>',
-            '           <div class="span1 newitem" type="map"><i class="icon-map-marker"></i></div>',
-            '       </div>',
-            '   </div>',
-            '</div>'
-        ].join('');
-
-        pStack.append(portlet);
-
-        // Set click event
-        $(function(){
-            $(".newitem").click(function(e){
-                var itemType = $(this).attr('type');
-                var itemID = portletCounter++;
-                var portletType = portletTypeString2Type(itemType);
-
-                createPortlet( portletType, itemID, null );
-            });
-        });
+    var reLocatingPlus = function() {
+        $('.portletCreator').css('height',remaindedHeight());
     }
 
     var portletTypeString2Type = function (strType) {
@@ -246,7 +219,7 @@ function Flyer(options) {
     var remaindedHeight = function () {
         var emptySpaceHeight = pStack.height();
 
-        pStack.children().each(function(index) {
+        pStack.find('.portlet').each(function(index) {
             emptySpaceHeight -= $(this).height();
         });
 
@@ -254,16 +227,44 @@ function Flyer(options) {
     }
 
     var createPortlet = function( ptype, pid, content ) {
+
+        // Check Empty Space
+        if( remaindedHeight() < 30 )
+            return;
+
         var strType = portletType2string(ptype);
 
         var portlet = $('<div class="portlet"><div class="portlet-header">'+ strType +
             '</div><div class="portlet-content"></div></div>')
             .attr('id',pid)
             .attr('type',strType);
-
         pStack.append(portlet);
 
-        initPortlet( portlet );
+        // Show Close Button just In Edit Mode
+        if(editMode) {
+            portlet.find( ".portlet-header" )
+                .addClass( "ui-widget-header ui-corner-all" )
+                .prepend( "<span class='ui-icon ui-icon-closethick'></span>");
+
+            // Portlet Events
+            portlet.find( ".portlet-header .ui-icon").first()
+                .click(function(e) {
+                    $(e.target).parent().parent().remove();
+                    reLocatingPlus();
+                });
+
+            portlet
+                .resize(function(){
+                    reLocatingPlus();
+                })
+                .ready(function(){
+                   console.log('GG')
+                });
+
+
+        } else {
+            portlet.find( ".portlet-header").remove();
+        }
 
         // Init
         if(Widgets[ptype] && Widgets[ptype].init )
@@ -272,22 +273,10 @@ function Flyer(options) {
         // Set Content
         if(content && Widgets[ptype] && Widgets[ptype].deserialize )
             Widgets[ptype].deserialize(portlet, content);
+
+        if(editMode)
+            reLocatingPlus();
     };
-
-    var initPortlet = function(portlet) {
-        // Show Close Button just In Edit Mode
-        if(editMode) {
-            portlet.find( ".portlet-header" )
-                .addClass( "ui-widget-header ui-corner-all" )
-                .prepend( "<span class='ui-icon ui-icon-closethick'></span>");
-
-            portlet.find( ".portlet-header .ui-icon").first().click(function(e) {
-                $(e.target).parent().parent().remove();
-            });
-        } else {
-            portlet.find( ".portlet-header").remove();
-        }
-    }
 
     var json2flyer = function(flyerid) {
 
@@ -297,7 +286,7 @@ function Flyer(options) {
 
                 $('input[name=flyertext]').val(data.description);
 
-                for( var i=1; i<data.count; i++ ){
+                for( var i=0; i<data.count; i++ ){
                     if( data[i] )
                         createPortlet(
                             parseInt(data[i].type),
@@ -312,13 +301,15 @@ function Flyer(options) {
 
     var flyer2json = function() {
 
+        var portlets = pStack.find('.portlet');
+
         var flyer = {
             description: $('input[name=flyertext]').val(),
             flyerid:  $('input[name=flyerid]').val(),
-            count: pStack.children().length
+            count: portlets.length
         };
 
-        pStack.children().each(function(index) {
+        portlets.each(function(index) {
 
             var portlet =  $(this);
             var ptype =  portletTypeString2Type( portlet.attr('type') );
@@ -338,15 +329,27 @@ function Flyer(options) {
     // Initialization
     initDimension();
 
-    if(options.editMode)
-        addCreationPortlet();
+    if(options.editMode){
+
+        // Set click event
+        $(function(){
+            reLocatingPlus();
+
+            $(".newitem").click(function(e){
+                var itemType = $(this).attr('type');
+                var itemID = portletCounter++;
+                var portletType = portletTypeString2Type(itemType);
+
+                createPortlet( portletType, itemID, null );
+            });
+        });
+    }
 
     if(options.flyerid)
         json2flyer(options.flyerid)
 
     // Public functions
     this.createPortlet = createPortlet;
-    this.initPortlet = initPortlet;
     this.json2flyer = json2flyer;
     this.flyer2json = flyer2json;
     this.portletTypeString2Type = portletTypeString2Type;
