@@ -286,7 +286,11 @@ app.configure(function() {
     //});
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(express.session({ secret: 'keyboard cat' }));
+    app.use(express.session({
+        secret: 'keyboard cat',
+        maxAge  : new Date(Date.now() + 3600000), //1 Hour
+        expires : new Date(Date.now() + 3600000) //1 Hour
+    }));
     app.use(everyauth.middleware());
 });
 //endregion
