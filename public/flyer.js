@@ -200,7 +200,20 @@ function Flyer(options) {
     }
 
     var reLocatingPlus = function() {
-        $('.portletCreator').css('height',remaindedHeight());
+        var rh = remaindedHeight();
+
+        if( rh<30 ){
+            $('.portletCreator').css('height',50)
+                .css('bottom',-50)
+                .find('#portletCreatorAlarm')
+                .show();
+        }
+        else {
+            $('.portletCreator').css('height',remaindedHeight())
+                .css('bottom',0)
+                .find('#portletCreatorAlarm')
+                .hide();
+        }
     }
 
     var portletTypeString2Type = function (strType) {
@@ -353,7 +366,7 @@ function Flyer(options) {
 
                 $('input[name=flyertext]').val(data.description);
                 pStack.css('background-image',data.background)
-                    .css('background-size','cover');
+                    .css('background-size','contain');
 
                 for( var i=0; i<data.count; i++ ){
                     if( data[i] )
@@ -418,7 +431,7 @@ function Flyer(options) {
     var setBackground = function (url) {
         pStack
             .css('background-image','url("' + url + '")')
-            .css('background-size','cover');
+            .css('background-size','contain');
     }
 
     if(options.flyerid)

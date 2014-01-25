@@ -29,10 +29,18 @@ body {
 
 .portlet  {
     position: relative;
-    /*background-color: #b2ffbe;*/
+    transition: background-color .5s linear;
+    -moz-transition: background-color .5s linear;    /* FF3.7+ */
+    -o-transition: background-color .5s linear;      /* Opera 10.5 */
+    -webkit-transition: background-color .5s linear; /* Saf3.2+, Chrome */
 }
 .portlet:hover {
-    background-color: #fefff9;
+    background-color: rgb(255, 243, 135);
+    opacity: 0.8;
+    transition: background-color .5s linear;
+    -moz-transition: background-color .5s linear;    /* FF3.7+ */
+    -o-transition: background-color .5s linear;      /* Opera 10.5 */
+    -webkit-transition: background-color .5s linear; /* Saf3.2+, Chrome */
 }
 
 .portlet-header {

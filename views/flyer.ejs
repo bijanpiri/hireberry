@@ -1,7 +1,11 @@
 <% layout('layout') -%>
 
 <script src="http://cburgmer.github.io/rasterizeHTML.js/rasterizeHTML.allinone.js"></script>
-
+<style>
+    #portletStack {
+        box-shadow: 1px 1px 10px;
+    }
+</style>
 <script language="JavaScript">
     $( function(){
 
@@ -71,7 +75,7 @@
 <div class="container">
     <div class="row" style="padding: 5px">
         <div class="span6">
-        <input type="hidden" name="flyerid" value="<%=flyer._id%>">
+            <input type="hidden" name="flyerid" value="<%=flyer._id%>">
         </div>
         <div class="span2 pull-right">
             <% if(isOthersFlyer==true){ %>
@@ -84,11 +88,13 @@
     </div>
     <div class="row" style="padding: 5px">
         <h2>
-        <strong><%=flyer.flyer ? flyer.flyer.description : "untitled"%></strong>
+            <strong><%=flyer.flyer ? flyer.flyer.description : "untitled"%></strong>
         </h2>
     </div>
     <div class="row">
-        <div id="portletStack"></div>
+        <div class="span6 offse3">
+            <div id="portletStack"></div>
+        </div>
     </div>
 
     <% if(flyer.disqusShortname){ %>
@@ -112,5 +118,9 @@
     <% } %>
 </div>
 
-<button onclick="shot()">SHOT</button>
-<canvas id="canvas" width="4000" height="2000"></canvas>
+<div class="row" style="margin-top: 30px;">
+    <div class="span8 offset2">
+        <button onclick="shot()">SHOT</button>
+        <canvas id="canvas" width="400" height="200"></canvas>
+    </div>
+</div>
