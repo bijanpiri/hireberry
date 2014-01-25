@@ -246,7 +246,10 @@ function Flyer(options) {
         var portlet = $(
             '<div class="portlet">'+
             '<div class="portlet-header">'+ strType +'</div>' +
-            '<div class="portlet-content"></div></div>')
+            '<div class="portlet-content"></div>'+
+            '<div class="portlet-nextLayout"></div>' +
+            '<div class="portlet-prevLayout"></div>' +
+            '</div>')
             .attr('id',pid)
             .attr('type',strType)
         pStack.append(portlet);
@@ -285,7 +288,26 @@ function Flyer(options) {
         if(content && Widgets[ptype] && Widgets[ptype].deserialize )
             Widgets[ptype].deserialize(portlet, content);
 
-        portlet.css('height',Widgets[ptype].height);
+        var h = Widgets[ptype].height;
+
+        portlet.css('height',h);
+
+        // Next Layout Button
+        portlet.find('.portlet-nextLayout')
+            .css('top',(h-32)/2 )
+            .css('right',-32)
+            .click(function(){
+                console.log('Next');
+            });
+
+        // Previous Layout Button
+        portlet.find('.portlet-prevLayout')
+            .css('top',(h-32)/2)
+            .css('left',-32)
+            .click(function(){
+                console.log('Prev');
+            });
+
         if(editMode)
             reLocatingPlus();
     };

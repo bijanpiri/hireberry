@@ -28,9 +28,13 @@ body {
 }
 
 .portlet  {
-   /* border: 2px dotted #999;*/
+    position: relative;
     background-color: #b2ffbe;
 }
+.portlet:hover {
+    background-color: #fefff9;
+}
+
 .portlet-header {
     padding-bottom: 4px;
     padding-left: 0.2em;
@@ -42,8 +46,20 @@ body {
 }
 .portlet-content { padding: 0.4em; }
 
-.portlet:hover {
-    border: 2px dotted #000;
+.portlet-nextLayout {
+    position: absolute;
+    background-image: url('/images/next.png');
+    background-size: cover;
+    height: 32px;
+    width: 32px;
+}
+
+.portlet-prevLayout {
+    position: absolute;
+    background-image: url('/images/prev.png');
+    background-size: cover;
+    height: 32px;
+    width: 32px;
 }
 
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
