@@ -63,6 +63,24 @@ body {
     height: 32px;
     width: 32px;
 }
+.portlet-closeButton {
+    position: absolute;
+    display: none;
+    height: 16px;
+    width: 16px;
+    top: 0;
+    right: 0;
+}
+
+.portlet-settingButton {
+    position: absolute;
+    display: none;
+    height: 16px;
+    width: 16px;
+    top: 0;
+    right: 16px;
+}
+
 
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }

@@ -244,7 +244,6 @@ function Flyer(options) {
 
         var portlet = $(
             '<div class="portlet">'+
-                '<div class="portlet-header">'+ strType +'</div>' +
                 '<div class="portlet-content"></div>'+
                 '<div class="portlet-nextLayout"></div>' +
                 '<div class="portlet-prevLayout"></div>' +
@@ -252,32 +251,6 @@ function Flyer(options) {
             .attr('id',pid)
             .attr('type',strType)
         pStack.append(portlet);
-
-        // Show Close Button just In Edit Mode
-        if(editMode) {
-            portlet.find( ".portlet-header" )
-                .addClass( "ui-widget-header ui-corner-all" )
-                .prepend( "<span class='ui-icon ui-icon-closethick'></span>");
-
-            // Portlet Events
-            portlet.find( ".portlet-header .ui-icon").first()
-                .click(function(e) {
-                    $(e.target).parent().parent().remove();
-                    reLocatingPlus();
-                });
-
-            portlet
-                .resize(function(){
-                    reLocatingPlus();
-                })
-                .ready(function(){
-                    console.log('GG')
-                });
-
-
-        } else {
-            portlet.find( ".portlet-header").remove();
-        }
 
         // Init
         if(Widgets[ptype] && Widgets[ptype].init )
@@ -292,9 +265,22 @@ function Flyer(options) {
         portlet.css('height',h);
 
         if(editMode) {
+            // Close button
+            $("<span class='portlet-closeButton ui-icon ui-icon-closethick'></span>")
+                .click(function(e) {
+                    $(e.target).parent().remove();
+                    reLocatingPlus();
+                })
+                .appendTo(portlet);
+
+            $("<span class='portlet-settingButton ui-icon ui-icon-gear'></span>")
+                .click(function(e) {
+                    console.log('Setting');;
+                })
+                .appendTo(portlet);
+
             // Next Layout Button
             portlet.find('.portlet-nextLayout')
-                .css('display','block')
                 .css('top',(h-32)/2 )
                 .css('right',-32)
                 .click(function(){
@@ -303,13 +289,24 @@ function Flyer(options) {
 
             // Previous Layout Button
             portlet.find('.portlet-prevLayout')
-                .css('display','block')
                 .css('top',(h-32)/2)
                 .css('left',-32)
                 .click(function(){
                     console.log('Prev');
                 });
 
+            portlet.mouseenter(function(){
+                portlet.find('.portlet-closeButton').show();
+                portlet.find('.portlet-nextLayout').show();
+                portlet.find('.portlet-prevLayout').show();
+                portlet.find('.portlet-settingButton').show();
+            });
+            portlet.mouseleave(function(){
+                portlet.find('.portlet-closeButton').hide();
+                portlet.find('.portlet-nextLayout').hide();
+                portlet.find('.portlet-prevLayout').hide();
+                portlet.find('.portlet-settingButton').hide();
+            });
 
             reLocatingPlus();
         }
