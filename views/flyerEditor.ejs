@@ -2,6 +2,11 @@
 
 
 <script src="/jquery-ui/js/file_upload.js"></script>
+
+<link href="http://hallojs.org/css/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<script src="http://rangy.googlecode.com/svn/trunk/currentrelease/rangy-core.js"></script>
+<script src="http://hallojs.org/js/hallo.js"></script>
+
 <script src="/flyer.js"></script>
 <script>
     var flyer;
@@ -20,11 +25,11 @@
             connectWith: ".portletStack",
             cursor: "move",
             axis: "y"
-        }).disableSelection();
+        })//.disableSelection();
 
         $('#buttonPreview').click( function() {
 
-            var flyerid = $('input[name=flyerid').val();
+            var flyerid = $('input[name=flyerid]').val();
 
             if( previewWindow==0 )
                 previewWindow = window.open('/flyer/' + flyerid);

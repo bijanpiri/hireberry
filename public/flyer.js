@@ -62,20 +62,29 @@ function Flyer(options) {
 
     Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
         .onInit(function(portlet) {
+
+            portlet.find('.portlet-content').append('<p></p>');
+            portlet.click(function(){
+                var p = portlet.find('.portlet-content p');
+
+                if( p.is(":focus")==false  )
+                    p.focus();
+                
+            });
+
             if(editMode){
-                portlet.find('.portlet-content').append('<input type="text" name="text">')
-            } else {
-                portlet.find('.portlet-content').append('<span class="text"></span>');
+                portlet.find('.portlet-content p').hallo({
+                    plugins: {
+                        'halloformat': {}
+                    }
+                })
             }
         })
         .onSerialize(function(portlet) {
-            return portlet.find('input[type="text"]').val();
+            return portlet.find('p').text();
         })
         .onDeserialize(function(portlet, content) {
-            if(editMode)
-                return portlet.find('input[type="text"]').val(content);
-            else
-                return portlet.find('span[class="text"]').text(content);
+            return portlet.find('p').text(content);
         })
 
 
