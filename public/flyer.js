@@ -3,10 +3,11 @@ function Flyer(options) {
     var editMode = options.editMode;
     var pStack = this;
     var portletCounter = 0;
+    var layoutIndex = 0;
     var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
 
-    function Widget(widgetType){
-        this.height = 100; //px
+
+    function Widget(options){
 
         this.onInit = function(callback){
             this.init = callback;
@@ -23,10 +24,24 @@ function Flyer(options) {
             return this;
         };
 
-        this.widgetType = widgetType;
+        this.onNextLayout = function(callback){
+            this.nextLayout = callback;
+            return this;
+        };
+
+        this.onPrevLayout = function(callback){
+            this.prevLayout = callback;
+            return this;
+        };
+
+        this.widgetType = options.widgetType;
+        this.height = 100; //px
+        this.hasLayout = options.hasLayout;
         this.init;
         this.serialize;
         this.deserialize;
+        this.nextLayout;
+        this.prevLayout;
     }
 
     /******** As A Sample **********
@@ -45,7 +60,7 @@ function Flyer(options) {
     // Widgets Collection
     var Widgets = {};
 
-    Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text})
+    Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
         .onInit(function(portlet) {
             if(editMode){
                 portlet.find('.portlet-content').append('<input type="text" name="text">')
@@ -61,10 +76,10 @@ function Flyer(options) {
                 return portlet.find('input[type="text"]').val(content);
             else
                 return portlet.find('span[class="text"]').text(content);
-        });
+        })
 
 
-    Widgets[widgetsType.Picture] = new Widget({widgetType:widgetsType.Picture})
+    Widgets[widgetsType.Picture] = new Widget({widgetType:widgetsType.Picture, hasLayout:true})
         .onInit(function(portlet, elementID) {
 
             portlet.find('.portlet-content').append(
@@ -93,10 +108,16 @@ function Flyer(options) {
         })
         .onDeserialize(function(portlet, content) {
             return portlet.find('.portlet-picture').attr('src', content);
+        })
+        .onNextLayout(function(){
+
+        })
+        .onPrevLayout(function(){
+
         });
 
 
-    Widgets[widgetsType.Video] = new Widget({widgetType:widgetsType.Video})
+    Widgets[widgetsType.Video] = new Widget({widgetType:widgetsType.Video, hasLayout:false})
         .onInit(function(portlet) {
             if(editMode)
                 portlet.find('.portlet-content').append('<input type="text">')
@@ -112,7 +133,7 @@ function Flyer(options) {
             return portlet.find('iframe').attr('src',content);
         });
 
-    Widgets[widgetsType.Button] = new Widget({widgetType:widgetsType.Button})
+    Widgets[widgetsType.Button] = new Widget({widgetType:widgetsType.Button, hasLayout:false})
         .onInit(function(portlet) {
             if(editMode)
                 portlet.find('.portlet-content').append('<input type="text">');
@@ -129,7 +150,7 @@ function Flyer(options) {
                 return portlet.find('a[class="btn"]').text(content).attr('href',content);
         });
 
-    Widgets[widgetsType.Tag] = new Widget({widgetType:widgetsType.Tag})
+    Widgets[widgetsType.Tag] = new Widget({widgetType:widgetsType.Tag, hasLayout:false})
         .onInit(function(portlet) {
             if(editMode){
                 portlet.find('.portlet-content').append('<input type="text" name="tags" data-role="tagsinput" placeholder="Add tags">');
@@ -150,7 +171,7 @@ function Flyer(options) {
                 return portlet.find('span[class="tag"]').text(content);
         });
 
-    Widgets[widgetsType.Map] = new Widget({widgetType:widgetsType.Map})
+    Widgets[widgetsType.Map] = new Widget({widgetType:widgetsType.Map, hasLayout:false})
         .onInit(function(portlet) {
             var id = 'map' + portlet.attr('id');
 
@@ -284,6 +305,7 @@ function Flyer(options) {
                 .css('top',(h-32)/2 )
                 .css('right',-32)
                 .click(function(){
+
                     console.log('Next');
                 });
 
@@ -297,14 +319,25 @@ function Flyer(options) {
 
             portlet.mouseenter(function(){
                 portlet.find('.portlet-closeButton').show();
-                portlet.find('.portlet-nextLayout').show();
-                portlet.find('.portlet-prevLayout').show();
+
+                var w = Widgets[ parseInt( $(this).attr('id') ) ];
+
+                if( w && w.hasLayout ){
+                    portlet.find('.portlet-nextLayout').show();
+                    portlet.find('.portlet-prevLayout').show();
+                }
                 portlet.find('.portlet-settingButton').show();
             });
             portlet.mouseleave(function(){
                 portlet.find('.portlet-closeButton').hide();
-                portlet.find('.portlet-nextLayout').hide();
-                portlet.find('.portlet-prevLayout').hide();
+
+                var w = Widgets[ parseInt( $(this).attr('id') ) ];
+
+                if( w && w.hasLayout ){
+                    portlet.find('.portlet-nextLayout').hide();
+                    portlet.find('.portlet-prevLayout').hide();
+                }
+
                 portlet.find('.portlet-settingButton').hide();
             });
 
