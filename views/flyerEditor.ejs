@@ -16,7 +16,11 @@
         });
 
 
-        $(".portletStack").sortable({connectWith: ".portletStack"}).disableSelection();
+        $(".portletStack").sortable({
+            connectWith: ".portletStack",
+            cursor: "move",
+            axis: "y"
+        }).disableSelection();
 
         $('#buttonPreview').click( function() {
 

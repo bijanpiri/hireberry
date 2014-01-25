@@ -219,10 +219,14 @@ function Flyer(options) {
     var remaindedHeight = function () {
         var emptySpaceHeight = pStack.height();
 
+        console.log('Stack-Height:' + pStack.height() );
+
         pStack.find('.portlet').each(function(index) {
             emptySpaceHeight -= $(this).height();
+            console.log('-' + $(this).height() );
         });
 
+        console.log('R-Height:' + emptySpaceHeight);
         return emptySpaceHeight;
     }
 
