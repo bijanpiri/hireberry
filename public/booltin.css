@@ -33,9 +33,19 @@ body {
 }
 .portlet-header {
     padding-bottom: 4px;
-    padding-left: 0.2em; }
-.portlet-header .ui-icon { float: right; }
+    padding-left: 0.2em;
+    height: 15px;
+}
+
+.portlet-header .ui-icon {
+    float: right;
+}
 .portlet-content { padding: 0.4em; }
+
+.portlet:hover {
+    border: 2px dotted #000;
+}
+
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
 .newitem {

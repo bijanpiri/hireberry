@@ -6,6 +6,8 @@ function Flyer(options) {
     var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
 
     function Widget(widgetType){
+        this.height = 100; //px
+
         this.onInit = function(callback){
             this.init = callback;
             return this;
@@ -66,8 +68,8 @@ function Flyer(options) {
         .onInit(function(portlet, elementID) {
 
             portlet.find('.portlet-content').append(
-                '<input type="file" name="picture" multiple>' +
-                '<img alt="IMAGE" src="#" class="portlet-picture">');
+                '<input type="file" name="picture" multiple hidden>' +
+                '<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
 
             if(editMode){
                 portlet.find('input[type=file]')
@@ -79,6 +81,9 @@ function Flyer(options) {
                             portlet.find('.portlet-picture').attr('src', '/uploads/' + data.result.files[0].name);
                         }
                     });
+                portlet.find('img').click(function(){
+                    portlet.find('input[type=file]').click();
+                });
             } else {
                 portlet.find('input[type=file]').remove();
             }
@@ -166,7 +171,7 @@ function Flyer(options) {
     // Set PortletStack size (A4 1.4) height/width = sqrt(2)
     var initDimension = function() {
 
-        var aspect_ratio = 0.75;
+        var aspect_ratio = 0.90;
         pStack.height( pStack.width() * aspect_ratio );
 
         $(window).resize(function() {
@@ -233,15 +238,17 @@ function Flyer(options) {
     var createPortlet = function( ptype, pid, content ) {
 
         // Check Empty Space
-        if( remaindedHeight() < 30 )
+        if( remaindedHeight() < 100 )
             return;
 
         var strType = portletType2string(ptype);
 
-        var portlet = $('<div class="portlet"><div class="portlet-header">'+ strType +
-            '</div><div class="portlet-content"></div></div>')
+        var portlet = $(
+            '<div class="portlet">'+
+            '<div class="portlet-header">'+ strType +'</div>' +
+            '<div class="portlet-content"></div></div>')
             .attr('id',pid)
-            .attr('type',strType);
+            .attr('type',strType)
         pStack.append(portlet);
 
         // Show Close Button just In Edit Mode
@@ -278,6 +285,7 @@ function Flyer(options) {
         if(content && Widgets[ptype] && Widgets[ptype].deserialize )
             Widgets[ptype].deserialize(portlet, content);
 
+        portlet.css('height',Widgets[ptype].height);
         if(editMode)
             reLocatingPlus();
     };
