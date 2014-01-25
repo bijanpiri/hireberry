@@ -47,7 +47,19 @@
 
             console.log( flyer );
         });
+
+        $('#backgroundImage').fileupload({
+            url:'/flyer/upload',
+            dataType: 'json',
+            done: function (e, data) {
+                flyer.setBackground( '/uploads/' + data.result.files[0].name );
+            }
+        });
     });
+
+    function changeBackground() {
+        $('#backgroundImage').click();
+    }
 
 </script>
 
@@ -66,6 +78,10 @@
             <button type="button" class="btn btn-success" id="buttonSave">Save</button>
             <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
             <span><%=templateID%></span>
+        </div>
+        <div class="span1 offset4">
+            <button class="btn btn-warning" onclick="changeBackground()">Background</button>
+            <input type="file" id="backgroundImage" hidden>
         </div>
     </div>
     <div class="row-fluid">

@@ -29,7 +29,7 @@ body {
 
 .portlet  {
     position: relative;
-    background-color: #b2ffbe;
+    /*background-color: #b2ffbe;*/
 }
 .portlet:hover {
     background-color: #fefff9;

@@ -352,6 +352,8 @@ function Flyer(options) {
                 console.log(data)
 
                 $('input[name=flyertext]').val(data.description);
+                pStack.css('background-image',data.background)
+                    .css('background-size','cover');
 
                 for( var i=0; i<data.count; i++ ){
                     if( data[i] )
@@ -373,6 +375,7 @@ function Flyer(options) {
         var flyer = {
             description: $('input[name=flyertext]').val(),
             flyerid:  $('input[name=flyerid]').val(),
+            background: pStack.css('background-image'),
             count: portlets.length
         };
 
@@ -412,6 +415,12 @@ function Flyer(options) {
         });
     }
 
+    var setBackground = function (url) {
+        pStack
+            .css('background-image','url("' + url + '")')
+            .css('background-size','cover');
+    }
+
     if(options.flyerid)
         json2flyer(options.flyerid)
 
@@ -422,7 +431,7 @@ function Flyer(options) {
     this.portletTypeString2Type = portletTypeString2Type;
     this.portletType2string = portletType2string;
     this.remaindedHeight = remaindedHeight;
-
+    this.setBackground = setBackground;
     return this;
 }
 
