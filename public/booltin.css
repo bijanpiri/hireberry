@@ -48,6 +48,7 @@ body {
 
 .portlet-nextLayout {
     position: absolute;
+    display: none;
     background-image: url('/images/next.png');
     background-size: cover;
     height: 32px;
@@ -56,6 +57,7 @@ body {
 
 .portlet-prevLayout {
     position: absolute;
+    display: none;
     background-image: url('/images/prev.png');
     background-size: cover;
     height: 32px;

@@ -30,17 +30,17 @@ function Flyer(options) {
     }
 
     /******** As A Sample **********
-    var w = new Widget().onInit(function(){
+     var w = new Widget().onInit(function(){
         console.log('inited');
     }).onSerialize(function(){
             console.log('serialized')
     }).onDeserialize(function(){
             console.log('deserialized')
     });
-    w.init();
-    w.serialize();
-    w.deserialize();
-    ******************************/
+     w.init();
+     w.serialize();
+     w.deserialize();
+     ******************************/
 
     // Widgets Collection
     var Widgets = {};
@@ -69,7 +69,7 @@ function Flyer(options) {
 
             portlet.find('.portlet-content').append(
                 '<input type="file" name="picture" multiple hidden>' +
-                '<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
+                    '<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
 
             if(editMode){
                 portlet.find('input[type=file]')
@@ -100,8 +100,7 @@ function Flyer(options) {
         .onInit(function(portlet) {
             if(editMode)
                 portlet.find('.portlet-content').append('<input type="text">')
-
-            portlet.find('.portlet-content').append('<iframe width="560" height="314" frameborder="0" allowfullscreen></iframe>')
+            portlet.find('.portlet-content').append('<iframe width="560" height="100" frameborder="0" allowfullscreen></iframe>')
         })
         .onSerialize(function(portlet) {
             return portlet.find('input[type="text"]').val()
@@ -245,11 +244,11 @@ function Flyer(options) {
 
         var portlet = $(
             '<div class="portlet">'+
-            '<div class="portlet-header">'+ strType +'</div>' +
-            '<div class="portlet-content"></div>'+
-            '<div class="portlet-nextLayout"></div>' +
-            '<div class="portlet-prevLayout"></div>' +
-            '</div>')
+                '<div class="portlet-header">'+ strType +'</div>' +
+                '<div class="portlet-content"></div>'+
+                '<div class="portlet-nextLayout"></div>' +
+                '<div class="portlet-prevLayout"></div>' +
+                '</div>')
             .attr('id',pid)
             .attr('type',strType)
         pStack.append(portlet);
@@ -272,7 +271,7 @@ function Flyer(options) {
                     reLocatingPlus();
                 })
                 .ready(function(){
-                   console.log('GG')
+                    console.log('GG')
                 });
 
 
@@ -292,24 +291,28 @@ function Flyer(options) {
 
         portlet.css('height',h);
 
-        // Next Layout Button
-        portlet.find('.portlet-nextLayout')
-            .css('top',(h-32)/2 )
-            .css('right',-32)
-            .click(function(){
-                console.log('Next');
-            });
+        if(editMode) {
+            // Next Layout Button
+            portlet.find('.portlet-nextLayout')
+                .css('display','block')
+                .css('top',(h-32)/2 )
+                .css('right',-32)
+                .click(function(){
+                    console.log('Next');
+                });
 
-        // Previous Layout Button
-        portlet.find('.portlet-prevLayout')
-            .css('top',(h-32)/2)
-            .css('left',-32)
-            .click(function(){
-                console.log('Prev');
-            });
+            // Previous Layout Button
+            portlet.find('.portlet-prevLayout')
+                .css('display','block')
+                .css('top',(h-32)/2)
+                .css('left',-32)
+                .click(function(){
+                    console.log('Prev');
+                });
 
-        if(editMode)
+
             reLocatingPlus();
+        }
     };
 
     var json2flyer = function(flyerid) {
