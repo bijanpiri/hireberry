@@ -113,16 +113,6 @@
     });
 </script>
 
-<!--
-<script>
-    $.getJSON('/boards',function(boards){
-
-        $.each(boards,function(index,board){
-            alert(board.name);
-        });
-    })
-</script>
--->
 <script>
     $(document).ready(main);
     function submit(){
@@ -146,70 +136,15 @@
                             });
                 });
     }
-    var clickTimeout;
-    var clickDetected = true;
-    function locate(){
-        if (!navigator.geolocation) {
-            locationError('Finding Location is not supported by your browser.');
-        } else {
-
-            map.locate();
-
-        }
-
-    }
 
     function main(){
         fillCategory();
-        $('#locate').click( locate);
+
         map = L.mapbox.map('map','coybit.gj1c3kom',{doubleClickZoom:false})
                 .setView([37.9, -77], 6)
-                .on('dblclick', function(e) {
-                    clickDetected = false;
-                    clearTimeout(clickTimeout);
-                    map.setView(e.latlng, map.getZoom() + 1);
-                    e.preventDefault();
-                    e.stopPropagation();
-                })
-                .on('click', function(e) {
 
-                    clickDetected = true;
-                    clickTimeout = setTimeout(function(){
-                        if(clickDetected)
-                            marker.setLatLng(e.latlng);
-                    },400);
-                });
-        /*marker = map.markerLayer.on('ready',function(){
-         var nameobject={},name=[];
-         var fetures = map.markerLayer.getGeoJSON().feature;
-
-         for(var  i =0 ; i<fetures.length; i++){
-         nameobject[fetures[i].properties['marker-symbol']]= true;
-         }
-         for (var k in nameobject) name.push(k);
-         });*/
-        /* var a = -77;
-
-         marker = L.mapbox.markerLayer({
-         type: 'Feature',
-         geometry: {
-         type: 'Point',
-         coordinates: [a, 37.9]
-         },
-         properties: {
-         title:'show me this mark',
-         description: 'my marker description',
-         'marker-size': 'large',
-         'marker-color': 'CC0033'
-         },
-         draggable: true
-
-         }).addTo(map);
-         }
-         a= a+3;*/
-        var geoJson= new Array();
         $.getJSON('/boards',function(boards){
-
+            var geoJson= new Array();
             $.each(boards,function(index,boardnn){
                 geoJson.push({
                     type: 'Feature',
@@ -226,14 +161,12 @@
                    // draggable: true
                 })
             });
+            map.markerLayer.setGeoJSON(geoJson);
         });
-        map.markerLayer.setGeoJSON(geoJson);
 
 
 
-        locate();
-        map.on('locationfound', locationFound);
-        map.on('locationerror', locationError);
+
     }
 
     function locationError(msg) {
