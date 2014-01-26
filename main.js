@@ -1,5 +1,4 @@
 var express = require('express');
-var passport = require('passport');
 var util = require('util');
 var everyauth = require('everyauth');
 var mongoose =  require('mongoose');
