@@ -28,6 +28,7 @@ body {
 }
 
 .portlet  {
+    overflow: hidden;
     position: relative;
     transition: background-color .5s linear;
     -moz-transition: background-color .5s linear;    /* FF3.7+ */
@@ -103,6 +104,17 @@ body {
     left: 0;
 }
 
+.portlet-splitter {
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    width: 100%;
+    background-color: #e5263e;
+}
+
+.portlet-splitter:hover{
+    cursor: ns-resize;
+}
 
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }

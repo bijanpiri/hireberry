@@ -5,7 +5,10 @@ function Flyer(options) {
     var portletCounter = 0;
     var layoutIndex = 0;
     var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
-
+    var splitterIsHold;
+    var splitterOwner;
+    var splitterOriginY;
+    var splitterOriginHeight;
 
     function Widget(options){
 
@@ -213,7 +216,7 @@ function Flyer(options) {
 
         if( rh<30 ){
             $('.portletCreator').css('height',50)
-                .css('bottom',-50)
+                .css('bottom',-60)
                 .find('#portletCreatorAlarm')
                 .show();
         }
@@ -290,6 +293,7 @@ function Flyer(options) {
                 '<div class="portlet-content"></div>'+
                 '<div class="portlet-nextLayout"></div>' +
                 '<div class="portlet-prevLayout"></div>' +
+                '<div class="portlet-splitter"></div>'+
                 '</div>')
             .attr('id',pid)
             .attr('type',strType)
@@ -372,6 +376,37 @@ function Flyer(options) {
                 if( w && w.hasLayout ){
                     portlet.find('.portlet-nextLayout').hide();
                     portlet.find('.portlet-prevLayout').hide();
+                }
+            });
+
+            portlet.find('.portlet-splitter').mousedown(function(e){
+                splitterIsHold = true;
+                splitterOwner = $(this).parent();
+                splitterOriginY = e.clientY;
+                splitterOriginHeight = splitterOwner.height();
+            });
+
+            $('body').mouseup(function(e){
+                splitterIsHold = false;
+            });
+
+            // pStack.parent = portletStack + portletCreator
+            pStack.parent().mousemove(function(e){
+                if( splitterIsHold ) {
+                    console.log('Resizing...' + splitterOwner.attr('type') + e.clientY);
+
+                    var curHeight = splitterOwner.height();
+                    var newHeight = splitterOriginHeight +  (e.clientY - splitterOriginY);
+                    var delta = newHeight-curHeight;
+
+                    // Snap
+                    if( remaindedHeight() - delta < 5 )
+                        newHeight += remaindedHeight() - delta;
+
+                    if( remaindedHeight() - delta >= 0){
+                        splitterOwner.height( newHeight );
+                        reLocatingPlus();
+                    }
                 }
             });
 
