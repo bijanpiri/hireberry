@@ -55,6 +55,9 @@ function Flyer(options) {
             layoutIndex=(layoutIndex-1+layouts.length)%layouts.length;
 
         };
+        this.hasLayout=function(){
+            return layouts.length>1;
+        }
 //        this.onLayoutChanged=function(){
 //            $(this).find('.portlet-content').html(this.currentLayout());
 //        }
@@ -62,11 +65,11 @@ function Flyer(options) {
 
         this.widgetType = options.widgetType;
         this.height = 100; //px
-//        this.hasLayout = options.hasLayout;
         this.init;
         this.initLayouts;
         this.serialize;
         this.deserialize;
+        this.port;
     }
 
     /******** As A Sample **********
@@ -87,23 +90,25 @@ function Flyer(options) {
 
     Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
         .onInit(function(portlet) {
+            port=portlet;
 
-            portlet.find('.portlet-content').addClass('portlet-content-text');
-
-            portlet.click(function(e){
-                $(this).find('.portlet-content').addClass('inEditMode').focus();
-            });
-
-            if(editMode){
-                portlet.find('.portlet-content').hallo({
-                    plugins: {
-                        'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": false},
-                        'hallojustify' : {},
-                        'hallolists' : {},
-                        'halloheadings': {}
-                    }
-                })
-            }
+            portlet.html( this.currentLayout());
+//            portlet.find('.portlet-content').addClass('portlet-content-text');
+//
+//            portlet.click(function(e){
+//                $(this).find('.portlet-content').addClass('inEditMode').focus();
+//            });
+//
+//            if(editMode){
+//                portlet.find('.portlet-content').hallo({
+//                    plugins: {
+//                        'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+//                        'hallojustify' : {},
+//                        'hallolists' : {},
+//                        'halloheadings': {}
+//                    }
+//                })
+//            }
         })
         .onSerialize(function(portlet) {
             return portlet.find('.portlet-content').html();
@@ -112,7 +117,18 @@ function Flyer(options) {
             return portlet.find('.portlet-content').html(content);
         })
         .onInitLayouts(function(portlet){
+            var layout1=
+                    $('<div>').addClass('portlet-content').append('Layout1')
+                    .after($('<div>').addClass('portlet-nextLayout'))
+                    .after($('<div>').addClass('portlet-prevLayout'))
+//                    .append($('<div>').addClass('.portlet-content').append('Layout1'))
+                ;
+            this.addLayout(layout1);
 
+            var layout2=
+                $('<div></div>')
+                    .addClass('.portlet-content').append('Layout2');
+                this.addLayout(layout2);
         })
 
 
@@ -322,11 +338,14 @@ function Flyer(options) {
                 '<div class="portlet-splitter"></div>'+
                 '</div>')
             .attr('id',pid)
+            .attr('typeid',ptype)
             .attr('type',strType);
 
         pStack.append(portlet);
 
         // Init
+        if(Widgets[ptype] && Widgets[ptype].initLayouts)
+            Widgets[ptype].initLayouts();
         if(Widgets[ptype] && Widgets[ptype].init )
             Widgets[ptype].init(portlet, pid);
 
@@ -386,9 +405,9 @@ function Flyer(options) {
                 portlet.find('.portlet-settingButton').show();
                 portlet.find('.portlet-moveButton').show();
 
-                var w = Widgets[ parseInt( $(this).attr('id') ) ];
+                var w = Widgets[ parseInt( $(this).attr('typeid') ) ];
 
-                if( w && w.hasLayout ){
+                if( w && w.hasLayout() ){
                     portlet.find('.portlet-nextLayout').show();
                     portlet.find('.portlet-prevLayout').show();
                 }
