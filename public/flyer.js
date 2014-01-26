@@ -3,7 +3,6 @@ function Flyer(options) {
     var editMode = options.editMode;
     var pStack = this;
     var portletCounter = 0;
-    var layoutIndex = 0;
     var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
     var splitterIsHold;
     var splitterOwner;
@@ -11,6 +10,8 @@ function Flyer(options) {
     var splitterOriginHeight;
 
     function Widget(options){
+        var layouts=new Array();
+        var layoutIndex = 0;
 
         this.onInit = function(callback){
             this.init = callback;
@@ -36,15 +37,26 @@ function Flyer(options) {
             this.prevLayout = callback;
             return this;
         };
+        this.addLayout=function(layout){
+            layouts.push(layout);
+        };
+        this.layout=function(){
+            return layouts[layoutIndex];
+        }
+        this.nextLayout=function(){
+            layoutIndex=(layoutIndex++)%layouts.length;
+        };
+        this.prevLayout=function(){
+
+        };
+
 
         this.widgetType = options.widgetType;
         this.height = 100; //px
-        this.hasLayout = options.hasLayout;
+//        this.hasLayout = options.hasLayout;
         this.init;
         this.serialize;
         this.deserialize;
-        this.nextLayout;
-        this.prevLayout;
     }
 
     /******** As A Sample **********
