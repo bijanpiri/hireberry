@@ -112,6 +112,7 @@
         })
     });
 </script>
+
 <script>
     $.getJSON('/boards',function(boards){
 
@@ -120,7 +121,8 @@
         });
     })
 </script>
-<div class="container-fluid">
+
+<div class="container-fluid" style="margin: 0 100px;">
 
     <div class="row-fluid">
         <div class="span12">
@@ -178,6 +180,10 @@
                                     </a>
                                 </li>
                                 <%}%>
+
+                                    <div id="map" style="height: 400px;" ></div>
+
+
                             </ul>
                         </div>
                     </div>

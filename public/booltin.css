@@ -69,6 +69,11 @@ body {
     width: 32px;
 }
 
+body {
+        padding-bottom: 150px;
+        width: 100%;
+    }
+
 .portlet-prevLayout {
     position: absolute;
     display: none;
