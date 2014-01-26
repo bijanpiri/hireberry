@@ -371,7 +371,31 @@ app.get('/setting', function(req,res){
 
    res.render('setting.ejs',{title:'Setting'});
 });
+app.get('/boards',function(req,res){
+    var FindUserBoards = function() {
+        BUsersBoards.find({user:req.user._id}, function (err, userBoards) {
+            if (err)
+                return handleError(err);
 
+            var boardsIDList = [];
+            for(var i=0; i<userBoards.length; i++)
+                boardsIDList.push(userBoards[i].board);
+            FindUserBoardsDetails(boardsIDList);
+
+        });
+
+    }
+
+    var FindUserBoardsDetails = function(boardsIDList) {
+        BBoards.find({_id:{$in:boardsIDList}}, function(err, b) {
+            res.send(b);
+        });
+    }
+    if(req.user)
+        FindUserBoards();
+    else
+        res.send('Login to get boards');
+});
 app.get('/profile', function(req,res) {
 
     var PrepareAndRender = function() {

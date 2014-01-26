@@ -37,24 +37,34 @@ function Flyer(options) {
             this.prevLayout = callback;
             return this;
         };
+        this.onInitLayouts=function(callback){
+            this.initLayouts=callback;
+            return this;
+        }
         this.addLayout=function(layout){
             layouts.push(layout);
         };
-        this.layout=function(){
+        this.currentLayout=function(){
             return layouts[layoutIndex];
         }
         this.nextLayout=function(){
-            layoutIndex=(layoutIndex++)%layouts.length;
-        };
-        this.prevLayout=function(){
+            layoutIndex=(layoutIndex+1)%layouts.length;
 
         };
+        this.prevLayout=function(){
+            layoutIndex=(layoutIndex-1+layouts.length)%layouts.length;
+
+        };
+//        this.onLayoutChanged=function(){
+//            $(this).find('.portlet-content').html(this.currentLayout());
+//        }
 
 
         this.widgetType = options.widgetType;
         this.height = 100; //px
 //        this.hasLayout = options.hasLayout;
         this.init;
+        this.initLayouts;
         this.serialize;
         this.deserialize;
     }
@@ -101,6 +111,10 @@ function Flyer(options) {
         .onDeserialize(function(portlet, content) {
             return portlet.find('.portlet-content').html(content);
         })
+        .onInitLayouts(function(portlet){
+
+        })
+
 
 
     Widgets[widgetsType.Picture] = new Widget({widgetType:widgetsType.Picture, hasLayout:true})
@@ -308,7 +322,8 @@ function Flyer(options) {
                 '<div class="portlet-splitter"></div>'+
                 '</div>')
             .attr('id',pid)
-            .attr('type',strType)
+            .attr('type',strType);
+
         pStack.append(portlet);
 
         // Init

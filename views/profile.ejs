@@ -112,6 +112,14 @@
         })
     });
 </script>
+<script>
+    $.getJSON('/boards',function(boards){
+
+        $.each(boards,function(index,board){
+            alert(board.name);
+        });
+    })
+</script>
 <div class="container-fluid">
 
     <div class="row-fluid">
