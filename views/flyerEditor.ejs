@@ -3,6 +3,8 @@
 
 <script src="/jquery-ui/js/file_upload.js"></script>
 
+<script src="http://cburgmer.github.io/rasterizeHTML.js/rasterizeHTML.allinone.js"></script>
+
 <link href="http://hallojs.org/css/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <script src="http://rangy.googlecode.com/svn/trunk/currentrelease/rangy-core.js"></script>
 <script src="http://hallojs.org/js/hallo.js"></script>
@@ -107,6 +109,25 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        function shot(){
+            var canvas = document.getElementById("canvas");
+            var flyerElem = $('.portletStack').html();
+
+            rasterizeHTML.drawHTML(flyerElem,canvas);
+        }
+    </script>
+    <div class="row-fluid">
+        <div class="span8 offset2">
+            <button onclick="shot()">SHOT</button>
+            <canvas id="canvas" width="400" height="200" crossOrigin=""></canvas>
+        </div>
+    </div>
+
 </div>
+
+
 
 

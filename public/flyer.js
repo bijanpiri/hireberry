@@ -325,7 +325,7 @@ function Flyer(options) {
     var createPortlet = function( ptype, pid, content ) {
 
         // Check Empty Space
-        if( remaindedHeight() < 100 )
+        if( editMode && remaindedHeight() < 100 )
             return;
 
         var strType = portletType2string(ptype);

@@ -1,6 +1,5 @@
 <% layout('layout') -%>
 
-<script src="http://cburgmer.github.io/rasterizeHTML.js/rasterizeHTML.allinone.js"></script>
 <style>
     #portletStack {
         box-shadow: 1px 1px 10px;
@@ -62,14 +61,6 @@
             flyerid:flyerid
         });
     });
-
-    function shot(){
-        var canvas = document.getElementById("canvas");
-        var flyerElem = $('#portletStack').html();
-
-        rasterizeHTML.drawHTML(flyerElem,canvas,function(image){
-        });
-    }
 </script>
 
 <div class="container">
@@ -116,11 +107,4 @@
         </div>
     </div>
     <% } %>
-</div>
-
-<div class="row" style="margin-top: 30px;">
-    <div class="span8 offset2">
-        <button onclick="shot()">SHOT</button>
-        <canvas id="canvas" width="400" height="200"></canvas>
-    </div>
 </div>
