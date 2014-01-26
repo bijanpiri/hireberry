@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="75bbfb85-70f0-48a8-846c-7962561503c1" name="Default" comment="" />
+    <list default="true" id="75bbfb85-70f0-48a8-846c-7962561503c1" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/profile.ejs" afterPath="$PROJECT_DIR$/views/profile.ejs" />
+    </list>
     <ignored path="booltin.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,19 +34,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="booltin.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="booltin.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/booltin.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="63" column="23" selection-start="1253" selection-end="1253" vertical-scroll-proportion="2.827957" vertical-offset="808" max-vertical-offset="2431">
+            <state line="63" column="23" selection-start="1253" selection-end="1253" vertical-scroll-proportion="0.0" vertical-offset="1204" max-vertical-offset="2431">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="profile.ejs" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="profile.ejs" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/profile.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="123" column="0" selection-start="4326" selection-end="4326" vertical-scroll-proportion="-5.3846154" vertical-offset="1951" max-vertical-offset="4862">
+            <state line="229" column="8" selection-start="7552" selection-end="7552" vertical-scroll-proportion="0.91392404" vertical-offset="3532" max-vertical-offset="7157">
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#ul#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
@@ -58,7 +60,7 @@
       <file leaf-file-name="newboard.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/script/newboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="73" column="45" selection-start="1883" selection-end="1883" vertical-scroll-proportion="0.0" vertical-offset="1068" max-vertical-offset="2057">
+            <state line="73" column="45" selection-start="1883" selection-end="1883" vertical-scroll-proportion="0.0" vertical-offset="393" max-vertical-offset="2057">
               <folding />
             </state>
           </provider>
@@ -67,7 +69,7 @@
       <file leaf-file-name="boardnew.ejs" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/boardnew.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="22" selection-start="4231" selection-end="4231" vertical-scroll-proportion="0.0" vertical-offset="1666" max-vertical-offset="1921">
+            <state line="98" column="22" selection-start="4231" selection-end="4231" vertical-scroll-proportion="-49.384617" vertical-offset="382" max-vertical-offset="1921">
               <folding />
             </state>
           </provider>
@@ -316,17 +318,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.79692835" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25938568" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20923306" sideWeight="0.20307167" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20923306" sideWeight="0.7627986" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3993174" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3208191" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23720136" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -400,7 +402,9 @@
     </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1597" column="0" selection-start="26068" selection-end="26068" vertical-scroll-proportion="0.33333334" vertical-offset="27025" max-vertical-offset="64651" />
+        <state line="1597" column="0" selection-start="26068" selection-end="26068" vertical-scroll-proportion="0.33333334" vertical-offset="27025" max-vertical-offset="64651">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/register.ejs">
@@ -455,9 +459,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/boardnew.ejs">
+    <entry file="file://$PROJECT_DIR$/public/booltin.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="22" selection-start="4231" selection-end="4231" vertical-scroll-proportion="0.0" vertical-offset="1666" max-vertical-offset="1921">
+        <state line="63" column="23" selection-start="1253" selection-end="1253" vertical-scroll-proportion="0.0" vertical-offset="1204" max-vertical-offset="2431">
           <folding />
         </state>
       </provider>
@@ -469,22 +473,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/boardnew.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="22" selection-start="4231" selection-end="4231" vertical-scroll-proportion="-49.384617" vertical-offset="382" max-vertical-offset="1921">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/profile.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="0" selection-start="4326" selection-end="4326" vertical-scroll-proportion="-5.3846154" vertical-offset="1951" max-vertical-offset="4862">
+        <state line="229" column="8" selection-start="7552" selection-end="7552" vertical-scroll-proportion="0.91392404" vertical-offset="3532" max-vertical-offset="7157">
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#ul#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#li#0;n#ul#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#hr#0;n#div#2;n#div#0;n#a#0;n#div#0;n#li#0;n#ul#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/booltin.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="23" selection-start="1253" selection-end="1253" vertical-scroll-proportion="2.827957" vertical-offset="808" max-vertical-offset="2431">
-          <folding />
         </state>
       </provider>
     </entry>
