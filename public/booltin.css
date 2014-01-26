@@ -89,6 +89,15 @@ body {
     right: 16px;
 }
 
+.portlet-moveButton {
+    position: absolute;
+    display: none;
+    height: 16px;
+    width: 16px;
+    top: 0;
+    left: 0;
+}
+
 
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }

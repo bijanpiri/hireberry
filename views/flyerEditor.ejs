@@ -14,6 +14,7 @@
     var previewWindow = 0;
 
     $(function() {
+
         flyerid = $('input[name=flyerid]').val();
         flyer = $('.portletStack').Flyer({
             editMode:true,
@@ -21,11 +22,9 @@
         });
 
 
-        $(".portletStack").sortable({
-            connectWith: ".portletStack",
-            cursor: "move",
-            axis: "y"
-        })//.disableSelection();
+
+
+        $('#portletCreatorAlarm').hallo();
 
         $('#buttonPreview').click( function() {
 
