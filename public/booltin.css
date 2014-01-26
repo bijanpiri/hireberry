@@ -52,7 +52,12 @@ body {
 .portlet-header .ui-icon {
     float: right;
 }
-.portlet-content { padding: 0.4em; }
+.portlet-content {
+    /*padding: 0.4em; */
+}
+
+.portlet-content-text {
+}
 
 .portlet-nextLayout {
     position: absolute;

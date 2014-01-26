@@ -63,25 +63,28 @@ function Flyer(options) {
     Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
         .onInit(function(portlet) {
 
-            //portlet.find('.portlet-content').append('<p></p>');
+            portlet.find('.portlet-content').addClass('portlet-content-text');
 
             portlet.click(function(e){
-                $(this).addClass('inEditMode').focus();
+                $(this).find('.portlet-content').addClass('inEditMode').focus();
             });
 
             if(editMode){
-                portlet.hallo({
+                portlet.find('.portlet-content').hallo({
                     plugins: {
-                        'halloformat': {}
+                        'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": false},
+                        'hallojustify' : {},
+                        'hallolists' : {},
+                        'halloheadings': {}
                     }
                 })
             }
         })
         .onSerialize(function(portlet) {
-            return portlet.text();
+            return portlet.find('.portlet-content').html();
         })
         .onDeserialize(function(portlet, content) {
-            return portlet.text(content);
+            return portlet.find('.portlet-content').html(content);
         })
 
 
