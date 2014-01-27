@@ -5,6 +5,8 @@
 
 <script src="http://cburgmer.github.io/rasterizeHTML.js/rasterizeHTML.allinone.js"></script>
 
+<script src="/html2canvas.js"></script>
+
 <link href="http://hallojs.org/css/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <script src="http://rangy.googlecode.com/svn/trunk/currentrelease/rangy-core.js"></script>
 <script src="http://hallojs.org/js/hallo.js"></script>
@@ -14,6 +16,23 @@
     var flyer;
     var flyerid;
     var previewWindow = 0;
+
+    function changeBackground() {
+        $('#backgroundImage').click();
+    }
+
+    function shot(){
+        var canvas = document.getElementById("canvas");
+        var flyerElem = $('.portletStack');
+
+        //rasterizeHTML.drawHTML(flyerElem,canvas);
+
+        html2canvas(flyerElem, {
+            onrendered: function(canvas) {
+                console.log( canvas.toDataURL() );
+            }
+        });
+    }
 
     $(function() {
 
@@ -39,33 +58,38 @@
         })
 
         $('#buttonSave').click(function(){
-            var flyerjson = flyer.flyer2json('portletStack');
 
             $('#buttonSave').text('Saving...').addClass('disabled');
 
-            $.post( '/flyer/new', {flyer:flyerjson} )
-                    .done(function(data){
-                        $('#buttonSave').text('Save').removeClass('disabled');
-                    })
-                    .fail(function(data){
-                        $('#buttonSave').text('Save*').removeClass('disabled');
-                    });
+            var flyerElem = $('.portletStack');
+            var flyerjson = flyer.flyer2json('portletStack');
 
-            console.log( flyer );
+            // Generate Thumbnail Image
+            html2canvas(flyerElem, {
+                onrendered: function(canvas) {
+                    console.log( canvas.toDataURL() );
+
+                    flyerjson.thumbnail = canvas.toDataURL();
+
+                    $.post( '/flyer/new', {flyer:flyerjson} )
+                            .done(function(data){
+                                $('#buttonSave').text('Save').removeClass('disabled');
+                            })
+                            .fail(function(data){
+                                $('#buttonSave').text('Save*').removeClass('disabled');
+                            });
+                }
+            });
         });
 
         $('#backgroundImage').fileupload({
             url:'/flyer/upload',
             dataType: 'json',
             done: function (e, data) {
-                flyer.setBackground( '/uploads/' + data.result.files[0].name );
+                flyer.setBackground( '/uploads/' + data.result.files[0].name , true );
             }
         });
     });
-
-    function changeBackground() {
-        $('#backgroundImage').click();
-    }
 
 </script>
 
@@ -110,15 +134,6 @@
         </div>
     </div>
 
-
-    <script>
-        function shot(){
-            var canvas = document.getElementById("canvas");
-            var flyerElem = $('.portletStack').html();
-
-            rasterizeHTML.drawHTML(flyerElem,canvas);
-        }
-    </script>
     <div class="row-fluid">
         <div class="span8 offset2">
             <button onclick="shot()">SHOT</button>

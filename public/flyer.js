@@ -467,8 +467,7 @@ function Flyer(options) {
                 console.log(data)
 
                 $('input[name=flyertext]').val(data.description);
-                pStack.css('background-image',data.background)
-                    .css('background-size','contain');
+                setBackground(data.background, false);
 
                 for( var i=0; i<data.count; i++ ){
                     if( data[i] )
@@ -511,6 +510,16 @@ function Flyer(options) {
         return flyer;
     }
 
+    var getThumbnail = function (flyerid,callback){
+        $.get('/flyer/json/'+flyerid)
+            .done(function(data){
+                callback(data.thumbnail);
+            })
+            .fail(function(data){
+                callback(-1);
+            });
+    }
+
     // Initialization
     if( editMode ){
         pStack.sortable({
@@ -539,10 +548,11 @@ function Flyer(options) {
         });
     }
 
-    var setBackground = function (url) {
+    var setBackground = function (url, wrapper) {
         pStack
-            .css('background-image','url("' + url + '")')
-            .css('background-size','contain');
+            .css('background-image', ( wrapper ? 'url("' + url + '")' : url ) )
+            .css('background-size', pStack.width() + 'px ' + pStack.height() + 'px' )
+            .css('background-repeat', 'no-repeat');
     }
 
     if(options.flyerid)
@@ -556,6 +566,7 @@ function Flyer(options) {
     this.portletType2string = portletType2string;
     this.remaindedHeight = remaindedHeight;
     this.setBackground = setBackground;
+    this.getThumbnail = getThumbnail;
     return this;
 }
 

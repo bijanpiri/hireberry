@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">
 <script src="http://welldonethings.com/managed/tagmanager.js"></script>
 
+<script src="/flyer.js"></script>
+
 <script>
     var tagApi;
 
@@ -35,6 +37,12 @@
         $('.switchery').addClass('pull-right')
 
         $('.row-fluid .switchery').css('margin-top','10px').css('text-','10px')
+
+
+        var flyerid = $('input[name=flyerid]').val();
+        $().Flyer({}).getThumbnail(flyerid, function(imgURL){
+            $('#flyerThumbnail').attr('src',imgURL);
+        });
     });
 </script>
 
@@ -51,6 +59,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span12">
+                        <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
                         <input type="text" placeholder="Enter a title" style="width: 100%">
                     </div>
                 </div>
@@ -66,6 +75,9 @@
         </div>
         <div class="span6">
             <div class="container-fluid">
+                <div class="row-fluid" style="margin: 20px">
+                    <img width="300px" id="flyerThumbnail">
+                </div>
                 <div class="row-fluid">
                     <div class="span12" style="border: 1px solid #000;padding: 5px 0 0 5px;">
                         <input type="text" name="tags" placeholder="Board Name" class="tm-input" id="boardNamesList"/>
