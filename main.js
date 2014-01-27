@@ -207,7 +207,10 @@ everyauth.password
     })
     .respondToLoginSucceed( function (res, user) {
         if (user)
-            res.json({ success: true }, 200);
+            res.json({
+                success: true,
+                lastPage: '/profile.ejs'//(req.session.lastPage || '/profile.ejs')
+            }, 200);
         else
             res.json({ success: false }, 501);
     })
@@ -287,8 +290,8 @@ app.configure(function() {
     app.use(express.methodOverride());
     app.use(express.session({
         secret: 'keyboard cat',
-        maxAge  : new Date(Date.now() + 3600000), //1 Hour
-        expires : new Date(Date.now() + 3600000) //1 Hour
+        maxAge: false, //1 Hour
+        expires: false //1 Hour
     }));
     app.use(everyauth.middleware());
 });
@@ -515,7 +518,7 @@ app.get('/profile', function(req,res) {
         });
     }
 
-    if( req.user )
+    if( checkUser(req,res) )
         PrepareAndRender();
     else
         res.redirect('/login');
@@ -1261,9 +1264,13 @@ function getBoards(res,userid) {
 }
 
 function checkUser(req,res){
-    if(!req.user)
+    //if(!req.user)
+    if((req.session && req.session.auth && req.session.auth.loggedIn)==undefined){
+        // Set last page url for redirecting after login
+        req.session.lastPage = req.originalUrl;
         res.redirect('/login');
-    return req.user!=null;
+}
+return req.user!=null;
 }
 
 function BLog(text){

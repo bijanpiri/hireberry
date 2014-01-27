@@ -63,10 +63,10 @@
         });
         */
         $().Flyer({}).getThumbnail(flyerid, function(imgURL){
-            $('img')
+            $('<img>')
                     .attr('src',imgURL)
                     .width(400)
-                    .appendTo( $('#portletStack') );
+                    .appendTo($('#portletStack'));
         });
     });
 </script>

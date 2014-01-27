@@ -99,10 +99,10 @@
             */
             flyer.getThumbnail(flyerid, function(imgURL){
                 if(imgURL){
-                    $('img')
+                    $('<img>')
                             .attr('src',imgURL)
                             .width(300)
-                            .appendTo( parentElem );
+                            .appendTo(parentElem);
                     console.log(flyerid + ' - ' + imgURL);
                 }
             });
