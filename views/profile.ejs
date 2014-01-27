@@ -168,7 +168,7 @@
                     },
                     properties: {
                         title: boardnn.name,
-                        description: 'my marker description',
+                        description: boardnn.category,
                         'marker-size': 'large',
                         'marker-color': 'CC0033'
                     }
@@ -250,7 +250,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
-                        <div id="map" style="height: 400px; width: 600px;" ></div>
+                        <div id="map" style="height: 280px; margin: 10px;" ></div>
                         <div>
                             <ul class="thumbnails">
                                 <% for(i=0;i<boards.length;i++){%>
