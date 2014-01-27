@@ -56,9 +56,17 @@
 <script>
     $(function(){
         var flyerid = $('input[name=flyerid]').val();
+        /*
         $('#portletStack').Flyer({
             editMode:false,
             flyerid:flyerid
+        });
+        */
+        $().Flyer({}).getThumbnail(flyerid, function(imgURL){
+            $('img')
+                    .attr('src',imgURL)
+                    .width(400)
+                    .appendTo( $('#portletStack') );
         });
     });
 </script>

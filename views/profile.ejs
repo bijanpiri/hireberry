@@ -84,13 +84,27 @@
             });
         }
 
-        $('.userflyer').each(function(index){
+        var flyer = $().Flyer({});
+
+        $('.userflyer').each(function(idx){
 
             var flyerid = $(this).attr('flyer-id');
+            var parentElem = $('#userFlyerPreview'+flyerid);
 
+            /*
             $('#userFlyerPreview'+flyerid).Flyer({
                     editMode:false,
                     flyerid:flyerid
+            });
+            */
+            flyer.getThumbnail(flyerid, function(imgURL){
+                if(imgURL){
+                    $('img')
+                            .attr('src',imgURL)
+                            .width(300)
+                            .appendTo( parentElem );
+                    console.log(flyerid + ' - ' + imgURL);
+                }
             });
         });
 

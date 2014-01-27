@@ -916,7 +916,7 @@ app.get('/flyer/:id', function(req,res){
         if(err)
             return res.send('Oh oh error');
 
-        if(!flyer)
+        if(!flyer || !flyer.flyer)
             return res.send(404,{});
 
         var isOthersFlyer = (flyer.owner!=userid);
