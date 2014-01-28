@@ -28,48 +28,83 @@ function Flyer(options) {
             return this;
         };
 
-        this.onNextLayout = function(callback){
-            this.nextLayout = callback;
-            return this;
-        };
-
-        this.onPrevLayout = function(callback){
-            this.prevLayout = callback;
-            return this;
-        };
-        this.onInitLayouts=function(callback){
-            this.initLayouts=callback;
-            return this;
-        }
         this.addLayout=function(layout){
             layouts.push(layout);
         };
-        this.currentLayout=function(){
-            return layouts[layoutIndex];
-        }
+
         this.nextLayout=function(){
             layoutIndex=(layoutIndex+1)%layouts.length;
-
+            layoutChanged(false);
         };
         this.prevLayout=function(){
             layoutIndex=(layoutIndex-1+layouts.length)%layouts.length;
-
+            layoutChanged(true);
         };
+        var layoutChanged=function(left){
+//
+//            var content=portlet.find('.portlet-content');
+//            var current=$((content)[layoutIndex]).show();
+//            if(left)
+//                content.animate({'left':'-800'},function(){
+//                    content.hide();
+//                    current.show();
+//            });
+//            else{
+//                content.animate({'left':'800'},function(){
+//                    content.hide();
+//                    current.show();
+//                });
+//            }
+//            if(left)
+//                current.css('left','800px');
+//            else
+//                current.css('left','-800px');
+//            current.animate({'left':'0'})
+//
+//            current.show();
+
+        }
+        this.content=function(){
+            //var layCon='';
+            portlet=
+                $('<div></div>')
+                    .addClass('portlet')
+                    .addClass('jCarousel')
+                    .attr('data-jcarousel','true')
+
+                    .append(
+                        $('<div></div>')
+                            .addClass('portlet-nextLayout')
+                            .click(this.nextLayout))
+                    .append(
+                        $('<div></div>')
+                            .addClass('portlet-prevLayout')
+                            .click(this.prevLayout));
+
+//            var lays=$('<div></div>')
+            for(var i=0;i<layouts.length;i++){
+                portlet
+                    .append(
+                        $('<div></div>')
+                            .addClass('portlet-content')
+                            .append( layouts[i]));
+
+            }
+            $(portlet.find('.portlet-content')[0]).css('left','0').show();
+            return portlet;
+        }
         this.hasLayout=function(){
             return layouts.length>1;
         }
-//        this.onLayoutChanged=function(){
-//            $(this).find('.portlet-content').html(this.currentLayout());
-//        }
+
 
 
         this.widgetType = options.widgetType;
         this.height = 100; //px
         this.init;
-        this.initLayouts;
         this.serialize;
         this.deserialize;
-        this.port;
+        this.portlet;
     }
 
     /******** As A Sample **********
@@ -89,10 +124,20 @@ function Flyer(options) {
     var Widgets = {};
 
     Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
-        .onInit(function(portlet) {
-            port=portlet;
+        .onInit(function() {
+            var layout1='layout1';
+            this.addLayout(layout1);
 
-            portlet.html( this.currentLayout());
+            var layout2='layout2';
+            this.addLayout(layout2);
+
+            var layout3='layout3';
+            this.addLayout(layout3);
+            var layout4='layout4';
+            this.addLayout(layout4);
+//            port=portlet;
+
+//            portlet.html( this.content());
 //            portlet.find('.portlet-content').addClass('portlet-content-text');
 //
 //            portlet.click(function(e){
@@ -115,21 +160,7 @@ function Flyer(options) {
         })
         .onDeserialize(function(portlet, content) {
             return portlet.find('.portlet-content').html(content);
-        })
-        .onInitLayouts(function(portlet){
-            var layout1=
-                    $('<div>').addClass('portlet-content').append('Layout1')
-                    .after($('<div>').addClass('portlet-nextLayout'))
-                    .after($('<div>').addClass('portlet-prevLayout'))
-//                    .append($('<div>').addClass('.portlet-content').append('Layout1'))
-                ;
-            this.addLayout(layout1);
-
-            var layout2=
-                $('<div></div>')
-                    .addClass('.portlet-content').append('Layout2');
-                this.addLayout(layout2);
-        })
+        });
 
 
 
@@ -163,12 +194,6 @@ function Flyer(options) {
         .onDeserialize(function(portlet, content) {
             return portlet.find('.portlet-picture').attr('src', content);
         })
-        .onNextLayout(function(){
-
-        })
-        .onPrevLayout(function(){
-
-        });
 
 
     Widgets[widgetsType.Video] = new Widget({widgetType:widgetsType.Video, hasLayout:false})
@@ -330,24 +355,26 @@ function Flyer(options) {
 
         var strType = portletType2string(ptype);
 
-        var portlet = $(
-            '<div class="portlet">'+
-                '<div class="portlet-content"></div>'+
-                '<div class="portlet-nextLayout"></div>' +
-                '<div class="portlet-prevLayout"></div>' +
-                '<div class="portlet-splitter"></div>'+
-                '</div>')
+//        var portlet = $(
+//            '<div class="portlet">'+
+//                '<div class="portlet-content"></div>'+
+//                '<div class="portlet-nextLayout"></div>' +
+//                '<div class="portlet-prevLayout"></div>' +
+//                '<div class="portlet-splitter"></div>'+
+//                '</div>')
+//            .attr('id',pid)
+//            .attr('typeid',ptype)
+//            .attr('type',strType);
+
+
+        // Init
+        if(Widgets[ptype] && Widgets[ptype].init )
+            Widgets[ptype].init(portlet, pid);
+        var portlet=Widgets[ptype].content()
             .attr('id',pid)
             .attr('typeid',ptype)
             .attr('type',strType);
-
         pStack.append(portlet);
-
-        // Init
-        if(Widgets[ptype] && Widgets[ptype].initLayouts)
-            Widgets[ptype].initLayouts();
-        if(Widgets[ptype] && Widgets[ptype].init )
-            Widgets[ptype].init(portlet, pid);
 
         // Set Content
         if(content && Widgets[ptype] && Widgets[ptype].deserialize )

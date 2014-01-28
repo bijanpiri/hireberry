@@ -28,7 +28,7 @@ body {
 }
 
 .portlet  {
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: relative;
     transition: background-color .5s linear;
     -moz-transition: background-color .5s linear;    /* FF3.7+ */
@@ -54,9 +54,14 @@ body {
     float: right;
 }
 .portlet-content {
+    display: none;
+    position: relative;
+    left: -800px;
     /*padding: 0.4em; */
 }
-
+.portlet-content:first-child{
+    display: block;
+}
 .portlet-content-text {
 }
 
