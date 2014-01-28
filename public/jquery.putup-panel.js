@@ -20,9 +20,7 @@ $.fn.putupPanel = function() {
         return -1;
     }
 
-    function Select(boardIndex, selectionSource){
-
-        //selectionSource = 3;
+    function SelectByMap(boardIndex){
 
         // Find its index in selectedBoards
         var idxInSelectedBoard = indexInSelectedBoard(boardIndex);
@@ -33,7 +31,8 @@ $.fn.putupPanel = function() {
             selectedBoards.push(boardIndex);
 
             // Add to tags list
-            tagManager.tagsManager("pushTag", boards[boardIndex].name, true);
+            tag_board[ boards[boardIndex].name.hashCode() ] = boards[boardIndex]._id;
+            tagManager.tagsManager("pushTag", boards[boardIndex].name,true);
 
             // Select map marker
             var marker = markers[ boardIndex ];
@@ -45,20 +44,50 @@ $.fn.putupPanel = function() {
             selectedBoards.splice(idxInSelectedBoard,1);
 
             // Remove tag from tags list
-            if( selectionSource != selectionSources.Tag ){
-
-                // ToDO - BUG: select more than 1 board and unselect one of them from map. All of them removed!
-                var tags = tagManager.tagsManager('tags');
-                tagManager.tagsManager('empty');
-                tags.splice(boardIndex,1)
-                tags.forEach(function(tag){
-                    tagManager.tagsManager('pushTag',tag,true);
-                });
-            }
+            var tags = tagManager.tagsManager('tags').slice(0);
+            tagManager.tagsManager('empty');
+            tags.splice(boardIndex,1)
+            tags.forEach(function(tag){
+                tagManager.tagsManager('pushTag',tag,true);
+            });
 
             // Deselect map marker
             var marker = markers[ boardIndex ];
             marker.properties['marker-color'] = '#522';
+            map.markerLayer.setGeoJSON(markers);
+        }
+    }
+
+    function RemovedFromTagsList(boardIndex){
+
+        // Find its index in selectedBoards
+        var idxInSelectedBoard = indexInSelectedBoard(boardIndex);
+
+        if( idxInSelectedBoard!=-1 ){ // Select
+
+            // Remove from selected boards list
+            selectedBoards.splice(idxInSelectedBoard,1);
+
+            // Deselect map marker
+            var marker = markers[ boardIndex ];
+            marker.properties['marker-color'] = '#522';
+            map.markerLayer.setGeoJSON(markers);
+        }
+    }
+
+    function AddedToTagsList(boardIndex){
+
+        // Find its index in selectedBoards
+        var idxInSelectedBoard = indexInSelectedBoard(boardIndex);
+
+        if( idxInSelectedBoard==-1 ){ // Select
+
+            // Add to selected boards list
+            selectedBoards.push(boardIndex);
+
+            // Select map marker
+            var marker = markers[ boardIndex ];
+            marker.properties['marker-color'] = '#000';
             map.markerLayer.setGeoJSON(markers);
         }
     }
@@ -98,7 +127,7 @@ $.fn.putupPanel = function() {
 
         map.markerLayer.on('click',function(e) {
             var boardIndex = e.layer.feature.properties.boardIndex;
-            Select(boardIndex,selectionSources.Map);
+            SelectByMap(boardIndex,selectionSources.Map);
         });
 
 
@@ -118,11 +147,11 @@ $.fn.putupPanel = function() {
             //prefilled: ['My Boards']
         }).on('tm:pushed',function(e,t){
                 var boardid = tag_board[t.hashCode()];
-                Select( boardid2boardIndex(boardid), selectionSources.Tag, 'add' );
+                AddedToTagsList( boardid2boardIndex(boardid) );
             })
             .on('tm:spliced',function(e,t){
                 var boardid = tag_board[t.hashCode()];
-                Select( boardid2boardIndex(boardid), selectionSources.Tag, 'remove' );
+                RemovedFromTagsList( boardid2boardIndex(boardid) );
             });
 
         jQuery("#boardNamesList").typeahead({
