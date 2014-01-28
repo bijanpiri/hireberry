@@ -34,34 +34,15 @@ function Flyer(options) {
 
         this.nextLayout=function(){
             layoutIndex=(layoutIndex+1)%layouts.length;
-            layoutChanged(false);
+            layoutChanged($(this).parent());
         };
         this.prevLayout=function(){
             layoutIndex=(layoutIndex-1+layouts.length)%layouts.length;
-            layoutChanged(true);
+
+            layoutChanged($(this).parent());
         };
-        var layoutChanged=function(left){
-//
-//            var content=portlet.find('.portlet-content');
-//            var current=$((content)[layoutIndex]).show();
-//            if(left)
-//                content.animate({'left':'-800'},function(){
-//                    content.hide();
-//                    current.show();
-//            });
-//            else{
-//                content.animate({'left':'800'},function(){
-//                    content.hide();
-//                    current.show();
-//                });
-//            }
-//            if(left)
-//                current.css('left','800px');
-//            else
-//                current.css('left','-800px');
-//            current.animate({'left':'0'})
-//
-//            current.show();
+        var layoutChanged=function(portlet){
+            portlet.find('.jcarousel').jcarousel('scroll',layoutIndex);
 
         }
         this.content=function(){
@@ -69,28 +50,36 @@ function Flyer(options) {
             portlet=
                 $('<div></div>')
                     .addClass('portlet')
-                    .addClass('jCarousel')
-                    .attr('data-jcarousel','true')
-
                     .append(
-                        $('<div></div>')
-                            .addClass('portlet-nextLayout')
-                            .click(this.nextLayout))
+                        $('<div>').addClass('jcarousel')
+                            .attr('data-jcarousel','true')
+                            .attr('data-wrap','circular'))
                     .append(
-                        $('<div></div>')
-                            .addClass('portlet-prevLayout')
-                            .click(this.prevLayout));
+                        $('<a>')
+                            .addClass("jcarousel-control-prev")
+                            .addClass("portlet-prevLayout")
+                            .append('‹').click(this.prevLayout)
+                    ).append(
+                        $('<a>')
+                            .addClass("jcarousel-control-next")
+                            .addClass("portlet-nextLayout")
+                            .append('›').click(this.nextLayout)
+//                    )
+//                    .append(
+//                        '<a href="#" class="jcarousel-control-prev" data-jcarouselcontrol="true">‹</a>'
+//                    ).append(
+//                        '<a href="#" class="jcarousel-control-prev" data-jcarouselcontrol="true">‹</a>'
+                    );
 
-//            var lays=$('<div></div>')
+            var ul=$('<ul>');
             for(var i=0;i<layouts.length;i++){
-                portlet
+                ul
                     .append(
-                        $('<div></div>')
-                            .addClass('portlet-content')
-                            .append( layouts[i]));
+                        $('<li></li>')
+                            .append( $('<div></div>').append( layouts[i])));
 
             }
-            $(portlet.find('.portlet-content')[0]).css('left','0').show();
+            portlet.find('.jcarousel').append(ul).jcarousel();
             return portlet;
         }
         this.hasLayout=function(){
@@ -126,6 +115,28 @@ function Flyer(options) {
     Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
         .onInit(function() {
             var layout1='layout1';
+            layout1=
+                $('<div></div>')
+//                    .addClass('container')
+                    .append(
+                        $('<div></div>')
+//                            .addClass('row')
+//                            .append(
+//                                $('<div></div>')
+//                                    .addClass('span12')
+                                    .addClass('textfield')
+                                    .addClass('portlet-content-text')
+//                                    .addClass('portlet-content-text')
+//                            )
+            );
+            layout1.find('.textfield').hallo({
+                    plugins: {
+                        'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+                        'hallojustify' : {},
+                        'hallolists' : {},
+                        'halloheadings': {}
+                    }
+                });
             this.addLayout(layout1);
 
             var layout2='layout2';
@@ -135,9 +146,7 @@ function Flyer(options) {
             this.addLayout(layout3);
             var layout4='layout4';
             this.addLayout(layout4);
-//            port=portlet;
 
-//            portlet.html( this.content());
 //            portlet.find('.portlet-content').addClass('portlet-content-text');
 //
 //            portlet.click(function(e){
@@ -487,11 +496,22 @@ function Flyer(options) {
         }
     };
 
-    var json2flyer = function(flyerid,callback) {
+    var json2flyer = function(flyerid) {
 
         $.get('/flyer/json/'+flyerid)
             .done(function(data){
-                callback(data);
+                console.log(data)
+
+                $('input[name=flyertext]').val(data.description);
+                setBackground(data.background, false);
+
+                for( var i=0; i<data.count; i++ ){
+                    if( data[i] )
+                        createPortlet(
+                            parseInt(data[i].type),
+                            data[i].ID,
+                            data[i].Contents);
+                }
             })
             .fail(function(data){
                 console.log(data)
@@ -572,18 +592,7 @@ function Flyer(options) {
     }
 
     if(options.flyerid)
-        json2flyer(options.flyerid,function(json){
-            $('input[name=flyertext]').val(json.description);
-            setBackground(json.background, false);
-
-            for( var i=0; i<json.count; i++ ){
-                if( json[i] )
-                    createPortlet(
-                        parseInt(json[i].type),
-                        json[i].ID,
-                        json[i].Contents);
-            }
-        })
+        json2flyer(options.flyerid)
 
     // Public functions
     this.createPortlet = createPortlet;
