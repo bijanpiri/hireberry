@@ -108,6 +108,7 @@
 
 </script>
 
+
 <div class="container">
     <div class="row ">
         <div class="span12">
@@ -198,3 +199,14 @@
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">
+<script src="http://welldonethings.com/managed/tagmanager.js"></script>
+<script src="jquery.putup-panel.js"></script>
+<script>
+    function putup(){
+        $('#panel').putupPanel();
+    }
+</script>
+<button onclick="putup()">Put Up</button>
+<div id="panel" style="width:400px"></div>
