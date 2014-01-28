@@ -12,6 +12,7 @@
     var tagApi;
     var flyerJson;
     var flyerid;
+    var checkboxesList = [];
 
     $(function(){
         var tagApi = jQuery("#boardNamesList").tagsManager({
@@ -33,7 +34,7 @@
 
         var switchsList = $('input[type=checkbox]')
         switchsList.each(function(idx){
-            var s = new Switchery(switchsList[idx]);
+            checkboxesList[idx] = new Switchery(switchsList[idx]);
         })
 
         $('.switchery').addClass('pull-right')
@@ -48,6 +49,12 @@
             flyerJson.description = $('#description').val();
             flyerJson.disqusShortname = $('#disqussShortname').val();
 
+            var facebook = checkboxesList[0].isChecked();
+            var twitter = checkboxesList[1].isChecked();
+            var googleplus = checkboxesList[2].isChecked();
+            var reshare = checkboxesList[3].isChecked();
+            var reputup = checkboxesList[4].isChecked();
+
             $.post( '/flyer/save', {flyer:flyerJson} )
                     .done(function(data){
                         $('#buttonDone').removeClass('disabled');
@@ -57,12 +64,9 @@
                     });
         });
 
-        flyerid = $('input[name=flyerid]').val();
-        //$().Flyer({}).getThumbnail(flyerid, function(imgURL){
-        //    $('#flyerThumbnail').attr('src',imgURL);
-        //});
-
         // Load Flyer Properties
+        flyerid = $('input[name=flyerid]').val();
+
         $().Flyer({}).json2flyer(flyerid, function(json){
             flyerJson = json;
             $('#flyerThumbnail').attr('src',json.thumbnail);
@@ -90,9 +94,9 @@
                     </div>
                 </div>
                 <div class="row-fluid"><div class="span12"><b>Share on:</b></div></div>
-                <div class="row-fluid"><div class="span10 offset2">Facebook<input type="checkbox" class="pull-right"></div></div>
-                <div class="row-fluid"><div class="span10 offset2">Twitter<input type="checkbox" class="pull-right"></div></div>
-                <div class="row-fluid"><div class="span10 offset2">Google+<input type="checkbox" class="pull-right"></div></div>
+                <div class="row-fluid"><div class="span10 offset2">Facebook<input type="checkbox" class="js-switch pull-right"></div></div>
+                <div class="row-fluid"><div class="span10 offset2">Twitter<input type="checkbox" class="js-switch pull-right"></div></div>
+                <div class="row-fluid"><div class="span10 offset2">Google+<input type="checkbox" class="js-switch pull-right"></div></div>
                 <div class="row-fluid"><div class="span12"><b>Other Options:</b></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Comment<input type="text" id="disqussShortname" class="pull-right input-medium" placeholder="disqus shortname"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Reshare<input type="checkbox" class="pull-right"></div></div>
