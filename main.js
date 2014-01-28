@@ -373,6 +373,7 @@ app.get('/setting', function(req,res){
 
    res.render('setting.ejs',{title:'Setting'});
 });
+
 app.get('/boards',function(req,res){
     var FindUserBoards = function() {
         BUsersBoards.find({user:req.user._id}, function (err, userBoards) {
@@ -398,6 +399,7 @@ app.get('/boards',function(req,res){
     else
         res.send('Login to get boards');
 });
+
 app.get('/profile', function(req,res) {
 
     var PrepareAndRender = function() {
@@ -711,6 +713,10 @@ app.get('/board/:id',function(req,res) {
     });
 });
 
+app.get('/flyer/template', function(req,res){
+    res.render('flyerTemplate.ejs', {title:'Template Gallery'});
+});
+
 app.get('/flyer/editor/:tid', function(req,res){
 
     var flyerid;
@@ -770,7 +776,7 @@ app.get('/flyer/editor/:tid', function(req,res){
     getPublicBoards();
 });
 
-app.post('/flyer/new', function(req,res){
+app.post('/flyer/save', function(req,res){
     var flyer = req.body.flyer;
 
     BFlyers.update({_id:flyer.flyerid}, {$set:{flyer:flyer}}, function(err){
@@ -793,10 +799,6 @@ app.post('/flyer/new', function(req,res){
     */
 });
 
-app.get('/flyer/template', function(req,res){
-    res.render('flyerTemplate.ejs', {title:'Template Gallery'});
-});
-
 app.get('/flyer/publish/:flyerid', function(req,res){
     var flyerid = req.params.flyerid;
 
@@ -804,6 +806,15 @@ app.get('/flyer/publish/:flyerid', function(req,res){
        title:'Publish Flyer',
        flyerid:flyerid
    });
+});
+
+app.post('/flyer/publish/', function(req,res){
+    var flyerid = req.body.flyerid;
+
+    res.render('flyerPublish.ejs', {
+        title:'Publish Flyer',
+        flyerid:flyerid
+    });
 });
 
 app.post('/flyer/putup', function(req,res){
