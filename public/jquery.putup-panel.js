@@ -13,34 +13,38 @@ $.fn.putupPanel = function() {
 
     var selectionSources = { Tag:0, Map:1 };
 
+    function indexInSelectedBoard(boardIndex){
+        for(var i=0; i<selectedBoards.length;i++)
+            if( boardIndex == selectedBoards[i] )
+                return i;
+        return -1;
+    }
+
     function Select(boardIndex, selectionSource){
 
         //selectionSource = 3;
 
         // Find its index in selectedBoards
-        var idxInSelectedBoard = -1;
-        for(var i=0; i<selectedBoards.length;i++){
-            if( boardIndex == selectedBoards[i] ){
-                idxInSelectedBoard = i;
-                break;
-            }
-        }
+        var idxInSelectedBoard = indexInSelectedBoard(boardIndex);
 
-        if( idxInSelectedBoard==-1 ){
+        if( idxInSelectedBoard==-1 ){ // Select
 
+            // Add to selected boards list
             selectedBoards.push(boardIndex);
 
+            // Add to tags list
             tagManager.tagsManager("pushTag", boards[boardIndex].name, true);
 
+            // Select map marker
             var marker = markers[ boardIndex ];
             marker.properties['marker-color'] = '#000';
             map.markerLayer.setGeoJSON(markers);
         }
         else {
-            var boardIndex = selectedBoards[idxInSelectedBoard];
-
+            // Remove from selected boards list
             selectedBoards.splice(idxInSelectedBoard,1);
 
+            // Remove tag from tags list
             if( selectionSource != selectionSources.Tag ){
 
                 // ToDO - BUG: select more than 1 board and unselect one of them from map. All of them removed!
@@ -52,6 +56,7 @@ $.fn.putupPanel = function() {
                 });
             }
 
+            // Deselect map marker
             var marker = markers[ boardIndex ];
             marker.properties['marker-color'] = '#522';
             map.markerLayer.setGeoJSON(markers);
@@ -113,11 +118,11 @@ $.fn.putupPanel = function() {
             //prefilled: ['My Boards']
         }).on('tm:pushed',function(e,t){
                 var boardid = tag_board[t.hashCode()];
-                Select( boardid2boardIndex(boardid), selectionSources.Tag );
+                Select( boardid2boardIndex(boardid), selectionSources.Tag, 'add' );
             })
             .on('tm:spliced',function(e,t){
                 var boardid = tag_board[t.hashCode()];
-                Select( boardid2boardIndex(boardid), selectionSources.Tag );
+                Select( boardid2boardIndex(boardid), selectionSources.Tag, 'remove' );
             });
 
         jQuery("#boardNamesList").typeahead({
