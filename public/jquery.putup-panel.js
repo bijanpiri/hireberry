@@ -46,7 +46,7 @@ $.fn.putupPanel = function() {
             // Remove tag from tags list
             var tags = tagManager.tagsManager('tags').slice(0);
             tagManager.tagsManager('empty');
-            tags.splice(boardIndex,1)
+            tags.splice(idxInSelectedBoard,1)
             tags.forEach(function(tag){
                 tagManager.tagsManager('pushTag',tag,true);
             });
