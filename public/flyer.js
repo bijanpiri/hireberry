@@ -55,15 +55,19 @@ function Flyer(options) {
                             .attr('data-jcarousel','true')
                             .attr('data-wrap','circular'))
                     .append(
-                        $('<a>')
-                            .addClass("jcarousel-control-prev")
-                            .addClass("portlet-prevLayout")
-                            .append('‹').click(this.prevLayout)
+//                        $('<div>').addClass('jcarousel-control').append(
+                            $('<a>')
+                                .addClass("jcarousel-control-prev")
+//                            .addClass("portlet-prevLayout")
+                                .append('‹').click(this.prevLayout)
+//                        )
                     ).append(
+//                        $('<div>').addClass('jcarousel-control').append(
                         $('<a>')
                             .addClass("jcarousel-control-next")
-                            .addClass("portlet-nextLayout")
+//                            .addClass("portlet-nextLayout")
                             .append('›').click(this.nextLayout)
+//                        )
 //                    )
 //                    .append(
 //                        '<a href="#" class="jcarousel-control-prev" data-jcarouselcontrol="true">‹</a>'
@@ -118,25 +122,25 @@ function Flyer(options) {
             layout1=
                 $('<div></div>')
 //                    .addClass('container')
-                    .append(
-                        $('<div></div>')
+                .append(
+                    $('<div></div>')
 //                            .addClass('row')
 //                            .append(
 //                                $('<div></div>')
 //                                    .addClass('span12')
-                                    .addClass('textfield')
-                                    .addClass('portlet-content-text')
+                        .addClass('textfield')
+                        .addClass('portlet-content-text')
 //                                    .addClass('portlet-content-text')
 //                            )
-            );
+                );
             layout1.find('.textfield').hallo({
-                    plugins: {
-                        'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                        'hallojustify' : {},
-                        'hallolists' : {},
-                        'halloheadings': {}
-                    }
-                });
+                plugins: {
+                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+                    'hallojustify' : {},
+                    'hallolists' : {},
+                    'halloheadings': {}
+                }
+            });
             this.addLayout(layout1);
 
             var layout2='layout2';
@@ -413,21 +417,13 @@ function Flyer(options) {
                 .appendTo(portlet);
 
             // Next Layout Button
-            portlet.find('.portlet-nextLayout')
-                .css('top',(h-32)/2 )
-                .css('right',-32)
-                .click(function(){
-
-                    console.log('Next');
-                });
+            portlet.find('a.jcarousel-control-next')
+                .css('top',(h-30)/2 );
 
             // Previous Layout Button
-            portlet.find('.portlet-prevLayout')
-                .css('top',(h-32)/2)
-                .css('left',-32)
-                .click(function(){
-                    console.log('Prev');
-                });
+            portlet.find('a.jcarousel-control-prev')
+                .css('top',(h-30)/2);
+
 
             portlet.find('.portlet-handle')
                 .css('top',0)
@@ -443,10 +439,10 @@ function Flyer(options) {
 
                 var w = Widgets[ parseInt( $(this).attr('typeid') ) ];
 
-                if( w && w.hasLayout() ){
-                    portlet.find('.portlet-nextLayout').show();
-                    portlet.find('.portlet-prevLayout').show();
-                }
+//                if( w && w.hasLayout() ){
+//                    portlet.find('.portlet-nextLayout').show();
+//                    portlet.find('.portlet-prevLayout').show();
+//                }
             });
             portlet.mouseleave(function(){
                 portlet.find('.portlet-closeButton').hide();
@@ -455,10 +451,10 @@ function Flyer(options) {
 
                 var w = Widgets[ parseInt( $(this).attr('id') ) ];
 
-                if( w && w.hasLayout ){
-                    portlet.find('.portlet-nextLayout').hide();
-                    portlet.find('.portlet-prevLayout').hide();
-                }
+//                if( w && w.hasLayout ){
+//                    portlet.find('.portlet-nextLayout').hide();
+//                    portlet.find('.portlet-prevLayout').hide();
+//                }
             });
 
             portlet.find('.portlet-splitter').mousedown(function(e){

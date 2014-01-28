@@ -1,23 +1,77 @@
-*, *:before, *:after {
-    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-}
-.flyer{
-    background: powderblue;
-    width:400px;
-    height: 500px ;
-}
-.widget{
 
-    background: greenyellow;
-    margin: 0px;
-    height: 50px;
-    width:400px;
-}
-.text{
-    width:100%;
+.jcarousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
     height: 100%;
 }
-.bar{
-    height: 10px;
-    width:100%;
+
+
+.jcarousel ul {
+    width: 20000em;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.jcarousel li {
+    float: left;
+    width: 625px;
+    height: 100px;
+}
+
+/** Carousel Controls **/
+.jcarousel-control{
+    position: absolute;
+    width:100px;
+    height: 100px;
+    top:0;
+}
+.portlet:hover a.jcarousel-control-next,
+.portlet:hover a.jcarousel-control-prev{
+    display: block;
+}
+.jcarousel-control:hover .jcarousel-control-next,
+.jcarousel-control:hover .jcarousel-control-prev{
+    display: block;
+}
+.jcarousel-control-prev,
+.jcarousel-control-next {
+    display: none;
+    position: absolute;
+    top: 200px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background: #4E443C;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 0 1px #000;
+    font: 24px/27px Arial, sans-serif;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    -webkit-box-shadow: 0 0 2px #999;
+    -moz-box-shadow: 0 0 2px #999;
+    box-shadow: 0 0 2px #999;
+}
+
+.jcarousel-control-prev{
+    left: -30px;
+}
+
+.jcarousel-control-next {
+
+    right: -30px;
+}
+
+.jcarousel-control-prev:hover,
+.jcarousel-control-next:hover {
+    display: block;
+}
+.jcarousel-control-prev:hover span,
+    }
+.jcarousel-control-next:hover span {
+    display: block;
 }

@@ -6,11 +6,12 @@
 <script src="http://cburgmer.github.io/rasterizeHTML.js/rasterizeHTML.allinone.js"></script>
 
 <script src="/html2canvas.js"></script>
-
+<link href="/css/flyer.css" rel="stylesheet">
 <link href="http://hallojs.org/css/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <script src="http://rangy.googlecode.com/svn/trunk/currentrelease/rangy-core.js"></script>
 <script src="http://hallojs.org/js/hallo.js"></script>
 
+<script src="/script/jquery.jcarousel.min.js"></script>
 <script src="/flyer.js"></script>
 <script>
     var flyer;
@@ -35,12 +36,15 @@
     }
 
     $(function() {
-
+        $('.jcarousel').jcarousel();
         flyerid = $('input[name=flyerid]').val();
         flyer = $('.portletStack').Flyer({
             editMode:true,
             flyerid:flyerid
         });
+
+
+
 
         $('#portletCreatorAlarm').hallo();
 
@@ -59,7 +63,7 @@
             $('#buttonSave').text('Saving...').addClass('disabled');
 
             var flyerElem = $('.portletStack');
-            var flyerjson = flyer.flyer2json();
+            var flyerjson = flyer.flyer2json('portletStack');
 
             // Generate Thumbnail Image
             html2canvas(flyerElem, {
@@ -68,7 +72,7 @@
 
                     flyerjson.thumbnail = canvas.toDataURL();
 
-                    $.post( '/flyer/save', {flyer:flyerjson} )
+                    $.post( '/flyer/new', {flyer:flyerjson} )
                             .done(function(data){
                                 $('#buttonSave').text('Save').removeClass('disabled');
                             })
