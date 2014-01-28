@@ -75,6 +75,81 @@
         });
     });
 </script>
+<script>
+    $(document).ready(main);
+    function submit(){
+        $("input#tag").tagsinput('items');
+    }
+
+    var marker;
+   // var map;
+    function fillCategory(){
+        $.get('/board/categories',
+                function(cats){
+                    var options=$('select.categories');
+                    $.each(cats,
+                            function(i,cat){
+                                options.append(
+                                        $('<option>').attr('name',cat.id).append(
+                                                cat.name
+                                        )
+                                );
+
+                            });
+                });
+    }
+
+    function main(){
+        fillCategory();
+
+
+
+        $.getJSON('/board/get/public',function(boards){
+            var geoJson= new Array();
+            $.each(boards,function(index,boardnn){
+                geoJson.push({
+                    type: 'Feature',
+                    geometry:{
+                        type:'Point',
+                        coordinates:[boardnn.locationlng,boardnn.locationlat]
+                    },
+                    properties: {
+                        title: boardnn.name,
+                        description: boardnn.category,
+                        'marker-size': 'large',
+                        'marker-color': 'CC0033'
+                    }
+                    // draggable: true
+                })
+            });
+            map.markerLayer.setGeoJSON(geoJson);
+        });
+
+
+
+
+    }
+
+    function locationError(msg) {
+//    if(msg==null)
+//        msg='Failed to find location. Allow your browser to access your location.';
+        $('#msgLocationError>.msg').text(msg.message).parent().show();
+    }
+
+
+    function ErrorMsg(msg) {
+        $('.message-error').show();
+        $('.message-error>.msg-error').text(msg);
+    }
+
+    function locationFound(e) {
+        map.fitBounds(e.bounds);
+        marker.setLatLng(e.latlng);
+
+
+    }
+
+</script>
 
 <div class="container-fluid">
     <div class="row-fluid" style="margin-bottom: 30px;">
@@ -115,7 +190,7 @@
                 </div>
                 <div class="row-fluid">
                     <div class="span12" style="border: 1px solid #000;">
-                        <div id="map"></div>
+                        <div id="map" style="height: 400px;"></div>
                     </div>
                 </div>
             </div>
