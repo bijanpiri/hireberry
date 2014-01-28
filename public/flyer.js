@@ -460,22 +460,11 @@ function Flyer(options) {
         }
     };
 
-    var json2flyer = function(flyerid) {
+    var json2flyer = function(flyerid,callback) {
 
         $.get('/flyer/json/'+flyerid)
             .done(function(data){
-                console.log(data)
-
-                $('input[name=flyertext]').val(data.description);
-                setBackground(data.background, false);
-
-                for( var i=0; i<data.count; i++ ){
-                    if( data[i] )
-                        createPortlet(
-                            parseInt(data[i].type),
-                            data[i].ID,
-                            data[i].Contents);
-                }
+                callback(data);
             })
             .fail(function(data){
                 console.log(data)
@@ -556,7 +545,18 @@ function Flyer(options) {
     }
 
     if(options.flyerid)
-        json2flyer(options.flyerid)
+        json2flyer(options.flyerid,function(json){
+            $('input[name=flyertext]').val(json.description);
+            setBackground(json.background, false);
+
+            for( var i=0; i<json.count; i++ ){
+                if( json[i] )
+                    createPortlet(
+                        parseInt(json[i].type),
+                        json[i].ID,
+                        json[i].Contents);
+            }
+        })
 
     // Public functions
     this.createPortlet = createPortlet;

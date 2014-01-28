@@ -96,12 +96,12 @@
         </div>
     </div>
 
-    <% if(flyer.disqusShortname){ %>
+    <% if(flyer.flyer.disqusShortname){ %>
     <div class="row" style="margin-top: 30px;">
         <div class="span8 offset2">
             <div id="disqus_thread"></div>
             <script type="text/javascript">
-                var disqus_shortname = '<%=flyer.disqusShortname%>';
+                var disqus_shortname = '<%=flyer.flyer.disqusShortname%>';
 
                 /* * * DON'T EDIT BELOW THIS LINE * * */
                 (function() {

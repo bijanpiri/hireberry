@@ -10,6 +10,8 @@
 
 <script>
     var tagApi;
+    var flyerJson;
+    var flyerid;
 
     $(function(){
         var tagApi = jQuery("#boardNamesList").tagsManager({
@@ -38,10 +40,34 @@
 
         $('.row-fluid .switchery').css('margin-top','10px').css('text-','10px')
 
+        // Save Flyer Proeprties
+        $('#buttonDone').click(function(){
 
-        var flyerid = $('input[name=flyerid]').val();
-        $().Flyer({}).getThumbnail(flyerid, function(imgURL){
-            $('#flyerThumbnail').attr('src',imgURL);
+            $('#buttonDone').addClass('disabled');
+
+            flyerJson.description = $('#description').val();
+            flyerJson.disqusShortname = $('#disqussShortname').val();
+
+            $.post( '/flyer/save', {flyer:flyerJson} )
+                    .done(function(data){
+                        $('#buttonDone').removeClass('disabled');
+                    })
+                    .fail(function(data){
+                        $('#buttonDone').removeClass('disabled');
+                    });
+        });
+
+        flyerid = $('input[name=flyerid]').val();
+        //$().Flyer({}).getThumbnail(flyerid, function(imgURL){
+        //    $('#flyerThumbnail').attr('src',imgURL);
+        //});
+
+        // Load Flyer Properties
+        $().Flyer({}).json2flyer(flyerid, function(json){
+            flyerJson = json;
+            $('#flyerThumbnail').attr('src',json.thumbnail);
+            $('#description').val(json.description);
+            $('#disqussShortname').val(json.disqusShortname);
         });
     });
 </script>
@@ -51,7 +77,7 @@
         <div class="span9 offset1" style="background-color: #555; color: #fff; line-height: 25px; padding-left:10px ">
             STEP 1 > STEP2 > <b>STEP3. Publish your flyer</b>
             <a href="/flyer/editor" class="btn btn-success pull-right">Back</a>
-            <a href="#" class="btn btn-success pull-right">Done</a>
+            <a href="#" id="buttonDone" class="btn btn-success pull-right">Done</a>
         </div>
     </div>
     <div class="row-fluid">
@@ -60,7 +86,7 @@
                 <div class="row-fluid">
                     <div class="span12">
                         <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
-                        <input type="text" placeholder="Enter a title" style="width: 100%">
+                        <input type="text" id="description" placeholder="Enter a title" style="width: 100%">
                     </div>
                 </div>
                 <div class="row-fluid"><div class="span12"><b>Share on:</b></div></div>
@@ -68,7 +94,7 @@
                 <div class="row-fluid"><div class="span10 offset2">Twitter<input type="checkbox" class="pull-right"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Google+<input type="checkbox" class="pull-right"></div></div>
                 <div class="row-fluid"><div class="span12"><b>Other Options:</b></div></div>
-                <div class="row-fluid"><div class="span10 offset2">Comment<input type="text" class="pull-right input-medium" placeholder="disqus shortname"></div></div>
+                <div class="row-fluid"><div class="span10 offset2">Comment<input type="text" id="disqussShortname" class="pull-right input-medium" placeholder="disqus shortname"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Reshare<input type="checkbox" class="pull-right"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Reput-up<input type="checkbox" class="pull-right"></div></div>
             </div>

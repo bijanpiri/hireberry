@@ -42,9 +42,6 @@
             flyerid:flyerid
         });
 
-
-
-
         $('#portletCreatorAlarm').hallo();
 
         $('#buttonPreview').click( function() {
@@ -62,7 +59,7 @@
             $('#buttonSave').text('Saving...').addClass('disabled');
 
             var flyerElem = $('.portletStack');
-            var flyerjson = flyer.flyer2json('portletStack');
+            var flyerjson = flyer.flyer2json();
 
             // Generate Thumbnail Image
             html2canvas(flyerElem, {
