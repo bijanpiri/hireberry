@@ -136,7 +136,10 @@ $(function(){
         modal: true,
         autoOpen: false,
         width: 620,
-        height: 450
+        height: 450,
+        beforeClose: function( even ,ui ){
+            $('#putupPanelBody').html('');
+        }
     });
 
     $('#putupDoneButton').click(function(){
@@ -222,7 +225,6 @@ function OpenPutupPanel(flyerid) {
 
 function ClosePutupPanel() {
     $('#putupPanel').dialog('close');
-    $('#putupPanelBody').remove();
 }
 
 </script>
