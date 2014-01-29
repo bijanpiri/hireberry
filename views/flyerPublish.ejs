@@ -22,9 +22,16 @@
 
     $(function(){
         var tagApi = jQuery("#boardNamesList").tagsManager({
-            prefilled: ['My Boards']
+            prefilled: ["jk"]
         });
 
+            // tagApi.tagsManager("pushTag",);
+       /* $.getJSON('/board/get/public',function(boards){
+            jQuery("#boardNamesList").tagsManager({
+
+            })
+        });
+*/
         jQuery("#boardNamesList").typeahead({
             name: 'boards',
             limit: 15,
@@ -34,9 +41,10 @@
                     tagApi.tagsManager("pushTag", d.display);
                 });
 
+
         map = L.mapbox.map('map', 'coybit.gj1c3kom',{
             doubleClickZoom: false
-        }).setView([37.9, -77],4);
+        }).setView([37.9, -77],6);
 
         var switchsList = $('input[type=checkbox]')
         switchsList.each(function(idx){
@@ -81,6 +89,7 @@
             $('#disqussShortname').val(json.disqusShortname);
         });
     });
+
 </script>
 <script>
     $(document).ready(main);
