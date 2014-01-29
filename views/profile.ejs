@@ -6,7 +6,13 @@
     }
 </style>
 
+<link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">
+<script src="http://welldonethings.com/managed/tagmanager.js"></script>
+<script src="jquery.putup-panel.js"></script>
+
 <script>
+    var putupPanel;
+
     function showMessage(text) {
         $('.alert').find('.msg').text(text);
         $('.alert').show();
@@ -124,7 +130,29 @@
 
             return false;
         })
+
+        $('#putupPanel').dialog( {
+            modal: true,
+            autoOpen: false,
+            width: 620,
+            height: 450
+        });
+
+        putupPanel = $('#putupPanelBody').putupPanel();
+
+        $('#putupDoneButton').click(function(){
+            console.log( putupPanel.getSelectedBoards() );
+        })
     });
+
+    function OpenPutupPanel() {
+        $('#putupPanel').dialog('open');
+    }
+
+    function ClosePutupPanel() {
+        $('#putupPanel').dialog('close');
+    }
+
 </script>
 
 <script>
@@ -287,7 +315,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="row-fluid">
-                                                    <div class="span12 flyerInformation"></div>
+                                                    <div class="span10 flyerInformation"></div>
+                                                    <div class="span2"><a class="btn btn-mini" onclick="OpenPutupPanel()">Put More</a></div>
                                                 </div>
 
                                                 <div class="row-fluid">
@@ -355,5 +384,13 @@
             </div>
         </div>
     </div>
-
 </div>
+
+<!-- Modal -->
+<div id="putupPanel" title="PutUp Panel">
+    <div id="putupPanelBody" style="width: 600px; height: 300px">
+    </div>
+    <div style="position: absolute; bottom: 0;">
+        <button type="button" class="btn btn-primary" id="putupDoneButton">Done</button>
+    </div>
+</div><!-- /.modal -->

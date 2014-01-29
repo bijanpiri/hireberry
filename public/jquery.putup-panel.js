@@ -121,8 +121,12 @@ $.fn.putupPanel = function() {
 
     function initMap() {
 
-        $('<div>').attr('id','map').appendTo(host);
-        map = L.mapbox.map('map', 'coybit.gj1c3kom')
+        $('<div>').attr('id','putupMap')
+            .width( host.width() )
+            .height( host.height() - 30 )
+            .appendTo(host);
+
+        map = L.mapbox.map('putupMap', 'coybit.gj1c3kom')
             .setView([37.9, -77], 6);
 
         map.markerLayer.on('click',function(e) {
@@ -196,4 +200,13 @@ $.fn.putupPanel = function() {
     }
 
     init();
+
+    this.getSelectedBoards = function() {
+        // ToDo: Check It!
+        return selectedBoards.map(function(selectedBoard){
+            return boards[selectedBoard]
+        });
+    }
+
+    return this;
 };
