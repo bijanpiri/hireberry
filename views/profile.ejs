@@ -11,64 +11,63 @@
 <script src="jquery.putup-panel.js"></script>
 
 <script>
-    var putupPanel;
+var putupPanel;
+var putupModal;
 
-    function showMessage(text) {
-        $('.alert').find('.msg').text(text);
-        $('.alert').show();
-        setTimeout(function(){hideMessage()},7000);
-    }
+function showMessage(text) {
+    $('.alert').find('.msg').text(text);
+    $('.alert').show();
+    setTimeout(function(){hideMessage()},7000);
+}
 
-    function hideMessage() {
-        $('.alert').hide();
-    }
+function hideMessage() {
+    $('.alert').hide();
+}
 
-    $(function(){
+var LoadBoardsInformation = function() {
 
-        var LoadBoardsInformation = function() {
+    // Load information about flyers on each board
+    $('.userboard').each(function(index){
 
-            // Load information about flyers on each board
-            $('.userboard').each(function(index){
+        var boardid = $(this).attr('board-id');
+        var flyerInformation = $(this).find('.thumbnail .boardInformation');
+        flyerInformation.html('');
 
-                var boardid = $(this).attr('board-id');
-                var flyerInformation = $(this).find('.thumbnail .boardInformation');
-                flyerInformation.html('');
+        $.get('/board/'+boardid+'/flyers')
+                .done(function(data){
+                    flyerInformation.append('Number Of Flyers: ' + data.flyers.length);
+                })
+                .fail(function(data){
+                });
+    });
+}
 
-                $.get('/board/'+boardid+'/flyers')
-                        .done(function(data){
-                            flyerInformation.append('Number Of Flyers: ' + data.flyers.length);
-                        })
-                        .fail(function(data){
-                        });
-            });
-        }
+var LoadFlyersInformation = function() {
+    // Load information about board of flyer
+    $('.userflyer').each(function(index){
 
-        var LoadFlyersInformation = function() {
-            // Load information about board of flyer
-            $('.userflyer').each(function(index){
+        var flyerid = $(this).attr('flyer-id');
+        var boardInformation = $(this).find('.thumbnail .flyerInformation');
 
-                var flyerid = $(this).attr('flyer-id');
-                var boardInformation = $(this).find('.thumbnail .flyerInformation');
+        $.get('/flyer/'+flyerid+'/boards')
+                .done(function(data){
+                    // Clear
+                    boardInformation.html('');
 
-                $.get('/flyer/'+flyerid+'/boards')
-                        .done(function(data){
-                            // Clear
-                            boardInformation.html('');
+                    // Refill it
+                    data.boards.forEach(function(board){
 
-                            // Refill it
-                            data.boards.forEach(function(board){
-
-                                // Add PutDown button to each board which the flyer is put on it
-                                $('<div></div>')
-                                        .addClass('btn btn-warning btn-small btn-block putdownButton')
-                                        .attr('boardid',board._id)
-                                        .attr('flyerid',flyerid)
-                                        .text('Put-Dowm From ' + board.name )
-                                        .click(function(){
-                                            $.post('/flyer/putdown',{
-                                                flyerid:$(this).attr('flyerid'),
-                                                boardid:$(this).attr('boardid')
-                                            }).done(function(data){
+                        // Add PutDown button to each board which the flyer is put on it
+                        $('<div></div>')
+                                .addClass('btn btn-warning btn-small btn-block putdownButton')
+                                .attr('boardid',board._id)
+                                .attr('flyerid',flyerid)
+                                .text('Put-Dowm From ' + board.name )
+                                .click(function(){
+                                    $.post('/flyer/putdown',{
+                                        flyerid:$(this).attr('flyerid'),
+                                        boardid:$(this).attr('boardid')
+                                    }).done(function(data){
                                                 showMessage(data.error);
 
                                                 // ToDo: Implement More Efficient!
@@ -78,80 +77,153 @@
                                             }).fail(function(data){
                                                 showMessage(data.error);
                                             });
-                                        })
-                                        .appendTo(boardInformation);
-                            });
-                            $('<div></div>')
-                                    .text('Number Of Boards: ' + data.boards.length)
-                                    .prependTo(boardInformation);
-                        })
-                        .fail(function(data){
-                        });
-            });
-        }
-
-        var flyer = $().Flyer({});
-
-        $('.userflyer').each(function(idx){
-
-            var flyerid = $(this).attr('flyer-id');
-            var parentElem = $('#userFlyerPreview'+flyerid);
-
-            /*
-            $('#userFlyerPreview'+flyerid).Flyer({
-                    editMode:false,
-                    flyerid:flyerid
-            });
-            */
-            flyer.getThumbnail(flyerid, function(imgURL){
-                if(imgURL){
-                    $('<img>')
-                            .attr('src',imgURL)
-                            .width(300)
-                            .appendTo(parentElem);
-                    console.log(flyerid + ' - ' + imgURL);
-                }
-            });
-        });
-
-        LoadBoardsInformation();
-        LoadFlyersInformation();
-
-        $('.putupform').submit(function(){
-
-            $.post('/flyer/putup',$(this).serialize())
-                    .always(function(data){
-                        showMessage(data.error);
-
-                        // ToDo: Implement More Efficient!
-                        LoadBoardsInformation();
-                        LoadFlyersInformation();
+                                })
+                                .appendTo(boardInformation);
                     });
+                    $('<div></div>')
+                            .text('Number Of Boards: ' + data.boards.length)
+                            .prependTo(boardInformation);
+                })
+                .fail(function(data){
+                });
+    });
+}
 
-            return false;
-        })
+$(function(){
 
-        $('#putupPanel').dialog( {
-            modal: true,
-            autoOpen: false,
-            width: 620,
-            height: 450
+    var flyer = $().Flyer({});
+
+    $('.userflyer').each(function(idx){
+
+        var flyerid = $(this).attr('flyer-id');
+        var parentElem = $('#userFlyerPreview'+flyerid);
+
+        /*
+         $('#userFlyerPreview'+flyerid).Flyer({
+         editMode:false,
+         flyerid:flyerid
+         });
+         */
+        flyer.getThumbnail(flyerid, function(imgURL){
+            if(imgURL){
+                $('<img>')
+                        .attr('src',imgURL)
+                        .width(300)
+                        .appendTo(parentElem);
+                console.log(flyerid + ' - ' + imgURL);
+            }
         });
-
-        putupPanel = $('#putupPanelBody').putupPanel();
-
-        $('#putupDoneButton').click(function(){
-            console.log( putupPanel.getSelectedBoards() );
-        })
     });
 
-    function OpenPutupPanel() {
-        $('#putupPanel').dialog('open');
-    }
+    LoadBoardsInformation();
+    LoadFlyersInformation();
 
-    function ClosePutupPanel() {
-        $('#putupPanel').dialog('close');
-    }
+    $('.putupform').submit(function(){
+
+        $.post('/flyer/putup',$(this).serialize())
+                .always(function(data){
+                    showMessage(data.error);
+
+                    // ToDo: Implement More Efficient!
+                    LoadBoardsInformation();
+                    LoadFlyersInformation();
+                });
+
+        return false;
+    })
+
+    putupModal = $('#putupPanel').dialog( {
+        modal: true,
+        autoOpen: false,
+        width: 620,
+        height: 450
+    });
+
+    $('#putupDoneButton').click(function(){
+        var selectedBoards = putupPanel.getSelectedBoards();
+        var defaultSelectedBoards = putupPanel.getDefaultSelectedBoards();
+        var flyerid = $('#putupPanel').attr('currentFlyerID');
+
+        // PutDown From The Removed Boards
+        for(var i=0; i<defaultSelectedBoards.length; i++){
+            var isFound = false;
+            for(var j=0; j<selectedBoards.length; j++){
+                if(selectedBoards[j]._id==defaultSelectedBoards[i]._id){
+                    isFound = true;
+                    break;
+                }
+            }
+
+            if(isFound==false){
+                putdown(flyerid,defaultSelectedBoards[i]._id);
+                defaultSelectedBoards[i] = null;
+            }
+        }
+
+
+        //for(var i=0;i<selectedBoards.length;i++)
+        //    putup( flyerid, selectedBoards[i]._id, (i==selectedBoards.length-1) );
+
+        // PutUp On The New Boards
+        for(var i=0; i<selectedBoards.length; i++){
+            var isFound = false;
+            for(var j=0; defaultSelectedBoards[j]!=null && j<defaultSelectedBoards.length; j++){
+                if(selectedBoards[i]._id==defaultSelectedBoards[j]._id){
+                    isFound = true;
+                    break;
+                }
+            }
+
+            if(isFound==false)
+                putup(flyerid,selectedBoards[i]._id);
+        }
+
+        ClosePutupPanel();
+    })
+});
+
+function putdown(flyerid, boardid){
+    $.post('/flyer/putdown',{
+        flyerid:flyerid,
+        boardid:boardid
+    })
+            .done(function(data){
+                LoadBoardsInformation();
+                LoadFlyersInformation();
+            })
+            .fail(function(data){});
+}
+
+function putup( flyerid, boardid, updateInfo ){
+    $.post('/flyer/putup', {
+        boardid:boardid,
+        flyerid:flyerid
+    }).always(function(data){
+                LoadBoardsInformation();
+                LoadFlyersInformation();
+
+                showMessage(data.error);
+            });
+}
+
+function OpenPutupPanel(flyerid) {
+    $('#putupPanel').attr('currentFlyerID',flyerid);
+
+    // Set current boards that is put up on them
+    $.get('/flyer/'+flyerid+'/boards')
+            .done(function(data){
+
+                putupPanel = $('#putupPanelBody').putupPanel();
+                putupPanel.setSelectedBoards(data.boards);
+
+                $('#putupPanel').dialog('open');
+            });
+}
+
+function ClosePutupPanel() {
+    $('#putupPanel').dialog('close');
+    $('#putupPanelBody').remove();
+}
 
 </script>
 
@@ -200,7 +272,7 @@
                         'marker-size': 'large',
                         'marker-color': 'CC0033'
                     }
-                   // draggable: true
+                    // draggable: true
                 })
             });
             map.markerLayer.setGeoJSON(geoJson);
@@ -226,8 +298,6 @@
     function locationFound(e) {
         map.fitBounds(e.bounds);
         marker.setLatLng(e.latlng);
-
-
     }
 
 </script>
@@ -316,7 +386,7 @@
                                                 </div>
                                                 <div class="row-fluid">
                                                     <div class="span10 flyerInformation"></div>
-                                                    <div class="span2"><a class="btn btn-mini" onclick="OpenPutupPanel()">Put More</a></div>
+                                                    <div class="span2"><a class="btn btn-mini" onclick="OpenPutupPanel('<%=flyers[i]._id%>')">Put More</a></div>
                                                 </div>
 
                                                 <div class="row-fluid">

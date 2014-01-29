@@ -10,6 +10,7 @@ $.fn.putupPanel = function() {
     var boards = [];
     var selectedBoards = [];
     var tag_board = {};
+    var defaultSelectedBoard = [];
 
     var selectionSources = { Tag:0, Map:1 };
 
@@ -97,25 +98,48 @@ $.fn.putupPanel = function() {
 
             $.each(publicBoards, function(index,board){
 
-                boards.push(board);
+                if( board.locationlng && board.locationlat){
+                    boards.push(board);
 
-                markers.push({
-                    type: 'Feature',
-                    geometry:{
-                        type:'Point',
-                        coordinates:[board.locationlng,board.locationlat]
-                    },
-                    properties: {
-                        title: board.name,
-                        description: board.category,
-                        'marker-size': 'large',
-                        'marker-color': '522',
-                        'boardIndex': index
-                    }
-                })
+                    markers.push({
+                        type: 'Feature',
+                        geometry:{
+                            type:'Point',
+                            coordinates:[board.locationlng,board.locationlat]
+                        },
+                        properties: {
+                            title: board.name,
+                            description: board.category,
+                            'marker-size': 'large',
+                            'marker-color': '522',
+                            'boardIndex': index
+                        }
+                    })
+                }
             });
 
-            map.markerLayer.setGeoJSON(markers);
+            try{
+                map.markerLayer.setGeoJSON(markers);
+            }catch (e) {}
+
+            // Add preset selected board to panel
+            for( var i=0; i<defaultSelectedBoard.length; i++ ){
+
+                var boardid = defaultSelectedBoard[i]._id;
+                var boardName = defaultSelectedBoard[i].name;
+                var boardIndex = boardid2boardIndex( boardid );
+
+                // Select On Map
+                selectedBoards.push(boardIndex);
+
+                // Select map marker
+                var marker = markers[ boardIndex ];
+                marker.properties['marker-color'] = '#000';
+                map.markerLayer.setGeoJSON(markers);
+
+                tag_board[boardName.hashCode()] = boardid;
+                tagManager.tagsManager('pushTag',boardName);
+            }
         });
     }
 
@@ -202,11 +226,16 @@ $.fn.putupPanel = function() {
     init();
 
     this.getSelectedBoards = function() {
-        // ToDo: Check It!
         return selectedBoards.map(function(selectedBoard){
             return boards[selectedBoard]
         });
     }
+
+    this.setSelectedBoards = function(boards) {
+        defaultSelectedBoard = boards.splice(0)
+    }
+
+    this.getDefaultSelectedBoards = function() { return defaultSelectedBoard; }
 
     return this;
 };
