@@ -142,10 +142,16 @@ $.fn.putupPanel = function() {
     }
 
     function initTagsInput() {
+
         $('<input>').attr('type','text').attr('id','boardNamesList').addClass('tm-input').appendTo(host);
         tagManager = jQuery("#boardNamesList").tagsManager({
-            //prefilled: ['My Boards']
-        }).on('tm:pushed',function(e,t){
+            deleteTagsOnBackspace: true,
+            backspace:[]
+        })
+            .on('tm:pushed',function(e,t){
+                // Clear input
+                jQuery("#boardNamesList").val('');
+
                 var boardid = tag_board[t.hashCode()];
                 AddedToTagsList( boardid2boardIndex(boardid) );
             })
@@ -164,6 +170,11 @@ $.fn.putupPanel = function() {
                 tag_board[d.display.hashCode()] = boardID;
                 tagManager.push(d.display);
             });
+
+        // A CSS confilict between Typeahead and TagsManager is solved by this code
+        jQuery("#boardNamesList").parent().find('.tt-hint')
+            .css('background','none')
+            .css('display','none');
     }
 
     function init(){
