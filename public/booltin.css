@@ -78,7 +78,11 @@ body {
         padding-bottom: 150px;
         width: 100%;
     }
-
+.portlet:hover .portlet-closeButton,
+.portlet:hover .portlet-moveButton,
+.portlet:hover .portlet-settingButton {
+    display: block;
+}
 .portlet-prevLayout {
     position: absolute;
     display: none;

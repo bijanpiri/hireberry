@@ -9,96 +9,243 @@ function Flyer(options) {
     var splitterOriginY;
     var splitterOriginHeight;
 
-    function Widget(options){
-        var layouts=new Array();
-        var layoutIndex = 0;
+    function Widget(){
+        this.layouts=new Array();
+        this.layoutIndex = 0;
 
-        this.onInit = function(callback){
-            this.init = callback;
-            return this;
-        };
+//        this.widgetType = options.widgetType;
+        this.height = 100; //px
 
-        this.onSerialize = function(callback){
-            this.serialize = callback;
-            return this;
-        };
+        this.portlet=$('<div>').addClass('portlet');
 
-        this.onDeserialize = function(callback){
-            this.deserialize = callback;
-            return this;
-        };
+        this.serialize = function(){};
 
-        this.addLayout=function(layout){
-            layouts.push(layout);
-        };
+        this.deserialize = function(){};
+        this.addLayout=
+            function(layout){
+                this.layouts.push(layout);
+            };
 
-        this.nextLayout=function(){
-            layoutIndex=(layoutIndex+1)%layouts.length;
-            layoutChanged($(this).parent());
-        };
-        this.prevLayout=function(){
-            layoutIndex=(layoutIndex-1+layouts.length)%layouts.length;
+        this.nextLayout=
+            function(event){
+                var w=event.data;
+                w.layoutIndex=(w.layoutIndex+1)%w.layouts.length;
+                w.layoutChanged();
+            };
 
-            layoutChanged($(this).parent());
-        };
-        var layoutChanged=function(portlet){
-            portlet.find('.jcarousel').jcarousel('scroll',layoutIndex);
+        this.prevLayout=
+            function(event){
+                var w=event.data;
+                w.layoutIndex=(w.layoutIndex-1+w.layouts.length)%w.layouts.length;
+                w.layoutChanged();
+            };
+        this.layoutChanged=
+            function(){
+                this.portlet.find('.jcarousel').jcarousel('scroll',this.layoutIndex);
+            }
 
-        }
         this.content=function(){
             //var layCon='';
-            portlet=
-                $('<div></div>')
-                    .addClass('portlet')
+            this.portlet
                     .append(
                         $('<div>').addClass('jcarousel')
                             .attr('data-jcarousel','true')
                             .attr('data-wrap','circular'))
                     .append(
-//                        $('<div>').addClass('jcarousel-control').append(
-                            $('<a>')
-                                .addClass("jcarousel-control-prev")
-//                            .addClass("portlet-prevLayout")
-                                .append('‹').click(this.prevLayout)
-//                        )
+                        $('<a>')
+                            .addClass("jcarousel-control-prev")
+                            .append('‹').click(this,this.prevLayout)
                     ).append(
-//                        $('<div>').addClass('jcarousel-control').append(
                         $('<a>')
                             .addClass("jcarousel-control-next")
-//                            .addClass("portlet-nextLayout")
-                            .append('›').click(this.nextLayout)
-//                        )
-//                    )
-//                    .append(
-//                        '<a href="#" class="jcarousel-control-prev" data-jcarouselcontrol="true">‹</a>'
-//                    ).append(
-//                        '<a href="#" class="jcarousel-control-prev" data-jcarouselcontrol="true">‹</a>'
+                            .append('›').click(this,this.nextLayout)
                     );
 
             var ul=$('<ul>');
-            for(var i=0;i<layouts.length;i++){
+            for(var i=0;i<this.layouts.length;i++){
                 ul
                     .append(
                         $('<li></li>')
-                            .append( $('<div></div>').append( layouts[i])));
+                            .append( $('<div></div>').append( this.layouts[i])));
 
             }
-            portlet.find('.jcarousel').append(ul).jcarousel();
-            return portlet;
+            this.portlet.find('.jcarousel').append(ul).jcarousel();
+            return this.portlet;
         }
         this.hasLayout=function(){
-            return layouts.length>1;
+            return this.layouts.length>1;
         }
-
-
-
-        this.widgetType = options.widgetType;
-        this.height = 100; //px
-        this.init;
-        this.serialize;
-        this.deserialize;
-        this.portlet;
     }
+
+    Widget.prototype.constructor=Widget;
+
+//    Widget.prototype.init = function(){};
+
+
+
+    function TextWidget(){
+        Widget.call(this);
+        var layout1='layout1';
+        layout1=
+            $('<div></div>')
+//                    .addClass('container')
+            .append(
+                $('<div></div>')
+//                            .addClass('row')
+//                            .append(
+//                                $('<div></div>')
+//                                    .addClass('span12')
+                    .addClass('textfield')
+                    .addClass('portlet-content-text')
+//                                    .addClass('portlet-content-text')
+//                            )
+            );
+        layout1.find('.textfield').hallo({
+            plugins: {
+                'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+                'hallojustify' : {},
+                'hallolists' : {},
+                'halloheadings': {}
+            }
+        });
+        this.addLayout(layout1);
+
+        var layout2='layout2';
+        this.addLayout(layout2);
+
+        var layout3='layout3';
+        this.addLayout(layout3);
+        var layout4='layout4';
+        this.addLayout(layout4);
+        this.serialize=function(){
+            return portlet.find('.portlet-content').html();
+        }
+        this.deserialize=function(){
+            return portlet.find('.portlet-content').html(content);
+        }
+    }
+
+    TextWidget.prototype=new Widget();
+    TextWidget.prototype.constructor=TextWidget;
+
+    function PictureWidget(){
+        Widget.call(this);
+//        function init(){
+
+            var file=
+            $('<input type="file" name="picture" multiple hidden>');
+        var img=$('<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
+        var layout1=$('<div></div>').append(img).append(file);
+            this.addLayout(layout1);
+
+            if(editMode){
+                file
+//                    .attr('id','fileupload'+elementID)
+                    .fileupload({
+                        url:'/flyer/upload',
+                        dataType: 'json',
+                        done: function (e, data) {
+                            img.attr('src', '/uploads/' + data.result.files[0].name);
+                        }
+                    });
+                img.click(function(){
+                    file.click();
+                });
+            } else {
+                this.portlet.find('input[type=file]').remove();
+            }
+            this.addLayout("picture layout 2");
+//        }
+//        init();
+        this.serialize=function(){
+            return this.portlet.find('.portlet-picture').attr('src');
+        }
+        this.deserialize=function(portlet, content) {
+            return this.portlet.find('.portlet-picture').attr('src', content);
+        }
+    }
+    PictureWidget.prototype=new Widget();
+    PictureWidget.prototype.constructor=PictureWidget;
+
+
+    function VideoWidget(){
+        Widget.call(this);
+
+        this.addLayout('Video layout 1');
+        this.addLayout('Video layout 2');
+    }
+    VideoWidget.prototype=new Widget();
+    VideoWidget.prototype.constructor=VideoWidget;
+
+
+    function ButtonWidget(){
+        Widget.call(this);
+
+        this.addLayout('ButtonWidget layout 1');
+        this.addLayout('ButtonWidget layout 2');
+
+        this.serialize=function(){
+
+            return this.portlet.find('input[type="text"]').val()
+        }
+        this.deserialize=function(){
+
+            if(editMode)
+                return this.portlet.find('input[type="text"]').val(content);
+            else
+                return this.portlet.find('a[class="btn"]').text(content).attr('href',content);
+
+        }
+    }
+    ButtonWidget.prototype=new Widget();
+    ButtonWidget.prototype.constructor=ButtonWidget;
+
+    function TagWidget(){
+        Widget.call(this);
+
+        this.init=function() {
+            if(editMode){
+                portlet.find('.portlet-content').append('<input type="text" name="tags" data-role="tagsinput" placeholder="Add tags">');
+
+//                ToDo: tagsinput doesn't work!
+                portlet.find('input[type="text"]').tagsinput('refresh');
+            }
+            else
+                portlet.find('.portlet-content').append('<span class="tag"></span>');
+        }
+        this.serialize=function() {
+            return portlet.find('input[name="tags"]').val()
+        }
+        this.deserialize=function( content) {
+            if(editMode)
+                return portlet.find('input[name="tags"]').val(content);
+            else
+                return portlet.find('span[class="tag"]').text(content);
+        };
+    }
+    TagWidget.prototype=new Widget();
+    TagWidget.prototype.constructor=TagWidget;
+
+    function MapWidget(){
+        Widget.call(this);
+
+        this.addLayout('MapWidget layout 1');
+        this.addLayout('MapWidget layout 2');
+        function init() {
+            var id = 'map' + portlet.attr('id');
+
+            this.portlet.find('.portlet-content').append('<div style="height: 200px" id="' + id + '"></div>');
+
+            L.mapbox.map(id, 'coybit.gj1c3kom');
+        }
+        init();
+        this.serialize=function(){}
+        this.deserialize=function(){}
+    }
+    MapWidget.prototype=new Widget();
+    MapWidget.prototype.constructor=MapWidget;
+
+
 
     /******** As A Sample **********
      var w = new Widget().onInit(function(){
@@ -116,40 +263,40 @@ function Flyer(options) {
     // Widgets Collection
     var Widgets = {};
 
-    Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
-        .onInit(function() {
-            var layout1='layout1';
-            layout1=
-                $('<div></div>')
+//    Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
+//        .onInit(function() {
+//            var layout1='layout1';
+//            layout1=
+//                $('<div></div>')
 //                    .addClass('container')
-                .append(
-                    $('<div></div>')
+//                .append(
+//                    $('<div></div>')
 //                            .addClass('row')
 //                            .append(
 //                                $('<div></div>')
 //                                    .addClass('span12')
-                        .addClass('textfield')
-                        .addClass('portlet-content-text')
+//                        .addClass('textfield')
+//                        .addClass('portlet-content-text')
 //                                    .addClass('portlet-content-text')
 //                            )
-                );
-            layout1.find('.textfield').hallo({
-                plugins: {
-                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                    'hallojustify' : {},
-                    'hallolists' : {},
-                    'halloheadings': {}
-                }
-            });
-            this.addLayout(layout1);
+//                );
+//            layout1.find('.textfield').hallo({
+//                plugins: {
+//                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+//                    'hallojustify' : {},
+//                    'hallolists' : {},
+//                    'halloheadings': {}
+//                }
+//            });
+//            this.addLayout(layout1);
 
-            var layout2='layout2';
-            this.addLayout(layout2);
-
-            var layout3='layout3';
-            this.addLayout(layout3);
-            var layout4='layout4';
-            this.addLayout(layout4);
+//            var layout2='layout2';
+//            this.addLayout(layout2);
+//
+//            var layout3='layout3';
+//            this.addLayout(layout3);
+//            var layout4='layout4';
+//            this.addLayout(layout4);
 
 //            portlet.find('.portlet-content').addClass('portlet-content-text');
 //
@@ -167,120 +314,120 @@ function Flyer(options) {
 //                    }
 //                })
 //            }
-        })
-        .onSerialize(function(portlet) {
-            return portlet.find('.portlet-content').html();
-        })
-        .onDeserialize(function(portlet, content) {
-            return portlet.find('.portlet-content').html(content);
-        });
+//        })
+//        .onSerialize(function(portlet) {
+//            return portlet.find('.portlet-content').html();
+//        })
+//        .onDeserialize(function(portlet, content) {
+//            return portlet.find('.portlet-content').html(content);
+//        });
 
 
 
-    Widgets[widgetsType.Picture] = new Widget({widgetType:widgetsType.Picture, hasLayout:true})
-        .onInit(function(portlet, elementID) {
+//    Widgets[widgetsType.Picture] = new Widget({widgetType:widgetsType.Picture})
+//        .onInit(function(portlet, elementID) {
+//
+//            portlet.find('.portlet-content').append(
+//                '<input type="file" name="picture" multiple hidden>' +
+//                    '<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
+//
+//            if(editMode){
+//                portlet.find('input[type=file]')
+//                    .attr('id','fileupload'+elementID)
+//                    .fileupload({
+//                        url:'/flyer/upload',
+//                        dataType: 'json',
+//                        done: function (e, data) {
+//                            portlet.find('.portlet-picture').attr('src', '/uploads/' + data.result.files[0].name);
+//                        }
+//                    });
+//                portlet.find('img').click(function(){
+//                    portlet.find('input[type=file]').click();
+//                });
+//            } else {
+//                portlet.find('input[type=file]').remove();
+//            }
+//        })
+//        .onSerialize(function(portlet) {
+//            return portlet.find('.portlet-picture').attr('src');
+//        })
+//        .onDeserialize(function(portlet, content) {
+//            return portlet.find('.portlet-picture').attr('src', content);
+//        })
+//
+//
+//    Widgets[widgetsType.Video] = new Widget({widgetType:widgetsType.Video})
+//        .onInit(function(portlet) {
+//            if(editMode)
+//                portlet.find('.portlet-content').append('<input type="text">')
+//            portlet.find('.portlet-content').append('<iframe width="560" height="100" frameborder="0" allowfullscreen></iframe>')
+//        })
+//        .onSerialize(function(portlet) {
+//            return portlet.find('input[type="text"]').val()
+//        })
+//        .onDeserialize(function(portlet, content) {
+//            if(editMode)
+//                return portlet.find('input[type="text"]').val(content);
+//
+//            return portlet.find('iframe').attr('src',content);
+//        });
+//
+//    Widgets[widgetsType.Button] = new Widget({widgetType:widgetsType.Button})
+//        .onInit(function(portlet) {
+//            if(editMode)
+//                portlet.find('.portlet-content').append('<input type="text">');
+//            else
+//                portlet.find('.portlet-content').append('<a class="btn"></a>');
+//        })
+//        .onSerialize(function(portlet) {
+//            return portlet.find('input[type="text"]').val()
+//        })
+//        .onDeserialize(function(portlet, content) {
+//            if(editMode)
+//                return portlet.find('input[type="text"]').val(content);
+//            else
+//                return portlet.find('a[class="btn"]').text(content).attr('href',content);
+//        });
+//
+//    Widgets[widgetsType.Tag] = new Widget({widgetType:widgetsType.Tag})
+//        .onInit(function(portlet) {
+//            if(editMode){
+//                portlet.find('.portlet-content').append('<input type="text" name="tags" data-role="tagsinput" placeholder="Add tags">');
+//
+//                ToDo: tagsinput doesn't work!
+//                portlet.find('input[type="text"]').tagsinput('refresh');
+//            }
+//            else
+//                portlet.find('.portlet-content').append('<span class="tag"></span>');
+//        })
+//        .onSerialize(function(portlet) {
+//            return portlet.find('input[name="tags"]').val()
+//        })
+//        .onDeserialize(function(portlet, content) {
+//            if(editMode)
+//                return portlet.find('input[name="tags"]').val(content);
+//            else
+//                return portlet.find('span[class="tag"]').text(content);
+//        });
 
-            portlet.find('.portlet-content').append(
-                '<input type="file" name="picture" multiple hidden>' +
-                    '<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
-
-            if(editMode){
-                portlet.find('input[type=file]')
-                    .attr('id','fileupload'+elementID)
-                    .fileupload({
-                        url:'/flyer/upload',
-                        dataType: 'json',
-                        done: function (e, data) {
-                            portlet.find('.portlet-picture').attr('src', '/uploads/' + data.result.files[0].name);
-                        }
-                    });
-                portlet.find('img').click(function(){
-                    portlet.find('input[type=file]').click();
-                });
-            } else {
-                portlet.find('input[type=file]').remove();
-            }
-        })
-        .onSerialize(function(portlet) {
-            return portlet.find('.portlet-picture').attr('src');
-        })
-        .onDeserialize(function(portlet, content) {
-            return portlet.find('.portlet-picture').attr('src', content);
-        })
-
-
-    Widgets[widgetsType.Video] = new Widget({widgetType:widgetsType.Video, hasLayout:false})
-        .onInit(function(portlet) {
-            if(editMode)
-                portlet.find('.portlet-content').append('<input type="text">')
-            portlet.find('.portlet-content').append('<iframe width="560" height="100" frameborder="0" allowfullscreen></iframe>')
-        })
-        .onSerialize(function(portlet) {
-            return portlet.find('input[type="text"]').val()
-        })
-        .onDeserialize(function(portlet, content) {
-            if(editMode)
-                return portlet.find('input[type="text"]').val(content);
-
-            return portlet.find('iframe').attr('src',content);
-        });
-
-    Widgets[widgetsType.Button] = new Widget({widgetType:widgetsType.Button, hasLayout:false})
-        .onInit(function(portlet) {
-            if(editMode)
-                portlet.find('.portlet-content').append('<input type="text">');
-            else
-                portlet.find('.portlet-content').append('<a class="btn"></a>');
-        })
-        .onSerialize(function(portlet) {
-            return portlet.find('input[type="text"]').val()
-        })
-        .onDeserialize(function(portlet, content) {
-            if(editMode)
-                return portlet.find('input[type="text"]').val(content);
-            else
-                return portlet.find('a[class="btn"]').text(content).attr('href',content);
-        });
-
-    Widgets[widgetsType.Tag] = new Widget({widgetType:widgetsType.Tag, hasLayout:false})
-        .onInit(function(portlet) {
-            if(editMode){
-                portlet.find('.portlet-content').append('<input type="text" name="tags" data-role="tagsinput" placeholder="Add tags">');
-
-                // ToDo: tagsinput doesn't work!
-                //portlet.find('input[type="text"]').tagsinput('refresh');
-            }
-            else
-                portlet.find('.portlet-content').append('<span class="tag"></span>');
-        })
-        .onSerialize(function(portlet) {
-            return portlet.find('input[name="tags"]').val()
-        })
-        .onDeserialize(function(portlet, content) {
-            if(editMode)
-                return portlet.find('input[name="tags"]').val(content);
-            else
-                return portlet.find('span[class="tag"]').text(content);
-        });
-
-    Widgets[widgetsType.Map] = new Widget({widgetType:widgetsType.Map, hasLayout:false})
-        .onInit(function(portlet) {
-            var id = 'map' + portlet.attr('id');
-
-            portlet.find('.portlet-content').append('<div style="height: 200px" id="' + id + '"></div>');
-
-            L.mapbox.map(id, 'coybit.gj1c3kom');
-        })
-        .onSerialize(function(portlet) {
-            return '';
-        })
-        .onDeserialize(function(portlet, content) {
-            return '';
-        });
-
-    // Functions
-
-    // Set PortletStack size (A4 1.4) height/width = sqrt(2)
+//    Widgets[widgetsType.Map] = new Widget({widgetType:widgetsType.Map})
+//        .onInit(function(portlet) {
+//            var id = 'map' + portlet.attr('id');
+//
+//            portlet.find('.portlet-content').append('<div style="height: 200px" id="' + id + '"></div>');
+//
+//            L.mapbox.map(id, 'coybit.gj1c3kom');
+//        })
+//        .onSerialize(function(portlet) {
+//            return '';
+//        })
+//        .onDeserialize(function(portlet, content) {
+//            return '';
+//        });
+//
+//    Functions
+//
+//    Set PortletStack size (A4 1.4) height/width = sqrt(2)
     var initDimension = function() {
 
         var aspect_ratio = 0.90;
@@ -366,7 +513,7 @@ function Flyer(options) {
         if( editMode && remaindedHeight() < 100 )
             return;
 
-        var strType = portletType2string(ptype);
+//        var strType = portletType2string(ptype);
 
 //        var portlet = $(
 //            '<div class="portlet">'+
@@ -381,19 +528,38 @@ function Flyer(options) {
 
 
         // Init
-        if(Widgets[ptype] && Widgets[ptype].init )
-            Widgets[ptype].init(portlet, pid);
-        var portlet=Widgets[ptype].content()
-            .attr('id',pid)
-            .attr('typeid',ptype)
-            .attr('type',strType);
+//        if(Widgets[ptype] && Widgets[ptype].init )
+//            Widgets[ptype].init(portlet, pid);
+        var widget=new Widget();
+        switch (ptype){
+            case widgetsType.Text:
+                widget=new TextWidget();
+                break;
+            case widgetsType.Picture:
+                widget=new PictureWidget();
+                break;
+            case widgetsType.Video:
+                widget=new VideoWidget();
+                break;
+            case widgetsType.Button:
+                widget=new ButtonWidget();
+                break;
+            case widgetsType.Map:
+                widget=new MapWidget();
+                break;
+
+        }
+        var portlet=widget.content()
+//            .attr('id',pid)
+            .attr('typeid',ptype);
+//            .attr('type',strType);
         pStack.append(portlet);
 
         // Set Content
-        if(content && Widgets[ptype] && Widgets[ptype].deserialize )
-            Widgets[ptype].deserialize(portlet, content);
+//        if(content && Widgets[ptype] && Widgets[ptype].deserialize )
+//            Widgets[ptype].deserialize(portlet, content);
 
-        var h = Widgets[ptype].height;
+        var h = widget.height;
 
         portlet.css('height',h);
 
@@ -431,31 +597,6 @@ function Flyer(options) {
                 .click(function(){
                     console.log('Handle');
                 });
-
-            portlet.mouseenter(function(){
-                portlet.find('.portlet-closeButton').show();
-                portlet.find('.portlet-settingButton').show();
-                portlet.find('.portlet-moveButton').show();
-
-                var w = Widgets[ parseInt( $(this).attr('typeid') ) ];
-
-//                if( w && w.hasLayout() ){
-//                    portlet.find('.portlet-nextLayout').show();
-//                    portlet.find('.portlet-prevLayout').show();
-//                }
-            });
-            portlet.mouseleave(function(){
-                portlet.find('.portlet-closeButton').hide();
-                portlet.find('.portlet-settingButton').hide();
-                portlet.find('.portlet-moveButton').hide();
-
-                var w = Widgets[ parseInt( $(this).attr('id') ) ];
-
-//                if( w && w.hasLayout ){
-//                    portlet.find('.portlet-nextLayout').hide();
-//                    portlet.find('.portlet-prevLayout').hide();
-//                }
-            });
 
             portlet.find('.portlet-splitter').mousedown(function(e){
                 splitterIsHold = true;

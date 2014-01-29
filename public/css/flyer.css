@@ -7,7 +7,7 @@
 }
 
 
-.jcarousel ul {
+.jcarousel>ul {
     width: 20000em;
     position: relative;
     list-style: none;
@@ -15,7 +15,7 @@
     padding: 0;
 }
 
-.jcarousel li {
+.jcarousel>ul>li {
     float: left;
     width: 625px;
     height: 100px;
@@ -71,7 +71,7 @@
     display: block;
 }
 .jcarousel-control-prev:hover span,
-    
+
 .jcarousel-control-next:hover span {
     display: block;
 }
