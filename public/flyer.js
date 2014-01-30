@@ -14,7 +14,10 @@ function Flyer(options) {
         this.layoutIndex = 0;
         this.height = 100; //px
         this.type=0;
-        this.portlet=$('<div>').addClass('portlet').data('widget',this);
+        this.portlet=
+            $('<div>')
+                .addClass('portlet')
+                .data('widget',this);
 
         this.serialize = function(){};
 
@@ -193,7 +196,7 @@ function Flyer(options) {
         this.serialize=function(){
             return this.portlet.find('input[type="text"]').val()
         }
-        this.deserialize=function(){
+        this.deserialize=function(content){
 
             if(editMode)
                 return this.portlet.find('input[type="text"]').val(content);
@@ -273,6 +276,7 @@ function Flyer(options) {
         // ToDo: PROBLEM
         //L.mapbox.map(id, 'coybit.gj1c3kom');
 
+
         this.serialize = function(){
             return {
                 center: mapbox[this.layoutIndex].getCenter(),
@@ -285,6 +289,7 @@ function Flyer(options) {
                 mapbox[1].setView( content.center, content.zoom );
             }
         }
+
     }
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
@@ -331,22 +336,27 @@ function Flyer(options) {
         return emptySpaceHeight;
     }
 
-    var createPortlet = function( ptype, content ) {
+    var createPortlet = function( wData ) {
 
         // Check Empty Space
         if( editMode && remaindedHeight() < 100 )
             return;
 
-        var widget = new Widgets[ptype]();
+        var widget = new Widgets[wData.type]();
 
         var portlet = widget.content();
-        widget.type=ptype;
+        widget.type=wData.type;
         pStack.append(portlet);
-
+        if(wData.height)
+            widget.height=wData.height;
+        if(wData.layoutIndex){
+            widget.layoutIndex=wData.layoutIndex;
+            widget.layoutChanged();
+        }
         var h = widget.height;
         portlet.css('height',h);
-
-        widget.deserialize(content);
+        if(wData.content)
+            widget.deserialize(wData.content);
 
         if(editMode) {
             // Close button
@@ -424,22 +434,22 @@ function Flyer(options) {
 
         $.get('/flyer/json/'+flyerid)
             .done(function(data){
-
                 if( callback ){
                     callback(data);
                     return;
                 }
-
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
-
-                for( var i=0; i<data.count; i++ ){
-                    if( data[i] )
-                        portletCounter++;
-
+                var widgetData=data.widgets;
+                for( var i=0; i<widgetData.length; i++ ){
+                    if( widgetData[i] )
                         createPortlet(
-                            data[i].type,
-                            data[i].Contents);
+                            {
+                                type:widgetData[i].type,
+                                content:widgetData[i].Contents,
+                                height:widgetData[i].height,
+                                layoutIndex:widgetData[i].layoutIndex
+                            });
                 }
             })
             .fail(function(data){
@@ -455,15 +465,18 @@ function Flyer(options) {
             description: $('input[name=flyertext]').val(),
             flyerid:  $('input[name=flyerid]').val(),
             background: pStack.css('background-image'),
-            count: portlets.length
+            count: portlets.length,
+            widgets:[]
         };
 
         portlets.each(function(index) {
             var widget = $(this).data('widget');
-            flyer[index] = {
+            flyer.widgets.push( {
                 "type": widget.type,
+                'height':$(this).height(),
+                'layoutIndex':widget.layoutIndex,
                 "Contents":  ( widget  && widget.serialize())
-            };
+            });
         });
 
         return flyer;
@@ -505,7 +518,7 @@ function Flyer(options) {
 
            $(".newitem").click(function(e){
                var itemType = parseInt($(this).attr('type'));
-               createPortlet( itemType, null );
+               createPortlet( {type:itemType});
            });
        });
 
