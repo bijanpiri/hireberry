@@ -56,7 +56,8 @@ function Flyer(options) {
             // Add layouts containers
             var ul=$('<ul>');
             for(var i=0;i<this.layouts.length;i++){
-                ul.append( $('<li>').append( $('<div>').append(this.layouts[i]) ) );
+                var li = $('<li>').width(pStack.width()).append( $('<div>').append(this.layouts[i]));
+                ul.append( li );
             }
             this.portlet.find('.jcarousel').append(ul).jcarousel();
 
