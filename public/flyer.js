@@ -18,7 +18,7 @@ function Flyer(options) {
 
         this.serialize = function(){};
 
-        this.deserialize = function(){};
+        this.deserialize = function(content){};
 
         this.addLayout = function(layout){
                 this.layouts.push(layout);
@@ -104,12 +104,12 @@ function Flyer(options) {
         this.addLayout(layout3);
         this.addLayout(layout4);
 
-        this.serialize=function(){
-            return portlet.find('.portlet-content').html();
+        this.serialize = function(){
+            return this.portlet.find('.portlet-content-text').html();
         }
 
-        this.deserialize=function(){
-            return portlet.find('.portlet-content').html(content);
+        this.deserialize = function(content){
+            return this.portlet.find('.portlet-content-text').html(content);
         }
     }
     TextWidget.prototype = new Widget();
@@ -337,7 +337,8 @@ function Flyer(options) {
         if( editMode && remaindedHeight() < 100 )
             return;
 
-        var widget=new Widget();
+        var widget = new Widget();
+
         switch (ptype){
             case widgetsType.Text:
                 widget=new TextWidget();
@@ -356,16 +357,27 @@ function Flyer(options) {
                 break;
 
         }
-        var portlet = widget.content().attr('typeid',ptype);
+
+        Widgets[pid] = widget;
+
+        var portlet = widget.content()
+            .attr('type', portletType2string(ptype) )
+            .attr('id', pid);
         pStack.append(portlet);
 
         var h = widget.height;
         portlet.css('height',h);
 
+        widget.deserialize(content);
+
         if(editMode) {
             // Close button
             $("<span class='portlet-closeButton ui-icon ui-icon-closethick'></span>")
                 .click(function(e) {
+
+                    var pid = $(e.target).parent().attr('id');
+                    Widgets[ pid ] = null;
+
                     $(e.target).parent().remove();
                     reLocatingPlus();
                 })
@@ -470,12 +482,12 @@ function Flyer(options) {
             var portlet =  $(this);
             var ptype =  portletTypeString2Type( portlet.attr('type') );
             var pid =  portlet.attr('id');
-            var widget = Widgets[ptype];
+            var widget = Widgets[pid];
 
             flyer[index] = {
                 "type": ptype,
                 "ID": pid,
-                "Contents":  ( widget && 'serialize' in widget && widget.serialize && widget.serialize(portlet))
+                "Contents":  ( widget && ('serialize' in widget) && widget.serialize())
             };
         });
 
@@ -499,7 +511,7 @@ function Flyer(options) {
             .css('background-repeat', 'no-repeat');
     }
 
-   var initPortletsStack = function () {
+    var initPortletsStack = function () {
        // Initialization
        if( editMode ){
            pStack.sortable({
