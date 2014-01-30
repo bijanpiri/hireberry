@@ -241,10 +241,26 @@ function Flyer(options) {
 
         function initLayout1() {
             var id = 'map' + parseInt(Math.random()*100);
-            layout1 = $('<div>').attr('id',id).height(200);
+            var mapDiv =  $('<div>').attr('id',id);
+            layout1 = $('<div>')
+                .css('position', 'relative')
+                .height( this.height )
+                .width( pStack.width() )
+                .append(mapDiv);
+
+            L.mapbox.map(layout1[0], 'coybit.gj1c3kom');
         }
 
         function initLayout2() {
+            var id = 'map' + parseInt(Math.random()*100);
+            var mapDiv =  $('<div>').attr('id',id);
+            layout2 =$('<div>')
+                .css('position', 'relative')
+                .height( this.height*0.7 )
+                .width( pStack.width()*0.5 )
+                .append(mapDiv);
+
+            L.mapbox.map(layout2[0], 'coybit.gj1c3kom');
         }
 
         initLayout1.call(this);
