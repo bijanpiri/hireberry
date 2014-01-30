@@ -112,7 +112,6 @@ function Flyer(options) {
             return portlet.find('.portlet-content').html(content);
         }
     }
-
     TextWidget.prototype = new Widget();
     TextWidget.prototype.constructor = TextWidget;
 
@@ -120,31 +119,37 @@ function Flyer(options) {
     function PictureWidget(){
         Widget.call(this);
 
-            var file=
-            $('<input type="file" name="picture" multiple hidden>');
-        var img=$('<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
-        var layout1=$('<div></div>').append(img).append(file);
-            this.addLayout(layout1);
+        var layout1 = "image layout 1";
+        var layout2 = "image layout 2";
+
+        function initLayout1() {
+            var file = $('<input type="file" name="picture" multiple hidden>');
+            var img = $('<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
+            layout1 = $('<div>').append(img).append(file);
 
             if(editMode){
-                file
-//                    .attr('id','fileupload'+elementID)
-                    .fileupload({
-                        url:'/flyer/upload',
-                        dataType: 'json',
-                        done: function (e, data) {
-                            img.attr('src', '/uploads/' + data.result.files[0].name);
-                        }
-                    });
-                img.click(function(){
-                    file.click();
+                file.fileupload({
+                    url:'/flyer/upload',
+                    dataType: 'json',
+                    done: function (e, data) {
+                        img.attr('src', '/uploads/' + data.result.files[0].name);
+                    }
                 });
+
+                img.click(function(){
+                    file.click()
+                });
+
             } else {
                 this.portlet.find('input[type=file]').remove();
             }
-            this.addLayout("picture layout 2");
-//        }
-//        init();
+        }
+
+        initLayout1.call(this);
+
+        this.addLayout(layout1);
+        this.addLayout(layout2);
+
         this.serialize=function(){
             return this.portlet.find('.portlet-picture').attr('src');
         }
@@ -188,6 +193,7 @@ function Flyer(options) {
     ButtonWidget.prototype=new Widget();
     ButtonWidget.prototype.constructor=ButtonWidget;
 
+
     function TagWidget(){
         Widget.call(this);
 
@@ -213,6 +219,7 @@ function Flyer(options) {
     }
     TagWidget.prototype=new Widget();
     TagWidget.prototype.constructor=TagWidget;
+
 
     function MapWidget(){
         Widget.call(this);
