@@ -178,7 +178,6 @@ function Flyer(options) {
         this.addLayout('ButtonWidget layout 2');
 
         this.serialize=function(){
-
             return this.portlet.find('input[type="text"]').val()
         }
         this.deserialize=function(){
@@ -190,8 +189,8 @@ function Flyer(options) {
 
         }
     }
-    ButtonWidget.prototype=new Widget();
-    ButtonWidget.prototype.constructor=ButtonWidget;
+    ButtonWidget.prototype = new Widget();
+    ButtonWidget.prototype.constructor = ButtonWidget;
 
 
     function TagWidget(){
@@ -224,18 +223,28 @@ function Flyer(options) {
     function MapWidget(){
         Widget.call(this);
 
-        this.addLayout('MapWidget layout 1');
-        this.addLayout('MapWidget layout 2');
-        function init() {
-            var id = 'map' + portlet.attr('id');
+        var layout1 = 'MapWidget layout 1';
+        var layout2 = 'MapWidget layout 2';
 
-            this.portlet.find('.portlet-content').append('<div style="height: 200px" id="' + id + '"></div>');
-
-            L.mapbox.map(id, 'coybit.gj1c3kom');
+        function initLayout1() {
+            var id = 'map' + parseInt(Math.random()*100);
+            layout1 = $('<div>').attr('id',id).height(200);
         }
-        init();
-        this.serialize=function(){}
-        this.deserialize=function(){}
+
+        function initLayout2() {
+        }
+
+        initLayout1.call(this);
+        initLayout2.call(this);
+
+        this.addLayout(layout1);
+        this.addLayout(layout2);
+
+        // ToDo: PROBLEM
+        //L.mapbox.map(id, 'coybit.gj1c3kom');
+
+        this.serialize = function(){}
+        this.deserialize = function(){}
     }
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
