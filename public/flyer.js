@@ -2,19 +2,19 @@ function Flyer(options) {
 
     var editMode = options.editMode;
     var pStack = this;
-    var portletCounter = 0;
-    var widgetsType = { Unknow:0, Text:1, Picture:2, Video:3, Button: 4, Tag: 5, Map: 6 };
     var splitterIsHold;
     var splitterOwner;
     var splitterOriginY;
     var splitterOriginHeight;
+    var Widgets=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget];
 
     /****** Widget - Start *******/
     function Widget(){
         this.layouts = [];
         this.layoutIndex = 0;
         this.height = 100; //px
-        this.portlet=$('<div>').addClass('portlet');
+        this.type=0;
+        this.portlet=$('<div>').addClass('portlet').data('widget',this);
 
         this.serialize = function(){};
 
@@ -262,9 +262,6 @@ function Flyer(options) {
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
 
-    // Widgets Collection
-    var Widgets = {};
-
     var initDimension = function() {
 
         var aspect_ratio = 0.90;
@@ -292,43 +289,6 @@ function Flyer(options) {
         }
     }
 
-    var portletTypeString2Type = function (strType) {
-        switch(strType) {
-            case 'text':
-                return widgetsType.Text;
-            case 'picture':
-                return widgetsType.Picture;
-            case 'video':
-                return widgetsType.Video;
-            case 'button':
-                return widgetsType.Button;
-            case 'tag':
-                return widgetsType.Tag;
-            case 'map':
-                return widgetsType.Map;
-            default:
-                return widgetsType.Unknow;
-        }
-    }
-
-    var portletType2string = function (type) {
-        switch(type) {
-            case widgetsType.Text:
-                return 'text';
-            case widgetsType.Picture:
-                return 'picture';
-            case widgetsType.Video:
-                return 'video';
-            case widgetsType.Button:
-                return 'button';
-            case widgetsType.Tag:
-                return 'tag';
-            case widgetsType.Map:
-                return 'map';
-            default:
-                return 'Unknow';
-        }
-    }
 
     var remaindedHeight = function () {
         var emptySpaceHeight = pStack.height();
@@ -344,20 +304,16 @@ function Flyer(options) {
         return emptySpaceHeight;
     }
 
-    var createPortlet = function( ptype, pid, content ) {
+    var createPortlet = function( ptype, content ) {
 
         // Check Empty Space
         if( editMode && remaindedHeight() < 100 )
             return;
 
-        var Wids=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,MapWidget];
-        var widget = new Wids[ptype]();
+        var widget = new Widgets[ptype]();
 
-        Widgets[pid] = widget;
-
-        var portlet = widget.content()
-            .attr('type', portletType2string(ptype) )
-            .attr('id', pid);
+        var portlet = widget.content();
+        widget.type=ptype;
         pStack.append(portlet);
 
         var h = widget.height;
@@ -369,10 +325,6 @@ function Flyer(options) {
             // Close button
             $("<span class='portlet-closeButton ui-icon ui-icon-closethick'></span>")
                 .click(function(e) {
-
-                    var pid = $(e.target).parent().attr('id');
-                    Widgets[ pid ] = null;
-
                     $(e.target).parent().remove();
                     reLocatingPlus();
                 })
@@ -457,8 +409,7 @@ function Flyer(options) {
                 for( var i=0; i<data.count; i++ ){
                     if( data[i] )
                         createPortlet(
-                            parseInt(data[i].type),
-                            data[i].ID,
+                            data[i].type,
                             data[i].Contents);
                 }
             })
@@ -479,16 +430,10 @@ function Flyer(options) {
         };
 
         portlets.each(function(index) {
-
-            var portlet =  $(this);
-            var ptype =  portletTypeString2Type( portlet.attr('type') );
-            var pid =  portlet.attr('id');
-            var widget = Widgets[pid];
-
+            var widget = $(this).data('widget');
             flyer[index] = {
-                "type": ptype,
-                "ID": pid,
-                "Contents":  ( widget && ('serialize' in widget) && widget.serialize())
+                "type": widget.type,
+                "Contents":  ( widget  && widget.serialize())
             };
         });
 
@@ -530,11 +475,8 @@ function Flyer(options) {
            reLocatingPlus();
 
            $(".newitem").click(function(e){
-               var itemType = $(this).attr('type');
-               var itemID = portletCounter++;
-               var portletType = portletTypeString2Type(itemType);
-
-               createPortlet( portletType, itemID, null );
+               var itemType = parseInt($(this).attr('type'));
+               createPortlet( itemType, null );
            });
        });
 
@@ -548,8 +490,6 @@ function Flyer(options) {
     this.createPortlet = createPortlet;
     this.json2flyer = json2flyer;
     this.flyer2json = flyer2json;
-    this.portletTypeString2Type = portletTypeString2Type;
-    this.portletType2string = portletType2string;
     this.remaindedHeight = remaindedHeight;
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
