@@ -238,6 +238,7 @@ function Flyer(options) {
 
         var layout1 = 'MapWidget layout 1';
         var layout2 = 'MapWidget layout 2';
+        var mapbox = [];
 
         function initLayout1() {
             var id = 'map' + parseInt(Math.random()*100);
@@ -248,7 +249,7 @@ function Flyer(options) {
                 .width( pStack.width() )
                 .append(mapDiv);
 
-            L.mapbox.map(layout1[0], 'coybit.gj1c3kom');
+            mapbox[0] = L.mapbox.map(layout1[0], 'coybit.gj1c3kom');
         }
 
         function initLayout2() {
@@ -260,7 +261,7 @@ function Flyer(options) {
                 .width( pStack.width()*0.5 )
                 .append(mapDiv);
 
-            L.mapbox.map(layout2[0], 'coybit.gj1c3kom');
+            mapbox[1] = L.mapbox.map(layout2[0], 'coybit.gj1c3kom');
         }
 
         initLayout1.call(this);
@@ -272,8 +273,18 @@ function Flyer(options) {
         // ToDo: PROBLEM
         //L.mapbox.map(id, 'coybit.gj1c3kom');
 
-        this.serialize = function(){}
-        this.deserialize = function(){}
+        this.serialize = function(){
+            return {
+                center: mapbox[this.layoutIndex].getCenter(),
+                zoom: mapbox[this.layoutIndex].getZoom()
+            };
+        }
+        this.deserialize = function(content){
+            if( content ){
+                mapbox[0].setView( content.center, content.zoom );
+                mapbox[1].setView( content.center, content.zoom );
+            }
+        }
     }
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
@@ -424,6 +435,8 @@ function Flyer(options) {
 
                 for( var i=0; i<data.count; i++ ){
                     if( data[i] )
+                        portletCounter++;
+
                         createPortlet(
                             data[i].type,
                             data[i].Contents);
