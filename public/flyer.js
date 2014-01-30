@@ -127,7 +127,11 @@ function Flyer(options) {
 
         function initLayout1() {
             var file = $('<input type="file" name="picture" multiple hidden>');
-            var img = $('<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
+            var img =  $('<img>')
+                .height(this.height*0.7)
+                .addClass('img-rounded portlet-picture')
+                .attr('src','/images/upload.png');
+
             layout1 = $('<div>').append(img).append(file);
 
             if(editMode){
@@ -162,7 +166,7 @@ function Flyer(options) {
         this.serialize=function(){
             return this.portlet.find('.portlet-picture').attr('src');
         }
-        this.deserialize=function(portlet, content) {
+        this.deserialize=function(content) {
             return this.portlet.find('.portlet-picture').attr('src', content);
         }
     }
