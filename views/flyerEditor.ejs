@@ -72,7 +72,7 @@
 
                     flyerjson.thumbnail = canvas.toDataURL();
 
-                    $.post( '/flyer/new', {flyer:flyerjson} )
+                    $.post( '/flyer/save', {flyer:flyerjson} )
                             .done(function(data){
                                 $('#buttonSave').text('Save').removeClass('disabled');
                             })

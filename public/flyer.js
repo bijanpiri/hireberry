@@ -9,57 +9,46 @@ function Flyer(options) {
     var splitterOriginY;
     var splitterOriginHeight;
 
+    /****** Widget - Start *******/
     function Widget(){
-        this.layouts=new Array();
+        this.layouts = [];
         this.layoutIndex = 0;
-
-//        this.widgetType = options.widgetType;
         this.height = 100; //px
-
         this.portlet=$('<div>').addClass('portlet');
 
         this.serialize = function(){};
 
         this.deserialize = function(){};
-        this.addLayout=
-            function(layout){
-                this.layouts.push(layout);
-            };
 
-        this.nextLayout=
-            function(event){
-                var w=event.data;
+        this.addLayout = function(layout){
+                this.layouts.push(layout);
+        };
+
+        this.nextLayout = function(event){
+                var w = event.data;
                 w.layoutIndex=(w.layoutIndex+1)%w.layouts.length;
                 w.layoutChanged();
-            };
+        };
 
-        this.prevLayout=
-            function(event){
-                var w=event.data;
+        this.prevLayout = function(event){
+                var w = event.data;
                 w.layoutIndex=(w.layoutIndex-1+w.layouts.length)%w.layouts.length;
                 w.layoutChanged();
-            };
-        this.layoutChanged=
-            function(){
-                this.portlet.find('.jcarousel').jcarousel('scroll',this.layoutIndex);
-            }
+        };
 
-        this.content=function(){
-            //var layCon='';
+        this.layoutChanged = function(){
+                this.portlet.find('.jcarousel').jcarousel('scroll',this.layoutIndex);
+        };
+
+        this.content = function(){
             this.portlet
-                    .append(
-                        $('<div>').addClass('jcarousel')
-                            .attr('data-jcarousel','true')
-                            .attr('data-wrap','circular'))
-                    .append(
-                        $('<a>')
-                            .addClass("jcarousel-control-prev")
-                            .append('‹').click(this,this.prevLayout)
-                    ).append(
-                        $('<a>')
-                            .addClass("jcarousel-control-next")
-                            .append('›').click(this,this.nextLayout)
-                    );
+                .append(
+                    $('<div>').addClass('jcarousel').attr('data-jcarousel','true').attr('data-wrap','circular'))
+                .append(
+                    $('<a>').addClass("jcarousel-control-prev").append('‹').click(this,this.prevLayout))
+                .append(
+                    $('<a>').addClass("jcarousel-control-next").append('›').click(this,this.nextLayout))
+                .append( $('<div>').addClass('portlet-splitter') );
 
             var ul=$('<ul>');
             for(var i=0;i<this.layouts.length;i++){
@@ -72,16 +61,15 @@ function Flyer(options) {
             this.portlet.find('.jcarousel').append(ul).jcarousel();
             return this.portlet;
         }
+
         this.hasLayout=function(){
-            return this.layouts.length>1;
+            return (this.layouts.length > 1);
         }
     }
 
-    Widget.prototype.constructor=Widget;
+    Widget.prototype.constructor = Widget;
 
-//    Widget.prototype.init = function(){};
-
-
+    /****** Widget - End *******/
 
     function TextWidget(){
         Widget.call(this);
@@ -245,189 +233,9 @@ function Flyer(options) {
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
 
-
-
-    /******** As A Sample **********
-     var w = new Widget().onInit(function(){
-        console.log('inited');
-    }).onSerialize(function(){
-            console.log('serialized')
-    }).onDeserialize(function(){
-            console.log('deserialized')
-    });
-     w.init();
-     w.serialize();
-     w.deserialize();
-     ******************************/
-
     // Widgets Collection
     var Widgets = {};
 
-//    Widgets[widgetsType.Text] = new Widget({widgetType:widgetsType.Text, hasLayout:false})
-//        .onInit(function() {
-//            var layout1='layout1';
-//            layout1=
-//                $('<div></div>')
-//                    .addClass('container')
-//                .append(
-//                    $('<div></div>')
-//                            .addClass('row')
-//                            .append(
-//                                $('<div></div>')
-//                                    .addClass('span12')
-//                        .addClass('textfield')
-//                        .addClass('portlet-content-text')
-//                                    .addClass('portlet-content-text')
-//                            )
-//                );
-//            layout1.find('.textfield').hallo({
-//                plugins: {
-//                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-//                    'hallojustify' : {},
-//                    'hallolists' : {},
-//                    'halloheadings': {}
-//                }
-//            });
-//            this.addLayout(layout1);
-
-//            var layout2='layout2';
-//            this.addLayout(layout2);
-//
-//            var layout3='layout3';
-//            this.addLayout(layout3);
-//            var layout4='layout4';
-//            this.addLayout(layout4);
-
-//            portlet.find('.portlet-content').addClass('portlet-content-text');
-//
-//            portlet.click(function(e){
-//                $(this).find('.portlet-content').addClass('inEditMode').focus();
-//            });
-//
-//            if(editMode){
-//                portlet.find('.portlet-content').hallo({
-//                    plugins: {
-//                        'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-//                        'hallojustify' : {},
-//                        'hallolists' : {},
-//                        'halloheadings': {}
-//                    }
-//                })
-//            }
-//        })
-//        .onSerialize(function(portlet) {
-//            return portlet.find('.portlet-content').html();
-//        })
-//        .onDeserialize(function(portlet, content) {
-//            return portlet.find('.portlet-content').html(content);
-//        });
-
-
-
-//    Widgets[widgetsType.Picture] = new Widget({widgetType:widgetsType.Picture})
-//        .onInit(function(portlet, elementID) {
-//
-//            portlet.find('.portlet-content').append(
-//                '<input type="file" name="picture" multiple hidden>' +
-//                    '<img alt="IMAGE" src="/images/upload.png" class="portlet-picture" style="height: '+ this.height*0.7 +'px">');
-//
-//            if(editMode){
-//                portlet.find('input[type=file]')
-//                    .attr('id','fileupload'+elementID)
-//                    .fileupload({
-//                        url:'/flyer/upload',
-//                        dataType: 'json',
-//                        done: function (e, data) {
-//                            portlet.find('.portlet-picture').attr('src', '/uploads/' + data.result.files[0].name);
-//                        }
-//                    });
-//                portlet.find('img').click(function(){
-//                    portlet.find('input[type=file]').click();
-//                });
-//            } else {
-//                portlet.find('input[type=file]').remove();
-//            }
-//        })
-//        .onSerialize(function(portlet) {
-//            return portlet.find('.portlet-picture').attr('src');
-//        })
-//        .onDeserialize(function(portlet, content) {
-//            return portlet.find('.portlet-picture').attr('src', content);
-//        })
-//
-//
-//    Widgets[widgetsType.Video] = new Widget({widgetType:widgetsType.Video})
-//        .onInit(function(portlet) {
-//            if(editMode)
-//                portlet.find('.portlet-content').append('<input type="text">')
-//            portlet.find('.portlet-content').append('<iframe width="560" height="100" frameborder="0" allowfullscreen></iframe>')
-//        })
-//        .onSerialize(function(portlet) {
-//            return portlet.find('input[type="text"]').val()
-//        })
-//        .onDeserialize(function(portlet, content) {
-//            if(editMode)
-//                return portlet.find('input[type="text"]').val(content);
-//
-//            return portlet.find('iframe').attr('src',content);
-//        });
-//
-//    Widgets[widgetsType.Button] = new Widget({widgetType:widgetsType.Button})
-//        .onInit(function(portlet) {
-//            if(editMode)
-//                portlet.find('.portlet-content').append('<input type="text">');
-//            else
-//                portlet.find('.portlet-content').append('<a class="btn"></a>');
-//        })
-//        .onSerialize(function(portlet) {
-//            return portlet.find('input[type="text"]').val()
-//        })
-//        .onDeserialize(function(portlet, content) {
-//            if(editMode)
-//                return portlet.find('input[type="text"]').val(content);
-//            else
-//                return portlet.find('a[class="btn"]').text(content).attr('href',content);
-//        });
-//
-//    Widgets[widgetsType.Tag] = new Widget({widgetType:widgetsType.Tag})
-//        .onInit(function(portlet) {
-//            if(editMode){
-//                portlet.find('.portlet-content').append('<input type="text" name="tags" data-role="tagsinput" placeholder="Add tags">');
-//
-//                ToDo: tagsinput doesn't work!
-//                portlet.find('input[type="text"]').tagsinput('refresh');
-//            }
-//            else
-//                portlet.find('.portlet-content').append('<span class="tag"></span>');
-//        })
-//        .onSerialize(function(portlet) {
-//            return portlet.find('input[name="tags"]').val()
-//        })
-//        .onDeserialize(function(portlet, content) {
-//            if(editMode)
-//                return portlet.find('input[name="tags"]').val(content);
-//            else
-//                return portlet.find('span[class="tag"]').text(content);
-//        });
-
-//    Widgets[widgetsType.Map] = new Widget({widgetType:widgetsType.Map})
-//        .onInit(function(portlet) {
-//            var id = 'map' + portlet.attr('id');
-//
-//            portlet.find('.portlet-content').append('<div style="height: 200px" id="' + id + '"></div>');
-//
-//            L.mapbox.map(id, 'coybit.gj1c3kom');
-//        })
-//        .onSerialize(function(portlet) {
-//            return '';
-//        })
-//        .onDeserialize(function(portlet, content) {
-//            return '';
-//        });
-//
-//    Functions
-//
-//    Set PortletStack size (A4 1.4) height/width = sqrt(2)
     var initDimension = function() {
 
         var aspect_ratio = 0.90;
@@ -740,6 +548,7 @@ function Flyer(options) {
     this.remaindedHeight = remaindedHeight;
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
+
     return this;
 }
 
