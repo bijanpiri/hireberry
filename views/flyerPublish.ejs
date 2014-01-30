@@ -6,6 +6,12 @@
 <link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">
 <script src="http://welldonethings.com/managed/tagmanager.js"></script>
 
+<link href="http://hallojs.org/css/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<script src="http://rangy.googlecode.com/svn/trunk/currentrelease/rangy-core.js"></script>
+<script src="http://hallojs.org/js/hallo.js"></script>
+
+<script src="/script/jquery.jcarousel.min.js"></script>
+
 <script src="/flyer.js"></script>
 
 <script>
@@ -107,20 +113,23 @@
         $.getJSON('/board/get/public',function(boards){
             var geoJson= new Array();
             $.each(boards,function(index,boardnn){
-                geoJson.push({
-                    type: 'Feature',
-                    geometry:{
-                        type:'Point',
-                        coordinates:[boardnn.locationlng,boardnn.locationlat]
-                    },
-                    properties: {
-                        title: boardnn.name,
-                        description: boardnn.category,
-                        'marker-size': 'large',
-                        'marker-color': 'CC0033'
-                    }
-                    // draggable: true
-                })
+
+                if( boardnn.locationlng && boardnn.locationlat) {
+                    geoJson.push({
+                        type: 'Feature',
+                        geometry:{
+                            type:'Point',
+                            coordinates:[boardnn.locationlng,boardnn.locationlat]
+                        },
+                        properties: {
+                            title: boardnn.name,
+                            description: boardnn.category,
+                            'marker-size': 'large',
+                            'marker-color': 'CC0033'
+                        }
+                        // draggable: true
+                    })
+                }
             });
             map.markerLayer.setGeoJSON(geoJson);
         });

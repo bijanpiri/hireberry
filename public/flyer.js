@@ -459,11 +459,15 @@ function Flyer(options) {
         }
     };
 
-    var json2flyer = function(flyerid) {
+    var json2flyer = function(flyerid, callback) {
 
         $.get('/flyer/json/'+flyerid)
             .done(function(data){
-                console.log(data)
+
+                if( callback ){
+                    callback(data);
+                    return;
+                }
 
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
