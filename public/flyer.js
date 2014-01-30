@@ -350,26 +350,8 @@ function Flyer(options) {
         if( editMode && remaindedHeight() < 100 )
             return;
 
-        var widget = new Widget();
-
-        switch (ptype){
-            case widgetsType.Text:
-                widget=new TextWidget();
-                break;
-            case widgetsType.Picture:
-                widget=new PictureWidget();
-                break;
-            case widgetsType.Video:
-                widget=new VideoWidget();
-                break;
-            case widgetsType.Button:
-                widget=new ButtonWidget();
-                break;
-            case widgetsType.Map:
-                widget=new MapWidget();
-                break;
-
-        }
+        var Wids=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,MapWidget];
+        var widget = new Wids[ptype]();
 
         Widgets[pid] = widget;
 
