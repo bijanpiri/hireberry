@@ -64,6 +64,8 @@ function Flyer(options) {
             return this.portlet;
         }
 
+        this.resized = function() {};
+
         this.hasLayout=function(){
             return (this.layouts.length > 1);
         }
@@ -150,6 +152,12 @@ function Flyer(options) {
 
         this.addLayout(layout1);
         this.addLayout(layout2);
+
+        this.portlet.on('portlet:resized', function() {
+            this.height = $(this).height();
+
+            $(this).find('.portlet-picture').height( this.height*0.7 )
+        });
 
         this.serialize=function(){
             return this.portlet.find('.portlet-picture').attr('src');
@@ -424,7 +432,7 @@ function Flyer(options) {
             // pStack.parent = portletStack + portletCreator
             pStack.parent().mousemove(function(e){
                 if( splitterIsHold ) {
-                    console.log('Resizing...' + splitterOwner.attr('type') + e.clientY);
+                    console.log('Resizing...' + splitterOwner.attr('id') + e.clientY);
 
                     var curHeight = splitterOwner.height();
                     var newHeight = splitterOriginHeight +  (e.clientY - splitterOriginY);
@@ -433,6 +441,8 @@ function Flyer(options) {
                     // Snap
                     if( remaindedHeight() - delta < 5 )
                         newHeight += remaindedHeight() - delta;
+
+                    $(e.target).parent().trigger('portlet:resized');
 
                     if( remaindedHeight() - delta >= 0){
                         splitterOwner.height( newHeight );
