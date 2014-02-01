@@ -98,7 +98,8 @@ function Flyer(options) {
                     'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
                     'hallojustify' : {},
                     'hallolists' : {},
-                    'halloheadings': {}
+                    'halloheadings': {},
+                    'hallolink': {}
                 }
             });
         }
