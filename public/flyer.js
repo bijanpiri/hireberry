@@ -278,8 +278,10 @@ function Flyer(options) {
 
 
         this.serialize = function(){
+            var center = mapbox[this.layoutIndex].getCenter();
+
             return {
-                center: mapbox[this.layoutIndex].getCenter(),
+                center: {lat:center.lat, lng:center.lng },
                 zoom: mapbox[this.layoutIndex].getZoom()
             };
         }
