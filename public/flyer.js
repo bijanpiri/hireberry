@@ -6,7 +6,7 @@ function Flyer(options) {
     var splitterOwner;
     var splitterOriginY;
     var splitterOriginHeight;
-    var Widgets=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget];
+    var Widgets=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
 
     /****** Widget - Start *******/
     function Widget(){
@@ -191,13 +191,19 @@ function Flyer(options) {
     function ButtonWidget(){
         Widget.call(this);
 
+        var layout1 = '';
+
+        function initLayout1() {
+            layout1 = $('')
+        }
+
         this.addLayout('ButtonWidget layout 1');
         this.addLayout('ButtonWidget layout 2');
 
-        this.serialize=function(){
+        this.serialize = function(){
             return this.portlet.find('input[type="text"]').val()
         }
-        this.deserialize=function(content){
+        this.deserialize = function(content){
 
             if(editMode)
                 return this.portlet.find('input[type="text"]').val(content);
@@ -213,28 +219,56 @@ function Flyer(options) {
     function TagWidget(){
         Widget.call(this);
 
-        this.init=function() {
-            if(editMode){
-                portlet.find('.portlet-content').append('<input type="text" name="tags" data-role="tagsinput" placeholder="Add tags">');
+        var layout1 = '';
 
-//                ToDo: tagsinput doesn't work!
-                portlet.find('input[type="text"]').tagsinput('refresh');
-            }
-            else
-                portlet.find('.portlet-content').append('<span class="tag"></span>');
+        function initLayout1() {
+            layout1 = $('<input>')
+                .attr('type','text')
+                .attr('name','tags')
+                .attr('data-role','tagsinput')
+                .attr('placeholder','Add tags')
+                .val('')
+                .load(function(){
+                    $(this).tagsInput({})
+                });
         }
-        this.serialize=function() {
+
+        this.serialize = function() {
             return portlet.find('input[name="tags"]').val()
         }
-        this.deserialize=function( content) {
+
+        this.deserialize = function( content) {
             if(editMode)
                 return portlet.find('input[name="tags"]').val(content);
             else
                 return portlet.find('span[class="tag"]').text(content);
         };
+
+        initLayout1();
+
+        this.addLayout(layout1);
+
+        layout1.tagsInput({})
     }
     TagWidget.prototype=new Widget();
     TagWidget.prototype.constructor=TagWidget;
+
+
+    function VoiceWidget(){
+        Widget.call(this);
+
+        var layout1 = 'Vocie Layout 1';
+
+        this.serialize = function() {
+        }
+
+        this.deserialize = function( content) {
+        };
+
+        this.addLayout(layout1);
+    }
+    VoiceWidget.prototype = new Widget();
+    VoiceWidget.prototype.constructor = VoiceWidget;
 
 
     function MapWidget(){
@@ -320,12 +354,11 @@ function Flyer(options) {
         this.portlet.on('portlet:resized', function() {
             this.height = $(this).height();
 
-            mapbox[0]
-                .height(this.height)
+            layout1.height(this.height)
                 .width(pStack.width());
-            mapbox[1]
-                .height( this.height*0.7 )
-                .width( pStack.width()*0.5 ) ( this.height*0.7 )
+
+            layout2.height( this.height*0.7 )
+                .width( pStack.width()*0.5 );
         });
     }
     MapWidget.prototype=new Widget();
@@ -345,19 +378,23 @@ function Flyer(options) {
         var rh = remaindedHeight();
 
         if( rh<30 ){
-            $('.portletCreator').css('height',50)
+            $('.portletCreator')
+                .css('height',50)
                 .css('bottom',-60)
                 .find('#portletCreatorAlarm')
                 .show();
+            $('.portletCreator').find('#items').hide();
+
         }
         else {
-            $('.portletCreator').css('height',remaindedHeight())
+            $('.portletCreator')
+                .css('height',remaindedHeight())
                 .css('bottom',0)
                 .find('#portletCreatorAlarm')
                 .hide();
+            $('.portletCreator').find('#items').show();
         }
     }
-
 
     var remaindedHeight = function () {
         var emptySpaceHeight = pStack.height();
@@ -478,7 +515,7 @@ function Flyer(options) {
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
                 var widgetData=data.widgets;
-                for( var i=0; i<widgetData; i++ ){
+                for( var i=0; i<widgetData.length; i++ ){
                     if( widgetData[i] )
                         createPortlet(
                             {
@@ -592,15 +629,19 @@ function Flyer(options) {
         var portlets = pStack.find('.portlet');
         var portletsCount = portlets.length;
 
-        portlets.each(function() {
-            var widget = $(this).data('widget');
-            widget.enterToShotMode(function(){
-                portletsCount--;
+        if(portletsCount==0)
+            completedCallback();
+        else {
+            portlets.each(function() {
+                var widget = $(this).data('widget');
+                widget.enterToShotMode(function(){
+                    portletsCount--;
 
-                if(portletsCount==0)
-                    completedCallback();
+                    if(portletsCount==0)
+                        completedCallback();
+                });
             });
-        });
+        }
     }
 
     function exitFromShotMode() {
