@@ -20,8 +20,9 @@ function Flyer(options) {
                 .data('widget',this);
 
         this.serialize = function(){};
-
         this.deserialize = function(content){};
+        this.enterToShotMode = function(completedCallback) {completedCallback()};
+        this.exitFromShotMode = function() {};
 
         this.addLayout = function(layout){
                 this.layouts.push(layout);
@@ -241,6 +242,7 @@ function Flyer(options) {
 
         var layout1 = 'MapWidget layout 1';
         var layout2 = 'MapWidget layout 2';
+        var mapAsImage = '';
         var mapbox = [];
 
         function initLayout1() {
@@ -273,9 +275,7 @@ function Flyer(options) {
         this.addLayout(layout1);
         this.addLayout(layout2);
 
-        // ToDo: PROBLEM
-        //L.mapbox.map(id, 'coybit.gj1c3kom');
-
+        $('<img>').addClass('mapAsImage mapAsImage-hide').appendTo(this.portlet);
 
         this.serialize = function(){
             var center = mapbox[this.layoutIndex].getCenter();
@@ -285,6 +285,7 @@ function Flyer(options) {
                 zoom: mapbox[this.layoutIndex].getZoom()
             };
         }
+
         this.deserialize = function(content){
             if( content ){
                 mapbox[0].setView( content.center, content.zoom );
@@ -292,6 +293,28 @@ function Flyer(options) {
             }
         }
 
+        this.enterToShotMode = function(completedCallback) {
+
+            var curMap =  mapbox[this.layoutIndex];
+            var img = this.portlet.find('.mapAsImage');
+
+            leafletImage(curMap, function(err,canvas){
+
+                img.removeClass('mapAsImage-hide')
+                    .addClass('mapAsImage-show')
+                    .attr('src', canvas.toDataURL())
+
+                if( completedCallback )
+                    completedCallback()
+            });
+        }
+
+        this.exitFromShotMode = function() {
+            var img = this.portlet.find('.mapAsImage')
+                .removeClass('mapAsImage-show')
+                .addClass('mapAsImage-hide');
+            img.hide();
+        }
     }
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
@@ -443,7 +466,7 @@ function Flyer(options) {
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
                 var widgetData=data.widgets;
-                for( var i=0; i<widgetData.length; i++ ){
+                for( var i=0; i<widgetData; i++ ){
                     if( widgetData[i] )
                         createPortlet(
                             {
@@ -501,6 +524,23 @@ function Flyer(options) {
             .css('background-repeat', 'no-repeat');
     }
 
+    var getShot = function (callback) {
+
+        // Generate Thumbnail Image
+        enterShotMode( function(){
+
+            html2canvas(pStack, {
+                onrendered: function(canvas) {
+
+                    if(callback)
+                        callback( canvas.toDataURL() );
+
+                    exitFromShotMode();
+                }
+            });
+        });
+    }
+
     var initPortletsStack = function () {
        // Initialization
        if( editMode ){
@@ -530,6 +570,40 @@ function Flyer(options) {
 
     initPortletsStack();
 
+
+    // Private functions
+    function enterShotMode(completedCallback){
+        // Global Changes
+        pStack.find('.portlet-splitter').css('background-color','#000');
+
+        // Portlet Changes
+        var portlets = pStack.find('.portlet');
+        var portletsCount = portlets.length;
+
+        portlets.each(function() {
+            var widget = $(this).data('widget');
+            widget.enterToShotMode(function(){
+                portletsCount--;
+
+                if(portletsCount==0)
+                    completedCallback();
+            });
+        });
+    }
+
+    function exitFromShotMode() {
+        // Global Changes
+        pStack.find('.portlet-splitter').css('background-color','');
+
+        // Portlet Changes
+        var portlets = pStack.find('.portlet');
+
+        portlets.each(function() {
+            var widget = $(this).data('widget');
+            widget.exitFromShotMode();
+        });
+    }
+
     // Public functions
     this.createPortlet = createPortlet;
     this.json2flyer = json2flyer;
@@ -537,6 +611,7 @@ function Flyer(options) {
     this.remaindedHeight = remaindedHeight;
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
+    this.getShot = getShot;
 
     return this;
 }

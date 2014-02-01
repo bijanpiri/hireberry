@@ -11,6 +11,8 @@
 <script src="http://rangy.googlecode.com/svn/trunk/currentrelease/rangy-core.js"></script>
 <script src="http://hallojs.org/js/hallo.js"></script>
 
+<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.3/leaflet-image.js'></script>
+
 <script src="/script/jquery.jcarousel.min.js"></script>
 <script src="/flyer.js"></script>
 <script>
@@ -63,12 +65,27 @@
             $('#buttonSave').text('Saving...').addClass('disabled');
 
             var flyerElem = $('.portletStack');
-            var flyerjson = flyer.flyer2json('portletStack');
+            var flyerjson = flyer.flyer2json();
 
+            flyer.getShot(function(image){
+
+                flyerjson.thumbnail = image;
+
+                $.post( '/flyer/save', {flyer:flyerjson} )
+                        .done(function(data){
+                            $('#buttonSave').text('Save').removeClass('disabled');
+                        })
+                        .fail(function(data){
+                            $('#buttonSave').text('Save*').removeClass('disabled');
+                        });
+            });
+
+            /*
             // Generate Thumbnail Image
             html2canvas(flyerElem, {
                 onrendered: function(canvas) {
                     console.log( canvas.toDataURL() );
+
 
                     flyerjson.thumbnail = canvas.toDataURL();
 
@@ -81,6 +98,7 @@
                             });
                 }
             });
+            */
         });
 
         $('#backgroundImage').fileupload({
