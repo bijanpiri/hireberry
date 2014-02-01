@@ -90,11 +90,12 @@ function Flyer(options) {
         var layout4='layout4';
 
         function initLayout1(){
+            var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
             layout1 = $('<div>').append(
-                $('<div>').addClass('textfield').addClass('portlet-content-text')
+                textField
             );
 
-            layout1.find('.textfield').hallo({
+            textField.hallo({
                 plugins: {
                     'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
                     'hallojustify' : {},
@@ -102,17 +103,25 @@ function Flyer(options) {
                     'halloheadings': {},
                     'hallolink': {}
                 }
-            });
-        }
+            })
+            .css('height',this.height );
 
-        initLayout1();
+        }
+//        initLayout1();
+        initLayout1.call(this);
 
         // Add layouts
         this.addLayout(layout1);
         this.addLayout(layout2);
         this.addLayout(layout3);
         this.addLayout(layout4);
+        this.resized=function(){
+            console.log('resizing text widget...');
 
+        }
+        this.portlet.on('portlet:resized', function() {
+            $(this).find('.textfield').css('height', $(this).height());
+        });
         this.serialize = function(){
             return this.portlet.find('.portlet-content-text').html();
         }
@@ -658,6 +667,7 @@ function Flyer(options) {
             widget.exitFromShotMode();
         });
     }
+
 
     // Public functions
     this.createPortlet = createPortlet;
