@@ -120,14 +120,15 @@ body {
 
 .portlet-splitter {
     position: absolute;
-    height: 2px;
+    height: 7px;
     bottom: 0;
     width: 100%;
-    background-color: #e5263e;
+    background-color: none;
 }
 
 .portlet-splitter:hover{
     cursor: ns-resize;
+    background-color: #e5e5e5;
 }
 
 .portlet .mapAsImage-hide {
@@ -144,6 +145,28 @@ body {
     height: 100%;
     z-index: 10001;
     display: block;
+}
+
+.portlet .layoutButton {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background: #4E443C;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 0 1px #000;
+    font: 24px/27px Arial, sans-serif;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    -webkit-box-shadow: 0 0 2px #999;
+    -moz-box-shadow: 0 0 2px #999;
+    box-shadow: 0 0 2px #999;
 }
 
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }

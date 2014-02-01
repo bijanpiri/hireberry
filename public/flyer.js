@@ -46,14 +46,17 @@ function Flyer(options) {
 
         this.content = function(){
 
-            var leftButton = $('<a>').addClass("jcarousel-control-prev").append('‹').click(this,this.prevLayout);
-            var rightButton = $('<a>').addClass("jcarousel-control-next").append('›').click(this,this.nextLayout);
+            var leftButton = $('<a>').addClass("layoutButton").append('‹').click(this,this.prevLayout);
+            var rightButton = $('<a>').addClass("layoutButton").append('›').click(this,this.nextLayout);
             var centerPanel = $('<div>').addClass('jcarousel').attr('data-jcarousel','true').attr('data-wrap','circular');
             var resizingHandle = $('<div>').addClass('portlet-splitter');
 
+            var leftButtonContainer = $('<div>').addClass('jcarousel-control-prev').append(leftButton);
+            var rightButtonContainer = $('<div>').addClass('jcarousel-control-next').append(rightButton);
+
             this.portlet
-                .append(leftButton)
-                .append(rightButton)
+                .append(leftButtonContainer)
+                .append(rightButtonContainer)
                 .append(centerPanel)
                 .append(resizingHandle);
 
@@ -68,11 +71,9 @@ function Flyer(options) {
             return this.portlet;
         }
 
-        this.resized = function() {};
+        this.portlet.trigger('portlet:resizing', function(){
 
-        this.hasLayout=function(){
-            return (this.layouts.length > 1);
-        }
+        })
     }
 
     Widget.prototype.constructor = Widget;
@@ -453,12 +454,12 @@ function Flyer(options) {
                 .appendTo(portlet);
 
             // Next Layout Button
-            portlet.find('a.jcarousel-control-next')
-                .css('top',(h-30)/2 );
+            //portlet.find('a.jcarousel-control-next')
+            //    .css('top',(h-30)/2 );
 
             // Previous Layout Button
-            portlet.find('a.jcarousel-control-prev')
-                .css('top',(h-30)/2);
+            //portlet.find('a.jcarousel-control-prev')
+            //    .css('top',(h-30)/2);
 
 
             portlet.find('.portlet-handle')

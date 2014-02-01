@@ -38,31 +38,29 @@
 }
 .jcarousel-control-prev,
 .jcarousel-control-next {
-    display: none;
+    /*display: none;*/
     position: absolute;
-    top: 200px;
     width: 30px;
-    height: 30px;
-    text-align: center;
-    background: #4E443C;
-    color: #fff;
-    text-decoration: none;
-    text-shadow: 0 0 1px #000;
-    font: 24px/27px Arial, sans-serif;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    border-radius: 30px;
-    -webkit-box-shadow: 0 0 2px #999;
-    -moz-box-shadow: 0 0 2px #999;
-    box-shadow: 0 0 2px #999;
+    height: 100%;
+    top: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline-style:none;/*IE*/
+    cursor: pointer;
 }
-
+.portlet:hover .layoutButton,
+.portlet:hover .layoutButton{
+    display: block;
+}
 .jcarousel-control-prev{
     left: -30px;
 }
 
 .jcarousel-control-next {
-
     right: -30px;
 }
 
