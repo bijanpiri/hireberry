@@ -315,6 +315,18 @@ function Flyer(options) {
                 .addClass('mapAsImage-hide');
             img.hide();
         }
+
+        // Triggers
+        this.portlet.on('portlet:resized', function() {
+            this.height = $(this).height();
+
+            mapbox[0]
+                .height(this.height)
+                .width(pStack.width());
+            mapbox[1]
+                .height( this.height*0.7 )
+                .width( pStack.width()*0.5 ) ( this.height*0.7 )
+        });
     }
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
