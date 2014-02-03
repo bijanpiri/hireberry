@@ -29,19 +29,23 @@ function Flyer(options) {
         };
 
         this.nextLayout = function(event){
-                var w = event.data;
-                w.layoutIndex=(w.layoutIndex+1)%w.layouts.length;
-                w.layoutChanged();
+            var w = event.data;
+            var oldLayoutIndex = w.layoutIndex;
+            w.layoutIndex=(w.layoutIndex+1)%w.layouts.length;
+            w.layoutChanged(oldLayoutIndex, w.layoutIndex);
         };
 
         this.prevLayout = function(event){
-                var w = event.data;
-                w.layoutIndex=(w.layoutIndex-1+w.layouts.length)%w.layouts.length;
-                w.layoutChanged();
+            var w = event.data;
+            var oldLayoutIndex = w.layoutIndex;
+            w.layoutIndex=(w.layoutIndex-1+w.layouts.length)%w.layouts.length;
+            w.layoutChanged(oldLayoutIndex, w.layoutIndex);
         };
 
-        this.layoutChanged = function(){
-                this.portlet.find('.jcarousel').jcarousel('scroll',this.layoutIndex);
+        this.layoutChanged = function( oldLayoutIndex, newLayoutIndex ){
+            this.portlet.find('.jcarousel').jcarousel('scroll',this.layoutIndex);
+
+            this.portlet.trigger('portlet:layoutChanged', {old:oldLayoutIndex, new:newLayoutIndex});
         };
 
         this.content = function(){
@@ -88,40 +92,54 @@ function Flyer(options) {
         var layout2='layout2';
         var layout3='layout3';
         var layout4='layout4';
+        var dataSource = [];
 
         function initLayout1(){
             var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
-            layout1 = $('<div>').append(
-                textField
-            );
+            layout1 = $('<div>').append(textField);
 
-            textField.hallo({
-                plugins: {
+            textField.css('height',this.height ).hallo({plugins: {
                     'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
                     'hallojustify' : {},
                     'hallolists' : {},
                     'halloheadings': {},
                     'hallolink': {}
                 }
-            })
-            .css('height',this.height );
+            });
+        }
+
+        function initLayout2(){
+            var textField = $('<div>').addClass('textfield').addClass('portlet-content-text');
+            layout2 = $('<div>').append(textField);
+
+            textField.css('height',this.height ).hallo({plugins: {
+                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+                    'hallojustify' : {},
+                    'hallolists' : {},
+                    'halloheadings': {},
+                    'hallolink': {}
+                }
+            });
 
         }
-//        initLayout1();
+
         initLayout1.call(this);
+        initLayout2.call(this);
 
         // Add layouts
         this.addLayout(layout1);
         this.addLayout(layout2);
         this.addLayout(layout3);
         this.addLayout(layout4);
-        this.resized=function(){
-            console.log('resizing text widget...');
 
-        }
         this.portlet.on('portlet:resized', function() {
             $(this).find('.textfield').css('height', $(this).height());
         });
+
+        this.portlet.on('portlet:layoutChanged', function(e,idx) {
+            console.log(idx,idx.old,idx.new);
+        });
+
         this.serialize = function(){
             return this.portlet.find('.portlet-content-text').html();
         }
