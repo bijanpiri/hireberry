@@ -308,7 +308,20 @@ function Flyer(options) {
         this.addLayout('ButtonWidget layout 2');
 
         this.getSettingPanel = function(){
-            return $('<input type="text" id="displayText" placeholder="Display Text"><input type="text" id="url" placeholder="URL">');
+            var input1 = $('<input>')
+                .attr('id','displayText')
+                .attr('placeholder', 'Display Text')
+                .attr('type', 'text')
+                .val(layout1.text());
+
+            var input2 = $('<input>')
+                .attr('id','url')
+                .attr('placeholder', 'URL address')
+                .attr('type', 'text')
+                .val(layout1.attr('href'));
+
+            var settingPanel = $('<div>').append(input1).append(input2);
+            return settingPanel;
         }
 
         this.applySetting = function (settingPanel){
@@ -317,15 +330,15 @@ function Flyer(options) {
         }
 
         this.serialize = function(){
-            return this.portlet.find('input[type="text"]').val()
+            return {
+                display: layout1.text(),
+                url: layout1.attr('href')
+            }
         }
+
         this.deserialize = function(content){
-
-            if(editMode)
-                return this.portlet.find('input[type="text"]').val(content);
-            else
-                return this.portlet.find('a[class="btn"]').text(content).attr('href',content);
-
+            layout1.text( content.display  );
+            layout1.attr( 'href', content.url );
         }
     }
     ButtonWidget.prototype = new Widget();
