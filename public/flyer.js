@@ -56,7 +56,7 @@ function Flyer(options) {
             pStack.widgetWidthOpenSettingPanel = this;
 
             //pStack.animate({ height: this.pStackNormalHeight + delta }, duration);
-            this.portletContainer.find('.portlet-settingPanel').animate({height: delta}, duration);
+            this.portletContainer.find('.portlet-settingPanel').css('display','block').animate({height: delta}, duration);
             this.portletContainer.animate({ height:  this.portletContainer.height() + delta }, duration);
             this.settingPanelIsOpen = true;
         }
@@ -65,7 +65,7 @@ function Flyer(options) {
             pStack.widgetWidthOpenSettingPanel = null;
 
             //pStack.animate({ height: this.pStackNormalHeight }, duration);
-            this.portletContainer.find('.portlet-settingPanel').animate({height: 0}, duration);
+            this.portletContainer.find('.portlet-settingPanel').css('display','none').animate({height: 0}, duration);
             this.portletContainer.animate({ height:  this.portletContainer.height() - delta }, duration);
             this.settingPanelIsOpen = false;
         }
@@ -74,7 +74,7 @@ function Flyer(options) {
 
             var centerPanel = $('<div>').addClass('jcarousel').attr('data-jcarousel','true').attr('data-wrap','circular');
             var resizingHandle = $('<div>').addClass('portlet-splitter');
-            var settingPanel = $('<div>').addClass('portlet-settingPanel');
+            var settingPanel = $('<div>').addClass('portlet-settingPanel').html(this.getSettingPanel());
             var portletTopPadding = $('<div>').addClass('portlet-topPadding');
 
             var moveHandle = $('<div>')
@@ -125,6 +125,10 @@ function Flyer(options) {
             this.portlet.find('.jcarousel').append(ul).jcarousel();
 
             return this.portletContainer.append( this.portlet );
+        }
+
+        this.getSettingPanel = function () {
+            return 'Default Setting Panel';
         }
 
         this.portlet.trigger('portlet:resizing', function(){
@@ -195,6 +199,10 @@ function Flyer(options) {
         this.portlet.on('portlet:layoutChanged', function(e,idx) {
             console.log(idx,idx.old,idx.new);
         });
+
+        this.getSettingPanel = function () {
+            return 'Text Setting Panel';
+        }
 
         this.serialize = function(){
             return this.portlet.find('.portlet-content-text').html();

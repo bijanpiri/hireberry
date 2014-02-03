@@ -31,6 +31,10 @@ body {
     position: relative;
 }
 
+.portlet-container:hover .portlet-aroundButton  {
+    display: block;
+}
+
 .portlet {
     height: 100%;
 }

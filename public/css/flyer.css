@@ -75,6 +75,7 @@
 }
 
 .portlet-aroundButton {
+    display: none;
     position: absolute;
     /*z-index: -1; This property have problem with jQury.Sortable*/
     background-color: #6b6b6b;
@@ -107,6 +108,7 @@
 
 .portlet-settingPanel {
     position: relative;
+    display: none;
     height: 0;
     top: 0;
     background-color: #563;
