@@ -82,6 +82,14 @@
     height: 24px;
 }
 
+.portlet-aroundButton:hover {
+    background-color: #bfbfbf;
+}
+
+.portlet-aroundButton span {
+    margin: 6px;
+}
+
 .portlet-settingButton {
     right: 0px;
     top: 24px;

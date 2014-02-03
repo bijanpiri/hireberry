@@ -77,8 +77,12 @@ function Flyer(options) {
             var settingPanel = $('<div>').addClass('portlet-settingPanel');
             var portletTopPadding = $('<div>').addClass('portlet-topPadding');
 
-            var moveHandle = $('<div>').addClass('portlet-aroundButton portlet-moveHandle');
-            var deleteButton = $('<div>').addClass('portlet-aroundButton portlet-deleteButton')
+            var moveHandle = $('<div>')
+                .addClass('portlet-aroundButton portlet-moveHandle')
+                .append($('<span>').addClass('icon-move'));
+            var deleteButton = $('<div>')
+                .addClass('portlet-aroundButton portlet-deleteButton')
+                .append($('<span>').addClass('icon-trash'))
                 .click((function(widget){
                     return function(){
                         widget.portlet.remove();
@@ -86,6 +90,7 @@ function Flyer(options) {
                     }
                 })(this));
             var settingButton = $('<div>').addClass('portlet-aroundButton portlet-settingButton')
+                .append($('<span>').addClass('icon-wrench'))
                 .click( (function(widget){
                     return function(){
 
@@ -123,7 +128,11 @@ function Flyer(options) {
         }
 
         this.portlet.trigger('portlet:resizing', function(){
+            pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
+        })
 
+        this.portlet.trigger('portlet:newItemWillAdd', function(){
+            pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
         })
     }
 
