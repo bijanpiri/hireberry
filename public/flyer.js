@@ -74,7 +74,15 @@ function Flyer(options) {
 
             var centerPanel = $('<div>').addClass('jcarousel').attr('data-jcarousel','true').attr('data-wrap','circular');
             var resizingHandle = $('<div>').addClass('portlet-splitter');
-            var settingPanel = $('<div>').addClass('portlet-settingPanel').html(this.getSettingPanel());
+            var settingApplyButton = $('<button>').text('Apply').addClass('btn').click((function(widget){
+                    return function(){
+                        widget.applySetting(settingPanel)
+                        widget.closeSettingPanel();
+                    }
+                })(this));
+            var settingPanel = $('<div>').addClass('portlet-settingPanel')
+                .append(this.getSettingPanel())
+                .append(settingApplyButton);
             var portletTopPadding = $('<div>').addClass('portlet-topPadding');
 
             var moveHandle = $('<div>')
@@ -85,7 +93,7 @@ function Flyer(options) {
                 .append($('<span>').addClass('icon-trash'))
                 .click((function(widget){
                     return function(){
-                        widget.portlet.remove();
+                        widget.portletContainer.remove();
                         reLocatingPlus();
                     }
                 })(this));
@@ -129,6 +137,10 @@ function Flyer(options) {
 
         this.getSettingPanel = function () {
             return 'Default Setting Panel';
+        }
+
+        this.applySetting = function (settingPanelHTML){
+
         }
 
         this.portlet.trigger('portlet:resizing', function(){
@@ -287,11 +299,22 @@ function Flyer(options) {
         var layout1 = '';
 
         function initLayout1() {
-            layout1 = $('')
+            layout1 = $('<a>').addClass('btn btn-success').text('Default');
         }
 
-        this.addLayout('ButtonWidget layout 1');
+        initLayout1();
+
+        this.addLayout(layout1);
         this.addLayout('ButtonWidget layout 2');
+
+        this.getSettingPanel = function(){
+            return $('<input type="text" id="displayText" placeholder="Display Text"><input type="text" id="url" placeholder="URL">');
+        }
+
+        this.applySetting = function (settingPanel){
+            layout1.text( settingPanel.find('#displayText').val() );
+            layout1.attr('href', settingPanel.find('#url').val() );
+        }
 
         this.serialize = function(){
             return this.portlet.find('input[type="text"]').val()
