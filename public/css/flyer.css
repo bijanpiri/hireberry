@@ -73,3 +73,42 @@
 .jcarousel-control-next:hover span {
     display: block;
 }
+
+.portlet-aroundButton {
+    position: absolute;
+    /*z-index: -1; This property have problem with jQury.Sortable*/
+    background-color: #6b6b6b;
+    width: 24px;
+    height: 24px;
+}
+
+.portlet-settingButton {
+    right: 0px;
+    top: 24px;
+}
+
+.portlet-moveHandle {
+    right: 0px;
+    top: 0;
+}
+
+.portlet-deleteButton {
+    left: -24px;
+    top: 0;
+}
+
+.portlet-settingPanel {
+    position: relative;
+    height: 0;
+    top: 0;
+    background-color: #563;
+}
+
+.portlet-topPadding {
+    position: relative;
+    height: 5px;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+}

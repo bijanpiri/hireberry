@@ -7,6 +7,8 @@ function Flyer(options) {
     var splitterOriginY;
     var splitterOriginHeight;
     var Widgets=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
+    this.widgetWidthOpenSettingPanel = null;
+    this.pStackNormalHeight;
 
     /****** Widget - Start *******/
     function Widget(){
@@ -14,10 +16,9 @@ function Flyer(options) {
         this.layoutIndex = 0;
         this.height = 100; //px
         this.type=0;
-        this.portlet=
-            $('<div>')
-                .addClass('portlet')
-                .data('widget',this);
+        this.settingPanelIsOpen = false;
+        this.portlet = $('<div>').addClass('portlet').data('widget',this);
+        this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width()+24);
 
         this.serialize = function(){};
         this.deserialize = function(content){};
@@ -48,21 +49,67 @@ function Flyer(options) {
             this.portlet.trigger('portlet:layoutChanged', {old:oldLayoutIndex, new:newLayoutIndex});
         };
 
+        this.openSettingPanel = function(duration,delta) {
+            // Close other setting panel
+            if( pStack.widgetWidthOpenSettingPanel != null )
+                pStack.widgetWidthOpenSettingPanel.closeSettingPanel(duration,delta);
+            pStack.widgetWidthOpenSettingPanel = this;
+
+            //pStack.animate({ height: this.pStackNormalHeight + delta }, duration);
+            this.portletContainer.find('.portlet-settingPanel').animate({height: delta}, duration);
+            this.portletContainer.animate({ height:  this.portletContainer.height() + delta }, duration);
+            this.settingPanelIsOpen = true;
+        }
+
+        this.closeSettingPanel = function(duration,delta){
+            pStack.widgetWidthOpenSettingPanel = null;
+
+            //pStack.animate({ height: this.pStackNormalHeight }, duration);
+            this.portletContainer.find('.portlet-settingPanel').animate({height: 0}, duration);
+            this.portletContainer.animate({ height:  this.portletContainer.height() - delta }, duration);
+            this.settingPanelIsOpen = false;
+        }
+
         this.content = function(){
 
-            var leftButton = $('<a>').addClass("layoutButton").append('‹').click(this,this.prevLayout);
-            var rightButton = $('<a>').addClass("layoutButton").append('›').click(this,this.nextLayout);
             var centerPanel = $('<div>').addClass('jcarousel').attr('data-jcarousel','true').attr('data-wrap','circular');
             var resizingHandle = $('<div>').addClass('portlet-splitter');
+            var settingPanel = $('<div>').addClass('portlet-settingPanel');
+            var portletTopPadding = $('<div>').addClass('portlet-topPadding');
 
-            var leftButtonContainer = $('<div>').addClass('jcarousel-control-prev').append(leftButton);
-            var rightButtonContainer = $('<div>').addClass('jcarousel-control-next').append(rightButton);
+            var moveHandle = $('<div>').addClass('portlet-aroundButton portlet-moveHandle');
+            var deleteButton = $('<div>').addClass('portlet-aroundButton portlet-deleteButton')
+                .click((function(widget){
+                    return function(){
+                        widget.portlet.remove();
+                        reLocatingPlus();
+                    }
+                })(this));
+            var settingButton = $('<div>').addClass('portlet-aroundButton portlet-settingButton')
+                .click( (function(widget){
+                    return function(){
 
-            this.portlet
-                .append(leftButtonContainer)
-                .append(rightButtonContainer)
-                .append(centerPanel)
-                .append(resizingHandle);
+                        var delta = 100;
+                        var duration = 500;
+                        widget.portletContainer.find('.portlet-settingPanel').width(pStack.width());
+
+                        if( widget.settingPanelIsOpen )
+                           widget.closeSettingPanel(duration,delta);
+                        else
+                           widget.openSettingPanel(duration,delta);
+                    }
+                })(this));
+
+            this.portlet.width(pStack.width()).append(centerPanel);
+
+            this.portletContainer
+                .append(portletTopPadding)
+                .append(settingPanel)
+                .append(this.portlet)
+                .append(resizingHandle)
+                .append(settingButton)
+                .append(moveHandle)
+                .append(deleteButton);
 
             // Add layouts containers
             var ul=$('<ul>');
@@ -72,7 +119,7 @@ function Flyer(options) {
             }
             this.portlet.find('.jcarousel').append(ul).jcarousel();
 
-            return this.portlet;
+            return this.portletContainer.append( this.portlet );
         }
 
         this.portlet.trigger('portlet:resizing', function(){
@@ -401,6 +448,8 @@ function Flyer(options) {
         $(window).resize(function() {
             pStack.height( pStack.width() * aspect_ratio );
         });
+
+        this.pStackNormalHeight = pStack.height();
     }
 
     var reLocatingPlus = function() {
@@ -445,57 +494,22 @@ function Flyer(options) {
         if( editMode && remaindedHeight() < 100 )
             return;
 
+        // Create a widget and initializing it
         var widget = new Widgets[wData.type]();
-
         var portlet = widget.content();
-        widget.type=wData.type;
+        widget.type = wData.type;
         pStack.append(portlet);
         if(wData.height)
-            widget.height=wData.height;
+            widget.height = wData.height;
         if(wData.layoutIndex){
-            widget.layoutIndex=wData.layoutIndex;
+            widget.layoutIndex = wData.layoutIndex;
             widget.layoutChanged();
         }
-        var h = widget.height;
-        portlet.css('height',h);
+        portlet.css( 'height', widget.height );
         if(wData.content)
             widget.deserialize(wData.content);
 
         if(editMode) {
-            // Close button
-            $("<span class='portlet-closeButton ui-icon ui-icon-closethick'></span>")
-                .click(function(e) {
-                    $(e.target).parent().remove();
-                    reLocatingPlus();
-                })
-                .appendTo(portlet);
-
-            $("<span class='portlet-settingButton ui-icon ui-icon-gear'></span>")
-                .click(function(e) {
-                    console.log('Setting');;
-                })
-                .appendTo(portlet);
-
-            $("<span class='portlet-moveButton ui-icon ui-icon-arrow-4'></span>")
-                .click(function(e) {})
-                .appendTo(portlet);
-
-            // Next Layout Button
-            //portlet.find('a.jcarousel-control-next')
-            //    .css('top',(h-30)/2 );
-
-            // Previous Layout Button
-            //portlet.find('a.jcarousel-control-prev')
-            //    .css('top',(h-30)/2);
-
-
-            portlet.find('.portlet-handle')
-                .css('top',0)
-                .css('left',0)
-                .click(function(){
-                    console.log('Handle');
-                });
-
             portlet.find('.portlet-splitter').mousedown(function(e){
                 splitterIsHold = true;
                 splitterOwner = $(this).parent();
@@ -510,8 +524,6 @@ function Flyer(options) {
             // pStack.parent = portletStack + portletCreator
             pStack.parent().mousemove(function(e){
                 if( splitterIsHold ) {
-                    console.log('Resizing...' + splitterOwner.attr('id') + e.clientY);
-
                     var curHeight = splitterOwner.height();
                     var newHeight = splitterOriginHeight +  (e.clientY - splitterOriginY);
                     var delta = newHeight-curHeight;
@@ -626,7 +638,7 @@ function Flyer(options) {
                connectWith: ".portletStack",
                cursor: "move",
                axis: "y",
-               handle: ".portlet-moveButton"
+               handle: ".portlet-moveHandle"
            })//.disableSelection();
        }
 
