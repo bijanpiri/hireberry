@@ -147,12 +147,14 @@ function Flyer(options) {
 
         }
 
-        this.portlet.trigger('portlet:resizing', function(){
-            pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
+        this.portletContainer.on('portlet:resizing', function(e,newHeight){
+            if(pStack.widgetWidthOpenSettingPanel)
+                pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
         })
 
-        this.portlet.trigger('portlet:newItemWillAdd', function(){
-            pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
+        this.portlet.on('portlet:newItemWillAdd', function(){
+            if(pStack.widgetWidthOpenSettingPanel)
+                pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
         })
     }
 
@@ -270,8 +272,8 @@ function Flyer(options) {
         this.addLayout(layout1);
         this.addLayout(layout2);
 
-        this.portlet.on('portlet:resized', function() {
-            this.height = $(this).height();
+        this.portletContainer.on('portlet:resizing', function(e,newHeight) {
+            this.height = newHeight;//$(this).height();
 
             $(this).find('.portlet-picture').height( this.height*0.7 )
         });
@@ -304,6 +306,13 @@ function Flyer(options) {
 
         this.addLayout(layout1);
         this.addLayout('Video layout 2');
+
+        this.portletContainer.on('portlet:resizing', (function(widget){
+            return function(e,newHeight) {
+                widget.height = newHeight;
+                widget.portlet.find('iframe').attr('height',newHeight);
+            }
+        })(this))
     }
     VideoWidget.prototype=new Widget();
     VideoWidget.prototype.constructor=VideoWidget;
@@ -632,7 +641,7 @@ function Flyer(options) {
             $('body').mouseup(function(e){
 
                 if(splitterIsHold)
-                    splitterOwner.trigger('portlet:resized');
+                    splitterOwner.trigger('portlet:resized',splitterOwner.height());
 
                 splitterIsHold = false;
             });
@@ -648,7 +657,7 @@ function Flyer(options) {
                     if( remaindedHeight() - delta < 5 )
                         newHeight += remaindedHeight() - delta;
 
-                    splitterOwner.trigger('portlet:resizing');
+                    splitterOwner.trigger('portlet:resizing',splitterOwner.height());
 
                     if( remaindedHeight() - delta >= 0){
                         splitterOwner.height( newHeight );
