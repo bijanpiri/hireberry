@@ -55,19 +55,23 @@ function Flyer(options) {
                 pStack.widgetWidthOpenSettingPanel.closeSettingPanel(duration,delta);
             pStack.widgetWidthOpenSettingPanel = this;
 
-            //pStack.animate({ height: this.pStackNormalHeight + delta }, duration);
+            pStack.animate({ height: this.pStackNormalHeight + delta }, duration);
             this.portletContainer.find('.portlet-settingPanel').css('display','block').animate({height: delta}, duration);
             this.portletContainer.animate({ height:  this.portletContainer.height() + delta }, duration);
             this.settingPanelIsOpen = true;
+
+            setTimeout(reLocatingPlus,duration);
         }
 
         this.closeSettingPanel = function(duration,delta){
             pStack.widgetWidthOpenSettingPanel = null;
 
-            //pStack.animate({ height: this.pStackNormalHeight }, duration);
+            pStack.animate({ height: this.pStackNormalHeight }, duration);
             this.portletContainer.find('.portlet-settingPanel').css('display','none').animate({height: 0}, duration);
             this.portletContainer.animate({ height:  this.portletContainer.height() - delta }, duration);
             this.settingPanelIsOpen = false;
+
+            setTimeout(reLocatingPlus,duration);
         }
 
         this.content = function(){
@@ -77,7 +81,7 @@ function Flyer(options) {
             var settingApplyButton = $('<button>').text('Apply').addClass('btn').click((function(widget){
                     return function(){
                         widget.applySetting(settingPanel)
-                        widget.closeSettingPanel();
+                        widget.closeSettingPanel(500,100);
                     }
                 })(this));
             var settingPanel = $('<div>').addClass('portlet-settingPanel')
@@ -139,7 +143,7 @@ function Flyer(options) {
             return 'Default Setting Panel';
         }
 
-        this.applySetting = function (settingPanelHTML){
+        this.applySetting = function (settingPanel){
 
         }
 
@@ -505,25 +509,51 @@ function Flyer(options) {
         this.pStackNormalHeight = pStack.height();
     }
 
-    var reLocatingPlus = function() {
+    var reLocatingPlus = function(animated) {
         var rh = remaindedHeight();
+        animated=true;
 
         if( rh<30 ){
-            $('.portletCreator')
-                .css('height',50)
-                .css('bottom',-60)
-                .find('#portletCreatorAlarm')
-                .show();
-            $('.portletCreator').find('#items').hide();
+
+            if(animated) {
+                $('.portletCreator')
+                    .animate({
+                        height: 50,
+                        bottom: -60
+                    }, 500)
+                    .find('#portletCreatorAlarm')
+                    .show();
+                $('.portletCreator').find('#items').hide();
+            }
+            else {
+                $('.portletCreator')
+                    .css('height',50)
+                    .css('bottom',-60)
+                    .find('#portletCreatorAlarm')
+                    .show();
+                $('.portletCreator').find('#items').hide();
+            }
 
         }
         else {
-            $('.portletCreator')
-                .css('height',remaindedHeight())
-                .css('bottom',0)
-                .find('#portletCreatorAlarm')
-                .hide();
-            $('.portletCreator').find('#items').show();
+            if(animated) {
+                $('.portletCreator')
+                    .animate({
+                        height: remaindedHeight(),
+                        bottom: 0
+                    }, 500)
+                    .find('#portletCreatorAlarm')
+                    .hide();
+                $('.portletCreator').find('#items').show();
+            }
+            else {
+                $('.portletCreator')
+                    .css('height',remaindedHeight())
+                    .css('bottom',0)
+                    .find('#portletCreatorAlarm')
+                    .hide();
+                $('.portletCreator').find('#items').show();
+            }
         }
     }
 
@@ -606,6 +636,10 @@ function Flyer(options) {
                     callback(data);
                     return;
                 }
+
+                if( data.length == 0 )
+                    return;
+
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
                 var widgetData=data.widgets;
