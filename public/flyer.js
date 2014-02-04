@@ -303,7 +303,10 @@ function Flyer(options) {
         var layout1 = '';
 
         function initLayout1() {
-            layout1 = $('<a>').addClass('btn btn-success').text('Default');
+            layout1 = $('<a>')
+                .addClass('btn btn-success')
+                .text('Default')
+                .hallo({});
         }
 
         initLayout1();
@@ -511,7 +514,9 @@ function Flyer(options) {
 
     var reLocatingPlus = function(animated) {
         var rh = remaindedHeight();
-        animated=true;
+
+        if(animated==undefined)
+            animated = true;
 
         if( rh<30 ){
 
@@ -619,12 +624,12 @@ function Flyer(options) {
 
                     if( remaindedHeight() - delta >= 0){
                         splitterOwner.height( newHeight );
-                        reLocatingPlus();
+                        reLocatingPlus(false);
                     }
                 }
             });
 
-            reLocatingPlus();
+            reLocatingPlus(false);
         }
     };
 
