@@ -20,7 +20,7 @@ var app = express();
 var options = {
     server: {
         socketOptions: {
-            connectTimeoutMS: 3600000 ,
+            connectTimeoutMS: 10000 ,
             keepAlive: 1 }},
     replset:{
         socketOptions : {
