@@ -290,7 +290,19 @@ function Flyer(options) {
     function VideoWidget(){
         Widget.call(this);
 
-        this.addLayout('Video layout 1');
+        var layout1 = '';
+
+        function initLayout() {
+            layout1 = $('<iframe>')
+                .attr('width','100%')
+                .attr('height','100px')
+                .attr('src','//www.youtube.com/embed/n_6p-1J551Y')
+                .attr('frameborder','0');
+        }
+
+        initLayout();
+
+        this.addLayout(layout1);
         this.addLayout('Video layout 2');
     }
     VideoWidget.prototype=new Widget();
@@ -393,15 +405,27 @@ function Flyer(options) {
     function VoiceWidget(){
         Widget.call(this);
 
-        var layout1 = 'Vocie Layout 1';
+        var layout1 = 'Voice Layout 1';
+
+        function initLayout1() {
+
+            layout1 = $('<div>');
+
+            $.get('http://soundcloud.com/oembed?format=json&url=https://soundcloud.com/saghi-s/2vznv6x4pmxh')
+                .done(function(res){
+                    var embeded = $(res.html).height(100);
+                    layout1.append(embeded);
+                })
+        }
+
+        initLayout1();
+        this.addLayout(layout1);
 
         this.serialize = function() {
         }
 
         this.deserialize = function( content) {
         };
-
-        this.addLayout(layout1);
     }
     VoiceWidget.prototype = new Widget();
     VoiceWidget.prototype.constructor = VoiceWidget;
@@ -607,7 +631,8 @@ function Flyer(options) {
 
             $('body').mouseup(function(e){
 
-                splitterOwner.trigger('portlet:resized');
+                if(splitterIsHold)
+                    splitterOwner.trigger('portlet:resized');
 
                 splitterIsHold = false;
             });
