@@ -24,6 +24,9 @@ function Flyer(options) {
         this.deserialize = function(content){};
         this.enterToShotMode = function(completedCallback) {completedCallback()};
         this.exitFromShotMode = function() {};
+        this.resized=function(size){
+
+        }
 
         this.addLayout = function(layout){
                 this.layouts.push(layout);
