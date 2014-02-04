@@ -13,8 +13,13 @@ var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
 var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googleusercontent.com';
 var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
+<<<<<<< HEAD
 var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
 //var mongoHQConenctionString = 'mongodb://admin:admin124578@localhost:27017/booltindb';
+=======
+//var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
+var mongoHQConenctionString = 'mongodb://admin:admin124578@192.168.20.82:27017/booltindb';
+>>>>>>> relocating plus problem is solved
 
 var app = express();
 var options = {

@@ -246,7 +246,7 @@ function Flyer(options) {
         function initLayout1() {
             var file = $('<input type="file" name="picture" multiple hidden>');
             var img =  $('<img>')
-                .height(this.height*0.7)
+                .height(this.height)
                 .addClass('img-rounded portlet-picture')
                 .attr('src','/images/upload.png');
 
@@ -278,7 +278,7 @@ function Flyer(options) {
         this.portletContainer.on('portlet:resizing', function(e,newHeight) {
             this.height = newHeight;//$(this).height();
 
-            $(this).find('.portlet-picture').height( this.height*0.7 )
+            $(this).find('.portlet-picture').height( this.height )
         });
 
         this.serialize=function(){
@@ -538,7 +538,7 @@ function Flyer(options) {
 
     var initDimension = function() {
 
-        var aspect_ratio = 0.90;
+        var aspect_ratio = Math.sqrt(2);//0.90;
         pStack.height( pStack.width() * aspect_ratio );
 
         $(window).resize(function() {
@@ -634,23 +634,8 @@ function Flyer(options) {
             widget.deserialize(wData.content);
 
         if(editMode) {
-            portlet.find('.portlet-splitter').mousedown(function(e){
-                splitterIsHold = true;
-                splitterOwner = $(this).parent();
-                splitterOriginY = e.clientY;
-                splitterOriginHeight = splitterOwner.height();
-            });
 
-            $('body').mouseup(function(e){
-
-                if(splitterIsHold)
-                    splitterOwner.trigger('portlet:resized',splitterOwner.height());
-
-                splitterIsHold = false;
-            });
-
-            // pStack.parent = portletStack + portletCreator
-            pStack.parent().mousemove(function(e){
+            var mouseMove = function(e){
                 if( splitterIsHold ) {
                     var curHeight = splitterOwner.height();
                     var newHeight = splitterOriginHeight +  (e.clientY - splitterOriginY);
@@ -667,7 +652,46 @@ function Flyer(options) {
                         reLocatingPlus(false);
                     }
                 }
-            });
+            }
+
+            var mouseUp = function(e){
+
+                if(splitterIsHold)
+                    splitterOwner.trigger('portlet:resized',splitterOwner.height());
+
+                splitterIsHold = false;
+            }
+
+            var mouseDown = function(e){
+
+                /*
+                // ToDo: Attaching onmousemove event to all the iframs
+                // But a security error is occured during accessing https iframe content.
+                // Solve It!
+                $('iframe').each(function(index,frame){
+
+                    if( $(frame).attr('mouseEventIsSet') == undefined ) {
+
+                        // IE is special
+                        var frameDoc = frame.contentDocument || frame.contentWindow.document;
+                        var frameBody = frameDoc.getElementsByTagName("body")[0];
+
+                        frameBody.onmouseover = mouseMove;
+
+                        frame.attr('mouseEventIsSet','1')
+                    }
+                })
+                */
+
+                splitterIsHold = true;
+                splitterOwner = $(this).parent();
+                splitterOriginY = e.clientY;
+                splitterOriginHeight = splitterOwner.height();
+            }
+
+            portlet.find('.portlet-splitter').mousedown(mouseDown);
+            $(window).mouseup(mouseUp);
+            pStack.parent().mousemove(mouseMove);
 
             reLocatingPlus(false);
         }
@@ -778,7 +802,7 @@ function Flyer(options) {
 
        // Set click event
        $(function(){
-           reLocatingPlus();
+           //reLocatingPlus();
 
            $(".newitem").click(function(e){
                var itemType = parseInt($(this).attr('type'));
