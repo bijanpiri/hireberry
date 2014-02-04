@@ -706,8 +706,10 @@ function Flyer(options) {
                     return;
                 }
 
-                if( data.length == 0 )
+                if( data.length == 0 ){
+                    reLocatingPlus();
                     return;
+                }
 
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
