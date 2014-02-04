@@ -13,11 +13,21 @@ var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
 var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googleusercontent.com';
 var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
-//var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
-var mongoHQConenctionString = 'mongodb://admin:admin124578@localhost:27017/booltindb';
+var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
+//var mongoHQConenctionString = 'mongodb://admin:admin124578@localhost:27017/booltindb';
 
 var app = express();
-mongoose.connect(mongoHQConenctionString);
+var options = {
+    server: {
+        socketOptions: {
+            connectTimeoutMS: 3600000 ,
+            keepAlive: 1 }},
+    replset:{
+        socketOptions : {
+            keepAlive: 1 }}
+};
+
+mongoose.connect(mongoHQConenctionString,options);
 everyauth.debug = true;
 
 // For Sending Logs to Client Console Output
