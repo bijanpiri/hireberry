@@ -139,8 +139,16 @@ body {
     box-shadow: 0 0 2px #999;
 }
 
-.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 20px !important; }
-.ui-sortable-placeholder * { visibility: hidden; }
+.ui-sortable-placeholder {
+    border: 4px dotted black;
+    visibility: visible !important;
+    height: 50px !important;
+    background-color: #fbffb2;
+}
+.ui-sortable-placeholder * {
+    visibility: hidden;
+}
+
 .newitem {
     border-color: #000000;
     border-style: solid;

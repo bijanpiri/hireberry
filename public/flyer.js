@@ -606,6 +606,9 @@ function Flyer(options) {
             });
 
             $('body').mouseup(function(e){
+
+                splitterOwner.trigger('portlet:resized');
+
                 splitterIsHold = false;
             });
 
@@ -620,7 +623,7 @@ function Flyer(options) {
                     if( remaindedHeight() - delta < 5 )
                         newHeight += remaindedHeight() - delta;
 
-                    $(e.target).parent().trigger('portlet:resized');
+                    splitterOwner.trigger('portlet:resizing');
 
                     if( remaindedHeight() - delta >= 0){
                         splitterOwner.height( newHeight );
