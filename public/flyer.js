@@ -10,6 +10,14 @@ function Flyer(options) {
     this.widgetWidthOpenSettingPanel = null;
     this.pStackNormalHeight;
 
+    function Size(width,height){
+        if(width)   this.width=width else this.width=0;
+        if(height)  this.height=height else this.height=0;
+    }
+
+
+
+
     /****** Widget - Start *******/
     function Widget(){
         this.layouts = [];
@@ -150,15 +158,30 @@ function Flyer(options) {
 
         }
 
+        this.resize=function(size){
+
+        }
+
+        this.minimumSize=function(){
+            return new Size();
+        }
+        this.maximumSize=function(){
+            return new Size();
+        }
+
+        this.size=function(){
+            return new Size();
+        }
+
         this.portletContainer.on('portlet:resizing', function(e,newHeight){
             if(pStack.widgetWidthOpenSettingPanel)
                 pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
-        })
+        });
 
         this.portlet.on('portlet:newItemWillAdd', function(){
             if(pStack.widgetWidthOpenSettingPanel)
                 pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
-        })
+        });
     }
 
     Widget.prototype.constructor = Widget;
@@ -220,6 +243,10 @@ function Flyer(options) {
         this.portlet.on('portlet:layoutChanged', function(e,idx) {
             console.log(idx,idx.old,idx.new);
         });
+
+        this.contentSize=function(){
+
+        }
 
         this.getSettingPanel = function () {
             return 'Text Setting Panel';
