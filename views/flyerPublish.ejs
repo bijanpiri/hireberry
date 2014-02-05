@@ -11,7 +11,7 @@
 <script src="http://hallojs.org/js/hallo.js"></script>
 
 <script src="/script/jquery.jcarousel.min.js"></script>
-
+<script src="script/"></script>
 <script src="/flyer.js"></script>
 
 <script>
@@ -63,6 +63,7 @@
 
             $.post( '/flyer/save', {flyer:flyerJson} )
                     .done(function(data){
+//                        $.cookie('flyerid',null);
                         $('#buttonDone').removeClass('disabled');
                     })
                     .fail(function(data){
