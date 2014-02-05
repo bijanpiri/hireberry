@@ -724,6 +724,14 @@ app.get('/board/:id',function(req,res) {
     });
 });
 
+app.get('/flyer/new',function(req,res){
+    var flyerid=req.cookies.flyerid;
+
+    if(flyerid)
+        res.redirect('/flyer/editor/null');
+    else
+        res.redirect('/flyer/template');
+});
 app.get('/flyer/template', function(req,res){
     res.render('flyerTemplate.ejs', {title:'Template Gallery'});
 });
