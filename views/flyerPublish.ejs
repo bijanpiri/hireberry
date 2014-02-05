@@ -15,23 +15,85 @@
 <script src="/flyer.js"></script>
 
 <script>
-    var tagApi;
     var flyerJson;
     var flyerid;
     var checkboxesList = [];
+    var tagApi=[];
+    var tag_board = {};
+    var markers = [];
+    var boards = [];
+    var tagManager;
+    var selectedBoards = [];
+    var defaultSelectedBoard = [];
+    var selectionSources = { Tag:0, Map:1 };
 
     $(function(){
-        var tagApi = jQuery("#boardNamesList").tagsManager({
-            prefilled: ["jk"]
-        });
 
-            // tagApi.tagsManager("pushTag",);
-       /* $.getJSON('/board/get/public',function(boards){
-            jQuery("#boardNamesList").tagsManager({
-
-            })
-        });
+        var host = this;
+        init();
+       /* document.getElementById("boardNamesList").type="text";
+        $('#boardNamesList').addClass('tm-input').appendTo(host);*/
+/*
+        $('<input>').attr('type','text').attr('id','boardNamesList').addClass('tm-input').appendTo(host);
 */
+        tagApi = jQuery("#boardNamesList").tagsManager({
+             deleteTagsOnBackspace: true,
+             backspace:[]
+        }).on('tm:pushed',function(e,t){
+                    // Clear input
+                    jQuery("#boardNamesList").val('');
+
+                    var boardid = tag_board[t.hashCode()];
+                    AddedToTagsList( boardid2boardIndex(boardid) );
+                })
+                .on('tm:spliced',function(e,t){
+                    var boardid = tag_board[t.hashCode()];
+                    RemovedFromTagsList( boardid2boardIndex(boardid) );
+                });
+
+        $.getJSON('/board/get/public',function(publicBoards){
+            $.each(publicBoards, function(index,board){
+                if( board.locationlng && board.locationlat){
+                    boards.push(board);
+
+                    markers.push({
+                        type: 'Feature',
+                        geometry:{
+                            type:'Point',
+                            coordinates:[board.locationlng,board.locationlat]
+                        },
+                        properties: {
+                            title: board.name,
+                            description: board.category,
+                            'marker-size': 'large',
+                            'marker-color': '522',
+                            'boardIndex': index
+                        }
+                    })
+                }
+            });
+        });
+
+
+
+       /* $.getJSON('/board/get/public',function(boards){
+            $.each(boards,function(index,boardnn){
+                if( boardnn.locationlng && boardnn.locationlat){
+                    tagApi.tagsManager(
+                            "pushTag",boardnn.name
+                    )
+                }
+            })
+        });*/
+        jQuery("#boardNamesList").parent().find('.tt-hint')
+                .css('background','none')
+                .css('display','none');
+
+        /*$.getJSON('/board/get/public',function(boards){
+            jQuery("#boardNamesList").tagsManager({
+                tagApi.tagsManager("pushTag",boards.name)
+        });
+    });*/
         jQuery("#boardNamesList").typeahead({
             name: 'boards',
             limit: 15,
@@ -41,10 +103,22 @@
                     tagApi.tagsManager("pushTag", d.display);
                 });
 
-
+        var heightdiv=host.height-30;
+        document.getElementById("putupMap").height=heightdiv;
+        document.getElementById("putupMap").width=host.width;
+        /*$('<div>').attr('id','putupMap')
+                .width( host.width() )
+                .height( host.height() - 30 )
+                .appendTo(host);*/
         map = L.mapbox.map('map', 'coybit.gj1c3kom',{
             doubleClickZoom: false
         }).setView([37.9, -77],6);
+
+        map.markerLayer.on('click',function(e) {
+            var boardIndex = e.layer.feature.properties.boardIndex;
+            SelectByMap(boardIndex,selectionSources.Map);
+        });
+
 
         var switchsList = $('input[type=checkbox]')
         switchsList.each(function(idx){
@@ -88,7 +162,125 @@
             $('#description').val(json.description);
             $('#disqussShortname').val(json.disqusShortname);
         });
+        /////////////////////////////////////////
+
+
+        function indexInSelectedBoard(boardIndex){
+            for(var i=0; i<selectedBoards.length;i++)
+                if( boardIndex == selectedBoards[i] )
+                    return i;
+            return -1;
+        }
+        function SelectByMap(boardIndex){
+
+            // Find its index in selectedBoards
+            var idxInSelectedBoard = indexInSelectedBoard(boardIndex);
+
+            if( idxInSelectedBoard==-1 ){ // Select
+
+                // Add to selected boards list
+                selectedBoards.push(boardIndex);
+
+                // Add to tags list
+                tag_board[ boards[boardIndex].name.hashCode() ] = boards[boardIndex]._id;
+                tagManager.tagsManager("pushTag", boards[boardIndex].name,true);
+
+                // Select map marker
+                var marker = markers[ boardIndex ];
+                marker.properties['marker-color'] = '#000';
+                map.markerLayer.setGeoJSON(markers);
+            }
+            else {
+                // Remove from selected boards list
+                selectedBoards.splice(idxInSelectedBoard,1);
+
+                // Remove tag from tags list
+                var tags = tagManager.tagsManager('tags').slice(0);
+                tagManager.tagsManager('empty');
+                tags.splice(idxInSelectedBoard,1)
+                tags.forEach(function(tag){
+                    tagManager.tagsManager("pushTag",tag,true);
+                });
+
+                // Deselect map marker
+                var marker = markers[ boardIndex ];
+                marker.properties['marker-color'] = '#522';
+                map.markerLayer.setGeoJSON(markers);
+            }
+        }
+        function RemovedFromTagsList(boardIndex){
+
+            // Find its index in selectedBoards
+            var idxInSelectedBoard = indexInSelectedBoard(boardIndex);
+
+            if( idxInSelectedBoard!=-1 ){ // Select
+
+                // Remove from selected boards list
+                selectedBoards.splice(idxInSelectedBoard,1);
+
+                // Deselect map marker
+                var marker = markers[ boardIndex ];
+                marker.properties['marker-color'] = '#522';
+                map.markerLayer.setGeoJSON(markers);
+            }
+        }
+        function AddedToTagsList(boardIndex){
+
+            // Find its index in selectedBoards
+            var idxInSelectedBoard = indexInSelectedBoard(boardIndex);
+
+            if( idxInSelectedBoard==-1 ){ // Select
+
+                // Add to selected boards list
+                selectedBoards.push(boardIndex);
+
+                // Select map marker
+                var marker = markers[ boardIndex ];
+                marker.properties['marker-color'] = '#000';
+                map.markerLayer.setGeoJSON(markers);
+            }
+        }
+        function boardid2boardIndex(boardid){
+
+            for(var i=0; i<boards.length;i++)
+                if( boardid==boards[i]._id )
+                    return i;
+            return -1;
+        }
+        function init(){
+
+            String.prototype.hashCode = function(){
+                var hash = 0, i, char;
+                if (this.length == 0) return hash;
+                for (var i = 0, l = this.length; i < l; i++) {
+                    char  = this.charCodeAt(i);
+                    hash  = ((hash<<5)-hash)+char;
+                    hash |= 0; // Convert to 32bit integer
+                }
+                return hash.toString();
+            };
+
+            //initTagsInput();
+//        initMap();
+            //loadData();
+        }
+        this.getSelectedBoards = function() {
+            return selectedBoards.map(function(selectedBoard){
+                return boards[selectedBoard]
+            });
+        }
+
+        this.setSelectedBoards = function(boards) {
+            defaultSelectedBoard = boards.splice(0)
+        }
+
+        this.getDefaultSelectedBoards = function() { return defaultSelectedBoard; }
+
+        return this;
     });
+
+
+
 
 </script>
 <script>
@@ -203,7 +395,7 @@
                     <img width="300px" id="flyerThumbnail">
                 </div>
                 <div class="row-fluid">
-                    <div class="span12" style="border: 1px solid #000;padding: 5px 0 0 5px;">
+                    <div class="span12" id="putupMap" style="border: 1px solid #000;padding: 5px 0 0 5px;">
                         <input type="text" name="tags" placeholder="Board Name" class="tm-input" id="boardNamesList"/>
                     </div>
                 </div>
