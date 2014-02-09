@@ -11,8 +11,14 @@ function Flyer(options) {
     this.pStackNormalHeight;
 
     function Size(width,height){
-        if(width)   this.width=width else this.width=0;
-        if(height)  this.height=height else this.height=0;
+        if(width)
+            this.width=width
+        else
+            this.width=0;
+        if(height)
+            this.height=height
+        else
+            this.height=0;
     }
 
 
@@ -55,7 +61,6 @@ function Flyer(options) {
         };
 
         this.layoutChanged = function( oldLayoutIndex, newLayoutIndex ){
-            this.portlet.find('.jcarousel').jcarousel('scroll',this.layoutIndex);
 
             this.portlet.trigger('portlet:layoutChanged', {old:oldLayoutIndex, new:newLayoutIndex});
         };
@@ -87,32 +92,49 @@ function Flyer(options) {
 
         this.content = function(){
 
-            var centerPanel = $('<div>').addClass('jcarousel').attr('data-jcarousel','true').attr('data-wrap','circular');
-            var resizingHandle = $('<div>').addClass('portlet-splitter');
-            var settingApplyButton = $('<button>').text('Apply').addClass('btn').click((function(widget){
+            var centerPanel =
+                $('<div>')
+                    .addClass('centerPanel')
+
+            var resizingHandle =
+                $('<div>')
+                    .addClass('portlet-splitter');
+            var settingApplyButton =
+                $('<button>')
+                    .text('Apply')
+                    .addClass('btn')
+                    .click((function(widget){
                     return function(){
                         widget.applySetting(settingPanel)
                         widget.closeSettingPanel(500,100);
                     }
                 })(this));
-            var settingPanel = $('<div>').addClass('portlet-settingPanel')
-                .append(this.getSettingPanel())
-                .append(settingApplyButton);
-            var portletTopPadding = $('<div>').addClass('portlet-topPadding');
+            var settingPanel =
+                $('<div>')
+                    .addClass('portlet-settingPanel')
+                    .append(this.getSettingPanel())
+                    .append(settingApplyButton);
+            var portletTopPadding =
+                $('<div>')
+                    .addClass('portlet-topPadding');
 
             var moveHandle = $('<div>')
                 .addClass('portlet-aroundButton portlet-moveHandle')
-                .append($('<span>').addClass('icon-move'));
+                .append($('<span>')
+                    .addClass('icon-move'));
             var deleteButton = $('<div>')
                 .addClass('portlet-aroundButton portlet-deleteButton')
-                .append($('<span>').addClass('icon-trash'))
+                .append($('<span>')
+                    .addClass('icon-trash'))
                 .click((function(widget){
                     return function(){
                         widget.portletContainer.remove();
                         reLocatingPlus();
                     }
                 })(this));
-            var settingButton = $('<div>').addClass('portlet-aroundButton portlet-settingButton')
+            var settingButton =
+                $('<div>')
+                    .addClass('portlet-aroundButton portlet-settingButton')
                 .append($('<span>').addClass('icon-wrench'))
                 .click( (function(widget){
                     return function(){
@@ -139,13 +161,7 @@ function Flyer(options) {
                 .append(moveHandle)
                 .append(deleteButton);
 
-            // Add layouts containers
-            var ul=$('<ul>');
-            for(var i=0;i<this.layouts.length;i++){
-                var li = $('<li>').width(pStack.width()).append( $('<div>').append(this.layouts[i]));
-                ul.append( li );
-            }
-            this.portlet.find('.jcarousel').append(ul).jcarousel();
+            this.portlet.find('.centerPanel').append(this.layouts[this.layoutIndex]);
 
             return this.portletContainer.append( this.portlet );
         }
@@ -200,7 +216,7 @@ function Flyer(options) {
 
         function initLayout1(){
             var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
-            layout1 = $('<div>').append(textField);
+            layout1 = $('<div>').append(textField)
 
             textField.css('height',this.height ).hallo({plugins: {
                     'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},

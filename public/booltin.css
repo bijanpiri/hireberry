@@ -58,6 +58,7 @@ body {
     display: block;
 }
 .portlet-content-text {
+    overflow-y: scroll;
 }
 
 .portlet-nextLayout {
