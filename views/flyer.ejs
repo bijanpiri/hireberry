@@ -65,13 +65,14 @@
         $().Flyer({}).getThumbnail(flyerid, function(imgURL){
             $('<img>')
                     .attr('src',imgURL)
+                    .attr('itemprop','image')
                     .width(400)
                     .appendTo($('#portletStack'));
         });
     });
 </script>
 
-<div class="container">
+<div class="container" itemscope itemtype="http://schema.org/flyer">
     <div class="row" style="padding: 5px">
         <div class="span6">
             <input type="hidden" name="flyerid" value="<%=flyer._id%>">
@@ -86,8 +87,11 @@
         </div>
     </div>
     <div class="row" style="padding: 5px">
-        <h2>
-            <strong><%=flyer.flyer ? flyer.flyer.description : "untitled"%></strong>
+        <h2 itemprop="name">
+            flyer name
+        </h2>
+        <h2  >
+            <strong itemprop="description"><%=flyer.flyer ? flyer.flyer.description : "untitled"%></strong>
         </h2>
     </div>
     <div class="row">
