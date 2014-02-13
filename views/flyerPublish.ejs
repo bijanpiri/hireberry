@@ -31,8 +31,8 @@
     var flyerJson;
     var flyerid;
     var checkboxesList = [];
-
     $(function(){
+
        /* var tagApi;
         tagApi = jQuery("#boardNamesList").tagsManager();//{
 
@@ -62,6 +62,7 @@
         }).setView([37.9, -77],6);*/
 
 
+
         var switchsList = $('input[type=checkbox]')
         switchsList.each(function(idx){
             checkboxesList[idx] = new Switchery(switchsList[idx]);
@@ -84,11 +85,14 @@
             var googleplus = checkboxesList[2].isChecked();
             var reshare = checkboxesList[3].isChecked();
             var reputup = checkboxesList[4].isChecked();
+            flyerJson.tags=$('input.tags').val().split(',');
 
-            $.post( '/flyer/save', {flyer:flyerJson} )
+
+            $.post( '/flyer/publish', {flyer:flyerJson} )
                     .done(function(data){
                         $.removeCookie('flyerid',{path:'/'});
                         $('#buttonDone').removeClass('disabled');
+                        window.location = '/profile';
                     })
                     .fail(function(data){
                         $('#buttonDone').removeClass('disabled');
@@ -192,6 +196,7 @@
 
 </script>-->
 
+
 <div class="container-fluid">
     <div class="row-fluid" style="margin-bottom: 30px;">
         <div class="span9 offset1" style="background-color: #555; color: #fff; line-height: 25px; padding-left:10px ">
@@ -203,6 +208,22 @@
     <div class="row-fluid">
         <div class="span3 offset1">
             <div class="container-fluid">
+                <div class="row-fluid">
+                    <form>
+                        <fieldset>
+                            <legend>publish options:</legend>
+                            <div class="control-group">
+                                <div class="control-label"> Tags:</div>
+                                <div class="controls ">
+                                    <input class="htags" name='tags' type="hidden" />
+                                    <input class="tags"  type="text" data-role="tagsinput" />
+
+                                    <!--<label class="help-inline"></label>-->
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
                 <div class="row-fluid">
                     <div class="span12">
                         <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
@@ -217,6 +238,7 @@
                 <div class="row-fluid"><div class="span10 offset2">Comment<input type="text" id="disqussShortname" class="pull-right input-medium" placeholder="disqus shortname"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Reshare<input type="checkbox" class="pull-right"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Reput-up<input type="checkbox" class="pull-right"></div></div>
+                <div class="row-fluid"><div class="span10 offset2"><button class="btn btn-success btn-large" type="submit">Publish</button> </div>
             </div>
         </div>
         <div class="span6">

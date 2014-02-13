@@ -91,6 +91,7 @@ var BUsers = mongoose.model( 'users', {
     tempToken:String});
 var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
 var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
+var BFlyersTags = mongoose.model( 'flyersTags', {flyer:String,tag:String});
 var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
 var BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusShortname: String});
@@ -602,6 +603,7 @@ app.post('/board/new', function(req,res){
     });
 
     function boardSaved(err){
+        res.redirect('/profile');
         tags.forEach(function(tagName,i){
             BTag.findOne({name:tagName}, function(err, tag){
                     if(tag){
@@ -623,7 +625,7 @@ app.post('/board/new', function(req,res){
 
 
 
-    res.send('OK');
+
 });
 
 app.get('/board/categories', function(req,res){
@@ -827,13 +829,44 @@ app.get('/flyer/publish/:flyerid', function(req,res){
    });
 });
 
-app.post('/flyer/publish/', function(req,res){
-    var flyerid = req.body.flyerid;
+app.post('/flyer/publish', function(req,res){
+    console.log('Flyer pulish');
+    var flyer = req.body.flyer;
 
-    res.render('flyerPublish.ejs', {
-        title:'Publish Flyer',
-        flyerid:flyerid
-    });
+
+    BFlyers.update(
+        {_id:flyer.flyerid},
+        {$set:{flyer:flyer}},
+        {upsert:true},function(err){
+            var tags=flyer.tags;
+            if(!err){
+                tags.forEach(function(tagName,i){
+                    BTag.findOne({name:tagName}, function(err, tag){
+                        if(tag){
+                            BFlyersTags({
+                                flyer:flyer.flyerid,
+                                tag:tag._id
+                            }).save();
+                        }else{
+                            var newtag = BTag({name:tagName});
+                            newtag.save(function(){
+                                var flyerTag = BFlyersTags({
+                                    flyer:flyer.flyerid,
+                                    tag:newtag._id});
+                                flyerTag.save();
+                            });
+                        } });
+                });
+                res.redirect('/profile');
+            }else
+                res.send(500,{result:'DB Error'});
+        });
+
+
+//    res.render('flyerPublish.ejs', {
+//        title:'Publish Flyer',
+//        flyerid:flyer.flyerid
+//    });
 });
 
 app.post('/flyer/putup', function(req,res){
