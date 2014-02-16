@@ -3,11 +3,11 @@
 <head>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css">
 
     <title></title>
-    <script>
+    <!--<script>
         function showDialog(){
             $('.dlg').show();
 //            $('')
@@ -15,9 +15,29 @@
 
         }
     </script>
+-->
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false">
+
+    </script>
+
+    <script src="googleMap.js"></script>
+    <script>
+        $(function(){
+            $('.mapdiv').height(400).googleMaps();
+        })
+
+    </script>
+    <script >
+        //var center ;
+       // var markers = [];
+
+    </script>
 </head>
 <body>
-<div class="dlg error hide">hellow</div>
-<a onclick="return showDialog();" href="http://google.com"> a link</a>
+<div  style="width:500px;height:380px;" class="mapdiv"></div>
+<!--<div id="google-Map" style="width:500px;height:380px;"></div>-->
+<!--<div class="dlg error hide">hellow</div>
+<a onclick="return showDialog();" href="http://google.com"> a link</a>-->
+
 </body>
 </html>
