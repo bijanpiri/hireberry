@@ -94,7 +94,7 @@ $.fn.putupPanel = function() {
     }
 
     function loadData() {
-        $.getJSON('/board/get/public',function(publicBoards){
+        $.getJSON('/board/public',function(publicBoards){
 
             $.each(publicBoards, function(index,board){
 

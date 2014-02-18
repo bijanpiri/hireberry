@@ -383,7 +383,7 @@ app.get('/setting', function(req,res){
     if( !checkUser(req,res))
         return;
 
-   res.render('setting.ejs',{title:'Setting'});
+    res.render('setting.ejs',{title:'Setting'});
 });
 
 app.get('/boards',function(req,res){
@@ -414,12 +414,12 @@ app.get('/boards',function(req,res){
 
 app.get('/profile', function(req,res) {
 
-    var PrepareAndRender = function() {
-        FindUserBoards();
+    var PrepareAndRender = function(user) {
+        FindUserBoards(user);
     }
 
-    var FindUserBoards = function() {
-        BUsersBoards.find({user:req.user._id}, function (err, userBoards) {
+    var FindUserBoards = function(user) {
+        BUsersBoards.find({user:user._id}, function (err, userBoards) {
             if (err)
                 return handleError(err);
 
@@ -533,7 +533,7 @@ app.get('/profile', function(req,res) {
     }
 
     if( checkUser(req,res) )
-        PrepareAndRender();
+        PrepareAndRender(req.user);
     else
         res.redirect('/login');
 });
@@ -606,20 +606,20 @@ app.post('/board/new', function(req,res){
         res.redirect('/profile');
         tags.forEach(function(tagName,i){
             BTag.findOne({name:tagName}, function(err, tag){
-                    if(tag){
-                        BBoardsTags({
+                if(tag){
+                    BBoardsTags({
+                        board:newboard._id,
+                        tag:tag._id
+                    }).save();
+                }else{
+                    var newtag = BTag({name:tagName});
+                    newtag.save(function(){
+                        var boardTag = BBoardsTags({
                             board:newboard._id,
-                            tag:tag._id
-                        }).save();
-                    }else{
-                        var newtag = BTag({name:tagName});
-                        newtag.save(function(){
-                            var boardTag = BBoardsTags({
-                                board:newboard._id,
-                                tag:newtag._id});
-                            boardTag.save();
-                        });
-                    } });
+                            tag:newtag._id});
+                        boardTag.save();
+                    });
+                } });
         });
     }
 
@@ -637,7 +637,7 @@ app.get('/board/categories', function(req,res){
         {name:'other',id:5}]);
 });
 
-app.get('/board/get/public',function(req,res){
+app.get('/board/public',function(req,res){
     BBoards.find({privacy:'public'}, function (err, boards) {
         res.json(boards);
     });
@@ -734,6 +734,7 @@ app.get('/flyer/new',function(req,res){
     else
         res.redirect('/flyer/template');
 });
+
 app.get('/flyer/template', function(req,res){
     res.render('flyerTemplate.ejs', {title:'Template Gallery'});
 });
@@ -811,22 +812,22 @@ app.post('/flyer/save', function(req,res){
      var flyerBoard = req.body.board;
 
      var newflyer = BFlyers({text:flyerText, owner:req.user._id});
-    newflyer.save(function (err) {
-        BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(
-            function (err, product, numberAffected) {
-                res.redirect('/profile');
-            });
-    });
-    */
+     newflyer.save(function (err) {
+     BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(
+     function (err, product, numberAffected) {
+     res.redirect('/profile');
+     });
+     });
+     */
 });
 
 app.get('/flyer/publish/:flyerid', function(req,res){
     var flyerid = req.params.flyerid;
 
-   res.render('flyerPublish.ejs', {
-       title:'Publish Flyer',
-       flyerid:flyerid
-   });
+    res.render('flyerPublish.ejs', {
+        title:'Publish Flyer',
+        flyerid:flyerid
+    });
 });
 
 app.post('/flyer/publish', function(req,res){
@@ -896,25 +897,33 @@ app.post('/flyer/putdown', function(req,res){
     var boardid = req.body.boardid;
 
     BFlyersBoards.remove({flyer:flyerid,board:boardid}, function(err){
-            if(err)
-                return res.send(401,{error:'DB Error'});
+        if(err)
+            return res.send(401,{error:'DB Error'});
 
-            return res.send(200, {error:'The flyer is put down successfully.'});
+        return res.send(200, {error:'The flyer is put down successfully.'});
     });
 
 });
 
 app.get('/flyer/remove/:id', function(req,res){
-    var flyerid = req.params.id;
+    if(checkUser(req,res)){
+        var flyerid = req.params.id;
+        BFlyers.findOne({_id:flyerid},function(err,flyer){
+            if(flyer.owner==req.user._id){
+                BFlyersBoards.remove({flyer:flyerid});
+                BFlyers.remove({_id:flyerid},function(err){
+                    if(!err)
+                        res.redirect('/profile');
+                    else
+                        res.send('error deleting flyer:'+err);
+                });
 
-    BFlyersBoards.remove({flyer:flyerid}, function(err){
-        if(!err){
-            BFlyers.remove({_id:flyerid}, function(err){
-                if(!err)
-                    res.redirect('/profile');
-            });
-        }
-    });
+            }else
+            {
+                res.send(403, "You don't have permisson to remove this flyer");
+            }
+        });
+    }
 });
 
 app.post('/flyer/take', function(req,res){
@@ -1126,6 +1135,136 @@ app.get('/timeline', function(req,res){
     });
 });
 
+app.get('/user/:id',function(req,res){
+
+
+    var PrepareAndRender = function(user) {
+        FindUserBoards(user);
+    }
+
+    var FindUserBoards = function(user) {
+        BUsersBoards.find({user:user._id}, function (err, userBoards) {
+            if (err)
+                return handleError(err);
+
+            var boardsIDList = [];
+            for(var i=0; i<userBoards.length; i++)
+                boardsIDList.push(userBoards[i].board);
+
+            FindUserBoardsDetails(user,boardsIDList);
+        });
+    }
+
+    var FindUserBoardsDetails = function(user,boardsIDList) {
+        BBoards.find({_id:{$in:boardsIDList}}, function(err, userBoard) {
+            FindUserFlyers(user,userBoard);
+        });
+    }
+
+    var FindUserFlyers = function(user,userBoards) {
+        BFlyers.find({owner:user._id}, function (err, userFlyers) {
+            FindUserFollowingBoards(user,userBoards, userFlyers);
+        });
+    }
+
+    var FindUserFollowingBoards = function(user,userBoards,userFlyers) {
+        BBoardsFollwoing.find({follower:user._id}, function(err,followingBoardRows){
+            if(err) return res.send(500,{result:'DB Error'});
+
+            var followingBoardsIDList = [];
+            for(var i=0; i<followingBoardRows.length; i++)
+                followingBoardsIDList.push(followingBoardRows[i].board);
+
+            FindUserFollowingBoardsDetails(user,userBoards,userFlyers,followingBoardsIDList);
+        });
+    }
+
+    var FindUserFollowingBoardsDetails = function(user,userBoards,userFlyers,followingBoardsIDList){
+        BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
+            FindUserPocketedFlyer(user,userBoards,userFlyers,followingBoards);
+        });
+    }
+
+    var FindUserPocketedFlyer = function(user,userBoards,userFlyers,followingBoards) {
+        BFlyersTickets.find({user:user._id}, function(err,ticketedFlyersRows){
+
+            var ticketFlyersIDList = [];
+            for(var i=0; i<ticketedFlyersRows.length; i++)
+                if(ticketedFlyersRows[i].flyer)
+                    ticketFlyersIDList.push(ticketedFlyersRows[i].flyer);
+
+            FindUserPocketedFlyerDetails(user,userBoards,userFlyers,followingBoards,ticketFlyersIDList);
+        });
+    }
+
+    var FindUserPocketedFlyerDetails = function(user,userBoards,userFlyers,followingBoards,ticketFlyersIDList) {
+        BFlyers.find({_id:{$in:ticketFlyersIDList}}, function(err,existTicketedFlyers){
+            if(err) return res.send(500,{result:'DB Error'});
+
+
+            process.nextTick( function() {
+                var ticketedFlyers = [];
+
+                for( var i=0; i<ticketFlyersIDList.length; i++ ) {
+
+                    var foundIndex = -1;
+
+                    for( var j=0; j<existTicketedFlyers.length; j++ ) {
+                        if( existTicketedFlyers[j]._id == ticketFlyersIDList[j] ){
+                            foundIndex = j;
+                            break;
+                        }
+                    }
+
+                    if( foundIndex >= 0 )
+                        ticketedFlyers.push({
+                            isDeleted:false,
+                            flyer:existTicketedFlyers[foundIndex]
+                        });
+                    else
+                        ticketedFlyers.push({
+                            isDeleted:true
+                        });
+                }
+
+                FindPublicBoard(user,userBoards,userFlyers,followingBoards,ticketedFlyers);
+            });
+        });
+    }
+
+    var FindPublicBoard = function(user,userBoards,userFlyers,followingBoards,ticketedFlyers) {
+        BBoards.find({privacy:'public'},function(err,pBoards){
+
+            // Add User's boards to public boards list (board which user can put on theme)
+            pBoards = pBoards || [];
+            Array.prototype.push.apply(pBoards, userBoards);
+
+            RenderPage(user,userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards);
+        });
+    }
+
+    var RenderPage = function(user,userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards) {
+
+        res.render('profile.ejs',{
+            title:'Profile',
+            email:user.email,
+            boards:userBoards,
+            pBoards:pBoards,
+            flyers:userFlyers,
+            followingBoards:followingBoards,
+            ticketedFlyers:ticketedFlyers
+        });
+    }
+
+
+    BUsers.findOne({_id:req.params.id},function(err,user){
+        if(user)
+            PrepareAndRender(user);
+        else
+            res.redirect('/login');
+    })
+});
+
 //endregion
 
 //region AJAX endpoints
@@ -1332,8 +1471,8 @@ function checkUser(req,res){
         // Set last page url for redirecting after login
         req.session.lastPage = req.originalUrl;
         res.redirect('/login');
-}
-return req.user!=null;
+    }
+    return req.user!=null;
 }
 
 function BLog(text){
