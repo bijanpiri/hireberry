@@ -13,6 +13,8 @@ var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
 var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googleusercontent.com';
 var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
+var Facebook_AppID='241341676042668';
+var Facebook_AppSecret='2e748d80c87a8594e792eeb482f7c87d';
 var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
 
 
@@ -108,6 +110,21 @@ everyauth.everymodule
             callback(null, user);
         });
     });
+//endregion
+//region Facebook Authentication Configuartion
+everyauth
+    .facebook
+    .appId(Facebook_AppID)
+    .appSecret(Facebook_AppSecret)
+    .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
+        console.log(fbUserMetadata);
+        console.log(accessToken);
+        console.log(accessTokenExtra);
+        return true;
+//        return usersByFbId[fbUserMetadata.id] ||
+//            (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
+    })
+    .redirectPath('/');
 //endregion
 
 //region Twitter Authentication Configuration
