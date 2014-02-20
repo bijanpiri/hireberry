@@ -86,6 +86,10 @@ var BUsers = mongoose.model( 'users', {
     twitterid:String,
     twitterAccessToken:String,
     twitterAccessSecretToken:String,
+    facebookName:String,
+    facebookid:String,
+    facebookAccessToken:String,
+    facebookAccessTokenExtra:String,
     googlename:String,
     googleid:String,
     googleAccessToken:String,
@@ -117,12 +121,31 @@ everyauth
     .appId(Facebook_AppID)
     .appSecret(Facebook_AppSecret)
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
-        console.log(fbUserMetadata);
-        console.log(accessToken);
-        console.log(accessTokenExtra);
-        return true;
-//        return usersByFbId[fbUserMetadata.id] ||
-//            (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
+        BLog(fbUserMetadata);
+        BLog(accessToken);
+        BLog(accessTokenExtra);
+        var promise=this.Promise();
+        BUsers.findOne({facebookid:fbUserMetadata.id},function(err,user){
+            if(err)
+                return promise.fail([err]);
+            if(!user){
+                Blog('Facebook user not exist');
+                var newUser=BUsers({
+                    facebookid:fbUserMetadata.id,
+                    facebookName:fbUserMetadata.name,
+                    facebookAccessToken:accessToken,
+                    facebookAccessTokenExtra:accessTokenExtra
+                });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.fulfill(newUser);
+                });
+            }else
+                promise.fullfill(user);
+        });
+        return promise;
     })
     .redirectPath('/');
 //endregion
