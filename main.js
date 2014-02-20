@@ -31,6 +31,7 @@ var options = {
 
 mongoose.connect(mongoHQConenctionString,options);
 everyauth.debug = true;
+everyauth.helpExpress(app);
 
 // For Sending Logs to Client Console Output
 var server = require('http').createServer(app)
@@ -120,6 +121,12 @@ everyauth
     .facebook
     .appId(Facebook_AppID)
     .appSecret(Facebook_AppSecret)
+    .scope('email')
+    .fields('id,name,email,picture')
+    .handleAuthCallbackError( function (req, res) {
+        BLog('Facebook login denied by user');
+        req.redirect('/login');
+    })
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
         BLog(fbUserMetadata);
         BLog(accessToken);
