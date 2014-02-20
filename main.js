@@ -129,7 +129,7 @@ everyauth
             if(err)
                 return promise.fail([err]);
             if(!user){
-                Blog('Facebook user not exist');
+                BLog('Facebook user not exist');
                 var newUser=BUsers({
                     facebookid:fbUserMetadata.id,
                     facebookName:fbUserMetadata.name,
