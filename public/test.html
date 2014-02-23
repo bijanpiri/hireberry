@@ -3,8 +3,12 @@
 <head>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.css">
+    <script src="/bootstrap/tagsinput/bootstrap-tagsinput.js"></script>
+    <script src="/bootstrap/js/typeahead.js"></script>
+    <link rel="stylesheet" href="/bootstrap/tagsinput/bootstrap-tagsinput.css">
+
 
     <title></title>
     <!--<script>
@@ -16,28 +20,121 @@
         }
     </script>
 -->
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false">
 
-    </script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false"></script>
+    <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markermanager/src/markermanager.js"></script>
+    <!--Marker manager lib-->
 
-    <script src="googleMap.js"></script>
+
+   <!-- <script src="googleMap.js"></script>
     <script>
         $(function(){
             $('.mapdiv').height(400).googleMaps();
         })
 
-    </script>
+    </script>-->
     <script >
-        //var center ;
-       // var markers = [];
+        var map;
+        var mycenter;
+        var boards = [];
+        var markers;
+        function initialize(){
+            var map_property = {
+                center: new google.maps.LatLng(51.508742,-0.120850),
+                zoom: 5,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'),map_property);
+            //addMarker();
+            getLocation();
+
+        }
+
+        function addMarker(){
+            mycenter = new google.maps.LatLng(51.508742,-0.120850);
+            var marker = new google.maps.Marker({
+                position: mycenter
+            });
+            // marker.setMap(map);
+        }
+        function getLocation(){
+            markers = new MarkerManager(map);
+            $.getJSON('/board/get/public',function(publicBoards){
+                $.each(publicBoards,function(index,board){
+                    if(board.locationlat && board.locationlng){
+                        boards.push(board);
+                        marker = new google.maps.Marker({
+                            type:'Feature',
+                            position: new google.maps.LatLng(board.locationlng,board.locationlat),
+                            map: map,
+                            'result':[{"address_components":[{
+                                'title':board.name,
+                                'boardIndex':index,
+                                'description':board.category,
+                                'icon':{
+                                    'size':new google.maps.Size(32,32),
+                                    'color':'522'
+                                }
+
+                            }]
+                            }]
+
+                        });
+                        markers.addMarker(marker,0);
+                    }
+                });
+                markers.refresh();
+                // $('#map-canvas').gmap('addBounds',marker.position)
+                // continu json
+                try{
+                    markers.setMap(map);
+                }catch (e){}
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+        //this.attr('id','map-canvas');
+        //return this;
+
+    </script>
+    <script>
+
+       function inputtags(){
+            $('input#tags-input').tagsinput({
+
+             typehead: {
+             source:function(query){
+             return  $.getJSON('/board/get/public',function(publicBoards){
+                 $.each(publicBoards,function(index,board){
+                     if(board.locationlat && board.locationlng){
+                         boards.push(board);
+                         options.push(board.name);
+                     }
+                 });
+             });
+             }
+             }
+             });
+
+      }
+       inputtags();
 
     </script>
 </head>
 <body>
+<!--
 <div  style="width:500px;height:380px;" class="mapdiv"></div>
-<!--<div id="google-Map" style="width:500px;height:380px;"></div>-->
+-->
+<div id="map-canvas" style="width:500px;height:380px;"></div>
 <!--<div class="dlg error hide">hellow</div>
 <a onclick="return showDialog();" href="http://google.com"> a link</a>-->
-
+<div class="control-group">
+    <div class="control-label"> Tags:</div>
+    <div class="controls ">
+        <input class="htags" name='tags' type="hidden" />
+        <input class="tags"  type="text" data-role="tagsinput" id="tags-input" value="abc, mnp"/>
+        <!--<label class="help-inline"></label>-->
+    </div>
+</div>
+</div>
 </body>
 </html>

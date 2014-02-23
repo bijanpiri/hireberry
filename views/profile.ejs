@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">
 <script src="http://welldonethings.com/managed/tagmanager.js"></script>
 <script src="jquery.putup-panel.js"></script>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false"></script>
+<script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markermanager/src/markermanager.js"></script>
 
 <script>
 var putupPanel;
@@ -255,34 +257,64 @@ function ClosePutupPanel() {
 
     function main(){
         fillCategory();
+        var map;
+        var mycenter;
+        var boards = [];
+        var markers;
+        function initialize(){
+            var map_property = {
+                center: new google.maps.LatLng(51.508742,-0.120850),
+                zoom: 5,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'),map_property);
+            //addMarker();
+            getLocation();
 
-        map = L.mapbox.map('map','coybit.gj1c3kom',{doubleClickZoom:false})
-                .setView([37.9, -77], 6)
+        }
 
-        $.getJSON('/boards',function(boards){
-            var geoJson= new Array();
-            $.each(boards,function(index,boardnn){
-                geoJson.push({
-                    type: 'Feature',
-                    geometry:{
-                        type:'Point',
-                        coordinates:[boardnn.locationlng,boardnn.locationlat]
-                    },
-                    properties: {
-                        title: boardnn.name,
-                        description: boardnn.category,
-                        'marker-size': 'large',
-                        'marker-color': 'CC0033'
-                    }
-                    // draggable: true
-                })
+        function addMarker(){
+            mycenter = new google.maps.LatLng(51.508742,-0.120850);
+            var marker = new google.maps.Marker({
+                position: mycenter
             });
-            map.markerLayer.setGeoJSON(geoJson);
-        });
+            // marker.setMap(map);
+        }
+        function getLocation(){
+            markers = new MarkerManager(map);
+            $.getJSON('/board/get/public',function(publicBoards){
+                $.each(publicBoards,function(index,board){
+                    if(board.locationlat && board.locationlng){
+                        boards.push(board);
+                        marker = new google.maps.Marker({
+                            type:'Feature',
+                            position: new google.maps.LatLng(board.locationlng,board.locationlat),
+                            map: map,
+                            'result':[{"address_components":[{
+                                'title':board.name,
+                                'boardIndex':index,
+                                'description':board.category,
+                                'icon':{
+                                    'size':new google.maps.Size(32,32),
+                                    'color':'522'
+                                }
 
+                            }]
+                            }]
 
-
-
+                        });
+                        markers.addMarker(marker,0);
+                    }
+                });
+                markers.refresh();
+                // $('#map-canvas').gmap('addBounds',marker.position)
+                // continu json
+                try{
+                    markers.setMap(map);
+                }catch (e){}
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
     }
 
     function locationError(msg) {
@@ -350,7 +382,8 @@ function ClosePutupPanel() {
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
-                        <div id="map" style="width: 90%; height: 280px; margin: 10px;" ></div>
+                        <!--<div id="map" style="width: 90%; height: 280px; margin: 10px;" ></div>-->
+                        <div id="map-canvas" style="width:90%;height:280px; margin: 10px"></div>
                         <div>
                             <ul class="thumbnails">
                                 <% for(i=0;i<boards.length;i++){%>
