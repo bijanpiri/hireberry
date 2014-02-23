@@ -43,7 +43,7 @@ function Flyer(options) {
         }
 
         this.addLayout = function(layout){
-                this.layouts.push(layout);
+            this.layouts.push(layout);
         };
 
         this.nextLayout = function(event){
@@ -104,11 +104,11 @@ function Flyer(options) {
                     .text('Apply')
                     .addClass('btn')
                     .click((function(widget){
-                    return function(){
-                        widget.applySetting(settingPanel)
-                        widget.closeSettingPanel(500,100);
-                    }
-                })(this));
+                        return function(){
+                            widget.applySetting(settingPanel)
+                            widget.closeSettingPanel(500,100);
+                        }
+                    })(this));
             var settingPanel =
                 $('<div>')
                     .addClass('portlet-settingPanel')
@@ -135,20 +135,20 @@ function Flyer(options) {
             var settingButton =
                 $('<div>')
                     .addClass('portlet-aroundButton portlet-settingButton')
-                .append($('<span>').addClass('icon-wrench'))
-                .click( (function(widget){
-                    return function(){
+                    .append($('<span>').addClass('icon-wrench'))
+                    .click( (function(widget){
+                        return function(){
 
-                        var delta = 100;
-                        var duration = 500;
-                        widget.portletContainer.find('.portlet-settingPanel').width(pStack.width());
+                            var delta = 100;
+                            var duration = 500;
+                            widget.portletContainer.find('.portlet-settingPanel').width(pStack.width());
 
-                        if( widget.settingPanelIsOpen )
-                           widget.closeSettingPanel(duration,delta);
-                        else
-                           widget.openSettingPanel(duration,delta);
-                    }
-                })(this));
+                            if( widget.settingPanelIsOpen )
+                                widget.closeSettingPanel(duration,delta);
+                            else
+                                widget.openSettingPanel(duration,delta);
+                        }
+                    })(this));
 
             this.portlet.width(pStack.width()).append(centerPanel);
 
@@ -219,12 +219,12 @@ function Flyer(options) {
             layout1 = $('<div>').append(textField)
 
             textField.css('height',this.height ).hallo({plugins: {
-                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                    'hallojustify' : {},
-                    'hallolists' : {},
-                    'halloheadings': {},
-                    'hallolink': {}
-                }
+                'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+                'hallojustify' : {},
+                'hallolists' : {},
+                'halloheadings': {},
+                'hallolink': {}
+            }
             });
         }
 
@@ -233,12 +233,12 @@ function Flyer(options) {
             layout2 = $('<div>').append(textField);
 
             textField.css('height',this.height ).hallo({plugins: {
-                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                    'hallojustify' : {},
-                    'hallolists' : {},
-                    'halloheadings': {},
-                    'hallolink': {}
-                }
+                'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+                'hallojustify' : {},
+                'hallolists' : {},
+                'halloheadings': {},
+                'hallolink': {}
+            }
             });
 
         }
@@ -287,13 +287,17 @@ function Flyer(options) {
         var layout2 = "image layout 2";
 
         function initLayout1() {
-            var file = $('<input type="file" name="picture" multiple hidden>');
-            var img =  $('<img>')
-                .height(this.height)
-                .addClass('img-rounded portlet-picture')
-                .attr('src','/images/upload.png');
+            var layout0 = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
+                '<input type="file" name="picture" multiple hidden>'+
+                '<div><img src="ghjgh" width="50" height="50"></div>'+
+                '<div>Drop your pictures here</div>'+
+                '<div>or <button class="wbtn wbtn-2 wbtn-2a browseImgBtn">Browse</button> your computer</div>'+
+                '</div></div>';
 
-            layout1 = $('<div>').append(img).append(file);
+            layout1 = $(layout0);
+
+            var file = layout1.find('input[type=file]');
+            var browseButton = layout1.find('button');
 
             if(editMode){
                 file.fileupload({
@@ -304,7 +308,7 @@ function Flyer(options) {
                     }
                 });
 
-                img.click(function(){
+                browseButton.click(function(){
                     file.click()
                 });
 
@@ -710,23 +714,23 @@ function Flyer(options) {
             var mouseDown = function(e){
 
                 /*
-                // ToDo: Attaching onmousemove event to all the iframs
-                // But a security error is occured during accessing https iframe content.
-                // Solve It!
-                $('iframe').each(function(index,frame){
+                 // ToDo: Attaching onmousemove event to all the iframs
+                 // But a security error is occured during accessing https iframe content.
+                 // Solve It!
+                 $('iframe').each(function(index,frame){
 
-                    if( $(frame).attr('mouseEventIsSet') == undefined ) {
+                 if( $(frame).attr('mouseEventIsSet') == undefined ) {
 
-                        // IE is special
-                        var frameDoc = frame.contentDocument || frame.contentWindow.document;
-                        var frameBody = frameDoc.getElementsByTagName("body")[0];
+                 // IE is special
+                 var frameDoc = frame.contentDocument || frame.contentWindow.document;
+                 var frameBody = frameDoc.getElementsByTagName("body")[0];
 
-                        frameBody.onmouseover = mouseMove;
+                 frameBody.onmouseover = mouseMove;
 
-                        frame.attr('mouseEventIsSet','1')
-                    }
-                })
-                */
+                 frame.attr('mouseEventIsSet','1')
+                 }
+                 })
+                 */
 
                 splitterIsHold = true;
                 splitterOwner = $(this).parent();
@@ -835,30 +839,30 @@ function Flyer(options) {
     }
 
     var initPortletsStack = function () {
-       // Initialization
-       if( editMode ){
-           pStack.sortable({
-               connectWith: ".portletStack",
-               cursor: "move",
-               axis: "y",
-               handle: ".portlet-moveHandle"
-           })//.disableSelection();
-       }
+        // Initialization
+        if( editMode ){
+            pStack.sortable({
+                connectWith: ".portletStack",
+                cursor: "move",
+                axis: "y",
+                handle: ".portlet-moveHandle"
+            })//.disableSelection();
+        }
 
-       initDimension();
+        initDimension();
 
-       // Set click event
-       $(function(){
-           //reLocatingPlus();
+        // Set click event
+        $(function(){
+            //reLocatingPlus();
 
-           $(".newitem").click(function(e){
-               var itemType = parseInt($(this).attr('type'));
-               createPortlet( {type:itemType});
-           });
-       });
+            $(".newitem").click(function(e){
+                var itemType = parseInt($(this).attr('type'));
+                createPortlet( {type:itemType});
+            });
+        });
 
-       if(options.flyerid)
-           json2flyer(options.flyerid)
+        if(options.flyerid)
+            json2flyer(options.flyerid)
     }
 
     initPortletsStack();
