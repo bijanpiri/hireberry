@@ -22,9 +22,10 @@ body {
 .portletCreator  {
     position: absolute;
     width: 100%;
-    background-color: #999;
+    background-color: #f2f2f2;
     bottom: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 .portlet-container  {
@@ -71,9 +72,9 @@ body {
 }
 
 body {
-        padding-bottom: 150px;
-        width: 100%;
-    }
+    padding-bottom: 150px;
+    width: 100%;
+}
 .portlet:hover .portlet-closeButton,
 .portlet:hover .portlet-moveButton,
 .portlet:hover .portlet-settingButton {
@@ -151,14 +152,113 @@ body {
 }
 
 .newitem {
-    border-color: #000000;
-    border-style: solid;
+    display: inline-block;
 }
 .newitem:hover {
-    background-color: #ffffff;
 }
 
 /* Top 60px of page is overlaid by navbar. It's for that !*/
 nav  ~ .container, nav ~ .container-fluid {
     margin-top: 60px;
+}
+
+/**** Portlet Creator ****/
+
+/** Generic button - outer **/
+.buttonFrame {
+    width: 72px;
+    height: 72px;
+    background-color: #b3b3b3;
+    border-radius: 50%;
+    margin: 6px;
+    position: relative;
+    cursor: pointer;
+}
+
+.buttonFrame:hover {
+    width: 84px;
+    height: 84px;
+    margin: 0;
+}
+
+.buttonFrame:active {
+    background-color: #666;
+}
+
+/** Generic button - inner **/
+.button {
+    background: url('images/flyer-icons.png');
+    display: block;
+}
+
+.centeralBackgroundImage { /* Set its parent to position:relative*/
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+/** Specific button - outer **/
+.plusButtonFrame {
+    top: -20px;
+    display: inline-block;
+}
+
+.plusButtonFrame:hover {
+    top: 0;
+}
+
+/** Specific button - inner **/
+.plusButton {
+    height: 45px;
+    width: 46px;
+}
+
+.addNewTextButton {
+    background-position:  0 -45px;
+    height: 40px;
+    width: 34px;
+}
+
+.addNewPhotoButton {
+    background-position: 0 -85px;
+    height: 32px;
+    width: 41px;
+}
+
+.addNewVideoButton {
+    background-position: 0 -117px;
+    height: 36px;
+    width: 43px;
+}
+
+.addNewVoiceButton {
+    background-position: 0 -153px;
+    height: 35px;
+    width: 52px;
+}
+
+.addNewLinkButton {
+    background-position: 0 -230px;
+    height: 23px;
+    width: 55px;
+}
+
+.addNewMapButton {
+    background-position: 0 -189px;
+    height: 40px;
+    width: 26px;
+}
+
+.closeButton {
+    height: 45px;
+    width: 46px;
+    -webkit-transform: rotate(45deg);
+    -moz-transform:  rotate(45deg);
+    -ms-transform:  rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
 }

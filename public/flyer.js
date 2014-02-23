@@ -581,6 +581,8 @@ function Flyer(options) {
 
     var initDimension = function() {
 
+        //pStack.width(700);
+
         var aspect_ratio = Math.sqrt(2);//0.90;
         pStack.height( pStack.width() * aspect_ratio );
 
