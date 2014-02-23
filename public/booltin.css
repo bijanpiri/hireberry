@@ -348,3 +348,46 @@ nav  ~ .container, nav ~ .container-fluid {
     padding: 20px;
     border: dashed 2px #999;
 }
+
+/*** Video Widget ***/
+.videoWidgetOuter {
+    background-color: #F1F1F1;
+    position: relative;
+    height: 150px;
+}
+
+.videoWidgetInputboxOutter {
+    border: solid 1px #000;
+    height: 50px;
+    width: 500px;
+    border-radius: 5px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#videoWidgetInputboxText {
+    height: 40px;
+    width: 420px;
+    border: 0;
+    font-size: 24px;
+    line-height: 40px;
+    background-color: transparent;
+}
+
+.videoWidgetInputboxFooter {
+    font-size: 20px;
+}
+
+.videoWidgetInputboxDone {
+    width: 60px;
+    padding: 5px;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+    height: 30px;
+    top: -7px;
+}

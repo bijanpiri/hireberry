@@ -350,6 +350,16 @@ function Flyer(options) {
                 .attr('height','100px')
                 .attr('src','//www.youtube.com/embed/n_6p-1J551Y')
                 .attr('frameborder','0');
+
+            var inputbox = '<div class="videoWidgetInputboxOutter">'+
+            '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
+            '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone">Done</button>'+
+            '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
+            '</div></div>';
+
+            var outter = $('<div>').addClass('videoWidgetOuter').append(inputbox);
+
+            layout1 = $(outter)
         }
 
         initLayout();
