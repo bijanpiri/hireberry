@@ -59,7 +59,7 @@
         }
         function getLocation(){
             markers = new MarkerManager(map);
-            $.getJSON('/board/get/public',function(publicBoards){
+            $.getJSON('/board/public',function(publicBoards){
                 $.each(publicBoards,function(index,board){
                     if(board.locationlat && board.locationlng){
                         boards.push(board);

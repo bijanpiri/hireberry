@@ -6,7 +6,7 @@
     }
 </style>
 
-<link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">
+<!--<link rel="stylesheet" href="http://welldonethings.com/managed/tagmanager.css">-->
 <script src="http://welldonethings.com/managed/tagmanager.js"></script>
 <script src="jquery.putup-panel.js"></script>
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false"></script>
@@ -233,12 +233,11 @@ function ClosePutupPanel() {
 
 <script>
     $(document).ready(main);
-    function submit(){
+   /* function submit(){
         $("input#tag").tagsinput('items');
     }
+*/
 
-    var marker;
-    var map;
     function fillCategory(){
         $.get('/board/categories',
                 function(cats){
@@ -258,27 +257,18 @@ function ClosePutupPanel() {
     function main(){
         fillCategory();
         var map;
-        var mycenter;
         var boards = [];
         var markers;
         function initialize(){
             var map_property = {
-                center: new google.maps.LatLng(51.508742,-0.120850),
-                zoom: 5,
+                center: new google.maps.LatLng(37.9, -77),
+                zoom: 6,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             map = new google.maps.Map(document.getElementById('map-canvas'),map_property);
             //addMarker();
             getLocation();
 
-        }
-
-        function addMarker(){
-            mycenter = new google.maps.LatLng(51.508742,-0.120850);
-            var marker = new google.maps.Marker({
-                position: mycenter
-            });
-            // marker.setMap(map);
         }
         function getLocation(){
             markers = new MarkerManager(map);
@@ -329,11 +319,11 @@ function ClosePutupPanel() {
         $('.message-error>.msg-error').text(msg);
     }
 
-    function locationFound(e) {
+   /* function locationFound(e) {
         map.fitBounds(e.bounds);
         marker.setLatLng(e.latlng);
     }
-
+*/
 </script>
 
 <div class="container-fluid" style="margin: 0 100px;">
@@ -383,7 +373,7 @@ function ClosePutupPanel() {
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                         <!--<div id="map" style="width: 90%; height: 280px; margin: 10px;" ></div>-->
-                        <div id="map-canvas" style="width:90%;height:280px; margin: 10px"></div>
+                        <div id="map-canvas" style="width:50%;height:380px;"></div>
                         <div>
                             <ul class="thumbnails">
                                 <% for(i=0;i<boards.length;i++){%>
