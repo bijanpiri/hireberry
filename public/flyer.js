@@ -34,7 +34,7 @@ function Flyer(options) {
         this.type=0;
         this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
-        this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width()+24);
+        this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width());
 
         this.serialize = function(){};
         this.deserialize = function(content){};
@@ -73,9 +73,6 @@ function Flyer(options) {
 
         this.content = function(){
 
-            var centerPanel =
-                $('<div>').addClass('centerPanel')
-
             var resizingHandle =
                 $('<div>').addClass('portlet-splitter');
 
@@ -93,13 +90,12 @@ function Flyer(options) {
                 .append(this.getSettingPanel())
                 .append(settingApplyButton);
 
-            var moveHandle = $('<div>').addClass('portlet-aroundButton portlet-moveHandle')
-                .append($('<span>')
-                    .addClass('icon-move'));
+            // Action Buttons
+            var moveHandle = $('<div>').addClass('action-btn-frame move-btn-frame')
+                .append($('<i>').addClass('action-btn move-btn'));
 
-            var deleteButton = $('<div>').addClass('portlet-aroundButton portlet-deleteButton')
-                .append($('<span>')
-                    .addClass('icon-trash'))
+            var deleteButton = $('<div>').addClass('action-btn-frame delete-btn-frame')
+                .append($('<i>').addClass('action-btn delete-btn'))
                 .click((function(widget){
                     return function(){
                         widget.portletContainer.remove();
@@ -107,9 +103,8 @@ function Flyer(options) {
                     }
                 })(this));
 
-            var settingButton = $('<div>')
-                .addClass('portlet-aroundButton portlet-settingButton')
-                .append($('<span>').addClass('icon-wrench'))
+            var settingButton = $('<div>').addClass('action-btn-frame setting-btn-frame')
+                .append($('<i>').addClass('action-btn setting-btn'))
                 .click( (function(widget){
                     return function(){
 
@@ -124,7 +119,7 @@ function Flyer(options) {
                     }
                 })(this));
 
-            this.portlet.width(pStack.width()).append(centerPanel);
+            //this.portlet.width(pStack.width());
 
             this.portletContainer
                 .append(settingPanel)
@@ -134,7 +129,8 @@ function Flyer(options) {
                 .append(moveHandle)
                 .append(deleteButton);
 
-            this.portlet.find('.centerPanel').append(this.layout);
+            this.layout.height('100%');
+            this.portlet.append(this.layout);
 
             return this.portletContainer.append( this.portlet );
         }
@@ -758,7 +754,7 @@ function Flyer(options) {
                 connectWith: ".portletStack",
                 cursor: "move",
                 axis: "y",
-                handle: ".portlet-moveHandle"
+                handle: ".move-btn"
             })//.disableSelection();
         }
 

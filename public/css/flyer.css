@@ -1,109 +1,89 @@
 
-.jcarousel {
+
+#portletsBox {
+    position: relative;
+    width: 756px;
+}
+
+.portletStack {
+    margin: 0;
+    background-color: #fff;
+   /* box-shadow: 0 0 5px #000;*/
+}
+
+.portletCreator  {
+    position: absolute;
+    width: 700px;
+    background-color: #f2f2f2;
+    opacity: 0.75;
+    bottom: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin-left: 28px; /* Action Button Width */
+}
+
+.portletCreator:hover {
+    opacity: 1.0;
+}
+
+
+.portlet-container  {
     position: relative;
     overflow: hidden;
-    width: 100%;
-    height: 100%;
+    box-sizing: border-box;
+    padding: 0 28px; /* Action Button Width */
 }
 
-
-.jcarousel>ul {
-    width: 20000em;
-    position: relative;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.jcarousel>ul>li {
-    float: left;
-    width: 625px;
-    height: 100px;
-}
-
-/** Carousel Controls **/
-.jcarousel-control{
-    position: absolute;
-    width:100px;
-    height: 100px;
-    top:0;
-}
-.portlet:hover a.jcarousel-control-next,
-.portlet:hover a.jcarousel-control-prev{
-    display: block;
-}
-.jcarousel-control:hover .jcarousel-control-next,
-.jcarousel-control:hover .jcarousel-control-prev{
-    display: block;
-}
-.jcarousel-control-prev,
-.jcarousel-control-next {
-    /*display: none;*/
-    position: absolute;
-    width: 30px;
-    height: 100%;
-    top: 0;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    outline-style:none;/*IE*/
-    cursor: pointer;
-}
-.portlet:hover .layoutButton,
-.portlet:hover .layoutButton{
-    display: block;
-}
-.jcarousel-control-prev{
-    left: -30px;
-}
-
-.jcarousel-control-next {
-    right: -30px;
-}
-
-.jcarousel-control-prev:hover,
-.jcarousel-control-next:hover {
-    display: block;
-}
-.jcarousel-control-prev:hover span,
-
-.jcarousel-control-next:hover span {
+.portlet-container:hover .portlet-aroundButton  {
     display: block;
 }
 
-.portlet-aroundButton {
+/****
+Action Buttons
+****/
+.portlet-container .action-btn-frame {
     display: none;
     position: absolute;
     /*z-index: -1; This property have problem with jQury.Sortable*/
-    background-color: #6b6b6b;
-    width: 24px;
-    height: 24px;
+    background-color: #f1f1f1;
+    width: 28px;
+    height: 28px;
+    border: solid 1px #000;
 }
+.portlet-container:hover .action-btn-frame { display: block; }
+.portlet-container .action-btn-frame:hover { background-color: #bfbfbf; }
 
-.portlet-aroundButton:hover {
-    background-color: #bfbfbf;
-}
+.portlet-container .move-btn-frame { left: 0;top: 0; border-radius: 6px 0 0 0px;}
+.portlet-container .setting-btn-frame { left: 0;top: 28px; border-radius: 0px 0 0 6px;}
+.portlet-container .delete-btn-frame { right: 0;top: 0; border-radius: 0 6px 6px 0;}
 
-.portlet-aroundButton span {
-    margin: 6px;
-}
-
-.portlet-settingButton {
-    right: 0px;
-    top: 24px;
-}
-
-.portlet-moveHandle {
-    right: 0px;
+.portlet-container .action-btn {
+    background-image: url("/images/flyer-icons.png");
+    display: block;
+    position: absolute;
+    margin: auto;
+    left: 0;
     top: 0;
+    bottom: 0;
+    right: 0;
 }
 
-.portlet-deleteButton {
-    left: -24px;
-    top: 0;
+.portlet-container .setting-btn {
+    background-position: 0 -415px;
+    width: 22px;
+    height: 22px;
+}
+
+.portlet-container .move-btn {
+    background-position: 0 -436px;
+    width: 21px;
+    height: 13px;
+}
+
+.portlet-container .delete-btn {
+    background-position: 0 -449px;
+    width: 16px;
+    height: 23px;
 }
 
 .portlet-settingPanel {
@@ -121,4 +101,351 @@
     left: 0;
     right: 0;
     top: 0;
+}
+
+
+.portlet {
+    height: 100%;
+}
+
+.portlet-header {
+    padding-bottom: 4px;
+    padding-left: 0.2em;
+    height: 15px;
+}
+
+.portlet-header .ui-icon {
+    float: right;
+}
+.portlet-content {
+    display: none;
+    position: relative;
+    left: -800px;
+    /*padding: 0.4em; */
+}
+.portlet-content:first-child{
+    display: block;
+}
+.portlet-content-text {
+    overflow-y: auto;
+}
+
+body {
+    padding-bottom: 150px;
+    width: 100%;
+}
+.portlet:hover .portlet-closeButton,
+.portlet:hover .portlet-moveButton,
+.portlet:hover .portlet-settingButton {
+    display: block;
+}
+
+.portlet-splitter {
+    position: absolute;
+    height: 3px;
+    bottom: 0;
+    width: 700px;
+    background-color: gray;
+    z-index: 1;
+}
+
+.portlet-splitter:hover{
+    cursor: ns-resize;
+    background-color: #e5e5e5;
+}
+
+.portlet .mapAsImage-hide {
+    display: none;
+}
+
+.portlet .mapAsImage-show {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10001;
+    display: block;
+}
+
+.ui-sortable-placeholder {
+    border: 4px dotted black;
+    visibility: visible !important;
+    height: 50px !important;
+    background-color: #fbffb2;
+}
+.ui-sortable-placeholder * {
+    visibility: hidden;
+}
+
+.portlet-setting-btn-frame {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+}
+
+.portlet-setting-btn {
+    background: url('/images/flyer-icons.png') 0px 20px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.newitem {
+    display: inline-block;
+}
+.newitem:hover {
+}
+
+/* Top 60px of page is overlaid by navbar. It's for that !*/
+nav  ~ .container, nav ~ .container-fluid {
+    margin-top: 60px;
+}
+
+/**** Portlet Creator ****/
+
+/** Generic button - outer **/
+.buttonFrame {
+    width: 72px;
+    height: 72px;
+    background-color: #b3b3b3;
+    border-radius: 50%;
+    margin: 6px;
+    position: relative;
+    cursor: pointer;
+}
+
+.buttonFrame:hover {
+    width: 84px;
+    height: 84px;
+    margin: 0;
+}
+
+.buttonFrame:active {
+    background-color: #666;
+}
+
+/** Generic button - inner **/
+.button {
+    background: url('../images/flyer-icons.png');
+    display: block;
+}
+
+.centeralBackgroundImage { /* Set its parent to position:relative*/
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+/** Specific button - outer **/
+.plusButtonFrame {
+    top: -20px;
+    display: inline-block;
+}
+
+.plusButtonFrame:hover {
+    top: 0;
+}
+
+/** Specific button - inner **/
+.plusButton {
+    height: 45px;
+    width: 46px;
+}
+
+.addNewTextButton {
+    background-position:  0 -45px;
+    height: 40px;
+    width: 34px;
+}
+
+.addNewPhotoButton {
+    background-position: 0 -85px;
+    height: 32px;
+    width: 41px;
+}
+
+.addNewVideoButton {
+    background-position: 0 -117px;
+    height: 36px;
+    width: 43px;
+}
+
+.addNewVoiceButton {
+    background-position: 0 -153px;
+    height: 37px;
+    width: 52px;
+}
+
+.addNewLinkButton {
+    background-position: 0 -232px;
+    height: 23px;
+    width: 55px;
+}
+
+.addNewMapButton {
+    background-position: 0 -190px;
+    height: 42px;
+    width: 26px;
+}
+
+.closeButton {
+    height: 45px;
+    width: 46px;
+    -webkit-transform: rotate(45deg);
+    -moz-transform:  rotate(45deg);
+    -ms-transform:  rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* General button style (reset) */
+.wbtn {
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+    padding: 25px 80px;
+    display: inline-block;
+    margin: 15px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.wbtn:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+/* Pseudo elements for icons */
+.wbtn:before {
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+}
+/* Button 2 */
+.wbtn-2 {
+    background: #cb4e4e;
+    color: #fff;
+    box-shadow: 0 6px #ab3c3c;
+    -webkit-transition: none;
+    -moz-transition: none;
+    transition: none;
+}
+
+/* Button 2a */
+.wbtn-2a {
+    border-radius: 5px;
+}
+
+.wbtn-2a:hover {
+    box-shadow: 0 4px #ab3c3c;
+    top: 2px;
+}
+
+.wbtn-2a:active {
+    box-shadow: 0 0 #ab3c3c;
+    top: 6px;
+}
+
+/*** Image Widget ***/
+.browseImgBtn {
+    width: 100px;
+    padding: 5px;
+    margin: 0;
+}
+
+.imageWidgetCamera {
+    background: url('/images/flyer-icons.png') 0px -371px;
+    width: 59px;
+    height: 43px;
+    display: block;
+    margin: 0 auto;
+}
+
+.imageWidgetOuterContainer {
+    background-color: #f1f1f1;
+    text-align: center;
+    font-weight: 700;
+    line-height: 36px;
+}
+
+.imageWidgetInnerContainer {
+    /*margin: 10px;*/
+    padding: 20px;
+    border: dashed 2px #999;
+}
+
+/*** Video Widget ***/
+.videoWidgetOuter {
+    background-color: #F1F1F1;
+    position: relative;
+    height: 150px;
+}
+
+.videoWidgetInputboxOutter {
+    border: solid 1px #000;
+    height: 50px;
+    width: 500px;
+    border-radius: 5px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#videoWidgetInputboxText {
+    height: 40px;
+    width: 420px;
+    border: 0;
+    font-size: 24px;
+    line-height: 40px;
+    background-color: transparent;
+}
+
+.videoWidgetInputboxFooter {
+    font-size: 20px;
+}
+
+.videoWidgetInputboxDone {
+    width: 60px;
+    padding: 5px;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+    height: 30px;
+    top: -7px;
 }
