@@ -6,6 +6,9 @@ function Flyer(options) {
     var splitterOwner;
     var splitterOriginY;
     var splitterOriginHeight;
+
+    var TagWidget = null;
+
     var Widgets=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
     this.widgetWidthOpenSettingPanel = null;
     this.pStackNormalHeight;
@@ -343,15 +346,10 @@ function Flyer(options) {
     function VideoWidget(){
         Widget.call(this);
 
+        this.height = 180;
         var layout1 = '';
 
         function initLayout() {
-            layout1 = $('<iframe>')
-                .attr('width','100%')
-                .attr('height','100px')
-                .attr('src','//www.youtube.com/embed/n_6p-1J551Y')
-                .attr('frameborder','0');
-
             var inputbox = '<div class="videoWidgetInputboxOutter">'+
             '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
             '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone">Done</button>'+
@@ -433,59 +431,22 @@ function Flyer(options) {
     ButtonWidget.prototype = new Widget();
     ButtonWidget.prototype.constructor = ButtonWidget;
 
-
-    function TagWidget(){
-        Widget.call(this);
-
-        var layout1 = '';
-
-        function initLayout1() {
-            layout1 = $('<input>')
-                .attr('type','text')
-                .attr('name','tags')
-                .attr('data-role','tagsinput')
-                .attr('placeholder','Add tags')
-                .val('')
-                .load(function(){
-                    $(this).tagsInput({})
-                });
-        }
-
-        this.serialize = function() {
-            return portlet.find('input[name="tags"]').val()
-        }
-
-        this.deserialize = function( content) {
-            if(editMode)
-                return portlet.find('input[name="tags"]').val(content);
-            else
-                return portlet.find('span[class="tag"]').text(content);
-        };
-
-        initLayout1();
-
-        this.addLayout(layout1);
-
-        layout1.tagsInput({})
-    }
-    TagWidget.prototype=new Widget();
-    TagWidget.prototype.constructor=TagWidget;
-
-
     function VoiceWidget(){
         Widget.call(this);
 
+        this.height = 180;
         var layout1 = 'Voice Layout 1';
 
         function initLayout1() {
+            var inputbox = '<div class="videoWidgetInputboxOutter">'+
+                '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
+                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone">Done</button>'+
+                '<div class="videoWidgetInputboxFooter">Soundcloud is supported</div>'+
+                '</div></div>';
 
-            layout1 = $('<div>');
+            var outter = $('<div>').addClass('videoWidgetOuter').append(inputbox);
 
-            $.get('http://soundcloud.com/oembed?format=json&url=https://soundcloud.com/saghi-s/2vznv6x4pmxh')
-                .done(function(res){
-                    var embeded = $(res.html).height(100);
-                    layout1.append(embeded);
-                })
+            layout1 = $(outter)
         }
 
         initLayout1();
