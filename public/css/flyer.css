@@ -1,5 +1,8 @@
+@import "buttons.css";
 
-
+/********
+Whole Paper
+********/
 #portletsBox {
     position: relative;
     width: 756px;
@@ -8,7 +11,6 @@
 .portletStack {
     margin: 0;
     background-color: #fff;
-   /* box-shadow: 0 0 5px #000;*/
 }
 
 .portletCreator  {
@@ -26,7 +28,6 @@
     opacity: 1.0;
 }
 
-
 .portlet-container  {
     position: relative;
     overflow: hidden;
@@ -38,9 +39,9 @@
     display: block;
 }
 
-/****
+/********
 Action Buttons
-****/
+********/
 .portlet-container .action-btn-frame {
     display: none;
     position: absolute;
@@ -67,25 +68,25 @@ Action Buttons
     bottom: 0;
     right: 0;
 }
-
 .portlet-container .setting-btn {
     background-position: 0 -415px;
     width: 22px;
     height: 22px;
 }
-
 .portlet-container .move-btn {
     background-position: 0 -436px;
     width: 21px;
     height: 13px;
 }
-
 .portlet-container .delete-btn {
     background-position: 0 -449px;
     width: 16px;
     height: 23px;
 }
 
+/********
+Portlet
+********/
 .portlet-settingPanel {
     position: relative;
     display: none;
@@ -93,51 +94,8 @@ Action Buttons
     top: 0;
     background-color: #563;
 }
-
-.portlet-topPadding {
-    position: relative;
-    height: 5px;
-    width: 100%;
-    left: 0;
-    right: 0;
-    top: 0;
-}
-
-
 .portlet {
     height: 100%;
-}
-
-.portlet-header {
-    padding-bottom: 4px;
-    padding-left: 0.2em;
-    height: 15px;
-}
-
-.portlet-header .ui-icon {
-    float: right;
-}
-.portlet-content {
-    display: none;
-    position: relative;
-    left: -800px;
-    /*padding: 0.4em; */
-}
-.portlet-content:first-child{
-    display: block;
-}
-.portlet-content-text {
-    overflow-y: auto;
-}
-
-body {
-    padding-bottom: 150px;
-    width: 100%;
-}
-.portlet:hover .portlet-closeButton,
-.portlet:hover .portlet-moveButton,
-.portlet:hover .portlet-settingButton {
-    display: block;
 }
 
 .portlet-splitter {
@@ -148,16 +106,33 @@ body {
     background-color: gray;
     z-index: 1;
 }
-
 .portlet-splitter:hover{
     cursor: ns-resize;
     background-color: #e5e5e5;
 }
 
-.portlet .mapAsImage-hide {
-    display: none;
+.ui-sortable-placeholder {
+    border: 2px dotted #e5263e;
+    visibility: visible !important;
+    height: 50px !important;
+    background-color: #d7d4d4;
+    width: 700px;
+    box-sizing: border-box;
+    margin-left: 28px; /* Action Button Width */
+    color: #000;
+    content: "PLACE IT HERE";
 }
+.ui-sortable-placeholder * { visibility: hidden; }
 
+/********
+Text portlet
+********/
+.portlet-content-text {overflow-y: auto;}
+
+/********
+Map portlet
+********/
+.portlet .mapAsImage-hide { display: none;}
 .portlet .mapAsImage-show {
     position: absolute;
     top: 0;
@@ -170,48 +145,10 @@ body {
     display: block;
 }
 
-.ui-sortable-placeholder {
-    border: 4px dotted black;
-    visibility: visible !important;
-    height: 50px !important;
-    background-color: #fbffb2;
-}
-.ui-sortable-placeholder * {
-    visibility: hidden;
-}
-
-.portlet-setting-btn-frame {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    position: relative;
-    cursor: pointer;
-}
-
-.portlet-setting-btn {
-    background: url('/images/flyer-icons.png') 0px 20px;
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    margin: auto;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-}
-
-.newitem {
-    display: inline-block;
-}
-.newitem:hover {
-}
-
-/* Top 60px of page is overlaid by navbar. It's for that !*/
-nav  ~ .container, nav ~ .container-fluid {
-    margin-top: 60px;
-}
-
-/**** Portlet Creator ****/
+/********
+Portlet Creator
+********/
+.newitem { display: inline-block; }
 
 /** Generic button - outer **/
 .buttonFrame {
@@ -223,13 +160,11 @@ nav  ~ .container, nav ~ .container-fluid {
     position: relative;
     cursor: pointer;
 }
-
 .buttonFrame:hover {
     width: 84px;
     height: 84px;
     margin: 0;
 }
-
 .buttonFrame:active {
     background-color: #666;
 }
@@ -255,7 +190,6 @@ nav  ~ .container, nav ~ .container-fluid {
     top: -20px;
     display: inline-block;
 }
-
 .plusButtonFrame:hover {
     top: 0;
 }
@@ -265,43 +199,36 @@ nav  ~ .container, nav ~ .container-fluid {
     height: 45px;
     width: 46px;
 }
-
 .addNewTextButton {
     background-position:  0 -45px;
     height: 40px;
     width: 34px;
 }
-
 .addNewPhotoButton {
     background-position: 0 -85px;
     height: 32px;
     width: 41px;
 }
-
 .addNewVideoButton {
     background-position: 0 -117px;
     height: 36px;
     width: 43px;
 }
-
 .addNewVoiceButton {
     background-position: 0 -153px;
     height: 37px;
     width: 52px;
 }
-
 .addNewLinkButton {
     background-position: 0 -232px;
     height: 23px;
     width: 55px;
 }
-
 .addNewMapButton {
     background-position: 0 -190px;
     height: 42px;
     width: 26px;
 }
-
 .closeButton {
     height: 45px;
     width: 46px;
@@ -310,73 +237,6 @@ nav  ~ .container, nav ~ .container-fluid {
     -ms-transform:  rotate(45deg);
     -o-transform: rotate(45deg);
     transform: rotate(45deg);
-}
-
-/* General button style (reset) */
-.wbtn {
-    border: none;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
-    background: none;
-    cursor: pointer;
-    padding: 25px 80px;
-    display: inline-block;
-    margin: 15px 30px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-    outline: none;
-    position: relative;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s;
-}
-
-.wbtn:after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s;
-}
-
-/* Pseudo elements for icons */
-.wbtn:before {
-    font-family: 'icomoon';
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    position: relative;
-    -webkit-font-smoothing: antialiased;
-}
-/* Button 2 */
-.wbtn-2 {
-    background: #cb4e4e;
-    color: #fff;
-    box-shadow: 0 6px #ab3c3c;
-    -webkit-transition: none;
-    -moz-transition: none;
-    transition: none;
-}
-
-/* Button 2a */
-.wbtn-2a {
-    border-radius: 5px;
-}
-
-.wbtn-2a:hover {
-    box-shadow: 0 4px #ab3c3c;
-    top: 2px;
-}
-
-.wbtn-2a:active {
-    box-shadow: 0 0 #ab3c3c;
-    top: 6px;
 }
 
 /*** Image Widget ***/

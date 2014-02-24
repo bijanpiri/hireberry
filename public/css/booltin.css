@@ -7,3 +7,8 @@ body {
     padding-bottom: 150px;
     width: 100%;
 }
+
+/* Top 60px of page is overlaid by navbar. It's for that !*/
+nav  ~ .container, nav ~ .container-fluid {
+    margin-top: 60px;
+}
