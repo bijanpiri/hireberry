@@ -29,8 +29,7 @@ function Flyer(options) {
 
     /****** Widget - Start *******/
     function Widget(){
-        this.layouts = [];
-        this.layoutIndex = 0;
+        this.layouts = "";
         this.height = 100; //px
         this.type=0;
         this.settingPanelIsOpen = false;
@@ -41,31 +40,10 @@ function Flyer(options) {
         this.deserialize = function(content){};
         this.enterToShotMode = function(completedCallback) {completedCallback()};
         this.exitFromShotMode = function() {};
-        this.resized=function(size){
+        this.resized = function(size){}
 
-        }
-
-        this.addLayout = function(layout){
-            this.layouts.push(layout);
-        };
-
-        this.nextLayout = function(event){
-            var w = event.data;
-            var oldLayoutIndex = w.layoutIndex;
-            w.layoutIndex=(w.layoutIndex+1)%w.layouts.length;
-            w.layoutChanged(oldLayoutIndex, w.layoutIndex);
-        };
-
-        this.prevLayout = function(event){
-            var w = event.data;
-            var oldLayoutIndex = w.layoutIndex;
-            w.layoutIndex=(w.layoutIndex-1+w.layouts.length)%w.layouts.length;
-            w.layoutChanged(oldLayoutIndex, w.layoutIndex);
-        };
-
-        this.layoutChanged = function( oldLayoutIndex, newLayoutIndex ){
-
-            this.portlet.trigger('portlet:layoutChanged', {old:oldLayoutIndex, new:newLayoutIndex});
+        this.setLayout = function(layout){
+            this.layout = layout;
         };
 
         this.openSettingPanel = function(duration,delta) {
@@ -96,37 +74,30 @@ function Flyer(options) {
         this.content = function(){
 
             var centerPanel =
-                $('<div>')
-                    .addClass('centerPanel')
+                $('<div>').addClass('centerPanel')
 
             var resizingHandle =
-                $('<div>')
-                    .addClass('portlet-splitter');
-            var settingApplyButton =
-                $('<button>')
-                    .text('Apply')
-                    .addClass('btn')
-                    .click((function(widget){
-                        return function(){
-                            widget.applySetting(settingPanel)
-                            widget.closeSettingPanel(500,100);
-                        }
-                    })(this));
-            var settingPanel =
-                $('<div>')
-                    .addClass('portlet-settingPanel')
-                    .append(this.getSettingPanel())
-                    .append(settingApplyButton);
-            var portletTopPadding =
-                $('<div>')
-                    .addClass('portlet-topPadding');
+                $('<div>').addClass('portlet-splitter');
 
-            var moveHandle = $('<div>')
-                .addClass('portlet-aroundButton portlet-moveHandle')
+            var settingApplyButton = $('<button>').addClass('btn')
+                .text('Apply')
+                .addClass('btn')
+                .click((function(widget){
+                    return function(){
+                        widget.applySetting(settingPanel)
+                        widget.closeSettingPanel(500,100);
+                    }
+                })(this));
+
+            var settingPanel = $('<div>').addClass('portlet-settingPanel')
+                .append(this.getSettingPanel())
+                .append(settingApplyButton);
+
+            var moveHandle = $('<div>').addClass('portlet-aroundButton portlet-moveHandle')
                 .append($('<span>')
                     .addClass('icon-move'));
-            var deleteButton = $('<div>')
-                .addClass('portlet-aroundButton portlet-deleteButton')
+
+            var deleteButton = $('<div>').addClass('portlet-aroundButton portlet-deleteButton')
                 .append($('<span>')
                     .addClass('icon-trash'))
                 .click((function(widget){
@@ -135,28 +106,27 @@ function Flyer(options) {
                         reLocatingPlus();
                     }
                 })(this));
-            var settingButton =
-                $('<div>')
-                    .addClass('portlet-aroundButton portlet-settingButton')
-                    .append($('<span>').addClass('icon-wrench'))
-                    .click( (function(widget){
-                        return function(){
 
-                            var delta = 100;
-                            var duration = 500;
-                            widget.portletContainer.find('.portlet-settingPanel').width(pStack.width());
+            var settingButton = $('<div>')
+                .addClass('portlet-aroundButton portlet-settingButton')
+                .append($('<span>').addClass('icon-wrench'))
+                .click( (function(widget){
+                    return function(){
 
-                            if( widget.settingPanelIsOpen )
-                                widget.closeSettingPanel(duration,delta);
-                            else
-                                widget.openSettingPanel(duration,delta);
-                        }
-                    })(this));
+                        var delta = 100;
+                        var duration = 500;
+                        widget.portletContainer.find('.portlet-settingPanel').width(pStack.width());
+
+                        if( widget.settingPanelIsOpen )
+                            widget.closeSettingPanel(duration,delta);
+                        else
+                            widget.openSettingPanel(duration,delta);
+                    }
+                })(this));
 
             this.portlet.width(pStack.width()).append(centerPanel);
 
             this.portletContainer
-                .append(portletTopPadding)
                 .append(settingPanel)
                 .append(this.portlet)
                 .append(resizingHandle)
@@ -164,7 +134,7 @@ function Flyer(options) {
                 .append(moveHandle)
                 .append(deleteButton);
 
-            this.portlet.find('.centerPanel').append(this.layouts[this.layoutIndex]);
+            this.portlet.find('.centerPanel').append(this.layout);
 
             return this.portletContainer.append( this.portlet );
         }
@@ -221,7 +191,7 @@ function Flyer(options) {
             var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
             layout1 = $('<div>').append(textField)
 
-            textField.css('height',this.height ).hallo({plugins: {
+            textField.css('height', '100%' ).hallo({plugins: {
                 'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
                 'hallojustify' : {},
                 'hallolists' : {},
@@ -249,11 +219,7 @@ function Flyer(options) {
         initLayout1.call(this);
         initLayout2.call(this);
 
-        // Add layouts
-        this.addLayout(layout1);
-        this.addLayout(layout2);
-        this.addLayout(layout3);
-        this.addLayout(layout4);
+        this.setLayout(layout1);
 
         this.portlet.on('portlet:resized', function() {
             $(this).find('.textfield').css('height', $(this).height());
@@ -263,9 +229,7 @@ function Flyer(options) {
             console.log(idx,idx.old,idx.new);
         });
 
-        this.contentSize=function(){
-
-        }
+        this.contentSize = function(){}
 
         this.getSettingPanel = function () {
             return 'Text Setting Panel';
@@ -286,22 +250,21 @@ function Flyer(options) {
     function PictureWidget(){
         Widget.call(this);
 
-        this.height = 180;
-        var layout1 = "image layout 1";
-        var layout2 = "image layout 2";
+        this.height = 160;
+        var layout = "image layout 1";
 
         function initLayout1() {
-            var layout0 = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
+            var html = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
                 '<input type="file" name="picture" multiple hidden>'+
                 '<i class="imageWidgetCamera"></i>'+
                 '<div>Drop your pictures here</div>'+
                 '<div>or <button class="wbtn wbtn-2 wbtn-2a browseImgBtn">Browse</button> your computer</div>'+
                 '</div></div>';
 
-            layout1 = $(layout0);
+            layout = $(html);
 
-            var file = layout1.find('input[type=file]');
-            var browseButton = layout1.find('button');
+            var file = layout.find('input[type=file]');
+            var browseButton = layout.find('button');
 
             if(editMode){
                 file.fileupload({
@@ -323,8 +286,7 @@ function Flyer(options) {
 
         initLayout1.call(this);
 
-        this.addLayout(layout1);
-        this.addLayout(layout2);
+        this.setLayout(layout);
 
         this.portletContainer.on('portlet:resizing', function(e,newHeight) {
             this.height = newHeight;//$(this).height();
@@ -346,8 +308,8 @@ function Flyer(options) {
     function VideoWidget(){
         Widget.call(this);
 
-        this.height = 180;
-        var layout1 = '';
+        this.height = 150;
+        var layout = '';
 
         function initLayout() {
             var inputbox = '<div class="videoWidgetInputboxOutter">'+
@@ -358,13 +320,12 @@ function Flyer(options) {
 
             var outter = $('<div>').addClass('videoWidgetOuter').append(inputbox);
 
-            layout1 = $(outter)
+            layout = $(outter)
         }
 
         initLayout();
 
-        this.addLayout(layout1);
-        this.addLayout('Video layout 2');
+        this.setLayout(layout);
 
         this.portletContainer.on('portlet:resizing', (function(widget){
             return function(e,newHeight) {
@@ -380,10 +341,10 @@ function Flyer(options) {
     function ButtonWidget(){
         Widget.call(this);
 
-        var layout1 = '';
+        var layout = '';
 
         function initLayout1() {
-            layout1 = $('<a>')
+            layout = $('<a>')
                 .addClass('btn btn-success')
                 .text('Default')
                 .hallo({});
@@ -391,41 +352,40 @@ function Flyer(options) {
 
         initLayout1();
 
-        this.addLayout(layout1);
-        this.addLayout('ButtonWidget layout 2');
+        this.setLayout(layout);
 
         this.getSettingPanel = function(){
             var input1 = $('<input>')
                 .attr('id','displayText')
                 .attr('placeholder', 'Display Text')
                 .attr('type', 'text')
-                .val(layout1.text());
+                .val(layout.text());
 
             var input2 = $('<input>')
                 .attr('id','url')
                 .attr('placeholder', 'URL address')
                 .attr('type', 'text')
-                .val(layout1.attr('href'));
+                .val(layout.attr('href'));
 
             var settingPanel = $('<div>').append(input1).append(input2);
             return settingPanel;
         }
 
         this.applySetting = function (settingPanel){
-            layout1.text( settingPanel.find('#displayText').val() );
-            layout1.attr('href', settingPanel.find('#url').val() );
+            layout.text( settingPanel.find('#displayText').val() );
+            layout.attr('href', settingPanel.find('#url').val() );
         }
 
         this.serialize = function(){
             return {
-                display: layout1.text(),
-                url: layout1.attr('href')
+                display: layout.text(),
+                url: layout.attr('href')
             }
         }
 
         this.deserialize = function(content){
-            layout1.text( content.display  );
-            layout1.attr( 'href', content.url );
+            layout.text( content.display  );
+            layout.attr( 'href', content.url );
         }
     }
     ButtonWidget.prototype = new Widget();
@@ -434,8 +394,8 @@ function Flyer(options) {
     function VoiceWidget(){
         Widget.call(this);
 
-        this.height = 180;
-        var layout1 = 'Voice Layout 1';
+        this.height = 150;
+        var layout = 'Voice Layout 1';
 
         function initLayout1() {
             var inputbox = '<div class="videoWidgetInputboxOutter">'+
@@ -446,11 +406,11 @@ function Flyer(options) {
 
             var outter = $('<div>').addClass('videoWidgetOuter').append(inputbox);
 
-            layout1 = $(outter)
+            layout = $(outter)
         }
 
         initLayout1();
-        this.addLayout(layout1);
+        this.setLayout(layout);
 
         this.serialize = function() {
         }
@@ -465,40 +425,25 @@ function Flyer(options) {
     function MapWidget(){
         Widget.call(this);
 
-        var layout1 = 'MapWidget layout 1';
-        var layout2 = 'MapWidget layout 2';
+        var layout = 'MapWidget layout 1';
         var mapAsImage = '';
         var mapbox = [];
 
         function initLayout1() {
             var id = 'map' + parseInt(Math.random()*100);
             var mapDiv =  $('<div>').attr('id',id);
-            layout1 = $('<div>')
+            layout = $('<div>')
                 .css('position', 'relative')
                 .height( this.height )
                 .width( pStack.width() )
                 .append(mapDiv);
 
-            mapbox[0] = L.mapbox.map(layout1[0], 'coybit.gj1c3kom');
-        }
-
-        function initLayout2() {
-            var id = 'map' + parseInt(Math.random()*100);
-            var mapDiv =  $('<div>').attr('id',id);
-            layout2 =$('<div>')
-                .css('position', 'relative')
-                .height( this.height*0.7 )
-                .width( pStack.width()*0.5 )
-                .append(mapDiv);
-
-            mapbox[1] = L.mapbox.map(layout2[0], 'coybit.gj1c3kom');
+            mapbox[0] = L.mapbox.map(layout[0], 'coybit.gj1c3kom');
         }
 
         initLayout1.call(this);
-        initLayout2.call(this);
 
-        this.addLayout(layout1);
-        this.addLayout(layout2);
+        this.setLayout(layout);
 
         $('<img>').addClass('mapAsImage mapAsImage-hide').appendTo(this.portlet);
 
@@ -545,11 +490,8 @@ function Flyer(options) {
         this.portlet.on('portlet:resized', function() {
             this.height = $(this).height();
 
-            layout1.height(this.height)
+            layout.height(this.height)
                 .width(pStack.width());
-
-            layout2.height( this.height*0.7 )
-                .width( pStack.width()*0.5 );
         });
     }
     MapWidget.prototype=new Widget();
@@ -557,9 +499,7 @@ function Flyer(options) {
 
     var initDimension = function() {
 
-        //pStack.width(700);
-
-        var aspect_ratio = Math.sqrt(2);//0.90;
+        var aspect_ratio = Math.sqrt(2); // A4 ratio
         pStack.height( pStack.width() * aspect_ratio );
 
         $(window).resize(function() {
@@ -789,7 +729,8 @@ function Flyer(options) {
     var setBackground = function (url, wrapper) {
         pStack
             .css('background-image', ( wrapper ? 'url("' + url + '")' : url ) )
-            .css('background-size', pStack.width() + 'px ' + pStack.height() + 'px' )
+            //.css('background-size', pStack.width() + 'px ' + pStack.height() + 'px' )
+            .css('background-size', 'auto 100%' )
             .css('background-repeat', 'no-repeat');
     }
 

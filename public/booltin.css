@@ -9,8 +9,9 @@ body {
 }
 
 
-.portletsBox {
+#portletsBox {
     position: relative;
+    width: 700px;
 }
 
 .portletStack {
@@ -23,9 +24,14 @@ body {
     position: absolute;
     width: 100%;
     background-color: #f2f2f2;
+    opacity: 0.75;
     bottom: 0;
     padding: 0;
     overflow: hidden;
+}
+
+.portletCreator:hover {
+    opacity: 1.0;
 }
 
 .portlet-container  {
@@ -59,7 +65,7 @@ body {
     display: block;
 }
 .portlet-content-text {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .portlet-nextLayout {
@@ -91,10 +97,10 @@ body {
 
 .portlet-splitter {
     position: absolute;
-    height: 7px;
+    height: 3px;
     bottom: 0;
-    width: 100%;
-    background-color: none;
+    width: 700px;
+    background-color: gray;
     z-index: 1;
 }
 
