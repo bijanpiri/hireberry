@@ -330,10 +330,19 @@ nav  ~ .container, nav ~ .container-fluid {
     top: 6px;
 }
 
+/*** Image Widget ***/
 .browseImgBtn {
     width: 100px;
     padding: 5px;
     margin: 0;
+}
+
+.imageWidgetCamera {
+    background: url('/images/flyer-icons.png') 0px -371px;
+    width: 59px;
+    height: 43px;
+    display: block;
+    margin: 0 auto;
 }
 
 .imageWidgetOuterContainer {

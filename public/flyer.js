@@ -283,13 +283,14 @@ function Flyer(options) {
     function PictureWidget(){
         Widget.call(this);
 
+        this.height = 180;
         var layout1 = "image layout 1";
         var layout2 = "image layout 2";
 
         function initLayout1() {
             var layout0 = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
                 '<input type="file" name="picture" multiple hidden>'+
-                '<div><img src="ghjgh" width="50" height="50"></div>'+
+                '<i class="imageWidgetCamera"></i>'+
                 '<div>Drop your pictures here</div>'+
                 '<div>or <button class="wbtn wbtn-2 wbtn-2a browseImgBtn">Browse</button> your computer</div>'+
                 '</div></div>';
