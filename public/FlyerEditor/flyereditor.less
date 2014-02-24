@@ -1,0 +1,234 @@
+
+@w:360px;
+@h:640px;
+
+@padding:10px;
+@margin:10px;
+
+@setButtonWidth:100px;
+@setButtonHeight:56px;
+
+@setFieldWidth:330px;
+@setFieldHeight:60px;
+
+@setPalletWidth:330px;
+@setPalletHeight:200px;
+
+@setPanelWidth:700px;
+@setPanelHeight:400px;
+
+@radioBtnIndent:4px;
+@radioBtnActive:0;
+@radioBtnPress:2px;
+
+.padMar(){
+  padding: @padding;
+  margin: @margin;
+}
+.icon-container {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+.icon{
+  background-image: url("flyer-icons.png");
+  position: absolute;
+  margin: auto;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 39px;
+  height: 32px;
+  overflow: hidden;
+}
+.r-icon{
+  background-image: url("flyer-icons.png");
+  width: 39px;
+  height: 32px;
+  overflow: hidden;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 20px;
+
+}
+.round(@nw:4px,@ne:4px,@se:4px,@sw:4px){
+  -webkit-border-radius: @nw @ne @se @sw;
+  -moz-border-radius: @nw @ne @se @sw;
+  border-radius: @nw @ne @se @sw;
+
+}
+.shadow(@yOff,@color:#ddd) {
+  -moz-box-shadow:    0 @yOff @color;
+  -webkit-box-shadow: 0 @yOff @color;
+  box-shadow:         0 @yOff @color;
+}
+.bbtn-label{
+  width:@setButtonWidth;
+  height: @setButtonHeight;
+  background: #808080;
+  cursor: pointer;
+  .shadow(@radioBtnIndent);
+  .round();
+}
+.btn-Margin{
+  margin: 0 10px;
+}
+.bbtn-label:active{
+  position: relative;
+  top:@radioBtnIndent - @radioBtnActive;
+  background: #e1e1e1;
+  .shadow(@radioBtnActive);
+}
+input[type='radio']:checked+.bbtn-label{
+  position: relative;
+  top: @radioBtnPress;
+  background: #e1e1e1;
+  .shadow(@radioBtnPress);
+}
+
+.icon-align-left{ background-position: 0px -273px;}
+.icon-align-center{ background-position: 0px -305px;}
+.icon-align-right{ background-position: 0px -337px;}
+
+input[type='radio']:checked+.bbtn-label>.icon-align-left{background-position:39px -273px; }
+input[type='radio']:checked+.bbtn-label>.icon-align-center{background-position:39px -305px; }
+input[type='radio']:checked+.bbtn-label>.icon-align-right{background-position:39px -337px; }
+
+.input-group{
+  margin: 10px;
+}
+.b-group{
+  margin: 10px 0 0 10px;
+}
+.b-addon{
+  width: 60px;
+  height: @setFieldHeight;
+  position: relative;
+  background-color: #eee;
+  float: left;
+  cursor: pointer;
+  .round(4px,0,0,4px);
+
+}
+.input-addon{
+  height: @setFieldHeight;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  color: #555;
+  text-align: center;
+  border-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+  display: table-cell;
+  border-right: 0;
+}
+.radio-label{
+  background: #ddd;
+  border: none;
+  height: @setFieldHeight;
+  line-height: @setFieldHeight;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  width: 260px;
+  margin-bottom: 0;
+  display: table-cell;
+  .round(0,4px,4px,0);
+}
+.radio-label-icon{
+  position: absolute;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+}
+
+.circle{
+  border-radius: 50%;
+  margin: 0;
+}
+.out{
+  border: 3px #ffffff solid;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  background: transparent;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.in{
+  padding: 0;
+  margin: 2px;
+//  border: 2px transparent solid;
+  background-color: #ffffff;
+  width: 10px ;
+  height: 10px;
+  display: none;
+}
+
+input[type='radio']:checked+.circle .in{
+  display: block;
+}
+
+.bbtn-group{
+  margin: 10px 0 0 10px;
+  overflow: hidden;
+
+}
+.bbtn-group>label{
+  float: left;
+}
+
+.setField{
+  width:@setFieldWidth;
+  height: @setFieldHeight;
+  .padMar();
+}
+.leftPanel{
+  float: left;
+  overflow: hidden;
+  width:@setFieldWidth ;
+}
+.rightPanel{
+  float: left;
+  width: @setPalletWidth;
+  height: @setPalletHeight;
+  background: #ddd;
+  .round();
+  .padMar();
+}
+.setPanel{
+  width: @setPanelWidth;
+  height: @setPanelHeight;
+  float: right;
+  .padMar();
+}
+.bbtn-radio{
+  display: none;
+}
+
+.gray{background: #888888;}
+.darkGray{background: darkgrey;}
+.red{background: red;}
+.blue{background: blue;}
+.pink{background: pink;}
+.yellow{background: yellow;}
+.orange{background: orange;}
+
+.box{
+  height: @h;
+  width:@w;
+  background: #000000;
+}

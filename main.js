@@ -6,6 +6,7 @@ var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
 var upload = require('jquery-file-upload-middleware'); // Don't Forget Creating /public/tmp and /public/uploads
+//var bcrypt = require('bcrypt');
 
 //region Initialization
 
@@ -286,7 +287,7 @@ everyauth.password
         if (errors.length)
             return errors;
 
-        var promise = this.Promise()
+        var promise = this.Promise();
         BUsers.findOne({ email: login}, function (err, user) {
             if (err)
                 return promise.fulfill([err]);
@@ -295,6 +296,18 @@ everyauth.password
 
             if (!user)
                 return promise.fulfill(['invalid user']);
+
+//            bcrypt.compare(password, user.hash, function (err, didSucceed) {
+//                if (err) {
+//                    return promise.fail(err);
+//                    errors.push('Wrong password.');
+//                    return promise.fulfill(errors);
+//                }
+//                if (didSucceed) return promise.fulfill(user);
+//                errors.push('Wrong password.');
+//                return promise.fulfill(errors);
+//            });
+//
             if (user.password !== password)
                 return promise.fulfill(['Login failed']);
             promise.fulfill(user);
@@ -317,13 +330,24 @@ everyauth.password
         return null;
     })
     .registerUser( function (newUserAttributes) {
-        var promise = this.Promise();
+        var promise = this.Promise(),
+            password=newUserAttributes.password;
+
+//        delete newUserAttributes[password]; // Don't store password
+//        newUserAttributes.salt = bcrypt.genSaltSync(10);
+//        newUserAttributes.hash = bcrypt.hashSync(password, newUserAttributes.salt);
+//
+
         BUsers.count({email:newUserAttributes.email}, function(err,count){
             if(count>0)
                 return promise.fail(['Another User Exist With This Email']);
             else{
                 var user = BUsers(
-                    {email: newUserAttributes.email, password: newUserAttributes.password, salt: ''});
+                    {
+                        email: newUserAttributes.email,
+                        password: newUserAttributes.password,
+//                        hash: newUserAttributes.hash
+                    });
                 user.save(function(err){return promise.fulfill(user);});
             }
         });

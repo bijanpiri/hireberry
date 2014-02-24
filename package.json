@@ -12,6 +12,6 @@
         "jquery":"*",
         "socket.io": "*",
         "jquery-file-upload-middleware": "*",
-        "bcrypt":"*"
+        "password-hash":"*"
     }
 }
