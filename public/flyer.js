@@ -111,7 +111,7 @@ function Flyer(options) {
                         var duration = 500;
                         widget.portletContainer.find('.portlet-settingPanel')
                             .width('100%');
-                            //.width(pStack.width());
+                        //.width(pStack.width());
 
                         if( widget.settingPanelIsOpen )
                             widget.closeSettingPanel(duration,delta);
@@ -190,9 +190,8 @@ function Flyer(options) {
 
             textField.height( this.height ).hallo({
                 plugins: {
-                'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                'hallolists' : {},
-                'halloheadings': {}
+                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+                    'hallolists' : {}
                 }
             });
         }
@@ -236,14 +235,14 @@ function Flyer(options) {
         var layout = "";
 
         function initLayout1() {
-            var html = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
+            var emptyStateHtml = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
                 '<input type="file" name="picture" multiple hidden>'+
                 '<i class="imageWidgetCamera"></i>'+
                 '<div>Drop your pictures here</div>'+
                 '<div>or <button class="wbtn wbtn-2 wbtn-2a browseImgBtn">Browse</button> your computer</div>'+
                 '</div></div>';
 
-            layout = $(html);
+            layout = $(emptyStateHtml);
 
             var file = layout.find('input[type=file]');
             var browseButton = layout.find('button');
@@ -291,21 +290,41 @@ function Flyer(options) {
         Widget.call(this);
 
         this.height = 150;
+        var videoSourceURL;
         var layout = '';
 
-        function initLayout() {
-            var inputbox = '<div class="videoWidgetInputboxOutter">'+
-            '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
-            '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone">Done</button>'+
-            '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
-            '</div></div>';
+        function showVideo() {
+            var videoURL;
 
-            var outter = $('<div>').addClass('videoWidgetOuter').append(inputbox);
+            // Youtube
+            var parts = this.videoSourceURL.split('/')
+            var videoID = parts[parts.length-1];
+            videoURL = '//www.youtube.com/embed/' + videoID;
 
-            layout = $(outter)
+            var normalStateHtml = '<iframe width="356" height="200" frameborder="0" allowfullscreen></iframe>'
+            this.portlet.html( $(normalStateHtml).attr('src', videoURL + '?rel=0') );
         }
 
-        initLayout();
+        function initLayout() {
+            var emptyStateHtml = '<div class="videoWidgetOuter">'+
+                '<div class="videoWidgetInputboxOutter">'+
+                '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
+                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone" id="Done">Done</button>'+
+                '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
+                '</div></div></div>';
+
+            layout = $(emptyStateHtml);
+
+            layout.find('#Done').click( (function(widget){
+                return function(){
+                    widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxText').val();
+
+                    showVideo.call(widget);
+                }
+            }(this)));
+        }
+
+        initLayout.call(this);
 
         this.setLayout(layout);
 
@@ -315,6 +334,15 @@ function Flyer(options) {
                 widget.portlet.find('iframe').attr('height',newHeight);
             }
         })(this))
+
+        this.serialize = function() {
+            return {videoURL: this.videoSourceURL};
+        }
+
+        this.deserialize = function( content ) {
+            this.videoSourceURL = content.videoURL;
+            showVideo.call(this);
+        };
     }
     VideoWidget.prototype=new Widget();
     VideoWidget.prototype.constructor=VideoWidget;
@@ -325,14 +353,14 @@ function Flyer(options) {
 
         var layout = '';
 
-        function initLayout1() {
+        function initLayout() {
             layout = $('<a>')
                 .addClass('btn btn-success')
                 .text('Default')
                 .hallo({});
         }
 
-        initLayout1();
+        initLayout.call(this);
 
         this.setLayout(layout);
 
@@ -373,31 +401,55 @@ function Flyer(options) {
     ButtonWidget.prototype = new Widget();
     ButtonWidget.prototype.constructor = ButtonWidget;
 
+    // Sound Cloud 4 Test: http://soundcloud.com/oembed?format=json&url=https://soundcloud.com/saghi-s/2vznv6x4pmxh
+    // Youtube 4 Test: //www.youtube.com/embed/n_6p-1J551Y
     function VoiceWidget(){
         Widget.call(this);
 
         this.height = 150;
         var layout = 'Voice Layout 1';
 
-        function initLayout1() {
+        function showVoice() {
+            // SoundCloud
+            $.get(this.voiceSourceURL)
+                .done( (function(widget) {
+                    return function(res){
+                        var embeded = $(res.html).height(widget.height);
+                        widget.portlet.html( embeded );
+                    }
+                })(this))
+        }
+
+        function initLayout() {
             var inputbox = '<div class="videoWidgetInputboxOutter">'+
                 '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
-                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone">Done</button>'+
+                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone" id="done">Done</button>'+
                 '<div class="videoWidgetInputboxFooter">Soundcloud is supported</div>'+
                 '</div></div>';
 
             var outter = $('<div>').addClass('videoWidgetOuter').append(inputbox);
-
             layout = $(outter)
+
+            layout.find('#done').click( (function(widget){
+                return function(){
+                    widget.voiceSourceURL = widget.portlet.find('#videoWidgetInputboxText').val();
+
+                    showVoice.call(widget);
+                }
+            }(this)));
         }
 
-        initLayout1();
+        initLayout.call(this);
+
         this.setLayout(layout);
 
         this.serialize = function() {
+            return {voiceURL: this.voiceSourceURL};
         }
 
-        this.deserialize = function( content) {
+        this.deserialize = function( content ) {
+            this.voiceSourceURL = content.voiceURL;
+            showVoice.call(this);
         };
     }
     VoiceWidget.prototype = new Widget();
@@ -411,7 +463,7 @@ function Flyer(options) {
         var mapAsImage = '';
         var mapbox = [];
 
-        function initLayout1() {
+        function initLayout() {
             var id = 'map' + parseInt(Math.random()*100);
             var mapDiv =  $('<div>').attr('id',id);
             layout = $('<div>')
@@ -423,7 +475,7 @@ function Flyer(options) {
             mapbox[0] = L.mapbox.map(layout[0], 'coybit.gj1c3kom');
         }
 
-        initLayout1.call(this);
+        initLayout.call(this);
 
         this.setLayout(layout);
 
