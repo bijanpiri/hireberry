@@ -199,11 +199,7 @@ function Flyer(options) {
             });
         }
 
-
-
-
         initLayout1.call(this);
-
 
         this.setLayout(layout1);
 
@@ -238,19 +234,21 @@ function Flyer(options) {
                     widget.portlet.find('.textfield').css('text-align','center');
                 }
             })(this));
-            x.find('input#leftAlign_'+idCounter).click((function(widget){
+            x.find('input#rightAlign_'+idCounter).click((function(widget){
                 return function(){
-                    widget.portlet.find('.textfield').css('text-align','left');
+                    widget.portlet.find('.textfield').css('text-align','right');
                 }
             })(this));
             return x;
         }
 
         this.serialize = function(){
+            // ToDo: Save text-align too.
             return this.portlet.find('.portlet-content-text').html();
         }
 
         this.deserialize = function(content){
+            // ToDo: Retrieval text-align too.
             return this.portlet.find('.portlet-content-text').html(content);
         }
     }
