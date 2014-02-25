@@ -13,6 +13,7 @@ function Flyer(options) {
     this.widgetWidthOpenSettingPanel = null;
     this.pStackNormalHeight;
 
+    var idCounter=1;
     function Size(width,height){
         if(width)
             this.width=width
@@ -198,7 +199,11 @@ function Flyer(options) {
             });
         }
 
+
+
+
         initLayout1.call(this);
+
 
         this.setLayout(layout1);
 
@@ -213,7 +218,17 @@ function Flyer(options) {
         this.contentSize = function(){}
 
         this.getSettingPanel = function () {
-            return 'Text Setting Panel';
+            idCounter++;
+            var x=$('.widgets>.textWidget').clone();
+            x.find('*').each(
+                function(i,elem){
+                    if(elem.id)
+                        elem.id=elem.id+'_'+idCounter;
+                    if(elem.htmlFor)
+                        elem.htmlFor=elem.htmlFor+'_'+idCounter;
+
+                });
+            return x;
         }
 
         this.serialize = function(){
