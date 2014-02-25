@@ -29,8 +29,7 @@ function Flyer(options) {
 
     /****** Widget - Start *******/
     function Widget(){
-        this.layouts = "";
-        this.height = 100; //px
+        this.height = this.height || 100; //px
         this.type=0;
         this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
@@ -110,7 +109,9 @@ function Flyer(options) {
 
                         var delta = 100;
                         var duration = 500;
-                        widget.portletContainer.find('.portlet-settingPanel').width(pStack.width());
+                        widget.portletContainer.find('.portlet-settingPanel')
+                            .width('100%');
+                            //.width(pStack.width());
 
                         if( widget.settingPanelIsOpen )
                             widget.closeSettingPanel(duration,delta);
@@ -129,7 +130,7 @@ function Flyer(options) {
                 .append(moveHandle)
                 .append(deleteButton);
 
-            this.layout.height('100%');
+            this.layout.height(this.height);
             this.portlet.append(this.layout);
 
             return this.portletContainer.append( this.portlet );
@@ -173,47 +174,30 @@ function Flyer(options) {
 
     /****** Widget - End *******/
 
-    function TextWidget(){
+    function TextWidget(height){
 
+        this.height = height || 200;
         Widget.call(this);
 
         var layout1='layout1';
         var layout2='layout2';
         var layout3='layout3';
         var layout4='layout4';
-        var dataSource = [];
 
         function initLayout1(){
             var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
             layout1 = $('<div>').append(textField)
 
-            textField.css('height', '100%' ).hallo({plugins: {
+            textField.height( this.height ).hallo({
+                plugins: {
                 'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                'hallojustify' : {},
                 'hallolists' : {},
-                'halloheadings': {},
-                'hallolink': {}
-            }
+                'halloheadings': {}
+                }
             });
-        }
-
-        function initLayout2(){
-            var textField = $('<div>').addClass('textfield').addClass('portlet-content-text');
-            layout2 = $('<div>').append(textField);
-
-            textField.css('height',this.height ).hallo({plugins: {
-                'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                'hallojustify' : {},
-                'hallolists' : {},
-                'halloheadings': {},
-                'hallolink': {}
-            }
-            });
-
         }
 
         initLayout1.call(this);
-        initLayout2.call(this);
 
         this.setLayout(layout1);
 
@@ -244,10 +228,12 @@ function Flyer(options) {
 
 
     function PictureWidget(){
-        Widget.call(this);
 
         this.height = 160;
-        var layout = "image layout 1";
+
+        Widget.call(this);
+
+        var layout = "";
 
         function initLayout1() {
             var html = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
@@ -576,7 +562,7 @@ function Flyer(options) {
             return;
 
         // Create a widget and initializing it
-        var widget = new Widgets[wData.type]();
+        var widget = new Widgets[wData.type](wData.height);
         var portlet = widget.content();
         widget.type = wData.type;
         pStack.append(portlet);

@@ -112,7 +112,8 @@ Portlet
 }
 
 .ui-sortable-placeholder {
-    border: 2px dotted #e5263e;
+    border: 2px dotted #000000;
+    border-radius: 10px;
     visibility: visible !important;
     height: 100px !important;
     background-color: #d7d4d4;
@@ -127,7 +128,12 @@ Portlet
 /********
 Text portlet
 ********/
-.portlet-content-text {overflow-y: auto;}
+.portlet-content-text {
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f1f1f1;
+}
 
 /********
 Map portlet
