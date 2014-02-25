@@ -228,6 +228,21 @@ function Flyer(options) {
                         elem.htmlFor=elem.htmlFor+'_'+idCounter;
 
                 });
+            x.find('input#leftAlign_'+idCounter).click((function(widget){
+                return function(){
+                    widget.portlet.find('.textfield').css('text-align','left');
+                }
+            })(this));
+            x.find('input#centerAlign_'+idCounter).click((function(widget){
+                return function(){
+                    widget.portlet.find('.textfield').css('text-align','center');
+                }
+            })(this));
+            x.find('input#leftAlign_'+idCounter).click((function(widget){
+                return function(){
+                    widget.portlet.find('.textfield').css('text-align','left');
+                }
+            })(this));
             return x;
         }
 
