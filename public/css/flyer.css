@@ -92,7 +92,7 @@ Portlet
     display: none;
     height: 0;
     top: 0;
-    background-color: #563;
+    background-color: #f1f1f1;
 }
 .portlet {
     height: 100%;

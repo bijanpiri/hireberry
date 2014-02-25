@@ -34,6 +34,7 @@ function Flyer(options) {
         this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
         this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width());
+        this.settingPanel = ''; // Shortcut to setting panel element
 
         this.serialize = function(){};
         this.deserialize = function(content){};
@@ -51,9 +52,11 @@ function Flyer(options) {
                 pStack.widgetWidthOpenSettingPanel.closeSettingPanel(duration,delta);
             pStack.widgetWidthOpenSettingPanel = this;
 
-            pStack.animate({ height: this.pStackNormalHeight + delta }, duration);
-            this.portletContainer.find('.portlet-settingPanel').css('display','block').animate({height: delta}, duration);
-            this.portletContainer.animate({ height:  this.portletContainer.height() + delta }, duration);
+            this.pStackNormalHeight = this.pStackNormalHeight || pStack.height();
+
+            pStack.height( this.pStackNormalHeight + delta );
+            this.portletContainer.find('.portlet-settingPanel').css('display','block').height(delta);
+            this.portletContainer.height( this.portletContainer.height() + delta );
             this.settingPanelIsOpen = true;
 
             setTimeout(reLocatingPlus,duration);
@@ -87,7 +90,7 @@ function Flyer(options) {
 
             var settingPanel = $('<div>').addClass('portlet-settingPanel')
                 .append(this.getSettingPanel())
-                .append(settingApplyButton);
+                //.append(settingApplyButton);
 
             // Action Buttons
             var moveHandle = $('<div>').addClass('action-btn-frame move-btn-frame')
@@ -107,11 +110,11 @@ function Flyer(options) {
                 .click( (function(widget){
                     return function(){
 
-                        var delta = 100;
+                        var delta = 200;
                         var duration = 500;
-                        widget.portletContainer.find('.portlet-settingPanel')
+                        widget.portletContainer
+                            .find('.portlet-settingPanel')
                             .width('100%');
-                        //.width(pStack.width());
 
                         if( widget.settingPanelIsOpen )
                             widget.closeSettingPanel(duration,delta);
@@ -119,8 +122,6 @@ function Flyer(options) {
                             widget.openSettingPanel(duration,delta);
                     }
                 })(this));
-
-            //this.portlet.width(pStack.width());
 
             this.portletContainer
                 .append(settingPanel)
@@ -130,6 +131,7 @@ function Flyer(options) {
                 .append(moveHandle)
                 .append(deleteButton);
 
+            this.settingPanel = settingPanel;
             this.layout.height(this.height);
             this.portlet.append(this.layout);
 
@@ -301,8 +303,11 @@ function Flyer(options) {
             var videoID = parts[parts.length-1];
             videoURL = '//www.youtube.com/embed/' + videoID;
 
-            var normalStateHtml = '<iframe width="356" height="200" frameborder="0" allowfullscreen></iframe>'
+            var normalStateHtml = '<iframe width="356" height="150" frameborder="0" allowfullscreen></iframe>'
             this.portlet.html( $(normalStateHtml).attr('src', videoURL + '?rel=0') );
+
+            // Update Setting Panel
+            this.settingPanel.find('#videoWidgetInputboxText').val(this.videoSourceURL );
         }
 
         function initLayout() {
@@ -334,6 +339,26 @@ function Flyer(options) {
                 widget.portlet.find('iframe').attr('height',newHeight);
             }
         })(this))
+
+        this.getSettingPanel = function () {
+            var settingPanelHtml = '<div class="videoWidgetOuter">'+
+                '<div class="videoWidgetInputboxOutter">'+
+                '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
+                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone" id="Chanage">Done</button>'+
+                '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
+                '</div></div></div>';
+
+            var settingPanel = $(settingPanelHtml);
+
+            settingPanel.find('#Chanage').click( (function(widget){
+                return function(){
+                    widget.videoSourceURL = widget.settingPanel.find('#videoWidgetInputboxText').val();
+                    showVideo.call(widget);
+                }
+            }(this)));
+
+            return settingPanel;
+        }
 
         this.serialize = function() {
             return {videoURL: this.videoSourceURL};
@@ -411,13 +436,16 @@ function Flyer(options) {
 
         function showVoice() {
             // SoundCloud
-            $.get(this.voiceSourceURL)
+            $.get('http://soundcloud.com/oembed?format=json&url=' + this.voiceSourceURL)
                 .done( (function(widget) {
                     return function(res){
                         var embeded = $(res.html).height(widget.height);
                         widget.portlet.html( embeded );
                     }
                 })(this))
+
+            // Update Setting Panel
+            this.settingPanel.find('#videoWidgetInputboxText').val(this.voiceSourceURL );
         }
 
         function initLayout() {
@@ -442,6 +470,26 @@ function Flyer(options) {
         initLayout.call(this);
 
         this.setLayout(layout);
+
+        this.getSettingPanel = function () {
+            var settingPanelHtml = '<div class="videoWidgetOuter">'+
+                '<div class="videoWidgetInputboxOutter">'+
+                '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
+                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone" id="Chanage">Done</button>'+
+                '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
+                '</div></div></div>';
+
+            var settingPanel = $(settingPanelHtml);
+
+            settingPanel.find('#Chanage').click( (function(widget){
+                return function(){
+                    widget.voiceSourceURL = widget.settingPanel.find('#videoWidgetInputboxText').val();
+                    showVoice.call(widget);
+                }
+            }(this)));
+
+            return settingPanel;
+        }
 
         this.serialize = function() {
             return {voiceURL: this.voiceSourceURL};
