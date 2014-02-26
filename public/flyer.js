@@ -67,9 +67,9 @@ function Flyer(options) {
         this.closeSettingPanel = function(duration,delta){
             pStack.widgetWidthOpenSettingPanel = null;
 
-            pStack.animate({ height: this.pStackNormalHeight }, duration);
-            this.portletContainer.find('.portlet-settingPanel').css('display','none').animate({height: 0}, duration);
-            this.portletContainer.animate({ height:  this.portletContainer.height() - delta }, duration);
+            pStack.height(this.pStackNormalHeight);
+            this.portletContainer.find('.portlet-settingPanel').css('display','none').height(0);
+            this.portletContainer.height(this.portletContainer.height() - delta);
             this.settingPanelIsOpen = false;
 
             setTimeout(reLocatingPlus,duration);
@@ -557,31 +557,58 @@ function Flyer(options) {
     function MapWidget(){
         Widget.call(this);
 
+        this.height = 200;
         var layout = 'MapWidget layout 1';
-        var mapAsImage = '';
-        var mapbox = [];
+        var geocoder;
+        var map;
+
+        function codeAddress() {
+            var address = document.getElementById('address').value;
+            geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        draggable:true,
+                        title:"Drag me!"
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
 
         function initLayout() {
-            var id = 'map' + parseInt(Math.random()*100);
-            var mapDiv =  $('<div>').attr('id',id);
-            layout = $('<div>')
-                .css('position', 'relative')
-                .height( this.height )
-                .width( pStack.width() )
-                .append(mapDiv);
+            layout = $('.mapWidget').clone();
 
-            mapbox[0] = L.mapbox.map(layout[0], 'coybit.gj1c3kom');
+            layout.removeClass('.mapWidget').addClass('.mapWidgetInstance');
+
+            geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(-34.397, 150.644);
+            var mapOptions = {
+                zoom: 8,
+                center: latlng
+            }
+
+            layout.find('#map-canvas').height(200);
+
+            map = new google.maps.Map(layout.find('#map-canvas')[0], mapOptions);
+            layout.find('#Getcode').click(codeAddress);
+
+            //google.maps.event.addDomListener(window, 'load', initialize);
         }
+
+
 
         initLayout.call(this);
 
         this.setLayout(layout);
 
-        $('<img>').addClass('mapAsImage mapAsImage-hide').appendTo(this.portlet);
-
         this.getSettingPanel = function () {
             var settingPanel = $('<div>');
             settingPanel.height(50);
+            return settingPanel;
         }
 
         this.serialize = function(){

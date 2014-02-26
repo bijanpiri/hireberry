@@ -14,6 +14,7 @@
 <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.3/leaflet-image.js'></script>
 
 <script src="/script/jquery.jcarousel.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> <!-- Put Google Map just before flyer.js -->
 <script src="/flyer.js"></script>
 
 <script>
@@ -259,6 +260,13 @@
 
     </div>
 
+    <div class="mapWidget">
+        <div id="map-canvas" style="height: 100%"></div>
+        <div id="panel" style="position: absolute;left: 0;right: 0;top:0;margin: 0 auto;width: 300px;">
+            <input id="address" type="textbox" value="Sydney, NSW">
+            <input type="button" value="Geocode" id="Getcode">
+        </div>
+    </div>
 </div>
 
 
