@@ -192,7 +192,7 @@ function Flyer(options) {
 
         function initLayout1(){
             var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
-            layout1 = $('<div>').append(textField)
+            layout1 = $('<div>').append(textField);
 
             textField.height( this.height ).hallo({
                 plugins: {
@@ -230,17 +230,17 @@ function Flyer(options) {
                         elem.htmlFor=elem.htmlFor+'_'+idCounter;
 
                 });
-            x.find('input#leftAlign_'+idCounter).click((function(widget){
+            x.find('#leftAlign_'+idCounter).click((function(widget){
                 return function(){
                     widget.portlet.find('.textfield').css('text-align','left');
                 }
             })(this));
-            x.find('input#centerAlign_'+idCounter).click((function(widget){
+            x.find('#centerAlign_'+idCounter).click((function(widget){
                 return function(){
                     widget.portlet.find('.textfield').css('text-align','center');
                 }
             })(this));
-            x.find('input#rightAlign_'+idCounter).click((function(widget){
+            x.find('#rightAlign_'+idCounter).click((function(widget){
                 return function(){
                     widget.portlet.find('.textfield').css('text-align','right');
                 }
@@ -250,12 +250,27 @@ function Flyer(options) {
 
         this.serialize = function(){
             // ToDo: Save text-align too.
-            return this.portlet.find('.portlet-content-text').html();
+            var port=this.portlet.find('.portlet-content-text');
+            var text=port.html();
+            var align=port.css('text-align');
+            var data=new TextData(text,align);
+
+
+            return data;
         }
 
-        this.deserialize = function(content){
+        this.deserialize = function(data){
             // ToDo: Retrieval text-align too.
-            return this.portlet.find('.portlet-content-text').html(content);
+            this.portlet.parent().find('.'+data.align+'Align').attr('checked', 'checked');
+
+            return this.portlet
+                .find('.portlet-content-text')
+                .html(data.text)
+                .css('text-align',data.align);
+        }
+        function TextData(text,align){
+            this.text=text;
+            this.align=align;
         }
     }
     TextWidget.prototype = new Widget();
