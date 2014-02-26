@@ -281,7 +281,7 @@ function Flyer(options) {
         }
 
         this.serialize = function(){
-            // ToDo: Save text-align too.
+
             var port=this.portlet.find('.portlet-content-text');
             var text=port.html();
             var align=port.css('text-align');
@@ -292,8 +292,10 @@ function Flyer(options) {
         }
 
         this.deserialize = function(data){
-            // ToDo: Retrieval text-align too.
-            var id = this.portlet.parent().find('.'+data.align+'Align').attr('checked','checked');
+
+            this.portlet.parent().find('.'+data.align+'Align').attr('checked','checked');
+            if(data.text.indexOf('<h2>')>=0)
+                this.portlet.parent().find('.headline').attr('checked','checked');
             return this.portlet
                 .find('.portlet-content-text')
                 .html(data.text)
