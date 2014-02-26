@@ -73,13 +73,13 @@ Action Buttons
 }
 .portlet-container .setting-btn {
     background-position: 0 -415px;
-    width: 22px;
+    width: 23px;
     height: 22px;
 }
 .portlet-container .move-btn {
-    background-position: 0 -436px;
-    width: 21px;
-    height: 13px;
+    background-position: 0 -437px;
+    width: 22px;
+    height: 12px;
 }
 .portlet-container .delete-btn {
     background-position: 0 -449px;
@@ -235,7 +235,7 @@ Portlet Creator
 .addNewMapButton {
     background-position: 0 -190px;
     height: 42px;
-    width: 26px;
+    width: 27px;
 }
 .closeButton {
     height: 45px;

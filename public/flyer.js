@@ -146,17 +146,16 @@ function Flyer(options) {
             return 'Default Setting Panel';
         }
 
-        this.applySetting = function (settingPanel){
+        this.widgetDidAdd = function() {}
 
-        }
+        this.applySetting = function (settingPanel){}
 
-        this.resize=function(size){
-
-        }
+        this.resize=function(size){}
 
         this.minimumSize=function(){
             return new Size();
         }
+
         this.maximumSize=function(){
             return new Size();
         }
@@ -375,6 +374,7 @@ function Flyer(options) {
     PictureWidget.prototype.constructor=PictureWidget;
 
 
+    // Youtube Thumbnail: See this http://stackoverflow.com/a/2068371/946835
     function VideoWidget(){
         Widget.call(this);
 
@@ -604,18 +604,33 @@ function Flyer(options) {
     function MapWidget(){
         Widget.call(this);
 
-        this.height = 200;
+        this.height = 210;
         var layout = 'MapWidget layout 1';
         var geocoder;
         var map;
+        var mapID;
+        var marker;
 
         function codeAddress() {
             var address = document.getElementById('address').value;
             geocoder.geocode( { 'address': address}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
+
                     map.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
+
+                    var image = {
+                        url: '/images/flyer-icons.png',
+                        size: new google.maps.Size(52, 53),
+                        origin: new google.maps.Point(0,700),//(0,-564),
+                        anchor: new google.maps.Point(52/2, 32)
+                    };
+
+                    if(marker)
+                        marker.setMap(null);
+
+                    marker = new google.maps.Marker({
                         map: map,
+                        //icon: image,
                         position: results[0].geometry.location,
                         draggable:true,
                         title:"Drag me!"
@@ -627,10 +642,13 @@ function Flyer(options) {
         }
 
         function initLayout() {
-            layout = $('.mapWidget').clone();
+            layout = $('.widgets .mapWidget').clone();
 
-            layout.removeClass('.mapWidget').addClass('.mapWidgetInstance');
+            mapID = 'map-canvas' + Math.floor(100*Math.random());
+            layout.find('#map-canvas').attr('id',mapID);
+        }
 
+        this.widgetDidAdd = function() {
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(-34.397, 150.644);
             var mapOptions = {
@@ -638,19 +656,14 @@ function Flyer(options) {
                 center: latlng
             }
 
-            layout.find('#map-canvas').height(200);
-
-            map = new google.maps.Map(layout.find('#map-canvas')[0], mapOptions);
+            map = new google.maps.Map( document.getElementById(mapID), mapOptions);
             layout.find('#Getcode').click(codeAddress);
-
-            //google.maps.event.addDomListener(window, 'load', initialize);
         }
 
 
-
         initLayout.call(this);
-
         this.setLayout(layout);
+
 
         this.getSettingPanel = function () {
             var settingPanel = $('<div>');
@@ -795,6 +808,9 @@ function Flyer(options) {
         var portlet = widget.content();
         widget.type = wData.type;
         pStack.append(portlet);
+
+        widget.widgetDidAdd();
+
         if(wData.height)
             widget.height = wData.height;
         if(wData.layoutIndex){
