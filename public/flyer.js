@@ -610,6 +610,7 @@ function Flyer(options) {
         var map;
         var mapID;
         var marker;
+        var updateMapTimer;
 
         function codeAddress() {
             var address = document.getElementById('address').value;
@@ -658,6 +659,10 @@ function Flyer(options) {
 
             map = new google.maps.Map( document.getElementById(mapID), mapOptions);
             layout.find('#Getcode').click(codeAddress);
+            layout.find('#address').keydown(
+                function(){clearTimeout(updateMapTimer);
+                updateMapTimer = setTimeout(codeAddress,3000);
+            })
         }
 
 
