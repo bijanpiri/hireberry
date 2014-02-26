@@ -228,6 +228,8 @@ function Flyer(options) {
                         elem.id=elem.id+'_'+idCounter;
                     if(elem.htmlFor)
                         elem.htmlFor=elem.htmlFor+'_'+idCounter;
+                    if(elem.name)
+                        elem.name=elem.name+'_'+idCounter;
 
                 });
             x.find('#leftAlign_'+idCounter).click((function(widget){
@@ -243,6 +245,37 @@ function Flyer(options) {
             x.find('#rightAlign_'+idCounter).click((function(widget){
                 return function(){
                     widget.portlet.find('.textfield').css('text-align','right');
+                }
+            })(this));
+
+            x.find('#rightAlign_'+idCounter).click((function(widget){
+                return function(){
+                    widget.portlet.find('.textfield').css('text-align','right');
+                }
+            })(this));
+            x.find('#headline_'+idCounter).click((function(widget){
+                return function(){
+                    var textField=widget.portlet.find('.textfield');
+                    textField.children('div').each(
+                        function(id,line){
+                            line.innerHTML=('<h2>'+line.innerHTML+'</h2>');
+                        });
+
+                    var html=textField.html()
+                    var firstline=html.substr(0,html.indexOf('<div>'));
+                    var rest=html.substr(html.indexOf('<div>'));
+                    if(firstline.length>0)
+                        firstline='<h2>'+firstline+'</h2>';
+                    textField.html(firstline+rest);
+
+                }
+            })(this));
+
+            x.find('#text_'+idCounter).click((function(widget){
+                return function(){
+                    var text=widget.portlet.find('.textfield');
+                    text.html(text.html().replace(/<h2>/g,''));
+                    text.html(text.html().replace(/<\/h2>/g,''));
                 }
             })(this));
             return x;
@@ -261,8 +294,7 @@ function Flyer(options) {
 
         this.deserialize = function(data){
             // ToDo: Retrieval text-align too.
-            this.portlet.parent().find('.'+data.align+'Align').attr('checked', 'checked');
-
+            var id = this.portlet.parent().find('.'+data.align+'Align').attr('checked','checked');
             return this.portlet
                 .find('.portlet-content-text')
                 .html(data.text)
