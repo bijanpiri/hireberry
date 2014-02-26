@@ -31,6 +31,7 @@ function Flyer(options) {
     /****** Widget - Start *******/
     function Widget(){
         this.height = this.height || 100; //px
+        this.settingPanelHieght = 100;
         this.type=0;
         this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
@@ -89,9 +90,10 @@ function Flyer(options) {
                     }
                 })(this));
 
-            var settingPanel = $('<div>').addClass('portlet-settingPanel')
-                .append(this.getSettingPanel())
-                //.append(settingApplyButton);
+            var setttingPanelInside = this.getSettingPanel();
+            this.settingPanelHieght = setttingPanelInside.height();
+            var settingPanel = $('<div>').height(this.settingPanelHieght).addClass('portlet-settingPanel')
+                .append(setttingPanelInside)
 
             // Action Buttons
             var moveHandle = $('<div>').addClass('action-btn-frame move-btn-frame')
@@ -111,7 +113,8 @@ function Flyer(options) {
                 .click( (function(widget){
                     return function(){
 
-                        var delta = 200;
+                        //var delta = 200;
+                        var delta = widget.settingPanelHieght;
                         var duration = 500;
                         widget.portletContainer
                             .find('.portlet-settingPanel')
@@ -215,7 +218,10 @@ function Flyer(options) {
 
         this.getSettingPanel = function () {
             idCounter++;
-            var x=$('.widgets>.textWidget').clone();
+            var x = $('.widgets>.textWidget').clone();
+
+            x.height(240);
+
             x.find('*').each(
                 function(i,elem){
                     if(elem.id)
@@ -305,6 +311,12 @@ function Flyer(options) {
             $(this).find('.portlet-picture').height( this.height )
         });
 
+        this.getSettingPanel = function () {
+            var settingPanel = $('<div>');
+            settingPanel.height(50);
+            return settingPanel;
+        }
+
         this.serialize=function(){
             return this.portlet.find('.portlet-picture').attr('src');
         }
@@ -378,6 +390,8 @@ function Flyer(options) {
 
             var settingPanel = $(settingPanelHtml);
 
+            settingPanel.height(160);
+
             settingPanel.find('#Chanage').click( (function(widget){
                 return function(){
                     widget.videoSourceURL = widget.settingPanel.find('#videoWidgetInputboxText').val();
@@ -437,6 +451,12 @@ function Flyer(options) {
         this.applySetting = function (settingPanel){
             layout.text( settingPanel.find('#displayText').val() );
             layout.attr('href', settingPanel.find('#url').val() );
+        }
+
+        this.getSettingPanel = function () {
+            var settingPanel = $('<div>');
+            settingPanel.height(50);
+            return settingPanel;
         }
 
         this.serialize = function(){
@@ -509,6 +529,8 @@ function Flyer(options) {
 
             var settingPanel = $(settingPanelHtml);
 
+            settingPanel.height(160);
+
             settingPanel.find('#Chanage').click( (function(widget){
                 return function(){
                     widget.voiceSourceURL = widget.settingPanel.find('#videoWidgetInputboxText').val();
@@ -556,6 +578,11 @@ function Flyer(options) {
         this.setLayout(layout);
 
         $('<img>').addClass('mapAsImage mapAsImage-hide').appendTo(this.portlet);
+
+        this.getSettingPanel = function () {
+            var settingPanel = $('<div>');
+            settingPanel.height(50);
+        }
 
         this.serialize = function(){
             var center = mapbox[this.layoutIndex].getCenter();
@@ -625,12 +652,12 @@ function Flyer(options) {
         if(animated==undefined)
             animated = true;
 
-        if( rh<30 ){
+        if( rh<64 ){
 
             if(animated) {
                 $('.portletCreator')
                     .animate({
-                        height: 50,
+                        height: 100,
                         bottom: -60
                     }, 500)
                     .find('#portletCreatorAlarm')
@@ -639,7 +666,7 @@ function Flyer(options) {
             }
             else {
                 $('.portletCreator')
-                    .css('height',50)
+                    .css('height',100)
                     .css('bottom',-60)
                     .find('#portletCreatorAlarm')
                     .show();

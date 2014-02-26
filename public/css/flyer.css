@@ -90,7 +90,7 @@ Portlet
 .portlet-settingPanel {
     position: relative;
     display: none;
-    height: 0;
+    height: auto;
     top: 0;
     background-color: #f1f1f1;
 }
