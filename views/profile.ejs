@@ -278,7 +278,7 @@ function ClosePutupPanel() {
                         boards.push(board);
                         marker = new google.maps.Marker({
                             type:'Feature',
-                            position: new google.maps.LatLng(board.locationlng,board.locationlat),
+                            position: new google.maps.LatLng(board.locationlat,board.locationlng),
                             map: map,
                             'result':[{"address_components":[{
                                 'title':board.name,
