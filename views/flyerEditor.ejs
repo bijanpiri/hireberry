@@ -199,6 +199,7 @@
     </div>
 </div>
 <div class="widgets">
+
     <div class="textWidget">
         <div class="setPanel">
             <div class="leftPanel">
@@ -254,17 +255,14 @@
             <div class="rightPanel">
                 <div class="yellow"></div>
             </div>
-
         </div>
-
-
     </div>
 
     <div class="mapWidget">
-        <div id="panel" style="position: relative;background-color: #f1f1f1;height: 100%">
-            <textarea id="address" placeholder="Sydney, NSW" style="height: 170px;left: 20px;position: relative;top: 20px;width: 320px;box-sizing: border-box;resize: none;border: none;background-color: transparent"></textarea>
-            <div id="map-canvas" style="position: absolute;right: 20px;top:20px;bottom:20px;width: 320px;height: 170px;border: solid 1px #D3D3D3;box-sizing: border-box;"></div>
-            <img id="map-image" hidden style="position: absolute;right: 20px;top:20px;bottom:20px;width: 320px;height: 170px;border: solid 1px #D3D3D3;box-sizing: border-box;"></img>
+        <div id="panel" class="panel">
+            <textarea id="address" placeholder="Sydney, NSW" class="address-left"></textarea>
+            <div id="map-canvas" class="map-right"></div>
+            <img id="map-image" hidden class="map-right">
         </div>
     </div>
 

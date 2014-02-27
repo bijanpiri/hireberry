@@ -99,6 +99,7 @@ Portlet
 }
 .portlet {
     height: 100%;
+    background-color: #f1f1f1;
 }
 
 .portlet-splitter {
@@ -273,6 +274,18 @@ Portlet Creator
 }
 
 /*** Video Widget ***/
+
+.videoWidget {
+    position: absolute;
+    width: 300px;
+    height: 180px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 .videoWidgetOuter {
     background-color: #F1F1F1;
     position: relative;
@@ -315,3 +328,33 @@ Portlet Creator
 }
 .videoWidgetInputboxDone:hover {top: -2px;}
 .videoWidgetInputboxDone:active {top: 5px;}
+
+/**** Map Widget ****/
+.mapWidget .panel {
+    position: relative;
+    background-color: #f1f1f1;
+    height: 100%
+}
+
+.mapWidget .map-right {
+    position: absolute;
+    right: 20px;
+    top:20px;
+    bottom:20px;
+    width: 320px;
+    height: 170px;
+    border: solid 1px #D3D3D3;
+    box-sizing: border-box;
+}
+
+.mapWidget .address-left {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    box-sizing: border-box;
+    border: none;
+    width: 320px;
+    height: 170px;
+    resize: none;
+    background-color: transparent
+}

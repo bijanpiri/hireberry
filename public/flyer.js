@@ -378,7 +378,7 @@ function Flyer(options) {
     function VideoWidget(){
         Widget.call(this);
 
-        this.height = 150;
+        this.height = 200;
         var videoSourceURL;
         var layout = '';
 
@@ -390,8 +390,9 @@ function Flyer(options) {
             var videoID = parts[parts.length-1];
             videoURL = '//www.youtube.com/embed/' + videoID;
 
-            var normalStateHtml = '<iframe width="356" height="150" frameborder="0" allowfullscreen></iframe>'
-            this.portlet.html( $(normalStateHtml).attr('src', videoURL + '?rel=0') );
+            var iframe = $('<iframe width="300" height="180" frameborder="0" allowfullscreen></iframe>').attr('src', videoURL + '?rel=0')
+            var container = $('<div class="videoWidget"></div>').append(iframe);
+            this.portlet.html('').append(container);
 
             // Update Setting Panel
             this.settingPanel.find('#videoWidgetInputboxText').val(this.videoSourceURL );
@@ -526,7 +527,7 @@ function Flyer(options) {
     function VoiceWidget(){
         Widget.call(this);
 
-        this.height = 150;
+        this.height = 200;
         var layout = 'Voice Layout 1';
 
         function showVoice() {
@@ -759,12 +760,16 @@ function Flyer(options) {
                 '&markers=color:red%7C' + marker.position.d + ',' + marker.position.e +
                 '&size=320x170&maptype=roadmap&sensor=false'
 
+            //img.show().attr('src','');
+
+            img.load( completedCallback || function(){} );
+
             img.show().attr('src', staticImgURL)
 
             // ToDo: Wait to image load completely
 
-            if( completedCallback )
-                completedCallback()
+            //if( completedCallback )
+             //   completedCallback()
         }
 
         this.exitFromShotMode = function() {
@@ -957,15 +962,17 @@ function Flyer(options) {
                     return;
                 }
 
-                if( data.length == 0 ){
+                if( parseInt(data.count) == 0 ){
                     reLocatingPlus();
                     return;
                 }
 
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
-                var widgetData=data.widgets;
-                for( var i=0; i<widgetData.length; i++ ){
+                var widgetData = data.widgets;
+                var nWidgets = widgetData ? widgetData.length : 0;
+
+                for( var i=0; i<nWidgets; i++ ){
                     if( widgetData[i] )
                         createPortlet(
                             {
