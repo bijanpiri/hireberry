@@ -695,6 +695,7 @@ function Flyer(options) {
             // Load Map
             map = new google.maps.Map( document.getElementById(mapID), mapOptions);
 
+            /*
             // Fill with default values; current user location
             getCurrentPosition( function(pos) {
                 getAddress(pos, function(address) {
@@ -703,15 +704,15 @@ function Flyer(options) {
                     setMarker(pos);
                 });
             });
-
+*/
 
 
             // Set Events
             layout.find('#Getcode').click(codeAddress);
             layout.find('#address').keydown(
                 function(){clearTimeout(updateMapTimer);
-                updateMapTimer = setTimeout(codeAddress,2000);
-            })
+                    updateMapTimer = setTimeout(codeAddress,2000);
+                })
         }
 
 
@@ -726,35 +727,43 @@ function Flyer(options) {
         }
 
         this.serialize = function(){
-            var center = mapbox[this.layoutIndex].getCenter();
-
             return {
-                center: {lat:center.lat, lng:center.lng },
-                zoom: mapbox[this.layoutIndex].getZoom()
+                mapCenter : [map.getCenter().d,map.getCenter().e],
+                mapZoom : map.getZoom(),
+                markerPos : [marker.position.d,marker.position.e],
+                address : layout.find('#address').val()
             };
         }
 
         this.deserialize = function(content){
             if( content ){
-                mapbox[0].setView( content.center, content.zoom );
-                mapbox[1].setView( content.center, content.zoom );
+
+                map.setCenter( new google.maps.LatLng(content.mapCenter[0], content.mapCenter[1]) );
+
+                map.setZoom( parseInt(content.mapZoom) );
+
+                setMarker( new google.maps.LatLng(content.markerPos[0], content.markerPos[1]) );
+
+                layout.find('#address').val( content.address );
             }
         }
 
         this.enterToShotMode = function(completedCallback) {
 
-            var curMap =  mapbox[this.layoutIndex];
             var img = this.portlet.find('.mapAsImage');
 
-            leafletImage(curMap, function(err,canvas){
+            var staticImgURL = 'http://maps.googleapis.com/maps/api/staticmap?'+
+                'center='+ map.getCenter().d + ',' + map.getCenter().e +
+                '&zoom='+ map.getZoom() +
+                '&markers=color:red%7C' + marker.position.d + ',' + marker.position.e +
+                '&size=320x170&maptype=roadmap&sensor=false'
 
-                img.removeClass('mapAsImage-hide')
-                    .addClass('mapAsImage-show')
-                    .attr('src', canvas.toDataURL())
+            img.removeClass('mapAsImage-hide')
+                .addClass('mapAsImage-show')
+                .attr('src', staticImgURL)
 
-                if( completedCallback )
-                    completedCallback()
-            });
+            if( completedCallback )
+                completedCallback()
         }
 
         this.exitFromShotMode = function() {
