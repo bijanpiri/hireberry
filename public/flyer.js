@@ -750,7 +750,7 @@ function Flyer(options) {
 
         this.enterToShotMode = function(completedCallback) {
 
-            var img = this.portlet.find('.mapAsImage');
+            var img = this.portlet.find('#map-image');
 
             var staticImgURL = 'http://maps.googleapis.com/maps/api/staticmap?'+
                 'center='+ map.getCenter().d + ',' + map.getCenter().e +
@@ -758,18 +758,14 @@ function Flyer(options) {
                 '&markers=color:red%7C' + marker.position.d + ',' + marker.position.e +
                 '&size=320x170&maptype=roadmap&sensor=false'
 
-            img.removeClass('mapAsImage-hide')
-                .addClass('mapAsImage-show')
-                .attr('src', staticImgURL)
+            img.show().attr('src', staticImgURL)
 
             if( completedCallback )
                 completedCallback()
         }
 
         this.exitFromShotMode = function() {
-            var img = this.portlet.find('.mapAsImage')
-                .removeClass('mapAsImage-show')
-                .addClass('mapAsImage-hide');
+            var img = this.portlet.find('#map-image');
             img.hide();
         }
 
