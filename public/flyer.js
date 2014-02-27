@@ -619,27 +619,62 @@ function Flyer(options) {
 
                     map.setCenter(results[0].geometry.location);
 
-                    var image = {
-                        url: '/images/flyer-icons.png',
-                        size: new google.maps.Size(52, 53),
-                        origin: new google.maps.Point(0,700),//(0,-564),
-                        anchor: new google.maps.Point(52/2, 32)
-                    };
+                    setMarker(results[0].geometry.location);
 
-                    if(marker)
-                        marker.setMap(null);
-
-                    marker = new google.maps.Marker({
-                        map: map,
-                        //icon: image,
-                        position: results[0].geometry.location,
-                        draggable:true,
-                        title:"Drag me!"
-                    });
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
                 }
             });
+        }
+
+        function setMarker(pos) {
+            var image = {
+                url: '/images/flyer-icons.png',
+                size: new google.maps.Size(52, 53),
+                origin: new google.maps.Point(0,700),//(0,-564),
+                anchor: new google.maps.Point(52/2, 32)
+            };
+
+            if(marker)
+                marker.setMap(null);
+
+            marker = new google.maps.Marker({
+                map: map,
+                //icon: image,
+                position: pos,
+                draggable: true,
+                title: "Drag me!"
+            });
+        }
+
+        // Convert Lat/Lng to address
+        function getAddress(position, callback) {
+
+            geocoder.geocode({'latLng': position}, function(results, status) {
+
+                if(status == google.maps.GeocoderStatus.OK)
+                    callback(results[0]['formatted_address']);
+
+            });
+        }
+
+        function getCurrentPosition(callback) {
+            if(navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(function(position) {
+
+                    // Get Current Position
+                    var pos = new google.maps.LatLng(position.coords.latitude,
+                        position.coords.longitude);
+
+                    callback(pos);
+
+                }, function() {
+                    // Error: The Geolocation service failed.
+                });
+            } else {
+                // Error: Your browser doesn\'t support geolocation.
+            }
         }
 
         function initLayout() {
@@ -653,15 +688,29 @@ function Flyer(options) {
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(-34.397, 150.644);
             var mapOptions = {
-                zoom: 8,
+                zoom: 15,
                 center: latlng
             }
 
+            // Load Map
             map = new google.maps.Map( document.getElementById(mapID), mapOptions);
+
+            // Fill with default values; current user location
+            getCurrentPosition( function(pos) {
+                getAddress(pos, function(address) {
+                    map.setCenter(pos);
+                    layout.find('#address').val(address);
+                    setMarker(pos);
+                });
+            });
+
+
+
+            // Set Events
             layout.find('#Getcode').click(codeAddress);
             layout.find('#address').keydown(
                 function(){clearTimeout(updateMapTimer);
-                updateMapTimer = setTimeout(codeAddress,3000);
+                updateMapTimer = setTimeout(codeAddress,2000);
             })
         }
 
