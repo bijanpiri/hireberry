@@ -6,7 +6,7 @@ var Promise = require('promise');
 var engine = require('ejs-locals');
 var crypto = require('crypto');
 var upload = require('jquery-file-upload-middleware'); // Don't Forget Creating /public/tmp and /public/uploads
-//var bcrypt = require('bcrypt');
+
 
 //region Initialization
 
@@ -18,6 +18,8 @@ var Facebook_AppID='241341676042668';
 var Facebook_AppSecret='2e748d80c87a8594e792eeb482f7c87d';
 var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
 
+var keySize=512;
+var hashIteration=1;
 
 var app = express();
 var options = {
@@ -82,8 +84,8 @@ upload.on('error', function (e) {
 //region Mongose Models
 var BUsers = mongoose.model( 'users', {
     email: String,
-    password: String,
-    salt: String,
+    password: Buffer,
+    salt: Buffer,
     twittername:String,
     twitterid:String,
     twitterAccessToken:String,
@@ -296,26 +298,28 @@ everyauth.password
 
             if (!user)
                 return promise.fulfill(['invalid user']);
+            if(!user.password || !user.salt)
+                return promise.fulfill(['Server authentication error.']);
 
-//            bcrypt.compare(password, user.hash, function (err, didSucceed) {
-//                if (err) {
-//                    return promise.fail(err);
-//                    errors.push('Wrong password.');
-//                    return promise.fulfill(errors);
-//                }
-//                if (didSucceed) return promise.fulfill(user);
-//                errors.push('Wrong password.');
-//                return promise.fulfill(errors);
-//            });
-//
-            if (user.password !== password)
-                return promise.fulfill(['Login failed']);
-            promise.fulfill(user);
+            crypto.pbkdf2( password, user.salt, hashIteration, keySize,
+                function(err, dk) {
+                    var eq=true;
+                    var key=user.password;
+                    for(var i=0;i<keySize;i++) eq &= key[i] == dk[i];
+                    if(!eq)
+                        promise.fulfill(['Invalid password']);
+                    else
+                        promise.fulfill(user);
+
+                }
+            );
+
+//            if (user.password !== password)
+//                return promise.fulfill(['Login failed']);
         });
         return promise;
     })
     .loginSuccessRedirect('/profile')
-
     .getRegisterPath('/register')
     .postRegisterPath('/register')
     .registerView('register.ejs')
@@ -333,22 +337,30 @@ everyauth.password
         var promise = this.Promise(),
             password=newUserAttributes.password;
 
-//        delete newUserAttributes[password]; // Don't store password
+        delete newUserAttributes[password]; // Don't store password
 //        newUserAttributes.salt = bcrypt.genSaltSync(10);
 //        newUserAttributes.hash = bcrypt.hashSync(password, newUserAttributes.salt);
 //
 
         BUsers.count({email:newUserAttributes.email}, function(err,count){
             if(count>0)
-                return promise.fail(['Another User Exist With This Email']);
+                return promise.fail(['This email address has already registered']);
             else{
-                var user = BUsers(
-                    {
-                        email: newUserAttributes.email,
-                        password: newUserAttributes.password,
-//                        hash: newUserAttributes.hash
-                    });
-                user.save(function(err){return promise.fulfill(user);});
+                var salt = crypto.randomBytes(128).toString('base64');
+
+                crypto.pbkdf2( password, salt, hashIteration, keySize,
+                    function(err, dk) {
+                        var user = BUsers(
+                            {
+                                email: newUserAttributes.email,
+                                password: dk,
+                                salt:salt
+                            });
+                        user.save(function(err){return promise.fulfill(user);});
+                    }
+                );
+
+
             }
         });
 
