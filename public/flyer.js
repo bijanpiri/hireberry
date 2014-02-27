@@ -146,7 +146,7 @@ function Flyer(options) {
             return 'Default Setting Panel';
         }
 
-        this.widgetDidAdd = function() {}
+        this.widgetDidAdd = function(isNew) {}
 
         this.applySetting = function (settingPanel){}
 
@@ -684,7 +684,7 @@ function Flyer(options) {
             layout.find('#map-canvas').attr('id',mapID);
         }
 
-        this.widgetDidAdd = function() {
+        this.widgetDidAdd = function(isNew) {
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(-34.397, 150.644);
             var mapOptions = {
@@ -695,16 +695,17 @@ function Flyer(options) {
             // Load Map
             map = new google.maps.Map( document.getElementById(mapID), mapOptions);
 
-            /*
             // Fill with default values; current user location
-            getCurrentPosition( function(pos) {
-                getAddress(pos, function(address) {
-                    map.setCenter(pos);
-                    layout.find('#address').val(address);
-                    setMarker(pos);
+            if( isNew ) {
+                getCurrentPosition( function(pos) {
+                    getAddress(pos, function(address) {
+                        map.setCenter(pos);
+                        layout.find('#address').val(address);
+                        setMarker(pos);
+                    });
                 });
-            });
-*/
+            }
+
 
 
             // Set Events
@@ -759,6 +760,8 @@ function Flyer(options) {
                 '&size=320x170&maptype=roadmap&sensor=false'
 
             img.show().attr('src', staticImgURL)
+
+            // ToDo: Wait to image load completely
 
             if( completedCallback )
                 completedCallback()
@@ -868,7 +871,8 @@ function Flyer(options) {
         widget.type = wData.type;
         pStack.append(portlet);
 
-        widget.widgetDidAdd();
+        // Parameter: is it new?
+        widget.widgetDidAdd( (wData.content==null) );
 
         if(wData.height)
             widget.height = wData.height;
