@@ -358,3 +358,21 @@ Portlet Creator
     resize: none;
     background-color: transparent
 }
+
+.mapWidget .mapSetting .AlignButton {
+    background-image: url("/images/nflyer-map-modes.png");
+    width: 50px;
+    height: 50px;
+}
+
+.mapWidget .mapSetting .leftAlignButton {
+    background-position: 0 0;
+}
+
+.mapWidget .mapSetting .centerAlignButton {
+
+}
+
+.mapWidget .mapSetting .rightAlignButton {
+
+}

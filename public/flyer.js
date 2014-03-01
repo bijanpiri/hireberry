@@ -399,7 +399,7 @@ function Flyer(options) {
             var videoID = parts[parts.length-1];
             videoURL = '//www.youtube.com/embed/' + videoID;
 
-            var iframe = $('<iframe width="300" height="180" frameborder="0" allowfullscreen></iframe>').attr('src', videoURL + '?rel=0')
+            var iframe = $('<iframe width="100%" height="100%" frameborder="0" allowfullscreen></iframe>').attr('src', videoURL + '?rel=0')
             var container = $('<div class="videoWidget"></div>').append(iframe);
             this.portlet.html('').append(container);
 
@@ -430,13 +430,14 @@ function Flyer(options) {
 
         this.setLayout(layout);
 
+        /*
         this.portletContainer.on('portlet:resizing', (function(widget){
             return function(e,newHeight) {
                 widget.height = newHeight;
                 widget.portlet.find('iframe').attr('height',newHeight);
             }
         })(this))
-
+*/
         this.getSettingPanel = function () {
             var settingPanelHtml = '<div class="videoWidgetOuter">'+
                 '<div class="videoWidgetInputboxOutter">'+
@@ -732,8 +733,8 @@ function Flyer(options) {
 
 
         this.getSettingPanel = function () {
-            var settingPanel = $('<div>');
-            settingPanel.height(50);
+            var settingPanel = $('.mapWidgetSetting').clone();
+            settingPanel.height(150);
             return settingPanel;
         }
 
