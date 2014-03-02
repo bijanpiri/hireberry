@@ -40,7 +40,11 @@ function locate(){
 
 }
 $('button[type=submit]').click(function(){
-       $('input.htags').val($('input.tags').val());
+
+    $('input.htags').val($('input.tags').val());
+    var latlng=marker.getLatLng();
+    $('#lat').val(latlng.lat);
+    $('#lng').val(latlng.lng);
 });
 var marker;
 function main(){

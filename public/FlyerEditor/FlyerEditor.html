@@ -12,7 +12,42 @@
     <script src="FlyerEditor.js"></script>
 </head>
 <body >
+<div class="setPanel">
+    <div class="b-link-group">
+        <label for="link" class="b-label">Link</label>
+        <input class="b-text" placeholder="http://www.example.com" type="text" id="link">
+    </div>
+    <div class="b-link-group">
+        <label for="display" class="b-label">Display</label>
+        <input class="b-text" placeholder="Example" type="text" id="display">
+    </div>
 
+    <div class="b-link-group">
+        <label for="showLink" class="b-addon ">
+            <input id="showLink" name="type" hidden="hidden"  type="radio">
+            <div class="circle out">
+                <div class="circle in "></div>
+            </div>
+        </label>
+        <label  class="radio-label icon-container" for="showLink" >
+            Show as a Link
+            <i class="r-icon icon-align-center radio-label-icon"></i>
+        </label>
+    </div>
+
+    <div class="b-link-group">
+        <label for="showButton" class="b-addon ">
+            <input id="showButton" name="type" hidden="hidden"  type="radio" checked="checked">
+            <div class="circle out">
+                <div class="circle in "></div>
+            </div>
+        </label>
+        <label  class="radio-label icon-container" for="showButton" >
+            Show as a Button
+            <i class="r-icon icon-align-center radio-label-icon"></i>
+        </label>
+    </div>
+</div>
 <div class="setPanel gray">
     <div class="leftPanel">
         <div class="b-group">
