@@ -254,27 +254,30 @@ function Flyer(options) {
             })(this));
             x.find('#headline_'+idCounter).click((function(widget){
                 return function(){
-                    var textField=widget.portlet.find('.textfield');
-                    textField.children('div').each(
-                        function(id,line){
-                            line.innerHTML=('<h2>'+line.innerHTML+'</h2>');
-                        });
-
-                    var html=textField.html()
-                    var firstline=html.substr(0,html.indexOf('<div>'));
-                    var rest=html.substr(html.indexOf('<div>'));
-                    if(firstline.length>0)
-                        firstline='<h2>'+firstline+'</h2>';
-                    textField.html(firstline+rest);
-
+                    var textField=widget.portlet.find('.textfield').addClass('header');
+//                    var textField=widget.portlet.find('.textfield');
+//                    textField.children('div').each(
+//                        function(id,line){
+//                            line.innerHTML=('<h2>'+line.innerHTML+'</h2>');
+//                        });
+//
+//                    var html=textField.html();
+//                    var offset=html.indexOf('<div>');
+//                    if(offset<=0)
+//                        offset=html.length;
+//                    var firstline=html.substr(0,offset);
+//                    var rest=html.substr(offset);
+//                    if(firstline.length>0)
+//                        firstline='<h2>'+firstline+'</h2>';
+//                    textField.html(firstline+rest);
                 }
             })(this));
 
             x.find('#text_'+idCounter).click((function(widget){
                 return function(){
-                    var text=widget.portlet.find('.textfield');
-                    text.html(text.html().replace(/<h2>/g,''));
-                    text.html(text.html().replace(/<\/h2>/g,''));
+                    var text=widget.portlet.find('.textfield').removeClass('header');
+//                    text.html(text.html().replace(/<h2>/g,''));
+//                    text.html(text.html().replace(/<\/h2>/g,''));
                 }
             })(this));
             return x;
@@ -285,7 +288,8 @@ function Flyer(options) {
             var port=this.portlet.find('.portlet-content-text');
             var text=port.html();
             var align=port.css('text-align');
-            var data=new TextData(text,align);
+            var headline=port.hasClass('header');
+            var data=new TextData(text,align,headline);
 
 
             return data;
@@ -294,16 +298,19 @@ function Flyer(options) {
         this.deserialize = function(data){
 
             this.portlet.parent().find('.'+data.align+'Align').attr('checked','checked');
-            if(data.text.indexOf('<h2>')>=0)
+            if(data.headline){
                 this.portlet.parent().find('.headline').attr('checked','checked');
+                this.portlet.addClass('header');
+            }
             return this.portlet
                 .find('.portlet-content-text')
                 .html(data.text)
                 .css('text-align',data.align);
         }
-        function TextData(text,align){
+        function TextData(text,align,headline){
             this.text=text;
             this.align=align;
+            this.headline=headline;
         }
     }
     TextWidget.prototype = new Widget();
