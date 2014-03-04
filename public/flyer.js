@@ -56,6 +56,7 @@ function Flyer(options) {
 
         this.settingPanel = ''; // Shortcut to setting panel element
 
+
         this.serialize = function(){};
         this.deserialize = function(content){};
         this.enterToShotMode = function(completedCallback) {completedCallback()};
@@ -1143,7 +1144,6 @@ function Flyer(options) {
     }
 
     initPortletsStack();
-
 
     // Private functions
     function enterShotMode(completedCallback){
