@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="bootstrap/tagsinput/bootstrap-tagsinput.js"></script>
+    <link rel="stylesheet" href="bootstrap/tagsinput/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <script src="bootstrap/js/typeahead.js"></script>
+    <script src="bootstrap/js/hogan-2.0.0.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <title></title>
+    <script>
+        $(document).ready(function(){
+            $('#tags-input').tagsinput({
+                itemValue: function (item) {
+                    return item.value;
+                },
+                itemText: function (item) {
+                    return item.text;
+                },
+                typeahead:{
+                    source:[{'value':1,'text':"asdd"}]
+                }
+            });
+/*
+            $('#tags-input').tagsinput('add',{'value':1,'text':"me"});
+*/
+            $('#tags-input').tagsinput('add', { "text": "Amsterdam","value": 1  });
+        });
+
+    </script>
+</head>
+<body>
+<input id="tags-input" type="text"/>
+</body>
+</html>

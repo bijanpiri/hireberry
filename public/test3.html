@@ -10,7 +10,6 @@
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false"></script>
     <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markermanager/src/markermanager.js"></script>
     <script>
-        var marker;
         var map;
         var mycenter;
         var boards = [];
@@ -19,11 +18,6 @@
         var infowindow;
         var boardname;
         var titleaddtotagslist;
-        var markercolor;
-        var boardidtotags;
-        var items=[];
-        var idarray=[];
-        var removedvalue;
         function initialize(){
             var map_property = {
                 center: new google.maps.LatLng(51.508742,-0.120850),
@@ -42,7 +36,6 @@
                         boards.push(board);
                         marker = new google.maps.Marker({
                             type:'Feature',
-                            icon:'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
                             position: new google.maps.LatLng(board.locationlat,board.locationlng),
                             map: map,
                             'result':[{"address_components":[{
@@ -59,46 +52,24 @@
 
                         });
                         marker.title=board.name;
-                        marker.boardid=board._id;
+
                         markers.addMarker(marker);
                         markersarray.push(marker);
+//                        markers.addMarker(new openLayers.marker(markerslonlat))
                     }
-
-                    items.push({value:board._id,text:board.name,marker:marker});
                 });
-
                 markers.refresh();
                 try{
                     $.each(markersarray,function(index,marker){
                         google.maps.event.addListener(marker,'click',function(e){
                             titleaddtotagslist = marker.title;
-                            boardidtotags = marker.boardid;
-                            idarray=$('#tags-input').val().split(',');
-                            var flag=false;
-
-                                for(var i=0;i<idarray.length;i++){
-                                    if(idarray[i]==boardidtotags ){
-                                        removedvalue=boardidtotags;
-                                        $('#tags-input').tagsinput('remove',{value:boardidtotags});
-                                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/purple-dot.png');
-                                        flag=true;
-                                    }
-                                }
-                            if(flag==false){
-                                 $('#tags-input').tagsinput('add',{"value":boardidtotags,"text":titleaddtotagslist,marker:marker});
-                                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                            if($('#tags-input').val()!== titleaddtotagslist){
+                                $('#tags-input').tagsinput('add',titleaddtotagslist);
 
                             }
 
                         });
                     });
-                    $("#tags-input").on('itemAdded', function(event) {
-                        event.item.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
-                    });
-                    $("#tags-input").on('itemRemoved', function(event) {
-                        event.item.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/purple-dot.png');
-                    });
-
                     markers.setMap(map);
 
                 }catch (e){
@@ -107,26 +78,30 @@
             });
 
         }
+        /*function gettitle(){
+         $.each(markers,function(index,marker){
+         google.maps.event.addListener(marker,'click',function(e){
+         //boardname=this.title;
+         //alert(e.title);
+         });
+         });
+
+
+         }*/
+
         google.maps.event.addDomListener(window, 'load', initialize);
+
+
     </script>
     <script>
         $(document).ready(function(){
             $('#tags-input').tagsinput({
-                itemValue: function (item) {
-                    return item.value;
-                },
-                itemText: function (item) {
-                    return item.text;
-                },
                 typeahead:{
-                    source:items
+                    source:function(query){
+                        return $.getJSON('/boards/name');
+                    }
                 }
             });
-            /*for(var i=0;i<idarray.length;i++){
-                if(idarray[i]!==removedvalue)
-                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/purple-dot.png');
-            }*/
-
         });
     </script>
 </head>
