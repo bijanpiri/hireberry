@@ -33,7 +33,7 @@ Whole Paper
 
 .portlet-container  {
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
     box-sizing: border-box;
     padding: 0 28px; /* Action Button Width */
 }
@@ -359,6 +359,62 @@ Portlet Creator
     background-color: transparent
 }
 
+.toolbar{
+    position: absolute;
+    width: 700px;
+    height: 50px;
+    top:-50px;
+    left: 28px;
+    right: 0;
+    background: violet;
+
+}
+a.toolbar-button{
+    background: #ffff00;
+    border: 1px solid red;
+    float: left;
+    margin: 2px;
+    width: 45px;
+    height: 45px;
+    position: relative;
+    box-sizing: border-box;
+    text-decoration: none !important;
+    cursor: pointer;
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius:4px;
+}
+a.toolbar-button:active{
+    background: red !important ;
+}
+a.toolbar-button:hover{
+    background: greenyellow;
+}
+.toolbar-separator{
+    border-left: 3px solid darkgray ;
+    float: left;
+    margin-left:2px ;
+    height: 50px;
+}
+.toolbar-icon{
+    background-image: url("/images/flyer-icons.png");
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 39px;
+    height: 30px;
+    overflow: hidden;
+}
+.toolbar-icon-remove{
+    background-position: -30px -10px;
+}
+.toolbar-icon-add{
+    background-position: -10px -10px;
+}
 .mapWidget .mapSetting .AlignButton {
     background-image: url("/images/nflyer-map-modes.png");
     width: 50px;

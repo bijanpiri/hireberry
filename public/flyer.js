@@ -13,6 +13,20 @@ function Flyer(options) {
     this.widgetWidthOpenSettingPanel = null;
     this.pStackNormalHeight;
 
+    $(document).click(function(event){
+        if($(event.target).parents().index($('.portletStack'))==-1)
+            $('.toolbar').hide();
+    });
+
+    $(document).delegate('.portlet-container *','click',
+        function(event){
+            event.stopPropagation();
+        });
+    $(document).delegate('.portlet-container','click',
+        function(){
+            $('.toolbar').hide();
+        });
+
     var idCounter=1;
     function Size(width,height){
         if(width)
@@ -36,6 +50,10 @@ function Flyer(options) {
         this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
         this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width());
+        this.toolbar=$('<div>').addClass('toolbar').hide();
+
+
+
         this.settingPanel = ''; // Shortcut to setting panel element
 
         this.serialize = function(){};
@@ -92,8 +110,10 @@ function Flyer(options) {
 
             var setttingPanelInside = this.getSettingPanel();
             this.settingPanelHieght = setttingPanelInside.height();
+
             var settingPanel = $('<div>').height(this.settingPanelHieght).addClass('portlet-settingPanel')
-                .append(setttingPanelInside)
+                .append(setttingPanelInside);
+
 
             // Action Buttons
             var moveHandle = $('<div>').addClass('action-btn-frame move-btn-frame')
@@ -108,42 +128,71 @@ function Flyer(options) {
                     }
                 })(this));
 
-            var settingButton = $('<div>').addClass('action-btn-frame setting-btn-frame')
-                .append($('<i>').addClass('action-btn setting-btn'))
-                .click( (function(widget){
-                    return function(){
-
-                        //var delta = 200;
-                        var delta = widget.settingPanelHieght;
-                        var duration = 500;
-                        widget.portletContainer
-                            .find('.portlet-settingPanel')
-                            .width('100%');
-
-                        if( widget.settingPanelIsOpen )
-                            widget.closeSettingPanel(duration,delta);
-                        else
-                            widget.openSettingPanel(duration,delta);
-                    }
-                })(this));
 
             this.portletContainer
-                .append(settingPanel)
                 .append(this.portlet)
+                .append(this.toolbar)
+//                .append(settingPanel)
                 .append(resizingHandle)
-                .append(settingButton)
+//                .append(settingButton)
                 .append(moveHandle)
                 .append(deleteButton);
 
             this.settingPanel = settingPanel;
             this.layout.height(this.height);
             this.portlet.append(this.layout);
+            this.portlet.focusin(function(){
+                console.log('focused in');
+                $('.toolbar').hide();
+                $(this).parent().find('.toolbar').show();
+            });
+
+//                .focusout(function(){
+//                    $(this).parent().find('.toolbar').hide();
+//
+//                });
+//            $('.portlet').focusout(function(){
+//                console.log('focused out');
+//                $('.toolbar').hide();
+//                $('.portlet-container').find('.toolbar').show();
+//            });
+
+            var item=new Object();
+
+            item.tooltip='tooltip';
+            item.icon='toolbar-icon-add';
+            this.addToolbarItem(item);
+            this.addToolbarSeparator();
+
+            item=new Object();
+            item.tooltip='tooltip';
+            item.icon='toolbar-icon-remove';
+            item.action=function(){alert('hello');};
+            this.addToolbarItem(item);
 
             return this.portletContainer.append( this.portlet );
         }
 
         this.getSettingPanel = function () {
             return 'Default Setting Panel';
+        }
+
+        this.addToolbarItem=function(item){
+
+            var button=
+                $('<a>')
+                    .append(
+                        $('<i>')
+                            .addClass('toolbar-icon')
+                            .addClass(item.icon))
+                    .attr('title',item.tooltip)
+                    .addClass('toolbar-button')
+                    .click(item.action);
+            this.toolbar.append(button);
+            return button;
+        }
+        this.addToolbarSeparator=function(){
+            this.toolbar.append($('<div>').addClass('toolbar-separator'))
         }
 
         this.widgetDidAdd = function(isNew) {}
@@ -190,15 +239,23 @@ function Flyer(options) {
         var layout4='layout4';
 
         function initLayout1(){
-            var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
+//            var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
+            var textField=$('<div>')
+                .addClass('textfield')
+                .addClass('portlet-content-text')
+                .addClass('multi')
+                .addClass('textContent');
             layout1 = $('<div>').append(textField);
 
-            textField.height( this.height ).hallo({
-                plugins: {
-                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-                    'hallolists' : {}
-                }
-            });
+            textField.height( this.height )
+                .attr('contenteditable','true').addClass('multi');
+//                .hallo({
+//                plugins: {
+//                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
+//                    'hallolists' : {}
+//                }
+//            })
+            ;
         }
 
         initLayout1.call(this);
@@ -300,7 +357,7 @@ function Flyer(options) {
             this.portlet.parent().find('.'+data.align+'Align').attr('checked','checked');
             if(data.headline){
                 this.portlet.parent().find('.headline').attr('checked','checked');
-                this.portlet.addClass('header');
+                this.portlet.find('.textfield').addClass('header');
             }
             return this.portlet
                 .find('.portlet-content-text')
