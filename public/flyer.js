@@ -18,7 +18,7 @@ function Flyer(options) {
             $('.toolbar').hide();
     });
 
-    $(document).delegate('.portlet-container *','click',
+    $(document).delegate('.portlet-container>*','click',
         function(event){
             event.stopPropagation();
         });
@@ -27,7 +27,13 @@ function Flyer(options) {
             $('.toolbar').hide();
         });
 
+
+//    $(document).delegate('.portlet iframe','focusin',function() {
+//        console.log('hello');
+//    });
+
     var idCounter=1;
+    var toolbarid=1;
     function Size(width,height){
         if(width)
             this.width=width
@@ -48,8 +54,12 @@ function Flyer(options) {
         this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
         this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width());
+<<<<<<< HEAD
         this.toolbar=$('<div>').addClass('toolbar').hide();
 
+=======
+        this.toolbar=$('<div>').addClass('toolbar').attr('id',toolbarid++).hide();
+>>>>>>> Added wysihtml5 and portlate problem resolved
 
         this.settingPanel = ''; // Shortcut to setting panel element
         this.dialog_confirm=  $('<div id="dialog-confirm"  title="Remove widget?">');
@@ -168,11 +178,6 @@ function Flyer(options) {
             this.settingPanel = settingPanel;
             this.layout.height(this.height);
             this.portlet.append(this.layout);
-            this.portlet.focusin(function(){
-                console.log('focused in');
-                $('.toolbar').hide();
-                $(this).parent().find('.toolbar').show();
-            });
 
 //                .focusout(function(){
 //                    $(this).parent().find('.toolbar').hide();
@@ -207,7 +212,7 @@ function Flyer(options) {
         this.addToolbarItem=function(item){
 
             var button=
-                $('<a>')
+                $('<span>')
                     .append(
                         $('<i>')
                             .addClass('toolbar-icon')
@@ -249,6 +254,27 @@ function Flyer(options) {
             if(pStack.widgetWidthOpenSettingPanel)
                 pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
         });
+
+        this.clone=function(widget){
+            idCounter++;
+
+            var x=$('.widgets>'+widget).clone();
+
+            x.find('*').each(
+                function(i,elem){
+                    if(elem.id)
+                        elem.id=elem.id+'_'+idCounter;
+                    if(elem.htmlFor)
+                        elem.htmlFor=elem.htmlFor+'_'+idCounter;
+                    if(elem.name)
+                        elem.name=elem.name+'_'+idCounter;
+
+                });
+            return x;
+        }
+        this.restated=function(){
+            console.log('restated');
+        }
     }
 
     Widget.prototype.constructor = Widget;
@@ -260,11 +286,19 @@ function Flyer(options) {
         this.height = height || 200;
         Widget.call(this);
 
-        var layout1='layout1';
-        var layout2='layout2';
-        var layout3='layout3';
-        var layout4='layout4';
+        this.layout1='layout1';
+        this.layout2='layout2';
+        this.layout3='layout3';
+        this.layout4='layout4';
+        this.id=1;
 
+        function initLayout2(){
+
+            var x=this.clone('.textWidget');
+            this.id= x.find('textarea').attr('id');//Preserves id for using in widgetDidAdd
+
+            this.layout2=x;
+        }
         function initLayout1(){
 //            var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
             var textField=$('<div>')
@@ -285,9 +319,11 @@ function Flyer(options) {
             ;
         }
 
-        initLayout1.call(this);
+//        initLayout1.call(this);
+        initLayout2.call(this);
 
-        this.setLayout(layout1);
+//        this.setLayout(this.layout1);
+        this.setLayout(this.layout2);
 
         this.portlet.on('portlet:resized', function() {
             $(this).find('.textfield').css('height', $(this).height());
@@ -296,8 +332,22 @@ function Flyer(options) {
         this.portlet.on('portlet:layoutChanged', function(e,idx) {
             console.log(idx,idx.old,idx.new);
         });
+        this.widgetDidAdd=function(isNew){
+            var editor = new wysihtml5.Editor(this.id, { // id of textarea element
+                toolbar:      this.toolbar.attr('id'), // id of toolbar element
+                parserRules:  wysihtml5ParserRules // defined in parser rules set
+            });
 
+
+        }
         this.contentSize = function(){}
+        this.restated=function(){
+            var editor = new wysihtml5.Editor(this.id, { // id of textarea element
+                toolbar:      this.toolbar.attr('id'), // id of toolbar element
+                parserRules:  wysihtml5ParserRules // defined in parser rules set
+            });
+
+        };
 
         this.getSettingPanel = function () {
             idCounter++;
@@ -515,13 +565,13 @@ function Flyer(options) {
         this.setLayout(layout);
 
         /*
-        this.portletContainer.on('portlet:resizing', (function(widget){
-            return function(e,newHeight) {
-                widget.height = newHeight;
-                widget.portlet.find('iframe').attr('height',newHeight);
-            }
-        })(this))
-*/
+         this.portletContainer.on('portlet:resizing', (function(widget){
+         return function(e,newHeight) {
+         widget.height = newHeight;
+         widget.portlet.find('iframe').attr('height',newHeight);
+         }
+         })(this))
+         */
         this.getSettingPanel = function () {
             var settingPanelHtml = '<div class="videoWidgetOuter">'+
                 '<div class="videoWidgetInputboxOutter">'+
@@ -863,7 +913,7 @@ function Flyer(options) {
             // ToDo: Wait to image load completely
 
             //if( completedCallback )
-             //   completedCallback()
+            //   completedCallback()
         }
 
         this.exitFromShotMode = function() {
@@ -1149,8 +1199,18 @@ function Flyer(options) {
                 connectWith: ".portletStack",
                 cursor: "move",
                 axis: "y",
-                handle: ".move-btn"
-            })//.disableSelection();
+                handle: ".move-btn",
+                stop:
+                    function(event,ui){
+                        var container=ui.item;
+                        container.find('.wysihtml5-sandbox').remove();
+                        container.find('textarea').css('display','block');
+
+                        var widget=container.find('.portlet').data('widget');
+                        widget.restated();
+//                        });
+                    }
+            });//.disableSelection();
         }
 
         initDimension();

@@ -25,7 +25,8 @@
 
 <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">-->
 <script src="/flyer.js"></script>
-
+<script src="/script/wysihtml5Parser/advanced.js"></script>
+<script src="/script/wysihtml5.min.js"></script>
 <script>
     var flyer;
     var flyerid;
@@ -210,61 +211,7 @@
 <div class="widgets">
 
     <div class="textWidget">
-        <div class="setPanel">
-            <div class="leftPanel">
-                <div class="b-group">
-                    <label for="headline" class="b-addon ">
-                        <input class="headline" id="headline" name="type" hidden="hidden"  type="radio" >
-                        <div class="circle out">
-                            <div class="circle in "></div>
-                        </div>
-                    </label>
-                    <label  class="radio-label b-icon-container" for="headline">
-                        Headline
-                        <i class="r-icon b-icon-headline radio-label-icon"></i>
-                    </label>
-                </div>
-
-                <div class="b-group">
-                    <label for="text" class="b-addon ">
-                        <input id="text" name="type" hidden="hidden"  type="radio"  checked="checked">
-                        <div class="circle out">
-                            <div class="circle in "></div>
-                        </div>
-
-
-                    </label>
-                    <label  class="radio-label" for="text" >
-                        Text
-                        <i class="r-icon b-icon-text radio-label-icon"></i>
-
-                    </label>
-                </div>
-
-                <div class="bbtn-group">
-
-                    <input class="bbtn bbtn-radio leftAlign" id='leftAlign' type="radio" name="align" checked="checked">
-                    <label for="leftAlign" class="bbtn-label b-icon-container ">
-                        <i class="b-icon b-icon-align-left" ></i>
-                    </label>
-
-                    <input class="bbtn bbtn-radio centerAlign" id='centerAlign' type="radio" name="align">
-                    <label for="centerAlign" class="bbtn-label btn-Margin b-icon-container ">
-                        <i class="b-icon b-icon-align-center" ></i>
-                    </label>
-
-                    <input class="bbtn bbtn-radio rightAlign" id='rightAlign' type="radio" name="align">
-                    <label for="rightAlign" class="bbtn-label b-icon-container ">
-                        <i class="b-icon b-icon-align-right" ></i>
-                    </label>
-
-                </div>
-
-            </div>
-            <div class="rightPanel">
-                <div class="yellow"></div>
-            </div>
-        </div>
+            <textarea id="text-widget" class="text-widget" placeholder="Enter your text" autofocus="autofocus"></textarea>
     </div>
 
     <div class="mapWidget">
