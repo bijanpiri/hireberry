@@ -25,8 +25,9 @@
 
 <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">-->
 <script src="/flyer.js"></script>
-<script src="/script/wysihtml5Parser/advanced.js"></script>
-<script src="/script/wysihtml5.min.js"></script>
+<!--<script src="/script/wysihtml5Parser/advanced.js"></script>-->
+<!--<script src="/script/wysihtml5.min.js"></script>-->
+<script src="/script/bootstrap-wysiwyg.js"></script>
 <script>
     var flyer;
     var flyerid;
@@ -211,7 +212,16 @@
 <div class="widgets">
 
     <div class="textWidget">
-            <textarea id="text-widget" class="text-widget" placeholder="Enter your text" autofocus="autofocus"></textarea>
+        <div class="btn-toolbar" data-role="editor-toolbar"
+             data-target="text-widget">
+            <a data-edit="bold">bold</a>
+            <a data-edit="fontName Arial">font</a>
+
+            <!--<input type="text" data-edit="createLink"/>-->
+<!---->
+            <!--<input type="file" data-edit="insertImage" />-->
+        </div>
+            <div id="text-widget" class="text-widget" placeholder="Enter your text"  autofocus="autofocus"></div>
     </div>
 
     <div class="mapWidget">

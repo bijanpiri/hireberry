@@ -268,6 +268,8 @@ function Flyer(options) {
                         elem.htmlFor=elem.htmlFor+'_'+idCounter;
                     if(elem.name)
                         elem.name=elem.name+'_'+idCounter;
+                    if($(elem).attr('data-target'))
+                        $(elem).attr('data-target',$(elem).attr('data-target')+'_'+idCounter);
 
                 });
             return x;
@@ -295,7 +297,8 @@ function Flyer(options) {
         function initLayout2(){
 
             var x=this.clone('.textWidget');
-            this.id= x.find('textarea').attr('id');//Preserves id for using in widgetDidAdd
+
+            x.find('.text-widget').wysiwyg();
 
             this.layout2=x;
         }
@@ -333,19 +336,15 @@ function Flyer(options) {
             console.log(idx,idx.old,idx.new);
         });
         this.widgetDidAdd=function(isNew){
-            var editor = new wysihtml5.Editor(this.id, { // id of textarea element
-                toolbar:      this.toolbar.attr('id'), // id of toolbar element
-                parserRules:  wysihtml5ParserRules // defined in parser rules set
-            });
-
+//            $('#'+this.id).wysiwyg();
+//            var editor = new wysihtml5.Editor(this.id, { // id of textarea element
+//                toolbar:      this.toolbar.attr('id'), // id of toolbar element
+//                parserRules:  wysihtml5ParserRules // defined in parser rules set
+//            });
 
         }
         this.contentSize = function(){}
         this.restated=function(){
-            var editor = new wysihtml5.Editor(this.id, { // id of textarea element
-                toolbar:      this.toolbar.attr('id'), // id of toolbar element
-                parserRules:  wysihtml5ParserRules // defined in parser rules set
-            });
 
         };
 
