@@ -40,8 +40,6 @@ function Flyer(options) {
     }
 
 
-
-
     /****** Widget - Start *******/
     function Widget(){
         this.height = this.height || 100; //px
@@ -53,8 +51,8 @@ function Flyer(options) {
         this.toolbar=$('<div>').addClass('toolbar').hide();
 
 
-
         this.settingPanel = ''; // Shortcut to setting panel element
+        this.dialog_confirm=  $('<div id="dialog-confirm"  title="Remove widget?">');
 
 
         this.serialize = function(){};
@@ -120,22 +118,50 @@ function Flyer(options) {
             var moveHandle = $('<div>').addClass('action-btn-frame move-btn-frame')
                 .append($('<i>').addClass('action-btn move-btn'));
 
-            var deleteButton = $('<div>').addClass('action-btn-frame delete-btn-frame')
+            var deleteButton = $('<div >').addClass('action-btn-frame delete-btn-frame')
                 .append($('<i>').addClass('action-btn delete-btn'))
                 .click((function(widget){
                     return function(){
-                        widget.portletContainer.remove();
-                        reLocatingPlus();
-                    }
+
+                                   $( "#dialog-confirm" ).dialog({
+                                    resizable: false,
+                                    height:0,
+                                    width:175,
+                                    modal: true,
+                                    draggable : false,
+                                    position:'middle',
+                                    buttons: {
+                                        Ok: function() {
+                                            $( this ).dialog( "close" );
+                                            widget.portletContainer.remove();
+                                            reLocatingPlus();
+                                        },
+                                        Cancel: function() {
+                                            $( this ).dialog( "close" );
+                                        }
+                                    },
+                                    close: function( event,ui ) {
+                                        $( this ).dialog( "destroy" )
+                                    },
+                                    open:function(){
+                                        $(".ui-dialog-titlebar-close").hide();
+                                        //$(".ui-dialog-titlebar-close").removeClass(".ui-dialog-titlebar-close").addClass(".ui-button-icon-primary ui-icon ui-icon-closethick").show();
+
+                                       }
+                                   });
+                                   //widget.portletContainer.remove();
+                                   //reLocatingPlus();*/
+                        }
+
                 })(this));
 
-
             this.portletContainer
+                .append(this.dialog_confirm)
                 .append(this.portlet)
                 .append(this.toolbar)
-//                .append(settingPanel)
+//              .append(settingPanel)
                 .append(resizingHandle)
-//                .append(settingButton)
+//              .append(settingButton)
                 .append(moveHandle)
                 .append(deleteButton);
 
