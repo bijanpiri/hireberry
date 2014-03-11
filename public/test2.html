@@ -10,7 +10,6 @@
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false"></script>
     <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markermanager/src/markermanager.js"></script>
     <script>
-        var marker;
         var map;
         var mycenter;
         var boards = [];
@@ -40,7 +39,7 @@
                 $.each(publicBoards,function(index,board){
                     if(board.locationlat && board.locationlng){
                         boards.push(board);
-                        marker = new google.maps.Marker({
+                        var marker = new google.maps.Marker({
                             type:'Feature',
                             icon:'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
                             position: new google.maps.LatLng(board.locationlat,board.locationlng),
