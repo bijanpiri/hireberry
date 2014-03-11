@@ -18,6 +18,11 @@ function Flyer(options) {
             $('.toolbar').hide();
     });
 
+    $(document).delegate('.portlet','focusin',
+        function(){
+            $('.toolbar').hide();
+            $(this).parent().find('.toolbar').show();
+        });
     $(document).delegate('.portlet-container>*','click',
         function(event){
             event.stopPropagation();
@@ -189,18 +194,6 @@ function Flyer(options) {
 //                $('.portlet-container').find('.toolbar').show();
 //            });
 
-            var item=new Object();
-
-            item.tooltip='tooltip';
-            item.icon='toolbar-icon-add';
-            this.addToolbarItem(item);
-            this.addToolbarSeparator();
-
-            item=new Object();
-            item.tooltip='tooltip';
-            item.icon='toolbar-icon-remove';
-            item.action=function(){alert('hello');};
-            this.addToolbarItem(item);
 
             return this.portletContainer.append( this.portlet );
         }
@@ -209,7 +202,7 @@ function Flyer(options) {
             return 'Default Setting Panel';
         }
 
-        this.addToolbarItem=function(item){
+        this.addToolbarButton=function(item){
 
             var button=
                 $('<span>')
@@ -292,14 +285,14 @@ function Flyer(options) {
         this.layout2='layout2';
         this.layout3='layout3';
         this.layout4='layout4';
-        this.id=1;
+
 
         function initLayout2(){
 
             var x=this.clone('.textWidget');
-
-            x.find('.text-widget').wysiwyg();
-
+//            data-role="editor-toolbar"-->
+//                <!--data-target="#editor">-->
+//                <!--<a data-edit="bold"
             this.layout2=x;
         }
         function initLayout1(){
@@ -336,6 +329,29 @@ function Flyer(options) {
             console.log(idx,idx.old,idx.new);
         });
         this.widgetDidAdd=function(isNew){
+            var id='#'+this.layout2.find('.text-widget').attr('id');
+            this.toolbar
+                .attr('data-role','editor-toolbar')
+                .attr('data-target',id);
+//            <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+            this.toolbar.append($('.toolbars>.toolbar-text').clone());
+
+            $(id).wysiwyg(
+                {options:{activeToolbarClass:'btn-info'}}
+            );
+
+//            var item=new Object();
+//
+//            item.tooltip='tooltip';
+//            item.icon='toolbar-icon-add';
+//            this.addToolbarItem(item);
+//            this.addToolbarSeparator();
+//
+//            item=new Object();
+//            item.tooltip='tooltip';
+//            item.icon='toolbar-icon-remove';
+//            item.action=function(){alert('hello');};
+//            this.addToolbarItem(item);
 //            $('#'+this.id).wysiwyg();
 //            var editor = new wysihtml5.Editor(this.id, { // id of textarea element
 //                toolbar:      this.toolbar.attr('id'), // id of toolbar element

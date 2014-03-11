@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<head>
+    <meta charset="utf-8">
+    <title>Tiny, opensource, Bootstrap WYSIWYG rich text editor from MindMup</title>
+    <!--<link rel="apple-touch-icon" href="//mindmup.s3.amazonaws.com/lib/img/apple-touch-icon.png">-->
+    <!--<link rel="shortcut icon" href="http://mindmup.s3.amazonaws.com/lib/img/favicon.ico">-->
+    <!--<link href="external/prettify.css" rel="stylesheet">-->
+    <!--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">-->
+
+
+    <!--<script id="twitter-wjs" src="http://platform.twitter.com/widgets.js"></script>-->
+    <!--&lt;!&ndash;<script id="facebook-jssdk" src="http://connect.facebook.net/en_GB/all.js#xfbml=1"></script>-->
+
+    <!--<script async="" src="//www.google-analytics.com/analytics.js"></script>-->
+    <script src="bootstrap/js/jquery.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>&ndash;&gt;-->
+    <script src="script/jquery.hotkeys.js"></script>
+
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>-->
+    <!--<script src="external/prettify.js"></script>-->
+    <link href="index.css" rel="stylesheet">
+    <!--<script src="bootstrap-wysiwyg.js"></script>-->
+
+    <script src="script/bootstrap-wysiwyg.js"></script>
+
+</head>
+<body>
+
+<div class="portlet-container" style="width: 756px; height: 200px;"><div class="toolbar" id="8" data-role="editor-toolbar" data-target="#editor_4" style="display: block;"><div class="toolbar-text">
+    <div class="btn-group">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" title="" data-original-title="Font"><i class="icon-font"></i><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a data-edit="fontName Serif" style="font-family:'Serif'">Serif</a></li><li><a data-edit="fontName Sans" style="font-family:'Sans'">Sans</a></li><li><a data-edit="fontName Arial" style="font-family:'Arial'">Arial</a></li><li><a data-edit="fontName Arial Black" style="font-family:'Arial Black'">Arial Black</a></li><li><a data-edit="fontName Courier" style="font-family:'Courier'">Courier</a></li><li><a data-edit="fontName Courier New" style="font-family:'Courier New'">Courier New</a></li><li><a data-edit="fontName Comic Sans MS" style="font-family:'Comic Sans MS'">Comic Sans MS</a></li><li><a data-edit="fontName Helvetica" style="font-family:'Helvetica'">Helvetica</a></li><li><a data-edit="fontName Impact" style="font-family:'Impact'">Impact</a></li><li><a data-edit="fontName Lucida Grande" style="font-family:'Lucida Grande'">Lucida Grande</a></li><li><a data-edit="fontName Lucida Sans" style="font-family:'Lucida Sans'">Lucida Sans</a></li><li><a data-edit="fontName Tahoma" style="font-family:'Tahoma'">Tahoma</a></li><li><a data-edit="fontName Times" style="font-family:'Times'">Times</a></li><li><a data-edit="fontName Times New Roman" style="font-family:'Times New Roman'">Times New Roman</a></li><li><a data-edit="fontName Verdana" style="font-family:'Verdana'">Verdana</a></li></ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li>
+            <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
+            <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-large" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+        <a class="btn btn-large" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
+        <a class="btn btn-large" data-edit="strikethrough" title="" data-original-title="Strikethrough"><i class="icon-strikethrough"></i></a>
+        <a class="btn btn-large" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-large" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="icon-list-ul"></i></a>
+        <a class="btn btn-large" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="icon-list-ol"></i></a>
+        <a class="btn btn-large" data-edit="outdent" title="" data-original-title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a>
+        <a class="btn btn-large" data-edit="indent" title="" data-original-title="Indent (Tab)"><i class="icon-indent-right"></i></a>
+    </div>
+</div></div><div class="portlet-splitter"></div><div class="action-btn-frame move-btn-frame"><i class="action-btn move-btn"></i></div><div class="action-btn-frame delete-btn-frame"><i class="action-btn delete-btn"></i></div><div class="portlet"><div class="textWidget" style="height: 200px;">
+
+    <!--<div class="btn-toolbar" data-role="editor-toolbar"-->
+    <!--data-target="#editor">-->
+    <!--<a data-edit="bold" style="display: block;width: 100px;height: 100px; background: red">bold</a>-->
+    <!--<a data-edit="fontName Arial">...</a>-->
+    <!--</div>-->
+    <div id="editor_4" class="text-widget" contenteditable="true"><br></div>
+</div></div></div>
+
+<script>
+    $('#editor_4').wysiwyg();
+</script>
+</body>
+</html>
