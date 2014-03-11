@@ -59,12 +59,9 @@ function Flyer(options) {
         this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
         this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width());
-<<<<<<< HEAD
+
         this.toolbar=$('<div>').addClass('toolbar').hide();
 
-=======
-        this.toolbar=$('<div>').addClass('toolbar').attr('id',toolbarid++).hide();
->>>>>>> Added wysihtml5 and portlate problem resolved
 
         this.settingPanel = ''; // Shortcut to setting panel element
         this.dialog_confirm=  $('<div id="dialog-confirm"  title="Remove widget?">');
