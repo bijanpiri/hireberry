@@ -14,19 +14,14 @@ function Flyer(options) {
     this.pStackNormalHeight;
 
     $(document).mousedown(function(event){
-        if($(event.target).parents().index($('.portletStack'))==-1)
-            $('.toolbar').hide();
+//        if($(event.target).parents().index($('.portletStack'))==-1)
+//            $('.toolbar').hide();
     });
 
     $(document).delegate('.portlet','focusin',
         function(){
-            console.log('***************** portlet focusin****************');
-            console.log(this);
-            $('.toolbar').hide();
-
-            console.log('parent: \n');
-            console.log($(this).parent());
-            $(this).parent().find('.toolbar').show();
+//             $('.toolbar').hide();
+           $(this).parent().find('.toolbar').show();
         });
     $(document).delegate('.portlet-container>*','mousedown',
         function(event){
@@ -39,9 +34,9 @@ function Flyer(options) {
         });
 
 
-//    $(document).delegate('.portlet iframe','focusin',function() {
-//        console.log('hello');
-//    });
+    $(document).delegate('.portlet iframe','focusin',function() {
+        console.log('hello');
+    });
 
     var idCounter=1;
     var toolbarid=1;
