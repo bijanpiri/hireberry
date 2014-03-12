@@ -9,26 +9,32 @@ function Flyer(options) {
 
     var TagWidget = null;
 
-    var Widgets=[Widget,TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
+    var Widgets = [ Widget, TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
     this.widgetWidthOpenSettingPanel = null;
     this.pStackNormalHeight;
 
-    $(document).click(function(event){
+    $(document).mousedown(function(event){
         if($(event.target).parents().index($('.portletStack'))==-1)
             $('.toolbar').hide();
     });
 
     $(document).delegate('.portlet','focusin',
         function(){
+            console.log('***************** portlet focusin****************');
+            console.log(this);
             $('.toolbar').hide();
+
+            console.log('parent: \n');
+            console.log($(this).parent());
             $(this).parent().find('.toolbar').show();
         });
-    $(document).delegate('.portlet-container>*','click',
+    $(document).delegate('.portlet-container>*','mousedown',
         function(event){
             event.stopPropagation();
         });
-    $(document).delegate('.portlet-container','click',
+    $(document).delegate('.portlet-container','mousedown',
         function(){
+
             $('.toolbar').hide();
         });
 
@@ -337,23 +343,6 @@ function Flyer(options) {
                 {options:{activeToolbarClass:'btn-info'}}
             );
 
-//            var item=new Object();
-//
-//            item.tooltip='tooltip';
-//            item.icon='toolbar-icon-add';
-//            this.addToolbarItem(item);
-//            this.addToolbarSeparator();
-//
-//            item=new Object();
-//            item.tooltip='tooltip';
-//            item.icon='toolbar-icon-remove';
-//            item.action=function(){alert('hello');};
-//            this.addToolbarItem(item);
-//            $('#'+this.id).wysiwyg();
-//            var editor = new wysihtml5.Editor(this.id, { // id of textarea element
-//                toolbar:      this.toolbar.attr('id'), // id of toolbar element
-//                parserRules:  wysihtml5ParserRules // defined in parser rules set
-//            });
 
         }
         this.contentSize = function(){}
@@ -431,7 +420,7 @@ function Flyer(options) {
 
         this.serialize = function(){
 
-            var port=this.portlet.find('.portlet-content-text');
+            var port=this.portlet.find('.text-widget');
             var text=port.html();
             var align=port.css('text-align');
             var headline=port.hasClass('header');
@@ -449,7 +438,7 @@ function Flyer(options) {
                 this.portlet.find('.textfield').addClass('header');
             }
             return this.portlet
-                .find('.portlet-content-text')
+                .find('.text-widget')
                 .html(data.text)
                 .css('text-align',data.align);
         }
