@@ -367,8 +367,9 @@ Portlet Creator
     left: 28px;
     right: 0;
     background: violet;
-}
 
+}
+.toolbars{display: none;}
 .toolbar-button{
     background: #ffff00;
     border: 1px solid red;

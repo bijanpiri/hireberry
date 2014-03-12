@@ -14,13 +14,13 @@ function Flyer(options) {
     this.pStackNormalHeight;
 
     $(document).mousedown(function(event){
-//        if($(event.target).parents().index($('.portletStack'))==-1)
-//            $('.toolbar').hide();
+        if($(event.target).parents().index($('.portletStack'))==-1)
+            $('.toolbar').hide();
     });
 
     $(document).delegate('.portlet','focusin',
         function(){
-//             $('.toolbar').hide();
+             $('.toolbar').hide();
            $(this).parent().find('.toolbar').show();
         });
     $(document).delegate('.portlet-container>*','mousedown',
@@ -331,11 +331,12 @@ function Flyer(options) {
             this.toolbar
                 .attr('data-role','editor-toolbar')
                 .attr('data-target',id);
-//            <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
             this.toolbar.append($('.toolbars>.toolbar-text').clone());
-
             $(id).wysiwyg(
-                {options:{activeToolbarClass:'btn-info'}}
+                {
+                    activeToolbarClass:'btn-info',
+                    toolbarSelector: '[data-target='+id+']'
+                }
             );
 
 
