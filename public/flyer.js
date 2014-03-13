@@ -200,24 +200,6 @@ function Flyer(options) {
             return 'Default Setting Panel';
         }
 
-        this.addToolbarButton=function(item){
-
-            var button=
-                $('<span>')
-                    .append(
-                        $('<i>')
-                            .addClass('toolbar-icon')
-                            .addClass(item.icon))
-                    .attr('title',item.tooltip)
-                    .addClass('toolbar-button')
-                    .click(item.action);
-            this.toolbar.append(button);
-            return button;
-        }
-        this.addToolbarSeparator=function(){
-            this.toolbar.append($('<div>').addClass('toolbar-separator'))
-        }
-
         this.widgetDidAdd = function(isNew) {}
 
         this.applySetting = function (settingPanel){}
@@ -265,6 +247,10 @@ function Flyer(options) {
                 });
             return x;
         }
+        this.setToolbar=function(toolbar){
+            this.toolbar.append($('.toolbars>'+toolbar).clone());
+
+        }
         this.restated=function(){
             console.log('restated');
         }
@@ -279,45 +265,18 @@ function Flyer(options) {
         this.height = height || 200;
         Widget.call(this);
 
-        this.layout1='layout1';
-        this.layout2='layout2';
-        this.layout3='layout3';
-        this.layout4='layout4';
+        this.layout='layout';
 
-
-        function initLayout2(){
-
+        function initLayout(){
             var x=this.clone('.textWidget');
-//            data-role="editor-toolbar"-->
-//                <!--data-target="#editor">-->
-//                <!--<a data-edit="bold"
-            this.layout2=x;
-        }
-        function initLayout1(){
-//            var textField=$('<div>').addClass('textfield').addClass('portlet-content-text');
-            var textField=$('<div>')
-                .addClass('textfield')
-                .addClass('portlet-content-text')
-                .addClass('multi')
-                .addClass('textContent');
-            layout1 = $('<div>').append(textField);
-
-            textField.height( this.height )
-                .attr('contenteditable','true').addClass('multi');
-//                .hallo({
-//                plugins: {
-//                    'halloformat': {"bold": true, "italic": true, "strikethrough": true, "underline": true},
-//                    'hallolists' : {}
-//                }
-//            })
-            ;
+            this.layout=x;
+            return x;
         }
 
-//        initLayout1.call(this);
-        initLayout2.call(this);
+//        initLayout.call(this);
 
 //        this.setLayout(this.layout1);
-        this.setLayout(this.layout2);
+        this.setLayout(initLayout.call(this));
 
         this.portlet.on('portlet:resized', function() {
             $(this).find('.textfield').css('height', $(this).height());
@@ -327,19 +286,19 @@ function Flyer(options) {
             console.log(idx,idx.old,idx.new);
         });
         this.widgetDidAdd=function(isNew){
-            var id='#'+this.layout2.find('.text-widget').attr('id');
+            var id='#'+this.layout.find('.text-widget').attr('id');
             this.toolbar
                 .attr('data-role','editor-toolbar')
                 .attr('data-target',id);
-            this.toolbar.append($('.toolbars>.toolbar-text').clone());
+
+            this.setToolbar('.toolbar-text');
+
             $(id).wysiwyg(
                 {
                     activeToolbarClass:'btn-info',
                     toolbarSelector: '[data-target='+id+']'
                 }
             );
-
-
         }
         this.contentSize = function(){}
         this.restated=function(){

@@ -370,6 +370,9 @@ Portlet Creator
 
 }
 .toolbars{display: none;}
+.toolbar-text{
+    padding: 2px;
+}
 .toolbar-button{
     background: #ffff00;
     border: 1px solid red;
