@@ -63,7 +63,6 @@ function Flyer(options) {
 
         this.toolbar=$('<div>').addClass('toolbar').hide();
 
-
         this.settingPanel = ''; // Shortcut to setting panel element
         this.dialog_confirm=  $('<div id="dialog-confirm"  title="Remove widget?">');
 
@@ -251,6 +250,16 @@ function Flyer(options) {
             this.toolbar.append($('.toolbars>'+toolbar).clone());
 
         }
+        this.addToolbarCommand=function(command,callback){
+            var widget=this;
+            this.toolbar
+                .find('[command='+command+']')
+                .click(function(){
+                    callback(widget);
+                }
+            );
+
+        }
         this.restated=function(){
             console.log('restated');
         }
@@ -292,6 +301,17 @@ function Flyer(options) {
                 .attr('data-target',id);
 
             this.setToolbar('.toolbar-text');
+            this.addToolbarCommand('leftAlign',
+                function(widget)
+                {widget.portlet.css('text-align','left');});
+
+            this.addToolbarCommand('centerAlign',
+                function(widget)
+                {widget.portlet.css('text-align','center');});
+
+            this.addToolbarCommand('rightAlign',
+                function(widget)
+                {widget.portlet.css('text-align','right');});
 
             $(id).wysiwyg(
                 {
