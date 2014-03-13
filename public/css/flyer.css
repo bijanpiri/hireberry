@@ -57,7 +57,7 @@ Action Buttons
 .portlet-container:hover .action-btn-frame { display: block; }
 .portlet-container .action-btn-frame:hover { background-color: #bfbfbf; }
 
-.portlet-container .move-btn-frame { left: 0;top: 0; border-radius: 6px 0 0 0px;}
+.portlet-container .move-btn-frame { left: 0;top: 0; border-radius: 6px 0 0 6px;}
 .portlet-container .setting-btn-frame { left: 0;top: 28px; border-radius: 0px 0 0 6px;}
 .portlet-container .delete-btn-frame { right: 0;top: 0; border-radius: 0 6px 6px 0;}
 

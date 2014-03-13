@@ -1155,18 +1155,10 @@ function Flyer(options) {
                 connectWith: ".portletStack",
                 cursor: "move",
                 axis: "y",
-                handle: ".move-btn",
-                stop:
-                    function(event,ui){
-                        var container=ui.item;
-                        container.find('.wysihtml5-sandbox').remove();
-                        container.find('textarea').css('display','block');
 
-                        var widget=container.find('.portlet').data('widget');
-                        widget.restated();
-//                        });
-                    }
-            });//.disableSelection();
+                handle: ".move-btn-frame"
+            })//.disableSelection();
+
         }
 
         initDimension();
