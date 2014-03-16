@@ -449,21 +449,19 @@ function Flyer(options) {
 
             var file = layout.find('input[type=file]');
             layout.find('button').click(function(){file.click();});
-            var widget=this;
-            file.change(widget.handleFileSelect);
 
-            var dropZone = document.getElementsByClassName('imageWidgetOuterContainer')[0];
-            dropZone.addEventListener('dragover', function(x){ widget.drag(x);}, false);
-            dropZone.addEventListener('drop', function(x){widget.drop(x);}, false);
+            var widget=this;
 
             if(editMode){
-//                file.fileupload({
-//                    url:'/flyer/upload',
-//                    dataType: 'json',
-//                    done: function (e, data) {
-//                        img.attr('src', '/uploads/' + data.result.files[0].name);
-//                    }
-//                });
+                file.fileupload({
+                    url:'/flyer/upload',
+                    dataType: 'json',
+                    done: function (e, data) {
+                        var img=$('<img>');
+                        layout.html(img);
+                        img.attr('src', '/uploads/' + data.result.files[0].name);
+                    }
+                });
 
 
             } else {
@@ -474,8 +472,6 @@ function Flyer(options) {
         initLayout1.call(this);
 
         this.setLayout(layout);
-
-        
 
         // Setup the dnd listeners.
         this.handleFileSelect=function(evt) {

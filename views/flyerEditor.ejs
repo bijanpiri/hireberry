@@ -112,7 +112,7 @@
         $('#backgroundImage').fileupload({
             url:'/flyer/upload',
             dataType: 'json',
-
+//            dropZone:undefined,
             done: function (e, data) {
                 flyer.setBackground( '/uploads/' + data.result.files[0].name , true );
             }
