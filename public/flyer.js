@@ -23,10 +23,16 @@ function Flyer(options) {
              $('.toolbar').hide();
            $(this).parent().find('.toolbar').show();
         });
+    $(document).delegate('.portlet-container *','mousedown',
+        function(){
+            $('.toolbar').hide();
+            $(this).closest('.portlet-container').find('.toolbar').show();
+        });
     $(document).delegate('.portlet-container>*','mousedown',
         function(event){
             event.stopPropagation();
         });
+
     $(document).delegate('.portlet-container','mousedown',
         function(){
 
@@ -294,6 +300,7 @@ function Flyer(options) {
         this.portlet.on('portlet:layoutChanged', function(e,idx) {
             console.log(idx,idx.old,idx.new);
         });
+
         this.widgetDidAdd=function(isNew){
             var id='#'+this.layout.find('.text-widget').attr('id');
             this.toolbar
@@ -320,7 +327,9 @@ function Flyer(options) {
                 }
             );
         }
+
         this.contentSize = function(){}
+
         this.restated=function(){
 
         };
@@ -436,30 +445,26 @@ function Flyer(options) {
         var layout = "";
 
         function initLayout1() {
-            var emptyStateHtml = '<div class="imageWidgetOuterContainer"><div class="imageWidgetInnerContainer">'+
-                '<input type="file" name="picture" multiple hidden>'+
-                '<i class="imageWidgetCamera"></i>'+
-                '<div>Drop your pictures here</div>'+
-                '<div>or <button class="wbtn wbtn-2 wbtn-2a browseImgBtn">Browse</button> your computer</div>'+
-                '</div></div>';
-
-            layout = $(emptyStateHtml);
+            layout = this.clone('.imageWidget');
 
             var file = layout.find('input[type=file]');
-            var browseButton = layout.find('button');
+            layout.find('button').click(function(){file.click();});
+            var widget=this;
+            file.change(widget.handleFileSelect);
+
+            var dropZone = document.getElementsByClassName('imageWidgetOuterContainer')[0];
+            dropZone.addEventListener('dragover', function(x){ widget.drag(x);}, false);
+            dropZone.addEventListener('drop', function(x){widget.drop(x);}, false);
 
             if(editMode){
-                file.fileupload({
-                    url:'/flyer/upload',
-                    dataType: 'json',
-                    done: function (e, data) {
-                        img.attr('src', '/uploads/' + data.result.files[0].name);
-                    }
-                });
+//                file.fileupload({
+//                    url:'/flyer/upload',
+//                    dataType: 'json',
+//                    done: function (e, data) {
+//                        img.attr('src', '/uploads/' + data.result.files[0].name);
+//                    }
+//                });
 
-                browseButton.click(function(){
-                    file.click()
-                });
 
             } else {
                 this.portlet.find('input[type=file]').remove();
@@ -469,6 +474,24 @@ function Flyer(options) {
         initLayout1.call(this);
 
         this.setLayout(layout);
+
+        
+
+        // Setup the dnd listeners.
+        this.handleFileSelect=function(evt) {
+            var files = evt.target.files; // FileList object
+
+            // files is a FileList of File objects. List some properties.
+            var output = [];
+            for (var i = 0, f; f = files[i]; i++) {
+                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                    '</li>');
+            }
+            document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+
 
         this.portletContainer.on('portlet:resizing', function(e,newHeight) {
             this.height = newHeight;//$(this).height();
@@ -1146,7 +1169,6 @@ function Flyer(options) {
     var setBackground = function (url, wrapper) {
         pStack
             .css('background-image', ( wrapper ? 'url("' + url + '")' : url ) )
-            //.css('background-size', pStack.width() + 'px ' + pStack.height() + 'px' )
             .css('background-size', 'auto 100%' )
             .css('background-repeat', 'no-repeat');
     }

@@ -112,12 +112,14 @@
         $('#backgroundImage').fileupload({
             url:'/flyer/upload',
             dataType: 'json',
+
             done: function (e, data) {
                 flyer.setBackground( '/uploads/' + data.result.files[0].name , true );
             }
         });
+        $('#backgroundImage').fileupload('option',{dropZone:undefined});
 
-        $('#plusButton').click(function(){
+            $('#plusButton').click(function(){
             $('#plusButton').hide();
             $('#addButtons').show();
         });
@@ -219,7 +221,20 @@
         <!--</div>-->
         <div id="editor" class="text-widget"></div>
     </div>
+    <div class="imageWidget">
+        <div class="imageWidgetOuterContainer">
+            <div class="imageWidgetInnerContainer">
+                <input type="file" name="picture" hidden>
+                <i class="imageWidgetCamera"></i>
+                <div>Drop your pictures here</div>
+                <div>or
+                    <button class="wbtn wbtn-2 wbtn-2a browseImgBtn">Browse</button>
+                    your computer
+                </div>
+            </div>
+        </div>
 
+    </div>
     <div class="mapWidget">
         <div id="panel" class="panel">
             <textarea id="address" placeholder="Sydney, NSW" class="address-left"></textarea>
