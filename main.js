@@ -445,15 +445,7 @@ app.get('/dashboard', routerDashboard.showDashboard );
 app.get('/api/forms', routerDashboard.forms );
 //endregion
 
-
 //region Application Routers
-/* Router Guide:
- /auth/twitter
- /auth/google
- /logout
- /register
- /login
- */
 
 app.get('/', function(req,res) {
     if( req.user )
