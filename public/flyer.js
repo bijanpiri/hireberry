@@ -252,6 +252,7 @@ function Flyer(options) {
                 });
             return x;
         }
+
         this.setToolbar=function(toolbar){
             this.toolbar.append($('.toolbars>'+toolbar).clone());
 
@@ -1162,6 +1163,10 @@ function Flyer(options) {
             });
     }
 
+    var setLogo = function (url, wrapper) {
+        $('.portletHeader .logo').attr('src',url);
+    }
+
     var setBackground = function (url, wrapper) {
         pStack
             .css('background-image', ( wrapper ? 'url("' + url + '")' : url ) )
@@ -1263,7 +1268,7 @@ function Flyer(options) {
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
     this.getShot = getShot;
-
+    this.setLogo = setLogo;
     return this;
 }
 

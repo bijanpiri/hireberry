@@ -49,14 +49,11 @@
     }
 
     $(function() {
-//        $('.jcarousel').jcarousel();
         flyerid = $('input[name=flyerid]').val();
         flyer = $('.portletStack').Flyer({
             editMode:true,
             flyerid:flyerid
         });
-
-//        $('#portletCreatorAlarm').hallo();
 
         $('#buttonPreview').click( function() {
 
@@ -108,16 +105,18 @@
              });
              */
         });
+/*
 
-        $('#backgroundImage').fileupload({
+        $('#backgroundImage').fileupload('option',{dropZone:undefined});
+
+*/
+        $('.portletHeader .logo').fileupload({
             url:'/flyer/upload',
             dataType: 'json',
-//            dropZone:undefined,
             done: function (e, data) {
-                flyer.setBackground( '/uploads/' + data.result.files[0].name , true );
+                flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
             }
         });
-        $('#backgroundImage').fileupload('option',{dropZone:undefined});
 
             $('#plusButton').click(function(){
             $('#plusButton').hide();
@@ -166,8 +165,13 @@
     </div>
     <div class="row-fluid">
         <div class="span6 offset2" id="portletsBox">
-            <div class="portletStack">
+            <div class="portletHeader">
+                <img class="logo">
+                <div class="title">
+                    Title
+                </div>
             </div>
+            <div class="portletStack"></div>
             <div class="portletCreator container-fluid">
                 <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
                     Error: There is no space for adding new portlet!
