@@ -126,7 +126,7 @@ function Flyer(options) {
                 })(this));
 
             var setttingPanelInside = this.getSettingPanel();
-            this.settingPanelHieght = setttingPanelInside.height();
+//            this.settingPanelHieght = setttingPanelInside.height();
 
             var settingPanel = $('<div>').height(this.settingPanelHieght).addClass('portlet-settingPanel')
                 .append(setttingPanelInside);
@@ -260,9 +260,10 @@ function Flyer(options) {
         this.addToolbarCommand=function(command,callback){
             var widget=this;
             this.toolbar
-                .find('[command='+command+']')
+                .find('[command^='+command+']')
                 .click(function(){
-                    callback(widget);
+                    args=$(this).attr('command').split(' ');
+                    callback(widget,args);
                 }
             );
 
@@ -309,17 +310,24 @@ function Flyer(options) {
                 .attr('data-target',id);
 
             this.setToolbar('.toolbar-text');
-            this.addToolbarCommand('leftAlign',
-                function(widget)
-                {widget.portlet.css('text-align','left');});
+            this.addToolbarCommand('align',
+                function(widget,args)
+                {
+                    widget.toolbar.find('[command^=align]').removeClass('btn-info');
+                    widget.toolbar.find('[command="align '+args[1]+'"]').addClass('btn-info');
+                    widget.portlet.find('.text-widget').css('text-align',args[1]);});
 
-            this.addToolbarCommand('centerAlign',
-                function(widget)
-                {widget.portlet.css('text-align','center');});
 
-            this.addToolbarCommand('rightAlign',
-                function(widget)
-                {widget.portlet.css('text-align','right');});
+            this.addToolbarCommand('color',
+                function(widget,args)
+                {widget.portlet.find('.text-widget').css('color',args[1]);});
+
+             this.addToolbarCommand('size',
+                 function(widget,args)
+                 {
+                     widget.portlet.find('.text-widget').css('font-size',args[1]).css('line-height',args[1]);
+                 });
+
 
             $(id).wysiwyg(
                 {
@@ -335,103 +343,36 @@ function Flyer(options) {
 
         };
 
-        this.getSettingPanel = function () {
-            idCounter++;
-            var x = $('.widgets>.textWidget').clone();
-
-            x.height(240);
-
-            x.find('*').each(
-                function(i,elem){
-                    if(elem.id)
-                        elem.id=elem.id+'_'+idCounter;
-                    if(elem.htmlFor)
-                        elem.htmlFor=elem.htmlFor+'_'+idCounter;
-                    if(elem.name)
-                        elem.name=elem.name+'_'+idCounter;
-
-                });
-            x.find('#leftAlign_'+idCounter).click((function(widget){
-                return function(){
-                    widget.portlet.find('.textfield').css('text-align','left');
-                }
-            })(this));
-            x.find('#centerAlign_'+idCounter).click((function(widget){
-                return function(){
-                    widget.portlet.find('.textfield').css('text-align','center');
-                }
-            })(this));
-            x.find('#rightAlign_'+idCounter).click((function(widget){
-                return function(){
-                    widget.portlet.find('.textfield').css('text-align','right');
-                }
-            })(this));
-
-            x.find('#rightAlign_'+idCounter).click((function(widget){
-                return function(){
-                    widget.portlet.find('.textfield').css('text-align','right');
-                }
-            })(this));
-            x.find('#headline_'+idCounter).click((function(widget){
-                return function(){
-                    var textField=widget.portlet.find('.textfield').addClass('header');
-//                    var textField=widget.portlet.find('.textfield');
-//                    textField.children('div').each(
-//                        function(id,line){
-//                            line.innerHTML=('<h2>'+line.innerHTML+'</h2>');
-//                        });
-//
-//                    var html=textField.html();
-//                    var offset=html.indexOf('<div>');
-//                    if(offset<=0)
-//                        offset=html.length;
-//                    var firstline=html.substr(0,offset);
-//                    var rest=html.substr(offset);
-//                    if(firstline.length>0)
-//                        firstline='<h2>'+firstline+'</h2>';
-//                    textField.html(firstline+rest);
-                }
-            })(this));
-
-            x.find('#text_'+idCounter).click((function(widget){
-                return function(){
-                    var text=widget.portlet.find('.textfield').removeClass('header');
-//                    text.html(text.html().replace(/<h2>/g,''));
-//                    text.html(text.html().replace(/<\/h2>/g,''));
-                }
-            })(this));
-            return x;
-        }
-
         this.serialize = function(){
 
-            var port=this.portlet.find('.text-widget');
-            var text=port.html();
-            var align=port.css('text-align');
-            var headline=port.hasClass('header');
-            var data=new TextData(text,align,headline);
-
+            var text=this.portlet.find('.text-widget');
+            var data=new Object();
+            data.text=text.html();
+            data.align=text.css('text-align');
+            data.headline=text.hasClass('header');
+            data.foreColor=text.css('color');
+            data.fontSize=text.css('font-size');
 
             return data;
         }
 
         this.deserialize = function(data){
 
-            this.portlet.parent().find('.'+data.align+'Align').attr('checked','checked');
+            this.toolbar.find('[command="align '+data.align+'"]').addClass('btn-info');
+
             if(data.headline){
                 this.portlet.parent().find('.headline').attr('checked','checked');
                 this.portlet.find('.textfield').addClass('header');
             }
             return this.portlet
                 .find('.text-widget')
-                .html(data.text)
-                .css('text-align',data.align);
+                    .html(data.text)
+                    .css('text-align',data.align)
+                    .css('color',data.foreColor)
+                    .css('font-size',data.fontSize)
+                    .css('line-height',data.fontSize);
         }
-        function TextData(text,align,headline){
-            this.text=text;
-            this.align=align;
-            this.headline=headline;
-        }
+
     }
     TextWidget.prototype = new Widget();
     TextWidget.prototype.constructor = TextWidget;
@@ -463,6 +404,7 @@ function Flyer(options) {
                         img.attr('src', '/uploads/' + data.result.files[0].name);
                     }
                 });
+                file.fileupload('option',{dropZone:layout});
 
 
             } else {
