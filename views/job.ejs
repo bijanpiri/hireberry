@@ -1,0 +1,965 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="description" content="">
+<meta name="author" content="booltin">
+<link rel="shortcut icon" href="/images/favicon-16x16.png">
+<link href='http://fonts.googleapis.com/css?family=Gloria+Hallelujah' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+
+<title>Booltin - Job</title>
+
+<!-- Bootstrap core CSS -->
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/job.css" rel="stylesheet">
+<script src="/script/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.css">
+
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.js"></script>
+<script src="/script/color-thief.js"></script>
+
+
+<!-- Just for debugging purposes. Don't actually copy this line! -->
+<!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script src="/script/jribbble.js"></script>
+
+
+<script language="javascript">
+// Github Resource: http://developer.github.com/v3/search/#search-users
+// Github Sample: https://api.github.com/search/users?q=coybit
+
+// LinkedIn: http://developer.linkedin.com/documents/people-search-api
+// Authentication Is Needed
+
+// Stackoverflow: http://api.stackoverflow.com/1.1/usage/methods/users
+// Sample: http://api.stackoverflow.com/1.1/users?filter=coybit
+
+// Twitter: https://dev.twitter.com/docs/api/1.1/get/users/search
+// Authentication Is Needed  (Limit: 180/User)
+
+// About.me: http://about.me/developer/api/docs/#searchapi
+// Authentication Is Needed
+
+
+// Dribble: http://dribbble.com/api
+// http://api.dribbble.com/players/coybit
+
+// Behance: https://www.behance.net/dev/api/endpoints/2
+// Authentication Is Needed
+
+function validateForm() {
+    return false;
+}
+
+$(function(){
+
+    $('#dropzone').click(function(){
+        $('#resumefile').click();
+    })
+
+    document.getElementById('resumefile').onchange = function () {
+        $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
+    };
+
+    function getDoc(frame) {
+        var doc = null;
+
+        // IE8 cascading access check
+        try {
+            if (frame.contentWindow) {
+                doc = frame.contentWindow.document;
+            }
+        } catch(err) {
+        }
+
+        if (doc) { // successful getting content
+            return doc;
+        }
+
+        try { // simply checking may throw in ie8 under ssl or mismatched protocol
+            doc = frame.contentDocument ? frame.contentDocument : frame.document;
+        } catch(err) {
+            // last attempt
+            doc = frame.document;
+        }
+        return doc;
+    }
+
+    $("#applyForm").submit(function(e) {
+
+        // Name
+        if( $('#name').val().length == 0 ){
+            $('.error').show().html('Please enter your name');
+            e.preventDefault();
+            return false;
+        }
+
+        // Email
+        if(validateEmail( $('#email').val() )==false){
+            $('.error').show().html('Please enter a valid email address');
+            e.preventDefault();
+            return false;
+        }
+
+        /*
+         // File Size
+         $('input[type=file][max-size]').each(function(){
+         if(typeof this.files[0] !== 'undefined'){
+         var maxSize = parseInt($(this).attr('max-size'),10)
+         var size = this.files[0].fileSize;
+         if( maxSize < size) {
+         $('.error').show().html('Résumé file max size if 5 MB');
+         e.preventDefault();
+         return false;
+         }
+         }
+         });
+         */
+
+        $('.error').hide();
+
+        var formObj = $(this);
+        var formURL = formObj.attr("action");
+
+        if(window.FormData !== undefined)  // for HTML5 browsers
+        {
+            var formData = new FormData(this);
+            $.ajax({
+                url: formURL,
+                type: 'POST',
+                data:  formData,
+                mimeType:"multipart/form-data",
+                contentType: false,
+                cache: false,
+                processData:false,
+                success: function(data, textStatus, jqXHR)
+                {
+                    $('.temp').remove();
+                    $('.thanks').show();
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+
+                }
+            });
+            e.preventDefault();
+            $('.applyNowButton').val('Sending...').attr('disabled','disabled');
+            //e.unbind();
+        }
+        else  //for olden browsers
+        {
+            //generate a random id
+            var  iframeId = 'unique' + (new Date().getTime());
+
+            //create an empty iframe
+            var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
+
+            //hide it
+            iframe.hide();
+
+            //set form target to iframe
+            formObj.attr('target',iframeId);
+
+            //Add iframe to body
+            iframe.appendTo('body');
+            iframe.load(function(e)
+            {
+                var doc = getDoc(iframe[0]);
+                var docRoot = doc.body ? doc.body : doc.documentElement;
+                var data = docRoot.innerHTML;
+                //data is returned from server.
+
+            });
+
+        }
+    });
+
+
+    $('.badgeOuterFrame').click(function(){
+
+        var isInExpandedMode = ( parseInt( $(this).attr('expanded') ) == 1 );
+        var icon = $(this).find('.badgeIcon');
+        var text = $(this).find('.badgeDescription');
+        var box = $(this).find('.badgeFrame');
+        var scaleMargin = -10;
+
+        var scaleIcon = function( start, end ) {
+
+            // A trick to start scaling
+            icon.animate( {scale:start},0);
+
+            icon.animate( {scale:end}, {
+                step: function(now,fx) {
+                    var scaleFunction = "scale(" + now + "," + now + ")";
+                    $(this).css('-webkit-transform', scaleFunction);
+                    $(this).css('-moz-transform', scaleFunction);
+                    $(this).css('-o-transform', scaleFunction);
+                    $(this).css('-ms-transform', scaleFunction);
+                    $(this).css('transform', scaleFunction);
+                },
+                duration:100
+            },'linear');
+        }
+
+        if( isInExpandedMode ){
+
+            box.animate( { top:0, bottom:0, left:0, right:0 }, 100 );
+            icon.animate( {top:0, opacity:1}, 300 , function() { scaleIcon(0.5,1); });
+            text.animate( {bottom: -2 * $(this).height() ,opacity:0}, 300 );
+            $(this).attr('expanded','0');
+
+        } else {
+
+            $('.badgeOuterFrame[expanded=1]').click();
+
+            scaleIcon(1,0.5);
+
+            box.animate( { top:scaleMargin, bottom:scaleMargin, left:scaleMargin, right:scaleMargin }, 100 );
+            icon.animate( {top: 0, opacity:0.1}, 300 )
+            text.animate( {bottom:0 ,top: 0, opacity:1}, 300 );
+            $(this).attr('expanded','1');
+        }
+    });
+
+    $('#email')
+            .blur(function(){
+                var name = $('#name').val();
+                var email = $('#email').val();
+
+                fillProfiles();
+            })
+            .autocomplete({
+                minLength: 3,
+                source: function( request, response ) {
+                    // delegate back to autocomplete, but extract the last term
+                    var term = request.term;
+
+                    var emailProviders = [
+                        'gmail.com',
+                        'yahoo.com',
+                        'ymail.com',
+                        'aol.com'
+                    ];
+
+                    var parts = term.split('@');
+                    var provider = parts.length==2 ? parts[1] : '';
+                    var username = parts[0];
+                    var matchedProvider = [];
+
+                    for( var i=0; i<emailProviders.length; i++) {
+                        if( provider=='' ||
+                                (emailProviders[i].indexOf(provider) == 0  &&  emailProviders[i].length != provider.length ) ) {
+                            matchedProvider.push( username + '@' + emailProviders[i] );
+                        }
+                    }
+
+                    response( matchedProvider );
+                    return false;
+                },
+                focus: function() {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function( event, ui ) {
+                    $(this).val( ui.item.value );
+
+                    //fillProfiles();
+
+                    return false;
+                }
+            });
+
+
+
+    initCircleBox( $('#employmentType1') );
+    initCircleBox( $('#employmentType2') );
+    initCircleBox( $('#employmentType3') );
+
+
+    function initSlider(){
+        var slider = $('#expectedSalarySlider');
+        var handle = slider.find('.handle');
+        var barStart = slider.find('.start').offset().left + slider.find('.start').width();
+        var barEnd = slider.find('.end').offset().left;
+
+        var last = 3;
+        var step = 1.4;
+        salaryStopPoint = [];
+
+        for( var i=1; i<11; i++) {
+
+            var newValue = last * step;
+            last = newValue;
+
+            salaryStopPoint.push( newValue );
+
+            var tick = $('<div>').addClass('tick').css('left', newValue +'%' );
+            slider.prepend( tick );
+        }
+
+        handle.qtip({
+            prerender: true,
+            position: {
+                my: "bottom center",
+                at: "top-30 center",
+                collision: 'none'
+            },
+            hide: {
+                fixed: true
+            }
+        });
+    }
+
+    initSlider();
+
+    $('#expectedSalarySlider .handle').mousedown( function(e){
+        $(this).attr('pressed',1);
+        $(this).attr('orgX', e.pageX);
+    })
+
+    $(document).mousemove( function(e) {
+
+        var slider = $('#expectedSalarySlider');
+        var handle = slider.find('.handle');
+        var min = slider.find('.start').offset().left;
+        var max = slider.find('.end').offset().left + slider.find('.end').width();
+        var length = max - min; // = slider.width()
+
+        if( handle.attr('pressed') === '1' ){
+            var curX = e.pageX;
+            var newX = 0;
+            var handleCenterX = curX - min - handle.width()/2;
+
+            // Stop on each multiply of 10%
+            //delta = Math.round( (delta/length) * 10 ) * 10;
+            handleCenterX = 100 * handleCenterX / length;
+
+
+            if( handleCenterX < 0 )
+                newX = 0;
+            else if( handleCenterX > 95 )
+                newX = 95;
+            else
+                newX = handleCenterX;
+
+            handle.attr('title',newX)
+            handle.css('left', newX + '%');
+        }
+
+    })
+
+    $(document).mouseup( function() {
+        if( $('#expectedSalarySlider .handle').attr('pressed') === '1' ){
+            $('#expectedSalarySlider .handle').attr('pressed',0);
+        }
+    })
+});
+
+function initCircleBox(el) {
+
+    var slide = function(el,newIndex) {
+        el.attr('index', newIndex);
+        el.find('ul').animate({left:-1 * newIndex * 100},500);
+    }
+
+    function nextButtonHandle(el) {
+        return function(){
+            var index = parseInt( el.attr('index') );
+            index = (index+1) % el.find('li').length;
+            slide( el, index );
+        };
+    };
+
+    function previousButtonHandle(el) {
+        return function(){
+            var index = parseInt( el.attr('index') );
+            index = ( index>0 ? (index-1) : el.find('li').length-1 );
+            slide( el, index );
+        };
+    };
+
+    el.attr('index','0');
+    el.find('.employmentType-outerCircle ul').width(  100*el.find('li').length );
+    el.find('.employmentType-next').click( nextButtonHandle(el) );
+    el.find('.employmentType-previous').click( previousButtonHandle(el));
+}
+
+var map;
+var officeMarker;
+var visitorMarker;
+loadMap();
+findCity();
+
+function loadMap() {
+
+    function initialize() {
+        var mapOptions = {
+            zoom: 15,
+            center: new google.maps.LatLng(35.7073625,51.391225),
+            disableDefaultUI: true
+        };
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+
+        officeMarker = new google.maps.Marker({
+            position: new google.maps.LatLng(35.7073625,51.391225),
+            map: map,
+            title: 'Marblzz'
+        });
+
+        findPath();
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+}
+
+function findPath() {
+    if(navigator.geolocation) {
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var visitorLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+
+            visitorMarker = new google.maps.Marker({
+                position: /*new google.maps.LatLng(36.7073625,51.401225),//*/visitorLocation,
+                //map: map,
+                title: 'You\'re Here!'
+            });
+
+            var request = {
+                origin: visitorMarker.position,
+                destination: officeMarker.position,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            };
+
+            var directionsService = new google.maps.DirectionsService();
+            directionsDisplay = new google.maps.DirectionsRenderer()
+            directionsDisplay.setMap(map);
+            directionsService.route(request, function(response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                    var route = response.routes[0];
+
+                    // For routes that contain no waypoints, the route will consist of a single "leg".
+                    var distance = route.legs[0].distance.text;
+                    var duration = route.legs[0].duration.text;
+
+                    var moreInfo =
+                            'Now you are ' + distance + ' far away.<br/>' +
+                            'It takes about ' + duration + ' to get here.';
+
+                    $('.moreInfoAboutAddress').html( moreInfo );
+
+                    officeMarker.setMap(null)
+                }
+            });
+
+        }, function() {
+            // Geolocation service failed.
+        });
+    }
+    else {
+        // Your browser doesn't support geolocation.
+    }
+}
+
+function findCity() {
+    $.get('http://ipinfo.io/',function(res){
+        console.log( res.city + ', ' +  res.country )
+    },'jsonp')
+}
+
+</script>
+<script src="/script/profileFinder.js"></script>
+</head>
+
+<body>
+
+<!-- Wrap all page content here -->
+<div id="wrap">
+
+<form action="/job/upload" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
+
+<div class="container" style="padding-bottom: 0;">
+
+<div class="row"  id="text">
+    <div class="col-sm-10" >
+        <i class="logo"></i>
+    </div>
+    <div class="col-sm-2" style="text-align: right">
+        <h3 class="pageTitle pull-right">JOBS</h3>
+    </div>
+</div>
+
+<div class="row temp" id="text">
+    <div class="col-sm-12">
+        <div class="jobDescription">
+            <h3>We need a creative</h3>
+            <h1><strong>Front-End Web Developer</strong></h1>
+            <h3>Here at Marblzz</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row temp"  id="text"  style="font-size: 2em;margin-bottom: 2.5em">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div>
+            <p>
+                <strong>Marblzz</strong> is an early-stage start up. We work on <a href="http://boolt.in">Booltin</a>, our new product.
+                Booltin is growing fast and we are looking for people who accompany us on this journey.
+            </p>
+            <p>
+                Working at Marblzz has a lot advantages, such as:
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row temp"  id="badge"  style="font-size: 2em;">
+    <div class="col-sm-12">
+        <div class="row temp" id="badges">
+            <div class="col-sm-12">
+                <div style="display: table;margin: 0 auto;margin-bottom: 50px;">
+
+                    <div class="badgeOuterFrame">
+                        <div class="badgeFrame">
+                            <i class="badgeIcon badgeIconVacation"></i>
+                            <div class="badgeDescription">You can take a vacation anywhere, anytime.</div>
+                        </div>
+                    </div>
+
+                    <div class="badgeOuterFrame">
+                        <div class="badgeFrame">
+                            <i class="badgeIcon badgeIconFreeFood"></i>
+                            <div class="badgeDescription">You will never get hungry, with a fully stocked snack bar.</div>
+                        </div>
+                    </div>
+
+                    <div class="badgeOuterFrame">
+                        <div class="badgeFrame">
+                            <i class="badgeIcon badgeIconHealthCaring"></i>
+                            <div class="badgeDescription">Comprehensive health insurance including dental & vision options</div>
+                        </div>
+                    </div>
+
+                    <div class="badgeOuterFrame">
+                        <div class="badgeFrame">
+                            <i class="badgeIcon badgeIconShare"></i>
+                            <div class="badgeDescription">You can have a share.<br/>0.5-1%</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row temp" id="map">
+    <div class="col-sm-4 col-sm-offset-1 addressBoxCol">
+        <div class="addressBox">
+            <strong>Marblzz Office Address:</strong><br/>
+            16 Azar, Keshavarz Blvd, Tehran, Tehran, Iran
+            <div class="moreInfoAboutAddress">
+                Allow us to find your computer't locations to tell you some more information.
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 mapBoxCol">
+        <div id="map-canvas" style="height: 200px;border:1px solid rgb(189, 189, 189)"></div>
+        <div id="path" style="font-size: 16px;text-align: center;"></div>
+    </div>
+
+</div>
+
+<div class="row temp"  id="text">
+    <div class="col-sm-12" >
+        <h3 style="font-size: 3em;text-align: center;margin-bottom: 2em">
+            Fill this form if you love adventures!
+        </h3>
+    </div>
+</div>
+
+
+<div class="row"  id="employmentType" hidden>
+    <div class="col-sm-4" >
+
+        <div id="employmentType1" class="employmentType-frame" group="employmentType">
+            <div class="employmentType-button employmentType-next">&gt</div>
+            <div class="employmentType-button employmentType-previous">&lt</div>
+            <div class="employmentType-outerCircle">
+                <ul>
+                    <li class="choose">First</li><li class="choose">Second</li><li class="choose">Third</li>
+                </ul>
+            </div>
+            <div class="employmentType-label">First</div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-4" >
+
+        <div id="employmentType2" class="employmentType-frame" group="employmentType">
+            <div class="employmentType-button employmentType-next">&gt</div>
+            <div class="employmentType-button employmentType-previous">&lt</div>
+            <div class="employmentType-outerCircle">
+                <ul>
+                    <li class="choose">First</li><li class="choose">Second</li><li class="choose">Third</li>
+                </ul>
+            </div>
+            <div class="employmentType-label">Second</div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-4" >
+
+        <div id="employmentType3" class="employmentType-frame" group="employmentType">
+            <div class="employmentType-button employmentType-next">&gt</div>
+            <div class="employmentType-button employmentType-previous">&lt</div>
+            <div class="employmentType-outerCircle">
+                <ul>
+                    <li class="choose">First</li><li class="choose">Second</li><li class="choose">Third</li>
+                </ul>
+            </div>
+            <div class="employmentType-label">Third</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row temp"  id="text">
+    <h2 class="sectionTitle sectionTitle-blue">
+                    <span>
+                        { Required Skills }
+                        <div style="height: 15px;background-color: #f1f1f1;position: absolute;display: block; bottom: -15px;left: 15px;right: 15px;"></div>
+                    </span>
+    </h2>
+    <p class="sectionDescription">1. Select which ones you know, by clicking on them</p>
+
+    <div class="col-sm-12" >
+        <div>
+            <div style="display: table;margin: 0 auto;margin-bottom: 50px;">
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='html5' type="checkbox" name="html5">
+                    <label for="html5" class="bbtn-label b-icon-container b-label-html5">
+                        <i class="b-icon b-icon-html5" ></i>
+                    </label>
+                    <p>HTML5</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='css3' type="checkbox" name="css3">
+                    <label for="css3" class="bbtn-label b-icon-container b-label-css">
+                        <i class="b-icon b-icon-css" ></i>
+                    </label>
+                    <p>CSS3</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='js' type="checkbox" name="js">
+                    <label for="js" class="bbtn-label b-icon-container b-label-js">
+                        <i class="b-icon b-icon-js" ></i>
+                    </label>
+                    <p>Javascript</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='jquery' type="checkbox" name="jquery">
+                    <label for="jquery" class="bbtn-label b-icon-container b-label-jquery">
+                        <i class="b-icon b-icon-jquery" ></i>
+                    </label>
+                    <p>jQuery</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='less' type="checkbox" name="less">
+                    <label for="less" class="bbtn-label b-icon-container b-label-less">
+                        <i class="b-icon b-icon-less" ></i>
+                    </label>
+                    <p>Less</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='bootstrap' type="checkbox" name="bootstrap">
+                    <label for="bootstrap" class="bbtn-label b-icon-container b-label-bootstrap">
+                        <i class="b-icon b-icon-bootstrap" ></i>
+                    </label>
+                    <p>Bootstrap</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='git' type="checkbox" name="git">
+                    <label for="git" class="bbtn-label b-icon-container b-label-git">
+                        <i class="b-icon b-icon-git" ></i>
+                    </label>
+                    <p>Git</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row temp"  id="text">
+    <h2 class="sectionTitle sectionTitle-green">
+                    <span>
+                        { Desired Skills }
+                        <div style="height: 15px;background-color: #f1f1f1;position: absolute;display: block; bottom: -15px;left: 15px;right: 15px;"></div>
+                    </span>
+    </h2>
+    <p class="sectionDescription">2. Select which ones you know, by clicking on them</p>
+
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div>
+
+            <div style="display: table;margin: 0 auto;">
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='nodejs' type="checkbox" name="nodejs">
+                    <label for="nodejs" class="bbtn-label b-icon-container b-label-nodejs">
+                        <i class="b-icon b-icon-nodejs" ></i>
+                    </label>
+                    <p>Nodejs</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id='mongodb' type="checkbox" name="mongodb">
+                    <label for="mongodb" class="bbtn-label b-icon-container b-label-mongodb">
+                        <i class="b-icon b-icon-mongodb" ></i>
+                    </label>
+                    <p>Mongodb</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row temp" id="flatTitle">
+    <div class="col-sm-12" >
+        <div class="flatSection">
+            <hr>
+            <span>More Info</span>
+        </div>
+    </div>
+</div>
+
+<div class="row temp" id="workPlace-workType" style="margin-top: 4em">
+
+
+
+    <div class="col-sm-5 col-sm-offset-1" >
+        <div style="margin-bottom: 5em;">
+
+            <div class="radioButtonGroup">
+
+                <p class="radioButtonGroupDescription">3. You prefer to work at ...</p>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id="atHome" type="radio" name="workPlace" value="home" checked>
+                    <label for="atHome" class="bbtn-label b-icon-container bbtn-circlular b-label-atHome">
+                        <i class="b-icon b-icon-atHome" ></i>
+                    </label>
+                    <p class="subtitle">Home</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id="atOffice" type="radio" name="workPlace" value="office">
+                    <label for="atOffice" class="bbtn-label b-icon-container bbtn-circlular b-label-atOffice">
+                        <i class="b-icon b-icon-atOffice" ></i>
+                    </label>
+                    <p class="subtitle">Office</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-sm-5" >
+        <div style="margin-bottom: 5em;">
+            <div class="radioButtonGroup">
+
+                <p class="radioButtonGroupDescription">4. You prefer to work as ...</p>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id="fullTime" type="radio" name="workTime" value="fulltime" checked>
+                    <label for="fullTime" class="bbtn-label b-icon-container bbtn-circlular b-label-fullTime">
+                        <i class="b-icon b-icon-fullTime" ></i>
+                    </label>
+                    <p class="subtitle">Full-Time</p>
+                </div>
+
+                <div class="bbtn-group">
+                    <input class="bbtn bbtn-radio" id="partTime" type="radio" name="workTime" value="parttime">
+                    <label for="partTime" class="bbtn-label b-icon-container bbtn-circlular b-label-partTime">
+                        <i class="b-icon b-icon-partTime" ></i>
+                    </label>
+                    <p class="subtitle">Part-Time</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" id="salary" style="margin-bottom: 7em" hidden>
+    <p class="sectionDescription">How much salary do you expect?</p>
+    <div class="col-sm-6 col-sm-offset-3" style="margin-bottom: 5em">
+        <div id="expectedSalarySlider">
+            <div class="bar"></div>
+            <div class="start"></div>
+            <div class="end">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="handle" title="0">
+                <div class="innerHandle"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row temp"  id="text">
+    <p class="sectionDescription">5. Enter your name and email</p>
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div class="card">
+            <div class="cardHead">
+                <img class="profilePic" id="profileImage">
+            </div>
+            <input type="text" name="name" id="name" placeholder="Enter Your Name ..." class="cardField">
+            <hr>
+            <input type="email" name="email" id="email" placeholder="Enter Your Email Address ..." class="cardField">
+            <div class="cardFoot"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row temp"  id="profiles" style="margin-top: 3em">
+
+    <p class="sectionDescription">6. Complete your profiles address (Leave empty ones you don't have)</p>
+
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div class="profileAddress">
+            <i class="icon github-icon"></i>
+            <span>http://github.com/</span>
+            <input type="text" name="ghprofile" id="ghprofile"  placeholder="You">
+        </div>
+        <iframe class="ghcard" frameborder="0" scrolling="0" width="100%" height="200" allowtransparency hidden=""></iframe>
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div class="profileAddress">
+            <i class="icon stackoverflow-icon"></i>
+            <span>http://stackoverflow.com/</span>
+            <input type="text" name="soprofile" id="soprofile"  placeholder="You">
+        </div>
+        <img class="soflair" hidden="">
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div class="profileAddress">
+            <i class="icon dribbble-icon"></i>
+            <span>http://dribbble.com/</span>
+            <input type="text" name="drprofile" id="drprofile"  placeholder="You">
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div class="profileAddress">
+            <i class="icon behance-icon"></i>
+            <span>http://behance.net/</span>
+            <input type="text" name="beprofile" id="beprofile"  placeholder="You">
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div class="profileAddress">
+            <i class="icon linkedin-icon"></i>
+            <span>http://linkedin.com/in/</span>
+            <input type="text" name="liprofile" id="liprofile"  placeholder="You">
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3" >
+        <div class="profileAddress">
+            <i class="icon twitter-icon"></i>
+            <span>http://twitter.com/</span>
+            <input type="text" name="twprofile" id="twprofile"  placeholder="You">
+        </div>
+    </div>
+
+</div>
+
+<div class="row temp"  id="text">
+
+    <p class="sectionDescription">7-Do you have anything else to attach or say?</p>
+
+    <div class="col-sm-10 col-sm-offset-1" >
+        <div class="dropZone" id="dropzone">
+            <i class="logo resumeIcon"></i>
+            <span>Click Here To Add Your Résumé (Max. 5MB)</span>
+        </div>
+        <input type="file" id="resumefile" name="resume" style="display: none" max-size="5,242,880">
+        <textarea placeholder="Anything else?" rows="5" class="textarea" name="anythingElse"></textarea>
+    </div>
+</div>
+
+<div class="row temp"  id="text">
+    <div class="col-sm-6 col-sm-offset-3">
+        <input type="submit" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
+        <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
+    </div>
+</div>
+
+<div class="row temp"  id="text">
+    <div class="col-sm-6 col-sm-offset-3">
+        <p style="text-align: center;font-size: 1.5em;margin-top: 2em">
+            Powered By <i class="booltinIcon"></i><a href="http://boolt.in">Booltin</a>
+        </p>
+    </div>
+</div>
+
+<div class="row thanks"  id="text" hidden>
+    <h2 class="sectionTitle sectionTitle-blue" style="margin-top: 3em">
+                    <span>
+                        { Thanks }
+                        <div style="height: 15px;background-color: #f1f1f1;position: absolute;display: block; bottom: -15px;left: 15px;right: 15px;"></div>
+                    </span>
+    </h2>
+    <div class="col-sm-10 col-sm-offset-1" style="font-size: 2em;margin-bottom: 3em;text-align: center">
+        We've received your application request and will notify you ASAP.<br/>
+        If you have any question don't hesitate to <a href="mailto:hello@boolt.in">ask us<br/></a>.<br/>
+        You can read more about booltin <a href="://blog.boolt.in">here<br/></a>.<br/>
+    </div>
+</div>
+</div>
+</form>
+
+
+</div>
+
+</body>
+</html>

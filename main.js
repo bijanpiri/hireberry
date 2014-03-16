@@ -1,12 +1,19 @@
-var express = require('express');
-var util = require('util');
-var everyauth = require('everyauth');
-var mongoose =  require('mongoose');
-var Promise = require('promise');
-var engine = require('ejs-locals');
-var crypto = require('crypto');
-var upload = require('jquery-file-upload-middleware'); // Don't Forget Creating /public/tmp and /public/uploads
-
+express = require('express');
+util = require('util');
+everyauth = require('everyauth');
+mongoose =  require('mongoose');
+Promise = require('promise');
+engine = require('ejs-locals');
+crypto = require('crypto');
+upload = require('jquery-file-upload-middleware'); // Don't Forget Creating /public/tmp and /public/uploads
+mandrill  = require('node-mandrill');
+fs = require('fs');
+http = require('http')
+Dropbox = require("dropbox");
+twitterAPI = require('node-twitter-api');
+linkedin_client = require('linkedin-js')('75ybminxyl9mnq', 'KsgqEUNsLSXMAKg6', 'callbackURL')
+routerForm = require('./routers/form');
+routerDashboard = require('./routers/dashboard');
 
 //region Initialization
 
@@ -17,9 +24,24 @@ var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
 var Facebook_AppID='241341676042668';
 var Facebook_AppSecret='2e748d80c87a8594e792eeb482f7c87d';
 var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
-
 var keySize=512;
 var hashIteration=1;
+
+dbclient = new Dropbox.Client({
+    key: "7bdvs2t8zrdqdw8",
+    secret: "5y37uqs64t0f3gc",
+    sandbox     : false,
+    token       : 'tf6jvJZK81wAAAAAAAAAAZiljBK7q8eeXWVAllN7Ipq2dzVdOH89XfcS-xcUZDeA',
+    tokenSecret : '5y37uqs64t0f3gc'
+});
+
+TwitterAccessToken = '267915249-EKZZ2KneSOf06oIOMXFKWoSEsXQTg3EwjH4Z4dU1';
+TwitterAccessTokenSecret = 'ReF8CIy5IdFCmasTlKaayYAoSEIzYL4b4VLcp8IwBLVMD';
+twitter = new twitterAPI({
+    consumerKey: 'Lw7YsCYUV2Dv9yYViTvPQ',
+    consumerSecret: '1MUO7r44h230yRcASFNzSVlBlssvSSEqnarWpztbfw',
+    callback: 'http://localhost:5000/'
+});
 
 var app = express();
 var options = {
@@ -84,8 +106,7 @@ upload.on('error', function (e) {
 //region Mongose Models
 var BUsers = mongoose.model( 'users', {
     email: String,
-    password: Buffer,
-    salt: Buffer,
+    password: Buffer,    salt: Buffer,
     twittername:String,
     twitterid:String,
     twitterAccessToken:String,
@@ -108,6 +129,18 @@ var BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusSho
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
 var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
+
+MApplyForm = mongoose.model( 'applyForm', {
+    name:String,
+    email:String,
+    skills:String,
+    applyTime:String,
+    workPlace:String,
+    workTime:String,
+    profiles:String,
+    anythingelse:String,
+    resumePath:String
+});
 
 //endregion
 
@@ -400,6 +433,18 @@ app.listen(port, function() {
 
 module.exports = app;
 //endregion
+
+//region Hiring Form
+app.get('/job/dropboxAuth', routerForm.dropboxAuthentication );
+app.get('/liprofile/:q', routerForm.findLinkedInProfile )
+app.get('/gravatar/:email', routerForm.findGravatarProfile )
+app.get('/twprofile/:q', routerForm.findTwitterProfile )
+app.get('/job', routerForm.showForm );
+app.post('/job/upload', routerForm.uploadResume );
+app.get('/dashboard', routerDashboard.showDashboard );
+app.get('/api/forms', routerDashboard.forms );
+//endregion
+
 
 //region Application Routers
 /* Router Guide:

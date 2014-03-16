@@ -12,6 +12,10 @@
         "jquery":"*",
         "socket.io": "*",
         "jquery-file-upload-middleware": "*",
-        "password-hash":"*"
+        "password-hash":"*",
+        "node-mandrill":"*",
+        "dropbox": "*",
+        "node-twitter-api": "*",
+        "linkedin-js": "*"
     }
 }
