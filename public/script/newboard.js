@@ -29,77 +29,79 @@ function privacyChanged(){
 var clickTimeout;
 var clickDetected = true;
 var map;
-function locate(){
-    if (!navigator.geolocation) {
-        locationError('Finding Location is not supported by your browser.');
-    } else {
+var x = document.getElementById("demo");
+var markerlatlng;
+var marker;
+function initialize(){
+    var map_property = {
+        center: new google.maps.LatLng(51.508742,-0.120850),
+        zoom: 5,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'),map_property);
+    marker = new MarkerManager(map);
+    marker = new google.maps.Marker({
+        position:new google.maps.LatLng(51.508742,-0.120850),
+        map:map,
+        draggable:true,
+        title:"drag me!"
+    });
+    google.maps.event.addListener(marker,'dragend',function(e){
+        var latlng = marker.getPosition();
+        $('#lat').val(JSON.stringify( latlng.A));
+        console.log($('#lat').val());
+        $('#lng').val(JSON.stringify( latlng.k));
+        console.log($('#lng').val());
+    });
+    google.maps.event.addListener(marker,'click',function(e){
+        clickDetected = true;
+        clickTimeout = window.setTimeout(function(){
+           if(clickDetected)
+                google.maps.LatLng(e.latLng);
 
-        map.locate();
+        },400);
+    });
+    markerlatlng = marker.getPosition();
+    try{
+        $('#locate').click(function(){
+            if (!navigator.geolocation) {
+                locationError('Finding Location is not supported by your browser.');
+            } else {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+        });
+        function showPosition(position){
+                var mylocate= new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 
+            marker.setPosition(mylocate);
+            map.setCenter(mylocate);
+            map.setZoom(14);
+        }
+        marker.setMap(map);
+    }catch(e){
+        console.log(e);
     }
-
 }
 $('button[type=submit]').click(function(){
-
     $('input.htags').val($('input.tags').val());
-    var latlng=marker.getLatLng();
-    $('#lat').val(latlng.lat);
-    $('#lng').val(latlng.lng);
+    var latlng = marker.getPosition();
+    $('#lat').val(latlng.k);
+    $('#lng').val(latlng.A);
 });
-var marker;
+
 function main(){
 
     fillCategory();
 
     $('div.btn-group>button').click(privacyChanged);
     $('button#createBoard').click(createBoard);
-    $('#locate').click( locate);
-    map = L.mapbox.map('map', 'coybit.gj1c3kom',{
-        doubleClickZoom: false
-        })
-        .setView([37.9, -77],4)
-        .on('dblclick', function(e) {
-            clickDetected = false;
-            clearTimeout(clickTimeout);
-            map.setView(e.latlng, map.getZoom() + 1);
-            e.preventDefault();
-            e.stopPropagation();
-        })
-        .on('click', function(e) {
-
-            clickDetected = true;
-            clickTimeout = setTimeout(function(){
-                if(clickDetected)
-                    marker.setLatLng(e.latlng);
-            },400);
-        });
-
-    marker = L.marker(new L.LatLng(37.9, -77), {
-        icon: L.mapbox.marker.icon({'marker-color': 'CC0033'}),
-        draggable: true
-
-    })
-        .bindPopup('Locate your board in map')
-        .on('drag',
-        function(e){
-            var latlng=marker.getLatLng();
-            $('#lat')[0].value=(JSON.stringify( latlng.lat));
-            $('#lng')[0].value=(JSON.stringify( latlng.lng));
-        }
-    ).addTo(map);
-
-    locate();
-    map.on('locationfound', locationFound);
-
-    map.on('locationerror', locationError);
+    //$('#locate').click( locate);
+    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addListener(map,'on',locationFound);
+    google.maps.event.addListener(map,'on',locationError);
+    //locate();
 }
-//function messageClass(klass){
-//    var msg=$('#message');
-//    msg.removeClass('alert-info');
-//    msg.removeClass('alert-success');
-//    msg.removeClass('alert-error');
-//    msg.addClass(klass);
-//}
+
 function locationError(msg) {
 //    if(msg==null)
 //        msg='Failed to find location. Allow your browser to access your location.';
@@ -113,8 +115,11 @@ function ErrorMsg(msg) {
 }
 
 function locationFound(e) {
-    map.fitBounds(e.bounds);
-    marker.setLatLng(e.latlng);
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend(markerlatlng);
+    map.fitBounds(bounds);
+ //   marker.setLatLng(e.latlng);
 
+    google.maps.LatLng(markerlatlng);
 
 }

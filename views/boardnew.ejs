@@ -1,5 +1,11 @@
 <% layout('layout') %>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB9JJKEbOztuSVauWEU58UeQJWtuzip2eU&sensor=false"></script>
+<script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markermanager/src/markermanager.js"></script>
+<script>
+    var map;
+//    var marker = new MarkerManager(map);
 
+</script>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span5">
@@ -96,7 +102,8 @@
                 <span class="msg"></span>
             </div>
             <button id="locate" class="btn btn-block btn-warning" >Find my location</button>
-            <div id="map" ></div>
+            <!--<div id="map" ></div>-->
+            <div id="map-canvas" style="width:758px;height:400px;"></div>
         </div>
     </div>
 </div>
