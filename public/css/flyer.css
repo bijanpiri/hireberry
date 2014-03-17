@@ -15,6 +15,8 @@ Whole Paper
     background-color: #f2f2f2;
     position: relative;
     padding: 0 28px;
+    border-radius: 7px 7px 0 0;
+    margin: 0 28px;
 }
 
 .portletHeader .logo {
@@ -53,12 +55,13 @@ Whole Paper
 }
 
 .portletCreator  {
-    width: 100%;
     background-color: #000;
     opacity: 0.75;
     bottom: 0;
     overflow: hidden;
     box-sizing: border-box;
+    margin: 0 28px;
+    height: 200px;
 }
 
 /*.portletCreator:hover {*/
@@ -70,6 +73,7 @@ Whole Paper
     /*overflow: hidden;*/
     box-sizing: border-box;
     padding: 0 28px; /* Action Button Width */
+    background-color: #B3A389;
 }
 
 .portlet-container:hover .portlet-aroundButton  {
@@ -151,11 +155,10 @@ Portlet
 
 .ui-sortable-placeholder {
     border: 4px dotted #000000;
-    border-radius: 10px;
     visibility: visible !important;
     height: 100px !important;
     background-color: #f7e35c;
-    width: 100%;
+    margin: 0 28px;
     box-sizing: border-box;
     color: #000;
     content: "PLACE IT HERE";
@@ -398,8 +401,10 @@ Portlet Creator
     top: -50px;
     left: 28px;
     right: 28px;
-    background: violet;
-
+    background: rgb(226, 226, 226);
+    border-radius: 7px 7px 0 0;
+    border: 3px solid #999999;
+    box-sizing: border-box;
 }
 .toolbars{display: none;}
 .toolbar-text{
