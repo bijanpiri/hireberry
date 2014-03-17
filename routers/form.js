@@ -2,6 +2,12 @@
  * Created by coybit on 3/16/14.
  */
 module.exports.dropboxAuthentication = function (req,res){
+    dbclient.authenticate(function(error, client) {
+        if (error)
+            return res.send(502,{error:error})
+        res.send(200, { token: client._oauth._token } )
+    });
+
     /*
      // Once-Time Authentication. See This: http://stackoverflow.com/a/16336113/946835
      dbclient.authDriver(new Dropbox.AuthDriver.NodeServer(8191));

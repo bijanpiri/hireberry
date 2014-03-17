@@ -30,10 +30,12 @@ var hashIteration=1;
 dbclient = new Dropbox.Client({
     key: "7bdvs2t8zrdqdw8",
     secret: "5y37uqs64t0f3gc",
-    sandbox     : false,
-    token       : 'tf6jvJZK81wAAAAAAAAAAZiljBK7q8eeXWVAllN7Ipq2dzVdOH89XfcS-xcUZDeA',
-    tokenSecret : '5y37uqs64t0f3gc'
+    sandbox     : false
+    //token       : 'tf6jvJZK81wAAAAAAAAAAZiljBK7q8eeXWVAllN7Ipq2dzVdOH89XfcS-xcUZDeA',
+    //tokenSecret : '5y37uqs64t0f3gc'
 });
+dbclient.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
+
 
 TwitterAccessToken = '267915249-EKZZ2KneSOf06oIOMXFKWoSEsXQTg3EwjH4Z4dU1';
 TwitterAccessTokenSecret = 'ReF8CIy5IdFCmasTlKaayYAoSEIzYL4b4VLcp8IwBLVMD';
