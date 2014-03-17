@@ -38,11 +38,6 @@ function ProfilesWidget(){
 
             checkbox.change( stateChangedHandle( row ) );
         }
-
-
-        this.toolbar
-            .find('.stackoverflowCheckbox')
-            .change( stateChangedHandle( this.portlet.find('.stackoverflowRow') ) );
     }
 
     this.getSettingPanel = function () { return $('<div>') }

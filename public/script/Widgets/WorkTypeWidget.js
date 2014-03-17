@@ -8,8 +8,34 @@ function WorkTypeWidget(){
     }
 
     initLayout.call(this);
-
     this.setLayout(layout);
+
+    this.widgetDidAdd = function() {
+        this.setToolbar('.toolbar-workTypeWidget');
+
+        function stateChangedHandle( portlet ) {
+
+            return function() {
+                var visibility = [true,true];
+                var mode = parseInt( $(this).attr('no') );
+
+                if( mode == 1 ){
+                    portlet.find('.workPlaceSpan').hide();
+                    portlet.find('.workTimeSpan').show();
+                }
+                else if( mode == 2 ){
+                    portlet.find('.workPlaceSpan').show();
+                    portlet.find('.workTimeSpan').hide();
+                }
+                else{
+                    portlet.find('.workPlaceSpan').show();
+                    portlet.find('.workTimeSpan').show();
+                }
+            }
+        }
+
+        this.toolbar.find('input[type=radio]').change( stateChangedHandle(this.portlet) );
+    }
 
     this.getSettingPanel = function () { return $('<div>') }
 
