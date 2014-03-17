@@ -46,7 +46,7 @@ function Widget(){
                             Ok: function() {
                                 $( this ).dialog( "close" );
                                 widget.portletContainer.remove();
-                                reLocatingPlus();
+                                Widgets[widget.type].instances++;
                             },
                             Cancel: function() {
                                 $( this ).dialog( "close" );
