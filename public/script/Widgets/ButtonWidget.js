@@ -1,7 +1,3 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
 function ButtonWidget(){
     Widget.call(this);
 
@@ -33,3 +29,4 @@ function ButtonWidget(){
 ButtonWidget.prototype = new Widget();
 ButtonWidget.prototype.constructor = ButtonWidget;
 
+    

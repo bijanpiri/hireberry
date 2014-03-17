@@ -1,12 +1,10 @@
-
 function ProfilesWidget(){
-
     Widget.call(this);
 
     var layout = '';
 
     function initLayout() {
-        layout = this.clone('.profilesWidget');
+        layout = $('.widgets .profilesWidget').clone();
     }
 
     initLayout.call(this);
@@ -21,5 +19,3 @@ function ProfilesWidget(){
 }
 ProfilesWidget.prototype=new Widget();
 ProfilesWidget.prototype.constructor=ProfilesWidget;
-ProfilesWidget.instances=1;
-

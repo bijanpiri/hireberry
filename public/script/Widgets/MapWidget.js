@@ -1,7 +1,3 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
 function MapWidget(){
     Widget.call(this);
 
@@ -78,7 +74,7 @@ function MapWidget(){
     }
 
     function initLayout() {
-        layout = this.clone('.mapWidget');
+        layout = $('.widgets .mapWidget').clone();
 
         mapID = 'map-canvas' + Math.floor(100*Math.random());
         layout.find('#map-canvas').attr('id',mapID);

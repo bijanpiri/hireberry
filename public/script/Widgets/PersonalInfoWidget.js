@@ -1,15 +1,10 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
 function PersonalInfoWidget(){
-
     Widget.call(this);
 
     var layout = '';
 
     function initLayout() {
-        layout = this.clone('.personalInfoWidget');
+        layout = $('.widgets .personalInfoWidget').clone();
     }
 
     initLayout.call(this);
@@ -24,4 +19,3 @@ function PersonalInfoWidget(){
 }
 PersonalInfoWidget.prototype=new Widget();
 PersonalInfoWidget.prototype.constructor=PersonalInfoWidget;
-PersonalInfoWidget.instances=1;

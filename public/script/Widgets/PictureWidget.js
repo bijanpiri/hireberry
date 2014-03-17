@@ -1,8 +1,3 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
-
 function PictureWidget(){
     Widget.call(this);
 
@@ -62,4 +57,3 @@ function PictureWidget(){
 }
 PictureWidget.prototype=new Widget();
 PictureWidget.prototype.constructor=PictureWidget;
-

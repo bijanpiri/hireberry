@@ -1,10 +1,5 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
-    // Sound Cloud 4 Test: http://soundcloud.com/oembed?format=json&url=https://soundcloud.com/saghi-s/2vznv6x4pmxh
-    // Youtube 4 Test: //www.youtube.com/embed/n_6p-1J551Y
-
+// Sound Cloud 4 Test: http://soundcloud.com/oembed?format=json&url=https://soundcloud.com/saghi-s/2vznv6x4pmxh
+// Youtube 4 Test: //www.youtube.com/embed/n_6p-1J551Y
 function VoiceWidget(){
     Widget.call(this);
 

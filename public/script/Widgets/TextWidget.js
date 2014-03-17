@@ -1,6 +1,3 @@
-/**
- * Created by Bijan on 3/17/14.
- */
 function TextWidget(){
     Widget.call(this);
 
@@ -92,5 +89,3 @@ function TextWidget(){
 }
 TextWidget.prototype = new Widget();
 TextWidget.prototype.constructor = TextWidget;
-
-

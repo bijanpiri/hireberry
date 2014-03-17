@@ -1,7 +1,4 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-    // Youtube Thumbnail: See this http://stackoverflow.com/a/2068371/946835
+// Youtube Thumbnail: See this http://stackoverflow.com/a/2068371/946835
 function VideoWidget(){
     Widget.call(this);
 

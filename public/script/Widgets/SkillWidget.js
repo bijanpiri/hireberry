@@ -1,13 +1,10 @@
-/**
- * Created by Bijan on 3/17/14.
- */
 function SkillWidget(){
     Widget.call(this);
 
     var layout = '';
 
     function initLayout() {
-        layout = this.clone('.skillWidget');
+        layout = $('.widgets .skillWidget').clone();
     }
 
     initLayout.call(this);
@@ -22,4 +19,3 @@ function SkillWidget(){
 }
 SkillWidget.prototype=new Widget();
 SkillWidget.prototype.constructor=SkillWidget;
-SkillWidget.instances=1;

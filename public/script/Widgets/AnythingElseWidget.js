@@ -1,10 +1,4 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
 function AnythingElseWidget(){
-
-
     Widget.call(this);
 
     var layout = '';
@@ -25,4 +19,3 @@ function AnythingElseWidget(){
 }
 AnythingElseWidget.prototype=new Widget();
 AnythingElseWidget.prototype.constructor=AnythingElseWidget;
-AnythingElseWidget.instances=1;

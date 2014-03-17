@@ -1,15 +1,10 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
 function ResumeWidget(){
-
     Widget.call(this);
 
     var layout = '';
 
     function initLayout() {
-        layout = this.clone('.resumeWidget');
+        layout = $('.widgets .resumeWidget').clone();
     }
 
     initLayout.call(this);
@@ -24,5 +19,3 @@ function ResumeWidget(){
 }
 ResumeWidget.prototype=new Widget();
 ResumeWidget.prototype.constructor=ResumeWidget;
-ResumeWidget.instances=1;
-

@@ -1,15 +1,10 @@
-/**
- * Created by Bijan on 3/17/14.
- */
-
 function WorkTypeWidget(){
-
     Widget.call(this);
 
     var layout = '';
 
     function initLayout() {
-        layout = this.clone('.workTypeWidget');
+        layout = $('.widgets .workTypeWidget').clone();
     }
 
     initLayout.call(this);
@@ -24,4 +19,3 @@ function WorkTypeWidget(){
 }
 WorkTypeWidget.prototype=new Widget();
 WorkTypeWidget.prototype.constructor=WorkTypeWidget;
-WorkTypeWidget.instances=1;
