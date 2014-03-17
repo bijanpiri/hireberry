@@ -1,9 +1,7 @@
 function AnythingElseWidget(){
-<<<<<<< HEAD
-=======
 
     this.limit=100;
->>>>>>> Added toolbar for anything else
+
     Widget.call(this);
 
     var layout = '';
@@ -21,35 +19,30 @@ function AnythingElseWidget(){
         this.setToolbar('.toolbar-anything');
         this.addToolbarCommand('limit',
             function(widget,args,input){
-                widget.limit=$(input).val();
+                widget.limit=parseInt($(input).val());
                 widget.portlet.find('textarea').attr('maxlength',$(input).val());
             });
         var widget=this;
         this.portlet.find('textarea').on('change keyup paste',function(){
+            var enter=($(this).val().match(/\n/gm)||[]).length;
             var len=$(this).val().length;
-            var rem=Math.max(0, widget.limit-len);
+            var limit=widget.limit+enter*2;
+            widget.portlet.find('textarea').attr('maxlength',limit);
+            var rem=Math.max(0, limit-len-enter);
             widget.toolbar.find('.remaind').html(rem);
         });
-//        this.addToolbarCommand('align',
-//            function(widget,args)
-//            {
-//                widget.toolbar.find('[command^=align]').removeClass('btn-info');
-//                widget.toolbar.find('[command="align '+args[1]+'"]').addClass('btn-info');
-//                widget.portlet.find('.text-widget').css('text-align',args[1]);});
-//
-//
     }
 
     this.serialize = function() {
         var data=new Object();
         data.limit=this.limit;
-        data.text=this.portlet.find('textarea').html();
+        data.text=this.portlet.find('textarea').val();
         return data;
     }
 
     this.deserialize = function( data ) {
         this.limit=data.limit;
-        this.portlet.find('textarea').html(data.text);
+        this.portlet.find('textarea').val(data.text);
     };
 }
 AnythingElseWidget.prototype=new Widget();
