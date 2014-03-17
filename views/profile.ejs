@@ -378,6 +378,7 @@ function ClosePutupPanel() {
                             <ul class="thumbnails">
                                 <% for(i=0;i<boards.length;i++){%>
                                 <li class="span3 userboard" board-id="<%=boards[i]._id%>">
+                                    <a class="btn btn-mini btn-danger" href="/board/remove/<%=boards[i]._id%>">&times;</a>
                                     <a class="thumbnail" href="/board/<%=boards[i]._id%>">
                                         <h3 class="caption"><%=boards[i].name%></h3>
                                         <h5 class="caption"><%=boards[i].category%></h5>
