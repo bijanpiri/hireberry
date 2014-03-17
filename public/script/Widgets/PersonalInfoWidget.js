@@ -9,7 +9,7 @@ function PersonalInfoWidget(){
     var layout = '';
 
     function initLayout() {
-        layout = $('.widgets .personalInfoWidget').clone();
+        layout = this.clone('.personalInfoWidget');
     }
 
     initLayout.call(this);

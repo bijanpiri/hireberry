@@ -9,7 +9,7 @@ function WorkTypeWidget(){
     var layout = '';
 
     function initLayout() {
-        layout = $('.widgets .workTypeWidget').clone();
+        layout = this.clone('.workTypeWidget');
     }
 
     initLayout.call(this);

@@ -7,7 +7,7 @@ function SeperatorWidget(){
     var layout = '';
 
     function initLayout() {
-        layout = $('.widgets .seperatorWidget').clone();
+        layout = this.clone('.seperatorWidget');
     }
 
     initLayout.call(this);

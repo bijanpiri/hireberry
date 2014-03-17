@@ -6,7 +6,7 @@ function ProfilesWidget(){
     var layout = '';
 
     function initLayout() {
-        layout = $('.widgets .profilesWidget').clone();
+        layout = this.clone('.profilesWidget');
     }
 
     initLayout.call(this);

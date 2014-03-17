@@ -78,7 +78,7 @@ function MapWidget(){
     }
 
     function initLayout() {
-        layout = $('.widgets .mapWidget').clone();
+        layout = this.clone('.mapWidget');
 
         mapID = 'map-canvas' + Math.floor(100*Math.random());
         layout.find('#map-canvas').attr('id',mapID);

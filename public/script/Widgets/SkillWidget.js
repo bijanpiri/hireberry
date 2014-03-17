@@ -7,7 +7,7 @@ function SkillWidget(){
     var layout = '';
 
     function initLayout() {
-        layout = $('.widgets .skillWidget').clone();
+        layout = this.clone('.skillWidget');
     }
 
     initLayout.call(this);

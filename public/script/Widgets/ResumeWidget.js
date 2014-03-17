@@ -9,7 +9,7 @@ function ResumeWidget(){
     var layout = '';
 
     function initLayout() {
-        layout = $('.widgets .resumeWidget').clone();
+        layout = this.clone('.resumeWidget');
     }
 
     initLayout.call(this);

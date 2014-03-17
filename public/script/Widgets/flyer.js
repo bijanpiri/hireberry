@@ -7,6 +7,7 @@ var Widgets = [
     PersonalInfoWidget, ResumeWidget, AnythingElseWidget,
     ProfilesWidget, SeperatorWidget, SkillWidget
 ];
+
 function Flyer(options) {
 
     editMode = options.editMode;
