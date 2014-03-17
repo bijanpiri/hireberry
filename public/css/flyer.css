@@ -150,14 +150,13 @@ Portlet
 }
 
 .ui-sortable-placeholder {
-    border: 2px dotted #000000;
+    border: 4px dotted #000000;
     border-radius: 10px;
     visibility: visible !important;
     height: 100px !important;
-    background-color: #d7d4d4;
-    width: 700px;
+    background-color: #f7e35c;
+    width: 100%;
     box-sizing: border-box;
-    margin-left: 28px; /* Action Button Width */
     color: #000;
     content: "PLACE IT HERE";
 }
