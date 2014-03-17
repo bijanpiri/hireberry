@@ -23,8 +23,8 @@ function Flyer(options) {
 
     $(document).delegate('.portlet','focusin',
         function(){
-             $('.toolbar').hide();
-           $(this).parent().find('.toolbar').show();
+            $('.toolbar').hide();
+            $(this).parent().find('.toolbar').show();
         });
     $(document).delegate('.portlet-container *','mousedown',
         function(){
@@ -55,7 +55,8 @@ function Flyer(options) {
     function Widget(){
         this.type=0;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
-        this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width());
+        this.portletContainer = $('<div>').addClass('portlet-container')
+            //.width(pStack.width());
 
         this.toolbar=$('<div>').addClass('toolbar').hide();
 
@@ -81,32 +82,30 @@ function Flyer(options) {
                 .click((function(widget){
                     return function(){
 
-                                   $( "#dialog-confirm" ).dialog({
-                                    resizable: false,
-                                    height:0,
-                                    width:175,
-                                    modal: true,
-                                    draggable : false,
-                                    position:'middle',
-                                    buttons: {
-                                        Ok: function() {
-                                            $( this ).dialog( "close" );
-                                            widget.portletContainer.remove();
-                                            reLocatingPlus();
-                                        },
-                                        Cancel: function() {
-                                            $( this ).dialog( "close" );
-                                        }
-                                    },
-                                    close: function( event,ui ) {
-                                        $( this ).dialog( "destroy" )
-                                    },
-                                    open:function(){
-                                        $(".ui-dialog-titlebar-close").hide();
-                                        //$(".ui-dialog-titlebar-close").removeClass(".ui-dialog-titlebar-close").addClass(".ui-button-icon-primary ui-icon ui-icon-closethick").show();
-
-                                       }
-                                   });
+                        $( "#dialog-confirm" ).dialog({
+                            resizable: false,
+                            height:0,
+                            width:175,
+                            modal: true,
+                            draggable : false,
+                            position:'middle',
+                            buttons: {
+                                Ok: function() {
+                                    $( this ).dialog( "close" );
+                                    widget.portletContainer.remove();
+                                    reLocatingPlus();
+                                },
+                                Cancel: function() {
+                                    $( this ).dialog( "close" );
+                                }
+                            },
+                            close: function( event,ui ) {
+                                $( this ).dialog( "destroy" )
+                            },
+                            open:function(){
+                                $(".ui-dialog-titlebar-close").hide();
+                            }
+                        });
                     }
 
                 })(this));
@@ -169,8 +168,6 @@ function Flyer(options) {
     /****** Widget - End *******/
 
     function TextWidget(){
-
-
         Widget.call(this);
 
         this.layout='layout';
@@ -206,14 +203,14 @@ function Flyer(options) {
                 function(widget,args)
                 {widget.portlet.find('.text-widget').css('color',args[1]);});
 
-             this.addToolbarCommand('size',
-                 function(widget,args)
-                 {
-                     widget.portlet.
-                         find('.text-widget')
-                         .css('font-size',args[1])
-                         .css('line-height',args[1]);
-                 });
+            this.addToolbarCommand('size',
+                function(widget,args)
+                {
+                    widget.portlet.
+                        find('.text-widget')
+                        .css('font-size',args[1])
+                        .css('line-height',args[1]);
+                });
 
 
             $(id).wysiwyg(
@@ -251,11 +248,11 @@ function Flyer(options) {
             }
             return this.portlet
                 .find('.text-widget')
-                    .html(data.text)
-                    .css('text-align',data.align)
-                    .css('color',data.foreColor)
-                    .css('font-size',data.fontSize)
-                    .css('line-height',data.fontSize);
+                .html(data.text)
+                .css('text-align',data.align)
+                .css('color',data.foreColor)
+                .css('font-size',data.fontSize)
+                .css('line-height',data.fontSize);
         }
 
     }
@@ -264,9 +261,6 @@ function Flyer(options) {
 
 
     function PictureWidget(){
-
-
-
         Widget.call(this);
 
         var layout = "";
@@ -640,7 +634,6 @@ function Flyer(options) {
     function WorkTypeWidget(){
         Widget.call(this);
 
-        this.height = 329;
         var layout = '';
 
         function initLayout() {
@@ -663,7 +656,6 @@ function Flyer(options) {
     function PersonalInfoWidget(){
         Widget.call(this);
 
-        this.height = 252;
         var layout = '';
 
         function initLayout() {
@@ -686,7 +678,6 @@ function Flyer(options) {
     function ResumeWidget(){
         Widget.call(this);
 
-        this.height = 200;
         var layout = '';
 
         function initLayout() {
@@ -709,7 +700,6 @@ function Flyer(options) {
     function AnythingElseWidget(){
         Widget.call(this);
 
-        this.height = 200;
         var layout = '';
 
         function initLayout() {
@@ -732,7 +722,6 @@ function Flyer(options) {
     function ProfilesWidget(){
         Widget.call(this);
 
-        this.height = 400;
         var layout = '';
 
         function initLayout() {
@@ -755,7 +744,6 @@ function Flyer(options) {
     function SeperatorWidget(){
         Widget.call(this);
 
-        this.height = 150;
         var layout = '';
 
         function initLayout() {
@@ -778,7 +766,6 @@ function Flyer(options) {
     function SkillWidget(){
         Widget.call(this);
 
-        this.height = 150;
         var layout = '';
 
         function initLayout() {
