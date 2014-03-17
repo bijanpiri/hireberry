@@ -42,7 +42,6 @@ function Flyer(options) {
             $('.toolbar').hide();
         });
 
-
     $(document).delegate('.portlet iframe','focusin',function() {
         console.log('hello');
     });
@@ -53,6 +52,7 @@ function Flyer(options) {
 
     /****** Widget - Start *******/
     function Widget(){
+        Widget.instances=1000;
         this.type=0;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
         this.portletContainer = $('<div>').addClass('portlet-container')
@@ -632,6 +632,7 @@ function Flyer(options) {
     MapWidget.prototype.constructor=MapWidget;
 
     function WorkTypeWidget(){
+
         Widget.call(this);
 
         var layout = '';
@@ -652,8 +653,10 @@ function Flyer(options) {
     }
     WorkTypeWidget.prototype=new Widget();
     WorkTypeWidget.prototype.constructor=WorkTypeWidget;
+    WorkTypeWidget.instances=1;
 
     function PersonalInfoWidget(){
+
         Widget.call(this);
 
         var layout = '';
@@ -674,8 +677,10 @@ function Flyer(options) {
     }
     PersonalInfoWidget.prototype=new Widget();
     PersonalInfoWidget.prototype.constructor=PersonalInfoWidget;
+    PersonalInfoWidget.instances=1;
 
     function ResumeWidget(){
+
         Widget.call(this);
 
         var layout = '';
@@ -696,8 +701,11 @@ function Flyer(options) {
     }
     ResumeWidget.prototype=new Widget();
     ResumeWidget.prototype.constructor=ResumeWidget;
+    ResumeWidget.instances=1;
 
     function AnythingElseWidget(){
+
+
         Widget.call(this);
 
         var layout = '';
@@ -718,8 +726,10 @@ function Flyer(options) {
     }
     AnythingElseWidget.prototype=new Widget();
     AnythingElseWidget.prototype.constructor=AnythingElseWidget;
+    AnythingElseWidget.instances=1;
 
     function ProfilesWidget(){
+
         Widget.call(this);
 
         var layout = '';
@@ -740,6 +750,7 @@ function Flyer(options) {
     }
     ProfilesWidget.prototype=new Widget();
     ProfilesWidget.prototype.constructor=ProfilesWidget;
+    ProfilesWidget.instances=1;
 
     function SeperatorWidget(){
         Widget.call(this);
@@ -784,87 +795,18 @@ function Flyer(options) {
     }
     SkillWidget.prototype=new Widget();
     SkillWidget.prototype.constructor=SkillWidget;
-
-    var initDimension = function() {
-
-        var aspect_ratio = Math.sqrt(2); // A4 ratio
-        pStack.height( pStack.width() * aspect_ratio );
-
-        $(window).resize(function() {
-            pStack.height( pStack.width() * aspect_ratio );
-        });
-
-        this.pStackNormalHeight = pStack.height();
-    }
-
-    var reLocatingPlus = function(animated) {
-        var rh = remaindedHeight();
-
-        if(animated==undefined)
-            animated = true;
-
-        if( rh<64 ){
-
-            if(animated) {
-                $('.portletCreator')
-                    .animate({
-                        /*height: 100,*/
-                        bottom: -60
-                    }, 500)
-                    .find('#portletCreatorAlarm')
-                    .show();
-                $('.portletCreator').find('#items').hide();
-            }
-            else {
-                $('.portletCreator')
-                    //.css('height',100)
-                    .css('bottom',-60)
-                    .find('#portletCreatorAlarm')
-                    .show();
-                $('.portletCreator').find('#items').hide();
-            }
-
-        }
-        else {
-            if(animated) {
-                $('.portletCreator')
-                    .animate({
-                        height: remaindedHeight(),
-                        bottom: 0
-                    }, 500)
-                    .find('#portletCreatorAlarm')
-                    .hide();
-                $('.portletCreator').find('#items').show();
-            }
-            else {
-                $('.portletCreator')
-                    .css('height',remaindedHeight())
-                    .css('bottom',0)
-                    .find('#portletCreatorAlarm')
-                    .hide();
-                $('.portletCreator').find('#items').show();
-            }
-        }
-    }
-
-    var remaindedHeight = function () {
-        var emptySpaceHeight = pStack.height();
-
-        console.log('Stack-Height:' + pStack.height() );
-
-        pStack.find('.portlet').each(function(index) {
-            emptySpaceHeight -= $(this).height();
-            console.log('-' + $(this).height() );
-        });
-
-        console.log('R-Height:' + emptySpaceHeight);
-        return emptySpaceHeight;
-    }
-
+    SkillWidget.instances=1;
 
     var createPortlet = function( wData ) {
 
         // Create a widget and initializing it
+
+        if(Widgets[wData.type].instances==0){
+            alert("You can not use more widget of this type.");
+            return;
+        }
+        Widgets[wData.type].instances--;
+
         var widget = new Widgets[wData.type]();
         var portlet = widget.content();
         widget.type = wData.type;
@@ -989,7 +931,6 @@ function Flyer(options) {
 
         // Set click event
         $(function(){
-            //reLocatingPlus();
 
             $(".newitem").click(function(e){
                 var itemType = parseInt($(this).attr('type'));
@@ -1005,8 +946,6 @@ function Flyer(options) {
 
     // Private functions
     function enterShotMode(completedCallback){
-        // Global Changes
-
 
         // Portlet Changes
         var portlets = pStack.find('.portlet');
