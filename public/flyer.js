@@ -647,11 +647,11 @@ function Flyer(options) {
     function WorkTypeWidget(){
         Widget.call(this);
 
-        this.height = 300;
+        this.height = 329;
         var layout = '';
 
         function initLayout() {
-            layout = $('.workTypeWidget').clone();
+            layout = $('.widgets .workTypeWidget').clone();
         }
 
         initLayout.call(this);
@@ -670,7 +670,7 @@ function Flyer(options) {
     function PersonalInfoWidget(){
         Widget.call(this);
 
-        this.height = 300;
+        this.height = 252;
         var layout = '';
 
         function initLayout() {

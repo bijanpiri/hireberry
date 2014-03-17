@@ -53,13 +53,18 @@ Whole Paper
 }
 
 .portletCreator  {
+<<<<<<< HEAD
     width: 700px;
     background-color: #f2f2f2;
+=======
+    position: absolute;
+    width: 100%;
+    background-color: #000;
+>>>>>>> some css editing
     opacity: 0.75;
     bottom: 0;
     overflow: hidden;
     box-sizing: border-box;
-    margin-left: 28px; /* Action Button Width */
 }
 
 /*.portletCreator:hover {*/
@@ -396,11 +401,10 @@ Portlet Creator
 
 .toolbar{
     position: absolute;
-    width: 700px;
     height: 50px;
-    top:-50px;
+    top: -50px;
     left: 28px;
-    right: 0;
+    right: 28px;
     background: violet;
 
 }

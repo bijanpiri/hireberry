@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab);
 
 body {
     background-color: #B3A389;
@@ -23,13 +24,6 @@ a, a:active, a:visited, a:focus {
 a:hover {
     color: #42d182;
     text-decoration: none;
-}
-
-#wrap {
-}
-.container {
-    background-color: #f1f1f1;
-    padding: 30px;
 }
 
 .logo {
@@ -915,7 +909,9 @@ Contact Card
     height: 40px;
 }
 
-.cardField {
+.cardfield,
+.card input[type="text"],
+.card input[type="email"] {
     height: 40px;
     width: 100%;
     padding: 0 30px;
@@ -925,6 +921,10 @@ Contact Card
     text-align: center;
     margin: 20px 0;
     background-color: transparent;
+    box-sizing: border-box;
+    outline: 0;
+    box-shadow: 0 0 0 transparent;
+    -webkit-box-shadow: 0 0 0 transparent;
 }
 
 .cardField:focus {
@@ -939,10 +939,13 @@ Contact Card
     padding: 1em;
 }
 
-.profileAddress input {
+.profileAddress input[type=text] {
     font-size: 2em;
     border: 0;
+    border-radius: 0;
     outline: 0;
+    box-shadow: 0 0 0 transparent;
+    -webkit-box-shadow: 0 0 0 transparent;
     background-color:  transparent;
     border-bottom: 2px solid #000;
     width: 150px;
@@ -1122,7 +1125,7 @@ Flat Section
 
 .flatSection hr {
     border: 1px solid #9c9c9c;
-    margin: 0 4em 0 0;
+    margin: 0;
     top: 0;
     bottom: 0;
 }
