@@ -19,3 +19,4 @@ function ResumeWidget(){
 }
 ResumeWidget.prototype=new Widget();
 ResumeWidget.prototype.constructor=ResumeWidget;
+ResumeWidget.instances = 1;

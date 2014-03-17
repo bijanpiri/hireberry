@@ -5,6 +5,7 @@ var idCounter;
 var editMode
 
 function Widget(){
+    Widget.instances=1000;
     this.type=0;
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container')

@@ -19,3 +19,4 @@ function AnythingElseWidget(){
 }
 AnythingElseWidget.prototype=new Widget();
 AnythingElseWidget.prototype.constructor=AnythingElseWidget;
+AnythingElseWidget.instances = 1;

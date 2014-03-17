@@ -19,3 +19,4 @@ function WorkTypeWidget(){
 }
 WorkTypeWidget.prototype=new Widget();
 WorkTypeWidget.prototype.constructor=WorkTypeWidget;
+WorkTypeWidget.instances = 1;

@@ -19,3 +19,4 @@ function PersonalInfoWidget(){
 }
 PersonalInfoWidget.prototype=new Widget();
 PersonalInfoWidget.prototype.constructor=PersonalInfoWidget;
+PersonalInfoWidget.instances = 1

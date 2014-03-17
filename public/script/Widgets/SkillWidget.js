@@ -19,3 +19,4 @@ function SkillWidget(){
 }
 SkillWidget.prototype=new Widget();
 SkillWidget.prototype.constructor=SkillWidget;
+SkillWidget.instances = 1
