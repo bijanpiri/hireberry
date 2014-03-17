@@ -1,7 +1,7 @@
 /**
  * Created by Bijan on 3/17/14.
  */
-var idCounter;
+var idCounter=1;
 var editMode
 
 function Widget(){
@@ -101,15 +101,19 @@ function Widget(){
         this.toolbar.append($('.toolbars>'+toolbar).clone());
 
     }
+
     this.addToolbarCommand=function(command,callback){
         var widget=this;
         this.toolbar
             .find('[command^='+command+']')
-            .click(function(){
-                args=$(this).attr('command').split(' ');
-                callback(widget,args);
-            }
-        );
+            .each(function(i,elem){
+                var e=$(elem);
+                var event= e.attr('event') || 'click';
+                e.on(event,function(){
+                    args=$(this).attr('command').split(' ');
+                    callback(widget,args,this);
+                })
+            });
 
     }
     this.restated=function(){
