@@ -152,6 +152,9 @@ input[type='radio']:checked + .bbtn-label{
 /****
 Employment Type
 ****/
+#workPlace-workType {
+}
+
 .radioButtonGroup {
     display: table;
     margin: 0 auto;

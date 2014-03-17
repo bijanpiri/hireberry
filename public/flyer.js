@@ -5,8 +5,21 @@ function Flyer(options) {
 
     var TagWidget = null;
 
+<<<<<<< HEAD
     var Widgets = [ Widget, TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
 
+=======
+    var Widgets = [
+        Widget, TextWidget, PictureWidget,
+        VideoWidget, ButtonWidget, TagWidget,
+        MapWidget, VoiceWidget, WorkTypeWidget,
+        PersonalInfoWidget, ResumeWidget, AnythingElseWidget,
+        ProfilesWidget, SeperatorWidget, SkillWidget
+    ];
+
+    this.widgetWidthOpenSettingPanel = null;
+    this.pStackNormalHeight;
+>>>>>>> widgets are moved to flyerEditor (from booltin-job)
 
     $(document).mousedown(function(event){
         if($(event.target).parents().index($('.portletStack'))==-1)
@@ -629,6 +642,245 @@ function Flyer(options) {
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
 
+<<<<<<< HEAD
+=======
+    function WorkTypeWidget(){
+        Widget.call(this);
+
+        this.height = 300;
+        var layout = '';
+
+        function initLayout() {
+            layout = $('.workTypeWidget').clone();
+        }
+
+        initLayout.call(this);
+
+        this.setLayout(layout);
+
+        this.getSettingPanel = function () { return $('<div>') }
+
+        this.serialize = function() {}
+
+        this.deserialize = function( content ) {};
+    }
+    WorkTypeWidget.prototype=new Widget();
+    WorkTypeWidget.prototype.constructor=WorkTypeWidget;
+
+    function PersonalInfoWidget(){
+        Widget.call(this);
+
+        this.height = 300;
+        var layout = '';
+
+        function initLayout() {
+            layout = $('.personalInfoWidget').clone();
+        }
+
+        initLayout.call(this);
+
+        this.setLayout(layout);
+
+        this.getSettingPanel = function () { return $('<div>') }
+
+        this.serialize = function() {}
+
+        this.deserialize = function( content ) {};
+    }
+    PersonalInfoWidget.prototype=new Widget();
+    PersonalInfoWidget.prototype.constructor=PersonalInfoWidget;
+
+    function ResumeWidget(){
+        Widget.call(this);
+
+        this.height = 200;
+        var layout = '';
+
+        function initLayout() {
+            layout = $('.resumeWidget').clone();
+        }
+
+        initLayout.call(this);
+
+        this.setLayout(layout);
+
+        this.getSettingPanel = function () { return $('<div>') }
+
+        this.serialize = function() {}
+
+        this.deserialize = function( content ) {};
+    }
+    ResumeWidget.prototype=new Widget();
+    ResumeWidget.prototype.constructor=ResumeWidget;
+
+    function AnythingElseWidget(){
+        Widget.call(this);
+
+        this.height = 200;
+        var layout = '';
+
+        function initLayout() {
+            layout = $('.anythingElseWidget').clone();
+        }
+
+        initLayout.call(this);
+
+        this.setLayout(layout);
+
+        this.getSettingPanel = function () { return $('<div>') }
+
+        this.serialize = function() {}
+
+        this.deserialize = function( content ) {};
+    }
+    AnythingElseWidget.prototype=new Widget();
+    AnythingElseWidget.prototype.constructor=AnythingElseWidget;
+
+    function ProfilesWidget(){
+        Widget.call(this);
+
+        this.height = 400;
+        var layout = '';
+
+        function initLayout() {
+            layout = $('.profilesWidget').clone();
+        }
+
+        initLayout.call(this);
+
+        this.setLayout(layout);
+
+        this.getSettingPanel = function () { return $('<div>') }
+
+        this.serialize = function() {}
+
+        this.deserialize = function( content ) {};
+    }
+    ProfilesWidget.prototype=new Widget();
+    ProfilesWidget.prototype.constructor=ProfilesWidget;
+
+    function SeperatorWidget(){
+        Widget.call(this);
+
+        this.height = 150;
+        var layout = '';
+
+        function initLayout() {
+            layout = $('.seperatorWidget').clone();
+        }
+
+        initLayout.call(this);
+
+        this.setLayout(layout);
+
+        this.getSettingPanel = function () { return $('<div>') }
+
+        this.serialize = function() {}
+
+        this.deserialize = function( content ) {};
+    }
+    SeperatorWidget.prototype=new Widget();
+    SeperatorWidget.prototype.constructor=SeperatorWidget;
+
+    function SkillWidget(){
+        Widget.call(this);
+
+        this.height = 150;
+        var layout = '';
+
+        function initLayout() {
+            layout = $('.skillWidget').clone();
+        }
+
+        initLayout.call(this);
+
+        this.setLayout(layout);
+
+        this.getSettingPanel = function () { return $('<div>') }
+
+        this.serialize = function() {}
+
+        this.deserialize = function( content ) {};
+    }
+    SkillWidget.prototype=new Widget();
+    SkillWidget.prototype.constructor=SkillWidget;
+
+    var initDimension = function() {
+
+        var aspect_ratio = Math.sqrt(2); // A4 ratio
+        pStack.height( pStack.width() * aspect_ratio );
+
+        $(window).resize(function() {
+            pStack.height( pStack.width() * aspect_ratio );
+        });
+
+        this.pStackNormalHeight = pStack.height();
+    }
+
+    var reLocatingPlus = function(animated) {
+        var rh = remaindedHeight();
+
+        if(animated==undefined)
+            animated = true;
+
+        if( rh<64 ){
+
+            if(animated) {
+                $('.portletCreator')
+                    .animate({
+                        height: 100,
+                        bottom: -60
+                    }, 500)
+                    .find('#portletCreatorAlarm')
+                    .show();
+                $('.portletCreator').find('#items').hide();
+            }
+            else {
+                $('.portletCreator')
+                    .css('height',100)
+                    .css('bottom',-60)
+                    .find('#portletCreatorAlarm')
+                    .show();
+                $('.portletCreator').find('#items').hide();
+            }
+
+        }
+        else {
+            if(animated) {
+                $('.portletCreator')
+                    .animate({
+                        height: remaindedHeight(),
+                        bottom: 0
+                    }, 500)
+                    .find('#portletCreatorAlarm')
+                    .hide();
+                $('.portletCreator').find('#items').show();
+            }
+            else {
+                $('.portletCreator')
+                    .css('height',remaindedHeight())
+                    .css('bottom',0)
+                    .find('#portletCreatorAlarm')
+                    .hide();
+                $('.portletCreator').find('#items').show();
+            }
+        }
+    }
+
+    var remaindedHeight = function () {
+        var emptySpaceHeight = pStack.height();
+
+        console.log('Stack-Height:' + pStack.height() );
+
+        pStack.find('.portlet').each(function(index) {
+            emptySpaceHeight -= $(this).height();
+            console.log('-' + $(this).height() );
+        });
+
+        console.log('R-Height:' + emptySpaceHeight);
+        return emptySpaceHeight;
+    }
+>>>>>>> widgets are moved to flyerEditor (from booltin-job)
 
     var createPortlet = function( wData ) {
 
