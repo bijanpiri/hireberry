@@ -2,16 +2,11 @@ function Flyer(options) {
 
     var editMode = options.editMode;
     var pStack = this;
-    var splitterIsHold;
-    var splitterOwner;
-    var splitterOriginY;
-    var splitterOriginHeight;
 
     var TagWidget = null;
 
     var Widgets = [ Widget, TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
-    this.widgetWidthOpenSettingPanel = null;
-    this.pStackNormalHeight;
+
 
     $(document).mousedown(function(event){
         if($(event.target).parents().index($('.portletStack'))==-1)
@@ -46,92 +41,29 @@ function Flyer(options) {
 
     var idCounter=1;
     var toolbarid=1;
-    function Size(width,height){
-        if(width)
-            this.width=width
-        else
-            this.width=0;
-        if(height)
-            this.height=height
-        else
-            this.height=0;
-    }
 
 
     /****** Widget - Start *******/
     function Widget(){
-        this.height = this.height || 100; //px
-        this.settingPanelHieght = 100;
         this.type=0;
-        this.settingPanelIsOpen = false;
         this.portlet = $('<div>').addClass('portlet').data('widget',this);
         this.portletContainer = $('<div>').addClass('portlet-container').width(pStack.width());
 
         this.toolbar=$('<div>').addClass('toolbar').hide();
 
-        this.settingPanel = ''; // Shortcut to setting panel element
         this.dialog_confirm=  $('<div id="dialog-confirm"  title="Remove widget?">');
-
 
         this.serialize = function(){};
         this.deserialize = function(content){};
         this.enterToShotMode = function(completedCallback) {completedCallback()};
         this.exitFromShotMode = function() {};
-        this.resized = function(size){}
 
         this.setLayout = function(layout){
             this.layout = layout;
         };
 
-        this.openSettingPanel = function(duration,delta) {
-            // Close other setting panel
-            if( pStack.widgetWidthOpenSettingPanel != null )
-                pStack.widgetWidthOpenSettingPanel.closeSettingPanel(duration,delta);
-            pStack.widgetWidthOpenSettingPanel = this;
-
-            this.pStackNormalHeight = this.pStackNormalHeight || pStack.height();
-
-            pStack.height( this.pStackNormalHeight + delta );
-            this.portletContainer.find('.portlet-settingPanel').css('display','block').height(delta);
-            this.portletContainer.height( this.portletContainer.height() + delta );
-            this.settingPanelIsOpen = true;
-
-            setTimeout(reLocatingPlus,duration);
-        }
-
-        this.closeSettingPanel = function(duration,delta){
-            pStack.widgetWidthOpenSettingPanel = null;
-
-            pStack.height(this.pStackNormalHeight);
-            this.portletContainer.find('.portlet-settingPanel').css('display','none').height(0);
-            this.portletContainer.height(this.portletContainer.height() - delta);
-            this.settingPanelIsOpen = false;
-
-            setTimeout(reLocatingPlus,duration);
-        }
 
         this.content = function(){
-
-            var resizingHandle =
-                $('<div>').addClass('portlet-splitter');
-
-            var settingApplyButton = $('<button>').addClass('btn')
-                .text('Apply')
-                .addClass('btn')
-                .click((function(widget){
-                    return function(){
-                        widget.applySetting(settingPanel)
-                        widget.closeSettingPanel(500,100);
-                    }
-                })(this));
-
-            var setttingPanelInside = this.getSettingPanel();
-//            this.settingPanelHieght = setttingPanelInside.height();
-
-            var settingPanel = $('<div>').height(this.settingPanelHieght).addClass('portlet-settingPanel')
-                .append(setttingPanelInside);
-
-
             // Action Buttons
             var moveHandle = $('<div>').addClass('action-btn-frame move-btn-frame')
                 .append($('<i>').addClass('action-btn move-btn'));
@@ -167,9 +99,7 @@ function Flyer(options) {
 
                                        }
                                    });
-                                   //widget.portletContainer.remove();
-                                   //reLocatingPlus();*/
-                        }
+                    }
 
                 })(this));
 
@@ -177,61 +107,15 @@ function Flyer(options) {
                 .append(this.dialog_confirm)
                 .append(this.portlet)
                 .append(this.toolbar)
-//              .append(settingPanel)
-                .append(resizingHandle)
-//              .append(settingButton)
                 .append(moveHandle)
                 .append(deleteButton);
 
-            this.settingPanel = settingPanel;
-            this.layout.height(this.height);
             this.portlet.append(this.layout);
-
-//                .focusout(function(){
-//                    $(this).parent().find('.toolbar').hide();
-//
-//                });
-//            $('.portlet').focusout(function(){
-//                console.log('focused out');
-//                $('.toolbar').hide();
-//                $('.portlet-container').find('.toolbar').show();
-//            });
-
 
             return this.portletContainer.append( this.portlet );
         }
 
-        this.getSettingPanel = function () {
-            return 'Default Setting Panel';
-        }
-
         this.widgetDidAdd = function(isNew) {}
-
-        this.applySetting = function (settingPanel){}
-
-        this.resize=function(size){}
-
-        this.minimumSize=function(){
-            return new Size();
-        }
-
-        this.maximumSize=function(){
-            return new Size();
-        }
-
-        this.size=function(){
-            return new Size();
-        }
-
-        this.portletContainer.on('portlet:resizing', function(e,newHeight){
-            if(pStack.widgetWidthOpenSettingPanel)
-                pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
-        });
-
-        this.portlet.on('portlet:newItemWillAdd', function(){
-            if(pStack.widgetWidthOpenSettingPanel)
-                pStack.widgetWidthOpenSettingPanel.closeSettingPanel();
-        });
 
         this.clone=function(widget){
             idCounter++;
@@ -272,14 +156,13 @@ function Flyer(options) {
             console.log('restated');
         }
     }
-
     Widget.prototype.constructor = Widget;
 
     /****** Widget - End *******/
 
-    function TextWidget(height){
+    function TextWidget(){
 
-        this.height = height || 200;
+
         Widget.call(this);
 
         this.layout='layout';
@@ -290,14 +173,7 @@ function Flyer(options) {
             return x;
         }
 
-//        initLayout.call(this);
-
-//        this.setLayout(this.layout1);
         this.setLayout(initLayout.call(this));
-
-        this.portlet.on('portlet:resized', function() {
-            $(this).find('.textfield').css('height', $(this).height());
-        });
 
         this.portlet.on('portlet:layoutChanged', function(e,idx) {
             console.log(idx,idx.old,idx.new);
@@ -325,7 +201,10 @@ function Flyer(options) {
              this.addToolbarCommand('size',
                  function(widget,args)
                  {
-                     widget.portlet.find('.text-widget').css('font-size',args[1]).css('line-height',args[1]);
+                     widget.portlet.
+                         find('.text-widget')
+                         .css('font-size',args[1])
+                         .css('line-height',args[1]);
                  });
 
 
@@ -336,8 +215,6 @@ function Flyer(options) {
                 }
             );
         }
-
-        this.contentSize = function(){}
 
         this.restated=function(){
 
@@ -380,7 +257,7 @@ function Flyer(options) {
 
     function PictureWidget(){
 
-        this.height = 160;
+
 
         Widget.call(this);
 
@@ -402,11 +279,12 @@ function Flyer(options) {
                         var img=$('<img>');
                         layout.html(img);
                         img.attr('src', '/uploads/' + data.result.files[0].name);
+                    },
+                    progress:function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
                     }
                 });
                 file.fileupload('option',{dropZone:layout});
-
-
             } else {
                 this.portlet.find('input[type=file]').remove();
             }
@@ -430,20 +308,6 @@ function Flyer(options) {
             }
             document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
         }
-
-
-        this.portletContainer.on('portlet:resizing', function(e,newHeight) {
-            this.height = newHeight;//$(this).height();
-
-            $(this).find('.portlet-picture').height( this.height )
-        });
-
-        this.getSettingPanel = function () {
-            var settingPanel = $('<div>');
-            settingPanel.height(50);
-            return settingPanel;
-        }
-
         this.serialize=function(){
             return this.portlet.find('.portlet-picture').attr('src');
         }
@@ -459,7 +323,6 @@ function Flyer(options) {
     function VideoWidget(){
         Widget.call(this);
 
-        this.height = 200;
         var videoSourceURL;
         var layout = '';
 
@@ -475,8 +338,6 @@ function Flyer(options) {
             var container = $('<div class="videoWidget"></div>').append(iframe);
             this.portlet.html('').append(container);
 
-            // Update Setting Panel
-            this.settingPanel.find('#videoWidgetInputboxText').val(this.videoSourceURL );
         }
 
         function initLayout() {
@@ -501,36 +362,6 @@ function Flyer(options) {
         initLayout.call(this);
 
         this.setLayout(layout);
-
-        /*
-         this.portletContainer.on('portlet:resizing', (function(widget){
-         return function(e,newHeight) {
-         widget.height = newHeight;
-         widget.portlet.find('iframe').attr('height',newHeight);
-         }
-         })(this))
-         */
-        this.getSettingPanel = function () {
-            var settingPanelHtml = '<div class="videoWidgetOuter">'+
-                '<div class="videoWidgetInputboxOutter">'+
-                '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
-                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone" id="Chanage">Done</button>'+
-                '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
-                '</div></div></div>';
-
-            var settingPanel = $(settingPanelHtml);
-
-            settingPanel.height(160);
-
-            settingPanel.find('#Chanage').click( (function(widget){
-                return function(){
-                    widget.videoSourceURL = widget.settingPanel.find('#videoWidgetInputboxText').val();
-                    showVideo.call(widget);
-                }
-            }(this)));
-
-            return settingPanel;
-        }
 
         this.serialize = function() {
             return {videoURL: this.videoSourceURL};
@@ -561,34 +392,6 @@ function Flyer(options) {
 
         this.setLayout(layout);
 
-        this.getSettingPanel = function(){
-            var input1 = $('<input>')
-                .attr('id','displayText')
-                .attr('placeholder', 'Display Text')
-                .attr('type', 'text')
-                .val(layout.text());
-
-            var input2 = $('<input>')
-                .attr('id','url')
-                .attr('placeholder', 'URL address')
-                .attr('type', 'text')
-                .val(layout.attr('href'));
-
-            var settingPanel = $('<div>').append(input1).append(input2);
-            return settingPanel;
-        }
-
-        this.applySetting = function (settingPanel){
-            layout.text( settingPanel.find('#displayText').val() );
-            layout.attr('href', settingPanel.find('#url').val() );
-        }
-
-        this.getSettingPanel = function () {
-            var settingPanel = $('<div>');
-            settingPanel.height(50);
-            return settingPanel;
-        }
-
         this.serialize = function(){
             return {
                 display: layout.text(),
@@ -609,7 +412,6 @@ function Flyer(options) {
     function VoiceWidget(){
         Widget.call(this);
 
-        this.height = 200;
         var layout = 'Voice Layout 1';
 
         function showVoice() {
@@ -617,13 +419,10 @@ function Flyer(options) {
             $.get('http://soundcloud.com/oembed?format=json&url=' + this.voiceSourceURL)
                 .done( (function(widget) {
                     return function(res){
-                        var embeded = $(res.html).height(widget.height);
                         widget.portlet.html( embeded );
                     }
                 })(this))
 
-            // Update Setting Panel
-            this.settingPanel.find('#videoWidgetInputboxText').val(this.voiceSourceURL );
         }
 
         function initLayout() {
@@ -649,28 +448,6 @@ function Flyer(options) {
 
         this.setLayout(layout);
 
-        this.getSettingPanel = function () {
-            var settingPanelHtml = '<div class="videoWidgetOuter">'+
-                '<div class="videoWidgetInputboxOutter">'+
-                '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
-                '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone" id="Chanage">Done</button>'+
-                '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
-                '</div></div></div>';
-
-            var settingPanel = $(settingPanelHtml);
-
-            settingPanel.height(160);
-
-            settingPanel.find('#Chanage').click( (function(widget){
-                return function(){
-                    widget.voiceSourceURL = widget.settingPanel.find('#videoWidgetInputboxText').val();
-                    showVoice.call(widget);
-                }
-            }(this)));
-
-            return settingPanel;
-        }
-
         this.serialize = function() {
             return {voiceURL: this.voiceSourceURL};
         }
@@ -683,11 +460,9 @@ function Flyer(options) {
     VoiceWidget.prototype = new Widget();
     VoiceWidget.prototype.constructor = VoiceWidget;
 
-
     function MapWidget(){
         Widget.call(this);
 
-        this.height = 210;
         var layout = 'MapWidget layout 1';
         var geocoder;
         var map;
@@ -799,16 +574,8 @@ function Flyer(options) {
                 })
         }
 
-
         initLayout.call(this);
         this.setLayout(layout);
-
-
-        this.getSettingPanel = function () {
-            var settingPanel = $('.mapWidgetSetting').clone();
-            settingPanel.height(150);
-            return settingPanel;
-        }
 
         this.serialize = function(){
             return {
@@ -858,102 +625,15 @@ function Flyer(options) {
             var img = this.portlet.find('#map-image');
             img.hide();
         }
-
-        // Triggers
-        this.portlet.on('portlet:resized', function() {
-            this.height = $(this).height();
-
-            layout.height(this.height)
-                .width(pStack.width());
-        });
     }
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
 
-    var initDimension = function() {
-
-        var aspect_ratio = Math.sqrt(2); // A4 ratio
-        pStack.height( pStack.width() * aspect_ratio );
-
-        $(window).resize(function() {
-            pStack.height( pStack.width() * aspect_ratio );
-        });
-
-        this.pStackNormalHeight = pStack.height();
-    }
-
-    var reLocatingPlus = function(animated) {
-        var rh = remaindedHeight();
-
-        if(animated==undefined)
-            animated = true;
-
-        if( rh<64 ){
-
-            if(animated) {
-                $('.portletCreator')
-                    .animate({
-                        height: 100,
-                        bottom: -60
-                    }, 500)
-                    .find('#portletCreatorAlarm')
-                    .show();
-                $('.portletCreator').find('#items').hide();
-            }
-            else {
-                $('.portletCreator')
-                    .css('height',100)
-                    .css('bottom',-60)
-                    .find('#portletCreatorAlarm')
-                    .show();
-                $('.portletCreator').find('#items').hide();
-            }
-
-        }
-        else {
-            if(animated) {
-                $('.portletCreator')
-                    .animate({
-                        height: remaindedHeight(),
-                        bottom: 0
-                    }, 500)
-                    .find('#portletCreatorAlarm')
-                    .hide();
-                $('.portletCreator').find('#items').show();
-            }
-            else {
-                $('.portletCreator')
-                    .css('height',remaindedHeight())
-                    .css('bottom',0)
-                    .find('#portletCreatorAlarm')
-                    .hide();
-                $('.portletCreator').find('#items').show();
-            }
-        }
-    }
-
-    var remaindedHeight = function () {
-        var emptySpaceHeight = pStack.height();
-
-        console.log('Stack-Height:' + pStack.height() );
-
-        pStack.find('.portlet').each(function(index) {
-            emptySpaceHeight -= $(this).height();
-            console.log('-' + $(this).height() );
-        });
-
-        console.log('R-Height:' + emptySpaceHeight);
-        return emptySpaceHeight;
-    }
 
     var createPortlet = function( wData ) {
 
-        // Check Empty Space
-        if( editMode && remaindedHeight() < 100 )
-            return;
-
         // Create a widget and initializing it
-        var widget = new Widgets[wData.type](wData.height);
+        var widget = new Widgets[wData.type]();
         var portlet = widget.content();
         widget.type = wData.type;
         pStack.append(portlet);
@@ -961,78 +641,13 @@ function Flyer(options) {
         // Parameter: is it new?
         widget.widgetDidAdd( (wData.content==null) );
 
-        if(wData.height)
-            widget.height = wData.height;
         if(wData.layoutIndex){
             widget.layoutIndex = wData.layoutIndex;
             widget.layoutChanged();
         }
-        portlet.css( 'height', widget.height );
+
         if(wData.content)
             widget.deserialize(wData.content);
-
-        if(editMode) {
-
-            var mouseMove = function(e){
-                if( splitterIsHold ) {
-                    var curHeight = splitterOwner.height();
-                    var newHeight = splitterOriginHeight +  (e.clientY - splitterOriginY);
-                    var delta = newHeight-curHeight;
-
-                    // Snap
-                    if( remaindedHeight() - delta < 5 )
-                        newHeight += remaindedHeight() - delta;
-
-                    splitterOwner.trigger('portlet:resizing',splitterOwner.height());
-
-                    if( remaindedHeight() - delta >= 0){
-                        splitterOwner.height( newHeight );
-                        reLocatingPlus(false);
-                    }
-                }
-            }
-
-            var mouseUp = function(e){
-
-                if(splitterIsHold)
-                    splitterOwner.trigger('portlet:resized',splitterOwner.height());
-
-                splitterIsHold = false;
-            }
-
-            var mouseDown = function(e){
-
-                /*
-                 // ToDo: Attaching onmousemove event to all the iframs
-                 // But a security error is occured during accessing https iframe content.
-                 // Solve It!
-                 $('iframe').each(function(index,frame){
-
-                 if( $(frame).attr('mouseEventIsSet') == undefined ) {
-
-                 // IE is special
-                 var frameDoc = frame.contentDocument || frame.contentWindow.document;
-                 var frameBody = frameDoc.getElementsByTagName("body")[0];
-
-                 frameBody.onmouseover = mouseMove;
-
-                 frame.attr('mouseEventIsSet','1')
-                 }
-                 })
-                 */
-
-                splitterIsHold = true;
-                splitterOwner = $(this).parent();
-                splitterOriginY = e.clientY;
-                splitterOriginHeight = splitterOwner.height();
-            }
-
-            portlet.find('.portlet-splitter').mousedown(mouseDown);
-            $(window).mouseup(mouseUp);
-            pStack.parent().mousemove(mouseMove);
-
-            reLocatingPlus(false);
-        }
     };
 
     var json2flyer = function(flyerid, callback) {
@@ -1043,12 +658,6 @@ function Flyer(options) {
                     callback(data);
                     return;
                 }
-
-                if( parseInt(data.count) == 0 ){
-                    reLocatingPlus();
-                    return;
-                }
-
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
                 var widgetData = data.widgets;
@@ -1060,7 +669,7 @@ function Flyer(options) {
                             {
                                 type:widgetData[i].type,
                                 content:widgetData[i].Contents,
-                                height:widgetData[i].height,
+
                                 layoutIndex:widgetData[i].layoutIndex
                             });
                 }
@@ -1086,7 +695,6 @@ function Flyer(options) {
             var widget = $(this).data('widget');
             flyer.widgets.push( {
                 "type": widget.type,
-                'height':$(this).height(),
                 'layoutIndex':widget.layoutIndex,
                 "Contents":  ( widget  && widget.serialize())
             });
@@ -1146,7 +754,6 @@ function Flyer(options) {
 
         }
 
-        initDimension();
 
         // Set click event
         $(function(){
@@ -1167,7 +774,7 @@ function Flyer(options) {
     // Private functions
     function enterShotMode(completedCallback){
         // Global Changes
-        pStack.find('.portlet-splitter').css('background-color','#000');
+
 
         // Portlet Changes
         var portlets = pStack.find('.portlet');
@@ -1190,7 +797,6 @@ function Flyer(options) {
 
     function exitFromShotMode() {
         // Global Changes
-        pStack.find('.portlet-splitter').css('background-color','');
 
         // Portlet Changes
         var portlets = pStack.find('.portlet');
@@ -1206,7 +812,6 @@ function Flyer(options) {
     this.createPortlet = createPortlet;
     this.json2flyer = json2flyer;
     this.flyer2json = flyer2json;
-    this.remaindedHeight = remaindedHeight;
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
     this.getShot = getShot;
