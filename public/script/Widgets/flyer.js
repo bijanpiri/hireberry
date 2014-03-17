@@ -1,19 +1,17 @@
+var TagWidget = null;
+
+var Widgets = [
+    Widget, TextWidget, PictureWidget,
+    VideoWidget, ButtonWidget, TagWidget,
+    MapWidget, VoiceWidget, WorkTypeWidget,
+    PersonalInfoWidget, ResumeWidget, AnythingElseWidget,
+    ProfilesWidget, SeperatorWidget, SkillWidget
+];
 function Flyer(options) {
 
     editMode = options.editMode;
     var pStack = this;
 
-    var TagWidget = null;
-
-    var Widgets = [
-        Widget, TextWidget, PictureWidget,
-        VideoWidget, ButtonWidget, TagWidget,
-        MapWidget, VoiceWidget, WorkTypeWidget,
-        PersonalInfoWidget, ResumeWidget, AnythingElseWidget,
-        ProfilesWidget, SeperatorWidget, SkillWidget
-    ];
-
-    this.widgetWidthOpenSettingPanel = null;
     this.pStackNormalHeight;
 
     $(document).mousedown(function(event){

@@ -3,6 +3,8 @@
  */
 var idCounter;
 var editMode
+
+
 function Widget(){
 
     Widget.instances=1000;
@@ -46,7 +48,7 @@ function Widget(){
                             Ok: function() {
                                 $( this ).dialog( "close" );
                                 widget.portletContainer.remove();
-                                reLocatingPlus();
+                                Widgets[widget.type].instances++;
                             },
                             Cancel: function() {
                                 $( this ).dialog( "close" );
