@@ -5,10 +5,6 @@ function Flyer(options) {
 
     var TagWidget = null;
 
-<<<<<<< HEAD
-    var Widgets = [ Widget, TextWidget,PictureWidget,VideoWidget,ButtonWidget,TagWidget,MapWidget,VoiceWidget];
-
-=======
     var Widgets = [
         Widget, TextWidget, PictureWidget,
         VideoWidget, ButtonWidget, TagWidget,
@@ -19,7 +15,6 @@ function Flyer(options) {
 
     this.widgetWidthOpenSettingPanel = null;
     this.pStackNormalHeight;
->>>>>>> widgets are moved to flyerEditor (from booltin-job)
 
     $(document).mousedown(function(event){
         if($(event.target).parents().index($('.portletStack'))==-1)
@@ -642,8 +637,6 @@ function Flyer(options) {
     MapWidget.prototype=new Widget();
     MapWidget.prototype.constructor=MapWidget;
 
-<<<<<<< HEAD
-=======
     function WorkTypeWidget(){
         Widget.call(this);
 
@@ -674,7 +667,7 @@ function Flyer(options) {
         var layout = '';
 
         function initLayout() {
-            layout = $('.personalInfoWidget').clone();
+            layout = $('.widgets .personalInfoWidget').clone();
         }
 
         initLayout.call(this);
@@ -697,7 +690,7 @@ function Flyer(options) {
         var layout = '';
 
         function initLayout() {
-            layout = $('.resumeWidget').clone();
+            layout = $('.widgets .resumeWidget').clone();
         }
 
         initLayout.call(this);
@@ -720,7 +713,7 @@ function Flyer(options) {
         var layout = '';
 
         function initLayout() {
-            layout = $('.anythingElseWidget').clone();
+            layout = $('.widgets .anythingElseWidget').clone();
         }
 
         initLayout.call(this);
@@ -743,7 +736,7 @@ function Flyer(options) {
         var layout = '';
 
         function initLayout() {
-            layout = $('.profilesWidget').clone();
+            layout = $('.widgets .profilesWidget').clone();
         }
 
         initLayout.call(this);
@@ -766,7 +759,7 @@ function Flyer(options) {
         var layout = '';
 
         function initLayout() {
-            layout = $('.seperatorWidget').clone();
+            layout = $('.widgets .seperatorWidget').clone();
         }
 
         initLayout.call(this);
@@ -789,7 +782,7 @@ function Flyer(options) {
         var layout = '';
 
         function initLayout() {
-            layout = $('.skillWidget').clone();
+            layout = $('.widgets .skillWidget').clone();
         }
 
         initLayout.call(this);
@@ -828,7 +821,7 @@ function Flyer(options) {
             if(animated) {
                 $('.portletCreator')
                     .animate({
-                        height: 100,
+                        /*height: 100,*/
                         bottom: -60
                     }, 500)
                     .find('#portletCreatorAlarm')
@@ -837,7 +830,7 @@ function Flyer(options) {
             }
             else {
                 $('.portletCreator')
-                    .css('height',100)
+                    //.css('height',100)
                     .css('bottom',-60)
                     .find('#portletCreatorAlarm')
                     .show();
@@ -880,7 +873,7 @@ function Flyer(options) {
         console.log('R-Height:' + emptySpaceHeight);
         return emptySpaceHeight;
     }
->>>>>>> widgets are moved to flyerEditor (from booltin-job)
+
 
     var createPortlet = function( wData ) {
 
