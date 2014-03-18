@@ -570,12 +570,20 @@
     </div>
 
     <div class="toolbar-profileWidget">
-        <input type="checkbox" class="githubCheckbox" checked><span>Github</span>
-        <input type="checkbox" class="stackoverflowCheckbox" checked><span>Stackoverflow</span>
-        <input type="checkbox" class="dribbbleCheckbox" checked><span>Dribbble</span>
-        <input type="checkbox" class="behanceCheckbox" checked><span>Behance</span>
-        <input type="checkbox" class="linkedinCheckbox" checked><span>Linkedin</span>
-        <input type="checkbox" class="twitterCheckbox" checked><span>Twitter</span>
+        <form>
+            <input type="checkbox" id="github"   name="p" value="github" class="githubCheckbox" checked>
+            <label for="github">Github</label>
+            <input type="checkbox" id="stack"    name="p" value="stack" class="stackoverflowCheckbox" checked>
+            <label for="stack">Stackoverflow</label>
+            <input type="checkbox" id="dribble"  name="p" value="dribble" class="dribbbleCheckbox" checked>
+            <label for="dribble">Dribbble</label>
+            <input type="checkbox" id="behance"  name="p" value="behance" class="behanceCheckbox" checked>
+            <label for="behance">Behance</label>
+            <input type="checkbox" id="linkedin" name="p" value="linkedin" class="linkedinCheckbox" checked>
+            <label for="linkedin">Linkedin</label>
+            <input type="checkbox" id="twitter"  name="p" value="twitter" class="twitterCheckbox" checked>
+            <label for="twitter">Twitter</label>
+        </form>
     </div>
 
     <div class="toolbar-workTypeWidget">

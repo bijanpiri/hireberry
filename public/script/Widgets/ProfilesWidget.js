@@ -4,7 +4,7 @@ function ProfilesWidget(){
     var layout = '';
 
     function initLayout() {
-        layout = $('.widgets .profilesWidget').clone();
+        layout = this.clone('.profilesWidget');
     }
 
     initLayout.call(this);
@@ -40,11 +40,22 @@ function ProfilesWidget(){
         }
     }
 
-    this.getSettingPanel = function () { return $('<div>') }
+    this.serialize = function() {
 
-    this.serialize = function() {}
+        var data={profiles:
+            this.toolbar
+            .find('.toolbar-profileWidget form').serialize()};
 
-    this.deserialize = function( content ) {};
+        return data;
+    }
+
+    this.deserialize = function( content ) {
+        this.toolbar.find('form>input[name=p]').each(
+            function(i,input){
+                $(input).prop('checked',content.profiles.indexOf(input.value)>0).change();
+            }
+        );
+    }
 }
 ProfilesWidget.prototype=new Widget();
 ProfilesWidget.prototype.constructor=ProfilesWidget;
