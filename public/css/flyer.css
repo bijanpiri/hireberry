@@ -62,6 +62,8 @@ Whole Paper
     box-sizing: border-box;
     margin: 0 28px;
     height: 200px;
+    border-radius: 0 0 7px 7px;
+    padding: 10px 0;
 }
 
 .portlet-container  {
