@@ -2,10 +2,23 @@ function SeperatorWidget(){
     Widget.call(this);
 
     var layout = '';
+    var text;
+    var color;
 
     function initLayout() {
         layout = $('.widgets .seperatorWidget').clone();
 
+    }
+
+    function setColor(color) {
+        this.color = color;
+        this.portlet.find('.flatSection span').css( 'color', color);
+        this.portlet.find('.flatSection hr').css( 'border-color', color);
+    }
+
+    function setText(text) {
+        this.text = text;
+        this.portlet.find('.flatSection span').text(text);
     }
 
     initLayout.call(this);
@@ -14,26 +27,35 @@ function SeperatorWidget(){
     this.widgetDidAdd = function() {
         this.setToolbar('.toolbar-separatorWidget');
 
-        this.toolbar.find('input[name=text]').keyup( (function(layout) {
+        this.toolbar.find('input[name=text]').keyup( (function(widget) {
             return function(e) {
-                layout.find('.flatSection span').text( $(e.target).val() );
+                setText.call( widget, $(e.target).val() );
             }
-        })(this.layout))
+        })(this))
 
-        this.toolbar.find('input[type=color]').change( (function(layout) {
+        this.toolbar.find('input[type=color]').change( (function(widget) {
             return function(e) {
-                var color = $(e.target).val();
-                layout.find('.flatSection span').css( 'color', color);
-                layout.find('.flatSection hr').css( 'border-color', color);
+                setColor.call(widget, $(e.target).val() )
             }
-        })(this.layout))
+        })(this))
     }
 
     this.getSettingPanel = function () { return $('<div>') }
 
-    this.serialize = function() {}
+    this.serialize = function() {
+        return {
+            text: this.text,
+            color: this.color
+        }
+    }
 
-    this.deserialize = function( content ) {};
+    this.deserialize = function( content ) {
+        setColor.call( this, content.color );
+        setText.call( this, content.text );
+
+        this.toolbar.find('input[name=text]').val(content.text)
+        this.toolbar.find('input[type=color]').val(content.color)
+    };
 }
 SeperatorWidget.prototype=new Widget();
 SeperatorWidget.prototype.constructor=SeperatorWidget;
