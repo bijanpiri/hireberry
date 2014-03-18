@@ -60,7 +60,7 @@ function Widget(options){
 
             })(this));
 
-        if( editMode) {
+        if( this.editMode) {
             this.portletContainer
                 .append(this.dialog_confirm)
                 .append(this.portlet)
