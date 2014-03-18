@@ -117,9 +117,9 @@ function MapWidget(){
 
     this.serialize = function(){
         return {
-            mapCenter : [map.getCenter().d,map.getCenter().e],
+            mapCenter : [map.getCenter().k,map.getCenter().A],
             mapZoom : map.getZoom(),
-            markerPos : [marker.position.d,marker.position.e],
+            markerPos : [marker.position.k,marker.position.A],
             address : layout.find('#address').val()
         };
     }
