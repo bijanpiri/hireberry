@@ -92,7 +92,7 @@ function MapWidget(){
         map = new google.maps.Map( document.getElementById(mapID), mapOptions);
 
         // Set Events
-        if( editMode ) {
+        if( this.editMode ) {
             // Fill with default values; current user location
             if( isNew ) {
                 getCurrentPosition( function(pos) {
