@@ -38,6 +38,10 @@ function SkillWidget(){
     this.setLayout(layout);
 
     this.widgetDidAdd = function() {
+
+        if(this.editMode==false)
+            return;
+
         this.setToolbar('.toolbar-skillsWidget');
         var chosenBox = this.toolbar.find('.chosen-select');
 

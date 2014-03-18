@@ -37,14 +37,13 @@ function Flyer(options) {
 
     $(document).delegate('.portlet-container','mousedown',
         function(){
-
             $('.toolbar').hide();
         });
 
-    $(document).delegate('.portlet iframe','focusin',function() {
-        console.log('hello');
-    });
-
+    if( editMode==false )
+        $('.portletCreator').hide();
+    else
+        $('.portletSubmittion').hide();
 
     var createPortlet = function( wData ) {
 
@@ -57,6 +56,7 @@ function Flyer(options) {
         Widgets[wData.type].instances--;
 
         var widget = new Widgets[wData.type]();
+        widget.editMode = editMode;
         var portlet = widget.content();
         widget.type = wData.type;
         pStack.append(portlet);
@@ -90,13 +90,11 @@ function Flyer(options) {
 
                 for( var i=0; i<nWidgets; i++ ){
                     if( widgetData[i] )
-                        createPortlet(
-                            {
-                                type:widgetData[i].type,
-                                content:widgetData[i].Contents,
-
-                                layoutIndex:widgetData[i].layoutIndex
-                            });
+                        createPortlet({
+                            type:widgetData[i].type,
+                            content:widgetData[i].Contents,
+                            layoutIndex:widgetData[i].layoutIndex
+                        });
                 }
             })
             .fail(function(data){

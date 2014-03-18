@@ -889,13 +889,32 @@ app.get('/flyer/template', function(req,res){
     res.render('flyerTemplate.ejs', {title:'Template Gallery'});
 });
 
-app.get('/flyer/editor/:tid', function(req,res){
+app.get('/flyer/json/:id', function(req,res){
+
+    //if(!checkUser(req,res))
+    //    return;
+
+    var flyerid = req.params.id;
+
+    BFlyers.findOne({_id:flyerid}, function(err,flyer){
+        if(err)
+            res.send('Oh oh error');
+
+        if(flyer)
+            res.send(flyer.flyer);
+        else
+            res.send('404, Not Found! Yah!');
+    });
+});
+
+app.get('/flyer/:mode/:tid', function(req,res){
 
     var flyerid;
     var boards = [];
     var templateID = req.params.tid;
+    var editMode = (req.params.mode || 'view').toLowerCase() !== 'view';
 
-    if(checkUser(req,res)==false)
+    if( editMode && checkUser(req,res)==false )
         return;
 
     var renderNewFlyerView = function() {
@@ -903,7 +922,8 @@ app.get('/flyer/editor/:tid', function(req,res){
             title:'new flyer',
             boards:boards,
             flyerid:flyerid,
-            templateID:templateID
+            templateID:templateID,
+            editMode: editMode
         });
     }
 
@@ -912,7 +932,8 @@ app.get('/flyer/editor/:tid', function(req,res){
         flyerid = req.query.flyerid;
 
         if( flyerid ) { // Edit Flyer
-            res.cookie('flyerid',flyerid);
+            if(editMode)
+                res.cookie('flyerid',flyerid);
             renderNewFlyerView();
         }
         else {          // New Flyer
@@ -1137,24 +1158,6 @@ app.get('/flyer/take', function(req,res){
             res.send(200,{ticketed:false});
         else
             res.send(200,{ticketed:true});
-    });
-});
-
-app.get('/flyer/json/:id', function(req,res){
-
-    //if(!checkUser(req,res))
-    //    return;
-
-    var flyerid = req.params.id;
-
-    BFlyers.findOne({_id:flyerid}, function(err,flyer){
-        if(err)
-            res.send('Oh oh error');
-
-        if(flyer)
-            res.send(flyer.flyer);
-        else
-            res.send('404, Not Found! Yah!');
     });
 });
 

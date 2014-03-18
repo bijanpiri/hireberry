@@ -70,7 +70,7 @@
     $(function() {
         flyerid = $('input[name=flyerid]').val();
         flyer = $('.portletStack').Flyer({
-            editMode:true,
+            editMode:<%=editMode%>,
             flyerid:flyerid
         });
 
@@ -79,9 +79,9 @@
             var flyerid = $('input[name=flyerid]').val();
 
             if( previewWindow==0 )
-                previewWindow = window.open('/flyer/' + flyerid);
+                previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
             else
-                previewWindow.location = '/flyer/' + flyerid;
+                previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
         })
 
         $('#buttonSave').click(function(){
@@ -247,6 +247,15 @@
                         <a class="newitem buttonFrame" type="14">
                             Skill
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
+                <div class="row-fluid"  id="text">
+                    <div class="span6 offset3">
+                        <input type="submit" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
+                        <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
                     </div>
                 </div>
             </div>

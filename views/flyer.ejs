@@ -5,63 +5,34 @@
         box-shadow: 1px 1px 10px;
     }
 </style>
-<script language="JavaScript">
-    $( function(){
+<link href="/css/flyer.css" rel="stylesheet">
+<link href="/css/job.css" rel="stylesheet">
 
-        TickeringState();
-
-        function TickeringState() {
-            var flyerid = $("#TicketButton").val();
-
-            $.ajax({
-                url: '/flyer/take',
-                type: 'get',
-                dataType: 'json',
-                data: {flyerid:flyerid},
-                error: function(data){
-                    alert('error '+data.result);
-                },
-                success: function(data){
-                    if( data.ticketed==false )
-                        $("#TicketButton").text('Take a Ticket');
-                    else
-                        $("#TicketButton").text('Drop Ticket');
-                }
-            });
-        }
-
-        $('#EditFlyerButton').click( function(){
-            window.location = '/flyer/editor/?flyerid=' + $('input[name=flyerid]').val();
-        });
-
-        $('#TicketButton').click( function(){
-            var flyerid= $("#TicketButton").val();
-
-            $.ajax({
-                url: '/flyer/take',
-                type: 'post',
-                dataType: 'json',
-                data: {flyerid:flyerid},
-                error: function(data){
-                    alert('error '+data.result);
-                },
-                success: function(data){
-                    TickeringState();
-                }
-            });
-        });
-    });
-</script>
-<script src="/flyer.js"></script>
+<script src="/script/Widgets/Widget.js"></script>
+<script src="/script/Widgets/TextWidget.js"></script>
+<script src="/script/Widgets/PictureWidget.js"></script>
+<script src="/script/Widgets/VideoWidget.js"></script>
+<script src="/script/Widgets/VoiceWidget.js"></script>
+<script src="/script/Widgets/WorkTypeWidget.js"></script>
+<script src="/script/Widgets/MapWidget.js"></script>
+<script src="/script/Widgets/ButtonWidget.js"></script>
+<script src="/script/Widgets/AnythingElseWidget.js"></script>
+<script src="/script/Widgets/PersonalInfoWidget.js"></script>
+<script src="/script/Widgets/ProfilesWidget.js"></script>
+<script src="/script/Widgets/ResumeWidget.js"></script>
+<script src="/script/Widgets/SeperatorWidget.js"></script>
+<script src="/script/Widgets/SkillWidget.js"></script>
+<script src="/script/Widgets/WorkTypeWidget.js"></script>
+<script src="/script/widgets/flyer.js"></script>
 <script>
     $(function(){
         var flyerid = $('input[name=flyerid]').val();
-        /*
+
         $('#portletStack').Flyer({
             editMode:false,
             flyerid:flyerid
         });
-        */
+        /*
         $().Flyer({}).getThumbnail(flyerid, function(imgURL){
             $('<img>')
                     .attr('src',imgURL)
@@ -69,6 +40,7 @@
                     .width(400)
                     .appendTo($('#portletStack'));
         });
+        */
     });
 </script>
 
@@ -95,7 +67,7 @@
         </h2>
     </div>
     <div class="row">
-        <div class="span6 offse3">
+        <div class="span12">
             <div id="portletStack"></div>
         </div>
     </div>

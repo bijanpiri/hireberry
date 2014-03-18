@@ -66,6 +66,14 @@ Whole Paper
     padding: 10px 0;
 }
 
+.portletSubmittion {
+    background-color: #F1F1F1;
+    box-sizing: border-box;
+    margin: 0 28px;
+    border-radius: 0 0 7px 7px;
+    padding: 10px 0;
+}
+
 .portlet-container  {
     position: relative;
     /*overflow: hidden;*/

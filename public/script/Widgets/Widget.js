@@ -4,16 +4,14 @@
 var idCounter=1;
 var editMode
 
-function Widget(){
+function Widget(options){
     Widget.instances=1000;
     this.type=0;
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
-    this.portletContainer = $('<div>').addClass('portlet-container')
-    //.width(pStack.width());
-
-    this.toolbar=$('<div>').addClass('toolbar').hide();
-
-    this.dialog_confirm=  $('<div id="dialog-confirm"  title="Remove widget?">');
+    this.portletContainer = $('<div>').addClass('portlet-container');
+    this.toolbar = $('<div>').addClass('toolbar').hide();
+    this.dialog_confirm =  $('<div id="dialog-confirm"  title="Remove">');
+    this.editMode = options ? options.editMode : true;
 
     this.serialize = function(){};
     this.deserialize = function(content){};
@@ -23,7 +21,6 @@ function Widget(){
     this.setLayout = function(layout){
         this.layout = layout;
     };
-
 
     this.content = function(){
         // Action Buttons
@@ -63,12 +60,16 @@ function Widget(){
 
             })(this));
 
-        this.portletContainer
-            .append(this.dialog_confirm)
-            .append(this.portlet)
-            .append(this.toolbar)
-            .append(moveHandle)
-            .append(deleteButton);
+        if( editMode) {
+            this.portletContainer
+                .append(this.dialog_confirm)
+                .append(this.portlet)
+                .append(this.toolbar)
+                .append(moveHandle)
+                .append(deleteButton);
+        } else {
+            this.portletContainer.append(this.portlet)
+        }
 
         this.portlet.append(this.layout);
 
@@ -116,6 +117,7 @@ function Widget(){
             });
 
     }
+
     this.restated=function(){
         console.log('restated');
     }
