@@ -1,5 +1,4 @@
 function AnythingElseWidget(){
-
     this.limit=100;
 
     Widget.call(this);
