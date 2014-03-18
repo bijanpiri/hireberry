@@ -9,17 +9,30 @@ function WorkTypeWidget(){
     }
 
     function changeVisibility() {
+
+        this.portlet.find('.workTimeSpan').removeClass('span6 span5 span0 offset3 offset1 offset0')
+        this.portlet.find('.workPlaceSpan').removeClass('span6 span5 span0 offset3 offset1 offset0')
+
         if( this.visibilityMode == 1 ){
             this.portlet.find('.workPlaceSpan').hide();
             this.portlet.find('.workTimeSpan').show();
+
+            this.portlet.find('.workPlaceSpan').addClass('span0')
+            this.portlet.find('.workTimeSpan').addClass('offset3 span6')
         }
         else if( this.visibilityMode == 2 ){
             this.portlet.find('.workPlaceSpan').show();
             this.portlet.find('.workTimeSpan').hide();
+
+            this.portlet.find('.workPlaceSpan').addClass('offset3 span6')
+            this.portlet.find('.workTimeSpan').addClass('span0')
         }
         else{
             this.portlet.find('.workPlaceSpan').show();
             this.portlet.find('.workTimeSpan').show();
+
+            this.portlet.find('.workPlaceSpan').addClass('offset1 span5')
+            this.portlet.find('.workTimeSpan').addClass('span5')
         }
     }
 
