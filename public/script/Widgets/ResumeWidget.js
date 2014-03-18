@@ -40,6 +40,17 @@ function ResumeWidget(){
                     })
             }
         })(this) );
+
+        // Add resume handler
+        if( this.editMode==false ) {
+            layout.find('#dropzone').click(function(){
+                $('#resumefile').click();
+            });
+
+            document.getElementById('resumefile').onchange = function () {
+                $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
+            };
+        }
     }
 
     this.getSettingPanel = function () { return $('<div>') }

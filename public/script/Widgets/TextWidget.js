@@ -44,12 +44,12 @@ function TextWidget(){
             });
 
 
-        $(id).wysiwyg(
-            {
+        if( this.editMode ){
+            $(id).wysiwyg({
                 activeToolbarClass:'btn-info',
                 toolbarSelector: '[data-target='+id+']'
-            }
-        );
+            });
+        }
     }
 
     this.restated=function(){

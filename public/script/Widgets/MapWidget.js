@@ -38,7 +38,7 @@ function MapWidget(){
             map: map,
             //icon: image,
             position: pos,
-            draggable: true,
+            draggable: this.editMode,
             title: "Drag me!"
         });
     }
@@ -91,25 +91,29 @@ function MapWidget(){
         // Load Map
         map = new google.maps.Map( document.getElementById(mapID), mapOptions);
 
-        // Fill with default values; current user location
-        if( isNew ) {
-            getCurrentPosition( function(pos) {
-                getAddress(pos, function(address) {
-                    map.setCenter(pos);
-                    layout.find('#address').val(address);
-                    setMarker(pos);
-                });
-            });
-        }
-
-
-
         // Set Events
-        layout.find('#Getcode').click(codeAddress);
-        layout.find('#address').keydown(
-            function(){clearTimeout(updateMapTimer);
-                updateMapTimer = setTimeout(codeAddress,2000);
-            })
+        if( editMode ) {
+            // Fill with default values; current user location
+            if( isNew ) {
+                getCurrentPosition( function(pos) {
+                    getAddress(pos, function(address) {
+                        map.setCenter(pos);
+                        layout.find('#address').val(address);
+                        setMarker(pos);
+                    });
+                });
+            }
+
+            layout.find('#Getcode').click(codeAddress);
+            layout.find('#address').keydown(
+                function(){clearTimeout(updateMapTimer);
+                    updateMapTimer = setTimeout(codeAddress,2000);
+                })
+
+        }
+        else {
+            layout.find('#address').attr('readonly',true);
+        }
     }
 
     initLayout.call(this);

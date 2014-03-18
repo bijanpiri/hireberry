@@ -10,7 +10,7 @@ var Widgets = [
 
 function Flyer(options) {
 
-    editMode = options.editMode;
+    var editMode = options.editMode;
     var pStack = this;
 
     this.pStackNormalHeight;
@@ -139,6 +139,9 @@ function Flyer(options) {
 
     var setLogo = function (url) {
         $('.portletHeader .logo').attr('src',url);
+
+        if(editMode==false)
+            $('.portletHeader .logo').css('border',0);
     }
 
     var setBackground = function (url, wrapper) {
