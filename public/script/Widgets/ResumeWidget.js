@@ -2,7 +2,14 @@ function ResumeWidget(){
     Widget.call(this);
 
     var layout = '';
-    var dropboxToken = null;
+    this.dropboxToken = null;
+
+    function connectionStateChanged() {
+        if( this.dropboxToken )
+            this.toolbar.find('button[name=connectToDropBox]').text('Disconnect from Dropbox');
+        else
+            this.toolbar.find('button[name=connectToDropBox]').text('Connect to Dropbox');
+    }
 
     function initLayout() {
         layout = $('.widgets .resumeWidget').clone();
@@ -14,38 +21,39 @@ function ResumeWidget(){
 
     this.widgetDidAdd = function() {
 
-        function connectionStateChanged() {
-            if( dropboxToken )
-                connectButton.text('Disconnect from Dropbox');
-            else
-                connectButton.text('Connect to Dropbox');
-        }
-
         this.setToolbar('.toolbar-resumeWidget');
         var connectButton = this.toolbar.find('button[name=connectToDropBox]');
-        connectionStateChanged();
+        connectionStateChanged.call(this);
 
-        connectButton.click( function() {
+        connectButton.click( (function(widget) {
 
-            if( dropboxToken ) {
-                dropboxToken = null;
-                connectionStateChanged();
+            return function() {
+                if( widget.dropboxToken ) {
+                    widget.dropboxToken = null;
+                    connectionStateChanged.call(widget);
+                }
+                else
+                    $.get( '/job/dropboxAuth').done( function(res) {
+                        if(res.token)
+                            widget.dropboxToken = res.token;
+                        connectionStateChanged.call(widget);
+                    })
             }
-            else
-                $.get( '/job/dropboxAuth').done( function(res) {
-                    if(res.token)
-                        dropboxToken = res.token;
-                    connectionStateChanged();
-                })
-
-        });
+        })(this) );
     }
 
     this.getSettingPanel = function () { return $('<div>') }
 
-    this.serialize = function() {}
+    this.serialize = function() {
+        return {
+            dbToken: this.dropboxToken
+        }
+    }
 
-    this.deserialize = function( content ) {};
+    this.deserialize = function( content ) {
+        this.dropboxToken = content.dbToken;
+        connectionStateChanged.call(this);
+    };
 }
 ResumeWidget.prototype=new Widget();
 ResumeWidget.prototype.constructor=ResumeWidget;

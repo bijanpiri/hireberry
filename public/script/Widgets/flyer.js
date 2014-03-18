@@ -83,6 +83,8 @@ function Flyer(options) {
                 }
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
+                setLogo(data.logo);
+
                 var widgetData = data.widgets;
                 var nWidgets = widgetData ? widgetData.length : 0;
 
@@ -110,6 +112,7 @@ function Flyer(options) {
             description: $('input[name=flyertext]').val(),
             flyerid:  $('input[name=flyerid]').val(),
             background: pStack.css('background-image'),
+            logo: $('.portletHeader .logo').attr('src'),
             count: portlets.length,
             widgets:[]
         };
@@ -136,7 +139,7 @@ function Flyer(options) {
             });
     }
 
-    var setLogo = function (url, wrapper) {
+    var setLogo = function (url) {
         $('.portletHeader .logo').attr('src',url);
     }
 

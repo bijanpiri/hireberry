@@ -27,9 +27,6 @@ a:hover {
 }
 
 .logo {
-    background-image: url("/images/bltn-hiring-icons@2x.png");
-    background-size: 272px 1269px;
-    background-position: 0 0;
     width: 235px;
     height: 48px;
     display: block;
