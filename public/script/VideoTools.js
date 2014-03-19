@@ -44,26 +44,75 @@ URLInfo.IsValid=undefined;
 URLInfo.videoID=undefined;
 
 //********************************************************************************
-// This function checks whether input url is a 'www.vimeo.com' or 'www.youtube.com' url. If is extract video id.
+// This function return host video. if host video be invalid return empty string
 //********************************************************************************
-function GetVideoID (url)
+function GetHostVideo (url)
+{
+    var urlInfo=new URLInfo();
+    var pars=new parseUri(url);
+    if( pars["host"].toLowerCase()=='vimeo.com' || pars["host"].toLowerCase()=='www.vimeo.com')
+    {
+        return 'vimeo';
+    }
+    else if( pars["host"].toLowerCase()=='youtube.com' || pars["host"].toLowerCase()=='www.youtube.com')
+    {
+        return 'youtube';
+    }
+    else if( pars["host"].toLowerCase()=='youtu.be' || pars["host"].toLowerCase()=='youtu.be')
+    {
+        return 'youtube';
+    }
+    else
+    {
+        return '';
+    }
+}
+
+//********************************************************************************
+// This function checks whether input url is a 'www.vimeo.com/[VideoId]' or 'www.youtube.com' url. If is extract video id.
+// Note : This Function don't suppot vimeo urls with 'www.vimeo.com/..../...' format.
+//********************************************************************************
+function GetYoutubeVideoID (url)
 {
     var urlInfo=new URLInfo();
     var pars=new parseUri(url);
     if( pars["host"].toLowerCase()=='vimeo.com' || pars["host"].toLowerCase()=='www.vimeo.com')
     {
         //http://vimeo.com/[videoID]
-        urlInfo.videoID= url.split('/').pop();
+        //urlInfo.videoID= url.split('/').pop();
+        $.get('http://vimeo.com/api/oembed.json?url=http%3A//'+url).done(function(response)
+        {
+            var parse_response= eval(response);
+            urlInfo.videoID= parse_response['video_id'];
+        });
         urlInfo.host= 'vimeo';
         urlInfo.IsValid=true;
         return urlInfo;
+
     }
     else if( pars["host"].toLowerCase()=='youtube.com' || pars["host"].toLowerCase()=='www.youtube.com')
     {
-        //query :  v=[videoID]
-        //https://www.youtube.com/watch?v=[query]
+        //query :  ....&v=[videoID]&.....
+        //https://www.youtube.com/watch?[query]
+        var queries=pars["query"].split('&');
+        for(var i=0;i< queries.length;i++)
+        {
+            var q= queries[i].split('=');
+            if(q[0].toLocaleLowerCase()=="v")
+            {
+                urlInfo.videoID=q[1];
+                break;
+            }
+        }
+        urlInfo.host= 'youtube';
+        urlInfo.IsValid= true;
+        return urlInfo;
+    }
+    else if(  pars["host"].toLowerCase()=='youtu.be' || pars["host"].toLowerCase()=='www.youtu.be' )
+    {
+        // http://youtu.be/[videoID]
 
-        urlInfo.videoID=pars["query"].slice(2);
+        urlInfo.videoID= url.split('/').pop();
         urlInfo.host= 'youtube';
         urlInfo.IsValid= true;
         return urlInfo;
@@ -75,7 +124,6 @@ function GetVideoID (url)
         urlInfo.IsValid=false;
         return urlInfo;
     }
-
 
 }
 //********************************************************************************
@@ -102,6 +150,8 @@ function showVimeoThumbnail(container,videoId,size)
                 var thumbnail_src = data[0].thumbnail_medium;
 
             //$('#thumb_wrapper').append('<img src="' + thumbnail_src + '"/>');
+            //container.height(480);
+            //container.width(640);
             container.attr("src",thumbnail_src);
         }
     });
@@ -119,30 +169,88 @@ function showYoutubeThumbnail(container,videoId,size)
     if(!(size==0 || size==1 || size==2 || size==3))
         size=0;
     var  thumbnail_src='http://img.youtube.com/vi/' + videoId +'/' +size + '.jpg';
-
+    //container.height(360);
+    //container.width(480);
     container.attr("src",thumbnail_src);
-
 }
 //********************************************************************************
 //
 //********************************************************************************
 function ShowThumbnail(container,url,size)
 {
-
-    var  urlInfo=GetVideoID (url);
-    if(urlInfo.IsValid==true)
+    var urlInfo=new URLInfo();
+    var pars=new parseUri(url);
+    if( pars["host"].toLowerCase()=='vimeo.com' || pars["host"].toLowerCase()=='www.vimeo.com')
     {
-        if( urlInfo.host=='vimeo')
+        //http://vimeo.com/[videoID]
+        //urlInfo.videoID= url.split('/').pop();
+        $.get('http://vimeo.com/api/oembed.json?url=http%3A//'+url).done(function(response)
         {
+            var parse_response= eval(response);
+            urlInfo.videoID= parse_response['video_id'];
+
+            urlInfo.host= 'vimeo';
+            urlInfo.IsValid=true;
             showVimeoThumbnail(container,  urlInfo.videoID,2);
-        }
-        else if( urlInfo.host=='youtube')
+            return urlInfo;
+        });
+
+    }
+    else if( pars["host"].toLowerCase()=='youtube.com' || pars["host"].toLowerCase()=='www.youtube.com')
+    {
+        //query :  ....&v=[videoID]&.....
+        //https://www.youtube.com/watch?[query]
+        var queries=pars["query"].split('&');
+        for(var i=0;i< queries.length;i++)
         {
-            showYoutubeThumbnail(container,  urlInfo.videoID,0);
+            var q= queries[i].split('=');
+            if(q[0].toLocaleLowerCase()=="v")
+            {
+                urlInfo.videoID=q[1];
+                break;
+            }
         }
+        urlInfo.host= 'youtube';
+        urlInfo.IsValid= true;
+        showYoutubeThumbnail(container,  urlInfo.videoID,0);
+        return urlInfo;
+    }
+    else if(  pars["host"].toLowerCase()=='youtu.be' || pars["host"].toLowerCase()=='www.youtu.be' )
+    {
+        // http://youtu.be/[videoID]
+        urlInfo.videoID= url.split('/').pop();
+        urlInfo.host= 'youtube';
+        urlInfo.IsValid= true;
+        showYoutubeThumbnail(container,  urlInfo.videoID,0);
+        return urlInfo;
     }
     else
     {
+        urlInfo.host= '';
+        urlInfo.videoID=-1;
+        urlInfo.IsValid=false;
         alert("The URL : '"+url+"' is not valid.");
+        return urlInfo;
     }
 }
+/*
+ function ShowThumbnail1(container,url,size)
+ {
+ var  urlInfo=GetVideoID (url);
+ if(urlInfo.IsValid==true)
+ {
+ if( urlInfo.host=='vimeo')
+ {
+ showVimeoThumbnail(container,  urlInfo.videoID,2);
+ }
+ else if( urlInfo.host=='youtube')
+ {
+ showYoutubeThumbnail(container,  urlInfo.videoID,0);
+ }
+ }
+ else
+ {
+ alert("The URL : '"+url+"' is not valid.");
+ }
+ return urlInfo;
+ }*/

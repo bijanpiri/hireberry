@@ -10,7 +10,8 @@ function Widget(options){
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container');
     this.toolbar = $('<div>').addClass('toolbar').hide();
-    this.dialog_confirm =  $('<div id="dialog-confirm"  title="Remove">');
+    this.dialog_confirm =  $('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>');
+   // this.dialog_confirm.html('').append()
     this.editMode = options ? options.editMode : true;
 
     this.serialize = function(){};
@@ -32,8 +33,8 @@ function Widget(options){
 
                     $( "#dialog-confirm" ).dialog({
                         resizable: false,
-                        height:0,
-                        width:175,
+                        height:150,
+                        width:200,
                         modal: true,
                         draggable : false,
                         position:'middle',
