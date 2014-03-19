@@ -373,7 +373,6 @@
     </div>
 </div>
 
-
 <div class="container-fluid workTypeWidget" style="padding: 20px">
     <div class="row-fluid" id="workPlace-workType" >
 
@@ -544,66 +543,67 @@
 <div class="container-fluid skillWidget" style="padding: 20px">
     <div class="span12" >
         <div>
-            <div style="display: table;margin: 0 auto;">
+            <form class="skills">
+                <div style="display: table;margin: 0 auto;">
 
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='html5' type="checkbox" name="html5">
-                    <label for="html5" class="bbtn-label b-icon-container b-label-html5">
-                        <i class="b-icon b-icon-html5" ></i>
-                    </label>
-                    <p>HTML5</p>
+                    <div class="bbtn-group">
+                        <input class="bbtn bbtn-radio" id='html5' type="checkbox" name="skill" value="html5">
+                        <label for="html5" class="bbtn-label b-icon-container b-label-html5">
+                            <i class="b-icon b-icon-html5" ></i>
+                        </label>
+                        <p>HTML5</p>
+                    </div>
+
+                    <div class="bbtn-group">
+                        <input class="bbtn bbtn-radio" id='css3' type="checkbox" name="skill" value="css3">
+                        <label for="css3" class="bbtn-label b-icon-container b-label-css">
+                            <i class="b-icon b-icon-css" ></i>
+                        </label>
+                        <p>CSS3</p>
+                    </div>
+
+                    <div class="bbtn-group">
+                        <input class="bbtn bbtn-radio" id='js' type="checkbox" name="skill" value="javascript">
+                        <label for="js" class="bbtn-label b-icon-container b-label-js">
+                            <i class="b-icon b-icon-js" ></i>
+                        </label>
+                        <p>Javascript</p>
+                    </div>
+
+                    <div class="bbtn-group">
+                        <input class="bbtn bbtn-radio" id='jquery' type="checkbox" name="skill" value="jquery">
+                        <label for="jquery" class="bbtn-label b-icon-container b-label-jquery">
+                            <i class="b-icon b-icon-jquery" ></i>
+                        </label>
+                        <p>jQuery</p>
+                    </div>
+
+                    <div class="bbtn-group">
+                        <input class="bbtn bbtn-radio" id='less' type="checkbox" name="skill" value="less">
+                        <label for="less" class="bbtn-label b-icon-container b-label-less">
+                            <i class="b-icon b-icon-less" ></i>
+                        </label>
+                        <p>Less</p>
+                    </div>
+
+                    <div class="bbtn-group">
+                        <input class="bbtn bbtn-radio" id='bootstrap' type="checkbox" name="skill" value="bootstrap">
+                        <label for="bootstrap" class="bbtn-label b-icon-container b-label-bootstrap">
+                            <i class="b-icon b-icon-bootstrap" ></i>
+                        </label>
+                        <p>Bootstrap</p>
+                    </div>
+
+                    <div class="bbtn-group">
+                        <input class="bbtn bbtn-radio" id='git' type="checkbox" name="skill" value="git">
+                        <label for="git" class="bbtn-label b-icon-container b-label-git">
+                            <i class="b-icon b-icon-git" ></i>
+                        </label>
+                        <p>Git</p>
+                    </div>
+
                 </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='css3' type="checkbox" name="css3">
-                    <label for="css3" class="bbtn-label b-icon-container b-label-css">
-                        <i class="b-icon b-icon-css" ></i>
-                    </label>
-                    <p>CSS3</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='js' type="checkbox" name="js">
-                    <label for="js" class="bbtn-label b-icon-container b-label-js">
-                        <i class="b-icon b-icon-js" ></i>
-                    </label>
-                    <p>Javascript</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='jquery' type="checkbox" name="jquery">
-                    <label for="jquery" class="bbtn-label b-icon-container b-label-jquery">
-                        <i class="b-icon b-icon-jquery" ></i>
-                    </label>
-                    <p>jQuery</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='less' type="checkbox" name="less">
-                    <label for="less" class="bbtn-label b-icon-container b-label-less">
-                        <i class="b-icon b-icon-less" ></i>
-                    </label>
-                    <p>Less</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='bootstrap' type="checkbox" name="bootstrap">
-                    <label for="bootstrap" class="bbtn-label b-icon-container b-label-bootstrap">
-                        <i class="b-icon b-icon-bootstrap" ></i>
-                    </label>
-                    <p>Bootstrap</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='git' type="checkbox" name="git">
-                    <label for="git" class="bbtn-label b-icon-container b-label-git">
-                        <i class="b-icon b-icon-git" ></i>
-                    </label>
-                    <p>Git</p>
-                </div>
-
-            </div>
-
+            </form>
         </div>
 
     </div>
@@ -732,15 +732,17 @@
 
     <div class="toolbar-skillsWidget">
         <div style="width: 350px;position: relative">
-            <select data-placeholder="Choose skills ..." style="width:350px;" multiple class="chosen-select">
-                <option>HTML5</option>
-                <option>CSS3</option>
-                <option>Javascript</option>
-                <option>jQuery</option>
-                <option>Less</option>
-                <option>Bootstrap</option>
-                <option>Git</option>
-            </select>
+            <form>
+                <select name="chosen" data-placeholder="Choose skills ..." style="width:350px;" multiple class="chosen-select">
+                    <option value="html5">HTML5</option>
+                    <option value="css3">CSS3</option>
+                    <option value="javascript">Javascript</option>
+                    <option value="jquery">jQuery</option>
+                    <option value="less">Less</option>
+                    <option value="bootstrap">Bootstrap</option>
+                    <option value="git">Git</option>
+                </select>
+            </form>
         </div>
     </div>
 

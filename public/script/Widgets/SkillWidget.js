@@ -6,32 +6,15 @@ function SkillWidget(){
 
     function updateSkillButtons(portlet, chosenBox) {
         var skills = chosenBox.val() || [];
+        portlet.find('form.skills input').each(function(i,input){
+            input.parentElement.style.display= skills.indexOf(input.value)>=0 ?
+                '':'none';
+        });
 
-        // connection['SkillName'] = 'buttonClass'
-        var connections = {};
-        connections['html5'] = 'HTML5';
-        connections['css3'] = 'CSS3';
-        connections['js'] = 'Javascript';
-        connections['jquery'] = 'jQuery';
-        connections['git'] = 'Git';
-        connections['bootstrap'] = 'Bootstrap';
-        connections['less'] = 'Less';
-
-        //var portlet = $(this).parent().parent().parent().parent().find('.portlet');
-
-        for(var key in connections ) {
-            var button = portlet.find( '#' + key).parent();
-
-            if( skills.indexOf( connections[key] ) >= 0 )
-                button.show();
-            else
-                button.hide();
-
-        }
     }
 
     function initLayout() {
-        layout = $('.widgets .skillWidget').clone();
+        layout = this.clone('.skillWidget');
     }
 
     initLayout.call(this);
@@ -58,11 +41,23 @@ function SkillWidget(){
         updateSkillButtons( this.portlet,  chosenBox );
     }
 
-    this.getSettingPanel = function () { return $('<div>') }
+    this.serialize = function() {
+        var data={
+            chosen:this.toolbar.find('form').serialize(),
+            skills:this.portlet.find('.skillWidget form').serialize()
+        };
+        return data;
+    }
 
-    this.serialize = function() {}
-
-    this.deserialize = function( content ) {};
+    this.deserialize = function( data ) {
+        var chosen=data.chosen;
+        this.toolbar.find('.chosen-select').val(chosen.replace(/chosen=/gi,'').split('&'));
+        this.portlet.find('.skillWidget input[name=skill]').each(
+            function(i,input){
+                $(input).prop('checked',data.skills.indexOf(input.value)>0).change();
+            }
+        );
+    };
 }
 SkillWidget.prototype=new Widget();
 SkillWidget.prototype.constructor=SkillWidget;

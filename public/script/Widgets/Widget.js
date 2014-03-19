@@ -87,8 +87,8 @@ function Widget(options){
                     elem.id=elem.id+'_'+idCounter;
                 if(elem.htmlFor)
                     elem.htmlFor=elem.htmlFor+'_'+idCounter;
-                if(elem.name)
-                    elem.name=elem.name+'_'+idCounter;
+//                if(elem.name)
+//                    elem.name=elem.name+'_'+idCounter;
                 if($(elem).attr('data-target'))
                     $(elem).attr('data-target',$(elem).attr('data-target')+'_'+idCounter);
 

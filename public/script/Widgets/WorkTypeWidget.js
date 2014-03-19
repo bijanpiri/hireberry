@@ -5,7 +5,8 @@ function WorkTypeWidget(){
     var visibilityMode;
 
     function initLayout() {
-        layout = $('.widgets .workTypeWidget').clone();
+        layout = this.clone('.workTypeWidget');
+
     }
 
     function changeVisibility() {
@@ -49,7 +50,9 @@ function WorkTypeWidget(){
             }
         }
 
-        this.toolbar.find('input[type=radio]').change( stateChangedHandle(this) );
+        this.toolbar.find('input[type=radio]').change( stateChangedHandle(this));
+        this.portlet.find('input[value=fulltime]').prop('checked',true);
+        this.portlet.find('input[value=office]').prop('checked',true);
     }
 
     this.getSettingPanel = function () { return $('<div>') }
