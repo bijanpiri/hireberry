@@ -57,6 +57,14 @@ function BadgeWidget(){
                 $(this).attr('expanded','1');
             }
         });
+        this.setToolbar('.toolbar-badgeWidget');
+        var badges=this.portlet;
+        this.toolbar.find('input[name=badge]')
+            .each(function(i,input){
+                $(input).change(function(){
+                    badges.find('.'+input.value).css('display',input.checked ?'':'none');
+                });
+            });
     }
 
     this.serialize = function() {}
