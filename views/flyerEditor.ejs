@@ -52,7 +52,8 @@
     var flyer;
     var flyerid;
     var previewWindow = 0;
-
+    var dialog_confirm=$('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>').hide();
+    dialog_confirm.appendTo('body');
 
     $(function() {
         flyerid = $('input[name=flyerid]').val();

@@ -10,8 +10,8 @@ function Widget(options){
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container');
     this.toolbar = $('<div>').addClass('toolbar').hide();
-    this.dialog_confirm =  $('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>');
-   // this.dialog_confirm.html('').append()
+    //this.dialog_confirm =  $('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>').hide();
+
     this.editMode = options ? options.editMode : true;
 
     this.serialize = function(){};
@@ -29,6 +29,7 @@ function Widget(options){
         var deleteButton = $('<div >').addClass('action-btn-frame delete-btn-frame')
             .append($('<i>').addClass('action-btn delete-btn'))
             .click((function(widget){
+
                 return function(){
 
                     $( "#dialog-confirm" ).dialog({
@@ -61,7 +62,7 @@ function Widget(options){
 
         if( this.editMode) {
             this.portletContainer
-                .append(this.dialog_confirm)
+                //.append(this.dialog_confirm)
                 .append(this.portlet)
                 .append(this.toolbar)
                 .append(moveHandle)

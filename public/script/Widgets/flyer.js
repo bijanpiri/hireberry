@@ -5,7 +5,7 @@ var Widgets = [
     VideoWidget, ButtonWidget, TagWidget,
     MapWidget, BadgeWidget, WorkTypeWidget,
     PersonalInfoWidget, ResumeWidget, AnythingElseWidget,
-    ProfilesWidget, SeperatorWidget, SkillWidget,
+    ProfilesWidget, SeperatorWidget, SkillWidget
 ];
 
 function Flyer(options) {
