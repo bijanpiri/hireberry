@@ -7,6 +7,7 @@ function MapWidget(){
     var mapID;
     var marker;
     var updateMapTimer;
+    var editMode;
 
     function codeAddress() {
         var address = document.getElementById('address').value;
@@ -38,7 +39,7 @@ function MapWidget(){
             map: map,
             //icon: image,
             position: pos,
-            draggable: this.editMode,
+            draggable: editMode,
             title: "Drag me!"
         });
     }
@@ -94,16 +95,17 @@ function MapWidget(){
 
         // Load Map
         map = new google.maps.Map( document.getElementById(mapID), mapOptions);
+        editMode = this.editMode;
 
         // Set Events
-        if( this.editMode ) {
+        if( editMode ) {
             // Fill with default values; current user location
             if( isNew ) {
-                getCurrentPosition.call( this, function(pos) {
-                    getAddress.call(this, pos, function(address) {
+                getCurrentPosition(function(pos) {
+                    getAddress(pos, function(address) {
                         map.setCenter(pos);
                         layout.find('#address').val(address);
-                        setMarker.call(this, pos);
+                        setMarker(pos);
                     });
                 });
             }
@@ -136,11 +138,11 @@ function MapWidget(){
     this.deserialize = function(content){
         if( content ){
 
-            map.setCenter( new google.maps.LatLng(content.mapCenter[0], content.mapCenter[1]) );
+            map.setCenter( new google.maps.LatLng( parseFloat(content.mapCenter[0]), parseFloat(content.mapCenter[1]) ) );
 
             map.setZoom( parseInt(content.mapZoom) );
 
-            setMarker.call( this, new google.maps.LatLng(content.markerPos[0], content.markerPos[1]) );
+            setMarker( new google.maps.LatLng( parseFloat(content.markerPos[0]), parseFloat(content.markerPos[1]) ) );
 
             layout.find('#address').val( content.address );
         }
