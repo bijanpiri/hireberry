@@ -99,18 +99,19 @@ function MapWidget(){
         if( this.editMode ) {
             // Fill with default values; current user location
             if( isNew ) {
-                getCurrentPosition( function(pos) {
-                    getAddress(pos, function(address) {
+                getCurrentPosition.call( this, function(pos) {
+                    getAddress.call(this, pos, function(address) {
                         map.setCenter(pos);
                         layout.find('#address').val(address);
-                        setMarker(pos);
+                        setMarker.call(this, pos);
                     });
                 });
             }
 
             layout.find('#Getcode').click(codeAddress);
             layout.find('#address').keydown(
-                function(){clearTimeout(updateMapTimer);
+                function(){
+                    clearTimeout(updateMapTimer);
                     updateMapTimer = setTimeout(codeAddress,2000);
                 })
 
@@ -139,7 +140,7 @@ function MapWidget(){
 
             map.setZoom( parseInt(content.mapZoom) );
 
-            setMarker( new google.maps.LatLng(content.markerPos[0], content.markerPos[1]) );
+            setMarker.call( this, new google.maps.LatLng(content.markerPos[0], content.markerPos[1]) );
 
             layout.find('#address').val( content.address );
         }
