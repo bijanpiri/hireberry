@@ -67,9 +67,13 @@ function MapWidget(){
 
             }, function() {
                 // Error: The Geolocation service failed.
+                var pos = new google.maps.LatLng(45,35);
+                callback( pos );
             });
         } else {
             // Error: Your browser doesn\'t support geolocation.
+            var pos = new google.maps.LatLng(45,35);
+            callback( pos );
         }
     }
 
