@@ -18,7 +18,7 @@ function WorkTypeWidget(){
             this.portlet.find('.workPlaceSpan').hide();
             this.portlet.find('.workTimeSpan').show();
 
-            this.portlet.find('.workPlaceSpan').addClass('span0')
+            //this.portlet.find('.workPlaceSpan').addClass('span0')
             this.portlet.find('.workTimeSpan').addClass('offset3 span6')
         }
         else if( this.visibilityMode == 2 ){
@@ -26,7 +26,7 @@ function WorkTypeWidget(){
             this.portlet.find('.workTimeSpan').hide();
 
             this.portlet.find('.workPlaceSpan').addClass('offset3 span6')
-            this.portlet.find('.workTimeSpan').addClass('span0')
+            //this.portlet.find('.workTimeSpan').addClass('span0')
         }
         else{
             this.portlet.find('.workPlaceSpan').show();
