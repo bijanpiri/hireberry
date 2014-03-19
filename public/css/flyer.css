@@ -145,6 +145,7 @@ Portlet
 .portlet {
     height: 100%;
     background-color: #f1f1f1;
+    border-top: 1px solid rgb(196, 196, 196);
 }
 
 .portlet-splitter {
@@ -503,4 +504,55 @@ Portlet Creator
 
 .mapWidget .mapSetting .rightAlignButton {
 
+}
+
+.profilesWidget {
+    padding: 2em 20px;
+}
+
+/****
+Toolbar - WorkType Widget
+****/
+.toolbar-workTypeWidget {}
+.toolbar-workTypeWidget div {
+    padding: 18px 20px;
+}
+.toolbar-workTypeWidget span {
+    font-size: 1.5em;
+    line-height: 1.5em;
+    vertical-align: top;
+    padding-left: 0.3em;
+    padding-right: 1em;
+}
+
+
+.toolbar-resumeWidget {}
+.toolbar-resumeWidget button {
+    margin: 15px 20px;
+}
+
+.toolbar-profileWidget {
+    padding: 15px 20px;
+}
+.toolbar-profileWidget label {
+    font-size: 1.6em;
+    padding-left: 0.3em;
+    padding-right: 1em;
+    vertical-align: top;
+    line-height: 1.6em;
+}
+
+.toolbar-anything {
+    margin: 15px;
+}
+.toolbar-anything label {
+    vertical-align: top;
+    line-height: 2em;
+}
+.toolbar-anything input {
+    width: 40px;
+}
+
+.toolbar-separatorWidget {
+    margin: 12px 20px;
 }
