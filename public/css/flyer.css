@@ -414,7 +414,8 @@ Portlet Creator
     width: 320px;
     height: 170px;
     resize: none;
-    background-color: transparent
+    background-color: #9c9c9c;
+    font-weight: 700;
 }
 
 .toolbar{
