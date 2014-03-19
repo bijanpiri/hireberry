@@ -44,15 +44,15 @@ function ProfilesWidget(){
 
         var data={profiles:
             this.toolbar
-            .find('.toolbar-profileWidget input').serialize()};
+            .find('.toolbar-profileWidget input').serialize().replace(/p=/gi,'').split(',')};
 
         return data;
     }
 
-    this.deserialize = function( content ) {
+    this.deserialize = function( data ) {
         this.toolbar.find('input[name=p]').each(
             function(i,input){
-                $(input).prop('checked',content.profiles.indexOf(input.value)>0).change();
+                $(input).prop('checked',data.profiles.indexOf(input.value)>=0).change();
             }
         );
     }
