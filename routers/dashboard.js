@@ -37,9 +37,8 @@ module.exports.forms = function (req,res) {
             // Skills
             var skills = JSON.parse( form.skills );
             var selectedSkill = '';
-            for (var skill in skills)
-                if ( skills.hasOwnProperty(skill) && skills[skill]==='on' )
-                    selectedSkill += '<span class="spanBox">' + skill + '</span>';
+            for (var j=0; j<skills.length; j++)
+                    selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
             form.skills = selectedSkill;
 
             // Profiles

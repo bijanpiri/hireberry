@@ -135,7 +135,7 @@ var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String}
 MApplyForm = mongoose.model( 'applyForm', {
     name:String,
     email:String,
-    skills:String,
+    skills:[],
     applyTime:String,
     workPlace:String,
     workTime:String,

@@ -108,17 +108,7 @@ module.exports.apply = function (req,res) {
     else
         resumeFileName = '-';
 
-    var skills = {
-        html5: req.body.html5,
-        css3: req.body.css3,
-        js: req.body.js,
-        jquery: req.body.jquery,
-        less: req.body.less,
-        bootstrap: req.body.bootstrap,
-        git: req.body.git,
-        nodejs: req.body.nodejs,
-        mongodb: req.body.mongodb
-    }
+    var skills = req.body.skill;
 
     var profiles = {
         github: req.body.ghprofile,
