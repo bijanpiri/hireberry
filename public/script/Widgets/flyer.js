@@ -26,18 +26,23 @@ function Flyer(options) {
             $(this).parent().find('.toolbar').show();
         });
     $(document).delegate('.portlet-container *','mousedown',
-        function(){
+        function(event){
             $('.toolbar').hide();
-            $(this).closest('.portlet-container').find('.toolbar').show();
+
+            if( $(this).hasClass('move-btn')==false && $(this).hasClass('delete-btn')==false )
+                $(this).closest('.portlet-container').find('.toolbar').show();
+            else
+                event.stopPropagation();
         });
     $(document).delegate('.portlet-container>*','mousedown',
         function(event){
             event.stopPropagation();
         });
 
-    $(document).delegate('.portlet-container','mousedown',
-        function(){
+    $(document).delegate('.portlet-container' ,'mousedown',
+        function(event){
             $('.toolbar').hide();
+            event.stopPropagation();
         });
 
     if( editMode==false )
@@ -63,6 +68,12 @@ function Flyer(options) {
 
         // Parameter: is it new?
         widget.widgetDidAdd( (wData.content==null) );
+
+        if( editMode ) {
+            widget.portlet
+                .mouseenter(function(){ $(this).addClass('portlet-hover');})
+                .mouseleave(function(){$(this).removeClass('portlet-hover');})
+        }
 
         if(wData.layoutIndex){
             widget.layoutIndex = wData.layoutIndex;

@@ -100,6 +100,7 @@ Action Buttons
     height: 28px;
 }
 .portlet-container:hover .action-btn-frame { display: block; }
+.portlet-container .action-btn-frame:active { display: block; }
 .portlet-container .action-btn-frame:hover { background-color: #bfbfbf; }
 
 .portlet-container .move-btn-frame { left: 0;top: 0; border-radius: 6px 0 0 6px;}
@@ -145,7 +146,13 @@ Portlet
 .portlet {
     height: 100%;
     background-color: #f1f1f1;
-    border-top: 1px solid rgb(196, 196, 196);
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.portlet-hover {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
 
 .portlet-splitter {
@@ -162,14 +169,13 @@ Portlet
 }
 
 .ui-sortable-placeholder {
-    border: 4px dotted #000000;
+    border: 2px dotted #ccc;
     visibility: visible !important;
     height: 100px !important;
-    background-color: #f7e35c;
-    margin: 0 28px;
-    box-sizing: border-box;
+    background-color: #FFF;
+    box-sizing: content-box;
     color: #000;
-    content: "PLACE IT HERE";
+    position: relative;
 }
 .ui-sortable-placeholder * { visibility: hidden; }
 
