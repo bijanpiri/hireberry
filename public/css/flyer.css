@@ -3,6 +3,8 @@
 
 body { background-color: rgb(79, 101, 121); }
 
+form { margin: 0 }
+
 /********
 Whole Paper
 ********/
@@ -96,7 +98,6 @@ Action Buttons
     background-color: #f1f1f1;
     width: 28px;
     height: 28px;
-    border: solid 1px #000;
 }
 .portlet-container:hover .action-btn-frame { display: block; }
 .portlet-container .action-btn-frame:hover { background-color: #bfbfbf; }
@@ -403,13 +404,12 @@ Portlet Creator
 
 .toolbar{
     position: absolute;
-    height: 50px;
-    top: -50px;
-    left: 28px;
-    right: 28px;
-    background: rgb(226, 226, 226);
-    border-radius: 7px 7px 0 0;
-    border: 3px solid #999999;
+    height: 60px;
+    top: -60px;
+    left: 14px;
+    right: 14px;
+    background: #333;
+    border-radius: 4px;
     box-sizing: border-box;
 }
 .toolbar label{

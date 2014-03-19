@@ -442,7 +442,7 @@ app.get('/liprofile/:q', routerForm.findLinkedInProfile )
 app.get('/gravatar/:email', routerForm.findGravatarProfile )
 app.get('/twprofile/:q', routerForm.findTwitterProfile )
 app.get('/job', routerForm.showForm );
-app.post('/job/upload', routerForm.uploadResume );
+app.post('/apply', routerForm.apply );
 app.get('/dashboard', routerDashboard.showDashboard );
 app.get('/api/forms', routerDashboard.forms );
 //endregion
@@ -1098,29 +1098,29 @@ app.get('/flyer/remove/:id', function(req,res){
 });
 app.get('/board/remove/:id',function(req,res){
     var userid;
-   if(checkUser(req,res)){
-       if(req.user)
-       {
+    if(checkUser(req,res)){
+        if(req.user)
+        {
             userid = req.user.id;
-       }
-       var boardid = req.params.id;
-       BUsersBoards.findOne({user:userid},function(err,uboard){
-           BBoards.findOne({_id:uboard.board},function(err){
-               BBoards.remove({_id:boardid},function(err){
-                   if(!err)
-                       res.redirect('/profile');
-                   else
-                       res.send('error deleting board:'+err);
-               });
-               if(err)
-                  res.send(403, "You don't have permisson to remove this board");
-           });
-           if(err){
-               res.send(err);
-           }
-       });
+        }
+        var boardid = req.params.id;
+        BUsersBoards.findOne({user:userid},function(err,uboard){
+            BBoards.findOne({_id:uboard.board},function(err){
+                BBoards.remove({_id:boardid},function(err){
+                    if(!err)
+                        res.redirect('/profile');
+                    else
+                        res.send('error deleting board:'+err);
+                });
+                if(err)
+                    res.send(403, "You don't have permisson to remove this board");
+            });
+            if(err){
+                res.send(err);
+            }
+        });
 
-   }
+    }
 });
 app.post('/flyer/take', function(req,res){
 

@@ -118,21 +118,6 @@ $(function(){
             return false;
         }
 
-        /*
-         // File Size
-         $('input[type=file][max-size]').each(function(){
-         if(typeof this.files[0] !== 'undefined'){
-         var maxSize = parseInt($(this).attr('max-size'),10)
-         var size = this.files[0].fileSize;
-         if( maxSize < size) {
-         $('.error').show().html('Résumé file max size if 5 MB');
-         e.preventDefault();
-         return false;
-         }
-         }
-         });
-         */
-
         $('.error').hide();
 
         var formObj = $(this);
@@ -190,7 +175,6 @@ $(function(){
 
         }
     });
-
 
     $('.badgeOuterFrame').click(function(){
 
@@ -284,91 +268,6 @@ $(function(){
                     return false;
                 }
             });
-
-
-
-    initCircleBox( $('#employmentType1') );
-    initCircleBox( $('#employmentType2') );
-    initCircleBox( $('#employmentType3') );
-
-
-    function initSlider(){
-        var slider = $('#expectedSalarySlider');
-        var handle = slider.find('.handle');
-        var barStart = slider.find('.start').offset().left + slider.find('.start').width();
-        var barEnd = slider.find('.end').offset().left;
-
-        var last = 3;
-        var step = 1.4;
-        salaryStopPoint = [];
-
-        for( var i=1; i<11; i++) {
-
-            var newValue = last * step;
-            last = newValue;
-
-            salaryStopPoint.push( newValue );
-
-            var tick = $('<div>').addClass('tick').css('left', newValue +'%' );
-            slider.prepend( tick );
-        }
-
-        handle.qtip({
-            prerender: true,
-            position: {
-                my: "bottom center",
-                at: "top-30 center",
-                collision: 'none'
-            },
-            hide: {
-                fixed: true
-            }
-        });
-    }
-
-    initSlider();
-
-    $('#expectedSalarySlider .handle').mousedown( function(e){
-        $(this).attr('pressed',1);
-        $(this).attr('orgX', e.pageX);
-    })
-
-    $(document).mousemove( function(e) {
-
-        var slider = $('#expectedSalarySlider');
-        var handle = slider.find('.handle');
-        var min = slider.find('.start').offset().left;
-        var max = slider.find('.end').offset().left + slider.find('.end').width();
-        var length = max - min; // = slider.width()
-
-        if( handle.attr('pressed') === '1' ){
-            var curX = e.pageX;
-            var newX = 0;
-            var handleCenterX = curX - min - handle.width()/2;
-
-            // Stop on each multiply of 10%
-            //delta = Math.round( (delta/length) * 10 ) * 10;
-            handleCenterX = 100 * handleCenterX / length;
-
-
-            if( handleCenterX < 0 )
-                newX = 0;
-            else if( handleCenterX > 95 )
-                newX = 95;
-            else
-                newX = handleCenterX;
-
-            handle.attr('title',newX)
-            handle.css('left', newX + '%');
-        }
-
-    })
-
-    $(document).mouseup( function() {
-        if( $('#expectedSalarySlider .handle').attr('pressed') === '1' ){
-            $('#expectedSalarySlider .handle').attr('pressed',0);
-        }
-    })
 });
 
 function initCircleBox(el) {

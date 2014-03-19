@@ -99,13 +99,11 @@ module.exports.showForm = function (req,res){
     res.render('job.ejs');
 }
 
-module.exports.uploadResume = function (req,res) {
-
-    console.log(req.files.resume.path)
+module.exports.apply = function (req,res) {
 
     var resumeFileName;
 
-    if( req.files.resume.size > 0 )
+    if(  req.files.resume && req.files.resume.size > 0 )
         resumeFileName = req.files.resume.path.replace(/^.*[\\\/]/, '') + req.files.resume.name;
     else
         resumeFileName = '-';
@@ -151,7 +149,7 @@ module.exports.uploadResume = function (req,res) {
         });
 
     var uploadResume = function() {
-        if( req.files.resume.size > 0 ) {
+        if( req.files.resume && req.files.resume.size > 0 ) {
 
             fs.readFile(req.files.resume.path, function (err, data) {
 
