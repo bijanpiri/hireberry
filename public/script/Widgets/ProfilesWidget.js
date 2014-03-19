@@ -12,39 +12,20 @@ function ProfilesWidget(){
 
     this.widgetDidAdd = function() {
         this.setToolbar('.toolbar-profileWidget');
+        var profile=this.portlet;
+        this.toolbar.find('input[name=p]').each(function(i,input){
+            $(input).change(function(){
+                profile.find('.'+input.value).css('display',input.checked ?'':'none');
+            })
+        });
 
-        function stateChangedHandle( profileElement ) {
-            return function() {
-                if( $(this).is(":checked") )
-                    profileElement.css('display','block');
-                else
-                    profileElement.css('display','none');
-            }
-        }
-
-        // Checkbox-Row connections
-        var connections = [
-            { checkboxClass:'.githubCheckbox', rowClass:'.githubRow' },
-            { checkboxClass:'.stackoverflowCheckbox', rowClass:'.stackoverflowRow'},
-            { checkboxClass:'.twitterCheckbox', rowClass:'.twitterRow'},
-            { checkboxClass:'.dribbbleCheckbox', rowClass:'.dribbbleRow'},
-            { checkboxClass:'.behanceCheckbox', rowClass:'.behanceRow'},
-            { checkboxClass:'.linkedinCheckbox', rowClass:'.linkedinRow'}
-        ];
-
-        for( var i=0; i<connections.length; i++ ) {
-            var row = this.portlet.find( connections[i].rowClass );
-            var checkbox =  this.toolbar.find( connections[i].checkboxClass );
-
-            checkbox.change( stateChangedHandle( row ) );
-        }
     }
 
     this.serialize = function() {
 
         var data={profiles:
             this.toolbar
-            .find('.toolbar-profileWidget input').serialize().replace(/p=/gi,'').split(',')};
+            .find('.toolbar-profileWidget input').serialize().replace(/p=/gi,'').split('&')};
 
         return data;
     }
