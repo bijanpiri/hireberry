@@ -151,23 +151,6 @@ function Flyer(options) {
             .css('background-repeat', 'no-repeat');
     }
 
-    var getShot = function (callback) {
-
-        // Generate Thumbnail Image
-        enterShotMode( function(){
-
-            html2canvas(pStack, {
-                onrendered: function(canvas) {
-
-                    if(callback)
-                        callback( canvas.toDataURL() );
-
-                    exitFromShotMode();
-                }
-            });
-        });
-    }
-
     var initPortletsStack = function () {
         // Initialization
         if( editMode ){
@@ -197,48 +180,12 @@ function Flyer(options) {
 
     initPortletsStack();
 
-    // Private functions
-    function enterShotMode(completedCallback){
-
-        // Portlet Changes
-        var portlets = pStack.find('.portlet');
-        var portletsCount = portlets.length;
-
-        if(portletsCount==0)
-            completedCallback();
-        else {
-            portlets.each(function() {
-                var widget = $(this).data('widget');
-                widget.enterToShotMode(function(){
-                    portletsCount--;
-
-                    if(portletsCount==0)
-                        completedCallback();
-                });
-            });
-        }
-    }
-
-    function exitFromShotMode() {
-        // Global Changes
-
-        // Portlet Changes
-        var portlets = pStack.find('.portlet');
-
-        portlets.each(function() {
-            var widget = $(this).data('widget');
-            widget.exitFromShotMode();
-        });
-    }
-
-
     // Public functions
     this.createPortlet = createPortlet;
     this.json2flyer = json2flyer;
     this.flyer2json = flyer2json;
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
-    this.getShot = getShot;
     this.setLogo = setLogo;
     return this;
 }

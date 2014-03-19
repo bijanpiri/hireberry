@@ -15,8 +15,6 @@ function Widget(options){
 
     this.serialize = function(){};
     this.deserialize = function(content){};
-    this.enterToShotMode = function(completedCallback) {completedCallback()};
-    this.exitFromShotMode = function() {};
 
     this.setLayout = function(layout){
         this.layout = layout;

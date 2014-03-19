@@ -140,33 +140,6 @@ function MapWidget(){
             layout.find('#address').val( content.address );
         }
     }
-
-    this.enterToShotMode = function(completedCallback) {
-
-        var img = this.portlet.find('#map-image');
-
-        var staticImgURL = 'http://maps.googleapis.com/maps/api/staticmap?'+
-            'center='+ map.getCenter().d + ',' + map.getCenter().e +
-            '&zoom='+ map.getZoom() +
-            '&markers=color:red%7C' + marker.position.d + ',' + marker.position.e +
-            '&size=320x170&maptype=roadmap&sensor=false'
-
-        //img.show().attr('src','');
-
-        img.load( completedCallback || function(){} );
-
-        img.show().attr('src', staticImgURL)
-
-        // ToDo: Wait to image load completely
-
-        //if( completedCallback )
-        //   completedCallback()
-    }
-
-    this.exitFromShotMode = function() {
-        var img = this.portlet.find('#map-image');
-        img.hide();
-    }
 }
 MapWidget.prototype=new Widget();
 MapWidget.prototype.constructor=MapWidget;
