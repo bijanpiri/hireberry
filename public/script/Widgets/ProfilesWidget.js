@@ -44,13 +44,13 @@ function ProfilesWidget(){
 
         var data={profiles:
             this.toolbar
-            .find('.toolbar-profileWidget form').serialize()};
+            .find('.toolbar-profileWidget input').serialize()};
 
         return data;
     }
 
     this.deserialize = function( content ) {
-        this.toolbar.find('form>input[name=p]').each(
+        this.toolbar.find('input[name=p]').each(
             function(i,input){
                 $(input).prop('checked',content.profiles.indexOf(input.value)>0).change();
             }

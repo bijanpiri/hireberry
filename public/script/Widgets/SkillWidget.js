@@ -6,7 +6,7 @@ function SkillWidget(){
 
     function updateSkillButtons(portlet, chosenBox) {
         var skills = chosenBox.val() || [];
-        portlet.find('form.skills input').each(function(i,input){
+        portlet.find('input[name=skill]').each(function(i,input){
             input.parentElement.style.display= skills.indexOf(input.value)>=0 ?
                 '':'none';
         });
@@ -43,8 +43,8 @@ function SkillWidget(){
 
     this.serialize = function() {
         var data={
-            chosen:this.toolbar.find('form').serialize(),
-            skills:this.portlet.find('.skillWidget form').serialize()
+            chosen:this.toolbar.find('.toolbar-skillsWidget select').serialize().replace(/chosen=/gi,'').split('&'),
+            skills:this.portlet.find('.skillWidget input').serialize().replace(/skill=/gi,'').split('&')
         };
         return data;
     }
@@ -53,7 +53,7 @@ function SkillWidget(){
 
         var chosen=this.toolbar
             .find('.chosen-select')
-            .val(data.chosen.replace(/chosen=/gi,'').split('&'))
+            .val(data.chosen)
             .trigger("chosen:updated");
 
         this.portlet.find('.skillWidget input[name=skill]').each(
