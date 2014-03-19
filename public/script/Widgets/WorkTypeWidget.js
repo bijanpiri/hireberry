@@ -59,14 +59,21 @@ function WorkTypeWidget(){
 
     this.serialize = function() {
         return {
-            mode: this.visibilityMode
+            mode: this.visibilityMode,
+            work: this.portlet.find('input').serialize()
         }
     }
 
-    this.deserialize = function( content ) {
-        this.visibilityMode = content.mode;
+    this.deserialize = function( data ) {
+        this.visibilityMode = data.mode;
         this.toolbar.find('input:radio[no=' + this.visibilityMode +']').prop('checked',true); // ToDo: It doesn't Work!
         changeVisibility.call(this);
+
+        this.portlet.find('input').each(
+            function(i,input){
+                $(input).prop('checked',data.work.indexOf(input.value)>=0).change();
+            }
+        );
     };
 }
 WorkTypeWidget.prototype=new Widget();
