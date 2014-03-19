@@ -51,7 +51,8 @@ function AnythingElseWidget(){
         this.toolbar.find('input[command=limit]').val(data.limit);
         this.portlet
             .find('textarea')
-            .val(data.text)
+            .val(this.editMode ? data.text :'')
+            .attr('placeholder',data.text)
             .attr('maxlength',this.limit)
             .change();
     };
