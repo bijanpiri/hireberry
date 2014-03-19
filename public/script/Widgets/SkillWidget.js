@@ -50,13 +50,19 @@ function SkillWidget(){
     }
 
     this.deserialize = function( data ) {
-        var chosen=data.chosen;
-        this.toolbar.find('.chosen-select').val(chosen.replace(/chosen=/gi,'').split('&'));
+
+        var chosen=this.toolbar
+            .find('.chosen-select')
+            .val(data.chosen.replace(/chosen=/gi,'').split('&'))
+            .trigger("chosen:updated");
+
         this.portlet.find('.skillWidget input[name=skill]').each(
             function(i,input){
                 $(input).prop('checked',data.skills.indexOf(input.value)>0).change();
             }
         );
+        updateSkillButtons(this.portlet,chosen);
+
     };
 }
 SkillWidget.prototype=new Widget();
