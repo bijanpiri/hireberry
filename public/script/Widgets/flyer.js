@@ -3,9 +3,9 @@ var TagWidget = null;
 var Widgets = [
     Widget, TextWidget, PictureWidget,
     VideoWidget, ButtonWidget, TagWidget,
-    MapWidget, VoiceWidget, WorkTypeWidget,
+    MapWidget, BadgeWidget, WorkTypeWidget,
     PersonalInfoWidget, ResumeWidget, AnythingElseWidget,
-    ProfilesWidget, SeperatorWidget, SkillWidget
+    ProfilesWidget, SeperatorWidget, SkillWidget,
 ];
 
 function Flyer(options) {

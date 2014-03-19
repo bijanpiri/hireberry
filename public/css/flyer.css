@@ -235,6 +235,7 @@ Portlet Creator
     top: 0;
     bottom: 0;
     margin: auto;
+    text-align: center;
 }
 
 /** Specific button - outer **/
@@ -247,6 +248,13 @@ Portlet Creator
 }
 
 /** Specific button - inner **/
+.genericButton {
+    height: 72px;
+    width: 72px;
+    line-height: 72px;
+    color: #000;
+}
+
 .plusButton {
     height: 45px;
     width: 46px;
@@ -411,6 +419,7 @@ Portlet Creator
     background: #333;
     border-radius: 4px;
     box-sizing: border-box;
+    color: #f1f1f1;
 }
 .toolbar label{
     display: inline;

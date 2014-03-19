@@ -40,6 +40,7 @@
 <script src="/script/Widgets/SeperatorWidget.js"></script>
 <script src="/script/Widgets/SkillWidget.js"></script>
 <script src="/script/Widgets/WorkTypeWidget.js"></script>
+<script src="/script/Widgets/BadgeWidget.js"></script>
 
 <script src="/script/Widgets/flyer.js"></script>
 <script src="/script/jquery.hotkeys.js"></script>
@@ -287,7 +288,7 @@
                                 <i class="button centeralBackgroundImage closeButton"></i>
                             </a>
                             <a class="newitem buttonFrame" type="7">
-                                <i class="button centeralBackgroundImage addNewVoiceButton"></i>
+                                <span class="centeralBackgroundImage genericButton">Badge</span>
                             </a>
                             <a class="newitem buttonFrame" type="4">
                                 <i class="button centeralBackgroundImage addNewLinkButton"></i>
@@ -296,25 +297,25 @@
                                 <i class="button centeralBackgroundImage addNewMapButton"></i>
                             </a>
                             <a class="newitem buttonFrame" type="8">
-                                WorkType
+                                <span class="centeralBackgroundImage genericButton">WorkType</span>
                             </a>
                             <a class="newitem buttonFrame" type="9">
-                                PersonalInfo
+                                <span class="centeralBackgroundImage genericButton">PersonalInfo</span>
                             </a>
                             <a class="newitem buttonFrame" type="10">
-                                Resume
+                                <span class="centeralBackgroundImage genericButton">Resume</span>
                             </a>
                             <a class="newitem buttonFrame" type="11">
-                                Else?
+                                <span class="centeralBackgroundImage genericButton">Else?</span>
                             </a>
                             <a class="newitem buttonFrame" type="12">
-                                Profiles
+                                <span class="centeralBackgroundImage genericButton">Profiles</span>
                             </a>
                             <a class="newitem buttonFrame" type="13">
-                                Seperator
+                                <span class="centeralBackgroundImage genericButton">Seperator</span>
                             </a>
                             <a class="newitem buttonFrame" type="14">
-                                Skill
+                                <span class="centeralBackgroundImage genericButton">Skill</span>
                             </a>
                         </div>
                     </div>
@@ -605,6 +606,48 @@
 
         </div>
 
+    </div>
+</div>
+
+<div class="container-fluid badgeWidget">
+    <div class="row-fluid"  id="badge"  style="font-size: 2em;">
+        <div class="col-sm-12">
+            <div class="row temp" id="badges">
+                <div class="col-sm-12">
+                    <div style="display: table;margin: 0 auto;margin-bottom: 50px;">
+
+                        <div class="badgeOuterFrame">
+                            <div class="badgeFrame">
+                                <i class="badgeIcon badgeIconVacation"></i>
+                                <div class="badgeDescription">You can take a vacation anywhere, anytime.</div>
+                            </div>
+                        </div>
+
+                        <div class="badgeOuterFrame">
+                            <div class="badgeFrame">
+                                <i class="badgeIcon badgeIconFreeFood"></i>
+                                <div class="badgeDescription">You will never get hungry, with a fully stocked snack bar.</div>
+                            </div>
+                        </div>
+
+                        <div class="badgeOuterFrame">
+                            <div class="badgeFrame">
+                                <i class="badgeIcon badgeIconHealthCaring"></i>
+                                <div class="badgeDescription">Comprehensive health insurance including dental & vision options</div>
+                            </div>
+                        </div>
+
+                        <div class="badgeOuterFrame">
+                            <div class="badgeFrame">
+                                <i class="badgeIcon badgeIconShare"></i>
+                                <div class="badgeDescription">You can have a share.<br/>0.5-1%</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
