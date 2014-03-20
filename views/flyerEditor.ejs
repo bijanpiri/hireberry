@@ -48,180 +48,185 @@
 <script src="/script/bootstrap-wysiwyg.js"></script>
 
 <script src="/script/VideoTools.js"></script>
+
+<script src="/script/profileFinder.js"></script>
+<script src="/script/color-thief.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script src="/script/jribbble.js"></script>
+
 <script>
-    var flyer;
-    var flyerid;
-    var previewWindow = 0;
-    var dialog_confirm=$('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>').hide();
-    dialog_confirm.appendTo('body');
+var flyer;
+var flyerid;
+var previewWindow = 0;
+var dialog_confirm=$('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>').hide();
+dialog_confirm.appendTo('body');
 
-    $(function() {
-        flyerid = $('input[name=flyerid]').val();
-        flyer = $('.portletStack').Flyer({
-            editMode:<%=editMode%>,
-            flyerid:flyerid
-        });
+$(function() {
+    flyerid = $('input[name=flyerid]').val();
+    flyer = $('.portletStack').Flyer({
+        editMode:<%=editMode%>,
+        flyerid:flyerid
+    });
 
-        $('#buttonPreview').click( function() {
+    $('#buttonPreview').click( function() {
 
-            var flyerid = $('input[name=flyerid]').val();
+        var flyerid = $('input[name=flyerid]').val();
 
-            if( previewWindow==0 )
-                previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
-            else
-                previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
-        })
+        if( previewWindow==0 )
+            previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
+        else
+            previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
+    })
 
-        $('#buttonSave').click(function(){
+    $('#buttonSave').click(function(){
 
-            $('#buttonSave').text('Saving...').addClass('disabled');
+        $('#buttonSave').text('Saving...').addClass('disabled');
 
-            var flyerjson = flyer.flyer2json();
-            flyerjson.thumbnail = '';
+        var flyerjson = flyer.flyer2json();
+        flyerjson.thumbnail = '';
 
-            $.post( '/flyer/save', {flyer:flyerjson} )
-                    .done(function(data){
-                        $('#buttonSave').text('Save').removeClass('disabled');
-                    })
-                    .fail(function(data){
-                        $('#buttonSave').text('Save*').removeClass('disabled');
-                    });
+        $.post( '/flyer/save', {flyer:flyerjson} )
+                .done(function(data){
+                    $('#buttonSave').text('Save').removeClass('disabled');
+                })
+                .fail(function(data){
+                    $('#buttonSave').text('Save*').removeClass('disabled');
+                });
 
-        });
+    });
 
-        $('.portletHeader .logo').fileupload({
-            url:'/flyer/upload',
-            dataType: 'json',
-            done: function (e, data) {
-                flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
+    $('.portletHeader .logo').fileupload({
+        url:'/flyer/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
+        }
+    });
+
+    $('#plusButton').click(function(){
+        $('#plusButton').hide();
+        $('#addButtons').show();
+    });
+
+    $('.closeButton').click(function(){
+        $('#plusButton').show();
+        $('#addButtons').hide();
+    });
+
+    function rotate(element, degree) {
+        element.animate({
+            '-webkit-transform': 'rotate(' + degree + 'deg)',
+            '-moz-transform': 'rotate(' + degree + 'deg)',
+            '-ms-transform': 'rotate(' + degree + 'deg)',
+            '-o-transform': 'rotate(' + degree + 'deg)',
+            'transform': 'rotate(' + degree + 'deg)',
+            'zoom': 1
+        }, 5000);
+    }
+
+    $('#dropzone').click(function(){
+        $('#resumefile').click();
+    })
+
+    document.getElementById('resumefile').onchange = function () {
+        $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
+    };
+
+    function getDoc(frame) {
+        var doc = null;
+
+        // IE8 cascading access check
+        try {
+            if (frame.contentWindow) {
+                doc = frame.contentWindow.document;
             }
-        });
-
-        $('#plusButton').click(function(){
-            $('#plusButton').hide();
-            $('#addButtons').show();
-        });
-
-        $('.closeButton').click(function(){
-            $('#plusButton').show();
-            $('#addButtons').hide();
-        });
-
-        function rotate(element, degree) {
-            element.animate({
-                '-webkit-transform': 'rotate(' + degree + 'deg)',
-                '-moz-transform': 'rotate(' + degree + 'deg)',
-                '-ms-transform': 'rotate(' + degree + 'deg)',
-                '-o-transform': 'rotate(' + degree + 'deg)',
-                'transform': 'rotate(' + degree + 'deg)',
-                'zoom': 1
-            }, 5000);
+        } catch(err) {
         }
 
-        $('#dropzone').click(function(){
-            $('#resumefile').click();
-        })
-
-        document.getElementById('resumefile').onchange = function () {
-            $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
-        };
-
-        function getDoc(frame) {
-            var doc = null;
-
-            // IE8 cascading access check
-            try {
-                if (frame.contentWindow) {
-                    doc = frame.contentWindow.document;
-                }
-            } catch(err) {
-            }
-
-            if (doc) { // successful getting content
-                return doc;
-            }
-
-            try { // simply checking may throw in ie8 under ssl or mismatched protocol
-                doc = frame.contentDocument ? frame.contentDocument : frame.document;
-            } catch(err) {
-                // last attempt
-                doc = frame.document;
-            }
+        if (doc) { // successful getting content
             return doc;
         }
 
-        $("#applyForm").submit(function(e) {
+        try { // simply checking may throw in ie8 under ssl or mismatched protocol
+            doc = frame.contentDocument ? frame.contentDocument : frame.document;
+        } catch(err) {
+            // last attempt
+            doc = frame.document;
+        }
+        return doc;
+    }
 
-            /*
-             // Name
-             if( $('#name').val().length == 0 ){
-             $('.error').show().html('Please enter your name');
-             e.preventDefault();
-             return false;
-             }
+    $("#applyForm").submit(function(e) {
 
-             // Email
-             if(validateEmail( $('#email').val() )==false){
-             $('.error').show().html('Please enter a valid email address');
-             e.preventDefault();
-             return false;
-             }
-             */
+        /*
+         // Name
+         if( $('#name').val().length == 0 ){
+         $('.error').show().html('Please enter your name');
+         e.preventDefault();
+         return false;
+         }
 
-            $('.error').hide();
+         // Email
+         if(validateEmail( $('#email').val() )==false){
+         $('.error').show().html('Please enter a valid email address');
+         e.preventDefault();
+         return false;
+         }
+         */
 
-            var formObj = $(this);
-            var formURL = formObj.attr("action");
+        $('.error').hide();
 
-            if(window.FormData !== undefined)  // for HTML5 browsers
+        var formObj = $(this);
+        var formURL = formObj.attr("action");
+
+        if(window.FormData !== undefined)  // for HTML5 browsers
+        {
+            var formData = new FormData(this);
+            $.ajax({
+                url: formURL,
+                type: 'POST',
+                data:  formData,
+                mimeType:"multipart/form-data",
+                contentType: false,
+                cache: false,
+                processData:false,
+                success: function(data, textStatus, jqXHR) {
+                    $('.temp').remove();
+                    $('.thanks').show();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+            e.preventDefault();
+            $('.applyNowButton').val('Sending...').attr('disabled','disabled');
+        }
+        else  //for olden browsers
+        {
+            //generate a random id
+            var  iframeId = 'unique' + (new Date().getTime());
+
+            //create an empty iframe
+            var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
+
+            //hide it
+            iframe.hide();
+
+            //set form target to iframe
+            formObj.attr('target',iframeId);
+
+            //Add iframe to body
+            iframe.appendTo('body');
+            iframe.load(function(e)
             {
-                var formData = new FormData(this);
-                $.ajax({
-                    url: formURL,
-                    type: 'POST',
-                    data:  formData,
-                    mimeType:"multipart/form-data",
-                    contentType: false,
-                    cache: false,
-                    processData:false,
-                    success: function(data, textStatus, jqXHR) {
-                        $('.temp').remove();
-                        $('.thanks').show();
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-
-                    }
-                });
-                e.preventDefault();
-                $('.applyNowButton').val('Sending...').attr('disabled','disabled');
-            }
-            else  //for olden browsers
-            {
-                //generate a random id
-                var  iframeId = 'unique' + (new Date().getTime());
-
-                //create an empty iframe
-                var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
-
-                //hide it
-                iframe.hide();
-
-                //set form target to iframe
-                formObj.attr('target',iframeId);
-
-                //Add iframe to body
-                iframe.appendTo('body');
-                iframe.load(function(e)
-                {
-                    var doc = getDoc(iframe[0]);
-                    var docRoot = doc.body ? doc.body : doc.documentElement;
-                    var data = docRoot.innerHTML;
-                    //data is returned from server.
-                });
-            }
-        });
-
+                var doc = getDoc(iframe[0]);
+                var docRoot = doc.body ? doc.body : doc.documentElement;
+                var data = docRoot.innerHTML;
+                //data is returned from server.
+            });
+        }
     });
+});
 
 </script>
 
@@ -232,9 +237,9 @@
     <div class="row-fluid" style="margin-bottom: 30px;">
         <div class="span10 offset1" style="padding:0 28px ">
             <div style="background-color: #141414;color: #fff;line-height: 3em;padding: 0.1em 0.1em 0.1em 1em;border-radius: 4px;">
-            STEP 1 > <b>STEP2. Create Your Flyer </b> > STEP3</b>
-            <a href="/flyer/publish/<%=flyerid%>" class="btn btn-success pull-right">Next</a>
-            <a href="/flyer/template" class="btn btn-success pull-right">Back</a>
+                STEP 1 > <b>STEP2. Create Your Flyer </b> > STEP3</b>
+                <a href="/flyer/publish/<%=flyerid%>" class="btn btn-success pull-right">Next</a>
+                <a href="/flyer/template" class="btn btn-success pull-right">Back</a>
             </div>
         </div>
     </div>

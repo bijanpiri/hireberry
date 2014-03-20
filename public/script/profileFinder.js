@@ -113,10 +113,10 @@ function findGithubProfile(q,p) {
         .done( function(res){
 
             if( res.items.length > 0 ){
-                fillProfileAddress( $('#ghprofile'), res.items[0].login, true);
+                fillProfileAddress( $('input[name=ghprofile]'), res.items[0].login, true);
             }
             else {
-                fillProfileAddress( $('#ghprofile'), res.items[0].login, false);
+                fillProfileAddress( $('input[name=ghprofile]'), res.items[0].login, false);
             }
 
             dataIsReceived('github',res);
@@ -130,14 +130,14 @@ function findStackoverflowProfile( q, p) {
 
             if( res.items && res.items.length > 0 ) {
                 var endOfURL = res.items[0].link.split('/').splice(3,4).join('/'); // Keep 3 last part of url /user/{uid}/{displayname}
-                fillProfileAddress( $('#soprofile'), endOfURL, true);
+                fillProfileAddress( $('input[name=soprofile]'), endOfURL, true);
 
                 var parts = res.items[0].link.split('/');
                 var uid = parts[ parts.length-2 ];
                 $('.soflair').attr('src','http://stackoverflow.com/users/flair/' + uid + '.png');
             }
             else {
-                fillProfileAddress( $('#soprofile'), p, false);
+                fillProfileAddress( $('input[name=soprofile]'), p, false);
             }
 
             dataIsReceived('stackoverflow',res);
@@ -152,11 +152,11 @@ function findDribbbleProfile(q,p) {
         complete: function(res) {}
     })
         .success(function(data) {
-            fillProfileAddress( $('#drprofile'), data.username, true);
+            fillProfileAddress( $('input[name=drprofile]'), data.username, true);
             dataIsReceived('dribbble',data);
         })
         .error(function() {
-            fillProfileAddress( $('#drprofile'), p, false);
+            fillProfileAddress( $('input[name=drprofile]'), p, false);
             dataIsReceived('dribbble',{});
         });
 }
@@ -165,9 +165,9 @@ function findBehanceProfile(q,p) {
     $.getJSON('https://www.behance.net/v2/users?api_key=FnneyRH4STbpcKoqK8M2aQwdHkdAfXzb&q=' + q + "&callback=?" ,
         function(res){
             if( res.users.length > 0)
-                fillProfileAddress( $('#beprofile'), res.users[0].username, true);
+                fillProfileAddress( $('input[name=beprofile]'), res.users[0].username, true);
             else
-                fillProfileAddress( $('#beprofile'), p, false);
+                fillProfileAddress( $('input[name=beprofile]'), p, false);
 
             dataIsReceived('behance',res);
         });
@@ -177,9 +177,9 @@ function findTwitterProfile(q,p) {
     $.get('/twprofile/' + q )
         .done( function(res){
             if( res.statuses )
-                fillProfileAddress( $('#twprofile'), res.statuses[0].user.screen_name, true);
+                fillProfileAddress( $('input[name=twprofile]'), res.statuses[0].user.screen_name, true);
             else
-                fillProfileAddress( $('#twprofile'), p, false);
+                fillProfileAddress( $('input[name=twprofile]'), p, false);
 
             dataIsReceived('twitter',res);
         });
