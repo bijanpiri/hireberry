@@ -35,7 +35,7 @@ module.exports.forms = function (req,res) {
             form.checked = false;
 
             // Skills
-            var skills = JSON.parse( form.skills );
+            var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
             var selectedSkill = '';
             for (var j=0; j<skills.length; j++)
                     selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
