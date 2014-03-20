@@ -33,6 +33,7 @@ Whole Paper
     top: 0;
     line-height: 40px;
     text-align: center;
+    box-sizing: content-box;
 }
 
 .portletHeader .title {
