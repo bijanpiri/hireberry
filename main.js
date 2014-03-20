@@ -354,7 +354,7 @@ everyauth.password
         });
         return promise;
     })
-    .loginSuccessRedirect('/profile')
+    .loginSuccessRedirect('/')
     .getRegisterPath('/register')
     .postRegisterPath('/register')
     .registerView('register.ejs')
@@ -401,7 +401,7 @@ everyauth.password
 
         return promise;
     })
-    .registerSuccessRedirect('/profile');
+    .registerSuccessRedirect('/');
 //endregion
 
 //region Configure Express
@@ -451,7 +451,7 @@ app.get('/api/forms', routerDashboard.forms );
 
 app.get('/', function(req,res) {
     if( req.user )
-        res.redirect('/profile');
+        res.redirect('/flyer/new');
     else
         res.redirect('/login');
 });

@@ -155,11 +155,6 @@
                             booltin<sup style="margin-left: 4px;color: red; font-size: 0.6em"><i>beta</i></sup>
                         </a>
                     </li>
-                    <li>
-                        <form id="searchform" class="navbar-search" method="get" action="/search" onsubmit="return search()">
-                            <input type="text" class="search-query2" placeholder="Search in users & boards" name="query" id="searchInput"/>
-                        </form>
-                    </li>
                 </ul>
                 <ul class="nav pull-right">
                     <% if(everyauth.loggedIn){ %>
@@ -178,8 +173,7 @@
                             <img class="avatar img-rounded" style="width: 24px" src="#">
                             <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/timeline">Timeline</a></li>
-                            <li><a href="/profile">Profile</a></li>
+                            <li><a href="/dashboard">Dashboard</a></li>
                             <li><a href="/setting">Setting</a></li>
                             <li><a href="/logout">Logout</a></li>
                         </ul>
@@ -195,7 +189,6 @@
                 </ul>
                 <% if(everyauth.loggedIn){ %>
                 <ul class="nav pull-right">
-                    <li><a href="/board/new" class="">Create Board</a></li>
                     <li><a href="/flyer/new" class="">Create Flyer</a></li>
                 </ul>
                 <%}%>

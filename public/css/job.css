@@ -3,13 +3,14 @@
 
 body {
     background-color: #B3A389;
-    font-size: 10px;
 
+    /*
     -ms-user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+    */
 }
 body,h1,h2,h3,h4,h5 {
     font-family: "Roboto Slab",cursive;

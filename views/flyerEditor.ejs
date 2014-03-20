@@ -230,22 +230,19 @@
 <div class="container-fluid" style="width: 95%;">
     <% if(editMode) { %>
     <div class="row-fluid" style="margin-bottom: 30px;">
-        <div class="span9 offset1" style="background-color: #555; color: #fff; line-height: 25px; padding-left:10px ">
+        <div class="span10 offset1" style="padding:0 28px ">
+            <div style="background-color: #141414;color: #fff;line-height: 3em;padding: 0.1em 0.1em 0.1em 1em;border-radius: 4px;">
             STEP 1 > <b>STEP2. Create Your Flyer </b> > STEP3</b>
             <a href="/flyer/publish/<%=flyerid%>" class="btn btn-success pull-right">Next</a>
             <a href="/flyer/template" class="btn btn-success pull-right">Back</a>
+            </div>
         </div>
     </div>
     <div class="row-fluid">
-        <div class="span3 offset1" style="margin-bottom: 10px;">
+        <div class="span3 offset1" style="padding-left: 28px;margin-bottom: 10px;">
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
             <button type="button" class="btn btn-success" id="buttonSave">Save</button>
             <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
-            <span><%=templateID%></span>
-        </div>
-        <div class="span1 offset4">
-            <button class="btn btn-warning" onclick="changeBackground()">Background</button>
-            <input type="file" id="backgroundImage" hidden>
         </div>
     </div>
     <% } %>
@@ -255,9 +252,9 @@
         <div class="row-fluid">
             <div class="span10 offset1" id="portletsBox">
                 <div class="portletHeader">
-                    <img class="logo">
+                    <img class="logo" src="">
                     <div class="title">
-                        Title
+                        JOBS
                     </div>
                 </div>
 

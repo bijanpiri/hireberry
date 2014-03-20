@@ -28,7 +28,7 @@ Whole Paper
     margin: auto 20px;
     min-width: 200px;
     height: 40px;
-    border: 3px dotted #9c9c9c;
+    border: 2px dashed #9c9c9c;
     bottom: 0;
     top: 0;
     line-height: 40px;
@@ -49,6 +49,7 @@ Whole Paper
     background: #999;
     font-weight: 700;
     border-radius: 7px;
+    font-size: 2em;
 }
 
 .portletStack {
