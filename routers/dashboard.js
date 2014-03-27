@@ -22,7 +22,7 @@ module.exports.forms = function(req,res){
         // Reduce
         // ToDo: Make reducing async
         var forms = flyers.map( function(flyer) {
-            var description = flyer.flyer  ? flyer.flyer.description : 'Untitlte';
+            var description = (flyer.flyer && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlte';
 
             return {
                 formName:description,
