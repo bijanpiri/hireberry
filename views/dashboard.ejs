@@ -74,8 +74,32 @@
 
     <script>
         $(function(){
+            // First fill Forms list, then fill table according to current selected form
+            fillFormsList( fillTable );
+        });
+
+        function fillFormsList( callback ) {
+
+            var ownerID = $('#ownerID').attr('val');
+
+            $.get('/api/forms?ownerID=' + ownerID).done( function(res) {
+
+                res.forms.forEach( function(form) {
+                    var option = $('<option>').text(form.formName).attr('id',form.formID);
+                    $('#formsList').append(option);
+                });
+
+                callback();
+            })
+        }
+
+        function fillTable() {
+            var qsParams =
+                    '?ownerID=' + $('#ownerID').attr('val')  +
+                    '&formID=' + $('#formsList :selected').attr('id');
+
             $('#formsTable').WATable({
-                url: '/api/forms',
+                url: '/api/applications' + qsParams,
                 preFill: true,
                 pageSize: 20,
                 sorting: true,
@@ -83,7 +107,7 @@
                 sortEmptyLast: true,
                 checkboxes: true
             });
-        });
+        }
     </script>
 </head>
 <body>
@@ -98,10 +122,10 @@
 
     <div class="row toolbarRow">
         <div class="span7">
+            <input type="hidden" id="ownerID" val="<%=ownerID%>">
+
             <div class="formName">
-                <select>
-                    <option>Booltin - Web Front-End Developer</option>
-                </select>
+                <select id="formsList"></select>
             </div>
         </div>
         <div class="span5">

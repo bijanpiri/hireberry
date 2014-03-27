@@ -95,10 +95,6 @@ module.exports.findTwitterProfile = function (req,res){
     }
 }
 
-module.exports.showForm = function (req,res){
-    res.render('job.ejs');
-}
-
 module.exports.apply = function (req,res) {
 
     var resumeFileName;
@@ -121,6 +117,7 @@ module.exports.apply = function (req,res) {
 
     // ToDo: Save Form In The Database
     MApplyForm({
+        flyerID: req.body.flyerid,
         name:req.body.name,
         email:req.body.email,
         applyTime: new Date(),

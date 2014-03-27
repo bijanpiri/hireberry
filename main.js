@@ -127,12 +127,13 @@ var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
 var BFlyersTags = mongoose.model( 'flyersTags', {flyer:String,tag:String});
 var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-var BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusShortname: String});
+BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusShortname: String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
 var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
 
 MApplyForm = mongoose.model( 'applyForm', {
+    flyerID: String,
     name:String,
     email:String,
     skills:[],
@@ -441,10 +442,10 @@ app.get('/job/dropboxAuth', routerForm.dropboxAuthentication );
 app.get('/liprofile/:q', routerForm.findLinkedInProfile )
 app.get('/gravatar/:email', routerForm.findGravatarProfile )
 app.get('/twprofile/:q', routerForm.findTwitterProfile )
-app.get('/job', routerForm.showForm );
 app.post('/apply', routerForm.apply );
 app.get('/dashboard', routerDashboard.showDashboard );
 app.get('/api/forms', routerDashboard.forms );
+app.get('/api/applications', routerDashboard.applications );
 //endregion
 
 //region Application Routers

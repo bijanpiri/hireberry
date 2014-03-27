@@ -3,10 +3,36 @@
  */
 
 module.exports.showDashboard = function (req,res) {
-    res.render('dashboard.ejs');
+
+    var ownerID = req.user.id;
+
+    res.render('dashboard.ejs', {
+        ownerID: ownerID
+    });
 }
 
-module.exports.forms = function (req,res) {
+// Return all the created forms (template)
+module.exports.forms = function(req,res){
+    var ownerID = req.query.ownerID;
+
+    BFlyers.find( {owner: ownerID}, function(err,flyers) {
+        if( err )
+            return res.send(502);
+
+        // Reduce
+        // ToDo: Make reducing async
+        var forms = flyers.map( function(flyer) {
+            return { formName:flyer._id, formID:flyer._id}
+        } );
+
+        res.send( {forms: forms} );
+    } )
+}
+
+// Return all the submitted form as a data-source
+module.exports.applications = function (req,res) {
+
+    // Data-Source template (for WaTable.js)
     var submittedForms = {
         cols: {
             userId: { index: 1, type: "number", unique:true },
@@ -23,7 +49,11 @@ module.exports.forms = function (req,res) {
         rows: []
     };
 
-    MApplyForm.find( {}, function(err,forms) {
+    // ToDo: Check whether current user is owner of this forms or not.
+
+    var flyerID = req.query.formID;
+
+    MApplyForm.find( {flyerID: flyerID}, function(err,forms) {
         if( err )
             return res.send(303,{error:err});
 
