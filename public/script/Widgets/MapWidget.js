@@ -8,6 +8,7 @@ function MapWidget(){
     var marker;
     var updateMapTimer;
     var editMode;
+    var visitorMarker;
 
     function codeAddress() {
         var address = document.getElementById('address').value;
@@ -78,6 +79,56 @@ function MapWidget(){
         }
     }
 
+    function findPath() {
+        if(navigator.geolocation) {
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var visitorLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+
+                visitorMarker = new google.maps.Marker({
+                    position: visitorLocation,
+                    //map: map,
+                    title: 'You\'re Here!'
+                });
+
+                var request = {
+                    origin: visitorMarker.position,
+                    destination: marker.position,
+                    travelMode: google.maps.DirectionsTravelMode.DRIVING
+                };
+
+                var directionsService = new google.maps.DirectionsService();
+                directionsDisplay = new google.maps.DirectionsRenderer()
+                directionsDisplay.setMap(map);
+                
+                directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(response);
+                        var route = response.routes[0];
+
+                        // For routes that contain no waypoints, the route will consist of a single "leg".
+                        var distance = route.legs[0].distance.text;
+                        var duration = route.legs[0].duration.text;
+
+                        var moreInfo =
+                            'Now you are ' + distance + ' far away.<br/>' +
+                                'It takes about ' + duration + ' to get here.';
+
+                        layout.find('.moreInfoAboutAddress').html( moreInfo );
+
+                        marker.setMap(null)
+                    }
+                });
+
+            }, function() {
+                // Geolocation service failed.
+            });
+        }
+        else {
+            // Your browser doesn't support geolocation.
+        }
+    }
+
     function initLayout() {
         layout = $('.widgets .mapWidget').clone();
 
@@ -87,10 +138,11 @@ function MapWidget(){
 
     this.widgetDidAdd = function(isNew) {
         geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(-34.397, 150.644);
+
         var mapOptions = {
             zoom: 15,
-            center: latlng
+            center: new google.maps.LatLng(-34.397, 150.644),
+            disableDefaultUI: true
         }
 
         // Load Map
@@ -121,6 +173,8 @@ function MapWidget(){
         else {
             layout.find('#address').attr('readonly',true);
         }
+
+        findPath();
     }
 
     initLayout.call(this);
