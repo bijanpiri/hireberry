@@ -14,6 +14,16 @@
             fillFormsList( fillTable );
 
             $('#formsList').change( fillTable )
+
+            $('#viewForm').click( function() {
+                var flyerid = $('#formsList :selected').attr('id')
+                window.open('/flyer/view/0?flyerid=' + flyerid);
+            });
+
+            $('#inactiveForm').click( function() {
+                var flyerid = $('#formsList :selected').attr('id')
+                // ToDo: Inactive form
+            });
         });
 
         function fillFormsList( callback ) {
@@ -69,10 +79,8 @@
             </div>
         </div>
         <div class="span5">
-            <button class="btn btn-success">New Form</button>
-            <button class="btn btn-warning">Inactive Form</button>
-            <button class="btn btn-danger">Delete Form</button>
-            <button class="btn btn-normal">View Form</button>
+            <button class="btn btn-warning" id="inactiveForm">Inactive Form</button>
+            <button class="btn btn-normal" id="viewForm">View Form</button>
         </div>
     </div>
 
