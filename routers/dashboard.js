@@ -22,7 +22,12 @@ module.exports.forms = function(req,res){
         // Reduce
         // ToDo: Make reducing async
         var forms = flyers.map( function(flyer) {
-            return { formName:flyer._id, formID:flyer._id}
+            var description = flyer.flyer  ? flyer.flyer.description : 'Untitlte';
+
+            return {
+                formName:description,
+                formID:flyer._id
+            }
         } );
 
         res.send( {forms: forms} );

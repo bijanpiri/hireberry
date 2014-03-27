@@ -76,6 +76,8 @@
         $(function(){
             // First fill Forms list, then fill table according to current selected form
             fillFormsList( fillTable );
+
+            $('#formsList').change( fillTable )
         });
 
         function fillFormsList( callback ) {
@@ -97,6 +99,8 @@
             var qsParams =
                     '?ownerID=' + $('#ownerID').attr('val')  +
                     '&formID=' + $('#formsList :selected').attr('id');
+
+            $('#formsTable').html('');
 
             $('#formsTable').WATable({
                 url: '/api/applications' + qsParams,

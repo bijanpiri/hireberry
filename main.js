@@ -908,6 +908,61 @@ app.get('/flyer/json/:id', function(req,res){
     });
 });
 
+app.get('/flyer/publish/:flyerid', function(req,res){
+    var flyerid = req.params.flyerid;
+
+    res.render('flyerPublish.ejs', {
+        title:'Publish Flyer',
+        flyerid:flyerid
+    });
+});
+
+app.post('/flyer/publish', function(req,res){
+
+    var flyer = req.body.flyer;
+
+
+    BFlyers.update(
+        {_id:flyer.flyerid},
+        {$set:{flyer:flyer}},
+        {upsert:true},function(err){
+            var tags=flyer.tags;
+            if(!err){
+                tags.forEach(function(tagName,i){
+                    BTag.findOne({name:tagName}, function(err, tag){
+                        if(tag){
+                            BFlyersTags({
+                                flyer:flyer.flyerid,
+                                tag:tag._id
+                            }).save();
+                        }else{
+                            var newtag = BTag({name:tagName});
+                            newtag.save(function(){
+                                var flyerTag = BFlyersTags({
+                                    flyer:flyer.flyerid,
+                                    tag:newtag._id});
+                                flyerTag.save();
+                            });
+                        } });
+                });
+                res.redirect('/profile');
+            }else
+                res.send(500,{result:'DB Error'});
+        });
+
+});
+
+app.post('/flyer/save', function(req,res){
+    var flyer = req.body.flyer;
+
+    BFlyers.update({_id:flyer.flyerid}, {$set:{flyer:flyer}}, function(err){
+        if(err) return res.send(401,{});
+
+        res.send(200,{});
+    });
+});
+
+
 app.get('/flyer/:mode/:tid', function(req,res){
 
     var flyerid;
@@ -970,78 +1025,6 @@ app.get('/flyer/:mode/:tid', function(req,res){
     getPublicBoards();
 });
 
-app.post('/flyer/save', function(req,res){
-    var flyer = req.body.flyer;
-
-    BFlyers.update({_id:flyer.flyerid}, {$set:{flyer:flyer}}, function(err){
-        if(err) return res.send(401,{});
-
-        res.send(200,{});
-    });
-
-    /*
-     var flyerText = req.body.flyertext;
-     var flyerBoard = req.body.board;
-
-     var newflyer = BFlyers({text:flyerText, owner:req.user._id});
-     newflyer.save(function (err) {
-     BFlyersBoards({flyer:newflyer._id,board:flyerBoard}).save(
-     function (err, product, numberAffected) {
-     res.redirect('/profile');
-     });
-     });
-     */
-});
-
-app.get('/flyer/publish/:flyerid', function(req,res){
-    var flyerid = req.params.flyerid;
-
-    res.render('flyerPublish.ejs', {
-        title:'Publish Flyer',
-        flyerid:flyerid
-    });
-});
-
-app.post('/flyer/publish', function(req,res){
-    console.log('Flyer pulish');
-    var flyer = req.body.flyer;
-
-
-    BFlyers.update(
-        {_id:flyer.flyerid},
-        {$set:{flyer:flyer}},
-        {upsert:true},function(err){
-            var tags=flyer.tags;
-            if(!err){
-                tags.forEach(function(tagName,i){
-                    BTag.findOne({name:tagName}, function(err, tag){
-                        if(tag){
-                            BFlyersTags({
-                                flyer:flyer.flyerid,
-                                tag:tag._id
-                            }).save();
-                        }else{
-                            var newtag = BTag({name:tagName});
-                            newtag.save(function(){
-                                var flyerTag = BFlyersTags({
-                                    flyer:flyer.flyerid,
-                                    tag:newtag._id});
-                                flyerTag.save();
-                            });
-                        } });
-                });
-                res.redirect('/profile');
-            }else
-                res.send(500,{result:'DB Error'});
-        });
-
-
-//    res.render('flyerPublish.ejs', {
-//        title:'Publish Flyer',
-//        flyerid:flyer.flyerid
-//    });
-});
-
 app.post('/flyer/putup', function(req,res){
     var flyerid = req.body.flyerid;
     var boardid = req.body.boardid;
@@ -1097,6 +1080,7 @@ app.get('/flyer/remove/:id', function(req,res){
         });
     }
 });
+
 app.get('/board/remove/:id',function(req,res){
     var userid;
     if(checkUser(req,res)){
