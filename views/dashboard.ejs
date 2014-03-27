@@ -20,6 +20,11 @@
                 window.open('/flyer/view/0?flyerid=' + flyerid);
             });
 
+            $('#editForm').click( function() {
+                var flyerid = $('#formsList :selected').attr('id')
+                window.open('/flyer/edit/0?flyerid=' + flyerid);
+            });
+
             $('#inactiveForm').click( function() {
                 var flyerid = $('#formsList :selected').attr('id')
                 // ToDo: Inactive form
@@ -81,6 +86,7 @@
         <div class="span5">
             <button class="btn btn-warning" id="inactiveForm">Inactive Form</button>
             <button class="btn btn-normal" id="viewForm">View Form</button>
+            <button class="btn btn-normal" id="editForm">Edit Form</button>
         </div>
     </div>
 
