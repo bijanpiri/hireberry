@@ -4,9 +4,13 @@
 
 module.exports.showDashboard = function (req,res) {
 
+    if( !req.user )
+        return res.redirect('/');
+
     var ownerID = req.user.id;
 
     res.render('dashboard.ejs', {
+        title: 'Dashboard',
         ownerID: ownerID
     });
 }

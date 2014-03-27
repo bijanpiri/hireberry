@@ -1,0 +1,61 @@
+#wrap .container {
+    background-color: #f1f1f1;
+    padding: 0 2em;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+.headerRow {
+    margin-bottom: 5em;
+}
+
+.tableRow {
+    margin-top: 2em;
+}
+
+.footerRow {
+}
+
+#formsTable {
+    overflow: auto;
+    border: 2px solid gray;
+    border-radius: 4px;
+}
+
+.spanBox {
+    display: inline;
+    float: none;
+    margin: 0 0.2em;
+    padding: 0.3em;
+    border: 1px solid rgb(179, 179, 179);
+    border-radius: 5px;
+    background-color: rgb(225, 225, 225);
+    color: rgb(96, 96, 96);
+    font-weight: 700;
+}
+
+.header {
+    font-size: 5em;
+    height: 2em;
+    line-height: 2.5em;
+    border-bottom: 2px solid #000;
+}
+
+.formName {
+    font-size: 2em;
+    line-height: 1.5em;
+}
+
+.formName select {
+    width: 100%;
+}
+
+.footer {
+    text-align: center;
+    font-size: 1.2em;
+    line-height: 1em;
+    margin-top: 1em;
+}
