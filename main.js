@@ -127,7 +127,7 @@ var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
 var BFlyersTags = mongoose.model( 'flyersTags', {flyer:String,tag:String});
 var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusShortname: String});
+BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusShortname: String, dbToken:String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
 var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
@@ -142,7 +142,8 @@ MApplyForm = mongoose.model( 'applyForm', {
     workTime:String,
     profiles:String,
     anythingelse:String,
-    resumePath:String
+    resumePath:String,
+    dbToken:String
 });
 
 //endregion

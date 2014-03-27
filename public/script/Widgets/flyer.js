@@ -62,6 +62,7 @@ function Flyer(options) {
 
         var widget = new Widgets[wData.type]();
         widget.editMode = editMode;
+        widget.flyerID = $('input[name=flyerid]').val();
         var portlet = widget.content();
         widget.type = wData.type;
         pStack.append(portlet);

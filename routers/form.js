@@ -2,10 +2,19 @@
  * Created by coybit on 3/16/14.
  */
 module.exports.dropboxAuthentication = function (req,res){
+
+    var flyerID = req.query.flyerid;
+
     dbclient.authenticate(function(error, client) {
         if (error)
             return res.send(502,{error:error})
-        res.send(200, { token: client._oauth._token } )
+
+        BFlyers.update( {_id:flyerID}, {dbToken:client._oauth._token}, function(err){
+
+            if(!err)
+                res.send(200, { token: client._oauth._token } )
+        });
+
     });
 
     /*
@@ -138,22 +147,43 @@ module.exports.apply = function (req,res) {
     var uploadResume = function() {
         if( req.files.resume && req.files.resume.size > 0 ) {
 
+            // Read from temp file
             fs.readFile(req.files.resume.path, function (err, data) {
 
-                // ToDo: Choose Unique Name
-                dbclient.writeFile(resumeFileName, data, function(error, stat) {
-                    if (error) {
-                        return showError(error);  // Something went wrong.
-                    }
+                // Find dropbox token
+                BFlyers.findOne( {_id:req.body.flyerid}, function(err,flyer) {
 
-                    console.log("File saved as revision " + stat.revisionTag);
-                    fs.unlink( req.files.resume.path );
-                    res.send(200,{});
-                });
+                    saveOnDropbox( flyer.dbToken, data, resumeFileName );
+
+                })
+
             });
         }
         else {
             res.send(200,{});
         }
+    }
+
+    var saveOnDropbox = function(dbToken,data,resumeFileName) {
+
+        var dbclient = new Dropbox.Client({
+            key: "7bdvs2t8zrdqdw8",
+            secret: "5y37uqs64t0f3gc",
+            sandbox     : false,
+            token       : dbToken,
+            tokenSecret : '5y37uqs64t0f3gc'
+        });
+
+        // ToDo: Choose Unique Name
+        dbclient.writeFile(resumeFileName, data, function(error, stat) {
+            if (error) {
+                return showError(error);  // Something went wrong.
+            }
+
+            console.log("File saved as revision " + stat.revisionTag);
+            fs.unlink( req.files.resume.path );
+            res.send(200,{});
+        });
+
     }
 };

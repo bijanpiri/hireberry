@@ -10,7 +10,7 @@ function Widget(options){
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container');
     this.toolbar = $('<div>').addClass('toolbar').hide();
-    //this.dialog_confirm =  $('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>').hide();
+    this.flyerID = '';
 
     this.editMode = options ? options.editMode : true;
 

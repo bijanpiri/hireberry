@@ -33,7 +33,7 @@ function ResumeWidget(){
                     connectionStateChanged.call(widget);
                 }
                 else
-                    $.get( '/job/dropboxAuth').done( function(res) {
+                    $.get( '/job/dropboxAuth?flyerid=' + widget.flyerID).done( function(res) {
                         if(res.token)
                             widget.dropboxToken = res.token;
                         connectionStateChanged.call(widget);
