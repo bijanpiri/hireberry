@@ -17,16 +17,6 @@ body,h1,h2,h3,h4,h5 {
     font-weight: 400;
 }
 
-a, a:active, a:visited, a:focus {
-    color: #37B36F;
-    display: inline-block;
-}
-
-a:hover {
-    color: #42d182;
-    text-decoration: none;
-}
-
 .logo {
     width: 235px;
     height: 48px;
