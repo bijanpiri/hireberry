@@ -64,6 +64,23 @@ function Flyer(options) {
         widget.editMode = editMode;
         widget.flyerID = $('input[name=flyerid]').val();
         var portlet = widget.content();
+
+        if ((widget instanceof ProfilesWidget) &&  editMode==true )
+        {
+            portlet.find(".profileAddress").find("input").each(function(i,input)
+            {
+               //$(input).hide();
+               //-------Use one of these for disabling input text--------
+               //$(input).attr("disabled", "disabled");
+               //$(input).prop("disabled", "disabled");
+               $(input).prop('readOnly','readOnly');
+
+                //Default cursor type in here is 'not-allowed'
+               $(input).css('cursor','default');
+               //--------------------------------------------------------
+            });
+        }
+
         widget.type = wData.type;
         pStack.append(portlet);
 
