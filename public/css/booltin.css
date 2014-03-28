@@ -5,11 +5,12 @@ body {
 body,h1,h2,h3,h4,h5 {
     font-family: "Roboto Slab",cursive;
     font-weight: 400;
+    font-size: 10px;
 }
 
 
 nav li a {
-    font-size: 1.0em;
+    font-size: 1.5em;
 }
 
 /* Top 60px of page is overlaid by navbar. It's for that !*/
@@ -18,5 +19,5 @@ nav  ~ .container, nav ~ .container-fluid {
 }
 
 .navbar .brand {
-    font-size: 1.5em;
+    font-size: 2.5em;
 }
