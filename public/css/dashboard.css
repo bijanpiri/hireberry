@@ -1,7 +1,7 @@
 #wrap .container {
     background-color: #f1f1f1;
     padding: 0 2em;
-    position: absolute;
+    position: relative;
     left: 0;
     right: 0;
     bottom: 0;
@@ -35,7 +35,7 @@
 }
 
 .header {
-    font-size: 5em;
+    font-size: 4em;
     height: 2em;
     line-height: 2.5em;
     border-bottom: 2px solid #000;

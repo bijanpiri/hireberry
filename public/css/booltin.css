@@ -1,17 +1,15 @@
 
-#map{
-    height: 400px;
+body {
+    background-color: #B3A389;
+}
+body,h1,h2,h3,h4,h5 {
+    font-family: "Roboto Slab",cursive;
+    font-weight: 400;
 }
 
-body {
-    padding-bottom: 150px;
-    width: 100%;
-    font-size: 10px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
 
 nav li a {
-    font-size: 1.5em;
+    font-size: 1.0em;
 }
 
 /* Top 60px of page is overlaid by navbar. It's for that !*/
@@ -20,5 +18,5 @@ nav  ~ .container, nav ~ .container-fluid {
 }
 
 .navbar .brand {
-    font-size: 2.5em;
+    font-size: 1.5em;
 }
