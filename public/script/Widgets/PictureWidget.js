@@ -2,12 +2,15 @@ function PictureWidget(){
     Widget.call(this);
 
     var layout = "";
+    var jcropApi;
     var coordinates;
     function initLayout1() {
         layout = this.clone('.image-widget');
 
         var file = layout.find('input[type=file]');
-        layout.find('button').click(function(){file.click();});
+        layout.find('button').click(function(){
+            file.click();
+        });
 
 
 
@@ -38,12 +41,25 @@ function PictureWidget(){
 
     this.widgetDidAdd=function(){
         this.setToolbar('.toolbar-picture');
+        var widget=this;
+        var replaceResults = function (img) {
+            var content;
+            if (!(img.src || img instanceof HTMLCanvasElement)) {
+                content = $('<span>Loading image file failed</span>');
+            } else {
+                content = $('<a target="_blank">').append(img)
+//                    .attr('download', currentFile.name)
+                    .attr('href', img.src || img.toDataURL());
+            }
+            layout.children('img').replaceWith(content);
+
+        }
         this.addToolbarCommand('add',function(){
             layout.find('input[type=file]').click();
-        });
-        this.addToolbarCommand('edit',function(){
-            var img=$(layout.find('img')[0]);
-            img.Jcrop({
+        }).addToolbarCommand('edit',function(){
+            event.preventDefault();
+            var img=layout.find('img');
+            jcropApi= img.Jcrop({
 
                 onSelect: function (coords) {
                     coordinates = coords;
@@ -54,32 +70,32 @@ function PictureWidget(){
                 allowSelect: true,
                 allowMove: true,
                 allowResize: true
-            });
-           img.setOptions({ allowMove: true,
-                allowMove: true,
-                allowResize: true});
+            },function(){jcropApi=this;});
+            widget.toolbar.find('[command=crop]').show();
+            widget.toolbar.find('[command=edit]').hide();
 
-        });
+        }).addToolbarCommand('crop',function(){
+                event.preventDefault();
+                widget.toolbar.find('[command=crop]').hide();
+                widget.toolbar.find('[command=edit]').show();
 
-        $('#can_size').change(function(e) {
-            jcrop_api.setOptions({ allowResize: !!this.checked });
+                var img=layout.find('img');
+                if(img && coordinates){
+                    replaceResults(loadImage.scale(img[0], {
+                        left: coordinates.x,
+                        top: coordinates.y,
+                        sourceWidth: coordinates.w,
+                        sourceHeight: coordinates.h,
+                        minWidth: $(img).width()
+                    }));
+                    coordinates = null;
+                }
+                if(jcropApi)
+                   jcropApi.release().destroy();
         });
 
     }
-    $('#crop').on('click', function (event) {
-        event.preventDefault();
-        var img = result.find('img, canvas')[0];
-        if (img && coordinates) {
-            replaceResults(loadImage.scale(img, {
-                left: coordinates.x,
-                top: coordinates.y,
-                sourceWidth: coordinates.w,
-                sourceHeight: coordinates.h,
-                minWidth: result.width()
-            }));
-            coordinates = null;
-        }
-    });
+
     this.serialize=function(){
         return this.portlet.find('.image-widget img').attr('src');
     }
