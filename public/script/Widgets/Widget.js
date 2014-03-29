@@ -115,7 +115,7 @@ function Widget(options){
                     callback(widget,args,this);
                 })
             });
-
+        return this;
     }
 
     this.restated=function(){

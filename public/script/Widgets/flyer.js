@@ -7,10 +7,10 @@ var Widgets = [
     PersonalInfoWidget, ResumeWidget, AnythingElseWidget,
     ProfilesWidget, SeperatorWidget, SkillWidget
 ];
-
+var editMode;
 function Flyer(options) {
 
-    var editMode = options.editMode;
+    editMode = options.editMode;
     var pStack = this;
 
     this.pStackNormalHeight;

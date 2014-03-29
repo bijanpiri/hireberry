@@ -562,3 +562,6 @@ Toolbar - WorkType Widget
 .toolbar-separatorWidget {
     margin: 12px 20px;
 }
+.picture-image{
+    max-width: none;
+}

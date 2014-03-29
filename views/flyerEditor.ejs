@@ -1,6 +1,7 @@
 <% layout('layout') -%>
 
-
+<script src="/script/jquery.Jcrop.js"></script>
+<script src="/script/load-image.min.js"></script>
 <script src="/jquery-ui/js/file_upload.js"></script>
 
 <script src="/script/rasterizeHTML.allinone.js"></script>
@@ -25,6 +26,8 @@
 
 <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">-->
 <link href="/css/job.css" rel="stylesheet">
+<link href="/css/jquery.Jcrop.css" rel="stylesheet">
+
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
 <script src="/script/Widgets/PictureWidget.js"></script>
@@ -365,7 +368,7 @@ $(function() {
     <div id="editor" class="text-widget"></div>
 </div>
 
-<div class="imageWidget">
+<div class="image-widget">
     <div class="imageWidgetOuterContainer">
         <div class="imageWidgetInnerContainer">
             <input type="file" name="picture" hidden>
@@ -376,6 +379,7 @@ $(function() {
                 your computer
             </div>
         </div>
+        <img>
     </div>
 
 </div>
@@ -704,6 +708,11 @@ $(function() {
             <a class="btn btn-large" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="icon-list-ul"></i></a>
             <a class="btn btn-large" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="icon-list-ol"></i></a>
         </div>
+    </div>
+
+    <div class="toolbar-picture">
+        <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
+        <a class="btn btn-large" command="edit"><i class="icon-edit"></i></a>
     </div>
 
     <div class="toolbar-separatorWidget">

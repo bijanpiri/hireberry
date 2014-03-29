@@ -2,26 +2,28 @@ function PictureWidget(){
     Widget.call(this);
 
     var layout = "";
-
+    var coordinates;
     function initLayout1() {
-        layout = this.clone('.imageWidget');
+        layout = this.clone('.image-widget');
 
         var file = layout.find('input[type=file]');
         layout.find('button').click(function(){file.click();});
 
-        var widget=this;
+
 
         if(editMode){
             file.fileupload({
                 url:'/flyer/upload',
                 dataType: 'json',
                 done: function (e, data) {
-                    var img=$('<img>');
-                    layout.html(img);
+                    layout.find('.imageWidgetInnerContainer').hide();
+                    var img=layout.find('img');
+
                     img.attr('src', '/uploads/' + data.result.files[0].name);
                 },
-                progress:function (e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                progressall:function (e, data) {
+                    var progress = parseInt(data.loaded * 100/ data.total , 10);
+                    console.log(progress);
                 }
             });
             file.fileupload('option',{dropZone:layout});
@@ -34,25 +36,58 @@ function PictureWidget(){
 
     this.setLayout(layout);
 
-    // Setup the dnd listeners.
-    this.handleFileSelect=function(evt) {
-        var files = evt.target.files; // FileList object
+    this.widgetDidAdd=function(){
+        this.setToolbar('.toolbar-picture');
+        this.addToolbarCommand('add',function(){
+            layout.find('input[type=file]').click();
+        });
+        this.addToolbarCommand('edit',function(){
+            var img=$(layout.find('img')[0]);
+            img.Jcrop({
 
-        // files is a FileList of File objects. List some properties.
-        var output = [];
-        for (var i = 0, f; f = files[i]; i++) {
-            output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                f.size, ' bytes, last modified: ',
-                f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                '</li>');
-        }
-        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+                onSelect: function (coords) {
+                    coordinates = coords;
+                },
+                onRelease: function () {
+                    coordinates = null;
+                },
+                allowSelect: true,
+                allowMove: true,
+                allowResize: true
+            });
+           img.setOptions({ allowMove: true,
+                allowMove: true,
+                allowResize: true});
+
+        });
+
+        $('#can_size').change(function(e) {
+            jcrop_api.setOptions({ allowResize: !!this.checked });
+        });
+
     }
+    $('#crop').on('click', function (event) {
+        event.preventDefault();
+        var img = result.find('img, canvas')[0];
+        if (img && coordinates) {
+            replaceResults(loadImage.scale(img, {
+                left: coordinates.x,
+                top: coordinates.y,
+                sourceWidth: coordinates.w,
+                sourceHeight: coordinates.h,
+                minWidth: result.width()
+            }));
+            coordinates = null;
+        }
+    });
     this.serialize=function(){
-        return this.portlet.find('.portlet-picture').attr('src');
+        return this.portlet.find('.image-widget img').attr('src');
     }
     this.deserialize=function(content) {
-        return this.portlet.find('.portlet-picture').attr('src', content);
+        layout.find('.imageWidgetInnerContainer').hide();
+        var img=layout.find('img');
+
+        return img.attr('src', content);
     }
 }
 PictureWidget.prototype=new Widget();
