@@ -1106,7 +1106,20 @@ Flat Section
     text-align: center;
     color: #9c9c9c;
 }
-
+.flatSection pre {
+    position: relative;
+    left: 0;
+    right: 0;
+    display: inline;
+    margin: 0 auto;
+    top: -0.9em;
+    bottom: 0;
+    font-size: 3em;
+    background-color: #f1f1f1;
+    color: #9c9c9c;
+    border: 0;
+    line-height:48px;
+}
 .flatSection hr {
     border: 1px solid #9c9c9c;
     margin: 0;

@@ -7,18 +7,17 @@ function SeperatorWidget(){
 
     function initLayout() {
         layout = $('.widgets .seperatorWidget').clone();
-
     }
 
     function setColor(color) {
         this.color = color;
-        this.portlet.find('.flatSection span').css( 'color', color);
+        this.portlet.find('.flatSection pre').css( 'color', color);
         this.portlet.find('.flatSection hr').css( 'border-color', color);
     }
 
     function setText(text) {
         this.text = text;
-        this.portlet.find('.flatSection span').text(text);
+        this.portlet.find('.flatSection pre').text(text);
     }
 
     initLayout.call(this);
@@ -26,7 +25,6 @@ function SeperatorWidget(){
 
     this.widgetDidAdd = function() {
         this.setToolbar('.toolbar-separatorWidget');
-
         this.toolbar.find('input[name=text]').keyup( (function(widget) {
             return function(e) {
                 setText.call( widget, $(e.target).val() );
