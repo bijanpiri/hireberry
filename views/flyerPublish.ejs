@@ -45,6 +45,7 @@
     var flyerJson;
     var flyerid;
     var checkboxesList = [];
+    var items = ['HIring','Developer']
     $(function(){
 
         // Init Tags Input
@@ -121,31 +122,48 @@
     </div>
 
     <div class="row-fluid">
-        <div class="span3 offset1">
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <form>
-                        <fieldset>
-                            <legend>publish options:</legend>
-                            <div class="control-group">
-                                <div class="control-label"> Tags:</div>
-                                <div class="controls ">
-                                    <input class="htags" name='tags' type="hidden" />
-                                    <input class="tags"  type="text" data-role="tagsinput" />
+        <div class="span6 offset3">
+            <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
 
-                                    <!--<label class="help-inline"></label>-->
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
                 <div class="row-fluid">
                     <div class="span12">
+                        <div style="font-size: 2em; border-bottom: 1px solid #000;margin-bottom: 1em">
+                            Publish Options
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span4">
                         <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
                         <input type="text" id="description" placeholder="Enter a title" style="width: 100%">
                     </div>
                 </div>
-                <div class="row-fluid"><div class="span12"><b>Share on:</b></div></div>
+
+                <div class="row-fluid controls-row">
+
+                    <div class="control-label"> Tags:</div>
+                    <div class="controls">
+                        <input class="htags" name='tags' type="hidden" />
+                        <input class="tags"  type="text" data-role="tagsinput" />
+                        <!--<label class="help-inline"></label>-->
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span2">
+                        <b>Share on:</b>
+                    </div>
+                    <div class="span4">
+                        <g:plus action="share" href="http://booltin.herokuapp.com/flyer/<%=flyerid%>"></g:plus>
+                    </div>
+                    <div class="span3">
+                        <div class="fb-share-button" data-href="http://booltin.herokuapp.com/flyer/<%=flyerid%>" data-type="button_count"></div>
+                    </div>
+                    <div class="span3">
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://booltin.herokuapp.com/flyer/<%=flyerid%>" data-text="Here is my flyer" >Tweet</a></div>
+                </div>
+            </div>
+            <div hidden>
                 <div class="row-fluid"><div class="span10 offset2">Facebook<input type="checkbox" class="js-switch pull-right"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Twitter<input type="checkbox" class="js-switch pull-right"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Google+<input type="checkbox" class="js-switch pull-right"></div></div>
@@ -153,9 +171,7 @@
                 <div class="row-fluid"><div class="span10 offset2">Comment<input type="text" id="disqussShortname" class="pull-right input-medium" placeholder="disqus shortname"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Reshare<input type="checkbox" class="pull-right"></div></div>
                 <div class="row-fluid"><div class="span10 offset2">Reput-up<input type="checkbox" class="pull-right"></div></div>
-                <div class="row-fluid"><div class="span10 offset2"><g:plus action="share" href="http://booltin.herokuapp.com/flyer/<%=flyerid%>"></g:plus> </div></div>
-                <div class="row-fluid"><div class="span10 offset2"><div class="fb-share-button" data-href="http://booltin.herokuapp.com/flyer/<%=flyerid%>" data-type="button_count"></div> </div></div>
-                <div class="row-fluid"><div class="span10 offset2"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://booltin.herokuapp.com/flyer/<%=flyerid%>" data-text="Here is my flyer" >Tweet</a></div> </div></div>
             </div>
+        </div>
     </div>
 </div>
