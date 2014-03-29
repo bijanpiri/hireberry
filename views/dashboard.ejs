@@ -67,8 +67,34 @@
 <div id="wrap">
 <div class="container">
 
+    <div class="row-fluid statisticsRow">
+        <div class="span3 statBox">
+            <div class="number"><%=numForms%></div>
+            <div class="text">Open Position</div>
+        </div>
+
+        <div class="span3 statBox">
+            <div class="number"><%=numApplications%></div>
+            <div class="text">Applications</div>
+        </div>
+
+        <div class="span3 statBox">
+            <div class="number"><%=numUnvisited%></div>
+            <div class="text">Unvisited Applications</div>
+        </div>
+
+        <div class="span3 statBox">
+            <div class="number"><%=numTodayApplications%></div>
+            <div class="text">Today Applications</div>
+        </div>
+    </div>
+
     <div class="row-fluid toolbarRow">
-        <div class="span7">
+        <div class="span2">
+                <span class="formsListLabel">Select a form:</span>
+            </div>
+
+        <div class="span5">
             <input type="hidden" id="ownerID" val="<%=ownerID%>">
 
             <div class="formName">
@@ -76,9 +102,9 @@
             </div>
         </div>
         <div class="span5">
-            <button class="btn btn-warning" id="inactiveForm">Inactive Form</button>
-            <button class="btn btn-normal" id="viewForm">View Form</button>
-            <button class="btn btn-normal" id="editForm">Edit Form</button>
+            <button class="btn btn-warning btn-large" id="inactiveForm">Inactive Form</button>
+            <button class="btn btn-primary btn-large" id="viewForm">View Form</button>
+            <button class="btn btn-success btn-large" id="editForm">Edit Form</button>
         </div>
     </div>
 

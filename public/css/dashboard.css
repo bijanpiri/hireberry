@@ -4,8 +4,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    top: 50px;
+    top: 80px;
     padding: 30px;
+    border-radius: 4px;
 }
 
 .headerRow {
@@ -46,13 +47,38 @@
     line-height: 1.5em;
 }
 
-.formName select {
-    width: 100%;
+.formsListLabel {
+    font-size: 2em;
+    line-height: 2em;
 }
 
-.footer {
-    text-align: center;
+#formsList {
+    height: 40px;
+    max-width: 100%;
+    background-color: transparent;
     font-size: 1.2em;
-    line-height: 1em;
-    margin-top: 1em;
+    margin: 0;
+}
+
+.statBox {
+    border-radius: 7px;
+    border: 2px solid #9A9A9A;
+    background-color: #fff;
+    margin-bottom: 40px;
+    height: 200px;
+    padding: 0.5em;
+}
+
+.statBox .number {
+    font-size: 8em;
+    line-height: 1.6em;
+    color: #487C96;
+    text-align: center;
+    font-weight: 700;
+}
+.statBox .text {
+    font-size: 2em;
+    color: #99C7DE;
+    text-align: center;
+    font-weight: 700;
 }

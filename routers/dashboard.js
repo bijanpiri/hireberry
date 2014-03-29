@@ -9,9 +9,15 @@ module.exports.showDashboard = function (req,res) {
 
     var ownerID = req.user.id;
 
+    // ToDo: Retrieval real numbers
+
     res.render('dashboard.ejs', {
         title: 'Dashboard',
-        ownerID: ownerID
+        ownerID: ownerID,
+        numForms: 10,
+        numApplications: 123,
+        numUnvisited: 52,
+        numTodayApplications: 6
     });
 }
 
@@ -44,16 +50,16 @@ module.exports.applications = function (req,res) {
     // Data-Source template (for WaTable.js)
     var submittedForms = {
         cols: {
-            userId: { index: 1, type: "number", unique:true },
-            applyTime: { index: 2, type: "string" },
-            name: { index: 3, type: "string" },
-            email: { index: 4, type: "string" },
-            skills: { index: 5, type: "string"},
-            profiles: { index: 6, type: "string"},
-            workTime: { index: 7, type: "string" },
-            workPlace: { index: 8, type: "string" },
-            resumePath: { index: 9, type: "string" },
-            anythingelse: { index: 10, type: "string" }
+            userId: { index: 1, type: "number", unique:true, friendly:"Num" },
+            applyTime: { index: 2, type: "string", friendly:"Application Date/Time" },
+            name: { index: 3, type: "string", friendly:"Name" },
+            email: { index: 4, type: "string", friendly:"Email" },
+            skills: { index: 5, type: "string", friendly:"Skills"},
+            profiles: { index: 6, type: "string", friendly:"Profiles"},
+            workTime: { index: 7, type: "string", friendly:"Work Time" },
+            workPlace: { index: 8, type: "string", friendly:"Work Place" },
+            resumePath: { index: 9, type: "string", friendly:"Resume" },
+            anythingelse: { index: 10, type: "string", friendly:"Cover Letter" }
         },
         rows: []
     };

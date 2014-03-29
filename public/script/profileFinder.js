@@ -116,7 +116,7 @@ function findGithubProfile(q,p) {
                 fillProfileAddress( $('input[name=ghprofile]'), res.items[0].login, true);
             }
             else {
-                fillProfileAddress( $('input[name=ghprofile]'), res.items[0].login, false);
+                fillProfileAddress( $('input[name=ghprofile]'), p, false);
             }
 
             dataIsReceived('github',res);
