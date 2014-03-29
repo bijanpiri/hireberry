@@ -91,7 +91,7 @@
                         $('#buttonDone').removeClass('disabled');
 
                         alert('Flyer is published.')
-                        window.location = '/';
+                        window.location = '/flyer/view/0?flyerid=' + flyerid;
                     })
                     .fail(function(data){
                         $('#buttonDone').removeClass('disabled');
@@ -101,7 +101,7 @@
         // Load Flyer Properties
         flyerid = $('input[name=flyerid]').val();
 
-        $().Flyer({}).json2flyer(flyerid, function(json){
+        $().Flyer({}).json2flyer(0,flyerid, function(json){
             flyerJson = json;
             $('#flyerThumbnail').attr('src',json.thumbnail);
             $('#description').val(json.description);
