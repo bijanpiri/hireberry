@@ -67,8 +67,9 @@ dialog_confirm.appendTo('body');
 $(function() {
     flyerid = $('input[name=flyerid]').val();
     flyer = $('.portletStack').Flyer({
-        editMode:<%=editMode%>,
-        flyerid:flyerid
+        editMode: <%=editMode%>,
+        flyerid: flyerid,
+        templateID: <%=templateID%>
     });
 
     $('#buttonPreview').click( function() {

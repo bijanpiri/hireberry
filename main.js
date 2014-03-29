@@ -882,7 +882,7 @@ app.get('/flyer/new',function(req,res){
     var flyerid=req.cookies.flyerid;
 
     if(flyerid)
-        res.redirect('/flyer/editor/null');
+        res.redirect('/flyer/editor/0');
     else
         res.redirect('/flyer/template');
 });
@@ -891,22 +891,34 @@ app.get('/flyer/template', function(req,res){
     res.render('flyerTemplate.ejs', {title:'Template Gallery'});
 });
 
-app.get('/flyer/json/:id', function(req,res){
+app.get('/flyer/:templateID/json/:id', function(req,res){
 
     //if(!checkUser(req,res))
     //    return;
 
     var flyerid = req.params.id;
+    var templateID = req.params.templateID;
 
-    BFlyers.findOne({_id:flyerid}, function(err,flyer){
-        if(err)
-            res.send('Oh oh error');
+    if( templateID==0 ) { // Load stored flyer
+        BFlyers.findOne({_id:flyerid}, function(err,flyer){
+            if(err)
+                res.send('Oh oh error');
 
-        if(flyer)
-            res.send(flyer.flyer);
+            if(flyer)
+                res.send(flyer.flyer);
+            else
+                res.send('404, Not Found! Yah!');
+        });
+    }
+    else { // Load a pre-built template
+
+        var templates = require('./templates.js');
+
+        if( 0 < templateID && templateID < 10)
+            res.send( templates.FlyerTemplates[ templateID ] );
         else
-            res.send('404, Not Found! Yah!');
-    });
+            res.send(200)
+    }
 });
 
 app.get('/flyer/publish/:flyerid', function(req,res){
@@ -976,7 +988,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
     var renderNewFlyerView = function() {
         res.render('flyerEditor.ejs',{
-            title:'new flyer',
+            title:'Flyer Editor',
             boards:boards,
             flyerid:flyerid,
             templateID:templateID,

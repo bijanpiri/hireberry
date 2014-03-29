@@ -102,9 +102,9 @@ function Flyer(options) {
             widget.deserialize(wData.content);
     };
 
-    var json2flyer = function(flyerid, callback) {
+    var json2flyer = function(templateID, flyerid, callback) {
 
-        $.get('/flyer/json/'+flyerid)
+        $.get('/flyer/' + templateID + '/json/'+flyerid)
             .done(function(data){
                 if( callback ){
                     callback(data);
@@ -203,8 +203,9 @@ function Flyer(options) {
             });
         });
 
-        if(options.flyerid)
-            json2flyer(options.flyerid)
+        // templateID=0 means 'don't use template'
+        if( options.flyerid)
+            json2flyer( options.templateID, options.flyerid )
     }
 
     initPortletsStack();
