@@ -19,6 +19,9 @@ function ProfilesWidget(){
             })
         });
 
+        if(this.editMode) {
+            this.portlet.find('input').prop('readOnly','readOnly').css('cursor','default');
+        }
     }
 
     this.serialize = function() {

@@ -58,7 +58,7 @@ function BadgeWidget(){
 
             } else {
 
-                $('.badgeOuterFrame[expanded=1]').click();
+                $(".badgeOuterFrame[expanded='1']").click();
 
                 scaleIcon(1,0.5);
 
