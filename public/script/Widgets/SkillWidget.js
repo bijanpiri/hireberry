@@ -6,10 +6,19 @@ function SkillWidget(){
 
     function updateSkillButtons(portlet, chosenBox) {
         var skills = chosenBox.val() || [];
+
+        if( skills.length == 0 ) { // Empty-State
+            portlet.find('.emptyState').show();
+        }
+        else {
+            portlet.find('.emptyState').hide();
+        }
+
         portlet.find('input[name=skill]').each(function(i,input){
             input.parentElement.style.display= skills.indexOf(input.value)>=0 ?
                 '':'none';
         });
+
 
     }
 
@@ -29,9 +38,9 @@ function SkillWidget(){
             width:'500px',
             no_results_text: "Oops, nothing found!"
         }).on('change', (function(portlet,chosenBox) {
-               return function() {
-                   updateSkillButtons( portlet,  chosenBox );
-               };
+                return function() {
+                    updateSkillButtons( portlet,  chosenBox );
+                };
             })(this.portlet, chosenBox));
 
         // Initialize
