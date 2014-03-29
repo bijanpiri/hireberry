@@ -62,11 +62,14 @@ function SkillWidget(){
             .val(data.chosen)
             .trigger("chosen:updated");
 
+        var skills = data.skills || [];
+
         this.portlet.find('.skillWidget input[name=skill]').each(
             function(i,input){
-                $(input).prop('checked',data.skills.indexOf(input.value)>=0).change();
+                $(input).prop('checked',skills.indexOf(input.value)>=0).change();
             }
         );
+
         updateSkillButtons(this.portlet,chosen);
 
     };
