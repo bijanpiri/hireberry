@@ -40,12 +40,12 @@ function Widget(options){
                         draggable : false,
                         position:'middle',
                         buttons: {
-                            Ok: function() {
+                            Yes: function() {
                                 $( this ).dialog( "close" );
                                 widget.portletContainer.remove();
                                 Widgets[widget.type].instances++;
                             },
-                            Cancel: function() {
+                            No: function() {
                                 $( this ).dialog( "close" );
                             }
                         },

@@ -143,7 +143,8 @@ MApplyForm = mongoose.model( 'applyForm', {
     profiles:String,
     anythingelse:String,
     resumePath:String,
-    dbToken:String
+    dbToken:String,
+    activities:[]
 });
 
 //endregion
@@ -447,6 +448,7 @@ app.post('/apply', routerForm.apply );
 app.get('/dashboard', routerDashboard.showDashboard );
 app.get('/api/forms', routerDashboard.forms );
 app.get('/api/applications', routerDashboard.applications );
+app.post('/api/applications/:applicationID', routerDashboard.updateApplication );
 //endregion
 
 //region Application Routers

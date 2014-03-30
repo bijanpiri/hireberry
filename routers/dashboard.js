@@ -52,15 +52,16 @@ module.exports.applications = function (req,res) {
     var submittedForms = {
         cols: {
             userId: { index: 1, type: "number", unique:true, friendly:"Num" },
-            applyTime: { index: 2, type: "string", friendly:"Application Date/Time" },
-            name: { index: 3, type: "string", friendly:"Name" },
-            email: { index: 4, type: "string", friendly:"Email" },
-            skills: { index: 5, type: "string", friendly:"Skills"},
-            profiles: { index: 6, type: "string", friendly:"Profiles"},
-            workTime: { index: 7, type: "string", friendly:"Work Time" },
-            workPlace: { index: 8, type: "string", friendly:"Work Place" },
-            resumePath: { index: 9, type: "string", friendly:"Resume" },
-            anythingelse: { index: 10, type: "string", friendly:"Cover Letter" }
+            lastActivity: { index: 2, type: "string", friendly:"Last Activity" },
+            applyTime: { index: 3, type: "string", friendly:"Application Date/Time" },
+            name: { index: 4, type: "string", friendly:"Name" },
+            email: { index: 5, type: "string", friendly:"Email" },
+            skills: { index: 6, type: "string", friendly:"Skills"},
+            profiles: { index: 7, type: "string", friendly:"Profiles"},
+            workTime: { index: 8, type: "string", friendly:"Work Time" },
+            workPlace: { index: 9, type: "string", friendly:"Work Place" },
+            resumePath: { index: 10, type: "string", friendly:"Resume" },
+            anythingelse: { index: 11, type: "string", friendly:"Cover Letter" }
         },
         rows: []
     };
@@ -112,10 +113,28 @@ module.exports.applications = function (req,res) {
             // Resume
             form.resumePath = (form.resumePath==='-') ? '' : makeLinkTag( 'link', form.resumePath, false);
 
+            // Last Activity
+            if( form.activities && form.activities.length > 0 )
+                form.lastActivity = form.activities[form.activities.length-1]['type'];
+            else
+                form.lastActivity = 'NEW'
+
             submittedForms.rows.push( form );
         }
 
         res.send(submittedForms);
+    })
+}
+
+module.exports.updateApplication = function(req,res) {
+    var appID = req.params.applicationID;
+    var activity = {
+        type:req.body.activity,
+        data:req.body.data,
+        timestamp: new Date() };
+
+    MApplyForm.update({_id:appID}, {$push:{activities:activity}}, function(err) {
+        res.send(200);
     })
 }
 

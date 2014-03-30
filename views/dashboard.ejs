@@ -1,124 +1,274 @@
 <% layout('layout.ejs') %>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js" type="text/javascript"></script>
-    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/script/jquery.watable.js" type="text/javascript" charset="utf-8"></script>
-    <link rel='stylesheet' href='/css/watable.css'/>
-    <link rel='stylesheet' href='/css/dashboard.css'>
-    <link rel='stylesheet' href='/css/job.css'>
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/script/jquery.watable.js" type="text/javascript" charset="utf-8"></script>
+<link rel='stylesheet' href='/css/watable.css'/>
+<link rel='stylesheet' href='/css/dashboard.css'>
+<link rel='stylesheet' href='/css/job.css'>
 
-    <script>
-        $(function(){
-            // First fill Forms list, then fill table according to current selected form
-            fillFormsList( fillTable );
+<script>
+    $(function(){
+        // First fill Forms list, then fill table according to current selected form
+        fillFormsList( fillTable );
 
-            $('#formsList').change( fillTable )
+        $('#formsList').change( fillTable )
 
-            $('#viewForm').click( function() {
-                var flyerid = $('#formsList :selected').attr('id')
-                window.open('/flyer/view/0?flyerid=' + flyerid);
-            });
-
-            $('#editForm').click( function() {
-                var flyerid = $('#formsList :selected').attr('id')
-                window.open('/flyer/edit/0?flyerid=' + flyerid);
-            });
-
-            $('#inactiveForm').click( function() {
-                var flyerid = $('#formsList :selected').attr('id')
-                // ToDo: Inactive form
-            });
+        $('#viewForm').click( function() {
+            var flyerid = $('#formsList :selected').attr('id')
+            window.open('/flyer/view/0?flyerid=' + flyerid);
         });
 
-        function fillFormsList( callback ) {
+        $('#editForm').click( function() {
+            var flyerid = $('#formsList :selected').attr('id')
+            window.open('/flyer/edit/0?flyerid=' + flyerid);
+        });
 
-            var ownerID = $('#ownerID').attr('val');
+        $('#inactiveForm').click( function() {
+            var flyerid = $('#formsList :selected').attr('id')
+            // ToDo: Inactive form
+        });
 
-            $.get('/api/forms?ownerID=' + ownerID).done( function(res) {
+        $('#activitiesModal').dialog({
+            resizable: false,
+            autoOpen: false,
+            modal: true,
+            title: "Activities",
+            width: 400,
+            maxHeight: 600
+        });
+    });
 
-                res.forms.forEach( function(form) {
-                    var option = $('<option>').text(form.formName + form.mode ).attr('id',form.formID);
-                    $('#formsList').append(option);
-                });
+    function fillFormsList( callback ) {
 
-                callback();
-            })
-        }
+        var ownerID = $('#ownerID').attr('val');
 
-        function fillTable() {
-            var selectedForm = $('#formsList :selected');
-            var qsParams =
-                    '?ownerID=' + $('#ownerID').attr('val')  +
-                    '&formID=' + selectedForm.attr('id');
+        $.get('/api/forms?ownerID=' + ownerID).done( function(res) {
 
-            $('#currentFormName').text( selectedForm.val() );
-
-            $('#formsTable').html('');
-
-            $('#formsTable').WATable({
-                url: '/api/applications' + qsParams,
-                preFill: true,
-                pageSize: 20,
-                sorting: true,
-                filter: true,
-                sortEmptyLast: true,
-                checkboxes: true
+            res.forms.forEach( function(form) {
+                var option = $('<option>').text(form.formName + form.mode ).attr('id',form.formID);
+                $('#formsList').append(option);
             });
-        }
-    </script>
+
+            callback();
+        })
+    }
+
+    function fillTable() {
+        var selectedForm = $('#formsList :selected');
+        var qsParams =
+                '?ownerID=' + $('#ownerID').attr('val')  +
+                        '&formID=' + selectedForm.attr('id');
+
+        $('#currentFormName').text( selectedForm.val() );
+
+        $('#formsTable').html('');
+
+        $('#formsTable').WATable({
+            url: '/api/applications' + qsParams,
+            preFill: true,
+            pageSize: 20,
+            sorting: true,
+            filter: true,
+            sortEmptyLast: true,
+            hidePagerOnEmpty: true,
+            checkboxes: true,
+            actions: {
+                filter: true, //Toggle visibility
+                columnPicker: true, //Toggle visibility
+                custom: [
+                    $('<a href="#">someLink</a>'),
+                    $('<a href="#">anotherLink</a>')
+                ]
+            },
+            rowClicked: function(data) {
+
+                var activities = $('<div>').addClass('activities');
+                var appID = data.row._id;
+
+                for( var i=0; i<data.row.activities.length; i++ ) {
+                    var activity = data.row.activities[i];
+                    var dateTime = new Date(activity['timestamp']);
+
+                    var activityItem = $('<div>').addClass('activity');
+                    var timeStamp = $('<div>').addClass('activity-timestamp').text( dateTime.toLocaleString() );
+                    var activityType = $('<div>').addClass('activity-type').text( activity['type'] );
+                    var separator = $('<hr>').addClass('activity-separator');
+                    var actionPanel = $('<div>').addClass('activity-actionPanel');
+
+                    var title = $('<p>').text('Make a decision').addClass('activity-title');
+                    var note = $('<textarea>').attr('placeholder','Enter a note about your decision causes')
+                            .addClass('activity-note')
+                            .attr('name','note') ;
+                    actionPanel.append(title).append(note).append('<br>');
+
+                    switch( activity['type'] ) {
+                        case 'NEW':
+                            var ignoreBtn = $('<button>')
+                                    .text('Ignore')
+                                    .click( handlerMaker(appID,'IGNORED',[note]) );
+
+                            var planBtn = $('<button>')
+                                    .text('Plan an interview')
+                                    .click( handlerMaker(appID,'PLANNING',[note]) );
+
+                            actionPanel.append(ignoreBtn).append(planBtn);
+                            break;
+                        case 'PLANNING':
+                            var interviewDate = $('<input type=date>')
+                                    .attr('name','interviewDate');
+                            var interviewTime = $('<input type=time>')
+                                    .attr('name','interviewTime')
+
+                            var ignoreBtn = $('<button>')
+                                    .text('Ignore')
+                                    .click( handlerMaker(appID,'IGNORED',[note]) );
+
+                            var inviteBtn = $('<button>')
+                                    .text('Send an invitation')
+                                    .click( handlerMaker(appID,'INVITED',[note,interviewDate,interviewTime]) );
+
+                            actionPanel.append(interviewDate)
+                                    .append(interviewTime)
+                                    .append('<br>')
+                                    .append(ignoreBtn)
+                                    .append(inviteBtn);
+                            break;
+                        case 'INVITED':
+                            var ignoreBtn = $('<button>')
+                                    .text('Approved')
+                                    .click( handlerMaker(appID,'APPROVED',[note]) );
+
+                            var inviteBtn = $('<button>')
+                                    .text('Decline')
+                                    .click( handlerMaker(appID,'DECLINED',[note]) );
+
+                            actionPanel.append(ignoreBtn).append(inviteBtn);
+                            break;
+                        case 'APPROVED':
+                        case 'DECLINED':
+                        case 'IGNORED':
+                            var BackToListBtn = $('<button>')
+                                    .text('Back to list')
+                                    .click( handlerMaker(appID,'NEW',[note]) );
+                            actionPanel.append(BackToListBtn);
+                            break
+                    }
+
+                    if( i < data.row.activities.length-1) {
+                        var prevData = data.row.activities[i+1].data;
+                        var information = '';
+
+                        for( var key in prevData) {
+                            information += '<b>' + key + '</b>' + ': ' + prevData[key] + '<br/>';
+                        }
+
+                        actionPanel = $('<div>').html(information);
+                    }
+
+                    activityItem
+                            .append(timeStamp)
+                            .append(activityType)
+                            .append(actionPanel)
+                            .append(separator);
+
+                    activities.prepend( activityItem );
+                }
+
+                $('#activitiesModal').find('.contain').html( activities );
+                $('#activitiesModal').dialog('open');
+
+                //igonreApplication(data.row._id);
+            }
+        });
+    }
+
+    // Make a triple parameters function
+    function handlerMaker(a,b,c) {
+        return (function(p1,p2,p3){
+            return function(){changeApplicationState(p1,p2,p3)}
+        })(a,b,c);
+    }
+
+    function changeApplicationState(appID,newState,inputElements) {
+
+        var data = {};
+
+        for(var i=0; i<inputElements.length; i++)
+            data[ inputElements[i].attr('name') ] = inputElements[i].val();
+
+        $.post( '/api/applications/' + appID, { activity:newState, data:data }).done( function(res) {
+                    fillTable();
+                })
+    }
+
+    function Application(appID) {
+        $.post( '/api/applications/' + appID, {
+            activity:'INVITED'
+        }).done( function(res) {
+                    fillTable();
+                })
+    }
+
+</script>
 
 <div id="wrap">
-<div class="container">
+    <div class="container">
 
-    <div class="row-fluid statisticsRow">
-        <div class="span3 statBox">
-            <div class="number"><%=numForms%></div>
-            <div class="text">Open Position</div>
-        </div>
+        <div class="row-fluid statisticsRow">
+            <div class="span3 statBox">
+                <div class="number"><%=numForms%></div>
+                <div class="text">Open Position</div>
+            </div>
 
-        <div class="span3 statBox">
-            <div class="number"><%=numApplications%></div>
-            <div class="text">Applications</div>
-        </div>
+            <div class="span3 statBox">
+                <div class="number"><%=numApplications%></div>
+                <div class="text">Applications</div>
+            </div>
 
-        <div class="span3 statBox">
-            <div class="number"><%=numUnvisited%></div>
-            <div class="text">Unvisited Applications</div>
-        </div>
+            <div class="span3 statBox">
+                <div class="number"><%=numUnvisited%></div>
+                <div class="text">Unvisited Applications</div>
+            </div>
 
-        <div class="span3 statBox">
-            <div class="number"><%=numTodayApplications%></div>
-            <div class="text">Today Applications</div>
-        </div>
-    </div>
-
-    <div class="row-fluid toolbarRow">
-        <div class="span2">
-            <span class="formsListLabel">Forms:</span>
-        </div>
-    </div>
-
-    <div class="row-fluid toolbarRow">
-        <div class="span7">
-            <input type="hidden" id="ownerID" val="<%=ownerID%>">
-
-            <div class="formName">
-                <select id="formsList"></select>
+            <div class="span3 statBox">
+                <div class="number"><%=numTodayApplications%></div>
+                <div class="text">Today Applications</div>
             </div>
         </div>
-        <div class="span5">
-            <button class="btn btn-warning btn-large" id="inactiveForm">Inactive Form</button>
-            <button class="btn btn-primary btn-large" id="viewForm">View Form</button>
-            <button class="btn btn-success btn-large" id="editForm">Edit Form</button>
-        </div>
-    </div>
 
-    <div class="row-fluid tableRow">
-        <div class="span12">
-            <div id="tableTitle">Application related to <span id="currentFormName">-</span>:</div>
-            <div id="formsTable"></div>
+        <div class="row-fluid toolbarRow">
+            <div class="span2">
+                <span class="formsListLabel">Forms:</span>
+            </div>
         </div>
-    </div>
 
+        <div class="row-fluid toolbarRow">
+            <div class="span7">
+                <input type="hidden" id="ownerID" val="<%=ownerID%>">
+
+                <div class="formName">
+                    <select id="formsList"></select>
+                </div>
+            </div>
+            <div class="span5">
+                <button class="btn btn-warning btn-large" id="inactiveForm">Inactive Form</button>
+                <button class="btn btn-primary btn-large" id="viewForm">View Form</button>
+                <button class="btn btn-success btn-large" id="editForm">Edit Form</button>
+            </div>
+        </div>
+
+        <div class="row-fluid tableRow">
+            <div class="span12">
+                <div id="tableTitle">Application related to <span id="currentFormName">-</span>:</div>
+                <div id="formsTable"></div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<div id="activitiesModal">
+    <div class="contain">
+
+    </div>
 </div>

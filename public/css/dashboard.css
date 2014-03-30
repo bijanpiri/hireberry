@@ -91,3 +91,39 @@
 #currentFormName {
     font-size: 1.5em;
 }
+
+.activity {
+}
+
+.activity-timestamp {
+    font-size: 1.2em;
+    color: #9c9c9c;
+}
+
+.activity-separator {
+    border-color: #000;
+}
+
+.activity-type {
+    font-size: 1.4em;
+}
+
+.activity-actionPanel {
+    background-color: #D3D3D3;
+    vertical-align: middle;
+    text-align: center;
+    padding: 10px 0;
+    margin: 10px 0;
+}
+
+.activity-actionPanel button {
+    margin: 0 5px;
+}
+
+.activity-note {
+    resize: none;
+}
+
+.activity-title {
+    font-size: 1.3em;
+}

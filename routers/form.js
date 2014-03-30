@@ -135,7 +135,8 @@ module.exports.apply = function (req,res) {
         workTime:req.body.workTime,
         profiles:JSON.stringify(profiles),
         anythingelse:req.body.anythingElse,
-        resumePath:resumeFileName
+        resumePath:resumeFileName,
+        activities:[{type:'NEW',timestamp:new Date()}]
     }).save( function(err, application) {
             if(err){
                 res.send(404,{});
