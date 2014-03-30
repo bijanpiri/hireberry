@@ -136,15 +136,15 @@ module.exports.apply = function (req,res) {
         profiles:JSON.stringify(profiles),
         anythingelse:req.body.anythingElse,
         resumePath:resumeFileName
-    }).save( function(err) {
+    }).save( function(err, application) {
             if(err){
                 res.send(404,{});
             } else {
-                uploadResume();
+                uploadResume( application._id );
             }
         });
 
-    var uploadResume = function() {
+    var uploadResume = function( applicationID ) {
         if( req.files.resume && req.files.resume.size > 0 ) {
 
             // Read from temp file
@@ -152,11 +152,8 @@ module.exports.apply = function (req,res) {
 
                 // Find dropbox token
                 BFlyers.findOne( {_id:req.body.flyerid}, function(err,flyer) {
-
-                    saveOnDropbox( flyer.dbToken, data, resumeFileName );
-
+                    saveOnDropbox( flyer.dbToken, data, resumeFileName, applicationID );
                 })
-
             });
         }
         else {
@@ -164,7 +161,7 @@ module.exports.apply = function (req,res) {
         }
     }
 
-    var saveOnDropbox = function(dbToken,data,resumeFileName) {
+    var saveOnDropbox = function( dbToken, data, resumeFileName, applicationID ) {
 
         var dbclient = new Dropbox.Client({
             key: "7bdvs2t8zrdqdw8",
@@ -180,9 +177,20 @@ module.exports.apply = function (req,res) {
                 return showError(error);  // Something went wrong.
             }
 
-            console.log("File saved as revision " + stat.revisionTag);
             fs.unlink( req.files.resume.path );
-            res.send(200,{});
+
+            // Create Share Link
+            dbclient.makeUrl(resumeFileName,{}, function(err,data) {
+
+                if( !err )
+                    MApplyForm.update({_id:applicationID},{resumePath:data.url}, function() {
+                        res.send(200,{});
+                    });
+                else
+                    res.send(200,{});
+
+            })
+
         });
 
     }

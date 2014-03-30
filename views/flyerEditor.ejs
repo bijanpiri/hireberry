@@ -194,12 +194,13 @@ $(function() {
 
         $('.error').hide();
 
-        var formObj = $(this);
+        var form = document.getElementById('applyForm');
+        var formObj = $('#applyForm');
         var formURL = formObj.attr("action");
 
         if(window.FormData !== undefined)  // for HTML5 browsers
         {
-            var formData = new FormData(this);
+            var formData = new FormData( form );
             $.ajax({
                 url: formURL,
                 type: 'POST',
