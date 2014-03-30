@@ -36,7 +36,8 @@ module.exports.forms = function(req,res){
 
             return {
                 formName:description,
-                formID:flyer._id
+                formID:flyer._id,
+                mode: flyer.publishTime ? "(Published)" : "(Draft)"
             }
         } );
 

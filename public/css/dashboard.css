@@ -54,7 +54,7 @@
 
 #formsList {
     height: 40px;
-    max-width: 100%;
+    width: 100%;
     background-color: transparent;
     font-size: 1.2em;
     margin: 0;
@@ -81,4 +81,13 @@
     color: #99C7DE;
     text-align: center;
     font-weight: 700;
+}
+
+#tableTitle {
+    font-size: 1.4em;
+    line-height: 3em;
+}
+
+#currentFormName {
+    font-size: 1.5em;
 }

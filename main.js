@@ -9,7 +9,7 @@ upload = require('jquery-file-upload-middleware'); // Don't Forget Creating /pub
 mandrill  = require('node-mandrill');
 fs = require('fs');
 http = require('http')
-Dropbox = require("dropbox");
+Dropbox = require("dropbox"); // https://github.com/evnm/dropbox-node
 twitterAPI = require('node-twitter-api');
 linkedin_client = require('linkedin-js')('75ybminxyl9mnq', 'KsgqEUNsLSXMAKg6', 'callbackURL')
 routerForm = require('./routers/form');
@@ -127,7 +127,7 @@ var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
 var BFlyersTags = mongoose.model( 'flyersTags', {flyer:String,tag:String});
 var BTag = mongoose.model( 'tags', {name:String});
 var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, disqusShortname: String, dbToken:String});
+BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, publishTime: String, disqusShortname: String, dbToken:String});
 var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
 var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
 var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
@@ -935,10 +935,7 @@ app.post('/flyer/publish', function(req,res){
     var flyer = req.body.flyer;
 
 
-    BFlyers.update(
-        {_id:flyer.flyerid},
-        {$set:{flyer:flyer}},
-        {upsert:true},function(err){
+    BFlyers.update( {_id:flyer.flyerid}, {$set:{flyer:flyer, publishTime:new Date()}}, {upsert:true}, function(err){
             var tags=flyer.tags;
             if(!err){
                 tags.forEach(function(tagName,i){

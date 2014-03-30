@@ -37,7 +37,7 @@
             $.get('/api/forms?ownerID=' + ownerID).done( function(res) {
 
                 res.forms.forEach( function(form) {
-                    var option = $('<option>').text(form.formName).attr('id',form.formID);
+                    var option = $('<option>').text(form.formName + form.mode ).attr('id',form.formID);
                     $('#formsList').append(option);
                 });
 
@@ -46,9 +46,12 @@
         }
 
         function fillTable() {
+            var selectedForm = $('#formsList :selected');
             var qsParams =
                     '?ownerID=' + $('#ownerID').attr('val')  +
-                    '&formID=' + $('#formsList :selected').attr('id');
+                    '&formID=' + selectedForm.attr('id');
+
+            $('#currentFormName').text( selectedForm.val() );
 
             $('#formsTable').html('');
 
@@ -91,10 +94,12 @@
 
     <div class="row-fluid toolbarRow">
         <div class="span2">
-                <span class="formsListLabel">Select a form:</span>
-            </div>
+            <span class="formsListLabel">Forms:</span>
+        </div>
+    </div>
 
-        <div class="span5">
+    <div class="row-fluid toolbarRow">
+        <div class="span7">
             <input type="hidden" id="ownerID" val="<%=ownerID%>">
 
             <div class="formName">
@@ -110,6 +115,7 @@
 
     <div class="row-fluid tableRow">
         <div class="span12">
+            <div id="tableTitle">Application related to <span id="currentFormName">-</span>:</div>
             <div id="formsTable"></div>
         </div>
     </div>
