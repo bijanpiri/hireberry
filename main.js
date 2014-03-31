@@ -1058,7 +1058,6 @@ app.post('/flyer/putup', function(req,res){
     })
 
 });
-
 app.post('/flyer/putdown', function(req,res){
     var flyerid = req.body.flyerid;
     var boardid = req.body.boardid;
@@ -1071,7 +1070,6 @@ app.post('/flyer/putdown', function(req,res){
     });
 
 });
-
 app.get('/flyer/remove/:id', function(req,res){
     if(checkUser(req,res)){
         var flyerid = req.params.id;
@@ -1094,6 +1092,7 @@ app.get('/flyer/remove/:id', function(req,res){
 });
 
 app.get('/board/remove/:id',function(req,res){
+
     var userid;
     if(checkUser(req,res)){
         if(req.user)
@@ -1118,6 +1117,7 @@ app.get('/board/remove/:id',function(req,res){
         });
 
     }
+
 });
 app.post('/flyer/take', function(req,res){
 
