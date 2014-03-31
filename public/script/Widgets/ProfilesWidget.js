@@ -26,7 +26,8 @@ function ProfilesWidget(){
 
     this.serialize = function() {
 
-        var data={profiles:
+        var data={
+            profiles:
             this.toolbar
             .find('.toolbar-profileWidget input').serialize().replace(/p=/gi,'').split('&')};
 
