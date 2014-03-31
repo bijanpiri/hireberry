@@ -51,9 +51,14 @@ nav  ~ .container, nav ~ .container-fluid {
 }
 
 #createFlyerButton {
-    border: 2px solid #fff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
     margin-top: 18px;
     margin-bottom: 18px;
+}
+
+#createFlyerButton:hover {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 1);
 }
 
 .navbar .nav > li > a > .booltinBrandLogo {
@@ -203,4 +208,29 @@ Login
     font-weight: 700;
     text-align: center;
     margin: 0;
+}
+
+/****
+Settings
+****/
+.settingsForm {
+    margin-top: 8em;
+}
+
+.settingsForm input {
+    height: 46px;
+    display: block;
+    width: 300px;
+    box-sizing: border-box;
+    font-size: 1.6em;
+    font-weight: 700;
+    border-color: #B3AE92;
+    padding: 0 20px;
+}
+
+.settingsForm input:focus {
+    border-color: #807C69;
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
