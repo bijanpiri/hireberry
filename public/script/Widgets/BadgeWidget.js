@@ -83,9 +83,18 @@ function BadgeWidget(){
         visibleBadgesChanged.call(this);
     }
 
-    this.serialize = function() {}
+    this.serialize = function() {
+        var data = {
+            chosen:this.toolbar.find('.toolbar-badgeWidget input').serialize().replace(/badge=/gi,'').split('&')
+        };
+        return data;
+    }
 
-    this.deserialize = function( content ) {};
+    this.deserialize = function( data ) {
+        this.toolbar.find('input[name=badge]').each(function(index,input){
+            $(input).prop('checked',data.chosen.indexOf(input.value)>=0).change();
+        });
+    }
 }
 BadgeWidget.prototype=new Widget();
 BadgeWidget.prototype.constructor=BadgeWidget;
