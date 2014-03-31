@@ -57,9 +57,9 @@ nav  ~ .container, nav ~ .container-fluid {
     background-image: url("/images/bltn-hiring-icons@2x.png");
     background-size: 272px 1269px;
     background-position: 0 0;
-    width: 200px;
-    height: 24px;
-    background-color: #fff;
+    width: 205px;
+    height: 28px;
+    margin: 18px 0;
 }
 
 nav li a {
@@ -125,4 +125,70 @@ Login
     height: 240px;
     width: 2px;
     background-color: #949079;
+}
+
+.registerBox {
+    color: #949079;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4%;
+    width: 350px;
+    position: absolute;
+    right: 135px;
+    top: 100px;
+    padding: 10px;
+}
+
+.registerBoxHeader {
+    font-size: 25px;
+    margin: 0;
+    color: #fff;
+    text-shadow: 2px 2px 1px #414040;
+    font-weight: 700;
+}
+
+.registerForm {
+    margin: 0;
+    padding: 20px;
+    color: #949079
+}
+
+.registerForm button {
+    padding: 15px 0;
+    width: 300px;
+    font-size: 2em;
+    margin: 10px 0 20px 0;
+}
+
+.registerForm .wbtn-2 {
+    background: #E68540;
+    box-shadow: 0 6px #B36832;
+}
+
+.registerForm .wbtn-2:hover {
+    box-shadow: 0 6px #B36832;
+}
+
+.registerForm input {
+    height: 45px;
+    display: block;
+    width: 300px;
+    box-sizing: border-box;
+    font-size: 1.6em;
+    font-weight: 700;
+    border-color: #B3AE92;
+    padding: 0 20px;
+}
+
+.registerForm input:focus {
+    border-color: #807C69;
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.registerBox .moreOption {
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
 }
