@@ -9,15 +9,9 @@ module.exports.showDashboard = function (req,res) {
 
     var ownerID = req.user.id;
 
-    // ToDo: Retrieval real numbers
-
     res.render('dashboard.ejs', {
         title: 'Dashboard',
-        ownerID: ownerID,
-        numForms: 10,
-        numApplications: 123,
-        numUnvisited: 52,
-        numTodayApplications: 6
+        ownerID: ownerID
     });
 }
 
@@ -85,7 +79,7 @@ module.exports.applications = function (req,res) {
             var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
             var selectedSkill = '';
             for (var j=0; j<skills.length; j++)
-                    selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
+                selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
             form.skills = selectedSkill;
 
             // Profiles
@@ -96,8 +90,8 @@ module.exports.applications = function (req,res) {
                 if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
                     selectedProfiles +=
                         '<span class="spanBox">' +
-                        makeLinkTag(profile,profiles[profile],false) +
-                        '</span>';
+                            makeLinkTag(profile,profiles[profile],false) +
+                            '</span>';
             form.profiles = selectedProfiles;
 
             // Workplace
@@ -136,6 +130,41 @@ module.exports.updateApplication = function(req,res) {
     MApplyForm.update({_id:appID}, {$push:{activities:activity}}, function(err) {
         res.send(200);
     })
+}
+
+module.exports.statisticalInfo = function(req,res) {
+
+    var userID = req.user._id;
+
+    BFlyers.find({owner:userID}, function(err,flyers) {
+
+        var flyerIDList = flyers.map( function(flyer){return flyer._id});
+
+        MApplyForm.find( {flyerID:{$in:flyerIDList}}, function(err,applications) {
+
+            var numNewApplications = 0;
+            var numTodayApplication = 0;
+
+            for(var i=0; i<applications.length; i++ ) {
+                var activities = applications[i].activities;
+                if( activities && activities.length==1 )
+                    numNewApplications++
+
+                var applicationDate = new Date( applications[i].applyTime );
+                var today = new Date();
+                if( today.toLocaleDateString() == applicationDate.toLocaleDateString() )
+                    numTodayApplication++;
+            }
+
+            res.send({
+                numForms: flyers.length,
+                numApplications: applications.length,
+                numTodayApplications: numTodayApplication,
+                numNewApplications: numNewApplications
+            });
+
+        })
+    });
 }
 
 function makeLinkTag(display, url, mailto) {

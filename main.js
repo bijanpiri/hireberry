@@ -449,6 +449,7 @@ app.get('/dashboard', routerDashboard.showDashboard );
 app.get('/api/forms', routerDashboard.forms );
 app.get('/api/applications', routerDashboard.applications );
 app.post('/api/applications/:applicationID', routerDashboard.updateApplication );
+app.get('/api/applications/stat', routerDashboard.statisticalInfo )
 //endregion
 
 //region Application Routers
