@@ -11,6 +11,11 @@ body,h1,h2,h3,h4,h5 {
     font-size: 10px;
 }
 
+.mainSpritImage {
+    background-image: url("/images/main@2x.png");
+    background-size: 121px 147px;
+}
+
 /****
  Navbar styles
 ****/
@@ -30,9 +35,7 @@ nav  ~ .container, nav ~ .container-fluid {
     border: none;
 }
 
-/***
- Navbar buttons
-***/
+/***Navbar buttons***/
 .navbar .nav > li > .navbar-button {
     text-shadow: none;
     color: #fff;
@@ -53,13 +56,22 @@ nav  ~ .container, nav ~ .container-fluid {
     margin-bottom: 18px;
 }
 
-.navbar #booltinBbrand {
-    background-image: url("/images/bltn-hiring-icons@2x.png");
-    background-size: 272px 1269px;
+.navbar .nav > li > a > .booltinBrandLogo {
     background-position: 0 0;
-    width: 205px;
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    display: inline-block;
+    margin: 5px 0;
+}
+
+.navbar .nav > li > a > .booltinBrandLogoType {
+    background-position: 0 -55px;
+    width: 121px;
     height: 28px;
-    margin: 18px 0;
+    padding: 0;
+    display: inline-block;
+    margin: 18px 0 18px 20px;
 }
 
 nav li a {
