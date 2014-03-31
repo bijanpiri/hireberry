@@ -29,6 +29,7 @@
     <script src="/bootstrap/js/hogan-2.0.0.js"></script>
 
     <link rel="stylesheet" href="/css/booltin.css">
+    <link rel="stylesheet" href="/css/buttons.css">
 
     <script src="/script/md5.js"></script>
 
@@ -143,56 +144,49 @@
 </head>
 <body>
 
-<nav class="navbar navbar-fixed-top navbar-inverse">
+<nav class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
             <div class="nav-collapse">
                 <ul class="nav">
                     <li>
-                        <a href="/" class="brand" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);">
-                            booltin<sup style="margin-left: 4px;color: red; font-size: 0.6em"><i>beta</i></sup>
-                        </a>
+                        <a href="/" id="booltinBbrand" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);"></a>
                     </li>
                 </ul>
                 <ul class="nav pull-right">
                     <% if(everyauth.loggedIn){ %>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <li class="navbar-dropdown">
+                        <a href="#" class="dropdown-toggle navbar-button" data-toggle="dropdown">
                             Hello
                             <% if(everyauth.user.email) { %>
-                                <%= everyauth.user.email %>
+                            <%= everyauth.user.email %>
                             <% } else if(everyauth.user.twittername) { %>
-                                <%= everyauth.user.twittername %>
+                            <%= everyauth.user.twittername %>
                             <% } else if(everyauth.user.googlename) { %>
-                                <%= everyauth.user.googlename %>
+                            <%= everyauth.user.googlename %>
                             <% } else { %>
-                                <%= 'Dude'%>
+                            <%= 'Dude'%>
                             <% }%>
                             <img class="avatar img-rounded" style="width: 24px" src="#">
-                            <b class="caret"></b></a>
+                        </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/setting">Setting</a></li>
-                            <li><a href="/logout">Logout</a></li>
+                            <li><a href="/setting" class="navbar-button">Setting</a></li>
+                            <li><a href="/logout" class="navbar-button">Logout</a></li>
                         </ul>
                     </li>
                     <%} else {%>
                     <li class="nav">
-                        <a href="/login">Login</a>
+                        <a href="/login" class="navbar-button">Login</a>
                     </li>
                     <li class="nav">
-                        <a href="/register">Register</a>
+                        <a href="/register" class="navbar-button">Register</a>
                     </li>
                     <%}%>
                 </ul>
                 <% if(everyauth.loggedIn){ %>
                 <ul class="nav pull-right">
-                    <li><a href="/flyer/new" class="">Create Flyer</a></li>
-                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/flyer/new" id="createFlyerButton" class="navbar-button">Create Flyer</a></li>
+                    <li><a href="/dashboard" class="navbar-button">Dashboard</a></li>
                 </ul>
                 <%}%>
             </div><!-- /.nav-collapse -->

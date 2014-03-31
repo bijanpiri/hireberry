@@ -1,23 +1,128 @@
 
+/****
+ General Styles
+****/
 body {
-    background-color: #B3A389;
+    background-color: #E2DECA;
 }
 body,h1,h2,h3,h4,h5 {
-    font-family: "Roboto Slab",cursive;
+    font-family: "Roboto",cursive;
     font-weight: 400;
     font-size: 10px;
 }
 
+/****
+ Navbar styles
+****/
+/* Top 60px of page is overlaid by navbar. It's for that !*/
+nav  ~ .container, nav ~ .container-fluid {
+    margin-top: 10em;
+}
+
+.navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner{
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.navbar-inner {
+    background-color: #37B36F;
+    background-image: none;
+    border: none;
+}
+
+/***
+ Navbar buttons
+***/
+.navbar .nav > li > .navbar-button {
+    text-shadow: none;
+    color: #fff;
+    margin: 20px 5px;
+    border-radius: 4px;
+    height: 30px;
+    padding: 5px 15px;
+    line-height: 30px;
+}
+.navbar .nav > li > .navbar-button:hover {
+    background-color: #2F995F;
+    color: #fff;
+}
+
+#createFlyerButton {
+    border: 2px solid #fff;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
+.navbar #booltinBbrand {
+    background-image: url("/images/bltn-hiring-icons@2x.png");
+    background-size: 272px 1269px;
+    background-position: 0 0;
+    width: 200px;
+    height: 24px;
+    background-color: #fff;
+}
 
 nav li a {
     font-size: 1.5em;
 }
 
-/* Top 60px of page is overlaid by navbar. It's for that !*/
-nav  ~ .container, nav ~ .container-fluid {
-    margin-top: 60px;
+.dropdown-menu {
+    top: 60px;
+    right: 20px;
 }
 
-.navbar .brand {
-    font-size: 2.5em;
+
+/****
+Login
+****/
+.loginForm {
+    margin: 20px  0 0 0;
+    color: #949079
+}
+
+.loginForm input {
+    height: 45px;
+    display: block;
+    width: 300px;
+    box-sizing: border-box;
+    font-size: 1.6em;
+    font-weight: 700;
+    border-color: #B3AE92;
+    padding: 0 20px;
+}
+
+.loginForm input:focus {
+    border-color: #807C69;
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.loginForm button {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 300px;
+    font-size: 2em;
+    margin: 10px 0 20px 0;
+}
+
+.loginForm .wbtn-2 {
+    background: #E68540;
+    box-shadow: 0 6px #B36832;
+}
+
+.loginForm .wbtn-2:hover {
+    box-shadow: 0 6px #B36832;
+}
+
+.loginForm .moreOption {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.verticalLoginSeparator {
+    margin: auto;
+    height: 240px;
+    width: 2px;
+    background-color: #949079;
 }

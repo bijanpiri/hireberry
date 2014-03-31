@@ -17,13 +17,6 @@ body {
     display: block;
 }
 
-.booltinIcon {
-    background-image: url('/images/favicon-16x16.png');
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    margin: 0 0.3em -2px 0.3em;
-}
 
 .pageTitle {
     background-color: #A9A9A9;
