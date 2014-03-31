@@ -24,7 +24,7 @@ Whole Paper
     left: 0;
     display: inline-block;
     margin: auto 20px;
-    min-width: 200px;
+    /*min-width: 200px;*/
     height: 40px;
     border: 2px dashed #9c9c9c;
     bottom: 0;
@@ -389,6 +389,7 @@ Portlet Creator
     font-size: 22px;
     line-height: 40px;
     margin-left: 0.75em;
+    color: #ffffff;
     background-color: transparent;
 }
 .videoWidgetInputboxFooter {

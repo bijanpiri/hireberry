@@ -18,6 +18,7 @@ function VideoWidget(){
      this.portlet.html('').append(container);
 
      }*/
+
     function playVideo()
     {
         var tmp_videoWidget=this;
@@ -57,7 +58,6 @@ function VideoWidget(){
         }
     }
 
-
     function showPreview() {
 
         var widget_tmp=this;
@@ -65,9 +65,9 @@ function VideoWidget(){
         {
             playVideo.call(widget_tmp);
         });
+
         img.load(function()
         {
-
             container.width(this.naturalWidth);
             container.height(this.naturalHeight);
 
@@ -75,8 +75,8 @@ function VideoWidget(){
             //img.width(this.naturalWidth);
             $(this).height(this.naturalHeight);
             $(this).width(this.naturalWidth);
-
         });
+
         img.mouseout(function()
         {
             img.fadeTo('fast',1.0,function(){});
@@ -87,9 +87,7 @@ function VideoWidget(){
         });
 
         var container = $('<div class="videoWidget"  style="position: inherit"></div>').append(img);
-
         ShowThumbnail($(img),this.videoSourceURL,2);
-
         this.portlet.html('').append(container);
     }
 
@@ -108,7 +106,6 @@ function VideoWidget(){
                 widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxText').val();
                 showPreview.call(widget);
                 widget.toolbar.find('.videoWidgetInputboxOutterToolbar').show();
-
                 // showVideo.call(widget);
             }
         }(this)));
@@ -118,22 +115,28 @@ function VideoWidget(){
 
     this.setLayout(layout);
 
-
     this.widgetDidAdd=function(){
         this.setToolbar('.toolbar-videoWidget');
         this.toolbar.find('.videoWidgetInputboxOutterToolbar').hide();
 
         var widget=this;
-        /*this.addToolbarCommand('show',function(){
-            while(this.portlet.find(".videoWidget").length>0)
-            {
-                widget.portlet.remove(".videoWidget")[0].remove();
-            }
-            widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxTextToolbar').val();
-            showPreview.call(widget);
-        });*/
 
-        this.toolbar.find('#DoneToolbar').click( (function(widget){
+        if(widget.editMode==false)
+        {
+            widget.portlet.find("#videoWidgetInputboxText").prop('readOnly','readOnly').css("cursor","default");
+            widget.portlet.find("#Done").off();
+        }
+
+        this.addToolbarCommand('done',function(){
+            while(widget.portlet.find(".videoWidget").length>0)
+            {
+                widget.portlet.find(".videoWidget")[0].remove();
+            }
+            widget.videoSourceURL = widget.toolbar.find('#videoWidgetInputboxTextToolbar').val();
+            showPreview.call(widget);
+        });
+
+       /* this.toolbar.find('#DoneToolbar').click( (function(widget){
             return function(){
                 while(widget.portlet.find(".videoWidget").length>0)
                 {
@@ -142,10 +145,8 @@ function VideoWidget(){
                 widget.videoSourceURL = widget.toolbar.find('#videoWidgetInputboxTextToolbar').val();
                 showPreview.call(widget);
             }
-        }(this)));
+        }(this)));*/
     }
-
-
 
     this.serialize = function() {
         return {videoURL: this.videoSourceURL};

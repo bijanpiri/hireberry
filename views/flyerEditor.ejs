@@ -65,9 +65,10 @@ var dialog_confirm=$('<div id="dialog-confirm"  title="Remove"> <p id="contentho
 dialog_confirm.appendTo('body');
 
 $(function() {
+    var editMode= <%=editMode%>;
     flyerid = $('input[name=flyerid]').val();
     flyer = $('.portletStack').Flyer({
-        editMode: <%=editMode%>,
+        editMode: editMode,
         flyerid: flyerid,
         templateID: <%=templateID%>
     });
@@ -109,7 +110,10 @@ $(function() {
                 flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
             }
         });
-        logoInput.click();
+        if(editMode==true)
+        {
+            logoInput.click();
+        }
     });
 
     logoInput.fileupload({
@@ -815,12 +819,10 @@ $(function() {
         <label for="share">share</label>
 
     </div>
-
-    <div class="toolbar-videoWidget">
-
-    <div class="videoWidgetInputboxOutterToolbar">
-        <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">
-        <button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDoneToolbar" id="DoneToolbar">Done</button>
-    </div>
-    </div>
+        <div class="toolbar-videoWidget">
+            <div class="videoWidgetInputboxOutterToolbar">
+                    <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">
+                    <button  command="done" class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDoneToolbar" id="DoneToolbar">Done</button>
+                </div>
+            </div>
 </div>

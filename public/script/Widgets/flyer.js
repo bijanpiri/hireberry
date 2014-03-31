@@ -46,7 +46,9 @@ function Flyer(options) {
         });
 
     if( editMode==false )
+    {
         $('.portletCreator').hide();
+    }
     else
         $('.portletSubmittion').hide();
 
@@ -154,7 +156,9 @@ function Flyer(options) {
         $('.portletHeader .logo').attr('src',url);
 
         if(editMode==false)
+        {
             $('.portletHeader .logo').css('border',0);
+        }
     }
 
     var setBackground = function (url, wrapper) {
