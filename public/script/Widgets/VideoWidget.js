@@ -35,7 +35,7 @@ function VideoWidget(){
                     var parse_response= eval(response);
                     videoURL='//player.vimeo.com/video/' +parse_response['video_id'] +'?autoplay=1';
                     var iframe = $('<iframe width="100%" height="100%" frameborder="0"  allowfullscreen></iframe>').attr('src', videoURL);
-                    var container = $('<div class="videoWidget" style="position: inherit"></div>').append(iframe);
+                    var container = $('<div class="videoWidget"  style="position: inherit"></div>').append(iframe);
                     container.height(himg);
                     container.width(wimg);
                     tmp_videoWidget.portlet.html('').append(container);
@@ -107,6 +107,8 @@ function VideoWidget(){
             return function(){
                 widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxText').val();
                 showPreview.call(widget);
+                widget.toolbar.find('.videoWidgetInputboxOutterToolbar').show();
+
                 // showVideo.call(widget);
             }
         }(this)));
@@ -115,6 +117,35 @@ function VideoWidget(){
     initLayout.call(this);
 
     this.setLayout(layout);
+
+
+    this.widgetDidAdd=function(){
+        this.setToolbar('.toolbar-videoWidget');
+        this.toolbar.find('.videoWidgetInputboxOutterToolbar').hide();
+
+        var widget=this;
+        /*this.addToolbarCommand('show',function(){
+            while(this.portlet.find(".videoWidget").length>0)
+            {
+                widget.portlet.remove(".videoWidget")[0].remove();
+            }
+            widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxTextToolbar').val();
+            showPreview.call(widget);
+        });*/
+
+        this.toolbar.find('#DoneToolbar').click( (function(widget){
+            return function(){
+                while(widget.portlet.find(".videoWidget").length>0)
+                {
+                    widget.portlet.find(".videoWidget")[0].remove();
+                }
+                widget.videoSourceURL = widget.toolbar.find('#videoWidgetInputboxTextToolbar').val();
+                showPreview.call(widget);
+            }
+        }(this)));
+    }
+
+
 
     this.serialize = function() {
         return {videoURL: this.videoSourceURL};

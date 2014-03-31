@@ -360,9 +360,30 @@ Portlet Creator
     bottom: 0;
     right: 0;
 }
+.videoWidgetInputboxOutterToolbar {
+    border: solid 2px #9c9c9c;
+    height: 50px;
+    width: 700px;
+    border-radius: 5px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
 #videoWidgetInputboxText {
     height: 40px;
     width: 400px;
+    border: 0;
+    font-size: 22px;
+    line-height: 40px;
+    margin-left: 0.75em;
+    background-color: transparent;
+}
+#videoWidgetInputboxTextToolbar {
+    height: 40px;
+    width: 600px;
     border: 0;
     font-size: 22px;
     line-height: 40px;
@@ -383,6 +404,17 @@ Portlet Creator
     height: 40px;
     top: -7px;
 }
+.videoWidgetInputboxDoneToolbar {
+    width: 70px;
+    padding: 2px;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+    height: 40px;
+    top: -7px;
+    right: 3px;
+}
+
 .videoWidgetInputboxDone:hover {top: -2px;}
 .videoWidgetInputboxDone:active {top: 5px;}
 
@@ -433,6 +465,9 @@ Portlet Creator
 }
 .toolbars{display: none;}
 .toolbar-text{
+    padding: 2px;
+}
+.toolbar-video{
     padding: 2px;
 }
 .toolbar-button{
