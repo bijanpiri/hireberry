@@ -2,6 +2,22 @@
 
 form { margin: 0 }
 
+/****
+Fix Toolbar
+****/
+#fixToolbar {
+    position: fixed;
+    top: 88px;
+    z-index: 1;
+    width: 100%;
+    background-color: #C7C2A3;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 /********
 Whole Paper
 ********/

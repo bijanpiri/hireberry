@@ -274,24 +274,29 @@ $(function() {
 
 </script>
 
-<div class="container-fluid" style="width: 95%;">
+<div class="container-fluid" id="fixToolbar">
     <% if(editMode) { %>
-    <div class="row-fluid" style="margin-bottom: 30px;">
-        <div class="span10 offset1" style="padding:0 28px ">
+    <div class="row-fluid">
+        <div class="span2">
             <div>
-                <a href="/flyer/publish/<%=flyerid%>" class="btn btn-success pull-right">Publish</a>
-                <a href="/flyer/template" class="btn btn-success pull-left">Back To Template Gallery</a>
+                <a href="/flyer/template" class="btn btn-success pull-right">&lt Change Template</a>
+            </div>
+        </div>
+        <div class="span8" style="text-align: center">
+            <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
+            <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
+            <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
+        </div>
+        <div class="span2">
+            <div>
+                <a href="/flyer/publish/<%=flyerid%>" class="btn btn-success pull-left">Publish &gt</a>
             </div>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="span3 offset1" style="padding-left: 28px;margin-bottom: 10px;">
-            <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
-            <button type="button" class="btn btn-success" id="buttonSave">Save</button>
-            <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
-        </div>
-    </div>
     <% } %>
+</div>
+
+<div class="container-fluid" style="margin-top: 18em">
 
     <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
 
