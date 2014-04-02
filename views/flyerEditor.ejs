@@ -67,35 +67,53 @@ var autosaveTimer;
 var autosaveInterval = 60*1000;
 
 $(function() {
-    var editMode= <%=editMode%>;
+    var editMode = <%=editMode%>;
+    var templateID = <%=templateID%>;
+
     flyerid = $('input[name=flyerid]').val();
     flyer = $('.portletStack').Flyer({
         editMode: editMode,
         flyerid: flyerid,
-        templateID: <%=templateID%>
+        templateID: templateID
     });
 
-    $('#buttonPreview').click( function() {
+    if( editMode ) {
 
-        // ToDo: Do a better work when saving is faild (before shwoing preview)
-        saveFlyer( function(saveSuccessfuly) {
-            var flyerid = $('input[name=flyerid]').val();
+        $('#buttonPreview').click( function() {
 
-            if( previewWindow==0 )
-                previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
-            else
-                previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
-        })
-    })
+            // ToDo: Do a better work when saving is faild (before shwoing preview)
+            saveFlyer( function(saveSuccessfuly) {
+                var flyerid = $('input[name=flyerid]').val();
 
-    // Saving flyer methods
-    autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
-    $('#buttonSave').click(function(){
-        saveFlyer();
-    });
+                if( previewWindow.window==null || previewWindow==0 )
+                    previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
+                else
+                    previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
+            })
+        });
 
-    var logoInput=$('input.logofile');
-    $(document).delegate('.portletHeader .logo','mousedown',function(){
+        $('#plusButton').click(function(){
+            $('#plusButton').hide();
+            $('#addButtons').show();
+        });
+
+        $('.closeButton').click(function(){
+            $('#plusButton').show();
+            $('#addButtons').hide();
+        });
+
+        // Saving flyer methods
+        autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
+        $('#buttonSave').click(function(){
+            saveFlyer();
+        });
+
+        // Logo uploading handling
+        var logoInput = $('input.logofile');
+        $(document).delegate('.portletHeader .logo','mousedown',function(){
+            if(editMode)
+                logoInput.click();
+        });
         logoInput.fileupload({
             url:'/flyer/upload',
             dataType: 'json',
@@ -104,30 +122,116 @@ $(function() {
                 flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
             }
         });
-        if(editMode==true)
-        {
-            logoInput.click();
+
+    }
+    else {
+
+        // Resume uploading handling
+        $('#dropzone').click(function(){
+            $('#resumefile').click();
+        })
+        document.getElementById('resumefile').onchange = function () {
+            $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
+        };
+
+        function getDoc(frame) {
+            var doc = null;
+
+            // IE8 cascading access check
+            try {
+                if (frame.contentWindow) {
+                    doc = frame.contentWindow.document;
+                }
+            } catch(err) {
+            }
+
+            if (doc) { // successful getting content
+                return doc;
+            }
+
+            try { // simply checking may throw in ie8 under ssl or mismatched protocol
+                doc = frame.contentDocument ? frame.contentDocument : frame.document;
+            } catch(err) {
+                // last attempt
+                doc = frame.document;
+            }
+            return doc;
         }
-    });
+        $('form').submit(false);
+        $("#submit_btn").click(function(e) {
 
-    logoInput.fileupload({
-        url:'/flyer/upload',
-        dataType: 'json',
-        dropZone:$('.portletHeader .logo'),
-        done: function (e, data) {
-            flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
-        }
-    });
+            /*
+             // Name
+             if( $('#name').val().length == 0 ){
+             $('.error').show().html('Please enter your name');
+             e.preventDefault();
+             return false;
+             }
 
-    $('#plusButton').click(function(){
-        $('#plusButton').hide();
-        $('#addButtons').show();
-    });
+             // Email
+             if(validateEmail( $('#email').val() )==false){
+             $('.error').show().html('Please enter a valid email address');
+             e.preventDefault();
+             return false;
+             }
+             */
 
-    $('.closeButton').click(function(){
-        $('#plusButton').show();
-        $('#addButtons').hide();
-    });
+            $('.error').hide();
+
+            var form = document.getElementById('applyForm');
+            var formObj = $('#applyForm');
+            var formURL = formObj.attr("action");
+
+            if(window.FormData !== undefined)  // for HTML5 browsers
+            {
+                var formData = new FormData( form );
+                $.ajax({
+                    url: formURL,
+                    type: 'POST',
+                    data:  formData,
+                    mimeType:"multipart/form-data",
+                    contentType: false,
+                    cache: false,
+                    processData:false,
+                    success: function(data, textStatus, jqXHR) {
+                        $('.portlet-container').hide();
+                        $('.portletSubmittion').hide();
+                        $('.portletThanksMessage').show();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+                e.preventDefault();
+                $('.applyNowButton').val('Sending...').attr('disabled','disabled');
+            }
+            else  //for olden browsers
+            {
+                //generate a random id
+                var  iframeId = 'unique' + (new Date().getTime());
+
+                //create an empty iframe
+                var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
+
+                //hide it
+                iframe.hide();
+
+                //set form target to iframe
+                formObj.attr('target',iframeId);
+
+                //Add iframe to body
+                iframe.appendTo('body');
+                iframe.load(function(e)
+                {
+                    var doc = getDoc(iframe[0]);
+                    var docRoot = doc.body ? doc.body : doc.documentElement;
+                    var data = docRoot.innerHTML;
+                    //data is returned from server.
+                });
+            }
+        });
+    }
+});
 
     function rotate(element, degree) {
         element.animate({
@@ -139,112 +243,6 @@ $(function() {
             'zoom': 1
         }, 5000);
     }
-
-    $('#dropzone').click(function(){
-        $('#resumefile').click();
-    })
-
-    document.getElementById('resumefile').onchange = function () {
-        $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
-    };
-
-    function getDoc(frame) {
-        var doc = null;
-
-        // IE8 cascading access check
-        try {
-            if (frame.contentWindow) {
-                doc = frame.contentWindow.document;
-            }
-        } catch(err) {
-        }
-
-        if (doc) { // successful getting content
-            return doc;
-        }
-
-        try { // simply checking may throw in ie8 under ssl or mismatched protocol
-            doc = frame.contentDocument ? frame.contentDocument : frame.document;
-        } catch(err) {
-            // last attempt
-            doc = frame.document;
-        }
-        return doc;
-    }
-    $('form').submit(false);
-    $("#submit_btn").click(function(e) {
-
-        /*
-         // Name
-         if( $('#name').val().length == 0 ){
-         $('.error').show().html('Please enter your name');
-         e.preventDefault();
-         return false;
-         }
-
-         // Email
-         if(validateEmail( $('#email').val() )==false){
-         $('.error').show().html('Please enter a valid email address');
-         e.preventDefault();
-         return false;
-         }
-         */
-
-        $('.error').hide();
-
-        var form = document.getElementById('applyForm');
-        var formObj = $('#applyForm');
-        var formURL = formObj.attr("action");
-
-        if(window.FormData !== undefined)  // for HTML5 browsers
-        {
-            var formData = new FormData( form );
-            $.ajax({
-                url: formURL,
-                type: 'POST',
-                data:  formData,
-                mimeType:"multipart/form-data",
-                contentType: false,
-                cache: false,
-                processData:false,
-                success: function(data, textStatus, jqXHR) {
-                    $('.portlet-container').hide();
-                    $('.portletSubmittion').hide();
-                    $('.portletThanksMessage').show();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-
-                }
-            });
-            e.preventDefault();
-            $('.applyNowButton').val('Sending...').attr('disabled','disabled');
-        }
-        else  //for olden browsers
-        {
-            //generate a random id
-            var  iframeId = 'unique' + (new Date().getTime());
-
-            //create an empty iframe
-            var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
-
-            //hide it
-            iframe.hide();
-
-            //set form target to iframe
-            formObj.attr('target',iframeId);
-
-            //Add iframe to body
-            iframe.appendTo('body');
-            iframe.load(function(e)
-            {
-                var doc = getDoc(iframe[0]);
-                var docRoot = doc.body ? doc.body : doc.documentElement;
-                var data = docRoot.innerHTML;
-                //data is returned from server.
-            });
-        }
-    });
-});
 
     function saveFlyer(callback) {
 
@@ -279,7 +277,7 @@ $(function() {
     <div class="row-fluid">
         <div class="span2">
             <div>
-                <a href="/flyer/template" class="btn btn-success pull-right">&lt Change Template</a>
+                <a href="/flyer/template" class="btn btn-success pull-right">&lt Templates</a>
             </div>
         </div>
         <div class="span8" style="text-align: center">
@@ -378,10 +376,10 @@ $(function() {
                 <div class="portletThanksMessage container-fluid" style="padding: 0 28px" hidden>
                     <div class="row-fluid"  id="text">
                         <div class="span-10 offset-1" style="font-size: 2em;padding:20px ;text-align: center;background: #f1f1f1;line-height: 1.6em;">
-                                { Thanks }<br/><br/>
-                                We've received your application request and will notify you ASAP.<br/>
-                                If you have any question don't hesitate to <a href="mailto:hello@boolt.in">ask us</a><br/>
-                                You can read more about booltin <a href="http://blog.boolt.in">here<br/></a><br/>
+                            { Thanks }<br/><br/>
+                            We've received your application request and will notify you ASAP.<br/>
+                            If you have any question don't hesitate to <a href="mailto:hello@boolt.in">ask us</a><br/>
+                            You can read more about booltin <a href="http://blog.boolt.in">here<br/></a><br/>
                         </div>
                     </div>
                 </div>
@@ -608,7 +606,7 @@ $(function() {
                     <hr>
                     <pre >More Info</pre>
                 </div>
-               <!--<span>More Info</span>-->
+                <!--<span>More Info</span>-->
             </div>
         </div>
     </div>
@@ -844,10 +842,10 @@ $(function() {
         <label for="share">share</label>
 
     </div>
-        <div class="toolbar-videoWidget">
-            <div class="videoWidgetInputboxOutterToolbar">
-                    <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">
-                    <button  command="done" class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDoneToolbar" id="DoneToolbar">Done</button>
-                </div>
-            </div>
+    <div class="toolbar-videoWidget">
+        <div class="videoWidgetInputboxOutterToolbar">
+            <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">
+            <button  command="done" class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDoneToolbar" id="DoneToolbar">Done</button>
+        </div>
+    </div>
 </div>

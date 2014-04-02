@@ -95,8 +95,7 @@ upload.on('begin', function (fileInfo) {
     console.log(fileInfo);
 });
 upload.on('abort', function (fileInfo) { });
-upload.on('end', function (fileInfo) {
-});
+upload.on('end', function (fileInfo) { });
 upload.on('delete', function (fileInfo) {  });
 upload.on('error', function (e) {
     console.log(e.message);
@@ -417,8 +416,6 @@ app.configure(function() {
     app.use(express.logger());
     app.use(express.cookieParser());
     app.use('/flyer/upload', upload.fileHandler());
-    //app.use('/flyer/upload', function(req,res,next) {
-    //});
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.session({
