@@ -234,3 +234,11 @@ Settings
     box-shadow: none;
     -webkit-box-shadow: none;
 }
+
+/****
+Modals
+****/
+.ui-widget-header {
+    border: 1px solid #2F995F;
+    background: #37B36F;
+}

@@ -1,11 +1,19 @@
 <% layout('layout.ejs') %>
 
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="http://almende.github.io/chap-links-library/js/timeline/timeline.js"></script>
+<link rel="stylesheet" type="text/css" href="http://almende.github.io/chap-links-library/js/timeline/timeline.css">
+
+
 <script src="/script/jquery.watable.js" type="text/javascript" charset="utf-8"></script>
 <link rel='stylesheet' href='/css/watable.css'/>
 <link rel='stylesheet' href='/css/dashboard.css'>
 <link rel='stylesheet' href='/css/job.css'>
 
 <script>
+
+google.load("visualization", "1");
+
 $(function(){
     // First fill Forms list, then fill table according to current selected form
     fillFormsList( fillTable );
@@ -33,8 +41,8 @@ $(function(){
         autoOpen: false,
         modal: true,
         title: "Activities",
-        width: 400,
-        maxHeight: 600
+        width: 800,
+        height: 450
     });
 });
 
@@ -81,103 +89,7 @@ function fillTable() {
             ]
         },
         rowClicked: function(data) {
-
-            var activities = $('<div>').addClass('activities');
-            var appID = data.row._id;
-
-            for( var i=0; i<data.row.activities.length; i++ ) {
-                var activity = data.row.activities[i];
-                var dateTime = new Date(activity['timestamp']);
-
-                var activityItem = $('<div>').addClass('activity');
-                var timeStamp = $('<div>').addClass('activity-timestamp').text( dateTime.toLocaleString() );
-                var activityType = $('<div>').addClass('activity-type').text( activity['type'] );
-                var separator = $('<hr>').addClass('activity-separator');
-                var actionPanel = $('<div>').addClass('activity-actionPanel');
-
-                var title = $('<p>').text('Make a decision').addClass('activity-title');
-                var note = $('<textarea>').attr('placeholder','Enter a note about your decision causes')
-                        .addClass('activity-note')
-                        .attr('name','note') ;
-                actionPanel.append(title).append(note).append('<br>');
-
-                switch( activity['type'] ) {
-                    case 'NEW':
-                        var ignoreBtn = $('<button>')
-                                .text('Ignore')
-                                .click( handlerMaker(appID,'IGNORED',[note]) );
-
-                        var planBtn = $('<button>')
-                                .text('Plan an interview')
-                                .click( handlerMaker(appID,'PLANNING',[note]) );
-
-                        actionPanel.append(ignoreBtn).append(planBtn);
-                        break;
-                    case 'PLANNING':
-                        var interviewDate = $('<input type=date>')
-                                .attr('name','interviewDate');
-                        var interviewTime = $('<input type=time>')
-                                .attr('name','interviewTime')
-
-                        var ignoreBtn = $('<button>')
-                                .text('Ignore')
-                                .click( handlerMaker(appID,'IGNORED',[note]) );
-
-                        var inviteBtn = $('<button>')
-                                .text('Send an invitation')
-                                .click( handlerMaker(appID,'INVITED',[note,interviewDate,interviewTime]) );
-
-                        actionPanel.append(interviewDate)
-                                .append(interviewTime)
-                                .append('<br>')
-                                .append(ignoreBtn)
-                                .append(inviteBtn);
-                        break;
-                    case 'INVITED':
-                        var ignoreBtn = $('<button>')
-                                .text('Approved')
-                                .click( handlerMaker(appID,'APPROVED',[note]) );
-
-                        var inviteBtn = $('<button>')
-                                .text('Decline')
-                                .click( handlerMaker(appID,'DECLINED',[note]) );
-
-                        actionPanel.append(ignoreBtn).append(inviteBtn);
-                        break;
-                    case 'APPROVED':
-                    case 'DECLINED':
-                    case 'IGNORED':
-                        var BackToListBtn = $('<button>')
-                                .text('Back to list')
-                                .click( handlerMaker(appID,'NEW',[note]) );
-                        actionPanel.append(BackToListBtn);
-                        break
-                }
-
-                if( i < data.row.activities.length-1) {
-                    var prevData = data.row.activities[i+1].data;
-                    var information = '';
-
-                    for( var key in prevData) {
-                        information += '<b>' + key + '</b>' + ': ' + prevData[key] + '<br/>';
-                    }
-
-                    actionPanel = $('<div>').html(information);
-                }
-
-                activityItem
-                        .append(timeStamp)
-                        .append(activityType)
-                        .append(actionPanel)
-                        .append(separator);
-
-                activities.prepend( activityItem );
-            }
-
-            $('#activitiesModal').find('.contain').html( activities );
-            $('#activitiesModal').dialog('open');
-
-            //igonreApplication(data.row._id);
+            rowClicked(data);
         }
     });
 }
@@ -218,6 +130,158 @@ function getStat() {
     });
 }
 
+function rowClicked(data) {
+
+    var activities = $('<div>').addClass('activities');
+    var appID = data.row._id;
+    var timelineRows = [];
+
+    for( var i=0; i<data.row.activities.length; i++ ) {
+        var activity = data.row.activities[i];
+        var dateTime = new Date(activity['timestamp']);
+
+        var activityItem = $('<div>').addClass('activity');
+        var timeStamp = $('<div>').addClass('activity-timestamp').text( dateTime.toLocaleString() );
+        var activityType = $('<div>').addClass('activity-type').text( activity['type'] );
+        var separator = $('<hr>').addClass('activity-separator');
+
+        var aboutDecision ='';
+
+        if( i > 0 ) {
+            var decisionTitle = $('<div>').append('Decision: ' +  data.row.activities[i-1]['type'] + ' &#10140; ' + data.row.activities[i]['type']);
+            var decisionBody = $('<div>');
+
+            var moreData = data.row.activities[i].data;
+            for( var key in moreData)
+                decisionBody.append('<b>' + key + '</b>' + ': ' + moreData[key] + '<br/>');
+
+            aboutDecision = $('<div>')
+                    .addClass('activity-decision')
+                    .append(decisionTitle)
+                    .append(decisionBody);
+        }
+
+        activityItem
+                //.append(separator)
+                .append(timeStamp)
+                .append(activityType)
+                .append(aboutDecision)
+
+        activities.prepend( activityItem );
+
+        timelineRows.push([dateTime,, activity['type']]);
+
+    }
+
+    $('#activitiesModal').find('.contain').html( activities );
+    $('#activitiesModal').dialog('open');
+
+    // Showing timeline must be called just after removing hidden property
+    loadTimeline(timelineRows);
+
+    var lastActivity = data.row.activities[ data.row.activities.length-1 ];
+    loadDecisionBox( lastActivity, appID );
+}
+
+function loadDecisionBox(activity,applicationID) {
+
+    $('#decisionBox').html('');
+
+    var actionPanel = $('<div>').addClass('activity-actionPanel');
+    var currentState = $('<p>').html('This application is in <b>' + activity['type'] + '</b> state.').addClass('activity-title');
+    var title = $('<p>').text('Make a decision').addClass('activity-title');
+    var note = $('<textarea>').attr('placeholder','Enter a note about your decision causes')
+            .addClass('activity-note')
+            .attr('name','note') ;
+    actionPanel.append(currentState).append(title).append(note).append('<br>');
+
+    switch( activity['type'] ) {
+        case 'NEW':
+            var ignoreBtn = $('<button>')
+                    .text('Ignore')
+                    .addClass('btn btn-danger')
+                    .click( handlerMaker(applicationID,'IGNORED',[note]) );
+
+            var planBtn = $('<button>')
+                    .text('Plan an interview')
+                    .addClass('btn btn-primary')
+                    .click( handlerMaker(applicationID,'PLANNING',[note]) );
+
+            actionPanel.append(ignoreBtn).append(planBtn);
+            break;
+        case 'PLANNING':
+            var interviewDate = $('<input type=date>')
+                    .attr('name','interviewDate');
+            var interviewTime = $('<input type=time>')
+                    .attr('name','interviewTime')
+
+            var ignoreBtn = $('<button>')
+                    .text('Ignore')
+                    .addClass('btn btn-danger')
+                    .click( handlerMaker(applicationID,'IGNORED',[note]) );
+
+            var inviteBtn = $('<button>')
+                    .text('Send an invitation')
+                    .addClass('btn btn-primary')
+                    .click( handlerMaker(applicationID,'INVITED',[note,interviewDate,interviewTime]) );
+
+            actionPanel.append(interviewDate)
+                    .append(interviewTime)
+                    .append('<br>')
+                    .append(ignoreBtn)
+                    .append(inviteBtn);
+            break;
+        case 'INVITED':
+            var ignoreBtn = $('<button>')
+                    .text('Approved')
+                    .addClass('btn btn-success')
+                    .click( handlerMaker(applicationID,'APPROVED',[note]) );
+
+            var inviteBtn = $('<button>')
+                    .text('Decline')
+                    .addClass('btn btn-danger')
+                    .click( handlerMaker(applicationID,'DECLINED',[note]) );
+
+            actionPanel.append(ignoreBtn).append(inviteBtn);
+            break;
+        case 'APPROVED':
+        case 'DECLINED':
+        case 'IGNORED':
+            var BackToListBtn = $('<button>')
+                    .text('Back to list')
+                    .addClass('btn btn-primary')
+                    .click( handlerMaker(applicationID,'NEW',[note]) );
+            actionPanel.append(BackToListBtn);
+            break
+    }
+
+    $('#decisionBox').append(actionPanel)
+}
+
+function loadTimeline(rows) {
+
+    // Create and populate a data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('datetime', 'start');
+    data.addColumn('datetime', 'end');
+    data.addColumn('string', 'content');
+
+    data.addRows(rows);
+
+    // specify options
+    var options = {
+        "width":  "500px",
+        "height": "200px",
+        "style": "box",
+        "showCurrentTime": true
+    };
+
+    // Instantiate our timeline object.
+    var timeline = new links.Timeline(document.getElementById('timeline'));
+
+    // Draw our timeline with the created data and options
+    timeline.draw(data, options);
+}
 
 </script>
 
@@ -278,5 +342,15 @@ function getStat() {
 </div>
 
 <div id="activitiesModal">
-    <div class="contain"></div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="contain" style="max-height: 400px; overflow-y: auto"></div>
+            </div>
+            <div class="span8">
+                <div id="timeline"></div>
+                <div id="decisionBox"></div>
+            </div>
+        </div>
+    </div>
 </div>

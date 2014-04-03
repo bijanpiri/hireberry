@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    top: 80px;
+    top: 10em;
     padding: 30px;
     border-radius: 4px;
 }
@@ -98,6 +98,7 @@
 .activity-timestamp {
     font-size: 1.2em;
     color: #9c9c9c;
+    display: inline-block;
 }
 
 .activity-separator {
@@ -106,14 +107,24 @@
 
 .activity-type {
     font-size: 1.4em;
+    display: inline-block;
+    padding-left: 0.5em;
+}
+
+.activity-decision {
+    padding: 1em 0 2em 1em;
+    background-color: #DFDFDF;
+    font-size: 1.2em;
+    border-left: 3px solid #AFAFAF;
 }
 
 .activity-actionPanel {
-    background-color: #D3D3D3;
+    background-color: #dfdfdf;
     vertical-align: middle;
     text-align: center;
     padding: 10px 0;
     margin: 10px 0;
+    border-radius: 7px;
 }
 
 .activity-actionPanel button {
