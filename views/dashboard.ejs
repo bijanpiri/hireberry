@@ -33,7 +33,9 @@ $(function(){
 
     $('#inactiveForm').click( function() {
         var flyerid = $('#formsList :selected').attr('id')
-        // ToDo: Inactive form
+        $.post('/flyer/inactive', {flyerID:flyerid}).done(function(){
+            fillFormsList();
+        });
     });
 
     $('#activitiesModal').dialog({

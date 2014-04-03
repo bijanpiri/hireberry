@@ -99,6 +99,7 @@ function Flyer(options) {
                 $('input[name=flyertext]').val(data.description);
                 setBackground(data.background, false);
                 setLogo(data.logo);
+                setThanksMessage(data.thanksMessage);
 
                 var widgetData = data.widgets;
                 var nWidgets = widgetData ? widgetData.length : 0;
@@ -159,6 +160,11 @@ function Flyer(options) {
         {
             $('.portletHeader .logo').css('border',0);
         }
+    }
+
+    var setThanksMessage = function (message) {
+        if(message)
+            $('.portletThanksMessage .thanksMessageContent').html(message);
     }
 
     var setBackground = function (url, wrapper) {
