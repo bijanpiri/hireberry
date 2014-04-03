@@ -10,6 +10,8 @@
 <script src="/script/jquery.cookie.js"></script>
 <script src="https://apis.google.com/js/plusone.js"></script>
 
+<link href="/css/flyer.css" rel="stylesheet" />
+
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
 <script src="/script/Widgets/PictureWidget.js"></script>
@@ -107,6 +109,7 @@
             $('#flyerThumbnail').attr('src',json.thumbnail);
             $('#description').val(json.description);
             $('#disqussShortname').val(json.disqusShortname);
+            $('#thanksMessage').val( json.thanksMessage );
         });
 
 
@@ -115,14 +118,24 @@
 
 </script>
 
-<div class="container-fluid">
-    <div class="row-fluid" style="margin-bottom: 30px;">
-        <div class="span9 offset1">
-            <a href="/flyer/edit/null" class="btn btn-success pull-left">Back To Editor</a>
-            <a href="#" id="buttonDone" class="btn btn-success pull-right">Done</a>
+
+<div class="container-fluid" id="fixToolbar">
+    <div class="row-fluid">
+        <div class="span2">
+            <div>
+                <a href="/flyer/edit/null" class="btn btn-success pull-right">Back To Editor</a>
+            </div>
+        </div>
+        <div class="span8"></div>
+        <div class="span2">
+            <div>
+                <a href="#" id="buttonDone" class="btn btn-warning">Done</a>
+            </div>
         </div>
     </div>
+</div>
 
+<div class="container-fluid" style="margin-top: 15em">
     <div class="row-fluid">
         <div class="span6 offset3">
             <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">

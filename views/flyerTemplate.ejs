@@ -1,4 +1,7 @@
 <% layout('layout') -%>
+
+<link href="/css/flyer.css" rel="stylesheet">
+
 <style>
 
 .thumbnail img {
@@ -58,15 +61,23 @@
         }) ;
     });
 </script>
-<div class="container-fluid">
+
+<div class="container-fluid" id="fixToolbar">
     <div class="row-fluid">
-        <div class="span9 offset1">
-            <button class="btn btn-success pull-right" id="buttonNext">Go To Editor</button>
+        <div class="span2"></div>
+        <div class="span8"></div>
+        <div class="span2">
+            <div>
+                <button class="btn btn-success" id="buttonNext">Go To Editor</button>
+            </div>
         </div>
     </div>
+</div>
+
+<div class="container-fluid" style="margin-top: 15em">
     <div class="row-fluid"  style="margin-top: 2em">
         <div class="span7 offset1">
-            <div class="container-fluid" style="background-color: #dddddd;padding: 10px">
+            <div class="container-fluid" style="background-color: #f1f1f1;padding: 10px">
                 <div class="row-fluid">
                     <div class="span12">
                         <input type="text" placeholder="Search">

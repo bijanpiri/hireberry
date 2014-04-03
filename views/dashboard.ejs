@@ -52,6 +52,8 @@ function fillFormsList( callback ) {
 
     var ownerID = $('#ownerID').attr('val');
 
+    $('#formsList option').remove();
+
     $.get('/api/forms?ownerID=' + ownerID).done( function(res) {
 
         res.forms.forEach( function(form) {
