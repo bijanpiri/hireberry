@@ -463,8 +463,16 @@ Portlet Creator
     width: 320px;
     height: 170px;
     resize: none;
-    background-color: #9c9c9c;
+    background-color: #D6D6D6;
     font-weight: 700;
+}
+
+.mapWidget .moreInfoAboutAddress {
+    position: relative;
+    top: -5em;
+    color: rgb(182, 101, 101);
+    font-size: 1.4em;
+    left: 2em;
 }
 
 .toolbar{
