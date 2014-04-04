@@ -129,7 +129,13 @@ Login & Register
 }
 
 .loginForm .wbtn-2:hover {
-    box-shadow: 0 6px #B36832;
+    box-shadow: 0 4px #B36832;
+    top: 2px
+}
+
+.loginForm .wbtn-2:active {
+    box-shadow: 0 0;
+    top: 6px
 }
 
 .loginForm .moreOption {
@@ -183,6 +189,16 @@ Login & Register
 
 .registerForm .wbtn-2:hover {
     box-shadow: 0 6px #B36832;
+}
+
+.registerForm .wbtn-2:hover {
+    box-shadow: 0 4px #B36832;
+    top: 2px
+}
+
+.registerForm .wbtn-2:active {
+    box-shadow: 0 0;
+    top: 6px
 }
 
 .registerForm input {
