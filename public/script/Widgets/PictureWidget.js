@@ -28,6 +28,11 @@ function PictureWidget(){
                     img.attr('src', '/uploads/' + data.result.files[0].name);
                 },
                 progressall:function (e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('.progress .bar').css(
+                        'width',
+                        progress + '%'
+                    );
                     var progress = parseInt(data.loaded * 100/ data.total , 10);
                     console.log(progress);
                 }
@@ -53,6 +58,9 @@ function PictureWidget(){
                     imgEditor.find('.image-edit-ok').click(function(){
                         imgEditor.hide();
                         imgly.renderToDataURL("image/jpeg", function (err, dataurl){
+                            //shows preview
+                            layout.find('img').attr('src',dataurl);
+                            //convert to blob in order to upload it.
                             var blob=dataURLtoBlob(dataurl);
                             dudata.files[0]=blob;
                             dudata.submit();
@@ -86,6 +94,8 @@ function PictureWidget(){
             layout.find('input[type=file]').click();
         }).addToolbarCommand('edit',function(){
               imgEditor.show();
+                var imgly = new imglyKit({container: layout.find(".image-dialog-content")});
+                imgEditor.find('.imgly-container').empty();
 
         });
 
