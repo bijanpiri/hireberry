@@ -27,6 +27,7 @@
 <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">-->
 <link href="/css/job.css" rel="stylesheet">
 <link href="/css/jquery.Jcrop.css" rel="stylesheet">
+<link href="http://ghinda.net/css-toggle-switch/dist/toggle-switch.css" rel="stylesheet">
 
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
@@ -85,134 +86,134 @@ var templateID = <%=templateID%>;
 var viewMode = '<%=viewMode%>';
 var existFlyer = <%= existFlyer %>
 
-$(function() {
+        $(function() {
 
-    if( viewMode=='embeded') {
-        // Hidden bars
-        $('nav').remove();
-        $('#fixToolbar').remove();
-        $('body > .container-fluid').css('margin-top','1em');
+            if( viewMode=='embeded') {
+                // Hidden bars
+                $('nav').remove();
+                $('#fixToolbar').remove();
+                $('body > .container-fluid').css('margin-top','1em');
 
-        $('.flyerRow').show();
-        loadFlyer();
-    }
-    else if( editMode ) {
-
-        if( existFlyer )
-            loadEditor();
-        else
-            loadTemplateChooser();
-    }
-    else {
-        $('.flyerRow').show();
-        loadFlyer();
-
-        // Resume uploading handling
-        $('#dropzone').click(function(){
-            $('#resumefile').click();
-        })
-        document.getElementById('resumefile').onchange = function () {
-            $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
-        };
-
-        function getDoc(frame) {
-            var doc = null;
-
-            // IE8 cascading access check
-            try {
-                if (frame.contentWindow) {
-                    doc = frame.contentWindow.document;
-                }
-            } catch(err) {
+                $('.flyerRow').show();
+                loadFlyer();
             }
+            else if( editMode ) {
 
-            if (doc) { // successful getting content
-                return doc;
+                if( existFlyer )
+                    loadEditor();
+                else
+                    loadTemplateChooser();
             }
+            else {
+                $('.flyerRow').show();
+                loadFlyer();
 
-            try { // simply checking may throw in ie8 under ssl or mismatched protocol
-                doc = frame.contentDocument ? frame.contentDocument : frame.document;
-            } catch(err) {
-                // last attempt
-                doc = frame.document;
-            }
-            return doc;
-        }
-        $('form').submit(false);
-        $("#submit_btn").click(function(e) {
+                // Resume uploading handling
+                $('#dropzone').click(function(){
+                    $('#resumefile').click();
+                })
+                document.getElementById('resumefile').onchange = function () {
+                    $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
+                };
 
-            /*
-             // Name
-             if( $('#name').val().length == 0 ){
-             $('.error').show().html('Please enter your name');
-             e.preventDefault();
-             return false;
-             }
+                function getDoc(frame) {
+                    var doc = null;
 
-             // Email
-             if(validateEmail( $('#email').val() )==false){
-             $('.error').show().html('Please enter a valid email address');
-             e.preventDefault();
-             return false;
-             }
-             */
-
-            $('.error').hide();
-
-            var form = document.getElementById('applyForm');
-            var formObj = $('#applyForm');
-            var formURL = formObj.attr("action");
-
-            if(window.FormData !== undefined)  // for HTML5 browsers
-            {
-                var formData = new FormData( form );
-                $.ajax({
-                    url: formURL,
-                    type: 'POST',
-                    data:  formData,
-                    mimeType:"multipart/form-data",
-                    contentType: false,
-                    cache: false,
-                    processData:false,
-                    success: function(data, textStatus, jqXHR) {
-                        $('.portlet-container').hide();
-                        $('.portletSubmittion').hide();
-                        $('.portletThanksMessage').show();
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-
+                    // IE8 cascading access check
+                    try {
+                        if (frame.contentWindow) {
+                            doc = frame.contentWindow.document;
+                        }
+                    } catch(err) {
                     }
-                });
-                e.preventDefault();
-                $('.applyNowButton').val('Sending...').attr('disabled','disabled');
-            }
-            else  //for olden browsers
-            {
-                //generate a random id
-                var  iframeId = 'unique' + (new Date().getTime());
 
-                //create an empty iframe
-                var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
+                    if (doc) { // successful getting content
+                        return doc;
+                    }
 
-                //hide it
-                iframe.hide();
+                    try { // simply checking may throw in ie8 under ssl or mismatched protocol
+                        doc = frame.contentDocument ? frame.contentDocument : frame.document;
+                    } catch(err) {
+                        // last attempt
+                        doc = frame.document;
+                    }
+                    return doc;
+                }
+                $('form').submit(false);
+                $("#submit_btn").click(function(e) {
 
-                //set form target to iframe
-                formObj.attr('target',iframeId);
+                    /*
+                     // Name
+                     if( $('#name').val().length == 0 ){
+                     $('.error').show().html('Please enter your name');
+                     e.preventDefault();
+                     return false;
+                     }
 
-                //Add iframe to body
-                iframe.appendTo('body');
-                iframe.load(function(e)
-                {
-                    var doc = getDoc(iframe[0]);
-                    var docRoot = doc.body ? doc.body : doc.documentElement;
-                    var data = docRoot.innerHTML;
-                    //data is returned from server.
+                     // Email
+                     if(validateEmail( $('#email').val() )==false){
+                     $('.error').show().html('Please enter a valid email address');
+                     e.preventDefault();
+                     return false;
+                     }
+                     */
+
+                    $('.error').hide();
+
+                    var form = document.getElementById('applyForm');
+                    var formObj = $('#applyForm');
+                    var formURL = formObj.attr("action");
+
+                    if(window.FormData !== undefined)  // for HTML5 browsers
+                    {
+                        var formData = new FormData( form );
+                        $.ajax({
+                            url: formURL,
+                            type: 'POST',
+                            data:  formData,
+                            mimeType:"multipart/form-data",
+                            contentType: false,
+                            cache: false,
+                            processData:false,
+                            success: function(data, textStatus, jqXHR) {
+                                $('.portlet-container').hide();
+                                $('.portletSubmittion').hide();
+                                $('.portletThanksMessage').show();
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+                        e.preventDefault();
+                        $('.applyNowButton').val('Sending...').attr('disabled','disabled');
+                    }
+                    else  //for olden browsers
+                    {
+                        //generate a random id
+                        var  iframeId = 'unique' + (new Date().getTime());
+
+                        //create an empty iframe
+                        var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
+
+                        //hide it
+                        iframe.hide();
+
+                        //set form target to iframe
+                        formObj.attr('target',iframeId);
+
+                        //Add iframe to body
+                        iframe.appendTo('body');
+                        iframe.load(function(e)
+                        {
+                            var doc = getDoc(iframe[0]);
+                            var docRoot = doc.body ? doc.body : doc.documentElement;
+                            var data = docRoot.innerHTML;
+                            //data is returned from server.
+                        });
+                    }
                 });
             }
         });
-    }
-});
 
 function loadFlyer() {
 
@@ -245,70 +246,12 @@ function loadEditor() {
     $('.flyerRow').show();
     $('#fixToolbar').show();
     $('#buttonEditview').hide();
-    
+
     loadFlyer();
 
     $('#buttonPublish').click( function() {
         loadPublishPanel();
     })
-
-    $('#buttonEditview').click( function() {
-        showLoading();
-
-        $('#buttonPreview').show();
-        $('#buttonSave').show();
-        $('#buttonPublish').show();
-        $('#buttonEditview').hide();
-
-        setTimeout(function(){
-            hideLoading()
-            $('#previewFrame iframe').remove();
-            $('#previewFrame').hide();
-            $('.flyerRow').show();
-        }, 1000);
-
-    });
-
-    $('#buttonPreview').click( function() {
-
-        var height = $('#portletsBox').height();
-
-        showLoading();
-
-        $('#buttonPreview').hide();
-        $('#buttonSave').hide();
-        $('#buttonPublish').hide();
-        $('#buttonEditview').show();
-
-        // ToDo: Do a better work when saving is faild (before shwoing preview)
-        saveFlyer( function(saveSuccessfuly) {
-            var flyerid = $('input[name=flyerid]').val();
-            var iframe = $('<iframe>')
-                    .attr('src','/flyer/embeded/' + flyerid)
-                    .attr('frameborder','0')
-                    .attr('width','100%')
-                    .attr('scrolling','no')
-                    .attr('height', height )
-                    .attr('hidden','hidden')
-                    .load( function() {
-
-                        hideLoading();
-                        $('.flyerRow').hide();
-                        iframe.show();
-
-                    });
-
-            $('#previewFrame').show();
-            $('#previewFrame').append( iframe );
-
-            /*
-            if( previewWindow.window==null || previewWindow==0 )
-                previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
-            else
-                previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
-             */
-        })
-    });
 
     $('#plusButton').click(function(){
         $('#plusButton').hide();
@@ -343,9 +286,70 @@ function loadEditor() {
     });
 }
 
+function GoToEditMode() {
+
+    showLoading();
+
+    $('#buttonPreview').show();
+    $('#buttonSave').show();
+    $('#buttonPublish').show();
+    $('#buttonEditview').hide();
+
+    setTimeout(function(){
+        hideLoading()
+        $('#previewFrame iframe').remove();
+        $('#previewFrame').hide();
+        $('.flyerRow').show();
+    }, 1000);
+
+};
+
+function GoToViewMode() {
+
+    var height = $('#portletsBox').height();
+
+    showLoading();
+
+    $('#buttonPreview').hide();
+    $('#buttonSave').hide();
+    $('#buttonPublish').hide();
+    $('#buttonEditview').show();
+
+    // ToDo: Do a better work when saving is faild (before shwoing preview)
+    saveFlyer( function(saveSuccessfuly) {
+        var flyerid = $('input[name=flyerid]').val();
+        var iframe = $('<iframe>')
+                .attr('src','/flyer/embeded/' + flyerid)
+                .attr('frameborder','0')
+                .attr('width','100%')
+                .attr('scrolling','no')
+                .attr('height', height )
+                .attr('hidden','hidden')
+                .load( function() {
+
+                    hideLoading();
+                    $('.flyerRow').hide();
+                    iframe.show();
+
+                });
+
+        $('#previewFrame').show();
+        $('#previewFrame').append( iframe );
+
+        /*
+         if( previewWindow.window==null || previewWindow==0 )
+         previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
+         else
+         previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
+         */
+    })
+};
+
 function showLoading() {
     var content = $('<div>').addClass('loadingContent').text('Please Wait ...');
     var loading = $('<div>').addClass('loading').append( content );
+
+    $('.loading').remove();
 
     $(document.body).append(loading);
 }
@@ -414,7 +418,7 @@ function saveFlyer(callback) {
     flyerjson.thumbnail = '';
 
     if( !existFlyer )
-    flyerjson.description = newFlyerName;
+        flyerjson.description = newFlyerName;
 
     $.post( '/flyer/save', {flyer:flyerjson} )
             .done(function(data){
@@ -430,6 +434,16 @@ function saveFlyer(callback) {
     // Set next auto save time
     clearTimeout(autosaveTimer);
     autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
+}
+
+function viewModeChanged(e) {
+
+    var isEditMode = $('input[name=viewmode]').prop('checked');
+
+    if( isEditMode )
+        GoToEditMode();
+    else
+        GoToViewMode();
 }
 
 function init() {
@@ -451,12 +465,19 @@ function init() {
 <div class="container-fluid" id="fixToolbar" hidden>
     <% if(editMode) { %>
     <div class="row-fluid">
-        <div class="span2"></div>
+        <div class="span2">
+            <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
+        </div>
         <div class="span8" style="text-align: center">
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
-            <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
-            <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
-            <button type="button" class="btn btn-warning" id="buttonEditview" hidden="hidden">Editview</button>
+            <label class="switch-light well" style="width: 100px;vertical-align: middle;display: inline-block;margin: 0;" onchange="viewModeChanged()">
+                <input type="checkbox" name="viewmode" checked>
+                <span>
+                    <span>View</span>
+                    <span>Edit</span>
+                </span>
+                <a class="btn btn-primary"></a>
+            </label>
         </div>
         <div class="span2">
             <div>
