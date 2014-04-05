@@ -16,37 +16,7 @@ function PictureWidget(){
             fileInput.click();
         });
 
-        // As soon as the user clicks the render button...
-        // Listen for "Render final image" click
 
-//        renderButton.click(function (event) {
-//            var dataUrl;
-//
-//            // dataUrl = imgly.renderToDataURL("png", function (err, dataUrl) {});
-//            // `dataUrl` now contains the full-sized rendered image
-//            // Caution: This string will probably exceed the maximum
-//            // dataURL size of 2M. You will not be able to set location.href
-//            // or an <img> tag's `src` attribute to this dataUrl.
-//
-//            // dataUrl = imgly.renderToDataURL("png", { maxSize: "100x100" }, function (err, dataUrl) {});
-//            // `dataUrl` now contains a resized rendered image that
-//            // does not exceed 100x100 while keeping the ratio
-//
-//            // dataUrl = imgly.renderToDataURL("png", { size: "100x100" }, function (err, dataUrl) {});
-//            // `dataUrl` now contains a resized rendered image with
-//            // a size of 100x100 pixels while _not_ keeping the ratio
-//
-//            imgly.renderToDataURL("png", { size: "300x" }, function (err, dataUrl) {
-//                // `dataUrl` now contains a resized rendered image with
-//                // a width of 300 pixels while keeping the ratio
-//
-//                $("<img>").attr({
-//                    src: dataUrl
-//                }).appendTo($("body"));
-//            });
-//            imgEditor.show();
-//        });
-//
 
 
         if(editMode){
@@ -58,10 +28,10 @@ function PictureWidget(){
                     imgEditor.show();
                     var reader = new FileReader();
                     reader.onload =
-                        function (e) {
-                            try {
+                        function (progress) {
+//                            try {
                                 imgEditor.find('.imgly-container').empty();
-                                var d=e.target.result;
+                                var d=progress.target.result;
                                 imgly.run(d);
                                 imgEditor.find('.image-edit-cancel').click(function(){
                                     imgEditor.hide();
@@ -77,16 +47,16 @@ function PictureWidget(){
                                     });
                                 });
 
-                            } catch (e) {
-                                console.log(e);
-                                imgEditor.hide();
-
-                                if(e.name == "NoSupportError") {
-                                    alert("Your browser does not support canvas.");
-                                } else if(e.name == "InvalidError") {
-                                    alert("The given file is not an image");
-                                }
-                            }
+//                            } catch (ex) {
+//                                console.log(ex);
+//                                imgEditor.hide();
+//
+//                                if(ex.name == "NoSupportError") {
+//                                    alert("Your browser does not support canvas.");
+//                                } else if(ex.name == "InvalidError") {
+//                                    alert("The given file is not an image");
+//                                }
+//                            }
                         };
 
                     reader.readAsDataURL(dudata.files[0]);
