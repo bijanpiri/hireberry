@@ -244,7 +244,8 @@ function loadEditor() {
     $('.templateRow').hide();
     $('.flyerRow').show();
     $('#fixToolbar').show();
-
+    $('#buttonEditview').hide();
+    
     loadFlyer();
 
     $('#buttonPublish').click( function() {
@@ -254,25 +255,34 @@ function loadEditor() {
     $('#buttonEditview').click( function() {
         showLoading();
 
-        $('#previewFrame iframe').remove();
-        $('.flyerRow').show();
-        $('#previewFrame').hide();
+        $('#buttonPreview').show();
+        $('#buttonSave').show();
+        $('#buttonPublish').show();
+        $('#buttonEditview').hide();
 
-        setTimeout(function(){ hideLoading() }, 1000);
+        setTimeout(function(){
+            hideLoading()
+            $('#previewFrame iframe').remove();
+            $('#previewFrame').hide();
+            $('.flyerRow').show();
+        }, 1000);
+
     });
 
     $('#buttonPreview').click( function() {
 
         var height = $('#portletsBox').height();
 
-        $('.flyerRow').hide();
+        showLoading();
+
+        $('#buttonPreview').hide();
+        $('#buttonSave').hide();
+        $('#buttonPublish').hide();
+        $('#buttonEditview').show();
 
         // ToDo: Do a better work when saving is faild (before shwoing preview)
         saveFlyer( function(saveSuccessfuly) {
             var flyerid = $('input[name=flyerid]').val();
-
-            showLoading();
-
             var iframe = $('<iframe>')
                     .attr('src','/flyer/embeded/' + flyerid)
                     .attr('frameborder','0')
@@ -283,6 +293,7 @@ function loadEditor() {
                     .load( function() {
 
                         hideLoading();
+                        $('.flyerRow').hide();
                         iframe.show();
 
                     });
@@ -333,7 +344,9 @@ function loadEditor() {
 }
 
 function showLoading() {
-    var loading = $('<div>').addClass('loading');
+    var content = $('<div>').addClass('loadingContent').text('Please Wait ...');
+    var loading = $('<div>').addClass('loading').append( content );
+
     $(document.body).append(loading);
 }
 
@@ -443,7 +456,7 @@ function init() {
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
             <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
             <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
-            <button type="button" class="btn btn-warning" id="buttonEditview">Editview</button>
+            <button type="button" class="btn btn-warning" id="buttonEditview" hidden="hidden">Editview</button>
         </div>
         <div class="span2">
             <div>

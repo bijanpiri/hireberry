@@ -21,7 +21,21 @@ body,h1,h2,h3,h4,h5 {
     top:0; bottom: 0;
     left: 0; right: 0;
     background-color: #000;
-    opacity: 0.20;
+    opacity: 0.80;
+}
+
+.loadingContent {
+    color: #fff;
+    font-size: 3em;
+    margin: auto;
+    display: inline;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    width: 200px;
 }
 
 /****
