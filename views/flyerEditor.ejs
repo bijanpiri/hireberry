@@ -94,7 +94,7 @@ $(function() {
             saveFlyer( function(saveSuccessfuly) {
                 var flyerid = $('input[name=flyerid]').val();
 
-                if( previewWindow.window==null || previewWindow==0 )
+                if( previewWindow==0 || previewWindow.window==null)
                     previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
                 else
                     previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
@@ -126,6 +126,7 @@ $(function() {
         logoInput.fileupload({
             url:'/flyer/upload',
             dataType: 'json',
+            replaceFileInput:false,
             dropZone:$('.portletHeader .logo'),
             done: function (e, data) {
                 flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
@@ -409,13 +410,7 @@ $(function() {
 
 </div>
 
-<div class="image-editor-dialog">
-    <div class="image-dialog-content imgly-container" id="imageEditor">
 
-    </div>
-    <a class="btn btn-warning btn-large pull-right image-edit-cancel"><i class="icon-remove"></i></a>
-    <a class="btn btn-primary btn-large pull-right image-edit-ok" ><i class="icon-ok"></i></a>
-</div>
 
 <div class="widgets">
 
@@ -442,7 +437,13 @@ $(function() {
         </div>
         <img>
     </div>
+    <div class="image-editor-dialog">
+        <div class="image-dialog-content imgly-container" id="imageEditor">
 
+        </div>
+        <a class="btn btn-warning btn-large pull-right image-edit-cancel"><i class="icon-remove"></i></a>
+        <a class="btn btn-primary btn-large pull-right image-edit-ok" ><i class="icon-ok"></i></a>
+    </div>
 </div>
 
 <div class="container-fluid mapWidget">
