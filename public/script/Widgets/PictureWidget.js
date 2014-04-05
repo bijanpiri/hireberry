@@ -22,8 +22,10 @@ function PictureWidget(){
                 replaceFileInput:false,
                 add:add,
                 dropZone:layout,
-                done: function (e, data) {
+                send:function(){
                     layout.find('.imageWidgetInnerContainer').hide();
+                },
+                done: function (e, data) {
                     var img=layout.find('img');
                     img.attr('src', '/uploads/' + data.result.files[0].name);
                 },
@@ -34,7 +36,6 @@ function PictureWidget(){
                         progress + '%'
                     );
                     var progress = parseInt(data.loaded * 100/ data.total , 10);
-                    console.log(progress);
                 }
             });
 
@@ -60,8 +61,10 @@ function PictureWidget(){
                         imgly.renderToDataURL("image/jpeg", function (err, dataurl){
                             //shows preview
                             layout.find('img').attr('src',dataurl);
+
                             //convert to blob in order to upload it.
                             var blob=dataURLtoBlob(dataurl);
+
                             dudata.files[0]=blob;
                             dudata.submit();
                         });
