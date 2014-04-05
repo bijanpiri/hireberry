@@ -251,16 +251,51 @@ function loadEditor() {
         loadPublishPanel();
     })
 
+    $('#buttonEditview').click( function() {
+        showLoading();
+
+        $('#previewFrame iframe').remove();
+        $('.flyerRow').show();
+        $('#previewFrame').hide();
+
+        setTimeout(function(){ hideLoading() }, 1000);
+    });
+
     $('#buttonPreview').click( function() {
+
+        var height = $('#portletsBox').height();
+
+        $('.flyerRow').hide();
 
         // ToDo: Do a better work when saving is faild (before shwoing preview)
         saveFlyer( function(saveSuccessfuly) {
             var flyerid = $('input[name=flyerid]').val();
 
+            showLoading();
+
+            var iframe = $('<iframe>')
+                    .attr('src','/flyer/embeded/' + flyerid)
+                    .attr('frameborder','0')
+                    .attr('width','100%')
+                    .attr('scrolling','no')
+                    .attr('height', height )
+                    .attr('hidden','hidden')
+                    .load( function() {
+
+                        hideLoading();
+                        iframe.show();
+
+                    });
+
+            $('#previewFrame').show();
+            $('#previewFrame').append( iframe );
+
+            /*
             if( previewWindow.window==null || previewWindow==0 )
                 previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
             else
                 previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
+             */
         })
     });
 
@@ -295,6 +330,15 @@ function loadEditor() {
             flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
         }
     });
+}
+
+function showLoading() {
+    var loading = $('<div>').addClass('loading');
+    $(document.body).append(loading);
+}
+
+function hideLoading() {
+    $('.loading').remove();
 }
 
 function loadPublishPanel() {
@@ -335,7 +379,6 @@ function loadSharePanel() {
         $('.shareRow').hide();
     });
 }
-
 
 function rotate(element, degree) {
     element.animate({
@@ -400,6 +443,7 @@ function init() {
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
             <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
             <button type="button" class="btn btn-warning" id="buttonPreview">Preview</button>
+            <button type="button" class="btn btn-warning" id="buttonEditview">Editview</button>
         </div>
         <div class="span2">
             <div>
@@ -645,6 +689,9 @@ function init() {
     </div>
 </div>
 
+</div>
+
+<div id="previewFrame" hidden>
 </div>
 
 <div class="widgets">
