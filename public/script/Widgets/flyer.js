@@ -90,13 +90,16 @@ function Flyer(options) {
 
     var json2flyer = function(templateID, flyerid, callback) {
 
+        var flyer = this;
+
         $.get('/flyer/' + templateID + '/json/'+flyerid)
             .done(function(data){
                 if( callback ){
                     callback(data);
                     return;
                 }
-                $('input[name=flyertext]').val(data.description);
+
+                flyer.description = data.description;
                 setBackground(data.background, false);
                 setLogo(data.logo);
                 setThanksMessage(data.thanksMessage);
@@ -123,7 +126,7 @@ function Flyer(options) {
         var portlets = pStack.find('.portlet');
 
         var flyer = {
-            description: $('input[name=flyertext]').val(),
+            description: this.description,
             flyerid:  $('input[name=flyerid]').val(),
             background: pStack.css('background-image'),
             logo: $('.portletHeader .logo').attr('src'),
@@ -199,10 +202,8 @@ function Flyer(options) {
 
         // templateID=0 means 'don't use template'
         if( options.flyerid)
-            json2flyer( options.templateID, options.flyerid )
+            this.json2flyer( options.templateID, options.flyerid )
     }
-
-    initPortletsStack();
 
     // Public functions
     this.createPortlet = createPortlet;
@@ -211,6 +212,9 @@ function Flyer(options) {
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
     this.setLogo = setLogo;
+
+    initPortletsStack.call(this);
+
     return this;
 }
 

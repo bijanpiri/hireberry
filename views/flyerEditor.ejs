@@ -1,14 +1,13 @@
 <% layout('layout') -%>
 
-<!--<script src="/script/jquery.Jcrop.js"></script>-->
-<!--<script src="/script/load-image.min.js"></script>-->
-<script src="/script/canvas-to-blob.min.js"></script>
+<script src="/script/jquery.Jcrop.js"></script>
+<script src="/script/load-image.min.js"></script>
 <script src="/jquery-ui/js/file_upload.js"></script>
+
 <script src="/script/rasterizeHTML.allinone.js"></script>
 
 <script src="/html2canvas.js"></script>
 <link href="/css/flyer.css" rel="stylesheet">
-<link href="/css/imgly.css" rel="stylesheet">
 
 <!--<link href="/css/font-awesome.css" rel="stylesheet" />-->
 <link href="/css/font-awesome.css" rel="stylesheet">
@@ -58,83 +57,55 @@
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
 <script src="/script/jribbble.js"></script>
 
+<script src="https://apis.google.com/js/plusone.js"></script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=241341676042668";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+
+
 <script>
 var flyer;
 var flyerid;
+var newFlyerName;
 var previewWindow = 0;
 var dialog_confirm=$('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>').hide();
 dialog_confirm.appendTo('body');
 var autosaveTimer;
 var autosaveInterval = 60*1000;
+var editMode = <%=editMode%>;
+var templateID = <%=templateID%>;
+var viewMode = '<%=viewMode%>';
+var existFlyer = <%= existFlyer %>
 
 $(function() {
-    var editMode = <%=editMode%>;
-    var templateID = <%=templateID%>;
-    var viewMode = '<%=viewMode%>';
 
     if( viewMode=='embeded') {
+        // Hidden bars
         $('nav').remove();
         $('#fixToolbar').remove();
         $('body > .container-fluid').css('margin-top','1em');
+
+        $('.flyerRow').show();
+        loadFlyer();
     }
+    else if( editMode ) {
 
-    flyerid = $('input[name=flyerid]').val();
-    flyer = $('.portletStack').Flyer({
-        editMode: editMode,
-        flyerid: flyerid,
-        templateID: templateID
-    });
-    $('form').submit(false);
-
-    if( editMode ) {
-
-        $('#buttonPreview').click( function() {
-
-            // ToDo: Do a better work when saving is faild (before shwoing preview)
-            saveFlyer( function(saveSuccessfuly) {
-                var flyerid = $('input[name=flyerid]').val();
-
-                if( previewWindow==0 || previewWindow.window==null)
-                    previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
-                else
-                    previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
-            })
-        });
-
-        $('#plusButton').click(function(){
-            $('#plusButton').hide();
-            $('#addButtons').show();
-        });
-
-        $('.closeButton').click(function(){
-            $('#plusButton').show();
-            $('#addButtons').hide();
-        });
-
-        // Saving flyer methods
-        autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
-        $('#buttonSave').click(function(){
-            saveFlyer();
-        });
-
-        // Logo uploading handling
-        var logoInput = $('input.logofile');
-        $(document).delegate('.portletHeader .logo','mousedown',function(){
-            if(editMode)
-                logoInput.click();
-        });
-        logoInput.fileupload({
-            url:'/flyer/upload',
-            dataType: 'json',
-            replaceFileInput:false,
-            dropZone:$('.portletHeader .logo'),
-            done: function (e, data) {
-                flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
-            }
-        });
-
+        if( existFlyer )
+            loadEditor();
+        else
+            loadTemplateChooser();
     }
     else {
+        $('.flyerRow').show();
+        loadFlyer();
 
         // Resume uploading handling
         $('#dropzone').click(function(){
@@ -167,6 +138,7 @@ $(function() {
             }
             return doc;
         }
+        $('form').submit(false);
         $("#submit_btn").click(function(e) {
 
             /*
@@ -242,53 +214,188 @@ $(function() {
     }
 });
 
-    function rotate(element, degree) {
-        element.animate({
-            '-webkit-transform': 'rotate(' + degree + 'deg)',
-            '-moz-transform': 'rotate(' + degree + 'deg)',
-            '-ms-transform': 'rotate(' + degree + 'deg)',
-            '-o-transform': 'rotate(' + degree + 'deg)',
-            'transform': 'rotate(' + degree + 'deg)',
-            'zoom': 1
-        }, 5000);
-    }
+function loadFlyer() {
 
-    function saveFlyer(callback) {
+    flyerid = $('input[name=flyerid]').val();
+    flyer = $('.portletStack').Flyer({
+        editMode: editMode,
+        flyerid: flyerid,
+        templateID: templateID
+    });
+}
 
+function loadTemplateChooser() {
 
-        callback = callback || function(a){}
+    $('.templateRow').show();
+    $('#GoToEditor').click( function() {
 
-        $('#buttonSave').text('Saving...').addClass('disabled');
+        newFlyerName = $('#flyerName1').val();
 
-        var flyerjson = flyer.flyer2json();
-        flyerjson.thumbnail = '';
+        if( newFlyerName.length === 0 )
+            newFlyerName = 'Untitled - ' + (new Date()).toDateString();
 
-        $.post( '/flyer/save', {flyer:flyerjson} )
+        loadEditor();
+    })
+
+}
+
+function loadEditor() {
+
+    $('.templateRow').hide();
+    $('.flyerRow').show();
+    $('#fixToolbar').show();
+
+    loadFlyer();
+
+    $('#buttonPublish').click( function() {
+        loadPublishPanel();
+    })
+
+    $('#buttonPreview').click( function() {
+
+        // ToDo: Do a better work when saving is faild (before shwoing preview)
+        saveFlyer( function(saveSuccessfuly) {
+            var flyerid = $('input[name=flyerid]').val();
+
+            if( previewWindow.window==null || previewWindow==0 )
+                previewWindow = window.open('/flyer/view/0?flyerid=' + flyerid);
+            else
+                previewWindow.location = '/flyer/view/0?flyerid=' + flyerid;
+        })
+    });
+
+    $('#plusButton').click(function(){
+        $('#plusButton').hide();
+        $('#addButtons').show();
+    });
+
+    $('.closeButton').click(function(){
+        $('#plusButton').show();
+        $('#addButtons').hide();
+    });
+
+    // Saving flyer methods
+    autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
+    $('#buttonSave').click(function(){
+        saveFlyer();
+    });
+
+    // Logo uploading handling
+    var logoInput = $('input.logofile');
+    $(document).delegate('.portletHeader .logo','mousedown',function(){
+        if(editMode)
+            logoInput.click();
+    });
+
+    logoInput.fileupload({
+        url:'/flyer/upload',
+        dataType: 'json',
+        dropZone:$('.portletHeader .logo'),
+        done: function (e, data) {
+            flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
+        }
+    });
+}
+
+function loadPublishPanel() {
+    $('.flyerRow').hide();
+    $('.publishRow').show();
+    $('#fixToolbar').hide();
+
+    if( existFlyer )
+        $('#flyerName2').val( flyer.description );
+    else
+        $('#flyerName2').val( newFlyerName );
+
+    $('#buttonPublishDone').click( function() {
+
+        var flyerJson = flyer.flyer2json();
+
+        flyerJson.description = $('#flyerName2').val() ;
+        flyerJson.thanksMessage = $('#thanksMessage').val();
+
+        $.post( '/flyer/publish', {flyer:flyerJson} )
                 .done(function(data){
-                    callback(true);
-                    $('#buttonSave').text('Save').removeClass('disabled');
-                })
-                .fail(function(data){
-                    callback(false)
-                    $('#buttonSave').text('Save*').removeClass('disabled');
+                    //$.removeCookie('flyerid',{path:'/'});
+                    loadSharePanel();
                 });
 
+    });
+}
 
-        // Set next auto save time
-        clearTimeout(autosaveTimer);
-        autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
-    }
+function loadSharePanel() {
+    $('.publishRow').hide();
+    $('.shareRow').show();
 
+    $('#flyerName3').text( $('#flyerName2').val()  );
+
+    $('#flyerURL').val( document.location.origin + '/flyer/embeded/' + flyerid );
+
+    $('#buttonShareDone').click( function() {
+        $('.shareRow').hide();
+    });
+}
+
+
+function rotate(element, degree) {
+    element.animate({
+        '-webkit-transform': 'rotate(' + degree + 'deg)',
+        '-moz-transform': 'rotate(' + degree + 'deg)',
+        '-ms-transform': 'rotate(' + degree + 'deg)',
+        '-o-transform': 'rotate(' + degree + 'deg)',
+        'transform': 'rotate(' + degree + 'deg)',
+        'zoom': 1
+    }, 5000);
+}
+
+function saveFlyer(callback) {
+
+    callback = callback || function(a){}
+
+    $('#buttonSave').text('Saving...').addClass('disabled');
+
+    var flyerjson = flyer.flyer2json();
+    flyerjson.thumbnail = '';
+
+    if( !existFlyer )
+    flyerjson.description = newFlyerName;
+
+    $.post( '/flyer/save', {flyer:flyerjson} )
+            .done(function(data){
+                callback(true);
+                $('#buttonSave').text('Save').removeClass('disabled');
+            })
+            .fail(function(data){
+                callback(false)
+                $('#buttonSave').text('Save*').removeClass('disabled');
+            });
+
+
+    // Set next auto save time
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
+}
+
+function init() {
+    $('.thumbnail').click(function(){
+        // Unselect old selected item
+        if( selectedThumbID )
+            $('.thumbnail[thumbnailID='+ selectedThumbID +']').removeClass('selected');
+
+        // Select recent selected item
+        selectedThumbID = $(this).attr('thumbnailID');
+        $(this).find('img').first().addClass('selected');
+
+        $('.thumbnailPreview').find('.caption').text( $(this).attr('caption') );
+        $('.thumbnailPreview').find('.description').text( $(this).attr('description') );
+    }) ;
+}
 </script>
 
-<div class="container-fluid" id="fixToolbar">
+<div class="container-fluid" id="fixToolbar" hidden>
     <% if(editMode) { %>
     <div class="row-fluid">
-        <div class="span2">
-            <div>
-                <a href="/flyer/template" class="btn btn-success pull-right">&lt Templates</a>
-            </div>
-        </div>
+        <div class="span2"></div>
         <div class="span8" style="text-align: center">
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
             <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
@@ -296,121 +403,249 @@ $(function() {
         </div>
         <div class="span2">
             <div>
-                <a href="/flyer/publish/<%=flyerid%>" class="btn btn-success pull-left">Publish &gt</a>
+                <a id="buttonPublish" class="btn btn-success pull-left">Publish</a>
             </div>
         </div>
     </div>
     <% } %>
 </div>
 
-<div class="container-fluid" style="margin-top: 18em">
+<div class="container-fluid templateContainer" style="margin-top: 15em">
+<div class="row-fluid templateRow" hidden>
+    <div class="span8 offset2">
 
-    <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
-
-        <div class="row-fluid">
-            <div class="span10 offset1" id="portletsBox">
-
-                <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
-
-                <div class="portletHeader">
-                    <input type="file" hidden="hidden" class="logofile">
-                    <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
-                    <div class="title">
-                        JOBS
+        <div class="container-fluid" style="padding: 20px;background-color: #f1f1f1;border-radius: 4px">
+            <div class="row-fluid">
+                <div class="span5">
+                    <input style="width: 100%" id="flyerName1" type="text" placeholder="Enter Flyer Name (ex. 'Front-End Developer')">
+                </div>
+            </div>
+            <div class="row-fluid" style="margin-top: 2em">
+                <div class="span12">
+                    <p style="font-size: 1.7em">
+                        Select a template for starting:
+                    </p>
+                </div>
+            </div>
+            <div class="row-fluid" hidden>
+                <div class="span3" style="height: 100%">
+                    <div class="thumbnailPreview">
+                        <p class="caption">Thumbnail #</p>
+                        <p class="description">Suitable for ...</p>
                     </div>
                 </div>
-
-                <div class="portletStack"></div>
-
-                <div class="portletCreator container-fluid">
-                    <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
-                        Error: There is no space for adding new portlet!
-                    </div>
-
-                    <div class="row-fluid" id="plusButton">
-                        <div style="width: 84px; height: 64px;margin: 0 auto;">
-                            <a class="buttonFrame plusButtonFrame">
-                                <i class="button centeralBackgroundImage plusButton "></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row-fluid" id="addButtons" hidden>
-                        <div style="margin: 0 auto;position: relative;width: 612px;">
-                            <a class="newitem buttonFrame" type="1">
-                                <i class="button centeralBackgroundImage addNewTextButton"></i>
-                            </a>
-                            <a class="newitem buttonFrame" type="2">
-                                <i class="button centeralBackgroundImage addNewPhotoButton"></i>
-                            </a>
-                            <a class="newitem buttonFrame" type="3">
-                                <i class="button centeralBackgroundImage addNewVideoButton"></i>
-                            </a>
-                            <a class="newitem buttonFrame">
-                                <i class="button centeralBackgroundImage closeButton"></i>
-                            </a>
-                            <a class="newitem buttonFrame" type="7">
-                                <span class="centeralBackgroundImage genericButton">Badge</span>
-                            </a>
-                            <a class="newitem buttonFrame" type="4">
-                                <i class="button centeralBackgroundImage addNewLinkButton"></i>
-                            </a>
-                            <a class="newitem buttonFrame" type="6">
-                                <i class="button centeralBackgroundImage addNewMapButton"></i>
-                            </a>
-                            <a class="newitem buttonFrame" type="8">
-                                <span class="centeralBackgroundImage genericButton">WorkType</span>
-                            </a>
-                            <a class="newitem buttonFrame" type="9">
-                                <span class="centeralBackgroundImage genericButton">PersonalInfo</span>
-                            </a>
-                            <a class="newitem buttonFrame" type="10">
-                                <span class="centeralBackgroundImage genericButton">Resume</span>
-                            </a>
-                            <a class="newitem buttonFrame" type="11">
-                                <span class="centeralBackgroundImage genericButton">Else?</span>
-                            </a>
-                            <a class="newitem buttonFrame" type="12">
-                                <span class="centeralBackgroundImage genericButton">Profiles</span>
-                            </a>
-                            <a class="newitem buttonFrame" type="13">
-                                <span class="centeralBackgroundImage genericButton">Seperator</span>
-                            </a>
-                            <a class="newitem buttonFrame" type="14">
-                                <span class="centeralBackgroundImage genericButton">Skill</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portletThanksMessage container-fluid" style="padding: 0 38px" hidden>
-                    <div class="row-fluid"  id="text">
-                        <div class="span-10 offset-1" style="font-size: 2em;padding:20px ;text-align: center;background: #f1f1f1;line-height: 1.6em;border-radius: 0 0 7px 7px;padding-bottom:3em;">
-                            <div class="thanksMessageContent">
-                            { Thanks }<br/><br/>
-                            We've received your application request and will notify you ASAP.<br/>
-                            If you have any question don't hesitate to <a href="mailto:hello@boolt.in">ask us</a><br/>
-                            You can read more about booltin <a href="http://blog.boolt.in">here<br/></a><br/>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
-                    <div class="row-fluid"  id="text">
-                        <div class="span6 offset3">
-                            <input type="button" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
-                            <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
-                        </div>
-                    </div>
+            </div>
+            <ul class="thumbnails" class="row-fluid">
+                <li class="span2">
+                    <a class="thumbnail" href="#" thumbnailID="0" caption="Blank" description="Create what you link">
+                        <img src="http://placebox.es/100/160/9c9c9c/ffffff/Template/" alt="...">
+                        <span>Blank</span>
+                    </a>
+                </li>
+                <li class="span2">
+                    <a class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
+                        <img src="http://placebox.es/100/160/9c9c9c/ffffff/Template/" alt="...">
+                        <span>Front-End Developer</span>
+                    </a>
+                </li>
+                <li class="span2">
+                    <a class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
+                        <img src="http://placebox.es/100/160/9c9c9c/ffffff/Template/" alt="...">
+                        <span>Back-End Developer</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="row-fluid">
+                <div class="span12">
+                    <button id="GoToEditor" class="btn btn-success pull-right">Done</button>
                 </div>
             </div>
         </div>
 
-    </form>
-
+    </div>
 </div>
 
+<div class="row-fluid flyerRow" hidden>
+    <div class="span10 offset1" id="portletsBox">
 
+        <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
+
+            <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
+            <input type="hidden" name="flyerName">
+
+            <div class="portletHeader">
+                <input type="file" hidden="hidden" class="logofile">
+                <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
+                <div class="title">
+                    JOBS
+                </div>
+            </div>
+
+            <div class="portletStack"></div>
+
+            <div class="portletCreator container-fluid">
+                <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
+                    Error: There is no space for adding new portlet!
+                </div>
+
+                <div class="row-fluid" id="plusButton">
+                    <div style="width: 84px; height: 64px;margin: 0 auto;">
+                        <a class="buttonFrame plusButtonFrame">
+                            <i class="button centeralBackgroundImage plusButton "></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row-fluid" id="addButtons" hidden>
+                    <div style="margin: 0 auto;position: relative;width: 612px;">
+                        <a class="newitem buttonFrame" type="1">
+                            <i class="button centeralBackgroundImage addNewTextButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="2">
+                            <i class="button centeralBackgroundImage addNewPhotoButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="3">
+                            <i class="button centeralBackgroundImage addNewVideoButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame">
+                            <i class="button centeralBackgroundImage closeButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="7">
+                            <span class="centeralBackgroundImage genericButton">Badge</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="4">
+                            <i class="button centeralBackgroundImage addNewLinkButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="6">
+                            <i class="button centeralBackgroundImage addNewMapButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="8">
+                            <span class="centeralBackgroundImage genericButton">WorkType</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="9">
+                            <span class="centeralBackgroundImage genericButton">PersonalInfo</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="10">
+                            <span class="centeralBackgroundImage genericButton">Resume</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="11">
+                            <span class="centeralBackgroundImage genericButton">Else?</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="12">
+                            <span class="centeralBackgroundImage genericButton">Profiles</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="13">
+                            <span class="centeralBackgroundImage genericButton">Seperator</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="14">
+                            <span class="centeralBackgroundImage genericButton">Skill</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portletThanksMessage container-fluid" style="padding: 0 38px" hidden>
+                <div class="row-fluid"  id="text">
+                    <div class="span-10 offset-1" style="font-size: 2em;padding:20px ;text-align: center;background: #f1f1f1;line-height: 1.6em;border-radius: 0 0 7px 7px;padding-bottom:3em;">
+                        <div class="thanksMessageContent">
+                            { Thanks }<br/><br/>
+                            We've received your application request and will notify you ASAP.<br/>
+                            If you have any question don't hesitate to <a href="mailto:hello@boolt.in">ask us</a><br/>
+                            You can read more about booltin <a href="http://blog.boolt.in">here<br/></a><br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
+                <div class="row-fluid"  id="text">
+                    <div class="span6 offset3">
+                        <input type="submit" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
+                        <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<div class="row-fluid publishRow" hidden>
+    <div class="span8 offset2">
+
+        <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <div style="font-size: 2em; border-bottom: 1px solid #000;margin-bottom: 1em">
+                        Publish Options
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid controls-row">
+                <div class="span12">
+                    <input type="text" id="flyerName2" style="width: 80%" placeholder="Flyer Name">
+                </div>
+            </div>
+
+            <div class="row-fluid controls-row">
+                <textarea id="thanksMessage" style="width: 80%" placeholder="Thanks Message"></textarea>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <button id="buttonPublishDone" class="btn btn-success pull-right">Done</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row-fluid shareRow" hidden>
+    <div class="span6 offset3">
+
+        <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
+
+            <div class="row-fluid controls-row">
+                <div class="span12">
+                    <p id="flyerName3">Title</p>
+                </div>
+            </div>
+
+            <div class="row-fluid controls-row">
+                <div class="span12">
+                    <input type="url" id="flyerURL" style="width: 90%">
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span2">
+                    <b>Share on:</b>
+                </div>
+                <div class="span4">
+                    <g:plus action="share" href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>"></g:plus>
+                </div>
+                <div class="span3">
+                    <div class="fb-share-button" data-href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-type="button_count"></div>
+                </div>
+                <div class="span3">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-text="We are hiring" >Tweet</a></div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <button id="buttonShareDone" class="btn btn-danger pull-right">Close</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
 
 <div class="widgets">
 
@@ -425,10 +660,6 @@ $(function() {
 </div>
 
 <div class="image-widget">
-    <div class="progress">
-        <div class="bar" style="width: 0%;"></div>
-    </div>
-
     <div class="imageWidgetOuterContainer">
         <div class="imageWidgetInnerContainer">
             <input type="file" name="picture" hidden>
@@ -442,13 +673,6 @@ $(function() {
         <img>
     </div>
 
-    <div class="image-editor-dialog">
-        <div class="image-dialog-content imgly-container" >
-
-        </div>
-        <a class="btn btn-warning btn-large pull-right image-edit-cancel"><i class="icon-remove"></i></a>
-        <a class="btn btn-primary btn-large pull-right image-edit-ok" ><i class="icon-ok"></i></a>
-    </div>
 </div>
 
 <div class="container-fluid mapWidget">

@@ -923,16 +923,9 @@ app.get('/board/:id',function(req,res) {
 
 app.get('/flyer/new',function(req,res){
     var flyerid=req.cookies.flyerid;
-
-    if(flyerid)
-        res.redirect('/flyer/editor/0');
-    else
-        res.redirect('/flyer/template');
+    res.redirect('/flyer/editor/0');
 });
 
-app.get('/flyer/template', function(req,res){
-    res.render('flyerTemplate.ejs', {title:'Template Gallery'});
-});
 
 app.get('/flyer/:templateID/json/:id', function(req,res){
 
@@ -1035,7 +1028,8 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
         flyerid: req.params.flyerID,
         templateID: 0,
         editMode: false,
-        viewMode: "embeded"
+        viewMode: "embeded",
+        existFlyer: true
     });
 
 })
@@ -1046,6 +1040,8 @@ app.get('/flyer/:mode/:tid', function(req,res){
     var boards = [];
     var templateID = req.params.tid;
     var editMode = (req.params.mode || 'view').toLowerCase() !== 'view';
+    var existFlyer = false;
+    var flyerName = '';
 
     if( editMode && checkUser(req,res)==false )
         return;
@@ -1057,7 +1053,8 @@ app.get('/flyer/:mode/:tid', function(req,res){
             flyerid:flyerid,
             templateID:templateID,
             editMode: editMode,
-            viewMode: "fullpage"
+            viewMode: "fullpage",
+            existFlyer: existFlyer
         });
     }
 
@@ -1065,24 +1062,30 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
         flyerid = req.query.flyerid;
 
-        if( flyerid ) { // Edit Flyer
+        if( flyerid ) { // Edit Flyer (FlyerID is passed by Query String)
             if(editMode)
                 res.cookie('flyerid',flyerid);
+            existFlyer = true;
             renderNewFlyerView();
         }
-        else {          // New Flyer
+        else {          // Query String is empty
             flyerid = req.cookies.flyerid;
-            if( !flyerid ) {
+
+            if( !flyerid ) {        // Cookie is empty. So make a new flyer
+
                 var newflyer = BFlyers({owner:req.user._id});
                 newflyer.save(function (err) {
                     flyerid = newflyer._id;
                     res.cookie('flyerid',flyerid);
                     renderNewFlyerView();
                 });
-            } else {
+
+            } else {        // Cookie isn't empty. So laod it
                 BFlyers.count({_id:flyerid}, function(err,count){
-                    if(!err && count>0)
+                    if(!err && count>0){
+                        existFlyer = true;
                         renderNewFlyerView();
+                    }
                     else {  // Flyer Draft is deleted.
                         // ToDo: Handle this situation better
                         res.clearCookie('flyerid');
