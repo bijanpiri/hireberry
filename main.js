@@ -16,7 +16,8 @@ routerForm = require('./routers/form');
 routerDashboard = require('./routers/dashboard');
 
 //region Initialization
-
+var LINKEDIN_CONSUMER_KEY = "77pqtwladavveq";
+var LINKEDIN_CONSUMER_SECRET = "OtnTkyKjGB6gY2J5";
 var TWITTER_CONSUMER_KEY = "IrzgMx7fEYybvrN25eiv1w";
 var TWITTER_CONSUMER_SECRET = "gE9FopMHdlSnTunNlAqvKv6ZwQ8QkEo3gsrjGyenr0";
 var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googleusercontent.com';
@@ -120,6 +121,10 @@ var BUsers = mongoose.model( 'users', {
     googleid:String,
     googleAccessToken:String,
     googleAccessSecretToken:String,
+    linkedinname:String,
+    linkedinid:String,
+    linkedinAccessToken:String,
+    linkedinAccessSecretToken:String,
     tempToken:String});
 var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
 var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
@@ -156,6 +161,44 @@ everyauth.everymodule
         });
     });
 //endregion
+
+//region Twitter Authentication Configuration
+everyauth.linkedin
+    .consumerKey(LINKEDIN_CONSUMER_KEY)
+    .consumerSecret(LINKEDIN_CONSUMER_SECRET)
+    .findOrCreateUser( function (session, accessToken, accessTokenSecret, linkedinUserMetadata) {
+        // find or create user logic goes here
+        var promise = this.Promise();
+
+        BUsers.findOne({linkedinid:linkedinUserMetadata.id}, function(err,user){
+
+            if(err)
+                return promise.fail([err]);
+
+            if(!user){
+                console.log("User Not Exist ... Creating ");
+                var newUser = BUsers({
+                    linkedinname:linkedinUserMetadata.lastName,
+                    linkedinid:linkedinUserMetadata.id,
+                    linkedinAccessToken:accessToken,
+                    linkedinAccessSecretToken:accessTokenSecret
+                });
+                newUser.save(function(err){
+                    if(err)
+                        promise.fail([err]);
+                    else
+                        promise.fulfill(newUser);
+                });
+            } else {
+                promise.fulfill(user);
+            }
+        });
+
+        return promise;
+    })
+    .redirectPath('/');
+//endregion
+
 //region Facebook Authentication Configuartion
 everyauth
     .facebook
