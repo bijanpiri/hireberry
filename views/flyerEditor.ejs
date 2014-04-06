@@ -1,13 +1,14 @@
 <% layout('layout') -%>
 
-<script src="/script/jquery.Jcrop.js"></script>
-<script src="/script/load-image.min.js"></script>
+<!--<script src="/script/jquery.Jcrop.js"></script>-->
+<!--<script src="/script/load-image.min.js"></script>-->
+<script src="/script/canvas-to-blob.min.js"></script>
 <script src="/jquery-ui/js/file_upload.js"></script>
-
 <script src="/script/rasterizeHTML.allinone.js"></script>
 
 <script src="/html2canvas.js"></script>
 <link href="/css/flyer.css" rel="stylesheet">
+<link href="/css/imgly.css" rel="stylesheet">
 
 <!--<link href="/css/font-awesome.css" rel="stylesheet" />-->
 <link href="/css/font-awesome.css" rel="stylesheet">
@@ -87,7 +88,7 @@ var viewMode = '<%=viewMode%>';
 var existFlyer = <%= existFlyer %>
 
         $(function() {
-
+            $('form').submit(false);
             if( viewMode=='embeded') {
                 // Hidden bars
                 $('nav').remove();
@@ -139,7 +140,6 @@ var existFlyer = <%= existFlyer %>
                     }
                     return doc;
                 }
-                $('form').submit(false);
                 $("#submit_btn").click(function(e) {
 
                     /*
@@ -638,7 +638,7 @@ function init() {
             <div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
                 <div class="row-fluid"  id="text">
                     <div class="span6 offset3">
-                        <input type="submit" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
+                            <input type="button" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
                         <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
                     </div>
                 </div>
@@ -742,6 +742,10 @@ function init() {
 </div>
 
 <div class="image-widget">
+    <div class="progress">
+        <div class="bar" style="width: 0%;"></div>
+    </div>
+
     <div class="imageWidgetOuterContainer">
         <div class="imageWidgetInnerContainer">
             <input type="file" name="picture" hidden>
@@ -755,6 +759,13 @@ function init() {
         <img>
     </div>
 
+    <div class="image-editor-dialog">
+        <div class="image-dialog-content imgly-container" >
+
+        </div>
+        <a class="btn btn-warning btn-large pull-right image-edit-cancel"><i class="icon-remove"></i></a>
+        <a class="btn btn-primary btn-large pull-right image-edit-ok" ><i class="icon-ok"></i></a>
+    </div>
 </div>
 
 <div class="container-fluid mapWidget">
