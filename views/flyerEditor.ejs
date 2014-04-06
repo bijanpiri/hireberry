@@ -279,6 +279,7 @@ function loadEditor() {
     logoInput.fileupload({
         url:'/flyer/upload',
         dataType: 'json',
+        replaceFileInput:false,
         dropZone:$('.portletHeader .logo'),
         done: function (e, data) {
             flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
