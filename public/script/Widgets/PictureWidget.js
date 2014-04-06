@@ -17,6 +17,8 @@ function PictureWidget(){
         imgEditor.find('.image-edit-cancel').click(function(){
             imgEditor.hide();
         });
+        imgEditor.find('.image-edit-ok').click(editImage);
+
 
         if(editMode){
             fileInput.fileupload({
@@ -41,19 +43,7 @@ function PictureWidget(){
             imgEditor.find('.imgly-container').empty();
             var d=progress.target.result;
             imgly.run(d);
-            imgEditor.find('.image-edit-ok').click(function(){
-                imgEditor.hide();
-                imgly.renderToDataURL("image/jpeg", function (err, dataurl){
-                    //shows preview
-                    layout.find('img').attr('src',dataurl);
 
-                    //convert to blob in order to upload it.
-                    var blob=dataURLtoBlob(dataurl);
-
-                    dudata.files[0]=blob;
-                    dudata.submit();
-                });
-            });
 
         } catch (ex) {
             console.log(ex);
@@ -119,8 +109,6 @@ function PictureWidget(){
                     return;
                 }
                 imgly.run(img);
-                imgEditor.find('.image-edit-ok').click(function(){editImage()});
-
             });
 
     }
