@@ -89,6 +89,8 @@ function VideoWidget(){
         var container = $('<div class="videoWidget"  style="position: inherit"></div>').append(img);
         ShowThumbnail($(img),this.videoSourceURL,2);
         this.portlet.html('').append(container);
+        this.toolbar.find('.videoWidgetInputboxOutterToolbar').show();
+        this.toolbar.find('#videoWidgetInputboxTextToolbar').val(this.videoSourceURL);
     }
 
     function initLayout() {
@@ -105,7 +107,6 @@ function VideoWidget(){
             return function(){
                 widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxText').val();
                 showPreview.call(widget);
-                widget.toolbar.find('.videoWidgetInputboxOutterToolbar').show();
                 // showVideo.call(widget);
             }
         }(this)));
