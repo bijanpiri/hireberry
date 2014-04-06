@@ -37,7 +37,7 @@ function PictureWidget(){
     }
     function readerLoad(progress) {
         try {
-            var imgly = new imglyKit({container: layout.find(".image-dialog-content")});
+            imgly = new imglyKit({container: layout.find(".image-dialog-content")});
             imgEditor.find('.imgly-container').empty();
             var d=progress.target.result;
             imgly.run(d);
@@ -68,17 +68,23 @@ function PictureWidget(){
     }
     var dudata;
     function add(e,data){
-        imgEditor.show();
-        var reader = new FileReader();
         dudata=data;
-        reader.onload =readerLoad;
+        var obj=data.files[0];
+        if(obj instanceof File){
+            imgEditor.show();
+            var reader = new FileReader();
+            reader.onload =readerLoad;
+            reader.readAsDataURL(data.files[0]);
 
-        reader.readAsDataURL(data.files[0]);
+        }else
+            data.submit();
     }
+
     function send(){
         bar.slideDown();
         layout.find('.imageWidgetInnerContainer').hide();
     }
+
     function done(e,data){
         bar.slideUp();
         var img=layout.find('img');
@@ -102,49 +108,35 @@ function PictureWidget(){
         this.addToolbarCommand('add',function(){
             layout.find('input[type=file]').click();
         }).addToolbarCommand('edit',function(){
-
-
                 imgEditor.show();
-                var imgly = new imglyKit({container: layout.find(".image-dialog-content")});
+                imgly = new imglyKit({container: layout.find(".image-dialog-content")});
                 imgEditor.find('.imgly-container').empty();
-//                imgly.run(layout.find('img').attr('src'));
                 var img=new Image();
                 img.src=layout.find('img').attr('src');
-                if(!img.src){
+                if(!layout.find('img').attr('src')){
+                    imgEditor.hide();
                     alert('First of all add a picture by drag and drop or browse button.');
                     return;
                 }
-                img.onload=function(){
-                    imgly.run(img);
-                    imgEditor.find('.image-edit-ok').click(function(){
-                        imgEditor.hide();
-                        imgly.renderToDataURL("image/jpeg", function (err, dataurl){
-                            //shows preview
-                            layout.find('img').attr('src',dataurl);
+                imgly.run(img);
+                imgEditor.find('.image-edit-ok').click(function(){editImage()});
 
-                            //convert to blob in order to upload it.
-                            var blob=dataURLtoBlob(dataurl);
-                            var list=new FileList();
-                            list.push(blob);
-                            layout.find('input[type=file]').fileupload('add',
-                                {
-                                    files:list,
-                                    url:'/flyer/upload',
-                                    dataType: 'json',
-                                    send:send,
-                                    done: done,
-                                    progressall:progressall
-                                }
-                            );
-//                            dudata.files[0]=blob;
-//                            dudata.submit();
-                        });
-                    });
-                }
             });
 
     }
+    var imgly;
+    function editImage(){
+        imgEditor.hide();
+        imgly.renderToDataURL("image/jpeg", function (err, dataurl){
+            //shows preview
+            layout.find('img').attr('src',dataurl);
 
+            //convert to blob in order to upload it.
+            var blob=dataURLtoBlob(dataurl);
+
+            layout.find('input[type=file]').fileupload('add',{files:blob});
+        });
+    }
     this.serialize=function(){
         return this.portlet.find('.image-widget img').attr('src');
     }
