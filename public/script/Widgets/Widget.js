@@ -78,6 +78,8 @@ function Widget(options){
 
     this.widgetDidAdd = function(isNew) {}
 
+    this.widgetFocus=function(){};
+
     this.clone=function(widget){
         idCounter++;
 

@@ -47,6 +47,11 @@ function SeperatorWidget(){
         }
     }
 
+    this.widgetFocus=function()
+    {
+        this.toolbar.find('input[name=text]').focus();
+    }
+
     this.deserialize = function( content ) {
         setColor.call( this, content.color );
         setText.call( this, content.text );

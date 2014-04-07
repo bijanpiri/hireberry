@@ -116,6 +116,14 @@ function VideoWidget(){
 
     this.setLayout(layout);
 
+    this.widgetFocus=function()
+    {
+       /*if(this.toolbar.find('.videoWidgetInputboxOutterToolbar').is(":visible"))
+           this.portlet.find('#videoWidgetInputboxTextToolbar').focus();
+       else*/
+           this.portlet.find('#videoWidgetInputboxText').focus();
+    }
+
     this.widgetDidAdd=function(){
         this.setToolbar('.toolbar-videoWidget');
         this.toolbar.find('.videoWidgetInputboxOutterToolbar').hide();
@@ -127,6 +135,8 @@ function VideoWidget(){
             widget.portlet.find("#videoWidgetInputboxText").prop('readOnly','readOnly').css("cursor","default");
             widget.portlet.find("#Done").off();
         }
+
+
 
         this.addToolbarCommand('done',function(){
             while(widget.portlet.find(".videoWidget").length>0)

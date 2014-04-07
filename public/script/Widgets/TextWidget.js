@@ -52,6 +52,11 @@ function TextWidget(){
         }
     }
 
+    this.widgetFocus=function()
+    {
+        this.portlet.find(".text-widget").focus();
+    }
+
     this.restated=function(){
 
     };

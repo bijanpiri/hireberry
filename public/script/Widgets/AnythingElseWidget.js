@@ -39,6 +39,11 @@ function AnythingElseWidget(){
     }
 
 
+    this.widgetFocus=function()
+    {
+      this.portlet.find('.anythingElseWidget').find("textarea").focus();
+    }
+
     this.serialize = function() {
         var data=new Object();
         data.limit=parseInt(this.toolbar.find('input[command=limit]').val());

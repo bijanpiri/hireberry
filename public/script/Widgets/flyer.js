@@ -86,6 +86,12 @@ function Flyer(options) {
 
         if(wData.content)
             widget.deserialize(wData.content);
+
+        if(wData.isNew)
+        {
+            $(widget.toolbar).show();
+            widget.widgetFocus();
+        }
     };
 
     var json2flyer = function(templateID, flyerid, callback) {
@@ -112,7 +118,8 @@ function Flyer(options) {
                         createPortlet({
                             type:widgetData[i].type,
                             content:widgetData[i].Contents,
-                            layoutIndex:widgetData[i].layoutIndex
+                            layoutIndex:widgetData[i].layoutIndex,
+                            isNew:false
                         });
                 }
             })
@@ -196,7 +203,7 @@ function Flyer(options) {
 
             $(".newitem").click(function(e){
                 var itemType = parseInt($(this).attr('type'));
-                createPortlet( {type:itemType});
+                createPortlet( {type:itemType,isNew:true});
             });
         });
 
