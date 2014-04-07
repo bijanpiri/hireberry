@@ -478,8 +478,10 @@ input[type='checkbox']:checked + .b-label-nodejs:hover {
 }
 
 .resumeIcon {
+    background-image: url("/images/bltn-hiring-icons@2x.png");
     width: 34px;
     height: 44px;
+    background-size: 272px 1269px;
     background-position: 0 -1225px;
     display: inline-block;
     vertical-align: middle;
