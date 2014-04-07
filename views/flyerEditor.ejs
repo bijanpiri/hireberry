@@ -442,12 +442,12 @@ function saveFlyer(callback) {
 
 function viewModeChanged(e) {
 
-    var isEditMode = $('input[name=viewmode]').prop('checked');
+    var isViewMode = $('input[name=viewmode]').prop('checked');
 
-    if( isEditMode )
-        GoToEditMode();
-    else
+    if( isViewMode )
         GoToViewMode();
+    else
+        GoToEditMode();
 }
 
 function init() {
@@ -474,11 +474,11 @@ function init() {
         </div>
         <div class="span8" style="text-align: center">
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
-            <label class="switch-light well" style="width: 100px;vertical-align: middle;display: inline-block;margin: 0;" onchange="viewModeChanged()">
-                <input type="checkbox" name="viewmode" checked>
+            <label class="switch-light switch-candy" style="width: 100px;vertical-align: middle;display: inline-block;margin: 0;" onchange="viewModeChanged()">
+                <input type="checkbox" name="viewmode">
                 <span>
-                    <span>View</span>
                     <span>Edit</span>
+                    <span>View</span>
                 </span>
                 <a class="btn btn-success"></a>
             </label>
