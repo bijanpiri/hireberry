@@ -124,7 +124,7 @@ Action Buttons
 .portlet-container .delete-btn-frame { right: 0;top: 16px; border-radius: 0 6px 6px 0;}
 
 .portlet-container .action-btn {
-    background-image: url("/images/flyer-icons.png");
+    background-image: url("/images/nflyer-icons.png");
     display: block;
     position: absolute;
     margin: auto;
@@ -139,12 +139,12 @@ Action Buttons
     height: 22px;
 }
 .portlet-container .move-btn {
-    background-position: 0 -437px;
+    background-position: 0 -262px;
     width: 22px;
     height: 12px;
 }
 .portlet-container .delete-btn {
-    background-position: 0 -449px;
+    background-position: 0 -275px;
     width: 17px;
     height: 21px;
 }
@@ -490,8 +490,9 @@ Portlet Creator
     display: inline;
 }
 .toolbars{display: none;}
+
 .toolbar-text{
-    padding: 2px;
+    padding: 8px;
 }
 .toolbar-video{
     padding: 2px;
@@ -552,8 +553,56 @@ Portlet Creator
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     padding: 20px;
-
+    list-style-position: inside;
 }
+.bool-btn-group{
+    display: inline;
+}
+.bool-btn-group .bool-btn{
+    float: left;
+    margin: 0;
+}
+.bool-btn{
+    width: 44px;
+    height: 44px;
+    display: inline-block;
+    padding: 0;
+    border: none;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    cursor:  pointer;
+    border-radius: 6px;
+    position: relative;
+}
+.bool-btn:hover{
+    background: #4C4C4C;
+}
+.bool-active{
+    background: #1F1F1F;
+}
+.bool-btn i
+{
+    background-image: url("/images/nflyer-icons.png");
+    position: absolute;
+    display: inline-block;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.bool-separator{border: none;border-left: 1px solid #808080; display: inline-block;width: 0;height: 44px;}
+.bool-icon-align-left{background-position: -100px -52px;width: 18px;height: 13px;}
+.bool-icon-align-center{background-position: -100px -66px;width: 18px;height: 13px;}
+.bool-icon-align-right{background-position: -100px -80px;width: 18px;height: 13px;}
+.bool-icon-bold{background-position: -100px -166px;width: 14px;height: 16px;}
+.bool-icon-italic{background-position:-100px -149px;width: 11px;height: 16px;}
+.bool-icon-underline{background-position: -100px -131px;width: 14px;height: 17px;}
+.bool-icon-list-ul{background-position: -100px -113px;width: 25px;height: 17px;}
+.bool-icon-list-ol{background-position: -100px -94px;width: 26px;height: 18px;}
+.bool-icon-size{background-position: -100px 0;}
+.bool-icon-color{background-position: -100px -29px;}
+
 
 .mapWidget .mapSetting .AlignButton {
     background-image: url("/images/nflyer-map-modes.png");
@@ -647,6 +696,5 @@ Toolbar - WorkType Widget
     right: 0;
     width: 800px;
     height: 600px;
-
     background: #dcdcdc;
 }

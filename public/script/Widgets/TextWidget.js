@@ -25,8 +25,8 @@ function TextWidget(){
         this.addToolbarCommand('align',
             function(widget,args)
             {
-                widget.toolbar.find('[command^=align]').removeClass('btn-info');
-                widget.toolbar.find('[command="align '+args[1]+'"]').addClass('btn-info');
+                widget.toolbar.find('[command^=align]').removeClass('bool-active');
+                widget.toolbar.find('[command="align '+args[1]+'"]').addClass('bool-active');
                 widget.portlet.find('.text-widget').css('text-align',args[1]);});
 
 
@@ -46,7 +46,7 @@ function TextWidget(){
 
         if( this.editMode ){
             $(id).wysiwyg({
-                activeToolbarClass:'btn-info',
+                activeToolbarClass:'bool-active',
                 toolbarSelector: '[data-target='+id+']'
             });
         }
@@ -64,19 +64,19 @@ function TextWidget(){
     this.serialize = function(){
 
         var text=this.portlet.find('.text-widget');
-        var data=new Object();
-        data.text=text.html();
-        data.align=text.css('text-align');
-        data.headline=text.hasClass('header');
-        data.foreColor=text.css('color');
-        data.fontSize=text.css('font-size');
-
+        var data={
+            text:text.html(),
+            align:text.css('text-align'),
+            headline:text.hasClass('header'),
+            foreColor:text.css('color'),
+            fontSize:text.css('font-size')
+        }
         return data;
     }
 
     this.deserialize = function(data){
 
-        this.toolbar.find('[command="align '+data.align+'"]').addClass('btn-info');
+        this.toolbar.find('[command="align '+data.align+'"]').addClass('bool-active');
 
         if(data.headline){
             this.portlet.parent().find('.headline').attr('checked','checked');

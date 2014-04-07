@@ -24,7 +24,8 @@ var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googl
 var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
 var Facebook_AppID='241341676042668';
 var Facebook_AppSecret='2e748d80c87a8594e792eeb482f7c87d';
-var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
+//var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
+var mongoHQConenctionString = 'mongodb://admin:admin124578@127.0.0.1:27017/booltindb';
 var keySize=512;
 var hashIteration=1;
 

@@ -1,3 +1,4 @@
+//ToDo: When user change a picture it must be deleted in server.
 function PictureWidget(){
     Widget.call(this);
 
