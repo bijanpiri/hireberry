@@ -347,8 +347,11 @@ function GoToViewMode() {
 };
 
 function showLoading() {
-    var content = $('<div>').addClass('loadingContent').text('Please Wait ...');
-    var loading = $('<div>').addClass('loading').append( content );
+    var content = $('<div>').addClass('loadingContent')
+            .text('Please Wait ...');
+    var loading = $('<div>').addClass('loading')
+            .append( content )
+            .height( $(document).height() );
 
     $('.loading').remove();
 
