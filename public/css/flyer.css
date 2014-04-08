@@ -492,7 +492,7 @@ Portlet Creator
 .toolbars{display: none;}
 
 .toolbar-text{
-    padding: 8px;
+
 }
 .toolbar-video{
     padding: 2px;
@@ -595,14 +595,71 @@ Portlet Creator
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     cursor:  pointer;
-    border-radius: 6px;
     position: relative;
+    float: left;
+    margin: 8px ;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+
+.bool-color-item{
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: #000000;
+    float: left;
+    margin: 2px;
+    padding: 0;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.bool-current-color{
+    position: absolute;
+    display: inline-block;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 28px;
+    height: 28px;
+    border: 3px solid white;
+    box-sizing: border-box;
+}
+.bool-color-item:hover{
+    border: 2px solid #808080;
+}
+
+.bool-color-picker{
+    margin: -8px 0 0 8px ;
+    background: #e6e6e6;
+    padding: 8px 0 0 8px;
+    overflow: hidden;
+    width: 324px;
+    height: 142px;
+    border: none;
+    border-top-left-radius: 0;
+}
+.bool-color-picker>li{
+    display: inline-block;
+    float: left;
+}
+.bool-btn-drop{
+    background: #B3B3B3;
 }
 .bool-btn:hover{
     background: #4C4C4C;
 }
 .bool-active{
     background: #1F1F1F;
+}
+.bool-active:hover{
+    background: #262626;
 }
 .bool-btn i
 {
@@ -615,7 +672,15 @@ Portlet Creator
     top: 0;
     bottom: 0;
 }
-.bool-separator{border: none;border-left: 1px solid #808080; display: inline-block;width: 0;height: 44px;}
+.bool-separator{
+    border: none;
+    border-left: 1px solid #808080;
+    display: inline-block;
+    width: 0;
+    height: 44px;
+    float: left;
+    margin-top: 8px;
+}
 .bool-icon-align-left{background-position: -100px -52px;width: 18px;height: 13px;}
 .bool-icon-align-center{background-position: -100px -66px;width: 18px;height: 13px;}
 .bool-icon-align-right{background-position: -100px -80px;width: 18px;height: 13px;}
@@ -624,10 +689,14 @@ Portlet Creator
 .bool-icon-underline{background-position: -100px -131px;width: 14px;height: 17px;}
 .bool-icon-list-ul{background-position: -100px -113px;width: 25px;height: 17px;}
 .bool-icon-list-ol{background-position: -100px -94px;width: 26px;height: 18px;}
-.bool-icon-size{background-position: -100px 0;}
-.bool-icon-color{background-position: -100px -29px;}
+.bool-icon-size{background-position: -100px 0;width: 20px;height: 17px;}
+.bool-icon-color{background-position: -100px -29px;width: 22px;height: 22px;}
 
-
+.open>.dropdown-toggle.bool-btn{
+    background: #e6e6e6;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
 .mapWidget .mapSetting .AlignButton {
     background-image: url("/images/nflyer-map-modes.png");
     width: 50px;

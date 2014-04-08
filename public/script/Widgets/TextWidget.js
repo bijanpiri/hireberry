@@ -20,6 +20,7 @@ function TextWidget(){
         this.toolbar
             .attr('data-role','editor-toolbar')
             .attr('data-target',id);
+        $('#colorPicker').ColorPicker();
 
         this.setToolbar('.toolbar-text');
         this.addToolbarCommand('align',
@@ -32,7 +33,10 @@ function TextWidget(){
 
         this.addToolbarCommand('color',
             function(widget,args)
-            {widget.portlet.find('.text-widget').css('color',args[1]);});
+            {
+                widget.portlet.find('.text-widget').css('color',args[1]);
+                widget.toolbar.find('.bool-current-color').css('background',args[1]);
+            });
 
         this.addToolbarCommand('size',
             function(widget,args)

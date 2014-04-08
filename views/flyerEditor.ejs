@@ -29,7 +29,7 @@
 <link href="/css/job.css" rel="stylesheet">
 <link href="/css/jquery.Jcrop.css" rel="stylesheet">
 <link href="http://ghinda.net/css-toggle-switch/dist/toggle-switch.css" rel="stylesheet">
-
+<script src="/script/widgets/ColorPicker.js"></script>
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
 <script src="/script/Widgets/PictureWidget.js"></script>
@@ -42,7 +42,7 @@
 <script src="/script/Widgets/PersonalInfoWidget.js"></script>
 <script src="/script/Widgets/ProfilesWidget.js"></script>
 <script src="/script/Widgets/ResumeWidget.js"></script>
-<script src="/script/Widgets/SeperatorWidget.js"></script>
+<script src="/script/Widgets/SeparatorWidget.js"></script>
 <script src="/script/Widgets/SkillWidget.js"></script>
 <script src="/script/Widgets/WorkTypeWidget.js"></script>
 <script src="/script/Widgets/BadgeWidget.js"></script>
@@ -1074,18 +1074,21 @@ function init() {
 <div class="toolbars">
     <div class="toolbar-text">
 
-            <a class="btn  btn-large dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Color"><i class="icon-tint"></i>&nbsp;<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li> <a class="btn btn-large" command="color #ff0000" title="Use Red Color"><i class="icon-tint"></i> Red</a></li>
-                <li> <a class="btn btn-large" command="color #00ff00" title="Use Green Color"><i class="icon-tint"></i> Green</a></li>
-                <li> <a class="btn btn-large" command="color #0000ff" title="Use Blue Color"><i class="icon-tint"></i> Blue</a></li>
-            </ul>
-            <a class="btn  btn-large dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
+            <a class="bool-btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size">
+                <i class="bool-icon-size"></i>
+            </a>
             <ul class="dropdown-menu">
                 <li><a command="size 32px"><font size="5">Huge</font></a></li>
                 <li><a command="size 20px"><font size="3">Normal</font></a></li>
                 <li><a command="size 12px"><font size="1">Small</font></a></li>
             </ul>
+
+            <div class="btn-group pull-left">
+                <a class="bool-btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <span class="bool-color-item bool-current-color"></span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker" id="colorPicker"></ul>
+            </div>
             <div class="bool-separator"></div>
             <a class="bool-btn"  command="align left" title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="bool-icon-align-left"></i></a>
             <a class="bool-btn"  command="align center" title="Align Center" data-original-title="Center (Ctrl/Cmd+E)"><i class="bool-icon-align-center"></i></a>
@@ -1098,7 +1101,7 @@ function init() {
             <a class="bool-btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
     </div>
 
-    <div class="toolbar-picture">
+    <div class="toolbar-picture">#6c6c6c
         <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
         <a class="btn btn-large" command="edit"><i class="icon-edit"></i></a>
         <a class="btn btn-large hide" command="crop"><i class="icon-edit"></i></a>
