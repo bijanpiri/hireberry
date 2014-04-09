@@ -129,16 +129,22 @@ var BUsers = mongoose.model( 'users', {
     linkedinid:String,
     linkedinAccessToken:String,
     linkedinAccessSecretToken:String,
-    tempToken:String});
-var BBoards = mongoose.model( 'boards', {name: String, category: String, privacy: String, locationlng: Number, locationlat: Number,tag:String});
-var BBoardsTags = mongoose.model( 'boardsTags', {board:String,tag:String});
-var BFlyersTags = mongoose.model( 'flyersTags', {flyer:String,tag:String});
-var BTag = mongoose.model( 'tags', {name:String});
-var BUsersBoards = mongoose.model( 'usersboards', {board:String, user:String});
-BFlyers = mongoose.model( 'flyers', {flyer: Object, owner: String, publishTime: String, disqusShortname: String, dbToken:String});
-var BFlyersBoards = mongoose.model( 'flyersboards', {flyer:String,board:String});
-var BBoardsFollwoing = mongoose.model( 'boardsfollowing', {board:String,follower:String});
-var BFlyersTickets = mongoose.model( 'flyerstickets', {flyer:String,user:String});
+    tempToken:String
+});
+
+BFlyers = mongoose.model( 'flyers', {
+    flyer: Object,
+    owner: String,
+    publishTime: String,
+    disqusShortname: String,
+    dbToken:String
+});
+
+BTeam = mongoose.model( 'teams', {
+    name: String,
+    admin: String,
+    members: []
+})
 
 MApplyForm = mongoose.model( 'applyForm', {
     flyerID: String,
@@ -558,157 +564,6 @@ app.get('/setting', function(req,res){
     res.render('setting.ejs',{title:'Setting'});
 });
 
-app.get('/profile', function(req,res) {
-
-    var PrepareAndRender = function(user) {
-        FindUserBoards(user);
-    }
-
-    var FindUserBoards = function(user) {
-        BUsersBoards.find({user:user._id}, function (err, userBoards) {
-            if (err)
-                return handleError(err);
-
-            var boardsIDList = [];
-            for(var i=0; i<userBoards.length; i++)
-                boardsIDList.push(userBoards[i].board);
-
-            FindUserBoardsDetails(boardsIDList);
-        });
-    }
-
-    var FindUserBoardsDetails = function(boardsIDList) {
-        BBoards.find({_id:{$in:boardsIDList}}, function(err, userBoard) {
-            FindUserFlyers(userBoard);
-        });
-    }
-
-    var FindUserFlyers = function(userBoards) {
-        BFlyers.find({owner:req.user._id}, function (err, userFlyers) {
-            FindUserFollowingBoards(userBoards, userFlyers);
-        });
-    }
-
-    var FindUserFollowingBoards = function(userBoards,userFlyers) {
-        BBoardsFollwoing.find({follower:req.user._id}, function(err,followingBoardRows){
-            if(err) return res.send(500,{result:'DB Error'});
-
-            var followingBoardsIDList = [];
-            for(var i=0; i<followingBoardRows.length; i++)
-                followingBoardsIDList.push(followingBoardRows[i].board);
-
-            FindUserFollowingBoardsDetails(userBoards,userFlyers,followingBoardsIDList);
-        });
-    }
-
-    var FindUserFollowingBoardsDetails = function(userBoards,userFlyers,followingBoardsIDList){
-        BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
-            FindUserPocketedFlyer(userBoards,userFlyers,followingBoards);
-        });
-    }
-
-    var FindUserPocketedFlyer = function(userBoards,userFlyers,followingBoards) {
-        BFlyersTickets.find({user:req.user._id}, function(err,ticketedFlyersRows){
-
-            var ticketFlyersIDList = [];
-            for(var i=0; i<ticketedFlyersRows.length; i++)
-                if(ticketedFlyersRows[i].flyer)
-                    ticketFlyersIDList.push(ticketedFlyersRows[i].flyer);
-
-            FindUserPocketedFlyerDetails(userBoards,userFlyers,followingBoards,ticketFlyersIDList);
-        });
-    }
-
-    var FindUserPocketedFlyerDetails = function(userBoards,userFlyers,followingBoards,ticketFlyersIDList) {
-        BFlyers.find({_id:{$in:ticketFlyersIDList}}, function(err,existTicketedFlyers){
-            if(err) return res.send(500,{result:'DB Error'});
-
-
-            process.nextTick( function() {
-                var ticketedFlyers = [];
-
-                for( var i=0; i<ticketFlyersIDList.length; i++ ) {
-
-                    var foundIndex = -1;
-
-                    for( var j=0; j<existTicketedFlyers.length; j++ ) {
-                        if( existTicketedFlyers[j]._id == ticketFlyersIDList[j] ){
-                            foundIndex = j;
-                            break;
-                        }
-                    }
-
-                    if( foundIndex >= 0 )
-                        ticketedFlyers.push({
-                            isDeleted:false,
-                            flyer:existTicketedFlyers[foundIndex]
-                        });
-                    else
-                        ticketedFlyers.push({
-                            isDeleted:true
-                        });
-                }
-
-                FindPublicBoard(userBoards,userFlyers,followingBoards,ticketedFlyers);
-            });
-        });
-    }
-
-    var FindPublicBoard = function(userBoards,userFlyers,followingBoards,ticketedFlyers) {
-        BBoards.find({privacy:'public'},function(err,pBoards){
-
-            // Add User's boards to public boards list (board which user can put on theme)
-            pBoards = pBoards || [];
-            Array.prototype.push.apply(pBoards, userBoards);
-
-            RenderPage(userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards);
-        });
-    }
-
-    var RenderPage = function(userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards) {
-
-        res.render('profile.ejs',{
-            title:'Profile',
-            email:req.user,
-            boards:userBoards,
-            pBoards:pBoards,
-            flyers:userFlyers,
-            followingBoards:followingBoards,
-            ticketedFlyers:ticketedFlyers
-        });
-    }
-
-    if( checkUser(req,res) )
-        PrepareAndRender(req.user);
-    else
-        res.redirect('/login');
-});
-
-app.post('/profile', function(req,res) {
-
-    if( !checkUser(req,res) )
-        return res.send(401);
-
-    var newPassword = req.body.newpassword;
-
-    if( req.body.newpassword != req.body.confirmnewpassword)
-        res.send(401,{error:'Not matched!'});
-    if( req.user ){
-
-        BUsers.update( { email: req.user.email, password: req.body.oldpassword },
-            { $set: { password: newPassword }},
-            function (err,nAffected) {
-                if (err)
-                    return handleError(err);
-
-                if(nAffected==0)
-                    res.send(401);
-                else
-                    res.send(200);
-            });
-    }
-});
-
 // region Flyers
 app.get('/flyer/new',function(req,res){
     var flyerid=req.cookies.flyerid;
@@ -825,7 +680,6 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
 app.get('/flyer/:mode/:tid', function(req,res){
 
     var flyerid;
-    var boards = [];
     var templateID = req.params.tid;
     var editMode = (req.params.mode || 'view').toLowerCase() !== 'view';
     var existFlyer = false;
@@ -837,7 +691,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
     var renderNewFlyerView = function() {
         res.render('flyerEditor.ejs',{
             title:'Flyer Editor',
-            boards:boards,
+            boards:[],
             flyerid:flyerid,
             templateID:templateID,
             editMode: editMode,
@@ -884,14 +738,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
         }
     };
 
-    var getPublicBoards = function() {
-        BBoards.find({}, function (err, boardsList){
-            boards = boardsList;
-            getLastFlyer();
-        });
-    }
-
-    getPublicBoards();
+    getLastFlyer();
 });
 
 app.get('/flyer/remove/:id', function(req,res){
@@ -899,7 +746,7 @@ app.get('/flyer/remove/:id', function(req,res){
         var flyerid = req.params.id;
         BFlyers.findOne({_id:flyerid},function(err,flyer){
             if(flyer.owner==req.user._id){
-                BFlyersBoards.remove({flyer:flyerid});
+
                 BFlyers.remove({_id:flyerid},function(err){
                     if(!err)
                         res.redirect('/profile');
@@ -913,35 +760,6 @@ app.get('/flyer/remove/:id', function(req,res){
             }
         });
     }
-});
-
-app.get('/board/remove/:id',function(req,res){
-
-    var userid;
-    if(checkUser(req,res)){
-        if(req.user)
-        {
-            userid = req.user.id;
-        }
-        var boardid = req.params.id;
-        BUsersBoards.findOne({user:userid},function(err,uboard){
-            BBoards.findOne({_id:uboard.board},function(err){
-                BBoards.remove({_id:boardid},function(err){
-                    if(!err)
-                        res.redirect('/profile');
-                    else
-                        res.send('error deleting board:'+err);
-                });
-                if(err)
-                    res.send(403, "You don't have permisson to remove this board");
-            });
-            if(err){
-                res.send(err);
-            }
-        });
-
-    }
-
 });
 
 app.get('/flyer/:id', function(req,res){
@@ -995,133 +813,6 @@ app.get('/search/users', function(req,res){
 });
 
 app.get('/user/:id',function(req,res){
-
-
-    var PrepareAndRender = function(user) {
-        FindUserBoards(user);
-    }
-
-    var FindUserBoards = function(user) {
-        BUsersBoards.find({user:user._id}, function (err, userBoards) {
-            if (err)
-                return handleError(err);
-
-            var boardsIDList = [];
-            for(var i=0; i<userBoards.length; i++)
-                boardsIDList.push(userBoards[i].board);
-
-            FindUserBoardsDetails(user,boardsIDList);
-        });
-    }
-
-    var FindUserBoardsDetails = function(user,boardsIDList) {
-        BBoards.find({_id:{$in:boardsIDList}}, function(err, userBoard) {
-            FindUserFlyers(user,userBoard);
-        });
-    }
-
-    var FindUserFlyers = function(user,userBoards) {
-        BFlyers.find({owner:user._id}, function (err, userFlyers) {
-            FindUserFollowingBoards(user,userBoards, userFlyers);
-        });
-    }
-
-    var FindUserFollowingBoards = function(user,userBoards,userFlyers) {
-        BBoardsFollwoing.find({follower:user._id}, function(err,followingBoardRows){
-            if(err) return res.send(500,{result:'DB Error'});
-
-            var followingBoardsIDList = [];
-            for(var i=0; i<followingBoardRows.length; i++)
-                followingBoardsIDList.push(followingBoardRows[i].board);
-
-            FindUserFollowingBoardsDetails(user,userBoards,userFlyers,followingBoardsIDList);
-        });
-    }
-
-    var FindUserFollowingBoardsDetails = function(user,userBoards,userFlyers,followingBoardsIDList){
-        BBoards.find({_id:{$in:followingBoardsIDList}}, function(err, followingBoards) {
-            FindUserPocketedFlyer(user,userBoards,userFlyers,followingBoards);
-        });
-    }
-
-    var FindUserPocketedFlyer = function(user,userBoards,userFlyers,followingBoards) {
-        BFlyersTickets.find({user:user._id}, function(err,ticketedFlyersRows){
-
-            var ticketFlyersIDList = [];
-            for(var i=0; i<ticketedFlyersRows.length; i++)
-                if(ticketedFlyersRows[i].flyer)
-                    ticketFlyersIDList.push(ticketedFlyersRows[i].flyer);
-
-            FindUserPocketedFlyerDetails(user,userBoards,userFlyers,followingBoards,ticketFlyersIDList);
-        });
-    }
-
-    var FindUserPocketedFlyerDetails = function(user,userBoards,userFlyers,followingBoards,ticketFlyersIDList) {
-        BFlyers.find({_id:{$in:ticketFlyersIDList}}, function(err,existTicketedFlyers){
-            if(err) return res.send(500,{result:'DB Error'});
-
-
-            process.nextTick( function() {
-                var ticketedFlyers = [];
-
-                for( var i=0; i<ticketFlyersIDList.length; i++ ) {
-
-                    var foundIndex = -1;
-
-                    for( var j=0; j<existTicketedFlyers.length; j++ ) {
-                        if( existTicketedFlyers[j]._id == ticketFlyersIDList[j] ){
-                            foundIndex = j;
-                            break;
-                        }
-                    }
-
-                    if( foundIndex >= 0 )
-                        ticketedFlyers.push({
-                            isDeleted:false,
-                            flyer:existTicketedFlyers[foundIndex]
-                        });
-                    else
-                        ticketedFlyers.push({
-                            isDeleted:true
-                        });
-                }
-
-                FindPublicBoard(user,userBoards,userFlyers,followingBoards,ticketedFlyers);
-            });
-        });
-    }
-
-    var FindPublicBoard = function(user,userBoards,userFlyers,followingBoards,ticketedFlyers) {
-        BBoards.find({privacy:'public'},function(err,pBoards){
-
-            // Add User's boards to public boards list (board which user can put on theme)
-            pBoards = pBoards || [];
-            Array.prototype.push.apply(pBoards, userBoards);
-
-            RenderPage(user,userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards);
-        });
-    }
-
-    var RenderPage = function(user,userBoards,userFlyers,followingBoards,ticketedFlyers,pBoards) {
-
-        res.render('profile.ejs',{
-            title:'Profile',
-            email:user.email,
-            boards:userBoards,
-            pBoards:pBoards,
-            flyers:userFlyers,
-            followingBoards:followingBoards,
-            ticketedFlyers:ticketedFlyers
-        });
-    }
-
-
-    BUsers.findOne({_id:req.params.id},function(err,user){
-        if(user)
-            PrepareAndRender(user);
-        else
-            res.redirect('/login');
-    })
 });
 
 //endregion
@@ -1331,16 +1022,6 @@ app.delete('/api/1.0/flyer', function(req,res) {
     console.log('>>>>>>>>>>Removing flyer '+tempToken);
 
     // ToDo: Check ownership of flyer
-
-    // Remove It
-    BFlyersBoards.remove({flyer:flyerid}, function(err){
-        if(!err){
-            BFlyers.remove({_id:flyerid}, function(err){
-                if(!err) res.send(200,{});
-            });
-        }
-    });
-
 });
 
 //endregion
