@@ -597,7 +597,7 @@ Portlet Creator
     cursor:  pointer;
     position: relative;
     float: left;
-    margin: 8px ;
+    margin: 8px 4px ;
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
@@ -773,6 +773,8 @@ Toolbar - WorkType Widget
     line-height: 60px;
     margin-left: 20px;
     padding: 0;
+    margin-right: 6px;
+    float: left;
 }
 
 .toolbar-anything {

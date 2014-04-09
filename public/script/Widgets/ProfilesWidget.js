@@ -16,16 +16,27 @@ function ProfilesWidget(){
         this.toolbar.find('input[name=p]').each(function(i,input){
             $(input).change(function(){
              profile.find('.'+input.value).css('display',input.checked ?'':'none');
-                if(input.checked)
-                {
-                    $('.toolbar-profileWidget').find("#"+input.value).addClass("bool-active");
-
-               }
+               if(input.checked)
+                   $('.toolbar-profileWidget').find("#"+input.value).parent().addClass("bool-active");
                 else
-                    $('.toolbar-profileWidget').find("#"+input.value).removeClass("bool-active");
+                   $('.toolbar-profileWidget').find("#"+input.value).parent().removeClass("bool-active");
             })
         });
+        /*this.addToolbarCommand('profile',
+            function(widget,args)
+            {
+                var cmd='[command="profile '+args[1]+'"]';
+                var s=widget.toolbar.find(cmd).find('input[id='+args[1]+']');
+                if( widget.toolbar.find(cmd).find('input[id='+args[1]+']')[0].checked)
+                {
+                    widget.toolbar.find(cmd).addClass('bool-active');
+                }
+                else
+                {
+                    widget.toolbar.find(cmd).removeClass('bool-active');
+                }
 
+            });*/
         if(this.editMode) {
             this.portlet.find('input').prop('readOnly','readOnly').css('cursor','default');
         }
