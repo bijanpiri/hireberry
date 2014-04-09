@@ -655,6 +655,7 @@ Portlet Creator
 .bool-btn:hover{
     background: #4C4C4C;
 }
+
 .bool-active{
     background: #1F1F1F;
 }
@@ -689,8 +690,18 @@ Portlet Creator
 .bool-icon-underline{background-position: -100px -131px;width: 14px;height: 17px;}
 .bool-icon-list-ul{background-position: -100px -113px;width: 25px;height: 17px;}
 .bool-icon-list-ol{background-position: -100px -94px;width: 26px;height: 18px;}
+
 .bool-icon-size{background-position: -100px 0;width: 20px;height: 17px;}
 .bool-icon-color{background-position: -100px -29px;width: 22px;height: 22px;}
+
+
+.bool-icon-github{background-position:-100px -183px;width: 28px;height: 24px;}
+.bool-icon-stackoverflow{background-position:-100px -208px;width: 22px;height: 27px;}
+.bool-icon-twitter{background-position:-100px -236px;width: 26px;height: 20px;}
+.bool-icon-linkedin{background-position:-100px -257px;width: 24px;height: 24px;}
+.bool-icon-dribbble{background-position:-100px -282px;width: 24px;height: 24px;}
+.bool-icon-behance{background-position:-100px -307px;width: 28px;height: 17px;}
+
 
 .open>.dropdown-toggle.bool-btn{
     background: #e6e6e6;
@@ -719,6 +730,8 @@ Portlet Creator
     padding: 2em 20px;
 }
 
+
+
 /****
 Toolbar - WorkType Widget
 ****/
@@ -741,7 +754,9 @@ Toolbar - WorkType Widget
 }
 
 .toolbar-profileWidget {
-    padding: 15px 20px;
+   /* padding: 15px 20px;*/
+    height: 60px;
+
 }
 .toolbar-profileWidget label {
     font-size: 1.6em;
@@ -751,6 +766,15 @@ Toolbar - WorkType Widget
     line-height: 1.6em;
 }
 
+#toolbar-labelprofile{
+    font-family: "Roboto";
+    font-size: 18px;
+    color: #8D8D8D;
+    line-height: 60px;
+    margin-left: 20px;
+    padding: 0;
+}
+
 .toolbar-anything {
     margin: 15px;
 }
@@ -758,6 +782,9 @@ Toolbar - WorkType Widget
     vertical-align: top;
     line-height: 2em;
 }
+
+
+
 .toolbar-anything input {
     width: 40px;
 }

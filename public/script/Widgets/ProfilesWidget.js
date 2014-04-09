@@ -15,7 +15,14 @@ function ProfilesWidget(){
         var profile=this.portlet;
         this.toolbar.find('input[name=p]').each(function(i,input){
             $(input).change(function(){
-                profile.find('.'+input.value).css('display',input.checked ?'':'none');
+             profile.find('.'+input.value).css('display',input.checked ?'':'none');
+                if(input.checked)
+                {
+                    $('.toolbar-profileWidget').find("#"+input.value).addClass("bool-active");
+
+               }
+                else
+                    $('.toolbar-profileWidget').find("#"+input.value).removeClass("bool-active");
             })
         });
 
