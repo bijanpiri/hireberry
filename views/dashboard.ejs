@@ -13,6 +13,7 @@
 <script>
 var teamID = '<%=teamID%>';
 var userID = '<%=userID%>';
+var teamMembers = [];
 
 google.load("visualization", "1");
 
@@ -69,7 +70,7 @@ function fillFormsList( callback ) {
 
 function fillTable() {
     var selectedForm = $('#formsList :selected');
-    var qsParams = '?userID='  + userID + '&formID=' + selectedForm.attr('id');
+    var qsParams = '?userID='  + userID + '&teamID='  + teamID + '&formID=' + selectedForm.attr('id');
 
     $('#currentFormName').text( selectedForm.val() );
 
@@ -307,8 +308,23 @@ function getTeamInfo() {
         $('#teamName').text( res.team.name );
         $('#teamAdmin').text( res.team.admin.email );
 
-        for( var i=0; i<res.team.members.length; i++ )
+        teamMembers = res.team.members;
+
+        for( var i=0; i<res.team.members.length; i++ ){
             $('#teamMembers').append( $('<div>').text(res.team.members[i].email) );
+
+            var option = $('<option>').attr('name',res.team.members[i]._id).attr('id',res.team.members[i]._id).text(res.team.members[i].email);
+            $('#assignTo').append( option );
+
+            // ToDo: select current selected item in SELECT element
+        }
+
+        $('#assignTo').change( function(e,item,r){
+            var userID = $('#assignTo :selected').attr('id')
+            var formID = $('#formsList :selected').attr('id')
+
+            $.post('/api/team/form/assign',{formID:formID,userID:userID})
+        })
     });
 
     $('#inviteToTeam').click( function() {
@@ -380,6 +396,7 @@ function saveTeamInfo() {
             <div class="span7">
                 <div class="formName">
                     <select id="formsList"></select>
+                    <select id="assignTo"></select>
                 </div>
             </div>
             <div class="span5">

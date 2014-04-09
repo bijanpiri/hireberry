@@ -138,7 +138,8 @@ BFlyers = mongoose.model( 'flyers', {
     owner: String,
     publishTime: String,
     disqusShortname: String,
-    dbToken:String
+    dbToken:String,
+    assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
 });
 
 BTeam = mongoose.model( 'teams', {
@@ -183,6 +184,7 @@ everyauth.everymodule
 everyauth.linkedin
     .consumerKey(LINKEDIN_CONSUMER_KEY)
     .consumerSecret(LINKEDIN_CONSUMER_SECRET)
+    .moduleTimeout(60000)
     .findOrCreateUser( function (session, accessToken, accessTokenSecret, linkedinUserMetadata) {
         // find or create user logic goes here
         var promise = this.Promise();
@@ -830,6 +832,22 @@ app.post('/api/user/team/join', function(req,res){
 
 });
 
+app.post('/api/team/form/assign', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    //var userID = req.user._id;
+    var userID = req.body.userID;
+    var formID = req.body.formID;
+
+    // Check whether current user is admin or not
+    assignForm(userID, formID, function(err) {
+        res.send(200)
+    } );
+
+});
+
 // endregion
 
 app.get('/search/users', function(req,res){
@@ -1047,6 +1065,15 @@ function inviteToTeam( invitedEmail, teamID, callback ) {
         .save( function(err) {
             callback(err);
         })
+}
+
+function assignForm(assigneeUserID,assignedFormID,callback) {
+    BFlyers.update( {_id:assignedFormID}, {assignedTo:assigneeUserID}, function(err){
+        if(err)
+            callback(err)
+        else
+            callback(null)
+    })
 }
 
 function BLog(text){

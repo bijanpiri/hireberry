@@ -20,25 +20,54 @@ module.exports.showDashboard = function (req,res) {
 // Return all the created forms (template)
 module.exports.forms = function(req,res){
     var teamID = req.query.teamID;
+    var userID = req.user._id;
 
-    BFlyers.find( {owner: teamID}, function(err,flyers) {
+    BTeam.count({_id:teamID,admin:userID}, function(err,count) {
         if( err )
-            return res.send(502);
+            return res.send(204);
 
-        // Reduce
-        // ToDo: Make reducing async
-        var forms = flyers.map( function(flyer) {
-            var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
+        if( count > 0 ) {   // User is admin
+            BFlyers.find( {owner: teamID}, function(err,flyers) {
+                if( err )
+                    return res.send(502);
 
-            return {
-                formName:description,
-                formID:flyer._id,
-                mode: flyer.publishTime ? "(Published)" : "(Draft)"
-            }
-        } );
+                // Reduce
+                // ToDo: Make reducing async
+                var forms = flyers.map( function(flyer) {
+                    var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
 
-        res.send( {forms: forms} );
-    } )
+                    return {
+                        formName:description,
+                        formID:flyer._id,
+                        mode: flyer.publishTime ? "(Published)" : "(Draft)"
+                    }
+                } );
+
+                res.send( {forms: forms} );
+            } );
+        }
+        else {
+            BFlyers.find( {owner: teamID, assignedTo:userID}, function(err,flyers) {
+                if( err )
+                    return res.send(502);
+
+                // Reduce
+                // ToDo: Make reducing async
+                var forms = flyers.map( function(flyer) {
+                    var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
+
+                    return {
+                        formName:description,
+                        formID:flyer._id,
+                        mode: flyer.publishTime ? "(Published)" : "(Draft)"
+                    }
+                } );
+
+                res.send( {forms: forms} );
+            } );
+        }
+    });
+
 }
 
 // Return all the submitted form as a data-source
@@ -65,61 +94,84 @@ module.exports.applications = function (req,res) {
     // ToDo: Check whether current user is owner of this forms or not.
 
     var flyerID = req.query.formID;
+    var teamID = req.query.teamID;
+    var userID = req.user._id;
 
-    MApplyForm.find( {flyerID: flyerID}, function(err,forms) {
+    BTeam.count({_id:teamID,admin:userID}, function(err,count) {
         if( err )
-            return res.send(303,{error:err});
+            return res.send(204);
 
-        for( var i=0; i<forms.length; i++ ) {
-            var form = forms[i]._doc;
-
-            // userId
-            form.userId = i+1;
-            form.checked = false;
-
-            // Skills
-            var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
-            var selectedSkill = '';
-            for (var j=0; j<skills.length; j++)
-                selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
-            form.skills = selectedSkill;
-
-            // Profiles
-            form.profiles = form.profiles || '{}';
-            var profiles = JSON.parse( form.profiles );
-            var selectedProfiles = '';
-            for (var profile in profiles)
-                if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
-                    selectedProfiles +=
-                        '<span class="spanBox">' +
-                            makeLinkTag(profile,profiles[profile],false) +
-                            '</span>';
-            form.profiles = selectedProfiles;
-
-            // Workplace
-            //form.workPlace = (form.workPlace=='fulltime') ?
-
-            // Email
-            form.email = makeLinkTag( form.email, form.email, true );
-
-            // Apply Date
-            var date = new Date( form.applyTime );
-            form.applyTime = date.toLocaleDateString();
-
-            // Resume
-            form.resumePath = (form.resumePath==='-') ? '' : makeLinkTag( 'link', form.resumePath, false);
-
-            // Last Activity
-            if( form.activities && form.activities.length > 0 )
-                form.lastActivity = form.activities[form.activities.length-1]['type'];
-            else
-                form.lastActivity = 'NEW'
-
-            submittedForms.rows.push( form );
+        if( count > 0 ) {   // User is admin
+            fetchApplications();
         }
+        else {
 
-        res.send(submittedForms);
-    })
+            BFlyers.count( {_id: flyerID, assignedTo:userID}, function(err,count) {
+                if( count > 0 )
+                    fetchApplications();
+                else
+                    res.send(200,submittedForms);
+            });
+
+        }
+    });
+
+    function fetchApplications() {
+        MApplyForm.find( {flyerID: flyerID}, function(err,forms) {
+            if( err )
+                return res.send(303,{error:err});
+
+            for( var i=0; i<forms.length; i++ ) {
+                var form = forms[i]._doc;
+
+                // userId
+                form.userId = i+1;
+                form.checked = false;
+
+                // Skills
+                var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
+                var selectedSkill = '';
+                for (var j=0; j<skills.length; j++)
+                    selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
+                form.skills = selectedSkill;
+
+                // Profiles
+                form.profiles = form.profiles || '{}';
+                var profiles = JSON.parse( form.profiles );
+                var selectedProfiles = '';
+                for (var profile in profiles)
+                    if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
+                        selectedProfiles +=
+                            '<span class="spanBox">' +
+                                makeLinkTag(profile,profiles[profile],false) +
+                                '</span>';
+                form.profiles = selectedProfiles;
+
+                // Workplace
+                //form.workPlace = (form.workPlace=='fulltime') ?
+
+                // Email
+                form.email = makeLinkTag( form.email, form.email, true );
+
+                // Apply Date
+                var date = new Date( form.applyTime );
+                form.applyTime = date.toLocaleDateString();
+
+                // Resume
+                form.resumePath = (form.resumePath==='-') ? '' : makeLinkTag( 'link', form.resumePath, false);
+
+                // Last Activity
+                if( form.activities && form.activities.length > 0 )
+                    form.lastActivity = form.activities[form.activities.length-1]['type'];
+                else
+                    form.lastActivity = 'NEW'
+
+                submittedForms.rows.push( form );
+            }
+
+            res.send(submittedForms);
+        })
+    }
 }
 
 module.exports.updateApplication = function(req,res) {
