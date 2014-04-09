@@ -129,7 +129,8 @@ var BUsers = mongoose.model( 'users', {
     linkedinid:String,
     linkedinAccessToken:String,
     linkedinAccessSecretToken:String,
-    tempToken:String
+    tempToken:String,
+    teamID: String
 });
 
 BFlyers = mongoose.model( 'flyers', {
@@ -142,12 +143,12 @@ BFlyers = mongoose.model( 'flyers', {
 
 BTeam = mongoose.model( 'teams', {
     name: String,
-    admin: String,
-    members: []
+    admin: {type : mongoose.Schema.ObjectId, ref : 'users'},
+    members: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
 })
 
 BInvitation = mongoose.model( 'invitation', {
-    inviterTeam: String,
+    inviterTeam: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     invitedEmail: String,
     inviteTime: String
 })
@@ -178,7 +179,7 @@ everyauth.everymodule
     });
 //endregion
 
-//region Twitter Authentication Configuration
+//region LinkedIn Authentication Configuration
 everyauth.linkedin
     .consumerKey(LINKEDIN_CONSUMER_KEY)
     .consumerSecret(LINKEDIN_CONSUMER_SECRET)
@@ -204,7 +205,10 @@ everyauth.linkedin
                     if(err)
                         promise.fail([err]);
                     else
-                        promise.fulfill(newUser);
+                        gettingReady( newUser._id, function() {
+                            promise.fulfill(newUser);
+                        });
+
                 });
             } else {
                 promise.fulfill(user);
@@ -447,13 +451,16 @@ everyauth.password
 
                 crypto.pbkdf2( password, salt, hashIteration, keySize,
                     function(err, dk) {
-                        var user = BUsers(
+                        BUsers(
                             {
                                 email: newUserAttributes.email,
                                 password: dk,
                                 salt:salt
+                            }).save(function(err,user){
+                                gettingReady( user._id, function() {
+                                    promise.fulfill(user);
+                                });
                             });
-                        user.save(function(err){return promise.fulfill(user);});
                     }
                 );
 
@@ -514,7 +521,7 @@ app.get('/api/applications/stat', routerDashboard.statisticalInfo )
 
 app.get('/', function(req,res) {
     if( req.user )
-        res.redirect('/flyer/new');
+        res.redirect('/dashboard');
     else
         res.redirect('/login');
 });
@@ -621,11 +628,11 @@ app.post('/flyer/publish', function(req,res){
     var flyer = req.body.flyer;
 
     BFlyers.update( {_id:flyer.flyerid}, {$set:{flyer:flyer, publishTime:new Date()}}, {upsert:true}, function(err){
-            if(!err){
-                res.send(200);
-            }else
-                res.send(500,{result:'DB Error'});
-        });
+        if(!err){
+            res.send(200);
+        }else
+            res.send(500,{result:'DB Error'});
+    });
 
 });
 
@@ -635,7 +642,7 @@ app.post('/flyer/inactive', function(req,res){
 
     BFlyers.update( {_id:flyerID}, {$set:{publishTime:''}}, function(err){
         if(!err)
-           res.send(200);
+            res.send(200);
     });
 });
 
@@ -700,7 +707,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
             if( !flyerid ) {        // Cookie is empty. So make a new flyer
 
-                var newflyer = BFlyers({owner:req.user._id});
+                var newflyer = BFlyers({owner:req.user.teamID});
                 newflyer.save(function (err) {
                     flyerid = newflyer._id;
                     res.cookie('flyerid',flyerid);
@@ -774,72 +781,53 @@ app.get('/flyer/:id', function(req,res){
 // endregion
 
 // region Team
-app.post('/team/invite', function(req,res){
+app.post('/api/team/invite', function(req,res){
 
-    if( checkUser(req,res) )
+    if( !checkUser(req,res) )
         return;
 
-    var userID = req.user._id;
-    var teamID = '';
+    var teamID = req.user.teamID;
     var invitedEmail = req.body.email;
 
-    // ToDo: Find in user's team and send invitation behind team to email address
+    inviteToTeam( invitedEmail, teamID, function() {
+        res.send(200);
+    });
 
-    res.send(200);
 });
 
-app.get('/user/invitations', function(req,res){
+app.get('/api/user/invitations', function(req,res){
 
-    if( checkUser(req,res) )
+    if( !checkUser(req,res) )
         return;
 
-    var userID = req.user._id;
     var email = req.user.email;
 
-    // ToDo: Find in invitation list
-
-    res.send(200,{
-        invited:'no'
+    BInvitation.find({invitedEmail:email})
+        .populate('inviterTeam')
+        .exec(function(err,invitations) {
+        if(!err)
+            res.send(200,invitations);
     });
+
 });
 
-app.post('/team', function(req,res){
+app.post('/api/user/team/join', function(req,res){
 
-    if( checkUser(req,res) )
+    if( !checkUser(req,res) )
         return;
 
     var userID = req.user._id;
-    var teamName = req.body.teamName;
+    var oldTeamID = req.user.teamID;
+    var newTeamID = req.body.teamID;
 
-    // ToDo: Create team and add user as its admin
+    changeRoleInTeam( userID, oldTeamID, 'user', function(err) {
+        leaveTeam( userID, oldTeamID, function(err) {
+            joinToTeam( userID, newTeamID, function(err) {
+                res.send(200);
+            });
+        })
+    })
 
-    res.send(200);
-});
-
-app.post('/team/member', function(req,res){
-
-    if( checkUser(req,res) )
-        return;
-
-    var userID = req.user._id;
-    var teamID = req.body.teamID;
-
-    // ToDo:
-
-    res.send(200);
-});
-
-app.post('/team/admin', function(req,res){
-
-    if( checkUser(req,res) )
-        return;
-
-    var adminID = req.body.userID;
-    var teamID = req.body.teamID;
-
-    // ToDo:
-
-    res.send(200);
 });
 
 // endregion
@@ -868,29 +856,21 @@ app.get('/search/users', function(req,res){
     });
 });
 
-app.get('/user/:id',function(req,res){
+app.get('/api/user/team',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+
+    getUserTeam(userID, function(err,team) {
+        res.send(200,{team:team});
+    })
 });
 
 //endregion
 
 //region Low Level API
-/*
- GET
- /ison
- /profile
- /flyers/:id
- /boards/:id
- POST
- /register
- /login
- /logout
- /flyers
- /boards
- PUT
- /profile/:id
- DELETE
- /flyers/:id
- */
 
 function login(res,email,password){
     BUsers.findOne({email:email,password:password}, function(err,user){
@@ -969,6 +949,104 @@ function checkUser(req,res){
         res.redirect('/login');
     }
     return req.user!=null;
+}
+
+function gettingReady(userID,callback) {
+
+    getUserTeam( userID, function(err,team) {
+
+        if( !team ) {
+            createTeam('MyTeam', function(err,team){
+
+                joinToTeam(userID,team._id, function() {
+
+                    changeRoleInTeam(userID,team._id,'admin', function(){
+                        callback();
+                    });
+
+                });
+            });
+        }
+    })
+}
+
+function getUserTeam(userID,callback) {
+
+    BUsers.findOne({_id:userID}, function(err,user){
+
+        if( err || !user || !user.teamID )
+            callback( err, null );
+        else
+            BTeam.findOne({_id:user.teamID})
+                .populate('admin members')
+                .exec(function(err,team){
+                    callback( null, team );
+                });
+    })
+}
+
+function createTeam(teamName,callback) {
+
+    BTeam({name:teamName}).save( function(err,team){
+        if(err)
+            callback(err,null);
+        else
+            callback(null,team);
+    })
+
+}
+
+function joinToTeam(userID,teamID,callback) {
+    BUsers.update({_id:userID},{teamID:teamID}, function(err) {
+        if(err)
+            callback(err,null);
+        else
+            BTeam.update({_id:teamID},{$push:{members:userID}}, function(err) {
+                callback(err);
+            });
+    })
+}
+
+function leaveTeam(userID,oldTeamID, callback) {
+    BUsers.update({_id:userID},{teamID:''}, function(err) {
+        if(err)
+            callback(err,null);
+        else
+            BTeam.update({_id:oldTeamID},{$pull:{members:userID}}, function(err) {
+                callback(err);
+            });
+    });
+}
+
+function changeRoleInTeam(userID,teamID,newRole,callback) {
+    if( newRole=='admin' ) {
+        // Set him as admin
+        BTeam.update({_id:teamID},{admin:userID}, function(err) {
+            if(err)
+                callback(err);
+            else
+                callback(null);
+        })
+    }
+    else {
+        // Clear admin field
+        BTeam.update({_id:teamID,admin:userID},{$unset:{admin:true}}, function(err) {
+            if(err)
+                callback(err);
+            else
+                callback(null);
+        })
+    }
+}
+
+function inviteToTeam( invitedEmail, teamID, callback ) {
+    BInvitation({
+        invitedEmail: invitedEmail,
+        inviterTeam: teamID,
+        inviteTime: new Date()})
+        .save( function(err) {
+            callback(err);
+        })
 }
 
 function BLog(text){

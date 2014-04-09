@@ -94,11 +94,10 @@ var existFlyer = <%= existFlyer %>
                 $('nav').remove();
                 $('#fixToolbar').remove();
                 $('body > .container-fluid').css('margin-top','1em');
-
-                $('.flyerRow').show();
-                loadFlyer();
             }
-            else if( editMode ) {
+
+
+            if( editMode ) {
 
                 if( existFlyer )
                     loadEditor();

@@ -11,6 +11,8 @@
 <link rel='stylesheet' href='/css/job.css'>
 
 <script>
+var teamID = '<%=teamID%>';
+var userID = '<%=userID%>';
 
 google.load("visualization", "1");
 
@@ -18,6 +20,8 @@ $(function(){
     // First fill Forms list, then fill table according to current selected form
     fillFormsList( fillTable );
     getStat();
+    getTeamInfo();
+    getInvitatinos();
 
     $('#formsList').change( fillTable )
 
@@ -50,11 +54,9 @@ $(function(){
 
 function fillFormsList( callback ) {
 
-    var ownerID = $('#ownerID').attr('val');
-
     $('#formsList option').remove();
 
-    $.get('/api/forms?ownerID=' + ownerID).done( function(res) {
+    $.get('/api/forms?teamID=' + teamID).done( function(res) {
 
         res.forms.forEach( function(form) {
             var option = $('<option>').text(form.formName + form.mode ).attr('id',form.formID);
@@ -67,9 +69,7 @@ function fillFormsList( callback ) {
 
 function fillTable() {
     var selectedForm = $('#formsList :selected');
-    var qsParams =
-            '?ownerID=' + $('#ownerID').attr('val')  +
-                    '&formID=' + selectedForm.attr('id');
+    var qsParams = '?userID='  + userID + '&formID=' + selectedForm.attr('id');
 
     $('#currentFormName').text( selectedForm.val() );
 
@@ -287,15 +287,63 @@ function loadTimeline(rows) {
     timeline.draw(data, options);
 }
 
+function getInvitatinos() {
+    $.get('/api/user/invitations').done( function(res){
+
+        for( var i=0; i<res.length; i++ ) {
+            var response = confirm( res[i].inviterTeam.name + ' team have invited you. Do you like to join them?' );
+            if( response )
+                $.post('/api/user/team/join',
+                        {teamID:res[i].inviterTeam._id})
+                        .done( function(res) {
+                            alert('You joint');
+                        })
+        }
+    });
+}
+
+function getTeamInfo() {
+    $.get('/api/user/team').done( function(res){
+        $('#teamName').text( res.team.name );
+        $('#teamAdmin').text( res.team.admin.email );
+
+        for( var i=0; i<res.team.members.length; i++ )
+            $('#teamMembers').append( $('<div>').text(res.team.members[i].email) );
+    });
+
+    $('#inviteToTeam').click( function() {
+        $.post('/api/team/invite',{ email: $('#inviteEmail').val() });
+    });
+}
+
+function saveTeamInfo() {
+    $.put('/api/user/team').done( function(res){})
+}
+
 </script>
 
 <div id="wrap">
     <div class="container">
         <div clas="row">
             <div class="span12">
-                Team
+                Team: <span id="teamName"></span>
+                Admin: <span id="teamAdmin"></span>
             </div>
         </div>
+
+        <div clas="row">
+            <div class="span12">
+                <div id="teamMembers"></div>
+            </div>
+        </div>
+
+        <div clas="row">
+            <div class="span12">
+                <input type="email" id="inviteEmail" placeholder="yourfriend@yourorg.com">
+                <button id="inviteToTeam">Invite</button>
+            </div>
+        </div>
+
     </div>
 
     <div class="container">
@@ -330,8 +378,6 @@ function loadTimeline(rows) {
 
         <div class="row-fluid toolbarRow">
             <div class="span7">
-                <input type="hidden" id="ownerID" val="<%=ownerID%>">
-
                 <div class="formName">
                     <select id="formsList"></select>
                 </div>

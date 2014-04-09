@@ -7,19 +7,21 @@ module.exports.showDashboard = function (req,res) {
     if( !req.user )
         return res.redirect('/');
 
-    var ownerID = req.user.id;
+    var teamID = req.user.teamID;
+    var userID = req.user._id;
 
     res.render('dashboard.ejs', {
         title: 'Dashboard',
-        ownerID: ownerID
+        userID: userID,
+        teamID: teamID
     });
 }
 
 // Return all the created forms (template)
 module.exports.forms = function(req,res){
-    var ownerID = req.query.ownerID;
+    var teamID = req.query.teamID;
 
-    BFlyers.find( {owner: ownerID}, function(err,flyers) {
+    BFlyers.find( {owner: teamID}, function(err,flyers) {
         if( err )
             return res.send(502);
 
