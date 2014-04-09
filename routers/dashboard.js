@@ -39,6 +39,7 @@ module.exports.forms = function(req,res){
                     return {
                         formName:description,
                         formID:flyer._id,
+                        assignedTo: flyer.assignedTo,
                         mode: flyer.publishTime ? "(Published)" : "(Draft)"
                     }
                 } );
@@ -59,6 +60,7 @@ module.exports.forms = function(req,res){
                     return {
                         formName:description,
                         formID:flyer._id,
+                        assignedTo: flyer.assignedTo,
                         mode: flyer.publishTime ? "(Published)" : "(Draft)"
                     }
                 } );

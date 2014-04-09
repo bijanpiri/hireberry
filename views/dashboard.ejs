@@ -14,6 +14,7 @@
 var teamID = '<%=teamID%>';
 var userID = '<%=userID%>';
 var teamMembers = [];
+var forms = [];
 
 google.load("visualization", "1");
 
@@ -24,7 +25,10 @@ $(function(){
     getTeamInfo();
     getInvitatinos();
 
-    $('#formsList').change( fillTable )
+    $('#formsList').change( function() {
+        fillTable();
+        selectAssignedToFromList();
+    });
 
     $('#viewForm').click( function() {
         var flyerid = $('#formsList :selected').attr('id')
@@ -59,6 +63,8 @@ function fillFormsList( callback ) {
 
     $.get('/api/forms?teamID=' + teamID).done( function(res) {
 
+        forms = res.forms;
+
         res.forms.forEach( function(form) {
             var option = $('<option>').text(form.formName + form.mode ).attr('id',form.formID);
             $('#formsList').append(option);
@@ -69,6 +75,9 @@ function fillFormsList( callback ) {
 }
 
 function fillTable() {
+
+    selectAssignedToFromList();
+
     var selectedForm = $('#formsList :selected');
     var qsParams = '?userID='  + userID + '&teamID='  + teamID + '&formID=' + selectedForm.attr('id');
 
@@ -315,9 +324,9 @@ function getTeamInfo() {
 
             var option = $('<option>').attr('name',res.team.members[i]._id).attr('id',res.team.members[i]._id).text(res.team.members[i].email);
             $('#assignTo').append( option );
-
-            // ToDo: select current selected item in SELECT element
         }
+
+        selectAssignedToFromList();
 
         $('#assignTo').change( function(e,item,r){
             var userID = $('#assignTo :selected').attr('id')
@@ -329,6 +338,15 @@ function getTeamInfo() {
 
     $('#inviteToTeam').click( function() {
         $.post('/api/team/invite',{ email: $('#inviteEmail').val() });
+    });
+}
+
+function selectAssignedToFromList() {
+    var selectedFormID = $('#formsList :selected').attr('id');
+
+    forms.forEach( function(form) {
+        if( form.formID == selectedFormID )
+            $('#assignTo option[name=' + form.assignedTo + ']').attr('selected','selected');
     });
 }
 
