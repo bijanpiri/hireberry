@@ -641,7 +641,7 @@ function init() {
             <div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
                 <div class="row-fluid"  id="text">
                     <div class="span6 offset3">
-                            <input type="button" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
+                        <input type="button" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
                         <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
                     </div>
                 </div>
@@ -1074,31 +1074,39 @@ function init() {
 <div class="toolbars">
     <div class="toolbar-text">
 
-            <a class="bool-btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size">
+        <div class="bool-combo">
+            <span class="bool-combo-icon">
                 <i class="bool-icon-size"></i>
-        </a>
-            <ul class="dropdown-menu">
-                <li><a command="size 32px"><font size="5">Huge</font></a></li>
-                <li><a command="size 20px"><font size="3">Normal</font></a></li>
-                <li><a command="size 12px"><font size="1">Small</font></a></li>
+            </span>
+            <a class="btn dropdown-toggle bool-combo-btn" data-toggle="dropdown" href="#">
+                <span class="bool-combo-text">Small</span>
+                <span class="caret bool-caret"></span>
+            </a>
+            <ul class="dropdown-menu bool-combo-list">
+                <li><a style="font-size: 18px" command="size 18">Small</a></li>
+                <li><a style="font-size: 20px" command="size 36">Medium</a></li>
+                <li><a style="font-size: 24px" command="size 48">Large</a></li>
             </ul>
 
-            <div class="btn-group pull-left">
-                <a class="bool-btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Color">
-                    <span class="bool-color-item bool-current-color"></span>
-                </a>
-                <ul class="dropdown-menu bool-color-picker" id="colorPicker"></ul>
-            </div>
-            <div class="bool-separator"></div>
-            <a class="bool-btn"  command="align left" title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="bool-icon-align-left"></i></a>
-            <a class="bool-btn"  command="align center" title="Align Center" data-original-title="Center (Ctrl/Cmd+E)"><i class="bool-icon-align-center"></i></a>
-            <a class="bool-btn"  command="align right" title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="bool-icon-align-right"></i></a>
-            <div class="bool-separator"></div>
-            <a class="bool-btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
-            <a class="bool-btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
-            <a class="bool-btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="bool-icon-underline"></i></a>
-            <a class="bool-btn" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="bool-icon-list-ul"></i></a>
-            <a class="bool-btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
+        </div>
+        <div class="btn-group pull-left">
+            <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                <span class="bool-color-item bool-current-color"></span>
+            </a>
+            <ul class="dropdown-menu bool-color-picker" >
+
+            </ul>
+        </div>
+        <div class="bool-separator"></div>
+        <a class="bool-btn"  command="align left" title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="bool-icon-align-left"></i></a>
+        <a class="bool-btn"  command="align center" title="Align Center" data-original-title="Center (Ctrl/Cmd+E)"><i class="bool-icon-align-center"></i></a>
+        <a class="bool-btn"  command="align right" title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="bool-icon-align-right"></i></a>
+        <div class="bool-separator"></div>
+        <a class="bool-btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
+        <a class="bool-btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
+        <a class="bool-btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="bool-icon-underline"></i></a>
+        <a class="bool-btn" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="bool-icon-list-ul"></i></a>
+        <a class="bool-btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
     </div>
 
     <div class="toolbar-picture">
@@ -1115,61 +1123,18 @@ function init() {
 
     <div class="toolbar-profileWidget">
 
-        <span id="toolbar-labelprofile">Profiles : </span>
-
-        <a  class="bool-btn" >
-            <input hidden="true" type="checkbox" id="github"   name="p" value="github" checked>
-            <label   for="github"  >
-                <i class="bool-icon-github"></i>
-            </label>
-        </a>
-
-        <a  class="bool-btn" >
-            <input hidden type="checkbox" id="stackoverflow"   name="p" value="stackoverflow" checked>
-            <label   for="stackoverflow"  >
-                <i class="bool-icon-stackoverflow"></i>
-            </label>
-        </a>
-
-        <a  class="bool-btn" >
-            <input hidden type="checkbox" id="twitter"   name="p" value="twitter" checked>
-            <label   for="twitter"  >
-            <i  class="bool-icon-twitter"></i>
-            </label>
-        </a>
-
-        <a  class="bool-btn" >
-            <input hidden="true" type="checkbox" id="linkedin"   name="p" value="linkedin" checked>
-            <label   for="linkedin"  >
-                <i class="bool-icon-linkedin"></i>
-            </label>
-        </a>
-        <a  class="bool-btn" >
-            <input hidden="true" type="checkbox" id="dribbble"   name="p" value="dribbble" checked>
-            <label   for="dribbble"  >
-                <i class="bool-icon-dribbble"></i>
-            </label>
-        </a>
-
-        <a  class="bool-btn" >
-            <input hidden="true" type="checkbox" id="behance"   name="p" value="behance" checked>
-            <label   for="behance"  >
-            <i  class="bool-icon-behance"></i>
-            </label>
-        </a>
-
-        <!--<input type="checkbox" id="github"   name="p" value="github" checked>-->
-        <!--<label for="github">Github</label>-->
-        <!--<input type="checkbox" id="stack"    name="p" value="stackoverflow"  checked>-->
-        <!--<label for="stack">Stackoverflow</label>-->
-        <!--<input type="checkbox" id="dribbble"  name="p" value="dribbble"  checked>-->
-        <!--<label for="dribbble">Dribbble</label>-->
-        <!--<input type="checkbox" id="behance"  name="p" value="behance" checked>-->
-        <!--<label for="behance">Behance</label>-->
-        <!--<input type="checkbox" id="linkedin" name="p" value="linkedin" checked>-->
-        <!--<label for="linkedin">Linkedin</label>-->
-        <!--<input type="checkbox" id="twitter"  name="p" value="twitter" checked>-->
-        <!--<label for="twitter">Twitter</label>-->
+        <input type="checkbox" id="github"   name="p" value="github" checked>
+        <label for="github">Github</label>
+        <input type="checkbox" id="stack"    name="p" value="stackoverflow"  checked>
+        <label for="stack">Stackoverflow</label>
+        <input type="checkbox" id="dribbble"  name="p" value="dribbble"  checked>
+        <label for="dribbble">Dribbble</label>
+        <input type="checkbox" id="behance"  name="p" value="behance" checked>
+        <label for="behance">Behance</label>
+        <input type="checkbox" id="linkedin" name="p" value="linkedin" checked>
+        <label for="linkedin">Linkedin</label>
+        <input type="checkbox" id="twitter"  name="p" value="twitter" checked>
+        <label for="twitter">Twitter</label>
 
     </div>
 

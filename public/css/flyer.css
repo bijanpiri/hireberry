@@ -573,6 +573,7 @@ Portlet Creator
 
 .text-widget{
     width: 100%;
+    font-size: 18px;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -592,12 +593,11 @@ Portlet Creator
     display: inline-block;
     padding: 0;
     border: none;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
     cursor:  pointer;
     position: relative;
     float: left;
-    margin: 8px 4px ;
+    margin: 8px ;
+    margin-right: 0;
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
@@ -611,9 +611,9 @@ Portlet Creator
     float: left;
     margin: 2px;
     padding: 0;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
     cursor: pointer;
     box-sizing: border-box;
 }
@@ -655,7 +655,6 @@ Portlet Creator
 .bool-btn:hover{
     background: #4C4C4C;
 }
-
 .bool-active{
     background: #1F1F1F;
 }
@@ -680,7 +679,7 @@ Portlet Creator
     width: 0;
     height: 44px;
     float: left;
-    margin-top: 8px;
+    margin: 8px 0 0 8px;
 }
 .bool-icon-align-left{background-position: -100px -52px;width: 18px;height: 13px;}
 .bool-icon-align-center{background-position: -100px -66px;width: 18px;height: 13px;}
@@ -690,23 +689,117 @@ Portlet Creator
 .bool-icon-underline{background-position: -100px -131px;width: 14px;height: 17px;}
 .bool-icon-list-ul{background-position: -100px -113px;width: 25px;height: 17px;}
 .bool-icon-list-ol{background-position: -100px -94px;width: 26px;height: 18px;}
-
-.bool-icon-size{background-position: -100px 0;width: 20px;height: 17px;}
 .bool-icon-color{background-position: -100px -29px;width: 22px;height: 22px;}
 
+.bool-icon-size{
+    background: url("/images/nflyer-icons.png");
+    background-position: -100px 0;
+    width: 20px;
+    height: 17px;
+    float: left;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
 
-.bool-icon-github{background-position:-100px -183px;width: 28px;height: 24px;}
-.bool-icon-stackoverflow{background-position:-100px -208px;width: 22px;height: 27px;}
-.bool-icon-twitter{background-position:-100px -236px;width: 26px;height: 20px;}
-.bool-icon-linkedin{background-position:-100px -257px;width: 24px;height: 24px;}
-.bool-icon-dribbble{background-position:-100px -282px;width: 24px;height: 24px;}
-.bool-icon-behance{background-position:-100px -307px;width: 28px;height: 17px;}
-
-
-.open>.dropdown-toggle.bool-btn{
+.open>.bool-color-dropdown{
     background: #e6e6e6;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+}
+.bool-combo{
+    width: 185px;
+    height: 44px;
+    display: inline-block;
+    padding: 0;
+    border: none;
+    cursor:  pointer;
+    position: relative;
+    float: left;
+    margin: 8px ;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+.bool-combo-btn{
+    width: 141px;
+    height: 44px;
+    padding: 0;
+    line-height: 44px;
+    text-align: left;
+    float: left;
+    border:none;
+    border: 1px solid #B3B3B3;
+    box-sizing: border-box;
+    outline: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background: #e6e6e6;
+
+}
+.bool-combo-btn:focus{
+    outline: none;
+
+}
+.open .bool-combo-btn{
+    border-bottom-right-radius: 0;
+}
+.bool-combo-icon{
+    width: 44px;
+    height: 44px;
+    background: #B3B3B3;
+    position: relative;
+    display: inline-block;
+    float: left;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.bool-combo-text{
+    float: left;
+    width: 120px;
+    text-indent: 20px;
+    font-size: 20px;
+}
+.bool-combo-list{
+    right: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: 1px solid #B3B3B3;
+    border-top: none;
+    background: #e6e6e6;
+    width: 141px;
+    left: 44px;
+    min-width: 30px;
+    box-sizing: border-box;
+}
+.bool-combo-list>li>a{
+    box-sizing: border-box;
+    line-height: 44px;
+}
+.bool-combo-list>li{
+    left: 44px;
+    width: 140px;
+    height: 44px;
+    border-bottom: 1px solid #B3B3B3;
+}
+.bool-combo-list>li:last-child{
+    border-bottom: none;
+}
+
+.bool-caret{
+    vertical-align: text-top;
+
+}
+.dropdown-menu{
+    padding: 0;
+    margin: 0;
+    top:100%;
+}
+.dropdown-menu>li>a{
+    cursor: pointer;
 }
 .mapWidget .mapSetting .AlignButton {
     background-image: url("/images/nflyer-map-modes.png");
@@ -730,8 +823,6 @@ Portlet Creator
     padding: 2em 20px;
 }
 
-
-
 /****
 Toolbar - WorkType Widget
 ****/
@@ -754,9 +845,7 @@ Toolbar - WorkType Widget
 }
 
 .toolbar-profileWidget {
-   /* padding: 15px 20px;*/
-    height: 60px;
-
+    padding: 15px 20px;
 }
 .toolbar-profileWidget label {
     font-size: 1.6em;
@@ -766,17 +855,6 @@ Toolbar - WorkType Widget
     line-height: 1.6em;
 }
 
-#toolbar-labelprofile{
-    font-family: "Roboto";
-    font-size: 18px;
-    color: #8D8D8D;
-    line-height: 60px;
-    margin-left: 20px;
-    padding: 0;
-    margin-right: 6px;
-    float: left;
-}
-
 .toolbar-anything {
     margin: 15px;
 }
@@ -784,9 +862,6 @@ Toolbar - WorkType Widget
     vertical-align: top;
     line-height: 2em;
 }
-
-
-
 .toolbar-anything input {
     width: 40px;
 }

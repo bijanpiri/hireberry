@@ -20,9 +20,9 @@ function TextWidget(){
         this.toolbar
             .attr('data-role','editor-toolbar')
             .attr('data-target',id);
-        $('#colorPicker').ColorPicker();
 
         this.setToolbar('.toolbar-text');
+
         this.addToolbarCommand('align',
             function(widget,args)
             {
@@ -30,7 +30,7 @@ function TextWidget(){
                 widget.toolbar.find('[command="align '+args[1]+'"]').addClass('bool-active');
                 widget.portlet.find('.text-widget').css('text-align',args[1]);});
 
-
+        this.toolbar.find('.bool-color-picker').ColorPicker();
         this.addToolbarCommand('color',
             function(widget,args)
             {
@@ -42,10 +42,14 @@ function TextWidget(){
             function(widget,args)
             {
                 widget.portlet.
-                    find('.text-widget')
-                    .css('font-size',args[1])
-                    .css('line-height',args[1]);
+                    find('.text-widget *')
+                    .css('font-size',args[1]+'px')
+                    .css('line-height',args[1]+'px');
             });
+        var widget=this;
+        this.toolbar.find('.bool-combo-list a').click(function(){
+            widget.toolbar.find('.bool-combo-text').html($(this).html());
+        });
 
 
         if( this.editMode ){
