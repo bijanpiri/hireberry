@@ -146,6 +146,12 @@ BTeam = mongoose.model( 'teams', {
     members: []
 })
 
+BInvitation = mongoose.model( 'invitation', {
+    inviterTeam: String,
+    invitedEmail: String,
+    inviteTime: String
+})
+
 MApplyForm = mongoose.model( 'applyForm', {
     flyerID: String,
     name:String,
@@ -503,6 +509,7 @@ app.post('/api/applications/:applicationID', routerDashboard.updateApplication )
 app.get('/api/applications/stat', routerDashboard.statisticalInfo )
 //endregion
 
+
 //region Application Routers
 
 app.get('/', function(req,res) {
@@ -613,31 +620,9 @@ app.post('/flyer/publish', function(req,res){
 
     var flyer = req.body.flyer;
 
-
     BFlyers.update( {_id:flyer.flyerid}, {$set:{flyer:flyer, publishTime:new Date()}}, {upsert:true}, function(err){
-            var tags=flyer.tags;
             if(!err){
-                /*
-                tags.forEach(function(tagName,i){
-                    BTag.findOne({name:tagName}, function(err, tag){
-                        if(tag){
-                            BFlyersTags({
-                                flyer:flyer.flyerid,
-                                tag:tag._id
-                            }).save();
-                        }else{
-                            var newtag = BTag({name:tagName});
-                            newtag.save(function(){
-                                var flyerTag = BFlyersTags({
-                                    flyer:flyer.flyerid,
-                                    tag:newtag._id});
-                                flyerTag.save();
-                            });
-                        } });
-
-                });
-                */
-                res.redirect('/profile');
+                res.send(200);
             }else
                 res.send(500,{result:'DB Error'});
         });
@@ -784,6 +769,77 @@ app.get('/flyer/:id', function(req,res){
         else
             res.send('404, Not Found! Yah!');
     });
+});
+
+// endregion
+
+// region Team
+app.post('/team/invite', function(req,res){
+
+    if( checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var teamID = '';
+    var invitedEmail = req.body.email;
+
+    // ToDo: Find in user's team and send invitation behind team to email address
+
+    res.send(200);
+});
+
+app.get('/user/invitations', function(req,res){
+
+    if( checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var email = req.user.email;
+
+    // ToDo: Find in invitation list
+
+    res.send(200,{
+        invited:'no'
+    });
+});
+
+app.post('/team', function(req,res){
+
+    if( checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var teamName = req.body.teamName;
+
+    // ToDo: Create team and add user as its admin
+
+    res.send(200);
+});
+
+app.post('/team/member', function(req,res){
+
+    if( checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var teamID = req.body.teamID;
+
+    // ToDo:
+
+    res.send(200);
+});
+
+app.post('/team/admin', function(req,res){
+
+    if( checkUser(req,res) )
+        return;
+
+    var adminID = req.body.userID;
+    var teamID = req.body.teamID;
+
+    // ToDo:
+
+    res.send(200);
 });
 
 // endregion
