@@ -181,6 +181,7 @@ everyauth.linkedin
             if(!user){
                 console.log("User Not Exist ... Creating ");
                 var newUser = BUsers({
+                    email: linkedinUserMetadata.emailAddress,
                     linkedinname:linkedinUserMetadata.lastName,
                     linkedinid:linkedinUserMetadata.id,
                     linkedinAccessToken:accessToken,
