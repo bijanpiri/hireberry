@@ -601,6 +601,12 @@ Portlet Creator
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
+
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .bool-color-item{

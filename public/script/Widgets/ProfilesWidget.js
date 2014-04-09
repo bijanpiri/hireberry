@@ -16,30 +16,36 @@ function ProfilesWidget(){
         this.toolbar.find('input[name=p]').each(function(i,input){
             $(input).change(function(){
              profile.find('.'+input.value).css('display',input.checked ?'':'none');
-               if(input.checked)
-                   $('.toolbar-profileWidget').find("#"+input.value).parent().addClass("bool-active");
-                else
-                   $('.toolbar-profileWidget').find("#"+input.value).parent().removeClass("bool-active");
-            })
+             if(input.checked)
+               $(input).parent().addClass("bool-active");
+            else
+               $(input).parent().removeClass("bool-active");
+        })
+            //This call is needed when adding widget to flyer in first time.
+            $(input).trigger('change');
         });
-        /*this.addToolbarCommand('profile',
-            function(widget,args)
-            {
-                var cmd='[command="profile '+args[1]+'"]';
-                var s=widget.toolbar.find(cmd).find('input[id='+args[1]+']');
-                if( widget.toolbar.find(cmd).find('input[id='+args[1]+']')[0].checked)
-                {
-                    widget.toolbar.find(cmd).addClass('bool-active');
-                }
-                else
-                {
-                    widget.toolbar.find(cmd).removeClass('bool-active');
-                }
 
-            });*/
-        if(this.editMode) {
-            this.portlet.find('input').prop('readOnly','readOnly').css('cursor','default');
-        }
+        this.toolbar.find('.bool-btn').each(function(i,btn){
+            $(btn).click(function(){
+               var input= $(btn).find('input[name=p]');
+               input.prop('checked',!input.is(':checked')).trigger('change');
+            });
+        })
+
+        /*this.addToolbarCommand('profile',
+        function(widget,args)
+        {
+            var cmd='[command="profile '+args[1]+'"]';
+            var s=widget.toolbar.find(cmd).find('input[id='+args[1]+']');
+            if( widget.toolbar.find(cmd).find('input[id='+args[1]+']')[0].checked)
+            {
+                 widget.toolbar.find(cmd).addClass('bool-active');
+            }
+            else
+            {
+                widget.toolbar.find(cmd).removeClass('bool-active');
+            }
+        });*/
     }
 
     this.serialize = function() {
