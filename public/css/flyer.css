@@ -48,6 +48,8 @@ Whole Paper
     line-height: 40px;
     text-align: center;
     box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
 }
 
 .portletHeader .title {
@@ -78,6 +80,8 @@ Whole Paper
     bottom: 0;
     overflow: hidden;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     margin: 0 38px;
     height: 200px;
     border-radius: 0 0 7px 7px;
@@ -87,6 +91,8 @@ Whole Paper
 .portletSubmittion {
     background-color: #F1F1F1;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     margin: 0 38px;
     border-radius: 0 0 7px 7px;
     padding: 10px 0;
@@ -96,6 +102,8 @@ Whole Paper
     position: relative;
     /*overflow: hidden;*/
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     padding: 0 38px; /* Action Button Width */
     background-color: transparent;
 }
@@ -190,6 +198,8 @@ Portlet
     height: 100px !important;
     background-color: #FFF;
     box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
     color: #000;
     position: relative;
 }
@@ -202,6 +212,8 @@ Text portlet
     overflow-y: auto;
     padding: 10px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     background-color: #f1f1f1;
 }
 
@@ -452,6 +464,8 @@ Portlet Creator
     height: 170px;
     border: solid 1px #D3D3D3;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .mapWidget .address-left {
@@ -459,6 +473,8 @@ Portlet Creator
     top: 20px;
     left: 20px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     border: none;
     width: 320px;
     height: 170px;
@@ -484,6 +500,8 @@ Portlet Creator
     background: #333;
     border-radius: 4px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     color: #f1f1f1;
 }
 .toolbar label{
@@ -506,6 +524,8 @@ Portlet Creator
     height: 45px;
     position: relative;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     text-decoration: none !important;
     cursor: pointer;
 
@@ -632,6 +652,8 @@ Portlet Creator
     -webkit-border-radius: 4px;
     cursor: pointer;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .bool-current-color{
@@ -646,6 +668,8 @@ Portlet Creator
     height: 28px;
     border: 3px solid white;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     background: #000000;
     float: left;
     padding: 0;
@@ -849,6 +873,8 @@ li.dropdown.open+.bool-tab-btn,.bool-tab-btn.open{
     border:none;
     border: 1px solid #B3B3B3;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     outline: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -889,9 +915,13 @@ li.dropdown.open+.bool-tab-btn,.bool-tab-btn.open{
     left: 44px;
     min-width: 30px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 .bool-combo-list>li>a{
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     line-height: 44px;
 }
 .bool-combo-list>li{
