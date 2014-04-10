@@ -534,6 +534,8 @@ Portlet Creator
     color: #8D8D8D;
     margin-left: 10px;
     margin-right: 8px;
+    margin-top:8px;
+    margin-bottom:8px;
     padding-bottom: 0;
     padding-top: 0;
     padding-right: 10px;
@@ -596,8 +598,7 @@ Portlet Creator
     cursor:  pointer;
     position: relative;
     float: left;
-    margin: 8px ;
-    margin-right: 0;
+    margin: 8px 4px ;
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
@@ -710,6 +711,14 @@ Portlet Creator
     right: 0;
     bottom: 0;
 }
+
+.bool-icon-github{background-position:-100px -183px;width: 28px;height: 24px;}
+.bool-icon-stackoverflow{background-position:-100px -208px;width: 22px;height: 27px;}
+.bool-icon-twitter{background-position:-100px -236px;width: 26px;height: 20px;}
+.bool-icon-linkedin{background-position:-100px -257px;width: 24px;height: 24px;}
+.bool-icon-dribbble{background-position:-100px -282px;width: 24px;height: 24px;}
+.bool-icon-behance{background-position:-100px -307px;width: 28px;height: 17px;}
+
 
 .open>.bool-color-dropdown{
     background: #e6e6e6;
@@ -851,7 +860,9 @@ Toolbar - WorkType Widget
 }
 
 .toolbar-profileWidget {
-    padding: 15px 20px;
+   /* padding: 15px 20px;*/
+    height: 60px;
+
 }
 .toolbar-profileWidget label {
     font-size: 1.6em;
@@ -859,6 +870,17 @@ Toolbar - WorkType Widget
     padding-right: 1em;
     vertical-align: top;
     line-height: 1.6em;
+}
+
+#toolbar-labelprofile{
+    font-family: "Roboto";
+    font-size: 18px;
+    color: #8D8D8D;
+    line-height: 60px;
+    margin-left: 20px;
+    padding: 0;
+    margin-right: 6px;
+    float: left;
 }
 
 .toolbar-anything {
