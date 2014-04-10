@@ -23,7 +23,6 @@ $.fn.ColorPicker=function(){
                             .css('background',c))
                     .click(function(){
                         var c=$(this).children('.bool-color-item').css('background-color');
-                        recentColors.push(c);
                         if(recentColors.indexOf(c)<0)
                             $(document)
                                 .find('.bool-color-picker-recent')
@@ -33,8 +32,11 @@ $.fn.ColorPicker=function(){
                                             $('<span>')
                                                 .addClass('bool-color-item')
                                                 .css('background-color',c)
+                                                .attr('command','color '+c)
                                         )
-                                )
+                                );
+                        recentColors.push(c);
+
                     })
             )
     })
