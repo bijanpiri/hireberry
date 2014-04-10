@@ -1,6 +1,7 @@
 /**
  * Created by Bijan on 4/8/14.
  */
+var recentColors=[];
 $.fn.ColorPicker=function(){
     var colors=[
         "#05283a","#04104b","#0d022d","#22002f","#300214","#4b0002","#461401","#462703","#432f03","#525004",
@@ -20,6 +21,21 @@ $.fn.ColorPicker=function(){
                             .addClass('bool-color-item')
                             .attr('command','color '+c)
                             .css('background',c))
+                    .click(function(){
+                        var c=$(this).children('.bool-color-item').css('background-color');
+                        recentColors.push(c);
+                        if(recentColors.indexOf(c)<0)
+                            $(document)
+                                .find('.bool-color-picker-recent')
+                                .prepend(
+                                    $('<li>')
+                                        .append(
+                                            $('<span>')
+                                                .addClass('bool-color-item')
+                                                .css('background-color',c)
+                                        )
+                                )
+                    })
             )
     })
 }

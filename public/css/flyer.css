@@ -598,7 +598,7 @@ Portlet Creator
     cursor:  pointer;
     position: relative;
     float: left;
-    margin: 8px 4px ;
+    margin: 8px 0px 0 8px ;
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
@@ -609,7 +609,16 @@ Portlet Creator
     -webkit-user-select: none;
     user-select: none;
 }
+.nav-pills>li>a.bool-btn{
+    padding: 0;
+    margin: 8px 0px 0 8px ;
+}
 
+.dropdown-menu{
+    padding: 0;
+    margin: 0;
+    top:100%;
+}
 .bool-color-item{
     display: inline-block;
     width: 22px;
@@ -637,13 +646,20 @@ Portlet Creator
     height: 28px;
     border: 3px solid white;
     box-sizing: border-box;
+    background: #000000;
+    float: left;
+    padding: 0;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    cursor: pointer;
 }
 .bool-color-item:hover{
     border: 2px solid #808080;
 }
-
+.nav-pills
 .bool-color-picker{
-    margin: -8px 0 0 8px ;
+    margin-left: 8px ;
     background: #e6e6e6;
     padding: 8px 0 0 8px;
     overflow: hidden;
@@ -651,13 +667,63 @@ Portlet Creator
     height: 142px;
     border: none;
     border-top-left-radius: 0;
+
 }
+.nav-pills
+.bool-color-picker-recent{
+    margin-left: -44px ;
+    position: absolute;
+    top:52px;
+}
+
+
 .bool-color-picker>li{
     display: inline-block;
     float: left;
 }
 .bool-btn-drop{
     background: #B3B3B3;
+}
+.bool-tab{
+    width: 157px;
+    height: 44px;
+    background: #B3B3B3;
+    position: absolute;
+
+    z-index: 20;
+    display: none;
+    padding: 0;
+    cursor: pointer;
+}
+.nav-pills
+.bool-tab-btn{
+    margin-left: 0;
+    display: none;
+}
+.nav-pills
+li.dropdown.open+.bool-tab-btn,.bool-tab-btn.open{
+    display: inline-block;
+}
+.nav-pills > li > a.bool-tab{
+    padding: 0;
+    border-radius: 0;
+    border-top-right-radius: 6px;
+    margin:8px 4px 0 0;
+    /*display: none;*/
+}
+
+.bool-tab-text{
+    display: inline-block;
+    height: 44px;
+    width: 100px;
+    color: #666;
+    font-size: 18px;
+    line-height: 44px;
+    position: absolute;
+    left: 35px;
+}
+.open .bool-tab{
+    display: inline-block;
 }
 .bool-btn:hover{
     background: #4C4C4C;
@@ -679,6 +745,15 @@ Portlet Creator
     top: 0;
     bottom: 0;
 }
+.bool-icon{
+    background-image: url("/images/nflyer-icons.png");
+    display: inline-block;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+}
 .bool-separator{
     border: none;
     border-left: 1px solid #808080;
@@ -696,7 +771,7 @@ Portlet Creator
 .bool-icon-underline{background-position: -100px -131px;width: 14px;height: 17px;}
 .bool-icon-list-ul{background-position: -100px -113px;width: 25px;height: 17px;}
 .bool-icon-list-ol{background-position: -100px -94px;width: 26px;height: 18px;}
-.bool-icon-color{background-position: -100px -29px;width: 22px;height: 22px;}
+.bool-icon-recent{background-position: -100px -29px;width: 22px;height: 22px;}
 
 .bool-icon-size{
     background: url("/images/nflyer-icons.png");
@@ -719,12 +794,19 @@ Portlet Creator
 .bool-icon-dribbble{background-position:-100px -282px;width: 24px;height: 24px;}
 .bool-icon-behance{background-position:-100px -307px;width: 28px;height: 17px;}
 
-
+.nav-pills
 .open>.bool-color-dropdown{
     background: #e6e6e6;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: 0;
+    border-top-left-radius: 6px;
+
 }
+.nav-pills>li.bool-btn:hover+li.open.bool-tab-btn:before>.bool-color-dropdown{
+    border-radius: 0;
+    border-top-left-radius: 6px;
+
+}
+.nav-pills>li.open
 .bool-combo{
     width: 185px;
     height: 44px;
@@ -808,11 +890,7 @@ Portlet Creator
     vertical-align: text-top;
 
 }
-.dropdown-menu{
-    padding: 0;
-    margin: 0;
-    top:100%;
-}
+
 .dropdown-menu>li>a{
     cursor: pointer;
 }

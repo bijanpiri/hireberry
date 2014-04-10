@@ -1089,14 +1089,37 @@ function init() {
             </ul>
 
         </div>
-        <div class="btn-group pull-left">
-            <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
-                <span class="bool-color-item bool-current-color"></span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker" >
+        <!--<ul class="nav nav-pills">-->
+            <!--...-->
+            <!--<li class="dropdown">-->
+                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+                    <!--Dropdown <span class="caret"></span>-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu">-->
+                    <!--...-->
+                <!--</ul>-->
+            <!--</li>-->
+            <!--...-->
+        <!--</ul>-->
+        <ul class="nav nav-pills pull-left">
+            <li class="dropdown btn-group ">
+                <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <span class="bool-current-color"></span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker" >
 
-            </ul>
-        </div>
+                </ul>
+
+            </li>
+            <li class="dropdown btn-group bool-tab-btn">
+                <a class="bool-tab dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <i class="bool-icon bool-icon-recent"></i>
+                    <span class="bool-tab-text">Recent Colors</span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
+                </ul>
+            </li>
+        </ul>
         <div class="bool-separator"></div>
         <a class="bool-btn"  command="align left" title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="bool-icon-align-left"></i></a>
         <a class="bool-btn"  command="align center" title="Align Center" data-original-title="Center (Ctrl/Cmd+E)"><i class="bool-icon-align-center"></i></a>

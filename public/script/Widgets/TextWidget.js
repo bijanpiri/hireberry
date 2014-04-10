@@ -30,7 +30,7 @@ function TextWidget(){
                 widget.toolbar.find('[command="align '+args[1]+'"]').addClass('bool-active');
                 widget.portlet.find('.text-widget').css('text-align',args[1]);});
 
-        this.toolbar.find('.bool-color-picker').ColorPicker();
+        this.toolbar.find('.bool-color-picker:first').ColorPicker();
         this.addToolbarCommand('color',
             function(widget,args)
             {
