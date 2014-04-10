@@ -125,7 +125,7 @@ module.exports.apply = function (req,res) {
     }
 
     // ToDo: Save Form In The Database
-    MApplyForm({
+    BApplications({
         flyerID: req.body.flyerid,
         name:req.body.name,
         email:req.body.email,

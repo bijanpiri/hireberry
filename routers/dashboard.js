@@ -22,7 +22,7 @@ module.exports.forms = function(req,res){
     var teamID = req.query.teamID;
     var userID = req.user._id;
 
-    BTeam.count({_id:teamID,admin:userID}, function(err,count) {
+    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
         if( err )
             return res.send(204);
 
@@ -99,7 +99,7 @@ module.exports.applications = function (req,res) {
     var teamID = req.query.teamID;
     var userID = req.user._id;
 
-    BTeam.count({_id:teamID,admin:userID}, function(err,count) {
+    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
         if( err )
             return res.send(204);
 
@@ -119,7 +119,7 @@ module.exports.applications = function (req,res) {
     });
 
     function fetchApplications() {
-        MApplyForm.find( {flyerID: flyerID}, function(err,forms) {
+        BApplications.find( {flyerID: flyerID}, function(err,forms) {
             if( err )
                 return res.send(303,{error:err});
 
@@ -183,7 +183,7 @@ module.exports.updateApplication = function(req,res) {
         data:req.body.data,
         timestamp: new Date() };
 
-    MApplyForm.update({_id:appID}, {$push:{activities:activity}}, function(err) {
+    BApplications.update({_id:appID}, {$push:{activities:activity}}, function(err) {
         res.send(200);
     })
 }
@@ -196,7 +196,7 @@ module.exports.statisticalInfo = function(req,res) {
 
         var flyerIDList = flyers.map( function(flyer){return flyer._id});
 
-        MApplyForm.find( {flyerID:{$in:flyerIDList}}, function(err,applications) {
+        BApplications.find( {flyerID:{$in:flyerIDList}}, function(err,applications) {
 
             var numNewApplications = 0;
             var numTodayApplication = 0;

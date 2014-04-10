@@ -135,26 +135,36 @@ var BUsers = mongoose.model( 'users', {
 
 BFlyers = mongoose.model( 'flyers', {
     flyer: Object,
-    owner: String,
+    owner: {type : mongoose.Schema.ObjectId, ref : 'team'},
+    creator: {type : mongoose.Schema.ObjectId, ref : 'users'},
     publishTime: String,
     disqusShortname: String,
     dbToken:String,
-    assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
+    autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
 });
 
-BTeam = mongoose.model( 'teams', {
+BComments = mongoose.model( 'comments', {
+    note: String,
+    comment: String,
+    subjectType: String,
+    formID: [{type : mongoose.Schema.ObjectId, ref : 'flyers'}],
+    applicationID: [{type : mongoose.Schema.ObjectId, ref : 'applications'}],
+    commenter: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
+})
+
+BTeams = mongoose.model( 'teams', {
     name: String,
     admin: {type : mongoose.Schema.ObjectId, ref : 'users'},
     members: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
 })
 
-BInvitation = mongoose.model( 'invitation', {
+BInvitations = mongoose.model( 'invitations', {
     inviterTeam: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     invitedEmail: String,
     inviteTime: String
 })
 
-MApplyForm = mongoose.model( 'applyForm', {
+BApplications = mongoose.model( 'applications', {
     flyerID: String,
     name:String,
     email:String,
@@ -166,7 +176,8 @@ MApplyForm = mongoose.model( 'applyForm', {
     anythingelse:String,
     resumePath:String,
     dbToken:String,
-    activities:[]
+    activities:[],
+    assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
 });
 
 //endregion
@@ -220,141 +231,6 @@ everyauth.linkedin
         return promise;
     })
     .redirectPath('/');
-//endregion
-
-//region Facebook Authentication Configuartion
-everyauth
-    .facebook
-    .appId(Facebook_AppID)
-    .appSecret(Facebook_AppSecret)
-    .scope('email')
-    .fields('id,name,email,picture')
-    .handleAuthCallbackError( function (req, res) {
-        BLog('Facebook login denied by user');
-        req.redirect('/login');
-    })
-    .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
-        BLog(fbUserMetadata);
-        BLog(accessToken);
-        BLog(accessTokenExtra);
-        var promise=this.Promise();
-        BUsers.findOne({facebookid:fbUserMetadata.id},function(err,user){
-            if(err)
-                return promise.fail([err]);
-            if(!user){
-                BLog('Facebook user not exist');
-                var newUser=BUsers({
-                    facebookid:fbUserMetadata.id,
-                    facebookName:fbUserMetadata.name,
-                    facebookAccessToken:accessToken,
-                    facebookAccessTokenExtra:accessTokenExtra
-                });
-                newUser.save(function(err){
-                    if(err)
-                        promise.fail([err]);
-                    else
-                        promise.fulfill(newUser);
-                });
-            }else
-                promise.fullfill(user);
-        });
-        return promise;
-    })
-    .redirectPath('/');
-//endregion
-
-//region Twitter Authentication Configuration
-everyauth.twitter
-    .consumerKey(TWITTER_CONSUMER_KEY)
-    .consumerSecret(TWITTER_CONSUMER_SECRET)
-    .findOrCreateUser( function (session, accessToken, accessTokenSecret, twitterUserMetadata) {
-        // find or create user logic goes here
-        var promise = this.Promise();
-
-        BUsers.findOne({twitterid:twitterUserMetadata.id}, function(err,user){
-
-            if(err)
-                return promise.fail([err]);
-
-            BLog('hello');
-            BLog( twitterUserMetadata );
-
-            if(!user){
-                console.log("User Not Exist ... Creating ");
-                var newUser = BUsers({
-                    twittername:twitterUserMetadata.name,
-                    twitterid:twitterUserMetadata.id,
-                    twitterAccessToken:accessToken,
-                    twitterAccessSecretToken:accessTokenSecret
-                });
-                newUser.save(function(err){
-                    if(err)
-                        promise.fail([err]);
-                    else
-                        promise.fulfill(newUser);
-                });
-            } else {
-                promise.fulfill(user);
-            }
-        });
-
-        return promise;
-    })
-    .redirectPath('/');
-//endregion
-
-//region Google Authentication Configuration
-everyauth.google
-    .appId(GOOGLE_CLIENT_ID)
-    .appSecret(GOOGLE_CLIENT_SECRET)
-    .scope('https://www.googleapis.com/auth/userinfo.email')
-    //.scope('https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds/')
-    .handleAuthCallbackError( function (req, res) {
-        res.redirect('/afterLoginWithGoolge');
-    })
-    .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
-        // find or create user logic goes here
-        //googleUser.refreshToken = extra.refresh_token;
-        //googleUser.expiresIn = extra.expires_in;
-
-        var promise = this.Promise();
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + googleUserMetadata + googleUserMetadata.id);
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessTokenExtra);
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$' + accessToken);
-
-        BUsers.findOne({googleid:googleUserMetadata.id}, function(err,user){
-
-            if(err)
-                return promise.fail([err]);
-
-            console.log(googleUserMetadata);
-
-            if(!user){
-                console.log("User Not Exist ... Creating ");
-
-                // ToDo: A Problem - Sometime google returns email, sometime returns name !!!
-                var newUser = BUsers({
-                    googlename:(googleUserMetadata.name || googleUserMetadata.email),
-                    googleid:googleUserMetadata.id,
-                    googleAccessToken:accessToken,
-                    googleAccessSecretToken:accessTokenExtra
-                });
-                newUser.save(function(err){
-                    if(err)
-                        promise.fail([err]);
-                    else
-                        promise.fulfill(newUser);
-                });
-            } else {
-                console.log("User Exist ... Returning ");
-                promise.fulfill(user);
-            }
-        });
-
-        return promise;
-
-    })
-    .redirectPath('/afterLoginWithGoolge');
 //endregion
 
 //region Local Username/Password Registration and Authentication Configuration
@@ -521,6 +397,8 @@ app.get('/api/applications/stat', routerDashboard.statisticalInfo )
 
 //region Application Routers
 
+// region General
+
 app.get('/', function(req,res) {
     if( req.user )
         res.redirect('/dashboard');
@@ -580,9 +458,34 @@ app.get('/setting', function(req,res){
     res.render('setting.ejs',{title:'Setting'});
 });
 
+app.get('/search/users', function(req,res){
+    var query = req.query.q;
+
+    // ToDo: Protect against SQLInjection Attack
+    // ToDo: Complete Search Mechanics
+
+    // Search in Users
+    BUsers.find({email:{$regex : '.*'+ query +'.*'}}, function(err,users){
+        if(err) return res.send('Error');
+        if(!users) return req.send('Not Found');
+
+        var results = [];
+        for(var i=0; i<users.length; i++){
+            results.push({
+                rtype:'user',
+                display:users[i].email,
+                link:'/user/' + users[i]._id
+            });
+        }
+
+        res.send(results);
+    });
+});
+
+// endregion
+
 // region Flyers
 app.get('/flyer/new',function(req,res){
-    var flyerid=req.cookies.flyerid;
     res.redirect('/flyer/editor/0');
 });
 
@@ -709,8 +612,10 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
             if( !flyerid ) {        // Cookie is empty. So make a new flyer
 
-                var newflyer = BFlyers({owner:req.user.teamID});
-                newflyer.save(function (err) {
+                BFlyers({
+                    owner: req.user.teamID,
+                    creator: req.user._id
+                }).save(function (err,newflyer) {
                     flyerid = newflyer._id;
                     res.cookie('flyerid',flyerid);
                     renderNewFlyerView();
@@ -756,33 +661,10 @@ app.get('/flyer/remove/:id', function(req,res){
     }
 });
 
-app.get('/flyer/:id', function(req,res){
-    var flyerid = req.params.id;
-    var userid = (req.user?req.user._id:'Unknow');
-
-    BFlyers.findOne({_id:flyerid}, function(err,flyer){
-        if(err)
-            return res.send('Oh oh error');
-
-        if(!flyer || !flyer.flyer)
-            return res.send(404,{});
-
-        var isOthersFlyer = (flyer.owner!=userid);
-
-        if(flyer)
-            res.render('flyer.ejs',{
-                title:flyer.flyer.description,
-                flyer:flyer,
-                isOthersFlyer:isOthersFlyer
-            });
-        else
-            res.send('404, Not Found! Yah!');
-    });
-});
-
 // endregion
 
 // region Team
+
 app.post('/api/team/invite', function(req,res){
 
     if( !checkUser(req,res) )
@@ -797,6 +679,52 @@ app.post('/api/team/invite', function(req,res){
 
 });
 
+app.post('/api/team/form/assign', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    //var userID = req.user._id;
+    var userID = req.body.userID;
+    var formID = req.body.formID;
+
+    // Check whether current user is admin or not
+    assignForm(userID, formID, function(err) {
+        res.send(200)
+    } );
+
+});
+
+app.get('/api/team/members',function(req,res){
+    if( !checkUser(req,res) )
+        return;
+
+    var teamID = req.user.teamID;
+
+    BTeams.find({_id:teamID}, function(err,members){
+        if(err)
+            res.send(305);
+        else
+            res.send(200,members);
+    })
+});
+
+// endregion
+
+// region User
+
+app.get('/api/user/team',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+
+    getUserTeam(userID, function(err,team) {
+        res.send(200,{team:team});
+    })
+});
+
 app.get('/api/user/invitations', function(req,res){
 
     if( !checkUser(req,res) )
@@ -804,12 +732,12 @@ app.get('/api/user/invitations', function(req,res){
 
     var email = req.user.email;
 
-    BInvitation.find({invitedEmail:email})
+    BInvitations.find({invitedEmail:email})
         .populate('inviterTeam')
         .exec(function(err,invitations) {
-        if(!err)
-            res.send(200,invitations);
-    });
+            if(!err)
+                res.send(200,invitations);
+        });
 
 });
 
@@ -832,59 +760,7 @@ app.post('/api/user/team/join', function(req,res){
 
 });
 
-app.post('/api/team/form/assign', function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    //var userID = req.user._id;
-    var userID = req.body.userID;
-    var formID = req.body.formID;
-
-    // Check whether current user is admin or not
-    assignForm(userID, formID, function(err) {
-        res.send(200)
-    } );
-
-});
-
 // endregion
-
-app.get('/search/users', function(req,res){
-    var query = req.query.q;
-
-    // ToDo: Protect against SQLInjection Attack
-    // ToDo: Complete Search Mechanics
-
-    // Search in Users
-    BUsers.find({email:{$regex : '.*'+ query +'.*'}}, function(err,users){
-        if(err) return res.send('Error');
-        if(!users) return req.send('Not Found');
-
-        var results = [];
-        for(var i=0; i<users.length; i++){
-            results.push({
-                rtype:'user',
-                display:users[i].email,
-                link:'/user/' + users[i]._id
-            });
-        }
-
-        res.send(results);
-    });
-});
-
-app.get('/api/user/team',function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    var userID = req.user._id;
-
-    getUserTeam(userID, function(err,team) {
-        res.send(200,{team:team});
-    })
-});
 
 //endregion
 
@@ -995,7 +871,7 @@ function getUserTeam(userID,callback) {
         if( err || !user || !user.teamID )
             callback( err, null );
         else
-            BTeam.findOne({_id:user.teamID})
+            BTeams.findOne({_id:user.teamID})
                 .populate('admin members')
                 .exec(function(err,team){
                     callback( null, team );
@@ -1005,7 +881,7 @@ function getUserTeam(userID,callback) {
 
 function createTeam(teamName,callback) {
 
-    BTeam({name:teamName}).save( function(err,team){
+    BTeams({name:teamName}).save( function(err,team){
         if(err)
             callback(err,null);
         else
@@ -1019,7 +895,7 @@ function joinToTeam(userID,teamID,callback) {
         if(err)
             callback(err,null);
         else
-            BTeam.update({_id:teamID},{$push:{members:userID}}, function(err) {
+            BTeams.update({_id:teamID},{$push:{members:userID}}, function(err) {
                 callback(err);
             });
     })
@@ -1030,7 +906,7 @@ function leaveTeam(userID,oldTeamID, callback) {
         if(err)
             callback(err,null);
         else
-            BTeam.update({_id:oldTeamID},{$pull:{members:userID}}, function(err) {
+            BTeams.update({_id:oldTeamID},{$pull:{members:userID}}, function(err) {
                 callback(err);
             });
     });
@@ -1039,7 +915,7 @@ function leaveTeam(userID,oldTeamID, callback) {
 function changeRoleInTeam(userID,teamID,newRole,callback) {
     if( newRole=='admin' ) {
         // Set him as admin
-        BTeam.update({_id:teamID},{admin:userID}, function(err) {
+        BTeams.update({_id:teamID},{admin:userID}, function(err) {
             if(err)
                 callback(err);
             else
@@ -1048,7 +924,7 @@ function changeRoleInTeam(userID,teamID,newRole,callback) {
     }
     else {
         // Clear admin field
-        BTeam.update({_id:teamID,admin:userID},{$unset:{admin:true}}, function(err) {
+        BTeams.update({_id:teamID,admin:userID},{$unset:{admin:true}}, function(err) {
             if(err)
                 callback(err);
             else
@@ -1058,7 +934,7 @@ function changeRoleInTeam(userID,teamID,newRole,callback) {
 }
 
 function inviteToTeam( invitedEmail, teamID, callback ) {
-    BInvitation({
+    BInvitations({
         invitedEmail: invitedEmail,
         inviterTeam: teamID,
         inviteTime: new Date()})
@@ -1074,6 +950,30 @@ function assignForm(assigneeUserID,assignedFormID,callback) {
         else
             callback(null)
     })
+}
+
+function askForCommentOnFlyer(note,flyerID,userID,callback) {
+    BComments({
+        note: note,
+        comment: '',
+        commenter:userID,
+        subjectType:'flyer',
+        flyerID:flyerID
+    }).save(function(err){
+            callback(err)
+        });
+}
+
+function askForCommentOnApplication(note,applicationID,userID,callback) {
+    BComments({
+        note: note,
+        comment: '',
+        commenter:userID,
+        subjectType:'application',
+        applicationID:applicationID
+    }).save(function(err){
+            callback(err)
+        });
 }
 
 function BLog(text){

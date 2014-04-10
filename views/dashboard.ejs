@@ -195,6 +195,20 @@ function rowClicked(data) {
 
     var lastActivity = data.row.activities[ data.row.activities.length-1 ];
     loadDecisionBox( lastActivity, appID );
+
+    // AskForComment section
+    $('#askForCommentOnApplication').click( function() {
+        $.post('/application/askForComment', {userID:'SELECETED USER',applicatinoID:'SELECTED APPLICATION'});
+    });
+
+    for( var i=0; i<teamMembers.length; i++ ){
+        var option = $('<option>')
+                .attr('name',teamMembers[i]._id)
+                .attr('id',teamMembers[i]._id)
+                .text(teamMembers[i].email);
+        $('#teamMembersForAssign').append( option.clone() );
+        $('#teamMembersForComment').append( option.clone() );
+    }
 }
 
 function loadDecisionBox(activity,applicationID) {
@@ -436,6 +450,18 @@ function saveTeamInfo() {
 
 <div id="activitiesModal">
     <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6">
+                <select id="teamMembersForComment">
+                </select>
+                <button id="askForCommentOnApplication">Ask For Comment</button>
+            </div>
+            <div class="span6">
+                <select id="teamMembersForAssign">
+                </select>
+                <button id="assignToOnApplication">Assign To</button>
+            </div>
+        </div>
         <div class="row-fluid">
             <div class="span4">
                 <div class="contain" style="max-height: 400px; overflow-y: auto"></div>
