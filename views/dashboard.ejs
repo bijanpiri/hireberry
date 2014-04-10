@@ -255,6 +255,7 @@ function rowClicked(data) {
 
     var lastActivity = data.row.activities[ data.row.activities.length-1 ];
     loadDecisionBox( lastActivity, appID );
+    getApplicationComments( appID );
 
     // AskForComment section
     $('#askForCommentOnApplication').unbind('click');
@@ -413,7 +414,7 @@ function getTeamInfo() {
             var userID = $('#assignTo :selected').attr('id')
             var formID = $('#formsList :selected').attr('id')
 
-            $.post('/api/team/form/assign',{formID:formID,userID:userID})
+            $.post('/api/team/form/assign',{formID:formID,userID:userID});
         })
     });
 
@@ -431,8 +432,23 @@ function selectAssignedToFromList() {
     });
 }
 
-function saveTeamInfo() {
-    $.put('/api/user/team').done( function(res){})
+function getApplicationComments(appID) {
+    $('.comments').html('');
+
+    $.get('/api/application/comments', {applicationID:appID}).done( function(res){
+
+        res.comments.forEach( function(comment) {
+            var commentObj = $('<div>').addClass('comment');
+            commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
+            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
+            commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s comment:") );
+            commentObj.append( $('<div>').addClass('commentBody').text(comment.comment) );
+            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
+
+            $('.comments').append( commentObj );
+        });
+
+    });
 }
 
 </script>
@@ -546,6 +562,8 @@ function saveTeamInfo() {
         <div class="row-fluid">
             <div class="span4">
                 <div class="contain" style="max-height: 400px; overflow-y: auto"></div>
+                <div class="commentsHeader">Comments</div>
+                <div class="comments"></div>
             </div>
             <div class="span8">
                 <div id="timeline"></div>

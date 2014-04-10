@@ -177,7 +177,7 @@ module.exports.updateApplication = function(req,res) {
 
 module.exports.statisticalInfo = function(req,res) {
 
-    var userID = req.user._id;
+    var userID = req.user.teamID;
 
     BFlyers.find({owner:userID}, function(err,flyers) {
 

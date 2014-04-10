@@ -171,3 +171,32 @@
 .reminders .remindersList {
 
 }
+
+.comments {
+    padding: 10px;
+    background: #E0E0E0;
+}
+
+.comments .comment {
+    margin-bottom: 20px;
+}
+
+.comments .commentBody {
+    border-left: 3px solid;
+    padding-left: 10px;
+}
+
+.comments .commenter {
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.comments .commentTime {
+    color: rgb(153, 150, 150);
+    font-size: 0.9em;
+}
+
+.commentsHeader {
+    margin-top: 20px;
+    font-size: 1.5em;
+}

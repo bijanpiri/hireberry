@@ -149,7 +149,9 @@ BComments = mongoose.model( 'comments', {
     subjectType: String,
     formID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
-    commenter: {type : mongoose.Schema.ObjectId, ref : 'users'}
+    commenter: {type : mongoose.Schema.ObjectId, ref : 'users'},
+    commentTime: String,
+    askingTime: String
 })
 
 BTeams = mongoose.model( 'teams', {
@@ -751,6 +753,20 @@ app.get('/api/user/form/askedForComment',function(req,res){
     })
 });
 
+app.get('/api/application/comments',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    // ToDo: (Security) Check wheter user can access this applicationID or no.
+    var userID = req.user._id;
+    var applicationID = req.query.applicationID;
+
+    getComments(applicationID, function(err,comments) {
+        res.send(200,{comments:comments});
+    })
+});
+
 app.post('/api/user/comment',function(req,res){
 
     if( !checkUser(req,res) )
@@ -1028,6 +1044,8 @@ function askForCommentOnForm(note,userID,formID,callback) {
     BComments({
         note: note,
         comment: '',
+        askingTime: new Date(),
+        commentTime:'',
         commenter:userID,
         subjectType:'form',
         formID:formID
@@ -1040,6 +1058,8 @@ function askForCommentOnApplication(note,userID,applicationID,callback) {
     BComments({
         note: note,
         comment: '',
+        askingTime: new Date(),
+        commentTime:'',
         commenter:userID,
         subjectType:'application',
         applicationID:applicationID
@@ -1049,7 +1069,7 @@ function askForCommentOnApplication(note,userID,applicationID,callback) {
 }
 
 function getAskedForCommentApplications(userID,callback) {
-    BComments.find({commenter:userID,subjectType:'application'})
+    BComments.find({commenter:userID,subjectType:'application',commentTime:''})
         .populate('applicationID')
         .exec( function(err,applications) {
             callback( err, applications )
@@ -1057,7 +1077,7 @@ function getAskedForCommentApplications(userID,callback) {
 }
 
 function getAskedForCommentForms(userID,callback) {
-    BComments.find({commenter:userID,subjectType:'form'})
+    BComments.find({commenter:userID,subjectType:'form',commentTime:''})
         .populate('formID')
         .exec( function(err,forms) {
             callback( err, forms )
@@ -1066,11 +1086,21 @@ function getAskedForCommentForms(userID,callback) {
 
 function setComment(userID,askedForCommentID,comment,callback) {
     BComments.update({_id:askedForCommentID,commenter:userID},{
-        comment: comment
+        comment: comment,
+        commentTime: new Date()
     }, function(err) {
         callback(err);
     })
 }
+
+function getComments(applicationID,callback) {
+    BComments.find({applicationID:applicationID})
+        .populate('commenter')
+        .exec(function(err,comments) {
+            callback(err,comments);
+        })
+}
+
 
 function BLog(text){
 
