@@ -26,49 +26,36 @@ module.exports.forms = function(req,res){
         if( err )
             return res.send(204);
 
-        if( count > 0 ) {   // User is admin
-            BFlyers.find( {owner: teamID}, function(err,flyers) {
-                if( err )
-                    return res.send(502);
-
-                // Reduce
-                // ToDo: Make reducing async
-                var forms = flyers.map( function(flyer) {
-                    var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
-
-                    return {
-                        formName:description,
-                        formID:flyer._id,
-                        assignedTo: flyer.assignedTo,
-                        mode: flyer.publishTime ? "(Published)" : "(Draft)"
-                    }
-                } );
-
-                res.send( {forms: forms} );
-            } );
-        }
-        else {
-            BFlyers.find( {owner: teamID, assignedTo:userID}, function(err,flyers) {
-                if( err )
-                    return res.send(502);
-
-                // Reduce
-                // ToDo: Make reducing async
-                var forms = flyers.map( function(flyer) {
-                    var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
-
-                    return {
-                        formName:description,
-                        formID:flyer._id,
-                        assignedTo: flyer.assignedTo,
-                        mode: flyer.publishTime ? "(Published)" : "(Draft)"
-                    }
-                } );
-
-                res.send( {forms: forms} );
-            } );
-        }
+        if( count > 0 ) // Admin
+            findFlyers({owner: teamID}); // ToDo: And is not the draft-mode form which is create by user
+        else    // Team member
+            findFlyers({owner: teamID, autoAssignedTo:userID});
     });
+
+    function findFlyers(query) {
+
+        BFlyers.find(query).populate('creator owner autoAssignedTo').exec( function(err,flyers) {
+            if( err )
+                return res.send(502);
+
+            // Reduce
+            // ToDo: Make reducing async
+            var forms = flyers.map( function(flyer) {
+                var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
+
+                return {
+                    formName:description,
+                    formID:flyer._id,
+                    autoAssignedTo: flyer.autoAssignedTo,
+                    creator: flyer.creator,
+                    mode: flyer.publishTime ? "(Published)" : "(Draft)"
+                }
+            } );
+
+            res.send( {forms: forms} );
+        });
+
+    }
 
 }
 
@@ -108,7 +95,7 @@ module.exports.applications = function (req,res) {
         }
         else {
 
-            BFlyers.count( {_id: flyerID, assignedTo:userID}, function(err,count) {
+            BFlyers.count( {_id: flyerID, autoAssignedTo:userID}, function(err,count) {
                 if( count > 0 )
                     fetchApplications();
                 else

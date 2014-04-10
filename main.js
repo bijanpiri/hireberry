@@ -135,7 +135,7 @@ var BUsers = mongoose.model( 'users', {
 
 BFlyers = mongoose.model( 'flyers', {
     flyer: Object,
-    owner: {type : mongoose.Schema.ObjectId, ref : 'team'},
+    owner: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     creator: {type : mongoose.Schema.ObjectId, ref : 'users'},
     publishTime: String,
     disqusShortname: String,
@@ -147,9 +147,9 @@ BComments = mongoose.model( 'comments', {
     note: String,
     comment: String,
     subjectType: String,
-    formID: [{type : mongoose.Schema.ObjectId, ref : 'flyers'}],
-    applicationID: [{type : mongoose.Schema.ObjectId, ref : 'applications'}],
-    commenter: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
+    formID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
+    applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
+    commenter: {type : mongoose.Schema.ObjectId, ref : 'users'}
 })
 
 BTeams = mongoose.model( 'teams', {
@@ -695,17 +695,88 @@ app.post('/api/team/form/assign', function(req,res){
 
 });
 
+app.post('/api/team/form/askForComment', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    //var userID = req.user._id;
+    var userID = req.body.userID;
+    var formID = req.body.formID;
+
+    // Check whether current user is admin or not
+    askForCommentOnForm('',userID, formID, function(err) {
+        res.send(200)
+    } );
+
+});
+
+app.post('/api/team/application/askForComment', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    //var userID = req.user._id;
+    var userID = req.body.userID;
+    var applicationID = req.body.applicationID;
+
+    // Check whether current user is admin or not
+    askForCommentOnApplication('',userID, applicationID, function(err) {
+        res.send(200)
+    } );
+
+});
+
+app.get('/api/user/application/askedForComment',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+
+    getAskedForCommentApplications(userID, function(err,applications) {
+        res.send(200,{applications:applications});
+    })
+});
+
+app.get('/api/user/form/askedForComment',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+
+    getAskedForCommentForms(userID, function(err,forms) {
+        res.send(200,{forms:forms});
+    })
+});
+
+app.post('/api/user/comment',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var askForCommentID = req.body.askForCommentID;
+    var comment = req.body.comment;
+
+    setComment(userID, askForCommentID, comment, function(err) {
+        res.send(200);
+    })
+});
+
+
 app.get('/api/team/members',function(req,res){
     if( !checkUser(req,res) )
         return;
 
     var teamID = req.user.teamID;
 
-    BTeams.find({_id:teamID}, function(err,members){
+    BTeams.findOne({_id:teamID}).populate('members').exec( function(err,team){
         if(err)
             res.send(305);
         else
-            res.send(200,members);
+            res.send(200,team.members);
     })
 });
 
@@ -759,6 +830,7 @@ app.post('/api/user/team/join', function(req,res){
     })
 
 });
+
 
 // endregion
 
@@ -944,7 +1016,7 @@ function inviteToTeam( invitedEmail, teamID, callback ) {
 }
 
 function assignForm(assigneeUserID,assignedFormID,callback) {
-    BFlyers.update( {_id:assignedFormID}, {assignedTo:assigneeUserID}, function(err){
+    BFlyers.update( {_id:assignedFormID}, {autoAssignedTo:assigneeUserID}, function(err){
         if(err)
             callback(err)
         else
@@ -952,19 +1024,19 @@ function assignForm(assigneeUserID,assignedFormID,callback) {
     })
 }
 
-function askForCommentOnFlyer(note,flyerID,userID,callback) {
+function askForCommentOnForm(note,userID,formID,callback) {
     BComments({
         note: note,
         comment: '',
         commenter:userID,
-        subjectType:'flyer',
-        flyerID:flyerID
+        subjectType:'form',
+        formID:formID
     }).save(function(err){
             callback(err)
         });
 }
 
-function askForCommentOnApplication(note,applicationID,userID,callback) {
+function askForCommentOnApplication(note,userID,applicationID,callback) {
     BComments({
         note: note,
         comment: '',
@@ -974,6 +1046,30 @@ function askForCommentOnApplication(note,applicationID,userID,callback) {
     }).save(function(err){
             callback(err)
         });
+}
+
+function getAskedForCommentApplications(userID,callback) {
+    BComments.find({commenter:userID,subjectType:'application'})
+        .populate('applicationID')
+        .exec( function(err,applications) {
+            callback( err, applications )
+        });
+}
+
+function getAskedForCommentForms(userID,callback) {
+    BComments.find({commenter:userID,subjectType:'form'})
+        .populate('formID')
+        .exec( function(err,forms) {
+            callback( err, forms )
+        });
+}
+
+function setComment(userID,askedForCommentID,comment,callback) {
+    BComments.update({_id:askedForCommentID,commenter:userID},{
+        comment: comment
+    }, function(err) {
+        callback(err);
+    })
 }
 
 function BLog(text){

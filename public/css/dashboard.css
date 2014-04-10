@@ -56,8 +56,30 @@
     height: 40px;
     width: 100%;
     background-color: transparent;
-    font-size: 1.2em;
+    font-size: 0.8em;
     margin: 0;
+    list-style-type: none;
+    padding: 0.5em 0;
+}
+
+#formsList .formTitle {
+    font-size: 0.8em;
+}
+
+#formsList .formMode {
+    color: #9c9c9c;
+    font-size: 0.5em;
+    padding: 0 0.5em;
+}
+
+#formsList .formCreator {
+    font-size: 0.5em;
+    padding: 0 0.5em;
+}
+
+#formsList .formAssignee {
+    font-size: 0.5em;
+    padding: 0 0.5em;
 }
 
 .statBox {

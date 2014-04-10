@@ -24,6 +24,7 @@ $(function(){
     getStat();
     getTeamInfo();
     getInvitatinos();
+    fillAskedForComments();
 
     $('#formsList').change( function() {
         fillTable();
@@ -57,6 +58,55 @@ $(function(){
     });
 });
 
+function fillAskedForComments() {
+    $.get('/api/user/application/askedForComment').done( function(resApp){
+
+        $.get('/api/user/form/askedForComment').done( function(resForm){
+
+            var A4C_applicatinos = resApp.applications;
+            var A4C_forms = resForm.forms;
+
+            A4C_applicatinos.forEach( function(a4c) {
+                var titleObj = $('<div>')
+                        .text('Application: ' + a4c.applicationID._id);
+                var textAreaObj = $('<textarea>')
+                        .attr('id','comment_app_' + a4c.applicationID._id)
+                        .css('display','block')
+                        .attr('placeholder','Your comment ...');
+                var sendBtnObj = $('<button>')
+                        .text('Send')
+                        .click( function() {
+                            $.post('/api/user/comment', {
+                                askForCommentID:a4c._id,
+                                comment:$('#comment_app_' + a4c.applicationID._id).val()
+                            })
+                        });
+
+                $('#askedForCommentList').append( $('<li>').append(titleObj).append(textAreaObj).append(sendBtnObj) );
+            });
+
+            A4C_forms.forEach( function(a4c) {
+                var titleObj = $('<div>')
+                        .text('Form: ' + a4c.formID._id);
+                var textAreaObj = $('<textarea>')
+                        .attr('id','comment_form_' + a4c.formID._id)
+                        .css('display','block')
+                        .attr('placeholder','Your comment ...');
+                var sendBtnObj = $('<button>')
+                        .text('Send')
+                        .click( function() {
+                            $.post('/api/user/comment', {
+                                askForCommentID:a4c._id,
+                                comment:$('#comment_form_' + a4c.formID._id).val()
+                            })
+                        });
+
+                $('#askedForCommentList').append( $('<li>').append(titleObj).append(textAreaObj).append(sendBtnObj) );
+            });
+        });
+    })
+}
+
 function fillFormsList( callback ) {
 
     $('#formsList option').remove();
@@ -66,7 +116,17 @@ function fillFormsList( callback ) {
         forms = res.forms;
 
         res.forms.forEach( function(form) {
-            var option = $('<option>').text(form.formName + form.mode ).attr('id',form.formID);
+            var formTitleObj = $('<span>').addClass('formTitle').text(form.formName);
+            var formStateObj = $('<span>').addClass('formMode').text(form.mode);
+            var formCreatorObj = $('<span>').addClass('formCreator').text(' - Created By: ' + form.creator.email);
+            var formAssigneeObj = $('<span>').addClass('formAssignee').text(' - Assigned To: ' + form.autoAssignedTo.email);
+            var formObj = $('<div>').addClass('form')
+                    .append(formTitleObj)
+                    .append(formStateObj)
+                    .append(formCreatorObj)
+                    .append(formAssigneeObj);
+
+            var option = $('<option>').append( formObj ).attr('id',form.formID);
             $('#formsList').append(option);
         });
 
@@ -197,9 +257,16 @@ function rowClicked(data) {
     loadDecisionBox( lastActivity, appID );
 
     // AskForComment section
+    $('#askForCommentOnApplication').unbind('click');
     $('#askForCommentOnApplication').click( function() {
-        $.post('/application/askForComment', {userID:'SELECETED USER',applicatinoID:'SELECTED APPLICATION'});
+        $.post('/api/team/application/askForComment', {
+            applicationID: appID,
+            userID: $('#teamMembersForComment :selected').attr('id')
+        });
     });
+
+    $('#teamMembersForAssign option').remove();
+    $('#teamMembersForComment option').remove();
 
     for( var i=0; i<teamMembers.length; i++ ){
         var option = $('<option>')
@@ -419,22 +486,33 @@ function saveTeamInfo() {
         </div>
 
         <div class="row-fluid toolbarRow">
-            <div class="span2">
+            <div class="span5">
                 <span class="formsListLabel">Forms:</span>
             </div>
+
+            <div class="span3">
+                <span class="formsListLabel">Assign To:</span>
+            </div>
+
         </div>
 
         <div class="row-fluid toolbarRow">
-            <div class="span7">
+            <div class="span5">
                 <div class="formName">
                     <select id="formsList"></select>
+                </div>
+            </div>
+
+            <div class="span3">
+                <div class="formName">
                     <select id="assignTo"></select>
                 </div>
             </div>
-            <div class="span5">
-                <button class="btn btn-warning btn-large" id="inactiveForm">Inactive Form</button>
-                <button class="btn btn-primary btn-large" id="viewForm">View Form</button>
-                <button class="btn btn-success btn-large" id="editForm">Edit Form</button>
+
+            <div class="span4">
+                <button class="btn btn-warning" id="inactiveForm">Inactive Form</button>
+                <button class="btn btn-primary" id="viewForm">View Form</button>
+                <button class="btn btn-success" id="editForm">Edit Form</button>
             </div>
         </div>
 
@@ -442,6 +520,14 @@ function saveTeamInfo() {
             <div class="span12">
                 <div id="tableTitle">Application related to <span id="currentFormName">-</span>:</div>
                 <div id="formsTable"></div>
+            </div>
+        </div>
+
+
+        <div class="row-fluid tableRow">
+            <div class="span12">
+                <div id="tableTitle">Asked For Comment:</div>
+                <ul id="askedForCommentList"></ul>
             </div>
         </div>
 
@@ -455,11 +541,6 @@ function saveTeamInfo() {
                 <select id="teamMembersForComment">
                 </select>
                 <button id="askForCommentOnApplication">Ask For Comment</button>
-            </div>
-            <div class="span6">
-                <select id="teamMembersForAssign">
-                </select>
-                <button id="assignToOnApplication">Assign To</button>
             </div>
         </div>
         <div class="row-fluid">
