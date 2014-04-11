@@ -914,6 +914,111 @@ Contact Card
     font-size: 0.7em;
 }
 
+/****
+Profile Widget - Personal info [Begin ]
+****/
+.bool-icon-email{background-position:-100px -282px;width: 24px;height: 24px;}
+.bool-icon-website{background-position:-100px -282px;width: 24px;height: 24px;}
+.bool-icon-tel{background-position:-100px -282px;width: 24px;height: 24px;}
+.PersonalInfo-container {
+
+}
+
+.PersonalInfo-field {
+    margin: 0;
+    width: 50%;
+    float: left;
+    min-width: 330px; !important
+    z-index: 1;
+}
+.PersonalInfo-field input[type=button] {
+
+    background-color: #FFFFFF;
+    background: url("/images/nflyer-icons.png");
+    background-position: -100px -80px;width: 40px;height: 40px;
+
+    box-sizing: border-box;
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-color: #B3B3B3;
+    border: 2px ;
+    border-left: 0px;
+    border-style: solid;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    margin: 0;
+    margin-right: 12px;
+    float: right;
+    padding:0;
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+
+}
+
+.PersonalInfo-field input[type=text] {
+
+    max-width: 410px;
+    min-width: 200px;
+    font-size: 18px;
+    font-family: "Roboto";
+    font-color:#4c4c4c;
+
+    box-sizing: border-box;
+    display: block;
+    width: 60%;
+    height: 40px;
+    border-color: #B3B3B3;
+    border: 2px;
+    border-right: 0px;
+    border-style: solid;
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    float: right;
+    margin:0;
+    margin-bottom: 20px;
+    padding: 0px 0px 0px 10px;
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+
+
+}
+.PersonalInfo-field input[type=text]:hover {
+    border-color: #8d8d8d;
+}
+.PersonalInfo-field  input[type=button]:hover{
+    border-color: #8d8d8d;
+}
+.PersonalInfo-field input[type=text]:active {
+    border-color: #8d8d8d;
+}
+.PersonalInfo-field  input[type=button]:active{
+    border-color: #8d8d8d;
+}
+
+.PersonalInfo-field span{
+    font-family: "Roboto";
+    font-size: 18px;
+    color: #8D8D8D;
+    line-height: 40px;
+    margin-right: 20px;
+    padding: 0;
+    min-width: 66px;
+    float: right;
+    text-align: right;
+}
+.PersonalInfo-field span:hover {
+    color: #666666;
+}
+.PersonalInfo-field span:focus {
+    color: #666666;
+}
+/****
+Profile Widget - Personal info [Begin ]
+****/
+
 .profileAddress {
     padding: 1em;
 }
@@ -1114,6 +1219,7 @@ Flat Section
     color: #9c9c9c;
     border: 0;
     line-height:48px;
+    /*white-space: pre;*/
 }
 .flatSection hr {
     border: 1px solid #9c9c9c;

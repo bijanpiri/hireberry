@@ -13,6 +13,16 @@ function ProfilesWidget(){
     this.widgetDidAdd = function() {
         this.setToolbar('.toolbar-profileWidget');
         var profile=this.portlet;
+        if(this.editMode) {
+
+            this.portlet.find('input').not('input[name=personalInfo-item]').prop('readOnly','readOnly').css('cursor','default');
+        }
+        profile.find('input[type=button]').each(function(i,input){
+            $(input).click(function(){
+                $(input).next().val("");
+            });
+        });
+
         this.toolbar.find('input[name=p]').each(function(i,input){
             $(input).change(function(){
              profile.find('.'+input.value).css('display',input.checked ?'':'none');
@@ -46,6 +56,7 @@ function ProfilesWidget(){
                 widget.toolbar.find(cmd).removeClass('bool-active');
             }
         });*/
+
     }
 
     this.serialize = function() {

@@ -914,7 +914,48 @@ function init() {
     </div>
 </div>
 
+
+
+<!--<div class="container-fluid profilesWidget">-->
 <div class="container-fluid profilesWidget">
+
+    <div  class="PersonalInfo-container">
+        <div>
+            <div class="PersonalInfo-field"  >
+                <div >
+                <input type="button"  >
+                <input type="text" name="personalInfo-item">
+                </div>
+                <span >Name</span>
+            </div>
+        </div>
+
+        <div >
+            <div class="PersonalInfo-field email" >
+                <input type="button"  >
+                <input type="text" name="personalInfo-item">
+                <span >Email</span>
+            </div>
+        </div>
+
+        <div >
+            <div class="PersonalInfo-field tel" >
+                <input type="button"  >
+                <input type="text"  name="personalInfo-item">
+                <span >Tel</span>
+            </div>
+        </div>
+
+        <div >
+            <div class="PersonalInfo-field website" >
+                <input type="button"  >
+                <input type="text"  name="personalInfo-item">
+                <span >Website</span>
+            </div>
+        </div>
+</div>
+
+
     <div class="row-fluid github">
         <div class="offset3 span6" >
             <div class="profileAddress">
@@ -937,22 +978,12 @@ function init() {
         </div>
     </div>
 
-    <div class="row-fluid dribbble">
+    <div class="row-fluid twitter">
         <div class="offset3 span6" >
             <div class="profileAddress">
-                <i class="icon dribbble-icon"></i>
-                <span>http://dribbble.com/</span>
-                <input type="text" name="drprofile" id="drprofile"  placeholder="You">
-            </div>
-        </div>
-    </div>
-
-    <div class="row-fluid behance">
-        <div class="offset3 span6" >
-            <div class="profileAddress">
-                <i class="icon behance-icon"></i>
-                <span>http://behance.net/</span>
-                <input type="text" name="beprofile" id="beprofile"  placeholder="You">
+                <i class="icon twitter-icon"></i>
+                <span>http://twitter.com/</span>
+                <input type="text" name="twprofile" id="twprofile"  placeholder="You">
             </div>
         </div>
     </div>
@@ -967,15 +998,31 @@ function init() {
         </div>
     </div>
 
-    <div class="row-fluid twitter">
+    <div class="row-fluid dribbble">
         <div class="offset3 span6" >
             <div class="profileAddress">
-                <i class="icon twitter-icon"></i>
-                <span>http://twitter.com/</span>
-                <input type="text" name="twprofile" id="twprofile"  placeholder="You">
+                <i class="icon dribbble-icon"></i>
+                <span>http://dribbble.com/</span>
+                <input type="text" name="drprofile" id="drprofile"  placeholder="You">
             </div>
         </div>
     </div>
+
+
+
+
+
+    <div class="row-fluid behance">
+        <div class="offset3 span6" >
+            <div class="profileAddress">
+                <i class="icon behance-icon"></i>
+                <span>http://behance.net/</span>
+                <input type="text" name="beprofile" id="beprofile"  placeholder="You">
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <div class="container-fluid seperatorWidget">
@@ -1213,6 +1260,20 @@ function init() {
         <a  class="bool-btn" >
             <input hidden type="checkbox" id="behance"   name="p" value="behance" checked>
             <i  class="bool-icon-behance"></i>
+        </a>
+        <div class="bool-separator"></div>
+        <a  class="bool-btn" >
+            <input hidden  type="checkbox" id="email"   name="p" value="email" checked>
+            <i class="bool-icon-email"></i>
+        </a>
+        <a  class="bool-btn" >
+            <input hidden type="checkbox" id="tel"   name="p" value="tel" checked>
+            <i class="bool-icon-tel"></i>
+        </a>
+
+        <a  class="bool-btn" >
+            <input hidden type="checkbox" id="website"   name="p" value="website" checked>
+            <i  class="bool-icon-website"></i>
         </a>
 
         <!--<input type="checkbox" id="github"   name="p" value="github" checked>-->
