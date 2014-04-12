@@ -42,7 +42,7 @@ function TextWidget(){
             function(widget,args)
             {
                 widget.portlet.
-                    find('.text-widget *')
+                    find('.text-widget,.text-widget *')
                     .css('font-size',args[1]+'px')
                     .css('line-height',args[1]+'px');
             });
@@ -50,6 +50,10 @@ function TextWidget(){
         this.toolbar.find('.bool-combo-list a').click(function(){
             widget.toolbar.find('.bool-combo-text').html($(this).html());
         });
+
+//        this.toolbar.find('.bool-tab').click(function(){
+//            $(this).show();
+//        });
 
 
         if( this.editMode ){

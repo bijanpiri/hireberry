@@ -224,8 +224,6 @@
     height: 44px;
     background: #B3B3B3;
     position: absolute;
-
-    z-index: 20;
     display: none;
     padding: 0;
     cursor: pointer;
@@ -234,7 +232,11 @@
     margin-left: 0;
     display: none;
 }
-.nav-pills li.dropdown.open+.bool-tab-btn,.bool-tab-btn.open{
+.nav-pills li.dropdown+.bool-tab-btn.open,
+.nav-pills li.dropdown.open+.bool-tab-btn{
+    display: inline-block;
+}
+.bool-tab-btn.open{
     display: inline-block;
 }
 .nav-pills > li > a.bool-tab{
@@ -326,6 +328,10 @@
 .bool-icon-linkedin{background-position:-100px -257px;width: 24px;height: 24px;}
 .bool-icon-dribbble{background-position:-100px -282px;width: 24px;height: 24px;}
 .bool-icon-behance{background-position:-100px -307px;width: 28px;height: 17px;}
+.bool-color-dropdown{z-index: 2000;}
+.nav-pills .bool-color-dropdown{
+    z-index: 21000  ;
+}
 
 .nav-pills .open>.bool-color-dropdown{
     background: #e6e6e6;
