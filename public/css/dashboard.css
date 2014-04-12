@@ -7,6 +7,10 @@
 .menu {
     font-size: 2.0em;
     text-align: center;
+    padding: 10px 30px;
+    line-height: 1.4em;
+    margin-bottom: 0.5em;
+    height: 1.4em;
 }
 
 .menu .item:hover {
@@ -85,13 +89,13 @@
     font-size: 2em;
     text-align: center;
     border-left: 3px solid #555555;
-    background-color: #B9B6B6;
+    background-color: #d6d6d6;
     padding: 5px 0;
     line-height: 1.3em;
 }
 
 .position {
-    background: #d6d6d6;
+    background: #e6e6e6;
     font-size: 2em;
     padding: 5px 0;
     border-left: 3px solid rgb(84, 177, 84);
@@ -325,4 +329,46 @@
     font-size: 1.7em;
     padding: 10px;
     border-left: 3px solid rgb(84, 177, 84);
+}
+
+/*** Asked For Comment ***/
+#comments_badge {
+    background-color: #AC4949;
+    border-radius: 50%;
+    font-size: 0.9em;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: top;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.3em;
+}
+
+#askedForCommentList {
+    list-style-type: none;
+}
+
+#askedForCommentList li {
+    border-left: 3px solid #5E5E5E;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+#askedForCommentList li .comment_date {
+    color: #949494;
+}
+
+#askedForCommentList li div {
+    font-size: 1.5em;
+}
+
+#askedForCommentList li textarea {
+    width: 400px;
+    margin: 10px 0;
+    height: 75px;
+    font-size: 1.6em;
+}
+
+#askedForCommentList li button {
 }
