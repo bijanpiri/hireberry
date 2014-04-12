@@ -56,6 +56,12 @@ $(function(){
         width: 800,
         height: 450
     });
+
+    $('.menu .item').click( function(e) {
+        var sectionContainerClass = '.' + $(e.target).attr('forContainer');
+        $('.sectionContainer').hide();
+        $(sectionContainerClass).show();
+    })
 });
 
 function fillAskedForComments() {
@@ -119,7 +125,7 @@ function fillFormsList( callback ) {
             var formTitleObj = $('<span>').addClass('formTitle').text(form.formName);
             var formStateObj = $('<span>').addClass('formMode').text(form.mode);
             var formCreatorObj = $('<span>').addClass('formCreator').text(' - Created By: ' + form.creator.email);
-            var formAssigneeObj = $('<span>').addClass('formAssignee').text(' - Assigned To: ' + form.autoAssignedTo.email);
+            var formAssigneeObj = $('<span>').addClass('formAssignee').text(' - Assigned To: ' + (form.autoAssignedTo ? form.autoAssignedTo.email : 'No One') );
             var formObj = $('<div>').addClass('form')
                     .append(formTitleObj)
                     .append(formStateObj)
@@ -236,7 +242,7 @@ function rowClicked(data) {
         }
 
         activityItem
-                //.append(separator)
+            //.append(separator)
                 .append(timeStamp)
                 .append(activityType)
                 .append(aboutDecision)
@@ -394,17 +400,36 @@ function getInvitatinos() {
     });
 }
 
+function getAvatar(email) {
+    var hash = CryptoJS.MD5( email.trim().toLowerCase() );
+    return 'http://www.gravatar.com/avatar/' + hash;
+}
+
 function getTeamInfo() {
-    $.get('/api/user/team').done( function(res){
-        $('#teamName').text( res.team.name );
-        $('#teamAdmin').text( res.team.admin.email );
+    $.get('/api/team/members').done( function(res){
+        $('#teamName').text( res.teamName );
+        $('#teamAdmin').text( res.teamAdminEmail );
 
-        teamMembers = res.team.members;
+        teamMembers = res.members;
 
-        for( var i=0; i<res.team.members.length; i++ ){
-            $('#teamMembers').append( $('<div>').text(res.team.members[i].email) );
+        $('#assignTo').html('')
+        $('#teamMembers').html('');
 
-            var option = $('<option>').attr('name',res.team.members[i]._id).attr('id',res.team.members[i]._id).text(res.team.members[i].email);
+        for( var i=0; i<res.members.length; i++ ){
+            var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.members[i].email) );
+            var emailObj = $('<div>').addClass('teamMemberEmail').text(res.members[i].email);
+            var roleObj = $('<div>').addClass('teamMemberRole').text( res.members[i].role );
+            var statusObj = $('<div>').addClass('teamMemberStatus').text( res.members[i].status );
+            var memberObj = $('<div>').addClass('teamMember')
+                    .append( avatarObj )
+                    .append( emailObj )
+                    .append( roleObj )
+                    .append( statusObj );
+
+
+            $('#teamMembers').append( memberObj );
+
+            var option = $('<option>').attr('name',res.members[i]._id).attr('id',res.members[i]._id).text(res.members[i].email);
             $('#assignTo').append( option );
         }
 
@@ -419,7 +444,12 @@ function getTeamInfo() {
     });
 
     $('#inviteToTeam').click( function() {
-        $.post('/api/team/invite',{ email: $('#inviteEmail').val() });
+        $.post('/api/team/invite',{ email: $('#inviteEmail').val() })
+                .done( function() {
+                    alert('Invitation is sent.')
+                    $('#inviteEmail').val('');
+                    getTeamInfo();
+                });
     });
 }
 
@@ -454,31 +484,18 @@ function getApplicationComments(appID) {
 </script>
 
 <div id="wrap">
-    <div class="container">
-        <div clas="row">
-            <div class="span12">
-                Team: <span id="teamName"></span>
-                Admin: <span id="teamAdmin"></span>
-            </div>
+    <div class="container menu">
+        <div class="row-fluid">
+            <div class="span2 item" forContainer="analyticsContainer">Analytics</div>
+            <div class="span2 item" forContainer="teamContainer">Team</div>
+            <div class="span2 item" forContainer="positionsContainer">Positions</div>
+            <div class="span2 item" forContainer="applicationsContainer">Applications</div>
+            <div class="span2 item" forContainer="hubpageContainer">Hubpage</div>
+            <div class="span2 item" forContainer="billingContainer">Billing</div>
         </div>
-
-        <div clas="row">
-            <div class="span12">
-                <div id="teamMembers"></div>
-            </div>
-        </div>
-
-        <div clas="row">
-            <div class="span12">
-                <input type="email" id="inviteEmail" placeholder="yourfriend@yourorg.com">
-                <button id="inviteToTeam">Invite</button>
-            </div>
-        </div>
-
     </div>
 
-    <div class="container">
-
+    <div class="container analyticsContainer sectionContainer" hidden>
         <div class="row-fluid statisticsRow">
             <div class="span3 statBox">
                 <div class="number" id="numForms"></div>
@@ -500,6 +517,39 @@ function getApplicationComments(appID) {
                 <div class="text">Today Applications</div>
             </div>
         </div>
+     </div>
+
+    <div class="container teamContainer sectionContainer" hidden>
+        <div class="row-fluid teamHeader">
+            <div class="span4">
+                <span id="teamNameTitle">Team:</span>
+                <span id="teamName"></span>
+            </div>
+            <div class="span4">
+                <span id="teamAdminTitle">Admin:</span>
+                <span id="teamAdmin"></span>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div id="teamMembers"></div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="teamInvitationPanel">
+                    <p>Send invatation to other members of your team to join:</p>
+                    <input type="email" id="inviteEmail" placeholder="yourfriend@yourorg.com">
+                    <button id="inviteToTeam" class="btn btn-warning">Invite</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container applicationsContainer sectionContainer" hidden>
 
         <div class="row-fluid toolbarRow">
             <div class="span5">

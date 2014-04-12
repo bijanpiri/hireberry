@@ -1,10 +1,26 @@
+
+#wrap {
+    position: relative;
+    top: 15em;
+}
+
+.menu {
+    font-size: 2.0em;
+    text-align: center;
+}
+
+.menu .item:hover {
+    border-bottom: 4px solid green;
+    cursor: pointer;
+}
+
 #wrap .container {
     background-color: #f1f1f1;
     position: relative;
     left: 0;
     right: 0;
     bottom: 0;
-    top: 10em;
+    top: 0;
     padding: 30px;
     border-radius: 4px;
 }
@@ -199,4 +215,89 @@
 .commentsHeader {
     margin-top: 20px;
     font-size: 1.5em;
+}
+
+/**** Team Panel *****/
+.teamHeader {
+    border-left: 3px solid rgb(94, 91, 91);
+    padding: 10px 20px;
+    background-color: #d6d6d6;
+    box-sizing: border-box;
+}
+
+#teamName {
+    font-size: 2.0em;
+}
+
+#teamNameTitle {
+    font-size: 1.5em;
+    color: rgb(155, 152, 152);
+}
+
+#teamAdmin {
+    font-size: 1.7em;
+}
+
+#teamAdminTitle {
+    font-size: 1.5em;
+    color: rgb(155, 152, 152);
+}
+
+
+#teamMembers {
+
+}
+
+.teamInvitationPanel {
+    background-color: #d6d6d6;
+    font-size: 1.7em;
+    padding: 10px;
+    border-left: 3px solid rgb(94, 91, 91);
+}
+
+#inviteEmail {
+    height: 30px;
+    font-size: 1.2em;
+    width: 300px;
+}
+
+#inviteToTeam {
+    vertical-align: top;
+    height: 40px;
+}
+
+.teamMemberEmail {
+    display: inline-block;
+}
+
+.teamMemberAvatar {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.teamMemberRole {
+    display: inline-block;
+    float: right;
+    font-weight: 700;
+    padding: 0 20px;
+    width: 70px;
+    text-align: center;
+}
+
+.teamMemberStatus {
+    display: inline-block;
+    float: right;
+    padding: 0 20px;
+    width: 70px;
+    text-align: center;
+}
+
+.teamMember {
+    background-color: #e1e1e1;
+    font-size: 1.7em;
+    padding: 10px;
+    border-left: 3px solid rgb(84, 177, 84);
 }

@@ -787,12 +787,39 @@ app.get('/api/team/members',function(req,res){
         return;
 
     var teamID = req.user.teamID;
+    var members = [];
 
-    BTeams.findOne({_id:teamID}).populate('members').exec( function(err,team){
+    BTeams.findOne({_id:teamID}).populate('members admin').exec( function(err,team){
         if(err)
-            res.send(305);
-        else
-            res.send(200,team.members);
+            return res.send(305);
+
+        members = team.members.map( function(member) {
+            return {
+                email: member.email,
+                status:'joint',
+                role: (member._id.toString()==team.admin._id.toString() ? 'admin' : 'member')
+            }
+        })
+
+        BInvitations.find({inviterTeam:teamID}, function(err,invitedPersons) {
+            if(err)
+                return res.send(305);
+
+            for(var i=0; i<invitedPersons.length; i++) {
+                members.push({
+                    email: invitedPersons[i].invitedEmail,
+                    status:'invited',
+                    role: 'member'
+                });
+            }
+
+            res.send(200,{
+                teamName: team.name,
+                teamAdminEmail: team.admin.email,
+                members: members
+            });
+        });
+
     })
 });
 
