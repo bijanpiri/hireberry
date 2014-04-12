@@ -357,12 +357,14 @@ function rowClicked(data) {
     $('#teamMembersForComment option').remove();
 
     for( var i=0; i<teamMembers.length; i++ ){
-        var option = $('<option>')
-                .attr('name',teamMembers[i]._id)
-                .attr('id',teamMembers[i]._id)
-                .text(teamMembers[i].email);
-        $('#teamMembersForAssign').append( option.clone() );
-        $('#teamMembersForComment').append( option.clone() );
+        if( teamMembers[i].status === 'joint' ) {
+            var option = $('<option>')
+                    .attr('name',teamMembers[i]._id)
+                    .attr('id',teamMembers[i]._id)
+                    .text(teamMembers[i].email);
+            $('#teamMembersForAssign').append( option.clone() );
+            $('#teamMembersForComment').append( option.clone() );
+        }
     }
 }
 

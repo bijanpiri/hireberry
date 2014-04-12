@@ -89,132 +89,132 @@ var viewMode = '<%=viewMode%>';
 var existFlyer = <%= existFlyer %>
 var teamMembers = [];
 
-        $(function() {
-            $('form').submit(false);
-            if( viewMode=='embeded') {
-                // Hidden bars
-                $('nav').remove();
-                $('#fixToolbar').remove();
-                $('body > .container-fluid').css('margin-top','1em');
-            }
+$(function() {
+    $('form').submit(false);
+    if( viewMode=='embeded') {
+        // Hidden bars
+        $('nav').remove();
+        $('#fixToolbar').remove();
+        $('body > .container-fluid').css('margin-top','1em');
+    }
 
 
-            if( editMode ) {
+    if( editMode ) {
 
-                if( existFlyer )
-                    loadEditor();
-                else
-                    loadTemplateChooser();
-            }
-            else {
-                $('.flyerRow').show();
-                loadFlyer();
+        if( existFlyer )
+            loadEditor();
+        else
+            loadTemplateChooser();
+    }
+    else {
+        $('.flyerRow').show();
+        loadFlyer();
 
-                // Resume uploading handling
-                $('#dropzone').click(function(){
-                    $('#resumefile').click();
-                })
-                document.getElementById('resumefile').onchange = function () {
-                    $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
-                };
+        // Resume uploading handling
+        $('#dropzone').click(function(){
+            $('#resumefile').click();
+        })
+        document.getElementById('resumefile').onchange = function () {
+            $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
+        };
 
-                function getDoc(frame) {
-                    var doc = null;
+        function getDoc(frame) {
+            var doc = null;
 
-                    // IE8 cascading access check
-                    try {
-                        if (frame.contentWindow) {
-                            doc = frame.contentWindow.document;
-                        }
-                    } catch(err) {
-                    }
-
-                    if (doc) { // successful getting content
-                        return doc;
-                    }
-
-                    try { // simply checking may throw in ie8 under ssl or mismatched protocol
-                        doc = frame.contentDocument ? frame.contentDocument : frame.document;
-                    } catch(err) {
-                        // last attempt
-                        doc = frame.document;
-                    }
-                    return doc;
+            // IE8 cascading access check
+            try {
+                if (frame.contentWindow) {
+                    doc = frame.contentWindow.document;
                 }
-                $("#submit_btn").click(function(e) {
+            } catch(err) {
+            }
 
-                    /*
-                     // Name
-                     if( $('#name').val().length == 0 ){
-                     $('.error').show().html('Please enter your name');
-                     e.preventDefault();
-                     return false;
-                     }
+            if (doc) { // successful getting content
+                return doc;
+            }
 
-                     // Email
-                     if(validateEmail( $('#email').val() )==false){
-                     $('.error').show().html('Please enter a valid email address');
-                     e.preventDefault();
-                     return false;
-                     }
-                     */
+            try { // simply checking may throw in ie8 under ssl or mismatched protocol
+                doc = frame.contentDocument ? frame.contentDocument : frame.document;
+            } catch(err) {
+                // last attempt
+                doc = frame.document;
+            }
+            return doc;
+        }
+        $("#submit_btn").click(function(e) {
 
-                    $('.error').hide();
+            /*
+             // Name
+             if( $('#name').val().length == 0 ){
+             $('.error').show().html('Please enter your name');
+             e.preventDefault();
+             return false;
+             }
 
-                    var form = document.getElementById('applyForm');
-                    var formObj = $('#applyForm');
-                    var formURL = formObj.attr("action");
+             // Email
+             if(validateEmail( $('#email').val() )==false){
+             $('.error').show().html('Please enter a valid email address');
+             e.preventDefault();
+             return false;
+             }
+             */
 
-                    if(window.FormData !== undefined)  // for HTML5 browsers
-                    {
-                        var formData = new FormData( form );
-                        $.ajax({
-                            url: formURL,
-                            type: 'POST',
-                            data:  formData,
-                            mimeType:"multipart/form-data",
-                            contentType: false,
-                            cache: false,
-                            processData:false,
-                            success: function(data, textStatus, jqXHR) {
-                                $('.portlet-container').hide();
-                                $('.portletSubmittion').hide();
-                                $('.portletThanksMessage').show();
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
+            $('.error').hide();
 
-                            }
-                        });
-                        e.preventDefault();
-                        $('.applyNowButton').val('Sending...').attr('disabled','disabled');
+            var form = document.getElementById('applyForm');
+            var formObj = $('#applyForm');
+            var formURL = formObj.attr("action");
+
+            if(window.FormData !== undefined)  // for HTML5 browsers
+            {
+                var formData = new FormData( form );
+                $.ajax({
+                    url: formURL,
+                    type: 'POST',
+                    data:  formData,
+                    mimeType:"multipart/form-data",
+                    contentType: false,
+                    cache: false,
+                    processData:false,
+                    success: function(data, textStatus, jqXHR) {
+                        $('.portlet-container').hide();
+                        $('.portletSubmittion').hide();
+                        $('.portletThanksMessage').show();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
                     }
-                    else  //for olden browsers
-                    {
-                        //generate a random id
-                        var  iframeId = 'unique' + (new Date().getTime());
+                });
+                e.preventDefault();
+                $('.applyNowButton').val('Sending...').attr('disabled','disabled');
+            }
+            else  //for olden browsers
+            {
+                //generate a random id
+                var  iframeId = 'unique' + (new Date().getTime());
 
-                        //create an empty iframe
-                        var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
+                //create an empty iframe
+                var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
 
-                        //hide it
-                        iframe.hide();
+                //hide it
+                iframe.hide();
 
-                        //set form target to iframe
-                        formObj.attr('target',iframeId);
+                //set form target to iframe
+                formObj.attr('target',iframeId);
 
-                        //Add iframe to body
-                        iframe.appendTo('body');
-                        iframe.load(function(e)
-                        {
-                            var doc = getDoc(iframe[0]);
-                            var docRoot = doc.body ? doc.body : doc.documentElement;
-                            var data = docRoot.innerHTML;
-                            //data is returned from server.
-                        });
-                    }
+                //Add iframe to body
+                iframe.appendTo('body');
+                iframe.load(function(e)
+                {
+                    var doc = getDoc(iframe[0]);
+                    var docRoot = doc.body ? doc.body : doc.documentElement;
+                    var data = docRoot.innerHTML;
+                    //data is returned from server.
                 });
             }
         });
+    }
+});
 
 function loadFlyer() {
 
@@ -376,11 +376,13 @@ function loadPublishPanel() {
     $.get('/api/team/members').done( function(res) {
         teamMembers = res;
 
-        res.forEach( function(item) {
-            var option = $('<option>').attr('id',item._id).text(item.email);
+        res.members.forEach( function(item) {
+            if( item.status === 'joint' ) {
+                var option = $('<option>').attr('id',item._id).text(item.email);
 
-            $('#askForComment').append( option.clone() );
-            $('#autoAssignTo').append( option.clone() );
+                $('#askForComment').append( option.clone() );
+                $('#autoAssignTo').append( option.clone() );
+            }
         });
         console.log(res);
     });
@@ -924,8 +926,8 @@ function init() {
         <div>
             <div class="PersonalInfo-field"  >
                 <div >
-                <input type="button"  >
-                <input type="text" name="personalInfo-item">
+                    <input type="button"  >
+                    <input type="text" name="personalInfo-item">
                 </div>
                 <span >Name</span>
             </div>
@@ -954,7 +956,7 @@ function init() {
                 <span >Website</span>
             </div>
         </div>
-</div>
+    </div>
 
 
     <div class="row-fluid github">
@@ -1224,12 +1226,12 @@ function init() {
 
         <a  class="bool-btn" >
             <input hidden type="checkbox" id="github"   name="p" value="github" checked>
-                <i class="bool-icon-github"></i>
+            <i class="bool-icon-github"></i>
         </a>
 
         <a  class="bool-btn" >
             <input hidden type="checkbox" id="stackoverflow"   name="p" value="stackoverflow" checked>
-                <i class="bool-icon-stackoverflow"></i>
+            <i class="bool-icon-stackoverflow"></i>
         </a>
 
         <a  class="bool-btn" >
@@ -1239,11 +1241,11 @@ function init() {
 
         <a  class="bool-btn" >
             <input hidden type="checkbox" id="linkedin"   name="p" value="linkedin" checked>
-                <i class="bool-icon-linkedin"></i>
+            <i class="bool-icon-linkedin"></i>
         </a>
         <a  class="bool-btn" >
             <input hidden type="checkbox" id="dribbble"   name="p" value="dribbble" checked>
-                <i class="bool-icon-dribbble"></i>
+            <i class="bool-icon-dribbble"></i>
         </a>
 
         <a  class="bool-btn" >
