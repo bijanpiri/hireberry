@@ -20,9 +20,23 @@ google.load("visualization", "1");
 
 $(function(){
     // First fill Forms list, then fill table according to current selected form
-    fillFormsList( fillTable );
+    fillPositionsList( function() {
+        getTeamInfo( function() {
+            $('.colAssignedTo select option').remove();
+
+            for( var i=0; i<teamMembers.length; i++ ){
+                if( teamMembers[i].status === 'joint') {
+                    var option = $('<option>')
+                            .attr('userID',teamMembers[i]._id)
+                            .text(teamMembers[i].email);
+                    $('.colAssignedTo select').append( option.clone() );
+                }
+            }
+
+        });
+    });
+    fillTable()
     getStat();
-    getTeamInfo();
     getInvitatinos();
     fillAskedForComments();
 
@@ -61,6 +75,8 @@ $(function(){
         var sectionContainerClass = '.' + $(e.target).attr('forContainer');
         $('.sectionContainer').hide();
         $(sectionContainerClass).show();
+        $('.menu .item').removeClass('item-selected');
+        $(e.target).addClass('item-selected');
     })
 });
 
@@ -113,27 +129,74 @@ function fillAskedForComments() {
     })
 }
 
-function fillFormsList( callback ) {
+function fillPositionsList( callback ) {
 
-    $('#formsList option').remove();
+    $('.positionsList').html('');
 
     $.get('/api/forms?teamID=' + teamID).done( function(res) {
 
         forms = res.forms;
 
         res.forms.forEach( function(form) {
-            var formTitleObj = $('<span>').addClass('formTitle').text(form.formName);
-            var formStateObj = $('<span>').addClass('formMode').text(form.mode);
-            var formCreatorObj = $('<span>').addClass('formCreator').text(' - Created By: ' + form.creator.email);
-            var formAssigneeObj = $('<span>').addClass('formAssignee').text(' - Assigned To: ' + (form.autoAssignedTo ? form.autoAssignedTo.email : 'No One') );
-            var formObj = $('<div>').addClass('form')
-                    .append(formTitleObj)
-                    .append(formStateObj)
-                    .append(formCreatorObj)
-                    .append(formAssigneeObj);
+            var row = $('.positionsContainer .positionsHeaderRow')
+                    .clone()
+                    .removeClass('positionsHeaderRow');
 
-            var option = $('<option>').append( formObj ).attr('id',form.formID);
-            $('#formsList').append(option);
+            var titleObj = $('<span>')
+                    .addClass('positionTitle')
+                    .text(form.formName);
+
+            var stateObj = $('<span>')
+                    .addClass('positionMode')
+                    .text(form.mode);
+
+            var creatorObj = $('<span>')
+                    .addClass('positionCreator')
+                    .text( form.creator.email);
+
+            var assigneeObj = $('<select>')
+                    .attr('formID', form.formID)
+                    .addClass('positionAssignee')
+                    .text((form.autoAssignedTo ? form.autoAssignedTo.email : 'No One') )
+                    .change( function(){
+                        var userID = $(this).find(':selected').attr('userID');
+                        var formID = $(this).attr('formID');
+
+                        $.post('/api/team/form/assign',{formID:formID,userID:userID});
+                    })
+
+            var editBtnObj = $('<a>')
+                    .addClass('btn btn-mini btn-primary')
+                    .attr('href','')
+                    .text('edit')
+                    .click( function() {
+                        window.open('/flyer/edit/0?flyerid=' + form.formID);
+                    });
+
+            var viewBtnObj = $('<a>')
+                    .addClass('btn btn-mini btn-warning')
+                    .attr('href','')
+                    .text('view')
+                    .click( function() {
+                        window.open('/flyer/view/0?flyerid=' + form.formID);
+                    });
+
+            var deleteBtnObj = $('<a>')
+                    .addClass('btn btn-mini btn-danger')
+                    .attr('href','')
+                    .text('remove')
+                    .click( function() {
+                        window.open('/flyer/remove?flyerid=' + form.formID);
+                    });
+
+            row.find('.colTitle').html('').append(titleObj);
+            row.find('.colStatus').html('').append(stateObj);
+            row.find('.colCreator').html('').append(creatorObj);
+            row.find('.colAssignedTo').html('').append(assigneeObj);
+            row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj).append(deleteBtnObj);
+
+            row.addClass('position').attr('id',form.formID);
+            $('.positionsContainer').append( row );
         });
 
         callback();
@@ -142,17 +205,10 @@ function fillFormsList( callback ) {
 
 function fillTable() {
 
-    selectAssignedToFromList();
+    $('#applicationsTable').html('');
 
-    var selectedForm = $('#formsList :selected');
-    var qsParams = '?userID='  + userID + '&teamID='  + teamID + '&formID=' + selectedForm.attr('id');
-
-    $('#currentFormName').text( selectedForm.val() );
-
-    $('#formsTable').html('');
-
-    $('#formsTable').WATable({
-        url: '/api/applications' + qsParams,
+    $('#applicationsTable').WATable({
+        url: '/api/applications',
         preFill: true,
         pageSize: 10,
         sorting: true,
@@ -405,7 +461,7 @@ function getAvatar(email) {
     return 'http://www.gravatar.com/avatar/' + hash;
 }
 
-function getTeamInfo() {
+function getTeamInfo(callback) {
     $.get('/api/team/members').done( function(res){
         $('#teamName').text( res.teamName );
         $('#teamAdmin').text( res.teamAdminEmail );
@@ -428,19 +484,9 @@ function getTeamInfo() {
 
 
             $('#teamMembers').append( memberObj );
-
-            var option = $('<option>').attr('name',res.members[i]._id).attr('id',res.members[i]._id).text(res.members[i].email);
-            $('#assignTo').append( option );
         }
 
-        selectAssignedToFromList();
-
-        $('#assignTo').change( function(e,item,r){
-            var userID = $('#assignTo :selected').attr('id')
-            var formID = $('#formsList :selected').attr('id')
-
-            $.post('/api/team/form/assign',{formID:formID,userID:userID});
-        })
+        callback();
     });
 
     $('#inviteToTeam').click( function() {
@@ -495,7 +541,7 @@ function getApplicationComments(appID) {
         </div>
     </div>
 
-    <div class="container analyticsContainer sectionContainer" hidden>
+    <div class="container analyticsContainer sectionContainer">
         <div class="row-fluid statisticsRow">
             <div class="span3 statBox">
                 <div class="number" id="numForms"></div>
@@ -517,7 +563,7 @@ function getApplicationComments(appID) {
                 <div class="text">Today Applications</div>
             </div>
         </div>
-     </div>
+    </div>
 
     <div class="container teamContainer sectionContainer" hidden>
         <div class="row-fluid teamHeader">
@@ -549,49 +595,22 @@ function getApplicationComments(appID) {
 
     </div>
 
+    <div class="container positionsContainer sectionContainer" hidden>
+
+        <div class="row-fluid positionsHeaderRow">
+            <div class="span3 colTitle">Name</div>
+            <div class="span1 colStatus">Status</div>
+            <div class="span3 colCreator">Creator</div>
+            <div class="span3 colAssignedTo">Assigned To</div>
+            <div class="span2 colOperations">Operatinos</div>
+        </div>
+    </div>
+
     <div class="container applicationsContainer sectionContainer" hidden>
 
-        <div class="row-fluid toolbarRow">
-            <div class="span5">
-                <span class="formsListLabel">Forms:</span>
-            </div>
-
-            <div class="span3">
-                <span class="formsListLabel">Assign To:</span>
-            </div>
-
-        </div>
-
-        <div class="row-fluid toolbarRow">
-            <div class="span5">
-                <div class="formName">
-                    <select id="formsList"></select>
-                </div>
-            </div>
-
-            <div class="span3">
-                <div class="formName">
-                    <select id="assignTo"></select>
-                </div>
-            </div>
-
-            <div class="span4">
-                <button class="btn btn-warning" id="inactiveForm">Inactive Form</button>
-                <button class="btn btn-primary" id="viewForm">View Form</button>
-                <button class="btn btn-success" id="editForm">Edit Form</button>
-            </div>
-        </div>
-
         <div class="row-fluid tableRow">
             <div class="span12">
-                <div id="tableTitle">Application related to <span id="currentFormName">-</span>:</div>
-                <div id="formsTable"></div>
-            </div>
-        </div>
-
-
-        <div class="row-fluid tableRow">
-            <div class="span12">
+                <div id="applicationsTable"></div>
                 <div id="tableTitle">Asked For Comment:</div>
                 <ul id="askedForCommentList"></ul>
             </div>

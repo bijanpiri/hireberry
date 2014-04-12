@@ -14,6 +14,16 @@
     cursor: pointer;
 }
 
+.menu .item-selected {
+    font-weight: 700;
+    color: rgb(55, 145, 38);
+}
+
+.menu .item-selected:hover {
+    border: none;
+}
+
+
 #wrap .container {
     background-color: #f1f1f1;
     position: relative;
@@ -33,7 +43,7 @@
     margin-top: 2em;
 }
 
-#formsTable {
+#applicationsTable {
     overflow: auto;
     border: 2px solid gray;
     border-radius: 4px;
@@ -68,34 +78,49 @@
     line-height: 2em;
 }
 
-#formsList {
-    height: 40px;
-    width: 100%;
-    background-color: transparent;
-    font-size: 0.8em;
-    margin: 0;
-    list-style-type: none;
-    padding: 0.5em 0;
+.positionsList {
 }
 
-#formsList .formTitle {
-    font-size: 0.8em;
+.positionsHeaderRow {
+    font-size: 2em;
+    text-align: center;
+    border-left: 3px solid #555555;
+    background-color: #B9B6B6;
+    padding: 5px 0;
+    line-height: 1.3em;
 }
 
-#formsList .formMode {
+.position {
+    background: #d6d6d6;
+    font-size: 2em;
+    padding: 5px 0;
+    border-left: 3px solid rgb(84, 177, 84);
+    text-align: center;
+    line-height: 1.3em;
+}
+
+.position .positionTitle {
+    font-size: 0.9em;
+}
+
+.position .positionMode {
     color: #9c9c9c;
-    font-size: 0.5em;
+    font-size: 0.6em;
+    font-weight: 700;
+}
+
+.position .positionCreator {
+    font-size: 0.8em;
     padding: 0 0.5em;
 }
 
-#formsList .formCreator {
-    font-size: 0.5em;
+.position .positionAssignee {
+    font-size: 0.8em;
     padding: 0 0.5em;
 }
 
-#formsList .formAssignee {
-    font-size: 0.5em;
-    padding: 0 0.5em;
+.position .colOperations a {
+    margin: 0 2px;
 }
 
 .statBox {

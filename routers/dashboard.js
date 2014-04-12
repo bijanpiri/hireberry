@@ -48,7 +48,7 @@ module.exports.forms = function(req,res){
                     formID:flyer._id,
                     autoAssignedTo: flyer.autoAssignedTo,
                     creator: flyer.creator,
-                    mode: flyer.publishTime ? "(Published)" : "(Draft)"
+                    mode: flyer.publishTime ? "published" : "drafted"
                 }
             } );
 
@@ -68,22 +68,20 @@ module.exports.applications = function (req,res) {
             userId: { index: 1, type: "number", unique:true, friendly:"Num" },
             lastActivity: { index: 2, type: "string", friendly:"Last Activity" },
             applyTime: { index: 3, type: "string", friendly:"Application Date/Time" },
-            name: { index: 4, type: "string", friendly:"Name" },
-            email: { index: 5, type: "string", friendly:"Email" },
-            skills: { index: 6, type: "string", friendly:"Skills"},
-            profiles: { index: 7, type: "string", friendly:"Profiles"},
-            workTime: { index: 8, type: "string", friendly:"Work Time" },
-            workPlace: { index: 9, type: "string", friendly:"Work Place" },
-            resumePath: { index: 10, type: "string", friendly:"Resume" },
-            anythingelse: { index: 11, type: "string", friendly:"Cover Letter" }
+            position: { index: 4, type: "string", friendly:"Position" },
+            name: { index: 5, type: "string", friendly:"Name" },
+            email: { index: 6, type: "string", friendly:"Email" },
+            skills: { index: 7, type: "string", friendly:"Skills"},
+            profiles: { index: 8, type: "string", friendly:"Profiles"},
+            workTime: { index: 9, type: "string", friendly:"Work Time" },
+            workPlace: { index: 10, type: "string", friendly:"Work Place" },
+            resumePath: { index: 11, type: "string", friendly:"Resume" },
+            anythingelse: { index: 12, type: "string", friendly:"Cover Letter" }
         },
         rows: []
     };
 
-    // ToDo: Check whether current user is owner of this forms or not.
-
-    var flyerID = req.query.formID;
-    var teamID = req.query.teamID;
+    var teamID = req.user.teamID;
     var userID = req.user._id;
 
     BTeams.count({_id:teamID,admin:userID}, function(err,count) {
@@ -91,75 +89,96 @@ module.exports.applications = function (req,res) {
             return res.send(204);
 
         if( count > 0 ) {   // User is admin
-            fetchApplications();
+            fetchTeamFlyers( function(teamFlyersID) {
+                fetchApplications(teamFlyersID);
+            })
         }
-        else {
-
-            BFlyers.count( {_id: flyerID, autoAssignedTo:userID}, function(err,count) {
-                if( count > 0 )
-                    fetchApplications();
-                else
-                    res.send(200,submittedForms);
-            });
-
+        else { // User is member
+            fetchAssignedFlyers( function(userFlyersID) {
+                fetchApplications(userFlyersID);
+            })
         }
     });
 
-    function fetchApplications() {
-        BApplications.find( {flyerID: flyerID}, function(err,forms) {
-            if( err )
-                return res.send(303,{error:err});
+    function fetchApplications(flyersID,flyersName) {
+        BApplications.find( {flyerID:{$in:flyersID} })
+            .populate('flyerID')
+            .exec(function(err,forms) {
+                if( err )
+                    return res.send(303,{error:err});
 
-            for( var i=0; i<forms.length; i++ ) {
-                var form = forms[i]._doc;
+                for( var i=0; i<forms.length; i++ ) {
+                    var form = forms[i]._doc;
 
-                // userId
-                form.userId = i+1;
-                form.checked = false;
+                    // userId
+                    form.userId = i+1;
+                    form.checked = false;
+                    form.position = form.flyerID.flyer.description;
 
-                // Skills
-                var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
-                var selectedSkill = '';
-                for (var j=0; j<skills.length; j++)
-                    selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
-                form.skills = selectedSkill;
+                    // Skills
+                    var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
 
-                // Profiles
-                form.profiles = form.profiles || '{}';
-                var profiles = JSON.parse( form.profiles );
-                var selectedProfiles = '';
-                for (var profile in profiles)
-                    if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
-                        selectedProfiles +=
-                            '<span class="spanBox">' +
-                                makeLinkTag(profile,profiles[profile],false) +
-                                '</span>';
-                form.profiles = selectedProfiles;
+                    // Reason: When skills contains just one item, it convert to string automatically
+                    if( typeof(skills) === 'string' )
+                        skills = [skills];
 
-                // Workplace
-                //form.workPlace = (form.workPlace=='fulltime') ?
+                    var selectedSkill = '';
+                    for (var j=0; j<skills.length; j++)
+                        selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
+                    form.skills = selectedSkill;
 
-                // Email
-                form.email = makeLinkTag( form.email, form.email, true );
+                    // Profiles
+                    form.profiles = form.profiles || '{}';
+                    var profiles = JSON.parse( form.profiles );
+                    var selectedProfiles = '';
+                    for (var profile in profiles)
+                        if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
+                            selectedProfiles +=
+                                '<span class="spanBox">' +
+                                    makeLinkTag(profile,profiles[profile],false) +
+                                    '</span>';
+                    form.profiles = selectedProfiles;
 
-                // Apply Date
-                var date = new Date( form.applyTime );
-                form.applyTime = date.toLocaleDateString();
+                    // Workplace
+                    //form.workPlace = (form.workPlace=='fulltime') ?
 
-                // Resume
-                form.resumePath = (form.resumePath==='-') ? '' : makeLinkTag( 'link', form.resumePath, false);
+                    // Email
+                    form.email = makeLinkTag( form.email, form.email, true );
 
-                // Last Activity
-                if( form.activities && form.activities.length > 0 )
-                    form.lastActivity = form.activities[form.activities.length-1]['type'];
-                else
-                    form.lastActivity = 'NEW'
+                    // Apply Date
+                    var date = new Date( form.applyTime );
+                    form.applyTime = date.toLocaleDateString();
 
-                submittedForms.rows.push( form );
-            }
+                    // Resume
+                    form.resumePath = (form.resumePath==='-') ? '' : makeLinkTag( 'link', form.resumePath, false);
 
-            res.send(submittedForms);
-        })
+                    // Last Activity
+                    if( form.activities && form.activities.length > 0 )
+                        form.lastActivity = form.activities[form.activities.length-1]['type'];
+                    else
+                        form.lastActivity = 'NEW'
+
+                    submittedForms.rows.push( form );
+                }
+
+                res.send(submittedForms);
+            })
+    }
+
+    function fetchTeamFlyers(callback) {
+        BFlyers.find({owner:teamID}, function(err,flyers) {
+            var teamFlyersID = flyers.map( function(flyer) { return flyer._id } );
+            var teamFlyersName = flyers.map( function(flyer) { return flyer.name } );
+            callback(teamFlyersID,teamFlyersName)
+        });
+    }
+
+    function fetchAssignedFlyers(callback) {
+        BFlyers.find({autoAssignedTo:userID}, function(err,flyers) {
+            var userFlyersID = flyers.map( function(flyer) { return flyer._id } );
+            var teamFlyersName = flyers.map( function(flyer) { return flyer.name } );
+            callback(userFlyersID,teamFlyersName)
+        });
     }
 }
 

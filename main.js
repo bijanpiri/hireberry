@@ -167,7 +167,7 @@ BInvitations = mongoose.model( 'invitations', {
 })
 
 BApplications = mongoose.model( 'applications', {
-    flyerID: String,
+    flyerID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     name:String,
     email:String,
     skills:[],
@@ -795,6 +795,7 @@ app.get('/api/team/members',function(req,res){
 
         members = team.members.map( function(member) {
             return {
+                _id: member._id,
                 email: member.email,
                 status:'joint',
                 role: (member._id.toString()==team.admin._id.toString() ? 'admin' : 'member')
