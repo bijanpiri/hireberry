@@ -17,11 +17,17 @@ function TextWidget(){
 
     this.widgetDidAdd=function(isNew){
         var id='#'+this.layout.find('.text-widget').attr('id');
+        var widget=this;
+
         this.toolbar
             .attr('data-role','editor-toolbar')
             .attr('data-target',id);
 
         this.setToolbar('.toolbar-text');
+        this.toolbar.delegate('.dropdown-menu *','click',
+            function(){
+                widget.portlet.find('.text-widget').focus();
+            });
 
         this.addToolbarCommand('align',
             function(widget,args)
@@ -44,9 +50,8 @@ function TextWidget(){
                 widget.portlet.
                     find('.text-widget,.text-widget *')
                     .css('font-size',args[1]+'px')
-                    .css('line-height',args[1]+'px');
+                    .css('line-height',args[1]*1.5+'px');
             });
-        var widget=this;
         this.toolbar.find('.bool-combo-list a').click(function(){
             widget.toolbar.find('.bool-combo-text').html($(this).html());
         });

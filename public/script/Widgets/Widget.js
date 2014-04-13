@@ -107,16 +107,15 @@ function Widget(options){
 
     this.addToolbarCommand=function(command,callback){
         var widget=this;
-        this.toolbar
-            .find('[command^='+command+']')
-            .each(function(i,elem){
-                var e=$(elem);
-                var event= e.attr('event') || 'click';
-                e.on(event,function(){
-                    args=$(this).attr('command').split(' ');
-                    callback(widget,args,this);
-                })
-            });
+        var events='click';
+//            'blur focus focusin focusout load resize scroll unload click '
+//                +'dblclick mousedown mouseup mousemove mouseover mouseout mouseenter '
+//                +'mouseleave change select submit keydown keypress keyup error';
+
+        this.toolbar.delegate('[command^='+command+']',events,function(event){
+            if((!this.event && event.type=='click')|| (this.even && this.event.indexOf(event.type)>=0 ))
+                callback(widget,$(this).attr('command').split(' '),this,this.event);
+        });
         return this;
     }
 
