@@ -15,16 +15,36 @@
     }
 
     $(function(){
-        $('#saveButton').click(function(){
-            var datastring= $("#passwordChangingForm").serialize();
+        $('#savePasswordButton').click(function(){
+            var datastring= $("#settingsForm").serialize();
             $.ajax({
-                url: '/profile',
+                url: 'api/setting/password',
                 type: 'post',
                 dataType: 'json',
                 data: datastring,
                 error: function(data){
                     if(data.status != 200)
                         showMessage('Invalid Email Or Password.');
+                    else
+                        showMessage('Saved Successfully');
+                },
+                success: function(data){
+                    showMessage('Saved Successfully');
+                }
+            });
+
+        });
+
+        $('#saveChangesButton').click(function(){
+            var datastring= $("#settingsForm").serialize();
+            $.ajax({
+                url: 'api/setting/basicinfo',
+                type: 'post',
+                dataType: 'json',
+                data: datastring,
+                error: function(data){
+                    if(data.status != 200)
+                        showMessage('Changes didn\'t save');
                     else
                         showMessage('Saved Successfully');
                 },
@@ -42,14 +62,15 @@
     });
 </script>
 
-<form class="settingsForm" action="/profile" method="post" id="passwordChangingForm">
+<form class="settingsForm" action="/profile" method="post" id="settingsForm">
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span12">
+            <div class="span4 offset4">
                 <div class="alert alert-info hide">
                     <span class="msg"></span>
                 </div>
+                <p style="font-size: 2em;margin-top: 2em">Basic Info.</p>
             </div>
         </div>
 
@@ -61,16 +82,22 @@
             </div>
             <div class="span3">
                 <div style="height: 80px">
-                    <input type="text"  name="yourname" placeholder="Your Name" style="margin: 17px 0;width: 180px;" value="What">
+                    <input type="text"  name="displayName" placeholder="Your Name" style="margin: 17px 0;width: 180px;" value="<%=everyauth.user.displayName%>">
                 </div>
             </div>
         </div>
 
         <div class="row-fluid">
             <div class="span4 offset4">
-                <div style="margin-top: 0.5em;font-size: 2.4em;font-size: 2.4em;background-color: #C7C2A3;color: #949079;border-radius: 4px;padding: 10px 20px;width: 260px;">
-                    <%=everyauth.user.email%>
+                <div style="background-color: #C7C2A3;color: #949079;width: 260px;">
+                    <input type="text"  name="email" placeholder="Your Name" style="margin: 17px 0;" value="<%=everyauth.user.email%>">
                 </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span2 offset4">
+                <button type="button" id="saveChangesButton" class="btn btn-success">Save changes</button>
             </div>
         </div>
 
@@ -84,8 +111,8 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span1 offset6">
-                <button type="button" id="saveButton" class="btn btn-success">Save</button>
+            <div class="span2 offset4">
+                <button type="button" id="savePasswordButton" class="btn btn-success">Save new password</button>
             </div>
         </div>
 

@@ -112,6 +112,7 @@ upload.on('error', function (e) {
 //region Mongose Models
 var BUsers = mongoose.model( 'users', {
     email: String,
+    displayName: String,
     password: Buffer,    salt: Buffer,
     twittername:String,
     twitterid:String,
@@ -223,6 +224,7 @@ everyauth.linkedin
                 console.log("User Not Exist ... Creating ");
                 var newUser = BUsers({
                     email: linkedinUserMetadata.emailAddress,
+                    displayName: linkedinUserMetadata.firstName + ' ' + linkedinUserMetadata.lastName,
                     linkedinname:linkedinUserMetadata.lastName,
                     linkedinid:linkedinUserMetadata.id,
                     linkedinAccessToken:accessToken,
@@ -346,6 +348,7 @@ everyauth.password
                         BUsers(
                             {
                                 email: newUserAttributes.email,
+                                displayName: newUserAttributes.email.split('@')[0],
                                 password: dk,
                                 salt:salt
                             }).save(function(err,user){
@@ -470,6 +473,36 @@ app.get('/setting', function(req,res){
         return;
 
     res.render('setting.ejs',{title:'Setting'});
+});
+
+app.post('/api/setting/password', function(req,res) {
+    var userID = req.user._id;
+    var oldpassword = req.body.oldpassword;
+    var newpassword = req.body.newpassword;
+
+    // ToDo: Adding Hash+Salt algorithm here too
+
+    BUsers.update( { _id: userID, password: oldpassword },
+        { password: newpassword }, function (err) {
+            if (err)
+                res.send(401,{});
+            else
+                res.send(200,{});
+        });
+});
+
+app.post('/api/setting/basicinfo', function(req,res) {
+    var userID = req.user._id;
+    var displayName = req.body.displayName;
+    var email = req.body.email;
+
+    BUsers.update( { _id: userID },
+        { displayName: displayName, email: email }, function (err) {
+            if (err)
+                res.send(401,{});
+            else
+                res.send(200,{});
+        });
 });
 
 app.get('/search/users', function(req,res){
@@ -630,10 +663,10 @@ app.get('/flyer/:mode/:tid', function(req,res){
                     owner: req.user.teamID,
                     creator: req.user._id
                 }).save(function (err,newflyer) {
-                    flyerid = newflyer._id;
-                    res.cookie('flyerid',flyerid);
-                    renderNewFlyerView();
-                });
+                        flyerid = newflyer._id;
+                        res.cookie('flyerid',flyerid);
+                        renderNewFlyerView();
+                    });
 
             } else {        // Cookie isn't empty. So laod it
                 BFlyers.count({_id:flyerid}, function(err,count){
@@ -1201,6 +1234,7 @@ app.post('/api/1.0/temptokenOwner', function(req,res) {
     findTempTokenOwner(res,tempToken);
 });
 
+
 app.post('/api/1.0/profile/password', function(req,res) {
     var tempToken = req.body.temptoken;
     var oldpassword = req.body.oldpassword;
@@ -1210,6 +1244,7 @@ app.post('/api/1.0/profile/password', function(req,res) {
 
     changePassword(res,tempToken,oldpassword,newpassword);
 });
+
 
 app.post('/api/1.0/flyer', function(req,res) {
     var tempToken = req.body.temptoken;

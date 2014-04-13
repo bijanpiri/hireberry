@@ -164,14 +164,8 @@
                     <li class="navbar-dropdown">
                         <a href="#" class="dropdown-toggle navbar-button" data-toggle="dropdown">
                             Hello
-                            <% if(everyauth.user.email) { %>
-                            <%= everyauth.user.email %>
-                            <% } else if(everyauth.user.twittername) { %>
-                            <%= everyauth.user.twittername %>
-                            <% } else if(everyauth.user.googlename) { %>
-                            <%= everyauth.user.googlename %>
-                            <% } else if(everyauth.user.linkedinname) { %>
-                            <%= everyauth.user.linkedinname %>
+                            <% if(everyauth.user.displayName) { %>
+                            <%= everyauth.user.displayName %>
                             <% } else { %>
                             <%= 'Dude'%>
                             <% }%>
