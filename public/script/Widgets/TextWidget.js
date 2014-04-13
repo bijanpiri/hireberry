@@ -67,6 +67,13 @@ function TextWidget(){
             widget.toolbar.find('.bool-combo-text').html($(this).html());
         });
 
+        this.toolbar.find('.bool-btn.bool-color-dropdown').hover(function(){
+            if($(this).parent().siblings().hasClass('open'))
+                $(this).addClass('top-left-round');
+            else
+                $(this).removeClass('top-left-round');
+        });
+
         if( this.editMode ){
             $(id).wysiwyg({
                 activeToolbarClass:'bool-active',

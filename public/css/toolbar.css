@@ -512,3 +512,11 @@ Toolbar - WorkType Widget
 {
     background: #B3B3B3;
 }
+.nav-pills a.top-left-round{
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-top-left-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+}
