@@ -198,6 +198,18 @@ everyauth.linkedin
     .consumerKey(LINKEDIN_CONSUMER_KEY)
     .consumerSecret(LINKEDIN_CONSUMER_SECRET)
     .moduleTimeout(60000)
+    .fetchOAuthUser(function (accessToken, accessTokenSecret, params) { // This method is override because we need to get extra info from user profile
+        var promise = this.Promise();
+        this.oauth.get(this.apiHost() + '/people/~:(id,first-name,last-name,emailAddress,headline,location:(name,country:(code)),industry,num-connections,num-connections-capped,summary,specialties,proposal-comments,associations,honors,interests,positions,publications,patents,languages,skills,certifications,educations,three-current-positions,three-past-positions,num-recommenders,recommendations-received,phone-numbers,im-accounts,twitter-accounts,date-of-birth,main-address,member-url-resources,picture-url,site-standard-profile-request:(url),api-standard-profile-request:(url,headers),public-profile-url)', accessToken, accessTokenSecret, function (err, data, res) {
+            if (err) {
+                err.extra = {data: data, res: res}
+                return promise.fail(err);
+            }
+            var oauthUser = JSON.parse(data);
+            promise.fulfill(oauthUser);
+        });
+        return promise;
+    })
     .findOrCreateUser( function (session, accessToken, accessTokenSecret, linkedinUserMetadata) {
         // find or create user logic goes here
         var promise = this.Promise();
