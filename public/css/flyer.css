@@ -17,7 +17,9 @@ Fix Toolbar
     padding-top: 5px;
     padding-bottom: 5px;
 }
-
+.navbar-fixed-top, .navbar-fixed-bottom {
+    z-index: 24000;
+}
 /********
 Whole Paper
 ********/
