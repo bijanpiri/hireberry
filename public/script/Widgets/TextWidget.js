@@ -14,7 +14,7 @@ function TextWidget(){
     this.portlet.on('portlet:layoutChanged', function(e,idx) {
         console.log(idx,idx.old,idx.new);
     });
-
+    var size;
     this.widgetDidAdd=function(isNew){
         var id='#'+this.layout.find('.text-widget').attr('id');
         var widget=this;
@@ -47,19 +47,25 @@ function TextWidget(){
         this.addToolbarCommand('size',
             function(widget,args)
             {
+                size=args[1];
                 widget.portlet.
                     find('.text-widget,.text-widget *')
-                    .css('font-size',args[1]+'px')
-                    .css('line-height',args[1]*1.5+'px');
+                    .css('font-size',size+'px')
+                    .css('line-height',size*1.5+'px');
             });
+        widget.portlet.find('.text-widget').change(
+            function(){
+                alert('change')
+            }
+        );
+        this.toolbar.delegate('.bool-btn','click',function(){
+           widget.portlet.find('.text-widget *')
+               .css('font-size',size+'px')
+               .css('line-height',size*1.5+'px');
+        });
         this.toolbar.find('.bool-combo-list a').click(function(){
             widget.toolbar.find('.bool-combo-text').html($(this).html());
         });
-
-//        this.toolbar.find('.bool-tab').click(function(){
-//            $(this).show();
-//        });
-
 
         if( this.editMode ){
             $(id).wysiwyg({
