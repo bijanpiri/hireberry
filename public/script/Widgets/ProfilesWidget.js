@@ -15,7 +15,7 @@ function ProfilesWidget(){
         var profile=this.portlet;
         if(this.editMode) {
 
-            this.portlet.find('input').not('input[name=personalInfo-item]').prop('readOnly','readOnly').css('cursor','default');
+//            this.portlet.find('input').not('input[name=personalInfo-item]').prop('readOnly','readOnly').css('cursor','default');
         }
         profile.find('input[type=button]').each(function(i,input){
             $(input).click(function(){

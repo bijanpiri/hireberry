@@ -1,0 +1,24 @@
+.bool-glass{
+    width: 30px;
+    height: 40px;
+}
+.bool-input-group{
+    position: relative;
+    display: inline-block;
+}
+.bool-clear-input{
+    background: lightgray;
+    color: #ffffff;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    margin: auto;
+    right: 5px;
+    top: 0;
+    bottom: 0;
+    border-radius: 16px;
+    text-align: center;
+    background-position: -100px -512px;
+
+
+}
