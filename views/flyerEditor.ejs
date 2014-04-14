@@ -368,10 +368,14 @@ function loadPublishPanel() {
     $('.publishRow').show();
     $('#fixToolbar').hide();
 
+    var flyerJson = flyer.flyer2json();
+
     if( existFlyer )
         $('#flyerName2').val( flyer.description );
     else
         $('#flyerName2').val( newFlyerName );
+
+    $('#thanksMessage').val( flyerJson.thanksMessage );
 
     $.get('/api/team/members').done( function(res) {
         teamMembers = res;
@@ -389,8 +393,6 @@ function loadPublishPanel() {
 
     $('#buttonPublishDone').click( function() {
 
-        var flyerJson = flyer.flyer2json();
-
         flyerJson.description = $('#flyerName2').val() ;
         flyerJson.thanksMessage = $('#thanksMessage').val();
 
@@ -406,6 +408,7 @@ function loadPublishPanel() {
 
         $.post( '/flyer/publish', {flyer:flyerJson} ).done(function(data){
             //$.removeCookie('flyerid',{path:'/'});
+            $('#publishFinalMessage').text(data.message);
             loadSharePanel();
         });
 
@@ -719,6 +722,7 @@ function init() {
                     <button id="buttonPublishDone" class="btn btn-success pull-right">Done</button>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -730,7 +734,8 @@ function init() {
         <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
 
             <div class="row-fluid controls-row">
-                <div class="span12">
+                <div class="span12" style="font-size: 2em;">
+                    <p id="publishFinalMessage" style="color: #9c9c9c;text-align: center;border: 2px solid #9c9c9c;padding: 10px;margin-bottom: 30px;border-radius: 4px;background-color: #DADADA;"></p>
                     <p id="flyerName3">Title</p>
                 </div>
             </div>

@@ -141,7 +141,8 @@ BFlyers = mongoose.model( 'flyers', {
     publishTime: String,
     disqusShortname: String,
     dbToken:String,
-    autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
+    autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'},
+    askedForPublish: Boolean
 });
 
 BComments = mongoose.model( 'comments', {
@@ -607,14 +608,30 @@ app.get('/flyer/publish/:flyerid', function(req,res){
 
 app.post('/flyer/publish', function(req,res){
 
-    var flyer = req.body.flyer;
+    if( !checkUser(req,res) )
+        return;
 
-    BFlyers.update( {_id:flyer.flyerid}, {$set:{flyer:flyer, publishTime:new Date()}}, {upsert:true}, function(err){
-        if(!err){
-            res.send(200);
-        }else
-            res.send(500,{result:'DB Error'});
-    });
+    var flyer = req.body.flyer;
+    var userID = req.user._id;
+    var teamID = req.user.teamID;
+
+    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+        if(count>0) { // User is admin
+            saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:new Date()}, 'Position is published.')
+        }
+        else {
+            saveInDatabase({flyer:flyer, askedForPublish:true, publishTime:''}, 'Ask For Pusblish request is sent.');
+        }
+    })
+
+    function saveInDatabase(param,successMessage) {
+        BFlyers.update({_id:flyer.flyerid}, param,{upsert:true}, function(err){
+                if(!err){
+                    res.send(200,{message:successMessage});
+                }else
+                    res.send(500,{result:'DB Error'});
+            });
+    }
 
 });
 

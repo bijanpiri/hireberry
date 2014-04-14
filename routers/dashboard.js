@@ -29,7 +29,7 @@ module.exports.forms = function(req,res){
         if( count > 0 ) // Admin
             findFlyers({owner: teamID}); // ToDo: And is not the draft-mode form which is create by user
         else    // Team member
-            findFlyers({owner: teamID, autoAssignedTo:userID});
+            findFlyers({owner: teamID, $or:[{creator:userID}, {autoAssignedTo:userID}]});
     });
 
     function findFlyers(query) {
@@ -42,13 +42,19 @@ module.exports.forms = function(req,res){
             // ToDo: Make reducing async
             var forms = flyers.map( function(flyer) {
                 var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
+                var currentMode;
+
+                if( flyer.askedForPublish == true )
+                    currentMode = 'Asked For Publish';
+                else
+                    currentMode = flyer.publishTime ? "published" : "drafted";
 
                 return {
                     formName:description,
                     formID:flyer._id,
                     autoAssignedTo: flyer.autoAssignedTo,
                     creator: flyer.creator,
-                    mode: flyer.publishTime ? "published" : "drafted"
+                    mode: currentMode
                 }
             } );
 
