@@ -398,20 +398,6 @@ app.listen(port, function() {
 module.exports = app;
 //endregion
 
-//region Hiring Form
-app.get('/job/dropboxAuth', routerForm.dropboxAuthentication );
-app.get('/liprofile/:q', routerForm.findLinkedInProfile )
-app.get('/gravatar/:email', routerForm.findGravatarProfile )
-app.get('/twprofile/:q', routerForm.findTwitterProfile )
-app.post('/apply', routerForm.apply );
-app.get('/dashboard', routerDashboard.showDashboard );
-app.get('/api/forms', routerDashboard.forms );
-app.get('/api/applications', routerDashboard.applications );
-app.post('/api/applications/:applicationID', routerDashboard.updateApplication );
-app.get('/api/applications/stat', routerDashboard.statisticalInfo )
-//endregion
-
-
 //region Application Routers
 
 // region General
@@ -530,6 +516,19 @@ app.get('/search/users', function(req,res){
 });
 
 // endregion
+
+//region Hiring Form
+app.get('/job/dropboxAuth', routerForm.dropboxAuthentication );
+app.get('/liprofile/:q', routerForm.findLinkedInProfile )
+app.get('/gravatar/:email', routerForm.findGravatarProfile )
+app.get('/twprofile/:q', routerForm.findTwitterProfile )
+app.post('/apply', routerForm.apply );
+app.get('/dashboard', routerDashboard.showDashboard );
+app.get('/api/forms', routerDashboard.forms );
+app.get('/api/applications', routerDashboard.applications );
+app.post('/api/applications/:applicationID', routerDashboard.updateApplication );
+app.get('/api/applications/stat', routerDashboard.statisticalInfo )
+//endregion
 
 // region Flyers
 app.get('/flyer/new',function(req,res){
@@ -826,7 +825,6 @@ app.post('/api/user/comment',function(req,res){
     })
 });
 
-
 app.get('/api/team/members',function(req,res){
     if( !checkUser(req,res) )
         return;
@@ -860,6 +858,7 @@ app.get('/api/team/members',function(req,res){
             }
 
             res.send(200,{
+                teamID: team._id,
                 teamName: team.name,
                 teamAdminEmail: team.admin.email,
                 members: members
@@ -867,6 +866,38 @@ app.get('/api/team/members',function(req,res){
         });
 
     })
+});
+
+app.get('/team/:teamID/jobs', function(req,res) {
+    res.render('hubpage.ejs',{title:'Hubpage',teamID:req.params.teamID});
+})
+
+app.get('/api/team/:teamID/positions',function(req,res){
+
+    var teamID = req.params.teamID;
+    var teamName = '';
+
+    BFlyers.find({owner:teamID, publishTime:{$not:{$eq:''}}})
+        .populate('owner')
+        .exec(function(err,positions){
+            if(err)
+                return res.send(305);
+
+            var positionsList = positions.map( function(position) {
+                return {
+                    id: position._id,
+                    title: position.flyer.description
+                }
+            })
+
+            BTeams.findOne({_id:teamID}, function(err,team){
+                res.send(200, {
+                    teamName: team.name ,
+                    positions: positionsList
+                });
+            })
+
+        })
 });
 
 // endregion

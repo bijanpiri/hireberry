@@ -490,6 +490,7 @@ function getAvatar(email) {
 
 function getTeamInfo(callback) {
     $.get('/api/team/members').done( function(res){
+        $('#teamJobsPage').attr('href','/team/' +  res.teamID + '/jobs')
         $('#teamName').text( res.teamName );
         $('#teamAdmin').text( res.teamAdminEmail );
 
@@ -624,6 +625,10 @@ function getApplicationComments(appID) {
 
     <div class="container positionsContainer sectionContainer" hidden>
 
+        <div style="padding-bottom: 40px; font-size: 1.7em;">
+            <a id="teamJobsPage">Jobs page</a>
+        </div>
+
         <div class="row-fluid positionsHeaderRow">
             <div class="span3 colTitle">Name</div>
             <div class="span1 colStatus">Status</div>
@@ -631,6 +636,7 @@ function getApplicationComments(appID) {
             <div class="span3 colAssignedTo">Assigned To</div>
             <div class="span2 colOperations">Operatinos</div>
         </div>
+
     </div>
 
     <div class="container applicationsContainer sectionContainer" hidden>

@@ -1,0 +1,61 @@
+<% layout('layout') -%>
+
+<script>
+    var teamID = '<%=teamID%>';
+
+            $(document).ready( function() {
+
+
+                $.get('/api/team/' +  teamID + '/positions').done( function(res) {
+
+                    $('.caption').text( res.teamName + '\'s Jobs' );
+
+
+                    res.positions.forEach( function(position) {
+                       var applyButtonObj = $('<a>').addClass('btn btn-success position-apply')
+                               .attr('href','/flyer/embeded/' + position.id)
+                               .text('Apply Now');
+
+                        var positioDescObj = $('<div>').addClass('position-description')
+                                .text( position.title);
+
+                        var positionObj = $('<div>').addClass('position')
+                                .append( positioDescObj )
+                                .append( applyButtonObj );
+
+                        $('.positions').append( positionObj )
+
+                    });
+                })
+            });
+</script>
+
+<style>
+    .caption {
+        font-size: 2em;
+    }
+
+    .positions {
+        font-size: 1.8em;
+    }
+
+    .position {
+        padding: 20px;
+        border-radius: 4px;
+        background-color: #fff;
+        margin: 10px 0;
+    }
+
+    .position-apply {
+        margin-top: 2em;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="span6 offset3">
+            <h2 class="caption"></h2>
+            <div class="positions"></div>
+        </div>
+    </div>
+</div>
