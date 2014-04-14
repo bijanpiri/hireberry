@@ -614,15 +614,21 @@ app.post('/flyer/publish', function(req,res){
     var flyer = req.body.flyer;
     var userID = req.user._id;
     var teamID = req.user.teamID;
+    var saveAsDraft = Boolean( req.body.saveAsDraft );
 
-    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
-        if(count>0) { // User is admin
-            saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:new Date()}, 'Position is published.')
-        }
-        else {
-            saveInDatabase({flyer:flyer, askedForPublish:true, publishTime:''}, 'Ask For Pusblish request is sent.');
-        }
-    })
+    if(saveAsDraft==='true') {
+        saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:''}, 'Position is saved as draft.')
+    }
+    else {
+        BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+            if(count>0) { // User is admin
+                saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:new Date()}, 'Position is published.')
+            }
+            else {
+                saveInDatabase({flyer:flyer, askedForPublish:true, publishTime:''}, 'Ask For Pusblish request is sent.');
+            }
+        });
+    }
 
     function saveInDatabase(param,successMessage) {
         BFlyers.update({_id:flyer.flyerid}, param,{upsert:true}, function(err){

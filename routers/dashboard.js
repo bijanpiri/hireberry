@@ -27,7 +27,12 @@ module.exports.forms = function(req,res){
             return res.send(204);
 
         if( count > 0 ) // Admin
-            findFlyers({owner: teamID}); // ToDo: And is not the draft-mode form which is create by user
+        // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
+            findFlyers({owner: teamID, $or:
+                [{publishTime:{$not:{$eq:''}}},
+                    {creator: userID},
+                    {askedForPublish:true}]
+            });
         else    // Team member
             findFlyers({owner: teamID, $or:[{creator:userID}, {autoAssignedTo:userID}]});
     });

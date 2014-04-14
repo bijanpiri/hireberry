@@ -391,8 +391,16 @@ function loadPublishPanel() {
         console.log(res);
     });
 
-    $('#buttonPublishDone').click( function() {
+    $('#buttonPublishSaveAsDraft').click( function() {
+        saveAsDraftOrPublish(true);
+    });
 
+
+    $('#buttonPublishDone').click( function() {
+        saveAsDraftOrPublish(false);
+    });
+
+    function saveAsDraftOrPublish(saveAsDraft) {
         flyerJson.description = $('#flyerName2').val() ;
         flyerJson.thanksMessage = $('#thanksMessage').val();
 
@@ -406,13 +414,15 @@ function loadPublishPanel() {
             $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
 
 
-        $.post( '/flyer/publish', {flyer:flyerJson} ).done(function(data){
-            //$.removeCookie('flyerid',{path:'/'});
+        $.post( '/flyer/publish', {saveAsDraft:saveAsDraft,flyer:flyerJson} ).done(function(data){
+
+            if(saveAsDraft==false)
+                ;//$.removeCookie('flyerid',{path:'/'});
+
             $('#publishFinalMessage').text(data.message);
             loadSharePanel();
         });
-
-    });
+    }
 }
 
 function loadSharePanel() {
@@ -719,6 +729,7 @@ function init() {
 
             <div class="row-fluid">
                 <div class="span12">
+                    <button id="buttonPublishSaveAsDraft" class="btn btn-danger pull-right">Save as draft</button>
                     <button id="buttonPublishDone" class="btn btn-success pull-right">Done</button>
                 </div>
             </div>
