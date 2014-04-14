@@ -971,14 +971,26 @@ app.post('/api/user/team/join', function(req,res){
     var userID = req.user._id;
     var oldTeamID = req.user.teamID;
     var newTeamID = req.body.teamID;
+    var invitationID = req.body.invitationID;
+    var answer = req.body.answer;
 
-    changeRoleInTeam( userID, oldTeamID, 'user', function(err) {
-        leaveTeam( userID, oldTeamID, function(err) {
-            joinToTeam( userID, newTeamID, function(err) {
-                res.send(200);
-            });
-        })
+    BInvitations.remove( {_id:invitationID} ,function() {
+
+        if( answer === 'accept' ) {
+            changeRoleInTeam( userID, oldTeamID, 'user', function(err) {
+                leaveTeam( userID, oldTeamID, function(err) {
+                    joinToTeam( userID, newTeamID, function(err) {
+                        res.send(200);
+                    });
+                })
+            })
+        }
+        else {
+            res.send(200);
+        }
+
     })
+
 
 });
 
