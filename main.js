@@ -466,17 +466,48 @@ app.post('/api/setting/password', function(req,res) {
     var oldpassword = req.body.oldpassword;
     var newpassword = req.body.newpassword;
 
-    // ToDo: Adding Hash+Salt algorithm here too
+//    ToDo: Adding Hash+Salt algorithm here too
+//    var promise = this.Promise();
+    BUsers.findOne({ email: req.user.email}, function (err, user) {
+        if (err)
+            return promise.fulfill([err]);
 
-    BUsers.update( { _id: userID, password: oldpassword },
-        { password: newpassword }, function (err) {
-            if (err)
-                res.send(401,{});
-            else
-                res.send(200,{});
-        });
+        console.log(user);
+
+        if (!user)
+            return promise.fulfill(['invalid user']);
+        if(!user.password || !user.salt)
+            return promise.fulfill(['Server authentication error.']);
+
+        crypto.pbkdf2( oldpassword, user.salt, hashIteration, keySize,
+            function(err, dk) {
+                var eq=true;
+                var key=user.password;
+                for(var i=0;i<keySize;i++) eq &= key[i] == dk[i];
+                if(!eq)
+                    res.send(403,'Invalid password.');
+                else{
+                    var salt = crypto.randomBytes(128).toString('base64');
+                    crypto.pbkdf2( newpassword, salt, hashIteration, keySize,
+                        function(err, dk) {
+                            BUsers.update(
+                                {email:user.email},
+                                {$set:{salt:salt,password: dk}},
+                                function (err, numberAffected, raw) {
+                                    if (err)    return handleError(err);
+                                    else{
+                                        console.log('>>>>>>>>>>Password changed successfully for '+user.email);
+                                        res.send(200,user);
+                                    }
+                                });
+                        }
+                    );
+                }
+            }
+        );
+
+    });
 });
-
 app.post('/api/setting/basicinfo', function(req,res) {
     var userID = req.user._id;
     var displayName = req.body.displayName;
@@ -966,7 +997,6 @@ function login(res,email,password){
             crypto.randomBytes(48, function(ex, buf) {
                 var token = buf.toString('hex');
                 user.tempToken = token;
-
                 BUsers.update(
                     {email:email,password:password},
                     {$set:{tempToken:token}},
