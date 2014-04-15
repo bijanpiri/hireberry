@@ -19,7 +19,7 @@ module.exports.showDashboard = function (req,res) {
 
 // Return all the created forms (template)
 module.exports.forms = function(req,res){
-    var teamID = req.query.teamID;
+    var teamID = req.user.teamID;
     var userID = req.user._id;
 
     BTeams.count({_id:teamID,admin:userID}, function(err,count) {

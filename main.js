@@ -887,7 +887,7 @@ app.get('/api/team/members',function(req,res){
     var members = [];
 
     BTeams.findOne({_id:teamID}).populate('members admin').exec( function(err,team){
-        if(err)
+        if(err || !team)
             return res.send(305);
 
         members = team.members.map( function(member) {
