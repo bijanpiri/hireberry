@@ -1330,7 +1330,6 @@ app.post('/api/1.0/temptokenOwner', function(req,res) {
     findTempTokenOwner(res,tempToken);
 });
 
-
 app.post('/api/1.0/profile/password', function(req,res) {
     var tempToken = req.body.temptoken;
     var oldpassword = req.body.oldpassword;
@@ -1340,7 +1339,6 @@ app.post('/api/1.0/profile/password', function(req,res) {
 
     changePassword(res,tempToken,oldpassword,newpassword);
 });
-
 
 app.post('/api/1.0/flyer', function(req,res) {
     var tempToken = req.body.temptoken;
