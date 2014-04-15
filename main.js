@@ -933,7 +933,7 @@ app.get('/api/team/:teamID/positions',function(req,res){
     var teamID = req.params.teamID;
     var teamName = '';
 
-    BFlyers.find({owner:teamID, publishTime:{$not:{$eq:''}}})
+    BFlyers.find({owner:teamID, publishTime:{$ne:''}})
         .populate('owner')
         .exec(function(err,positions){
             if(err)

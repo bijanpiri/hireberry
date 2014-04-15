@@ -29,7 +29,7 @@ module.exports.forms = function(req,res){
         if( count > 0 ) // Admin
         // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
             findFlyers({
-                owner: teamID, 
+                owner: teamID,
                 $or:[
                     {publishTime:{$ne:''}},
                     {creator: userID},
