@@ -107,6 +107,7 @@ function TextWidget(){
     this.deserialize = function(data){
 
         this.toolbar.find('[command="align '+data.align+'"]').addClass('bool-active');
+        this.toolbar.find('.bool-current-color').css('background',data.foreColor);
 
         if(data.headline){
             this.portlet.parent().find('.headline').attr('checked','checked');
@@ -119,6 +120,7 @@ function TextWidget(){
             .css('color',data.foreColor)
             .css('font-size',data.fontSize)
             .css('line-height',data.fontSize);
+
     }
 
 }

@@ -13,6 +13,7 @@ function SeperatorWidget(){
         this.color = color;
         this.portlet.find('.flatSection pre').css( 'color', color);
         this.portlet.find('.flatSection hr').css( 'border-color', color);
+        this.toolbar.find('.bool-current-color').css('background',color);
     }
 
     function setText(text) {
@@ -31,15 +32,19 @@ function SeperatorWidget(){
             }
         })(this))
 
-        this.toolbar.find('input[type=color]').change( (function(widget) {
-            return function(e) {
-                setColor.call(widget, $(e.target).val() )
-            }
-        })(this))
+
+        this.toolbar.find('.bool-color-picker:first').ColorPicker();
+        this.addToolbarCommand('color',
+            function(widget,args)
+            {
+                widget.color = args[1];
+                widget.portlet.find('.flatSection pre').css( 'color', args[1]);
+                widget.portlet.find('.flatSection hr').css( 'border-color', args[1]);
+                widget.toolbar.find('.bool-current-color').css('background',args[1]);
+            })
     }
 
     this.getSettingPanel = function () { return $('<div>') }
-
     this.serialize = function() {
         return {
             text: this.text,
@@ -55,9 +60,8 @@ function SeperatorWidget(){
     this.deserialize = function( content ) {
         setColor.call( this, content.color );
         setText.call( this, content.text );
-
         this.toolbar.find('input[name=text]').val(content.text)
-        this.toolbar.find('input[type=color]').val(content.color)
+
     };
 }
 SeperatorWidget.prototype=new Widget();

@@ -1259,9 +1259,31 @@ function init() {
     </div>
 
     <div class="toolbar-separatorWidget">
+       <div class="pull-left">
         <span  id="toolbar-labelSeparator" >Section Title</span>
         <input type="text" id="toolbar-inputTextSeparator" name="text" placeholder="More Info.">
-        <input type="color" name="seperatorColor" style="width: 28px; height: 28px; padding: 2px ">
+       </div>
+        <ul class="nav nav-pills pull-left">
+            <li class="dropdown btn-group ">
+                <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <span class="bool-current-color"></span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker" >
+
+                </ul>
+
+            </li>
+            <li class="dropdown btn-group bool-tab-btn">
+                <a class="bool-tab dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <i class="bool-icon bool-icon-recent"></i>
+                    <span class="bool-tab-text">Recent Colors</span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
+                    <li><div class="bool-no-recent">No item has been selected</div></li>
+                </ul>
+            </li>
+        </ul>
+
     </div>
 
     <div class="toolbar-profileWidget">
