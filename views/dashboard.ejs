@@ -19,6 +19,28 @@ var forms = [];
 google.load("visualization", "1");
 
 $(function(){
+
+    refresh();
+
+    $('#activitiesModal').dialog({
+        resizable: false,
+        autoOpen: false,
+        modal: true,
+        title: "Activities",
+        width: 800,
+        height: 450
+    });
+
+    $('.menu .item').click( function(e) {
+        var sectionContainerClass = '.' + $(e.target).attr('forContainer');
+        $('.sectionContainer').hide();
+        $(sectionContainerClass).show();
+        $('.menu .item').removeClass('item-selected');
+        $(e.target).addClass('item-selected');
+    })
+});
+
+function refresh() {
     // First fill Forms list, then fill table according to current selected form
     fillPositionsList( function() {
         getTeamInfo( function() {
@@ -40,47 +62,12 @@ $(function(){
     getInvitatinos();
     fillAskedForComments();
 
-    $('#formsList').change( function() {
-        fillTable();
-        selectAssignedToFromList();
-    });
-
-    $('#viewForm').click( function() {
-        var flyerid = $('#formsList :selected').attr('id')
-        window.open('/flyer/view/0?flyerid=' + flyerid);
-    });
-
-    $('#editForm').click( function() {
-        var flyerid = $('#formsList :selected').attr('id')
-        window.open('/flyer/edit/0?flyerid=' + flyerid);
-    });
-
-    $('#inactiveForm').click( function() {
-        var flyerid = $('#formsList :selected').attr('id')
-        $.post('/flyer/inactive', {flyerID:flyerid}).done(function(){
-            fillFormsList();
-        });
-    });
-
-    $('#activitiesModal').dialog({
-        resizable: false,
-        autoOpen: false,
-        modal: true,
-        title: "Activities",
-        width: 800,
-        height: 450
-    });
-
-    $('.menu .item').click( function(e) {
-        var sectionContainerClass = '.' + $(e.target).attr('forContainer');
-        $('.sectionContainer').hide();
-        $(sectionContainerClass).show();
-        $('.menu .item').removeClass('item-selected');
-        $(e.target).addClass('item-selected');
-    })
-});
+    setTimeout( refresh, 30000 );
+}
 
 function fillAskedForComments() {
+
+    $('#askedForCommentList').html('');
 
     $.get('/api/user/application/askedForComment').done( function(resApp){
 
@@ -234,11 +221,11 @@ function fillAskedForComments() {
 
 function fillPositionsList( callback ) {
 
-    $('.positionsList').html('');
-
     $.get('/api/forms?teamID=' + teamID).done( function(res) {
 
         forms = res.forms;
+
+        $('.positionsContainer .position').remove();
 
         res.forms.forEach( function(form) {
             var row = $('.positionsContainer .positionsHeaderRow')
