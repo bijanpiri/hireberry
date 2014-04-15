@@ -41,7 +41,7 @@ module.exports.forms = function(req,res){
 
         BFlyers.find(query).populate('creator owner autoAssignedTo').exec( function(err,flyers) {
             if( err )
-                return res.send(502);
+                return res.send(502,{error:err});
 
             // Reduce
             // ToDo: Make reducing async

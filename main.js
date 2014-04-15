@@ -620,6 +620,8 @@ app.post('/flyer/publish', function(req,res){
         saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:''}, 'Position is saved as draft.')
     }
     else {
+        res.cookie('flyerid','');
+
         BTeams.count({_id:teamID,admin:userID}, function(err,count) {
             if(count>0) { // User is admin
                 saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:new Date()}, 'Position is published.')

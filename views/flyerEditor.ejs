@@ -416,11 +416,6 @@ function loadPublishPanel() {
 
 
         $.post( '/flyer/publish', {saveAsDraft:saveAsDraft,flyer:flyerJson} ).done(function(data){
-
-            if(saveAsDraft==false)
-                ;//$.removeCookie('flyerid',{path:'/'});
-                //$.cookie("name", null);
-
             $('#publishFinalMessage').text(data.message);
             loadSharePanel();
         });
