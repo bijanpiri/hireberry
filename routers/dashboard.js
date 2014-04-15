@@ -28,10 +28,13 @@ module.exports.forms = function(req,res){
 
         if( count > 0 ) // Admin
         // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
-            findFlyers({owner: teamID, $or:
-                [{publishTime:{$not:{$eq:''}}},
+            findFlyers({
+                owner: teamID, 
+                $or:[
+                    {publishTime:{$ne:''}},
                     {creator: userID},
-                    {askedForPublish:true}]
+                    {askedForPublish:true}
+                ]
             });
         else    // Team member
             findFlyers({owner: teamID, $or:[{creator:userID}, {autoAssignedTo:userID}]});
