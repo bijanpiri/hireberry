@@ -372,3 +372,8 @@
 
 #askedForCommentList li button {
 }
+
+.applicationsPreview {
+    font-size: 1.7em;
+    line-height: 2em;
+}

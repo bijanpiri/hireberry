@@ -22,6 +22,15 @@ $(function(){
 
     refresh();
 
+    $('#applicationPreview').dialog({
+        resizable: false,
+        autoOpen: false,
+        modal: true,
+        title: "Application Preview",
+        width: 400,
+        height: 600
+    });
+
     $('#activitiesModal').dialog({
         resizable: false,
         autoOpen: false,
@@ -103,7 +112,9 @@ function fillAskedForComments() {
 
             var titleObj = $('<div>')
                     .text('You are asked to put your comment about ')
-                    .append( $('<a>').attr('href', '/applications/embeded/' + a4c.applicationID._id).text('this application') );
+                    .append( $('<a>').attr('applicationID',a4c.applicationID._id).text('this application').click( function() {
+                        showApplicationPreview( $(this).attr('applicationID') );
+                    }))
 
             var textAreaObj = $('<textarea>')
                     .attr('id','comment_app_' + a4c.applicationID._id)
@@ -216,6 +227,55 @@ function fillAskedForComments() {
                     .append(acceptBtnObj)
                     .append(declineBtnObj) );
         }
+    }
+
+    function showApplicationPreview(applicationID) {
+
+        $('#applicationPreview').html('');
+
+        $.get('/api/application/' + applicationID).done( function(app) {
+            app = app[0];
+
+            var workTime = app.workTime;
+            var workPlace = app.workPlace;
+            var profiles = app.profiles.length ? JSON.parse(app.profiles) : '';
+            var coverLetter = app.anythingelse;
+            var resumePath = app.resumePath;
+            var name = app.name;
+            var email = app.email;
+            var skills = app.skills.length ? JSON.parse(app.skills) : '';
+
+            var profielsArray = [];
+            for( var profile in profiles )
+                profielsArray += '<br>' + profile + ':' + profiles[profile];
+            profiles = profielsArray;
+
+            var workTimeObj = $('<div>').text('Work Time: ' + workTime);
+            var workPlaceObj = $('<div>').text('Work Place: ' + workPlace);
+            var profilesObj = $('<div>').html('Profiles: ' + profiles);
+            var coverLetterObj = $('<div>').text('Cover Letter: ' + coverLetter);
+            var resumePathObj = $('<div>').text('Resume Path: ' + resumePath);
+            var nameObj = $('<div>').text('Name: ' + name);
+            var emailObj = $('<div>').text('Email: ' + email);
+            var skillsObj = $('<div>').text('Skills: ' + skills);
+
+
+            var previewObj = $('<div>').addClass('applicationsPreview')
+                    .append(nameObj)
+                    .append(emailObj)
+                    .append(workTimeObj)
+                    .append(workPlaceObj)
+                    .append(profilesObj)
+                    .append(coverLetterObj)
+                    .append(resumePathObj)
+                    .append(skillsObj)
+
+
+            $('#applicationPreview').append( previewObj )
+        });
+
+
+        $('#applicationPreview').dialog('open');
     }
 }
 
@@ -727,4 +787,7 @@ function getApplicationComments(appID) {
             </div>
         </div>
     </div>
+</div>
+
+<div id="applicationPreview">
 </div>
