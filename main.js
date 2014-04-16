@@ -901,7 +901,22 @@ app.get('/api/application/comments',function(req,res){
     var userID = req.user._id;
     var applicationID = req.query.applicationID;
 
-    getComments(applicationID, function(err,comments) {
+    getComments(applicationID, 'applciation', function(err,comments) {
+        res.send(200,{comments:comments});
+    })
+});
+
+
+app.get('/api/form/comments',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    // ToDo: (Security) Check wheter user can access this applicationID or no.
+    var userID = req.user._id;
+    var formID = req.query.formID;
+
+    getComments(formID, 'form', function(err,comments) {
         res.send(200,{comments:comments});
     })
 });
@@ -1306,8 +1321,10 @@ function setComment(userID,askedForCommentID,comment,callback) {
     })
 }
 
-function getComments(applicationID,callback) {
-    BComments.find({applicationID:applicationID})
+function getComments(entityID ,entityType, callback) {
+    var q = (entityType==='form') ? {formID:entityID} : {applicationID:entityID};
+
+    BComments.find(q)
         .populate('commenter')
         .exec(function(err,comments) {
             callback(err,comments);

@@ -40,6 +40,15 @@ $(function(){
         height: 450
     });
 
+    $('#positionComments').dialog({
+        resizable: false,
+        autoOpen: false,
+        modal: true,
+        title: "Activities",
+        width: 400,
+        height: 600
+    });
+
     $('#teamNameChange').click( function() {
         var newName = prompt('Enter new name:');
         $.post('/api/team/name',{newName:newName}).done( function() {
@@ -349,10 +358,13 @@ function fillPositionsList( callback ) {
 
             var deleteBtnObj = $('<a>')
                     .addClass('btn btn-mini btn-danger')
-                    .attr('href','')
-                    .text('remove')
+                    .attr('formID',form.formID)
+                    .text('comments')
                     .click( function() {
-                        window.open('/flyer/remove?flyerid=' + form.formID);
+                        //window.open('/flyer/remove?flyerid=' + form.formID);
+                        $('#positionComments').dialog('open')
+                        var formID = $(this).attr('formID')
+                        getPositionComments( formID );
                     });
 
             row.find('.colTitle').html('').append(titleObj);
@@ -677,7 +689,7 @@ function selectAssignedToFromList() {
 }
 
 function getApplicationComments(appID) {
-    $('.comments').html('');
+    $('#activitiesModal .comments').html('');
 
     $.get('/api/application/comments', {applicationID:appID}).done( function(res){
         res.comments.forEach( function(comment) {
@@ -691,7 +703,23 @@ function getApplicationComments(appID) {
             $('.comments').append( commentObj );
         });
     });
+}
 
+function getPositionComments(appID) {
+    $('#positionComments .comments').html('');
+
+    $.get('/api/form/comments', {formID:appID}).done( function(res){
+        res.comments.forEach( function(comment) {
+            var commentObj = $('<div>').addClass('comment');
+            commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
+            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
+            commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s comment:") );
+            commentObj.append( $('<div>').addClass('commentBody').text(comment.comment) );
+            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
+
+            $('#positionComments .comments').append( commentObj );
+        });
+    });
 }
 
 </script>
@@ -737,12 +765,12 @@ function getApplicationComments(appID) {
             <div class="span4">
                 <span id="teamNameTitle">Team:</span>
                 <span id="teamName"></span>
-                <span id="teamNameChange" hide><a>Change</a></span>
+                <span id="teamNameChange" hidden><a>Change</a></span>
             </div>
             <div class="span4">
                 <span id="teamAdminTitle">Admin:</span>
                 <span id="teamAdmin"></span>
-                <span id="teamAdminChange" hide><a>Change</a></span>
+                <span id="teamAdminChange" hidden><a>Change</a></span>
             </div>
         </div>
 
@@ -795,6 +823,82 @@ function getApplicationComments(appID) {
             </div>
         </div>
     </div>
+
+    <div class="container billingContainer sectionContainer" hidden>
+        <div class="row-fluid tableRow">
+            <div class="offset3 span2">
+                <div class="plan">
+                    <div class="planTitle">1 Month</div>
+                    <div class="planDescription">
+                        <ul>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="planButton">
+                        <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                                data-button="subscribe"
+                                data-name="booltin - 1 month subscribtion"
+                                data-amount="15"
+                                data-currency="USD"
+                                data-recurrence="2"
+                                data-period="M"
+                                data-env="sandbox"></script>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span2">
+                <div class="plan">
+                    <div class="planTitle">3 Month</div>
+                    <div class="planDescription">
+                        <ul>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="planButton">
+                        <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                                data-button="subscribe"
+                                data-name="booltin - 1 month subscribtion"
+                                data-amount="15"
+                                data-currency="USD"
+                                data-recurrence="2"
+                                data-period="M"
+                                data-env="sandbox"></script>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span2">
+                <div class="plan">
+                    <div class="planTitle">12 Month</div>
+                    <div class="planDescription">
+                        <ul>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="planButton">
+                        <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                                data-button="subscribe"
+                                data-name="booltin - 1 month subscribtion"
+                                data-amount="15"
+                                data-currency="USD"
+                                data-recurrence="2"
+                                data-period="M"
+                                data-env="sandbox"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 
 <div id="activitiesModal">
@@ -821,4 +925,8 @@ function getApplicationComments(appID) {
 </div>
 
 <div id="applicationPreview">
+</div>
+
+<div id="positionComments">
+    <div class="comments"></div>
 </div>
