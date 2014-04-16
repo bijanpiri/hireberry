@@ -50,7 +50,7 @@ function refresh() {
                 if( teamMembers[i].status === 'joint') {
                     var option = $('<option>')
                             .attr('userID',teamMembers[i]._id)
-                            .text(teamMembers[i].email);
+                            .text(teamMembers[i].displayName);
                     $('.colAssignedTo select').append( option.clone() );
                 }
             }
@@ -242,12 +242,12 @@ function fillPositionsList( callback ) {
 
             var creatorObj = $('<span>')
                     .addClass('positionCreator')
-                    .text( form.creator.email);
+                    .text( form.creator.displayName);
 
             var assigneeObj = $('<select>')
                     .attr('formID', form.formID)
                     .addClass('positionAssignee')
-                    .text((form.autoAssignedTo ? form.autoAssignedTo.email : 'No One') )
+                    .text((form.autoAssignedTo ? form.autoAssignedTo.displayName : 'No One') )
                     .change( function(){
                         var userID = $(this).find(':selected').attr('userID');
                         var formID = $(this).attr('formID');
@@ -361,26 +361,26 @@ function getStat() {
 
 function rowClicked(data) {
 
-    var activities = $('<div>').addClass('activities');
+    var activitiesObj = $('<div>').addClass('activities');
     var appID = data.row._id;
+    var activities = data.row.activities;
     var timelineRows = [];
 
-    for( var i=0; i<data.row.activities.length; i++ ) {
-        var activity = data.row.activities[i];
-        var dateTime = new Date(activity['timestamp']);
+    for( var i=0; i<activities.length; i++ ) {
 
+        var activity = activities[i];
+        var dateTime = new Date(activity['timestamp']);
         var activityItem = $('<div>').addClass('activity');
         var timeStamp = $('<div>').addClass('activity-timestamp').text( dateTime.toLocaleString() );
         var activityType = $('<div>').addClass('activity-type').text( activity['type'] );
         var separator = $('<hr>').addClass('activity-separator');
-
         var aboutDecision ='';
 
         if( i > 0 ) {
-            var decisionTitle = $('<div>').append('Decision: ' +  data.row.activities[i-1]['type'] + ' &#10140; ' + data.row.activities[i]['type']);
+            var decisionTitle = $('<div>').append('Decision: ' +  activities[i-1]['type'] + ' &#10140; ' + activities[i]['type']);
             var decisionBody = $('<div>');
 
-            var moreData = data.row.activities[i].data;
+            var moreData = activities[i].data;
             for( var key in moreData)
                 decisionBody.append('<b>' + key + '</b>' + ': ' + moreData[key] + '<br/>');
 
@@ -390,19 +390,12 @@ function rowClicked(data) {
                     .append(decisionBody);
         }
 
-        activityItem
-            //.append(separator)
-                .append(timeStamp)
-                .append(activityType)
-                .append(aboutDecision)
-
-        activities.prepend( activityItem );
-
+        activityItem.append(timeStamp).append(activityType).append(aboutDecision)
+        activitiesObj.prepend( activityItem );
         timelineRows.push([dateTime,, activity['type']]);
-
     }
 
-    $('#activitiesModal').find('.contain').html( activities );
+    $('#activitiesModal').find('.contain').html( activitiesObj );
     $('#activitiesModal').dialog('open');
 
     // Showing timeline must be called just after removing hidden property
@@ -431,7 +424,7 @@ function rowClicked(data) {
             var option = $('<option>')
                     .attr('name',teamMembers[i]._id)
                     .attr('id',teamMembers[i]._id)
-                    .text(teamMembers[i].email);
+                    .text(teamMembers[i].displayName);
             $('#teamMembersForAssign').append( option.clone() );
             $('#teamMembersForComment').append( option.clone() );
         }

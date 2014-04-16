@@ -896,6 +896,7 @@ app.get('/api/team/members',function(req,res){
             return {
                 _id: member._id,
                 email: member.email,
+                displayName: member.displayName,
                 status:'joint',
                 role: (member._id.toString()==team.admin._id.toString() ? 'admin' : 'member')
             }

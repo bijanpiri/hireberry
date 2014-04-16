@@ -383,7 +383,7 @@ function loadPublishPanel() {
 
         res.members.forEach( function(item) {
             if( item.status === 'joint' ) {
-                var option = $('<option>').attr('id',item._id).text(item.email);
+                var option = $('<option>').attr('id',item._id).text(item.displayName);
 
                 $('#askForComment').append( option.clone() );
                 $('#autoAssignTo').append( option.clone() );
@@ -687,7 +687,7 @@ function init() {
 </div>
 
 <div class="row-fluid publishRow" hidden>
-    <div class="span8 offset2">
+    <div class="span6 offset3">
 
         <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
 
@@ -701,24 +701,28 @@ function init() {
 
             <div class="row-fluid controls-row">
                 <div class="span12">
-                    <input type="text" id="flyerName2" style="width: 80%" placeholder="Flyer Name">
+                    <input type="text" id="flyerName2" style="width: 98%" placeholder="Flyer Name">
                 </div>
             </div>
 
             <div class="row-fluid controls-row">
-                <textarea id="thanksMessage" style="width: 80%" placeholder="Thanks Message"></textarea>
+                <div class="span12">
+                <textarea id="thanksMessage" style="width: 98%" placeholder="Thanks Message"></textarea>
+                    </div>
             </div>
 
             <div class="row-fluid">
-                <div class="span6">
+
+                <div class="span6" style="font-size: 1.5em;">
                     Auto Assign To
-                    <select id="autoAssignTo">
-                        <option id="0">None</option>
-                    </select>
+                    <select id="autoAssignTo" style="height: 36px;vertical-align: inherit;">
+                            <option id="0">None</option>
+                        </select>
                 </div>
-                <div class="span6">
+
+                <div class="span6" style="font-size: 1.5em;">
                     Ask For Comment
-                    <select id="askForComment">
+                    <select id="askForComment" style="height: 36px;vertical-align: inherit;">
                         <option id="0">None</option>
                     </select>
                 </div>
@@ -726,8 +730,8 @@ function init() {
 
             <div class="row-fluid">
                 <div class="span12">
-                    <button id="buttonPublishSaveAsDraft" class="btn btn-danger pull-right">Save as draft</button>
                     <button id="buttonPublishDone" class="btn btn-success pull-right">Done</button>
+                    <button id="buttonPublishSaveAsDraft" class="btn btn-danger pull-right" style="margin-right: 1em;">Save as draft</button>
                 </div>
             </div>
 
