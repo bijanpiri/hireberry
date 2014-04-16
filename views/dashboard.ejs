@@ -233,7 +233,7 @@ function fillAskedForComments() {
 
         $('#applicationPreview').html('');
 
-        $.get('/api/application/' + applicationID).done( function(app) {
+        $.get('/api/application/json/' + applicationID).done( function(app) {
             app = app[0];
 
             var workTime = app.workTime;
