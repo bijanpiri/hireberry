@@ -20,7 +20,7 @@ google.load("visualization", "1");
 
 $(function(){
 
-    refresh();
+    refresh(false);
 
     $('#applicationPreview').dialog({
         resizable: false,
@@ -47,6 +47,11 @@ $(function(){
         });
     });
 
+    $('#teamAdminChange').click( function() {
+        $('.teamMemberMakeAdmin').show();
+    });
+
+
     $('.menu .item').click( function(e) {
         var sectionContainerClass = '.' + $(e.target).attr('forContainer');
         $('.sectionContainer').hide();
@@ -56,7 +61,7 @@ $(function(){
     })
 });
 
-function refresh() {
+function refresh(once) {
     // First fill Forms list, then fill table according to current selected form
     fillPositionsList( function() {
         getTeamInfo( function() {
@@ -78,7 +83,8 @@ function refresh() {
     getInvitatinos();
     fillAskedForComments();
 
-    setTimeout( refresh, 30000 );
+    if(once==false)
+        setTimeout( refresh, 30000 );
 }
 
 function fillAskedForComments() {
@@ -612,8 +618,10 @@ function getTeamInfo(callback) {
         $('#teamName').text( res.teamName );
         $('#teamAdmin').text( res.teamAdminEmail );
 
-        if( res.isAdmin===true )
+        if( res.isAdmin===true ) {
             $('#teamNameChange').show();
+            $('#teamAdminChange').show();
+        }
 
         teamMembers = res.members;
 
@@ -626,10 +634,12 @@ function getTeamInfo(callback) {
             var roleObj = $('<div>').addClass('teamMemberRole').text( res.members[i].role );
             var makeAdminObj = $('<div>').attr('userID',res.members[i]._id)
                     .addClass('teamMemberMakeAdmin btn')
+                    .hide()
                     .text( 'Make Admin')
                     .click( function() {
                         $.post('/api/team/admin', {newAdmin: $(this).attr('userID')}).done( function() {
-                            alert();
+                            $('.teamMemberMakeAdmin').hide();
+                            refresh(true)
                         })
                     });
             var statusObj = $('<div>').addClass('teamMemberStatus').text( res.members[i].status );
@@ -732,6 +742,7 @@ function getApplicationComments(appID) {
             <div class="span4">
                 <span id="teamAdminTitle">Admin:</span>
                 <span id="teamAdmin"></span>
+                <span id="teamAdminChange" hide><a>Change</a></span>
             </div>
         </div>
 
