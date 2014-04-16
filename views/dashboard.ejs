@@ -40,6 +40,13 @@ $(function(){
         height: 450
     });
 
+    $('#teamNameChange').click( function() {
+        var newName = prompt('Enter new name:');
+        $.post('/api/team/name',{newName:newName}).done( function() {
+            $('#teamName').text(newName);
+        });
+    });
+
     $('.menu .item').click( function(e) {
         var sectionContainerClass = '.' + $(e.target).attr('forContainer');
         $('.sectionContainer').hide();
@@ -605,6 +612,9 @@ function getTeamInfo(callback) {
         $('#teamName').text( res.teamName );
         $('#teamAdmin').text( res.teamAdminEmail );
 
+        if( res.isAdmin===true )
+            $('#teamNameChange').show();
+
         teamMembers = res.members;
 
         $('#assignTo').html('')
@@ -614,10 +624,19 @@ function getTeamInfo(callback) {
             var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.members[i].email) );
             var emailObj = $('<div>').addClass('teamMemberEmail').text(res.members[i].email);
             var roleObj = $('<div>').addClass('teamMemberRole').text( res.members[i].role );
+            var makeAdminObj = $('<div>').attr('userID',res.members[i]._id)
+                    .addClass('teamMemberMakeAdmin btn')
+                    .text( 'Make Admin')
+                    .click( function() {
+                        $.post('/api/team/admin', {newAdmin: $(this).attr('userID')}).done( function() {
+                            alert();
+                        })
+                    });
             var statusObj = $('<div>').addClass('teamMemberStatus').text( res.members[i].status );
             var memberObj = $('<div>').addClass('teamMember')
                     .append( avatarObj )
                     .append( emailObj )
+                    .append( res.isAdmin ? makeAdminObj : '' )
                     .append( roleObj )
                     .append( statusObj );
 
@@ -674,7 +693,7 @@ function getApplicationComments(appID) {
             <div class="span2 item" forContainer="teamContainer">Team</div>
             <div class="span2 item" forContainer="positionsContainer">Positions</div>
             <div class="span2 item" forContainer="applicationsContainer">Applications</div>
-            <div class="span2 item" forContainer="commentsContainer">Notifications<span id="comments_badge"></span></div>
+            <div class="span2 item" forContainer="commentsContainer">Requests<span id="comments_badge"></span></div>
             <div class="span2 item" forContainer="billingContainer">Billing</div>
         </div>
     </div>
@@ -708,6 +727,7 @@ function getApplicationComments(appID) {
             <div class="span4">
                 <span id="teamNameTitle">Team:</span>
                 <span id="teamName"></span>
+                <span id="teamNameChange" hide><a>Change</a></span>
             </div>
             <div class="span4">
                 <span id="teamAdminTitle">Admin:</span>

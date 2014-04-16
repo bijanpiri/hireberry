@@ -19,7 +19,6 @@
 }
 
 .menu .item-selected {
-    font-weight: 700;
     color: rgb(55, 145, 38);
 }
 
@@ -263,6 +262,12 @@
     color: rgb(155, 152, 152);
 }
 
+#teamNameChange {
+    margin: 0 1em;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
 #teamAdmin {
     font-size: 1.7em;
 }
@@ -321,6 +326,15 @@
     float: right;
     padding: 0 20px;
     width: 70px;
+    text-align: center;
+}
+
+.teamMemberMakeAdmin {
+    display: inline-block;
+    float: right;
+    padding: 0 20px;
+    width: 80px;
+    font-size: 0.7em;
     text-align: center;
 }
 

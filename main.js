@@ -774,6 +774,38 @@ app.get('/flyer/remove/:id', function(req,res){
 
 // region Team
 
+app.post('/api/team/name',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var teamID = req.user.teamID;
+    var newName = req.body.newName;
+
+    BTeams.update({admin:userID,_id:teamID},{name:newName}, function(err,affected) {
+        if( err || affected==0 )
+            return res.send(401)
+        res.send(200);
+    })
+});
+
+app.post('/api/team/admin',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var teamID = req.user.teamID;
+    var newAdmin = req.body.newAdmin;
+
+    BTeams.update({admin:userID,_id:teamID},{admin:newAdmin}, function(err,affected) {
+        if( err || affected==0 )
+            return res.send(401)
+        res.send(200);
+    })
+});
+
 app.post('/api/team/invite', function(req,res){
 
     if( !checkUser(req,res) )
@@ -921,10 +953,12 @@ app.get('/api/team/members',function(req,res){
                 });
             }
 
+
             res.send(200,{
                 teamID: team._id,
                 teamName: team.name,
                 teamAdminEmail: team.admin.email,
+                isAdmin: (team.admin._id.toString()===req.user._id.toString()),
                 members: members
             });
         });
