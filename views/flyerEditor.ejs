@@ -18,7 +18,7 @@
 <script src="/chosen/chosen.jquery.js"></script>
 <link href="/chosen/chosen.css" rel="stylesheet">
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script src="/script/map.google.js"></script>
 
 <!--<link rel="stylesheet" href="../../bootstrap-modal/css/bootstrap-modal.css">-->
 <!--<script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap.js"></script>-->
@@ -67,11 +67,11 @@
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
         js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=241341676042668";
+        js.src = "/script/facebook.all.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 </script>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="/script/twitter.widget.min.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
 
 
@@ -941,15 +941,67 @@ function init() {
 <div class="container-fluid profilesWidget">
     <div class="row-fluid">
 
-        <label for="name"></label>
+        <span class="bool-field">
+            <label class="bool-label" for="name">
+                Name:
+            </label>
 
-        <label class="bool-label" for="name">Name:</label>
+            <div class="bool-input-group">
+                <input type="text" name="name"   id="name">
+                <span class="bool-glass bool-image"></span>
+                <span class="bool-clear-container">
+                    <i class="bool-clear-btn bool-image"></i>
+                </span>
+            </div>
+        </span>
 
-        <div class="bool-input-group">
-            <input type="text" name="name"   id="name">
-            <span class="bool-glass"></span>
-            <span class="bool-clear bool-icon"></span>
+        <!--<div class="bool-iconic-input-container">-->
+            <!--<div class="bool-iconic-input">-->
+                <!--<div class="bool-iconic-input-left">-->
+                    <!--left iconic-->
+                <!--</div>-->
+                <!--<div class="bool-iconic-input-right">-->
+                    <!--right iconic-->
+
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="bool-iconic-input-container">
+            <div class="bool-iconic-input">
+                <div class="bool-iconic-col-icon">
+                    <div class="bool-iconic-cell-icon">
+                        <i class="bool-iconic-icon bool-icon-github-white"></i>
+                    </div>
+                </div>
+                <div class="bool-iconic-col-label">github.com/ </div>
+                <div class="bool-iconic-col-input">
+                    <input type="text" name="name" id="name">
+                    <span class="bool-glass bool-image"></span>
+                    <span class="bool-clear-container">
+                        <i class="bool-clear-btn bool-image"></i>
+                    </span>
+                </div>
+            </div>
         </div>
+        <!--<div class="bool-iconic-input-container">-->
+            <!--<div class="bool-iconic-input">-->
+
+                <!--<span class="bool-icon-container">-->
+                    <!--gfsdagsd sdag-->
+                <!--</span>-->
+                <!--<!--<label class="bool-input-label">github.com/</label>-->-->
+
+                <!--<div class="bool-iconic-input-right">-->
+                    <!--<input type="text" name="name" id="name">-->
+                    <!--<span class="bool-glass bool-image"></span>-->
+                    <!--<span class="bool-clear-container">-->
+                        <!--<i class="bool-clear-btn bool-image"></i>-->
+                    <!--</span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
         <div class="control-group">
 
             <div class="control-label">Name</div>
@@ -1009,7 +1061,6 @@ function init() {
         </div>
     </div>
 
-
     <div class="row-fluid github">
         <div class="offset3 span6" >
             <div class="profileAddress">
@@ -1061,10 +1112,6 @@ function init() {
             </div>
         </div>
     </div>
-
-
-
-
 
     <div class="row-fluid behance">
         <div class="offset3 span6" >
@@ -1406,6 +1453,7 @@ function init() {
         <label for="share">share</label>
 
     </div>
+
     <div class="toolbar-videoWidget">
         <div class="videoWidgetInputboxOutterToolbar">
             <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">

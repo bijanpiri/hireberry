@@ -40,6 +40,9 @@ function ProfilesWidget(){
                var input= $(btn).find('input[name=p]');
                input.prop('checked',!input.is(':checked')).trigger('change');
             });
+        });
+        this.portlet.delegate('.bool-clear-btn','click',function(){
+            $(this).parent().parent().find('input').val('');
         })
 
         /*this.addToolbarCommand('profile',

@@ -323,12 +323,21 @@
 }
 
 .bool-icon-github{background-position:-100px -183px;width: 28px;height: 24px;}
+.bool-icon-github-gray{background-position:-128px -183px;width: 28px;height: 24px;}
+.bool-icon-github-white{background-position:-156px -183px;width: 28px;height: 24px;}
+
 .bool-icon-stackoverflow{background-position:-100px -208px;width: 22px;height: 27px;}
+
 .bool-icon-twitter{background-position:-100px -236px;width: 26px;height: 20px;}
+
 .bool-icon-linkedin{background-position:-100px -257px;width: 24px;height: 24px;}
+
 .bool-icon-dribbble{background-position:-100px -282px;width: 24px;height: 24px;}
+
 .bool-icon-behance{background-position:-100px -307px;width: 28px;height: 17px;}
+
 .bool-color-dropdown{z-index: 2000;}
+
 .nav-pills .bool-color-dropdown{
     z-index: 21000  ;
 }
