@@ -243,7 +243,7 @@ function fillAskedForComments() {
                                 })
                     });
 
-            $('#askedForCommentList').append( $('<li>')
+            $('#askedForCommentList').append( $('<li>').attr('id','#'+objID)
                     .append(dateObj)
                     .append(titleObj)
                     .append(acceptBtnObj)
@@ -642,7 +642,7 @@ function getTeamInfo(callback) {
 
         for( var i=0; i<res.members.length; i++ ){
             var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.members[i].email) );
-            var emailObj = $('<div>').addClass('teamMemberEmail').text(res.members[i].email);
+            var emailObj = $('<div>').addClass('teamMemberEmail').text(res.members[i].displayName);
             var roleObj = $('<div>').addClass('teamMemberRole').text( res.members[i].role );
             var makeAdminObj = $('<div>').attr('userID',res.members[i]._id)
                     .addClass('teamMemberMakeAdmin btn')
