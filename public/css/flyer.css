@@ -636,9 +636,9 @@ Portlet Creator
     cursor: pointer;
 }
 
-input[type='checkbox']:checked + label { top: 0; }
+.beautifulButton input[type='checkbox']:checked + label { top: 0; }
 
-input[type='checkbox']:checked + label:hover { top: 1px; }
+.beautifulButton input[type='checkbox']:checked + label:hover { top: 1px; }
 
 .skillsButtons {
     display: inline-block;
