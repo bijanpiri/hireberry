@@ -10,7 +10,9 @@
     padding: 10px 30px;
     line-height: 1.4em;
     margin-bottom: 0.5em;
-    height: 1.4em;
+}
+.menu .item {
+    border-bottom: 4px solid transparent;
 }
 
 .menu .item:hover {
@@ -316,14 +318,14 @@
     height: 30px;
     width: 30px;
     display: inline-block;
-    padding: 0 10px;
+    margin: 0 10px;
 }
 
 .teamMemberRole {
     display: inline-block;
     float: right;
     font-weight: 700;
-    padding: 0 20px;
+    margin: 0 20px;
     width: 70px;
     text-align: center;
 }
@@ -331,7 +333,7 @@
 .teamMemberStatus {
     display: inline-block;
     float: right;
-    padding: 0 20px;
+    margin: 0 20px;
     width: 70px;
     text-align: center;
 }
