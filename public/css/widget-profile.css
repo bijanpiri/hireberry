@@ -71,103 +71,14 @@
     background-position: -100px -512px;
 }
 .bool-field{
-
+    float: left;
+    margin: 10px;
 }
 
-/*.bool-iconic-input-container {*/
-    /*width: 435px;*/
-/*}*/
-/*.bool-iconic-input{*/
-    /*width: 100%;*/
-    /*height: 44px;*/
-    /*margin: 0;*/
-    /*font-size: 18px;*/
-    /*box-sizing: border-box;*/
-    /*display: table;*/
-/*}*/
-/*.bool-iconic-input>div>* {*/
-    /*float: left;*/
-/*}*/
-
-/*.bool-input-label{*/
-    /*color: #000000;*/
-    /*background: #e6e6e6;*/
-    /*border: 2px solid #B3B3B3;*/
-    /*border-width: 2px 0 ;*/
-    /*height: 44px;*/
-    /*line-height: 44px;*/
-    /*padding: 0 10px 0 10px;*/
-    /*display: table-cell;*/
-    /*width: auto;*/
-/*}*/
-
-/*.bool-icon-container{*/
-    /*width: 44px;*/
-    /*background-image: url("/images/nflyer-icons.png");*/
-
-    /*display: table-cell;*/
-
-
-
-    /*border-radius: 4px;*/
-    /*border-bottom-left-radius: 0px;*/
-    /*border-top-right-radius: 0px;*/
-
-    /*-moz-border-radius: 4px;*/
-    /*-moz-border-bottom-right-image: 0;*/
-    /*-moz-border-top-right-image: 0;*/
-
-
-    /*-webkit-border-radius: 4px;*/
-    /*-webkit-border-bottom-right-radius: 0px;*/
-    /*-webkit-border-top-right-radius: 0px;*/
-
-/*}*/
-/*.bool-github-back{background: #1d75bb;}*/
-/*.bool-iconic-input input{*/
-    /*height: 44px;*/
-    /*line-height: 44px;*/
-    /*border: 2px solid #B3B3B3;*/
-    /*display: inline-block;*/
-    /*padding-left: 12px;*/
-    /*margin: 0;*/
-    /*font-size: 18px;*/
-
-    /*border-radius: 4px;*/
-    /*border-bottom-left-radius: 0px;*/
-    /*border-top-left-radius: 0px;*/
-
-    /*-moz-border-radius: 4px;*/
-    /*-moz-border-bottom-left-image: 0;*/
-    /*-moz-border-top-left-image: 0;*/
-
-
-    /*-webkit-border-radius: 4px;*/
-    /*-webkit-border-bottom-left-radius: 0px;*/
-    /*-webkit-border-top-left-radius: 0px;*/
-
-    /*box-sizing: border-box;*/
-    /*-moz-box-sizing: border-box;*/
-    /*-webkit-box-sizing: border-box;*/
-
-/*}*/
-/*.bool-iconic-container{*/
-    /*display: table;*/
-    /*width: 100%;*/
-/*}*/
-/*.bool-iconic-input-left{*/
-    /*background: green;*/
-    /*display: table-cell;*/
-    /*width: auto;*/
-/*}*/
-/*.bool-iconic-input-right{*/
-    /*background: blue;*/
-    /*display: table-cell;*/
-    /*width: 100%;*/
-/*}*/
 .bool-iconic-input-container{
     width: 435px;
-
+    float: left;
+    margin: 10px;
 }
 .bool-iconic-input{
     display: table;
@@ -175,12 +86,18 @@
 }
 .bool-iconic-col-icon{
     display: table-cell;
-    background: #1d75bb;
     width: 44px;
     height: 44px;
     border-radius: 4px 0 0 4px;
     box-sizing: border-box;
 }
+.bool-icon-back-github{background: #1d75bb;}
+.bool-icon-back-stackoverflow{background: #fe7a15;}
+.bool-icon-back-twitter{background: #55acee;}
+.bool-icon-back-linkedin{background: #0976b4;}
+.bool-icon-back-dribbble{background: #ee7cd2;}
+.bool-icon-back-behance{background: #1769ff;}
+
 .bool-iconic-cell-icon {
     position: relative;
     width: 44px;
@@ -227,10 +144,7 @@
 }
 .bool-iconic-icon{
     display: inline-block;
-    background: url("/images/nflyer-icons.png");
-    background-position:-156px -183px;
-    width: 28px;
-    height: 24px;
+    background-image: url("/images/nflyer-icons.png");
     position: absolute;
     margin: auto;
     top: 0;
@@ -238,6 +152,8 @@
     left: 0;
     right: 0;
 }
+
+
 .bool-input-label{
     display: table-cell;
     width: auto;
