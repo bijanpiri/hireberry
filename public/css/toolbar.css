@@ -542,3 +542,18 @@ Toolbar - WorkType Widget
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
 }
+
+.toolbar-badgeWidget .toolbar-badgeLabel {
+    margin: 9px 5px;
+    font-size: 1.7em;
+    border: 2px solid #505050;
+    border-radius: 4px;
+    padding: 10px;
+    display: inline-block;
+    background-color: rgb(65, 65, 65);
+}
+
+.toolbar-badgeWidget input[type=checkbox]:checked + .toolbar-badgeLabel {
+    border: 2px solid #fff;
+    background-color: rgb(65, 65, 65);
+}
