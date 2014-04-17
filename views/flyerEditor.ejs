@@ -851,7 +851,7 @@ function init() {
 
                 <div class="radioButtonGroup">
 
-                    <p class="radioButtonGroupDescription">3. You prefer to work at ...</p>
+                    <p class="radioButtonGroupDescription">You prefer to work at ...</p>
 
                     <div class="bbtn-group">
                         <input class="bbtn bbtn-radio" id="atHome" type="radio" name="workPlace" value="home" checked>
@@ -878,7 +878,7 @@ function init() {
             <div style="margin-bottom: 5em;">
                 <div class="radioButtonGroup">
 
-                    <p class="radioButtonGroupDescription">4. You prefer to work as ...</p>
+                    <p class="radioButtonGroupDescription">You prefer to work as ...</p>
 
                     <div class="bbtn-group">
                         <input class="bbtn bbtn-radio" id="fullTime" type="radio" name="workTime" value="fulltime" checked>
@@ -1203,9 +1203,14 @@ function init() {
 
 <div class="toolbar-workTypeWidget">
     <div>
-        <input type="radio" name="toolbar-worktype" class="toolbar-workType-time" no="1"><span>Time</span>
-        <input type="radio" name="toolbar-worktype" class="toolbar-workType-place" no="2"><span>Place</span>
-        <input type="radio" name="toolbar-worktype" class="toolbar-workType-both" no="3"><span>Both</span>
+        <input id="workType-time" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-time" no="1">
+        <label  for="workType-time" class="toolbar-widgetLabel">Time</label>
+
+        <input id="workType-place" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-place" no="2">
+        <label for="workType-place" class="toolbar-widgetLabel">Place</label>
+
+        <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3">
+        <label for="workType-both" class="toolbar-widgetLabel">Both</label>
     </div>
 </div>
 

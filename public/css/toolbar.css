@@ -464,16 +464,20 @@
 /****
 Toolbar - WorkType Widget
 ****/
-.toolbar-workTypeWidget {}
-.toolbar-workTypeWidget div {
-    padding: 18px 20px;
+.toolbar-workTypeWidget {
 }
-.toolbar-workTypeWidget span {
-    font-size: 1.5em;
-    line-height: 1.5em;
-    vertical-align: top;
-    padding-left: 0.3em;
-    padding-right: 1em;
+.toolbar-workTypeWidget .toolbar-widgetLabel {
+    margin: 9px 5px;
+    font-size: 1.7em;
+    border: 2px solid #505050;
+    border-radius: 4px;
+    padding: 10px;
+    display: inline-block;
+    background-color: rgb(65, 65, 65);
+}
+.toolbar-workTypeWidget input[type=radio]:checked + .toolbar-widgetLabel {
+    border: 2px solid #fff;
+    background-color: rgb(65, 65, 65);
 }
 
 
@@ -552,7 +556,6 @@ Toolbar - WorkType Widget
     display: inline-block;
     background-color: rgb(65, 65, 65);
 }
-
 .toolbar-badgeWidget input[type=checkbox]:checked + .toolbar-badgeLabel {
     border: 2px solid #fff;
     background-color: rgb(65, 65, 65);
