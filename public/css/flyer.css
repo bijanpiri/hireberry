@@ -404,7 +404,7 @@ Portlet Creator
     right: 0;
 }
 #videoWidgetInputboxText {
-    height: 40px;
+    height: 45px;
     width: 400px;
     border: 0;
     font-size: 22px;
@@ -413,7 +413,7 @@ Portlet Creator
     background-color: transparent;
 }
 #videoWidgetInputboxTextToolbar {
-    height: 40px;
+    height: 45px;
     width: 600px;
     border: 0;
     font-size: 22px;
@@ -433,7 +433,7 @@ Portlet Creator
     bottom: 0;
     margin: auto;
     position: absolute;
-    height: 40px;
+    height: 35px;
     top: -7px;
 }
 .videoWidgetInputboxDoneToolbar {
@@ -442,7 +442,7 @@ Portlet Creator
     bottom: 0;
     margin: auto;
     position: absolute;
-    height: 40px;
+    height: 35px;
     top: -7px;
     right: 3px;
 }
