@@ -1,31 +1,48 @@
-function ProfilesWidget(){
+function ProfilesWidget() {
     Widget.call(this);
 
-    var layout = '';
+    var profile = '';
 
     function initLayout() {
-        layout = this.clone('.profilesWidget');
+        profile = this.clone('.profilesWidget');
     }
 
     initLayout.call(this);
-    this.setLayout(layout);
+    this.setLayout(profile);
 
-    this.widgetDidAdd = function() {
+
+    this.widgetDidAdd = function () {
         this.setToolbar('.toolbar-profileWidget');
-        var profile=this.portlet;
-        var fileInput=this.portlet.find('input[type=file]');
-        var avatarImage=this.portlet.find('.bool-avatar-image');
-        if(this.editMode) {
+        var fileInput = this.portlet.find('input[type=file]');
+        var avatar = this.portlet.find('.bool-avatar-image');
+        profile.find('.bool-avatar-menu-gravatar').click(function(){
+            var email = profile.find('input[name="email"]').val();
+            var hash = CryptoJS.MD5( email.trim().toLowerCase() );
+            $('.bool-avatar-image').attr('src','http://www.gravatar.com/avatar/' + hash );
+            profile.find('.bool-avatar-no-container').hide();
+            profile.find('.bool-avatar-image').show();
+
+        });
+        profile.find('.bool-avatar-menu-upload').click(
+            function(){
+                fileInput.click();
+            }
+        );
+        profile.find('.bool-avatar-menu-remove').click(function(){
+            profile.find('.bool-avatar-no-container').show();
+            profile.find('.bool-avatar-image').hide();
+        });
+        if (this.editMode) {
             fileInput.fileupload({
-                url:'/flyer/upload',
+                url: '/flyer/upload',
                 dataType: 'json',
-                replaceFileInput:false,
+                replaceFileInput: false,
 //                add:add,
-                dropZone:avatarImage,
+                dropZone: avatar,
 //                send:send,
-//                done: done,
+                done: done,
 //                progressall:progressall
-                x:'x'
+                x: 'x'
             });
 
         }
@@ -34,22 +51,24 @@ function ProfilesWidget(){
         }
     }
 
-    function done(e,data){
-        bar.slideUp();
-        var img=layout.find('img');
-        img.attr('src', '/uploads/' + data.result.files[0].name);
+    function done(e, data) {
+        var avatar=profile.find('.bool-avatar-image');
+        profile.find('.bool-avatar-no-container').hide();
+        avatar.show();
+        avatar.attr('src', "/uploads/" + data.result.files[0].name);
 
     }
-    profile.find('input[type=button]').each(function(i,input){
-        $(input).click(function(){
+
+    profile.find('input[type=button]').each(function (i, input) {
+        $(input).click(function () {
             $(input).next().val("");
         });
     });
 
-    this.toolbar.find('input[name=p]').each(function(i,input){
-        $(input).change(function(){
-            profile.find('.'+input.value).css('display',input.checked ?'':'none');
-            if(input.checked)
+    this.toolbar.find('input[name=p]').each(function (i, input) {
+        $(input).change(function () {
+            profile.find('.' + input.value).css('display', input.checked ? '' : 'none');
+            if (input.checked)
                 $(input).parent().addClass("bool-active");
             else
                 $(input).parent().removeClass("bool-active");
@@ -58,13 +77,13 @@ function ProfilesWidget(){
         $(input).trigger('change');
     });
 
-    this.toolbar.find('.bool-btn').each(function(i,btn){
-        $(btn).click(function(){
-            var input= $(btn).find('input[name=p]');
-            input.prop('checked',!input.is(':checked')).trigger('change');
+    this.toolbar.find('.bool-btn').each(function (i, btn) {
+        $(btn).click(function () {
+            var input = $(btn).find('input[name=p]');
+            input.prop('checked', !input.is(':checked')).trigger('change');
         });
     });
-    this.portlet.delegate('.bool-clear-btn','click',function(){
+    this.portlet.delegate('.bool-clear-btn', 'click', function () {
         $(this).parent().parent().find('input').val('');
     })
 
@@ -83,25 +102,23 @@ function ProfilesWidget(){
      }
      });*/
 
-}
 
-this.serialize = function() {
+    this.serialize = function () {
 
-    var data={
-        profiles:
-            this.toolbar
-                .find('.toolbar-profileWidget input').serialize().replace(/p=/gi,'').split('&')};
+        var data = {
+            profiles: this.toolbar
+                .find('.toolbar-profileWidget input').serialize().replace(/p=/gi, '').split('&')};
 
-    return data;
-}
+        return data;
+    }
 
-this.deserialize = function( data ) {
-    this.toolbar.find('input[name=p]').each(
-        function(i,input){
-            $(input).prop('checked',data.profiles.indexOf(input.value)>=0).change();
-        }
-    );
-}
+    this.deserialize = function (data) {
+        this.toolbar.find('input[name=p]').each(
+            function (i, input) {
+                $(input).prop('checked', data.profiles.indexOf(input.value) >= 0).change();
+            }
+        );
+    }
 }
 ProfilesWidget.prototype=new Widget();
 ProfilesWidget.prototype.constructor=ProfilesWidget;
