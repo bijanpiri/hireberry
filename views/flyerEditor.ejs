@@ -590,156 +590,6 @@ function init() {
 <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
 <input type="hidden" name="flyerName">
 
-<style>
-    .beautifulButton {
-        display: inline-block;
-        margin: 10px 0 0 10px;
-    }
-    .beautifulButton > p {
-        text-align: center;
-        font-size: 1.4em;
-        color: #808080;
-    }
-    .beautifulButton > input[type=checkbox] {
-        display: none;
-    }
-    .beautifulButton > label {
-        position: relative;
-        width: 100px;
-        height: 100px;
-        background: #999999;
-        cursor: pointer;
-
-        -moz-box-shadow: 0 4px #666666;
-        -webkit-box-shadow: 0 4px #666666;
-        box-shadow: 0 4px #666666;
-
-        -webkit-border-radius: 4px 4px 4px 4px;
-        -moz-border-radius: 4px 4px 4px 4px;
-        border-radius: 4px 4px 4px 4px;
-    }
-
-    .beautifulButton > label:hover {
-        position: relative;
-        top: 1px !important;
-        -moz-box-shadow: 0 3px #666666;
-        -webkit-box-shadow: 0 3px #666666;
-        box-shadow: 0 3px #666666;
-    }
-
-    .beautifulButton > label > i {
-        background-image: url("/images/bltn-hiring-icons@2x.png");
-        background-size: 272px 1269px;
-        position: absolute;
-        margin: auto;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
-
-    /** Clicked **/
-    .beautifulButton > label:active {
-        position: relative;
-        top: 4px !important;
-        background: #AAA9A9;
-
-        -moz-box-shadow: 0 0 #dddddd !important;
-        -webkit-box-shadow: 0 0 #dddddd !important;
-        box-shadow: 0 0 #dddddd !important;
-    }
-
-    /** Checked  --> Change Backcolor ***/
-    input[type='checkbox']:checked + label {
-        top: 0;
-    }
-
-    /** Checked --> Change Icon **/
-    input[type='checkbox']:checked + label > i {
-    }
-
-    /** Hover --> Reaction! **/
-    input[type='checkbox']:checked + label:hover {
-        top: 1px;
-    }
-
-</style>
-
-<script>
-    $( function() {
-
-        function BuildButton(id, title,
-                             activeBackColor,
-                             activeShadowColor,
-                             activeIconPosition,
-                             passiveIconPosition,
-                             iconWidth,
-                             iconHeight,
-                             buttonWidth) {
-
-            // Build structure
-            var beautifulButtonObj = $('<div>').addClass('beautifulButton');
-            var inputObj = $('<input>').attr('type','checkbox')
-                    .attr('id',id)
-                    .attr('name','skill')
-                    .val(id);
-            var labelObj =$('<label>').attr('for',id);
-            var iconObj = $('<i>').addClass(id);
-            var pObj = $('<p>').text(title);
-
-            labelObj.append( iconObj );
-            beautifulButtonObj.append(inputObj).append(labelObj).append(pObj);
-
-
-            // Customize it
-            labelObj.width(buttonWidth || 100);
-            iconObj.css('background-position',passiveIconPosition)
-                    .width(iconWidth)
-                    .height(iconHeight);
-
-            inputObj.change( function() {
-                changeState( isChecked() );
-            });
-            labelObj.mouseenter( function() {
-                var currentBoxShadow = labelObj.css('box-shadow').replace(/^.*(rgba?\([^)]+\)).*$/,'$1');
-
-                labelObj.css('-webkit-box-shadow','0 3px ' + currentBoxShadow);
-                labelObj.css('box-shadow','0 3px ' + currentBoxShadow);
-            });
-            labelObj.mouseleave( function() {
-                var currentBoxShadow = labelObj.css('box-shadow').replace(/^.*(rgba?\([^)]+\)).*$/,'$1');
-
-                labelObj.css('-webkit-box-shadow','0 4px ' + currentBoxShadow);
-                labelObj.css('box-shadow','0 4px ' + currentBoxShadow);
-            });
-
-            function isChecked() { return beautifulButtonObj.find('input').is(':checked') }
-
-            function changeState(turnOn) {
-                if( turnOn ) {
-                    labelObj.css('background-color', activeBackColor);
-                    labelObj.css('-webkit-box-shadow','0 3px ' + activeShadowColor);
-                    labelObj.css('box-shadow','0 3px ' + activeShadowColor);
-
-                    iconObj.css('background-position', activeIconPosition)
-                } else {
-                    labelObj.css('background-color', '');
-                    labelObj.css('-webkit-box-shadow','');
-                    labelObj.css('box-shadow','');
-
-                    iconObj.css('background-position',passiveIconPosition)
-                }
-            }
-
-            return beautifulButtonObj;
-        }
-
-        // For example
-        //var btn =  BuildButton('jquery','jQuery', '#1C283B', '#151E2C', '0 -214px', '-58px -214px', 57, 54, 100);
-        //$('#buttonTest').append( btn );
-    });
-</script>
-
 <div class="portletHeader">
     <input type="file" hidden="hidden" class="logofile">
     <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
@@ -1085,8 +935,6 @@ function init() {
     </div>
 </div>
 
-
-
 <!--<div class="container-fluid profilesWidget">-->
 <div class="container-fluid profilesWidget">
     <div class="row-fluid">
@@ -1148,66 +996,14 @@ function init() {
     <div class="span12" >
         <div>
 
-            <div class="emptyState" style="font-size: 1.8em;text-align: center;">Add Some Skills From Toolbar</div>
-
             <div style="display: table;margin: 0 auto;">
+                <div class="skillsButtons"></div>
 
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='html5' type="checkbox" name="skill" value="html5">
-                    <label for="html5" class="bbtn-label b-icon-container b-label-html5">
-                        <i class="b-icon b-icon-html5" ></i>
-                    </label>
-                    <p>HTML5</p>
+                <div class="skillAddButton">
+                    <input type="checkbox" hidden id="skillAddButtonActive">
+                    <label for="skillAddButtonActive"></label>
+                    <input type="text" name="newSkillTextbox" placeholder="Enter Skill">
                 </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='css3' type="checkbox" name="skill" value="css3">
-                    <label for="css3" class="bbtn-label b-icon-container b-label-css">
-                        <i class="b-icon b-icon-css" ></i>
-                    </label>
-                    <p>CSS3</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='js' type="checkbox" name="skill" value="javascript">
-                    <label for="js" class="bbtn-label b-icon-container b-label-js">
-                        <i class="b-icon b-icon-js" ></i>
-                    </label>
-                    <p>Javascript</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='jquery' type="checkbox" name="skill" value="jquery">
-                    <label for="jquery" class="bbtn-label b-icon-container b-label-jquery">
-                        <i class="b-icon b-icon-jquery" ></i>
-                    </label>
-                    <p>jQuery</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='less' type="checkbox" name="skill" value="less">
-                    <label for="less" class="bbtn-label b-icon-container b-label-less">
-                        <i class="b-icon b-icon-less" ></i>
-                    </label>
-                    <p>Less</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='bootstrap' type="checkbox" name="skill" value="bootstrap">
-                    <label for="bootstrap" class="bbtn-label b-icon-container b-label-bootstrap">
-                        <i class="b-icon b-icon-bootstrap" ></i>
-                    </label>
-                    <p>Bootstrap</p>
-                </div>
-
-                <div class="bbtn-group">
-                    <input class="bbtn bbtn-radio" id='git' type="checkbox" name="skill" value="git">
-                    <label for="git" class="bbtn-label b-icon-container b-label-git">
-                        <i class="b-icon b-icon-git" ></i>
-                    </label>
-                    <p>Git</p>
-                </div>
-
             </div>
 
         </div>
@@ -1427,19 +1223,6 @@ function init() {
 </div>
 
 <div class="toolbar-skillsWidget">
-    <div style="width: 350px;position: relative">
-
-        <select name="chosen" data-placeholder="Choose skills ..." style="width:350px;" multiple class="chosen-select">
-            <option value="html5">HTML5</option>
-            <option value="css3">CSS3</option>
-            <option value="javascript">Javascript</option>
-            <option value="jquery">jQuery</option>
-            <option value="less">Less</option>
-            <option value="bootstrap">Bootstrap</option>
-            <option value="git">Git</option>
-        </select>
-
-    </div>
 </div>
 
 <div class="toolbar-badgeWidget">
