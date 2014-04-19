@@ -10,19 +10,19 @@ function ProfilesWidget() {
     initLayout.call(this);
     this.setLayout(profile);
 
+    function fetchAvatar(){
+        var email = profile.find('input[name="email"]').val();
+        var hash = CryptoJS.MD5( email.trim().toLowerCase() );
+        $('.bool-avatar-image').attr('src','http://www.gravatar.com/avatar/' + hash );
+        profile.find('.bool-avatar-no-container').hide();
+        profile.find('.bool-avatar-image').show();
 
+    }
     this.widgetDidAdd = function () {
         this.setToolbar('.toolbar-profileWidget');
         var fileInput = this.portlet.find('input[type=file]');
         var avatar = this.portlet.find('.bool-avatar-image');
-        profile.find('.bool-avatar-menu-gravatar').click(function(){
-            var email = profile.find('input[name="email"]').val();
-            var hash = CryptoJS.MD5( email.trim().toLowerCase() );
-            $('.bool-avatar-image').attr('src','http://www.gravatar.com/avatar/' + hash );
-            profile.find('.bool-avatar-no-container').hide();
-            profile.find('.bool-avatar-image').show();
-
-        });
+        profile.find('.bool-avatar-menu-gravatar').click(fetchAvatar);
         profile.find('.bool-avatar-menu-upload').click(
             function(){
                 fileInput.click();
@@ -65,19 +65,11 @@ function ProfilesWidget() {
         });
     });
 
-    this.toolbar.find('input[name=p]').each(function (i, input) {
-        $(input).change(function () {
-            profile.find('.' + input.value).css('display', input.checked ? '' : 'none');
-            if (input.checked)
-                $(input).parent().addClass("bool-active");
-            else
-                $(input).parent().removeClass("bool-active");
-        })
-        //This call is needed when adding widget to flyer in first time.
-        $(input).trigger('change');
+    this.toolbar.delegate('input[name=p]','change',function () {
+        profile.find('[for^="' + this.value+'"]').parent().css('display', this.checked ? '' : 'none');
     });
 
-    this.toolbar.find('.bool-btn').each(function (i, btn) {
+     this.toolbar.find('.bool-btn').each(function (i, btn) {
         $(btn).click(function () {
             var input = $(btn).find('input[name=p]');
             input.prop('checked', !input.is(':checked')).trigger('change');

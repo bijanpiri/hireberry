@@ -216,6 +216,16 @@
     overflow: hidden;
     margin-left: -15px;
 }
+.bool-avatar-menu:after{
+    position: absolute;
+    top: -6px;
+    left: 10px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ffffff;
+    border-left: 6px solid transparent;
+    content: '';
+}
 .bool-avatar-menu>li {
     width: 100%;
     padding: 0;

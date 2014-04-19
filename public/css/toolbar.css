@@ -307,6 +307,9 @@
 .bool-icon-list-ul{background-position: -100px -113px;width: 25px;height: 17px;}
 .bool-icon-list-ol{background-position: -100px -94px;width: 26px;height: 18px;}
 .bool-icon-recent{background-position: -100px -29px;width: 22px;height: 22px;}
+.bool-icon-email{background-position:-100px -355px;width: 27px;height: 18px;}
+.bool-icon-website{background-position:-100px -401px;width: 27px;height: 27px;}
+.bool-icon-tel{background-position:-100px -372px;width: 21px;height: 30px;}
 
 .bool-icon-size{
     background: url("/images/nflyer-icons.png");
@@ -559,4 +562,7 @@ Toolbar - WorkType Widget
 .toolbar-badgeWidget input[type=checkbox]:checked + .toolbar-badgeLabel {
     border: 2px solid #fff;
     background-color: rgb(65, 65, 65);
+}
+.toolbar-profileWidget input:checked+label{
+    background: #1F1F1F;
 }
