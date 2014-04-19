@@ -101,13 +101,13 @@ function VideoWidget(){
             '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
             '</div></div></div>';
 
+
         layout = $(emptyStateHtml);
 
         layout.find('#Done').click( (function(widget){
             return function(){
                 widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxText').val();
                 showPreview.call(widget);
-                // showVideo.call(widget);
             }
         }(this)));
     }
@@ -118,10 +118,7 @@ function VideoWidget(){
 
     this.widgetFocus=function()
     {
-       /*if(this.toolbar.find('.videoWidgetInputboxOutterToolbar').is(":visible"))
-           this.portlet.find('#videoWidgetInputboxTextToolbar').focus();
-       else*/
-           this.portlet.find('#videoWidgetInputboxText').focus();
+       this.portlet.find('#videoWidgetInputboxText').focus();
     }
 
     this.widgetDidAdd=function(){
@@ -132,11 +129,10 @@ function VideoWidget(){
 
         if(widget.editMode==false)
         {
+            widget.portlet.find('.videoWidgetOuter').hide();
             widget.portlet.find("#videoWidgetInputboxText").prop('readOnly','readOnly').css("cursor","default");
             widget.portlet.find("#Done").off();
         }
-
-
 
         this.addToolbarCommand('done',function(){
             while(widget.portlet.find(".videoWidget").length>0)
@@ -146,17 +142,6 @@ function VideoWidget(){
             widget.videoSourceURL = widget.toolbar.find('#videoWidgetInputboxTextToolbar').val();
             showPreview.call(widget);
         });
-
-       /* this.toolbar.find('#DoneToolbar').click( (function(widget){
-            return function(){
-                while(widget.portlet.find(".videoWidget").length>0)
-                {
-                    widget.portlet.find(".videoWidget")[0].remove();
-                }
-                widget.videoSourceURL = widget.toolbar.find('#videoWidgetInputboxTextToolbar').val();
-                showPreview.call(widget);
-            }
-        }(this)));*/
     }
 
     this.serialize = function() {
