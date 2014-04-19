@@ -79,21 +79,6 @@ function ProfilesWidget() {
         $(this).parent().parent().find('input').val('');
     })
 
-    /*this.addToolbarCommand('profile',
-     function(widget,args)
-     {
-     var cmd='[command="profile '+args[1]+'"]';
-     var s=widget.toolbar.find(cmd).find('input[id='+args[1]+']');
-     if( widget.toolbar.find(cmd).find('input[id='+args[1]+']')[0].checked)
-     {
-     widget.toolbar.find(cmd).addClass('bool-active');
-     }
-     else
-     {
-     widget.toolbar.find(cmd).removeClass('bool-active');
-     }
-     });*/
-
 
     this.serialize = function () {
 
