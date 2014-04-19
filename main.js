@@ -172,6 +172,8 @@ BApplications = mongoose.model( 'applications', {
     flyerID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     name:String,
     email:String,
+    tel:String,
+    website:String,
     skills:[],
     applyTime:String,
     workPlace:String,

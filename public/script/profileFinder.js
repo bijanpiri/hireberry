@@ -11,13 +11,13 @@ function validateEmail(email) {
 
 function fillProfiles() {
 
-    puserInfo.name = $('#name').val();
-    puserInfo.email = $('#email').val();
-    puserInfo.pUsername = $('#email').val().split('@')[0];
+    puserInfo.name = $('[name=name]').val();
+    puserInfo.email = $('[name=email]').val();
+    puserInfo.pUsername = $('[name=email]').val().split('@')[0];
     puserInfo.datasourceCount = 6;
     puserInfo.filledDatasourceCount = 0;
 
-    if( puserInfo.name.length > 0 && validateEmail(puserInfo.email) ) {
+    if( puserInfo.name.length > 0 || validateEmail(puserInfo.email) ) {
         $('.profileAddress input').val('').css('border-bottom','2px solid black');
 
         findGravatar( puserInfo.email );
@@ -74,26 +74,20 @@ function findGravatar(q) {
     }
 
     var showImage = function(url) {
-        $('.profilePic')
+        $('.bool-avatar-image')
             .attr('src',url)
             .css('display','block')
             .on('load', function(){
                 var colorThief = new ColorThief();
                 //var color = colorThief.getColor( document.getElementById('profileImage'), 1 )
-                var colors = colorThief.getPalette( document.getElementById('profileImage'), 3, 5 )
+                var colors = colorThief.getPalette( $('.bool-avatar-image')[0] , 3, 5 )
                 var rgb1 = 'rgb('+colors[0][0]+','+colors[0][1]+','+colors[0][2]+')';
                 var rgb2 = 'rgb('+colors[1][0]+','+colors[1][1]+','+colors[1][2]+')';
                 var rgb3 = 'rgb('+colors[2][0]+','+colors[2][1]+','+colors[2][2]+')';
 
-                $('.cardHead')
-                   // .height(80)
-                    .css('background-color', rgb1 )
-                $('.cardFoot')
-                    //.height(40)
-                    .css('background-color', rgb1 )
-                $('.profilePic').css('border-color', rgb2)
-                //$('.card').css('border-color', rgb3)
-            });
+                $('.bool-avatar-container').css('border-color', rgb1)
+            }).show();
+        $('.bool-avatar-no-container').hide();
 
 
         scaleElement( $('.profilePic'), 0, 1.2, function() {

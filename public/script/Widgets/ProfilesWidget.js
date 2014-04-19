@@ -10,14 +10,6 @@ function ProfilesWidget() {
     initLayout.call(this);
     this.setLayout(profile);
 
-    function fetchAvatar(){
-        var email = profile.find('input[name="email"]').val();
-        var hash = CryptoJS.MD5( email.trim().toLowerCase() );
-        $('.bool-avatar-image').attr('src','http://www.gravatar.com/avatar/' + hash );
-        profile.find('.bool-avatar-no-container').hide();
-        profile.find('.bool-avatar-image').show();
-
-    }
     this.widgetDidAdd = function () {
         this.setToolbar('.toolbar-profileWidget');
         var fileInput = this.portlet.find('input[type=file]');
@@ -51,6 +43,15 @@ function ProfilesWidget() {
         }
     }
 
+    function fetchAvatar(){
+        var email = profile.find('input[name="email"]').val();
+        var hash = CryptoJS.MD5( email.trim().toLowerCase() );
+        $('.bool-avatar-image').attr('src','http://www.gravatar.com/avatar/' + hash );
+        profile.find('.bool-avatar-no-container').hide();
+        profile.find('.bool-avatar-image').show();
+
+    }
+
     function done(e, data) {
         var avatar=profile.find('.bool-avatar-image');
         profile.find('.bool-avatar-no-container').hide();
@@ -67,6 +68,9 @@ function ProfilesWidget() {
 
     this.toolbar.delegate('input[name=p]','change',function () {
         profile.find('[for^="' + this.value+'"]').parent().css('display', this.checked ? '' : 'none');
+    });
+    profile.delegate('[name=email]','blur',function(){
+       fillProfiles();
     });
 
      this.toolbar.find('.bool-btn').each(function (i, btn) {

@@ -583,108 +583,108 @@ function init() {
 </div>
 
 <div class="row-fluid flyerRow" hidden>
-<div class="span10 offset1" id="portletsBox">
+    <div class="span10 offset1" id="portletsBox">
 
-<form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
+        <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
 
-<input type="hidden" name="flyerid" value="<%=flyerid%>"/>
-<input type="hidden" name="flyerName">
+            <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
+            <input type="hidden" name="flyerName">
 
-<div class="portletHeader">
-    <input type="file" hidden="hidden" class="logofile">
-    <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
-    <div class="title">
-        JOBS
-    </div>
-</div>
-
-<div class="portletStack"></div>
-
-<div class="portletCreator container-fluid">
-    <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
-        Error: There is no space for adding new portlet!
-    </div>
-
-    <div class="row-fluid" id="plusButton">
-        <div style="width: 84px; height: 64px;margin: 0 auto;">
-            <a class="buttonFrame plusButtonFrame">
-                <i class="button centeralBackgroundImage plusButton "></i>
-            </a>
-        </div>
-    </div>
-    <div class="row-fluid" id="addButtons" hidden>
-        <div style="margin: 0 auto;position: relative;width: 612px;">
-            <a class="newitem buttonFrame" type="1">
-                <i class="button centeralBackgroundImage addNewTextButton"></i>
-            </a>
-            <a class="newitem buttonFrame" type="2">
-                <i class="button centeralBackgroundImage addNewPhotoButton"></i>
-            </a>
-            <a class="newitem buttonFrame" type="3">
-                <i class="button centeralBackgroundImage addNewVideoButton"></i>
-            </a>
-            <a class="newitem buttonFrame">
-                <i class="button centeralBackgroundImage closeButton"></i>
-            </a>
-            <a class="newitem buttonFrame" type="7">
-                <span class="centeralBackgroundImage genericButton">Badge</span>
-            </a>
-            <a class="newitem buttonFrame" type="4">
-                <i class="button centeralBackgroundImage addNewLinkButton"></i>
-            </a>
-            <a class="newitem buttonFrame" type="6">
-                <i class="button centeralBackgroundImage addNewMapButton"></i>
-            </a>
-            <a class="newitem buttonFrame" type="8">
-                <span class="centeralBackgroundImage genericButton">WorkType</span>
-            </a>
-            <a class="newitem buttonFrame" type="9">
-                <span class="centeralBackgroundImage genericButton">PersonalInfo</span>
-            </a>
-            <a class="newitem buttonFrame" type="10">
-                <span class="centeralBackgroundImage genericButton">Resume</span>
-            </a>
-            <a class="newitem buttonFrame" type="11">
-                <span class="centeralBackgroundImage genericButton">Else?</span>
-            </a>
-            <a class="newitem buttonFrame" type="12">
-                <span class="centeralBackgroundImage genericButton">Profiles</span>
-            </a>
-            <a class="newitem buttonFrame" type="13">
-                <span class="centeralBackgroundImage genericButton">Seperator</span>
-            </a>
-            <a class="newitem buttonFrame" type="14">
-                <span class="centeralBackgroundImage genericButton">Skill</span>
-            </a>
-        </div>
-    </div>
-</div>
-
-<div class="portletThanksMessage container-fluid" style="padding: 0 38px" hidden>
-    <div class="row-fluid"  id="text">
-        <div class="span-10 offset-1" style="font-size: 2em;padding:20px ;text-align: center;background: #f1f1f1;line-height: 1.6em;border-radius: 0 0 7px 7px;padding-bottom:3em;">
-            <div class="thanksMessageContent">
-                { Thanks }<br/><br/>
-                We've received your application request and will notify you ASAP.<br/>
-                If you have any question don't hesitate to <a href="mailto:hello@boolt.in">ask us</a><br/>
-                You can read more about booltin <a href="http://blog.boolt.in">here<br/></a><br/>
+            <div class="portletHeader">
+                <input type="file" hidden="hidden" class="logofile">
+                <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
+                <div class="title">
+                    JOBS
+                </div>
             </div>
-        </div>
+
+            <div class="portletStack"></div>
+
+            <div class="portletCreator container-fluid">
+                <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
+                    Error: There is no space for adding new portlet!
+                </div>
+
+                <div class="row-fluid" id="plusButton">
+                    <div style="width: 84px; height: 64px;margin: 0 auto;">
+                        <a class="buttonFrame plusButtonFrame">
+                            <i class="button centeralBackgroundImage plusButton "></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row-fluid" id="addButtons" hidden>
+                    <div style="margin: 0 auto;position: relative;width: 612px;">
+                        <a class="newitem buttonFrame" type="1">
+                            <i class="button centeralBackgroundImage addNewTextButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="2">
+                            <i class="button centeralBackgroundImage addNewPhotoButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="3">
+                            <i class="button centeralBackgroundImage addNewVideoButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame">
+                            <i class="button centeralBackgroundImage closeButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="7">
+                            <span class="centeralBackgroundImage genericButton">Badge</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="4">
+                            <i class="button centeralBackgroundImage addNewLinkButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="6">
+                            <i class="button centeralBackgroundImage addNewMapButton"></i>
+                        </a>
+                        <a class="newitem buttonFrame" type="8">
+                            <span class="centeralBackgroundImage genericButton">WorkType</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="9">
+                            <span class="centeralBackgroundImage genericButton">PersonalInfo</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="10">
+                            <span class="centeralBackgroundImage genericButton">Resume</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="11">
+                            <span class="centeralBackgroundImage genericButton">Else?</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="12">
+                            <span class="centeralBackgroundImage genericButton">Profiles</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="13">
+                            <span class="centeralBackgroundImage genericButton">Seperator</span>
+                        </a>
+                        <a class="newitem buttonFrame" type="14">
+                            <span class="centeralBackgroundImage genericButton">Skill</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portletThanksMessage container-fluid" style="padding: 0 38px" hidden>
+                <div class="row-fluid"  id="text">
+                    <div class="span-10 offset-1" style="font-size: 2em;padding:20px ;text-align: center;background: #f1f1f1;line-height: 1.6em;border-radius: 0 0 7px 7px;padding-bottom:3em;">
+                        <div class="thanksMessageContent">
+                            { Thanks }<br/><br/>
+                            We've received your application request and will notify you ASAP.<br/>
+                            If you have any question don't hesitate to <a href="mailto:hello@boolt.in">ask us</a><br/>
+                            You can read more about booltin <a href="http://blog.boolt.in">here<br/></a><br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
+                <div class="row-fluid"  id="text">
+                    <div class="span6 offset3">
+                        <input type="button" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
+                        <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
     </div>
-</div>
-
-<div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
-    <div class="row-fluid"  id="text">
-        <div class="span6 offset3">
-            <input type="button" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton" style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
-            <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
-        </div>
-    </div>
-</div>
-
-</form>
-
-</div>
 </div>
 
 <div class="row-fluid publishRow" hidden>
@@ -939,7 +939,9 @@ function init() {
 
 <!--<div class="container-fluid profilesWidget">-->
 <div class="container-fluid profilesWidget">
-    <div class="row-fluid">
+<div class="row-fluid">
+
+    <div class="span4">
         <div class="bool-avatar">
             <input type="file" name="avatar" hidden="hidden">
 
@@ -947,9 +949,10 @@ function init() {
                 <img class="bool-avatar-image" >
 
                 <div class="bool-avatar-no-container bool-image">
-                <div class="bool-avatar-no bool-image">
+                    <div class="bool-avatar-no bool-image">
 
-                </div>
+
+                    </div>
                 </div>
 
             </div>
@@ -959,13 +962,13 @@ function init() {
                 <li><a class="bool-avatar-menu-remove">Remove</a></li>
             </ul>
         </div>
-
     </div>
-    <div class="row-fluid">
-         <span class="bool-field">
-                    <label class="bool-label" for="name">
-                        Name
-                    </label>
+
+    <div class="span8">
+        <div class="row-fluid">
+            <span class="bool-field">
+                <label class="bool-label" for="name">
+                    Name
 
                     <div class="bool-input-group">
                         <input type="text" name="name"   id="name">
@@ -974,11 +977,11 @@ function init() {
                             <i class="bool-clear-btn bool-image"></i>
                         </span>
                     </div>
-                </span>
-         <span class="bool-field">
-                    <label class="bool-label" for="email">
-                        Email
-                    </label>
+                </label>
+            </span>
+            <span class="bool-field">
+                <label class="bool-label" for="email">
+                    Email
 
                     <div class="bool-input-group">
                         <input type="text" name="email"   id="email">
@@ -987,11 +990,14 @@ function init() {
                             <i class="bool-clear-btn bool-image"></i>
                         </span>
                     </div>
-                </span>
-         <span class="bool-field">
-                    <label class="bool-label" for="tel">
-                        Tel
-                    </label>
+                </label>
+            </span>
+        </div>
+        <div class="row-fluid">
+
+            <span class="bool-field">
+                <label class="bool-label" for="tel">
+                    Tel
 
                     <div class="bool-input-group">
                         <input type="text" name="tel"   id="tel">
@@ -1000,11 +1006,12 @@ function init() {
                             <i class="bool-clear-btn bool-image"></i>
                         </span>
                     </div>
-                </span>
-         <span class="bool-field">
-                    <label class="bool-label" for="website">
-                        Website
-                    </label>
+                </label>
+
+            </span>
+            <span class="bool-field">
+                <label class="bool-label" for="website">
+                    Website
 
                     <div class="bool-input-group">
                         <input type="text" name="website"   id="website">
@@ -1013,122 +1020,126 @@ function init() {
                             <i class="bool-clear-btn bool-image"></i>
                         </span>
                     </div>
-                </span>
+                </label>
+            </span>
+
+        </div>
+        <div class="row-fluid">
+            <div class="bool-iconic-input-container">
+                <label for="github" class="bool-iconic-input">
+                    <div class="bool-iconic-col-icon bool-icon-back-github">
+                        <div class="bool-iconic-cell-icon">
+                            <i class="bool-iconic-icon bool-icon-github-white"></i>
+                        </div>
+                    </div>
+                    <div class="bool-iconic-col-label">github.com/ </div>
+                    <div class="bool-iconic-col-input">
+
+                        <input type="text" name="ghprofile" id="github">
+                        <span class="bool-glass bool-image"></span>
+                        <span class="bool-clear-container">
+                            <i class="bool-clear-btn bool-image"></i>
+                        </span>
+                    </div>
+                </label>
+            </div>
+            <div class="bool-iconic-input-container">
+                <label for="stackoverflow" class="bool-iconic-input">
+                    <div class="bool-iconic-col-icon bool-icon-back-stackoverflow">
+                        <div class="bool-iconic-cell-icon">
+                            <span class=" bool-icon-stackoverflow-white bool-iconic-icon"></span>
+                        </div>
+                    </div>
+                    <div class="bool-iconic-col-label">stackoverflow.com/ </div>
+                    <div class="bool-iconic-col-input">
+
+                        <input type="text" name="soprofile" id="stackoverflow">
+                        <span class="bool-glass bool-image"></span>
+                        <span class="bool-clear-container">
+                            <i class="bool-clear-btn bool-image"></i>
+                        </span>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="bool-iconic-input-container">
+                <label for="twitter" class="bool-iconic-input">
+                    <div class="bool-iconic-col-icon bool-icon-back-twitter">
+                        <div class="bool-iconic-cell-icon">
+                            <i class="bool-iconic-icon bool-icon-twitter-white"></i>
+                        </div>
+                    </div>
+                    <div class="bool-iconic-col-label">twitter.com/ </div>
+                    <div class="bool-iconic-col-input">
+
+                        <input type="text" name="twprofile" id="twitter">
+                        <span class="bool-glass bool-image"></span>
+                        <span class="bool-clear-container">
+                            <i class="bool-clear-btn bool-image"></i>
+                        </span>
+                    </div>
+                </label>
+            </div>
+            <div class="bool-iconic-input-container">
+                <label for="linkedin" class="bool-iconic-input">
+                    <div class="bool-iconic-col-icon bool-icon-back-linkedin">
+                        <div class="bool-iconic-cell-icon">
+                            <i class="bool-iconic-icon bool-icon-linkedin-white"></i>
+                        </div>
+                    </div>
+                    <div class="bool-iconic-col-label">linkedin.com/in/ </div>
+                    <div class="bool-iconic-col-input">
+
+                        <input type="text" name="liprofile" id="linkedin">
+                        <span class="bool-glass bool-image"></span>
+                        <span class="bool-clear-container">
+                            <i class="bool-clear-btn bool-image"></i>
+                        </span>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="bool-iconic-input-container">
+                <label for="dribbble" class="bool-iconic-input">
+                    <div class="bool-iconic-col-icon bool-icon-back-dribbble">
+                        <div class="bool-iconic-cell-icon">
+                            <i class="bool-iconic-icon bool-icon-dribbble-white"></i>
+                        </div>
+                    </div>
+                    <div class="bool-iconic-col-label">dribbble.com/ </div>
+                    <div class="bool-iconic-col-input">
+
+                        <input type="text" name="drprofile" id="dribbble">
+                        <span class="bool-glass bool-image"></span>
+                        <span class="bool-clear-container">
+                            <i class="bool-clear-btn bool-image"></i>
+                        </span>
+                    </div>
+                </label>
+            </div>
+            <div class="bool-iconic-input-container">
+                <label for="behance" class="bool-iconic-input">
+                    <div class="bool-iconic-col-icon bool-icon-back-behance">
+                        <div class="bool-iconic-cell-icon">
+                            <i class="bool-iconic-icon bool-icon-behance-white"></i>
+                        </div>
+                    </div>
+                    <div class="bool-iconic-col-label">behance.net/ </div>
+                    <div class="bool-iconic-col-input">
+
+                        <input type="text" name="beprofile" id="behance">
+                        <span class="bool-glass bool-image"></span>
+                        <span class="bool-clear-container">
+                            <i class="bool-clear-btn bool-image"></i>
+                        </span>
+                    </div>
+                </label>
+            </div>
+        </div>
     </div>
-
-    <div class="row-fluid">
-
-        <div class="bool-iconic-input-container">
-            <label for="github" class="bool-iconic-input">
-                <div class="bool-iconic-col-icon bool-icon-back-github">
-                    <div class="bool-iconic-cell-icon">
-                        <i class="bool-iconic-icon bool-icon-github-white"></i>
-                    </div>
-                </div>
-                <div class="bool-iconic-col-label">github.com/ </div>
-                <div class="bool-iconic-col-input">
-
-                    <input type="text" name="github" id="github">
-                    <span class="bool-glass bool-image"></span>
-                    <span class="bool-clear-container">
-                        <i class="bool-clear-btn bool-image"></i>
-                    </span>
-                </div>
-            </label>
-        </div>
-        <div class="bool-iconic-input-container">
-            <label for="stackoverflow" class="bool-iconic-input">
-                <div class="bool-iconic-col-icon bool-icon-back-stackoverflow">
-                    <div class="bool-iconic-cell-icon">
-                        <span class=" bool-icon-stackoverflow-white bool-iconic-icon"></span>
-                    </div>
-                </div>
-                <div class="bool-iconic-col-label">stackoverflow.com/ </div>
-                <div class="bool-iconic-col-input">
-
-                    <input type="text" name="stackoverflow" id="stackoverflow">
-                    <span class="bool-glass bool-image"></span>
-                    <span class="bool-clear-container">
-                        <i class="bool-clear-btn bool-image"></i>
-                    </span>
-                </div>
-            </label>
-        </div>
-        <div class="bool-iconic-input-container">
-            <label for="twitter" class="bool-iconic-input">
-                <div class="bool-iconic-col-icon bool-icon-back-twitter">
-                    <div class="bool-iconic-cell-icon">
-                        <i class="bool-iconic-icon bool-icon-twitter-white"></i>
-                    </div>
-                </div>
-                <div class="bool-iconic-col-label">twitter.com/ </div>
-                <div class="bool-iconic-col-input">
-
-                    <input type="text" name="twitter" id="twitter">
-                    <span class="bool-glass bool-image"></span>
-                    <span class="bool-clear-container">
-                        <i class="bool-clear-btn bool-image"></i>
-                    </span>
-                </div>
-            </label>
-        </div>
-        <div class="bool-iconic-input-container">
-            <label for="linkedin" class="bool-iconic-input">
-                <div class="bool-iconic-col-icon bool-icon-back-linkedin">
-                    <div class="bool-iconic-cell-icon">
-                        <i class="bool-iconic-icon bool-icon-linkedin-white"></i>
-                    </div>
-                </div>
-                <div class="bool-iconic-col-label">linkedin.com/in/ </div>
-                <div class="bool-iconic-col-input">
-
-                    <input type="text" name="linkedin" id="linkedin">
-                    <span class="bool-glass bool-image"></span>
-                    <span class="bool-clear-container">
-                        <i class="bool-clear-btn bool-image"></i>
-                    </span>
-                </div>
-            </label>
-        </div>
-        <div class="bool-iconic-input-container">
-            <label for="dribbble" class="bool-iconic-input">
-                <div class="bool-iconic-col-icon bool-icon-back-dribbble">
-                    <div class="bool-iconic-cell-icon">
-                        <i class="bool-iconic-icon bool-icon-dribbble-white"></i>
-                    </div>
-                </div>
-                <div class="bool-iconic-col-label">dribbble.com/ </div>
-                <div class="bool-iconic-col-input">
-
-                    <input type="text" name="dribbble" id="dribbble">
-                    <span class="bool-glass bool-image"></span>
-                    <span class="bool-clear-container">
-                        <i class="bool-clear-btn bool-image"></i>
-                    </span>
-                </div>
-            </label>
-        </div>
-        <div class="bool-iconic-input-container">
-            <label for="behance" class="bool-iconic-input">
-                <div class="bool-iconic-col-icon bool-icon-back-behance">
-                    <div class="bool-iconic-cell-icon">
-                        <i class="bool-iconic-icon bool-icon-behance-white"></i>
-                    </div>
-                </div>
-                <div class="bool-iconic-col-label">behance.net/ </div>
-                <div class="bool-iconic-col-input">
-
-                    <input type="text" name="behance" id="behance">
-                    <span class="bool-glass bool-image"></span>
-                    <span class="bool-clear-container">
-                        <i class="bool-clear-btn bool-image"></i>
-                    </span>
-                </div>
-            </label>
-        </div>
-
-    </div>
-
+</div>
 
 </div>
 
@@ -1210,190 +1221,190 @@ function init() {
 </div>
 
 <div class="toolbars">
-<div class="toolbar-text">
+    <div class="toolbar-text">
 
-    <div class="bool-combo">
+        <div class="bool-combo">
             <span class="bool-combo-icon">
                 <i class="bool-icon-size"></i>
             </span>
-        <a class="btn dropdown-toggle bool-combo-btn" data-toggle="dropdown" href="#">
-            <span class="bool-combo-text">Small</span>
-            <span class="caret bool-caret"></span>
-        </a>
-        <ul class="dropdown-menu bool-combo-list">
-            <li><a style="font-size: 18px" command="size 18">Small</a></li>
-            <li><a style="font-size: 20px" command="size 36">Medium</a></li>
-            <li><a style="font-size: 24px" command="size 48">Large</a></li>
+            <a class="btn dropdown-toggle bool-combo-btn" data-toggle="dropdown" href="#">
+                <span class="bool-combo-text">Small</span>
+                <span class="caret bool-caret"></span>
+            </a>
+            <ul class="dropdown-menu bool-combo-list">
+                <li><a style="font-size: 18px" command="size 18">Small</a></li>
+                <li><a style="font-size: 20px" command="size 36">Medium</a></li>
+                <li><a style="font-size: 24px" command="size 48">Large</a></li>
+            </ul>
+        </div>
+        <ul class="nav nav-pills pull-left">
+            <li class="dropdown btn-group ">
+                <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <span class="bool-current-color"></span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker" >
+
+                </ul>
+
+            </li>
+            <li class="dropdown btn-group bool-tab-btn">
+                <a class="bool-tab dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <i class="bool-icon bool-icon-recent"></i>
+                    <span class="bool-tab-text">Recent Colors</span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
+                    <li><div class="bool-no-recent">No item has been selected</div></li>
+                </ul>
+            </li>
         </ul>
+        <div class="bool-separator"></div>
+        <a class="bool-btn"  command="align left" title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="bool-icon-align-left"></i></a>
+        <a class="bool-btn"  command="align center" title="Align Center" data-original-title="Center (Ctrl/Cmd+E)"><i class="bool-icon-align-center"></i></a>
+        <a class="bool-btn"  command="align right" title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="bool-icon-align-right"></i></a>
+        <div class="bool-separator"></div>
+        <a class="bool-btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
+        <a class="bool-btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
+        <a class="bool-btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="bool-icon-underline"></i></a>
+        <a class="bool-btn" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="bool-icon-list-ul"></i></a>
+        <a class="bool-btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
     </div>
-    <ul class="nav nav-pills pull-left">
-        <li class="dropdown btn-group ">
-            <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
-                <span class="bool-current-color"></span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker" >
 
-            </ul>
-
-        </li>
-        <li class="dropdown btn-group bool-tab-btn">
-            <a class="bool-tab dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
-                <i class="bool-icon bool-icon-recent"></i>
-                <span class="bool-tab-text">Recent Colors</span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
-                <li><div class="bool-no-recent">No item has been selected</div></li>
-            </ul>
-        </li>
-    </ul>
-    <div class="bool-separator"></div>
-    <a class="bool-btn"  command="align left" title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="bool-icon-align-left"></i></a>
-    <a class="bool-btn"  command="align center" title="Align Center" data-original-title="Center (Ctrl/Cmd+E)"><i class="bool-icon-align-center"></i></a>
-    <a class="bool-btn"  command="align right" title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="bool-icon-align-right"></i></a>
-    <div class="bool-separator"></div>
-    <a class="bool-btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
-    <a class="bool-btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
-    <a class="bool-btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="bool-icon-underline"></i></a>
-    <a class="bool-btn" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="bool-icon-list-ul"></i></a>
-    <a class="bool-btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
-</div>
-
-<div class="toolbar-picture">
-    <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
-    <a class="btn btn-large" command="edit"><i class="icon-edit"></i></a>
-    <a class="btn btn-large hide" command="crop"><i class="icon-edit"></i></a>
-</div>
-
-<div class="toolbar-separatorWidget">
-    <div class="pull-left">
-        <span  id="toolbar-labelSeparator" >Section Title</span>
-        <input type="text" id="toolbar-inputTextSeparator" name="text" placeholder="More Info.">
+    <div class="toolbar-picture">
+        <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
+        <a class="btn btn-large" command="edit"><i class="icon-edit"></i></a>
+        <a class="btn btn-large hide" command="crop"><i class="icon-edit"></i></a>
     </div>
-    <ul class="nav nav-pills pull-left">
-        <li class="dropdown btn-group ">
-            <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
-                <span class="bool-current-color"></span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker" >
 
-            </ul>
+    <div class="toolbar-separatorWidget">
+        <div class="pull-left">
+            <span  id="toolbar-labelSeparator" >Section Title</span>
+            <input type="text" id="toolbar-inputTextSeparator" name="text" placeholder="More Info.">
+        </div>
+        <ul class="nav nav-pills pull-left">
+            <li class="dropdown btn-group ">
+                <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <span class="bool-current-color"></span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker" >
 
-        </li>
-        <li class="dropdown btn-group bool-tab-btn">
-            <a class="bool-tab dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
-                <i class="bool-icon bool-icon-recent"></i>
-                <span class="bool-tab-text">Recent Colors</span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
-                <li><div class="bool-no-recent">No item has been selected</div></li>
-            </ul>
-        </li>
-    </ul>
+                </ul>
 
-</div>
+            </li>
+            <li class="dropdown btn-group bool-tab-btn">
+                <a class="bool-tab dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
+                    <i class="bool-icon bool-icon-recent"></i>
+                    <span class="bool-tab-text">Recent Colors</span>
+                </a>
+                <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
+                    <li><div class="bool-no-recent">No item has been selected</div></li>
+                </ul>
+            </li>
+        </ul>
 
-<div class="toolbar-profileWidget">
-
-
-    <span id="toolbar-labelprofile">Profiles : </span>
-
-    <input hidden type="checkbox" id="tool-github"   name="p" value="github" checked>
-    <label  for="tool-github" class="bool-btn" >
-        <i class="bool-icon-github" for="tool-github"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-stackoverflow"   name="p" value="stackoverflow" checked>
-    <label for="tool-stackoverflow"  class="bool-btn" >
-        <i class="bool-icon-stackoverflow"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-twitter"   name="p" value="twitter" checked>
-    <label for="tool-twitter"  class="bool-btn" >
-        <i  class="bool-icon-twitter"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-linkedin"   name="p" value="linkedin" checked>
-    <label for="tool-linkedin"  class="bool-btn" >
-        <i class="bool-icon-linkedin"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-dribbble"   name="p" value="dribbble" checked>
-    <label for="tool-dribbble"  class="bool-btn" >
-        <i class="bool-icon-dribbble"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-behance"   name="p" value="behance" checked>
-    <label for="tool-behance" class="bool-btn" >
-        <i  class="bool-icon-behance"></i>
-    </label>
-
-    <div class="bool-separator"></div>
-
-    <input hidden  type="checkbox" id="tool-email"   name="p" value="email" checked>
-    <label for="tool-email"  class="bool-btn" >
-        <i class="bool-icon-email"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-tel"   name="p" value="tel" checked>
-    <label for="tool-tel"  class="bool-btn" >
-        <i class="bool-icon-tel"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-website"   name="p" value="website" checked>
-    <label for="tool-website"  class="bool-btn" >
-        <i  class="bool-icon-website"></i>
-    </label>
-</div>
-
-<div class="toolbar-workTypeWidget">
-    <div>
-        <input id="workType-time" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-time" no="1">
-        <label  for="workType-time" class="toolbar-widgetLabel">Time</label>
-
-        <input id="workType-place" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-place" no="2">
-        <label for="workType-place" class="toolbar-widgetLabel">Place</label>
-
-        <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3">
-        <label for="workType-both" class="toolbar-widgetLabel">Both</label>
     </div>
-</div>
 
-<div class="toolbar-resumeWidget">
-    <button name="connectToDropBox" class="btn">Connect to Dropbox</button>
-</div>
+    <div class="toolbar-profileWidget">
 
-<div class="toolbar-anything">
-    <label for="anything-limit" >Limit:</label>
 
-    <input id="anything-limit" type="number" command='limit' event='change keyup paste keydown' name="limit" value="1000" min="10" max="5000">
-    <label>you have </label>
-    <label class="remaind"></label>
-    <label> left</label>
-</div>
+        <span id="toolbar-labelprofile">Profiles : </span>
 
-<div class="toolbar-skillsWidget">
-</div>
+        <input hidden type="checkbox" id="tool-github"   name="p" value="github" checked>
+        <label  for="tool-github" class="bool-btn" >
+            <i class="bool-icon-github" for="tool-github"></i>
+        </label>
 
-<div class="toolbar-badgeWidget">
+        <input hidden type="checkbox" id="tool-stackoverflow"   name="p" value="stackoverflow" checked>
+        <label for="tool-stackoverflow"  class="bool-btn" >
+            <i class="bool-icon-stackoverflow"></i>
+        </label>
 
-    <input type="checkbox" id="vacation" hidden name="badge" value="vacation" checked>
-    <label for="vacation" class="toolbar-badgeLabel">Vacation</label>
+        <input hidden type="checkbox" id="tool-twitter"   name="p" value="twitter" checked>
+        <label for="tool-twitter"  class="bool-btn" >
+            <i  class="bool-icon-twitter"></i>
+        </label>
 
-    <input type="checkbox" id="snack" hidden name="badge" value="snack" checked>
-    <label for="snack" class="toolbar-badgeLabel">Snack</label>
+        <input hidden type="checkbox" id="tool-linkedin"   name="p" value="linkedin" checked>
+        <label for="tool-linkedin"  class="bool-btn" >
+            <i class="bool-icon-linkedin"></i>
+        </label>
 
-    <input type="checkbox" id="health" hidden name="badge" value="health" checked>
-    <label for="health" class="toolbar-badgeLabel">Health</label>
+        <input hidden type="checkbox" id="tool-dribbble"   name="p" value="dribbble" checked>
+        <label for="tool-dribbble"  class="bool-btn" >
+            <i class="bool-icon-dribbble"></i>
+        </label>
 
-    <input type="checkbox" id="share" hidden name="badge" value="share" checked>
-    <label for="share" class="toolbar-badgeLabel">Share</label>
+        <input hidden type="checkbox" id="tool-behance"   name="p" value="behance" checked>
+        <label for="tool-behance" class="bool-btn" >
+            <i  class="bool-icon-behance"></i>
+        </label>
 
-</div>
+        <div class="bool-separator"></div>
 
-<div class="toolbar-videoWidget">
-    <div class="videoWidgetInputboxOutterToolbar">
-        <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">
-        <button  command="done" class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDoneToolbar" id="DoneToolbar">Done</button>
+        <input hidden  type="checkbox" id="tool-email"   name="p" value="email" checked>
+        <label for="tool-email"  class="bool-btn" >
+            <i class="bool-icon-email"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-tel"   name="p" value="tel" checked>
+        <label for="tool-tel"  class="bool-btn" >
+            <i class="bool-icon-tel"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-website"   name="p" value="website" checked>
+        <label for="tool-website"  class="bool-btn" >
+            <i  class="bool-icon-website"></i>
+        </label>
     </div>
-</div>
+
+    <div class="toolbar-workTypeWidget">
+        <div>
+            <input id="workType-time" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-time" no="1">
+            <label  for="workType-time" class="toolbar-widgetLabel">Time</label>
+
+            <input id="workType-place" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-place" no="2">
+            <label for="workType-place" class="toolbar-widgetLabel">Place</label>
+
+            <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3">
+            <label for="workType-both" class="toolbar-widgetLabel">Both</label>
+        </div>
+    </div>
+
+    <div class="toolbar-resumeWidget">
+        <button name="connectToDropBox" class="btn">Connect to Dropbox</button>
+    </div>
+
+    <div class="toolbar-anything">
+        <label for="anything-limit" >Limit:</label>
+
+        <input id="anything-limit" type="number" command='limit' event='change keyup paste keydown' name="limit" value="1000" min="10" max="5000">
+        <label>you have </label>
+        <label class="remaind"></label>
+        <label> left</label>
+    </div>
+
+    <div class="toolbar-skillsWidget">
+    </div>
+
+    <div class="toolbar-badgeWidget">
+
+        <input type="checkbox" id="vacation" hidden name="badge" value="vacation" checked>
+        <label for="vacation" class="toolbar-badgeLabel">Vacation</label>
+
+        <input type="checkbox" id="snack" hidden name="badge" value="snack" checked>
+        <label for="snack" class="toolbar-badgeLabel">Snack</label>
+
+        <input type="checkbox" id="health" hidden name="badge" value="health" checked>
+        <label for="health" class="toolbar-badgeLabel">Health</label>
+
+        <input type="checkbox" id="share" hidden name="badge" value="share" checked>
+        <label for="share" class="toolbar-badgeLabel">Share</label>
+
+    </div>
+
+    <div class="toolbar-videoWidget">
+        <div class="videoWidgetInputboxOutterToolbar">
+            <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">
+            <button  command="done" class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDoneToolbar" id="DoneToolbar">Done</button>
+        </div>
+    </div>
 </div>

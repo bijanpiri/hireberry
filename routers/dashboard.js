@@ -85,6 +85,8 @@ module.exports.applications = function (req,res) {
             position: { index: 4, type: "string", friendly:"Position" },
             name: { index: 5, type: "string", friendly:"Name" },
             email: { index: 6, type: "string", friendly:"Email" },
+            tel: { index: 6, type: "string", friendly:"Tel" },
+            website: { index: 6, type: "string", friendly:"Website" },
             skills: { index: 7, type: "string", friendly:"Skills"},
             profiles: { index: 8, type: "string", friendly:"Profiles"},
             workTime: { index: 9, type: "string", friendly:"Work Time" },

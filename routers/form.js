@@ -129,6 +129,8 @@ module.exports.apply = function (req,res) {
         flyerID: req.body.flyerid,
         name:req.body.name,
         email:req.body.email,
+        tel:req.body.tel,
+        website:req.body.website,
         applyTime: new Date(),
         skills:JSON.stringify(skills),
         workPlace:req.body.workPlace,

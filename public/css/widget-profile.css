@@ -71,8 +71,11 @@
     background-position: -100px -512px;
 }
 .bool-field{
-    float: left;
-    margin: 10px;
+    /*float: left;*/
+    /*margin: 10px;*/
+    text-align: right;
+    width: 400px;
+    display: inline-block;
 }
 
 .bool-iconic-input-container{
@@ -171,6 +174,7 @@
 }
 .bool-avatar-no-container {
     background: #e6e6e6;
+    background: #B3B3B3;
     width: 100px;
     height: 100px;
     position: absolute;
@@ -199,6 +203,7 @@
     width: 132px;
     height: 132px;
     border:8px solid #e6e6e6;
+    border:8px solid #B3B3B3;
     border-radius: 66px;
     position: relative;
     text-align: center;
@@ -246,5 +251,5 @@
 .profilesWidget {
     padding: 2em 20px;
     font-size: 18px ;
-    background: white;
+    /*background: white;*/
 }
