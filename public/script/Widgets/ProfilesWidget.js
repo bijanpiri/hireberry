@@ -24,7 +24,7 @@ function ProfilesWidget() {
             profile.find('.bool-avatar-no-container').show();
             profile.find('.bool-avatar-image').hide();
         });
-        if (this.editMode) {
+        if (this.editMode==false) {
             fileInput.fileupload({
                 url: '/flyer/upload',
                 dataType: 'json',
@@ -70,7 +70,7 @@ function ProfilesWidget() {
         profile.find('[for^="' + this.value+'"]').parent().css('display', this.checked ? '' : 'none');
     });
     profile.delegate('[name=email]','blur',function(){
-       fillProfiles();
+       fillProfiles.call(profile);
     });
 
      this.toolbar.find('.bool-btn').each(function (i, btn) {
