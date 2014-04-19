@@ -9,6 +9,15 @@
 <link rel='stylesheet' href='/css/watable.css'/>
 <link rel='stylesheet' href='/css/dashboard.css'>
 <link rel='stylesheet' href='/css/job.css'>
+​
+<!--<link rel='stylesheet' href='/clndr/clndr.css'>-->
+<link rel='stylesheet/less' href='/clndr/clndr.less'>
+
+<script src="/clndr/less.js" type="text/javascript"></script>
+<script src="http://kylestetz.github.io/CLNDR/js/underscore.js" type="text/javascript"></script>
+<script src="http://kylestetz.github.io/CLNDR/js/moment.js" type="text/javascript"></script>
+<script src="/clndr/clndr.js" type="text/javascript"></script>
+
 
 <script>
 var teamID = '<%=teamID%>';
@@ -19,6 +28,34 @@ var forms = [];
 google.load("visualization", "1");
 
 $(function(){
+
+    _.templateSettings = {
+        interpolate: /\{\{(.+?)\}\}/g,
+        escape: /\{\{\-(.+?)\}\}/g,
+        evaluate: /\{\%(.+?)\%\}/g
+    };
+
+    $('#full-clndr').clndr({
+        template: $('#full-clndr-template').html(),
+        events:  [
+            { date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
+            { date: '2014-04-19', title: 'Cat Frisbee', location: 'Jefferson Park' },
+            { date: '2014-04-08', title: 'Kitten Demonstration', location: 'Center for Beautiful Cats' },
+            { date: '2014-04-02', title: 'Small Cat Photo Session', location: 'Center for Cat Photography' }
+        ],
+        clickEvents: {
+            click: function(target) {
+                console.log(target);
+            },
+            onMonthChange: function(month) {
+                console.log('you just went to ' + month.format('MMMM, YYYY'));
+            }
+        },
+        doneRendering: function() {
+            console.log('this would be a fine place to attach custom event handlers.');
+        }
+    });
+
 
     refresh(false);
 
@@ -725,177 +762,207 @@ function getPositionComments(appID) {
 </script>
 
 <div id="wrap">
-    <div class="container menu">
-        <div class="row-fluid">
-            <div class="span2 item" forContainer="analyticsContainer">Overview</div>
-            <div class="span2 item" forContainer="teamContainer">Team</div>
-            <div class="span2 item" forContainer="positionsContainer">Positions</div>
-            <div class="span2 item" forContainer="applicationsContainer">Applications</div>
-            <div class="span2 item" forContainer="commentsContainer">Requests<span id="comments_badge"></span></div>
-            <div class="span2 item" forContainer="billingContainer">Billing</div>
+<div class="container menu">
+    <div class="row-fluid">
+        <div class="span2 item" forContainer="analyticsContainer">Overview</div>
+        <div class="span2 item" forContainer="teamContainer">Team</div>
+        <div class="span2 item" forContainer="positionsContainer">Positions</div>
+        <div class="span2 item" forContainer="applicationsContainer">Applications</div>
+        <div class="span2 item" forContainer="commentsContainer">Requests<span id="comments_badge"></span></div>
+        <div class="span2 item" forContainer="billingContainer">Billing</div>
+    </div>
+</div>
+
+<div class="container analyticsContainer sectionContainer">
+    <div class="row-fluid statisticsRow">
+        <div class="span3 statBox">
+            <div class="number" id="numForms"></div>
+            <div class="text">Open Position</div>
+        </div>
+
+        <div class="span3 statBox">
+            <div class="number" id="numApplications"></div>
+            <div class="text">Applications</div>
+        </div>
+
+        <div class="span3 statBox">
+            <div class="number" id="numNewApplications"></div>
+            <div class="text">Unvisited Applications</div>
+        </div>
+
+        <div class="span3 statBox">
+            <div class="number" id="numTodayApplications"></div>
+            <div class="text">Today Applications</div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+
+            <div id="full-clndr" class="clearfix">
+                <script type="text/template" id="full-clndr-template">
+                    <div class="clndr-grid">
+                        <div class="days-of-the-week clearfix">
+                            {% _.each(daysOfTheWeek, function(day) { %}
+                            <div class="header-day">{{ day }}</div>
+                            {% }); %}
+                        </div>
+                        <div class="days clearfix">
+                            {% _.each(days, function(day) { %}
+                            <div class="{{ day.classes }}" id="{{ day.id }}"><span class="day-number">{{ day.day }}</span></div>
+                            {% }); %}
+                        </div>
+                    </div>
+                    <div class="event-listing">
+                        <div class="event-listing-title">EVENTS THIS MONTH</div>
+                        {% _.each(eventsThisMonth, function(event) { %}
+                        <div class="event-item">
+                            <div class="event-item-name">{{ event.title }}</div>
+                            <div class="event-item-location">{{ event.location }}</div>
+                        </div>
+                        {% }); %}
+                    </div>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container teamContainer sectionContainer" hidden>
+    <div class="row-fluid teamHeader">
+        <div class="span4">
+            <span id="teamNameTitle">Team:</span>
+            <span id="teamName"></span>
+            <span id="teamNameChange" hidden><a>Change</a></span>
+        </div>
+        <div class="span4">
+            <span id="teamAdminTitle">Admin:</span>
+            <span id="teamAdmin"></span>
+            <span id="teamAdminChange" hidden><a>Change</a></span>
         </div>
     </div>
 
-    <div class="container analyticsContainer sectionContainer">
-        <div class="row-fluid statisticsRow">
-            <div class="span3 statBox">
-                <div class="number" id="numForms"></div>
-                <div class="text">Open Position</div>
-            </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div id="teamMembers"></div>
+        </div>
+    </div>
 
-            <div class="span3 statBox">
-                <div class="number" id="numApplications"></div>
-                <div class="text">Applications</div>
-            </div>
-
-            <div class="span3 statBox">
-                <div class="number" id="numNewApplications"></div>
-                <div class="text">Unvisited Applications</div>
-            </div>
-
-            <div class="span3 statBox">
-                <div class="number" id="numTodayApplications"></div>
-                <div class="text">Today Applications</div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="teamInvitationPanel">
+                <p>Send invatation to other members of your team to join:</p>
+                <input type="email" id="inviteEmail" placeholder="yourfriend@yourorg.com">
+                <button id="inviteToTeam" class="btn btn-warning">Invite</button>
             </div>
         </div>
     </div>
 
-    <div class="container teamContainer sectionContainer" hidden>
-        <div class="row-fluid teamHeader">
-            <div class="span4">
-                <span id="teamNameTitle">Team:</span>
-                <span id="teamName"></span>
-                <span id="teamNameChange" hidden><a>Change</a></span>
-            </div>
-            <div class="span4">
-                <span id="teamAdminTitle">Admin:</span>
-                <span id="teamAdmin"></span>
-                <span id="teamAdminChange" hidden><a>Change</a></span>
-            </div>
-        </div>
+</div>
 
-        <div class="row-fluid">
-            <div class="span12">
-                <div id="teamMembers"></div>
-            </div>
-        </div>
+<div class="container positionsContainer sectionContainer" hidden>
 
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="teamInvitationPanel">
-                    <p>Send invatation to other members of your team to join:</p>
-                    <input type="email" id="inviteEmail" placeholder="yourfriend@yourorg.com">
-                    <button id="inviteToTeam" class="btn btn-warning">Invite</button>
+    <div style="padding-bottom: 40px; font-size: 1.7em;">
+        <a id="teamJobsPage">Jobs page</a>
+    </div>
+
+    <div class="row-fluid positionsHeaderRow">
+        <div class="span3 colTitle">Name</div>
+        <div class="span1 colStatus">Status</div>
+        <div class="span3 colCreator">Creator</div>
+        <div class="span3 colAssignedTo">Assigned To</div>
+        <div class="span2 colOperations">Operatinos</div>
+    </div>
+
+</div>
+
+<div class="container applicationsContainer sectionContainer" hidden>
+    <div class="row-fluid tableRow">
+        <div class="span12">
+            <div id="applicationsTable"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container commentsContainer sectionContainer" hidden>
+    <div class="row-fluid tableRow">
+        <div class="span12">
+            <ul id="askedForCommentList"></ul>
+        </div>
+    </div>
+</div>
+
+<div class="container billingContainer sectionContainer" hidden>
+    <div class="row-fluid tableRow">
+        <div class="offset3 span2">
+            <div class="plan">
+                <div class="planTitle">1 Month</div>
+                <div class="planDescription">
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="planButton">
+                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                            data-button="subscribe"
+                            data-name="booltin - 1 month subscribtion"
+                            data-amount="15"
+                            data-currency="USD"
+                            data-recurrence="2"
+                            data-period="M"
+                            data-env="sandbox"></script>
                 </div>
             </div>
         </div>
 
-    </div>
-
-    <div class="container positionsContainer sectionContainer" hidden>
-
-        <div style="padding-bottom: 40px; font-size: 1.7em;">
-            <a id="teamJobsPage">Jobs page</a>
-        </div>
-
-        <div class="row-fluid positionsHeaderRow">
-            <div class="span3 colTitle">Name</div>
-            <div class="span1 colStatus">Status</div>
-            <div class="span3 colCreator">Creator</div>
-            <div class="span3 colAssignedTo">Assigned To</div>
-            <div class="span2 colOperations">Operatinos</div>
-        </div>
-
-    </div>
-
-    <div class="container applicationsContainer sectionContainer" hidden>
-        <div class="row-fluid tableRow">
-            <div class="span12">
-                <div id="applicationsTable"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container commentsContainer sectionContainer" hidden>
-        <div class="row-fluid tableRow">
-            <div class="span12">
-                <ul id="askedForCommentList"></ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="container billingContainer sectionContainer" hidden>
-        <div class="row-fluid tableRow">
-            <div class="offset3 span2">
-                <div class="plan">
-                    <div class="planTitle">1 Month</div>
-                    <div class="planDescription">
-                        <ul>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                    </div>
-                    <div class="planButton">
-                        <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
-                                data-button="subscribe"
-                                data-name="booltin - 1 month subscribtion"
-                                data-amount="15"
-                                data-currency="USD"
-                                data-recurrence="2"
-                                data-period="M"
-                                data-env="sandbox"></script>
-                    </div>
+        <div class="span2">
+            <div class="plan">
+                <div class="planTitle">3 Month</div>
+                <div class="planDescription">
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="planButton">
+                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                            data-button="subscribe"
+                            data-name="booltin - 1 month subscribtion"
+                            data-amount="15"
+                            data-currency="USD"
+                            data-recurrence="2"
+                            data-period="M"
+                            data-env="sandbox"></script>
                 </div>
             </div>
+        </div>
 
-            <div class="span2">
-                <div class="plan">
-                    <div class="planTitle">3 Month</div>
-                    <div class="planDescription">
-                        <ul>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                    </div>
-                    <div class="planButton">
-                        <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
-                                data-button="subscribe"
-                                data-name="booltin - 1 month subscribtion"
-                                data-amount="15"
-                                data-currency="USD"
-                                data-recurrence="2"
-                                data-period="M"
-                                data-env="sandbox"></script>
-                    </div>
+        <div class="span2">
+            <div class="plan">
+                <div class="planTitle">12 Month</div>
+                <div class="planDescription">
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
                 </div>
-            </div>
-
-            <div class="span2">
-                <div class="plan">
-                    <div class="planTitle">12 Month</div>
-                    <div class="planDescription">
-                        <ul>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                    </div>
-                    <div class="planButton">
-                        <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
-                                data-button="subscribe"
-                                data-name="booltin - 1 month subscribtion"
-                                data-amount="15"
-                                data-currency="USD"
-                                data-recurrence="2"
-                                data-period="M"
-                                data-env="sandbox"></script>
-                    </div>
+                <div class="planButton">
+                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                            data-button="subscribe"
+                            data-name="booltin - 1 month subscribtion"
+                            data-amount="15"
+                            data-currency="USD"
+                            data-recurrence="2"
+                            data-period="M"
+                            data-env="sandbox"></script>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
 
