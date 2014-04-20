@@ -130,21 +130,46 @@ function MapWidget(){
     }
 
     function changeLayout() {
-        var m = this.portlet.find('.map-right').parent().html();
-        var a = this.portlet.find('.address-left').parent().html();
+        var mapContainer = this.portlet.find('.map-right').parent();
+        var adderessContainer = this.portlet.find('.address-left').parent();
 
-        this.portlet.find('.map-right').parent().html(a);
-        this.portlet.find('.address-left').parent().html(m);
+        // Save
+        var addressValue = this.portlet.find('.address-left').val();
+        var center = map.getCenter();
+        var zoom = map.getZoom();
+
+        var m = mapContainer.html();
+        var a = adderessContainer.html();
+
+        // Load
+        mapContainer.html(a);
+        adderessContainer.html(m);
+        map = new google.maps.Map( document.getElementById(mapID), {disableDefaultUI: true});
+        this.portlet.find('.address-left').val(addressValue);
+        map.setCenter( center );
+        map.setZoom( zoom );
+       if(marker)
+           marker.setMap(map);
     }
 
     function initLayout() {
         layout = $('.widgets .mapWidget').clone();
+        this.setToolbar('.toolbar-mapWidget')
 
         mapID = 'map-canvas' + Math.floor(100*Math.random());
         layout.find('#map-canvas').attr('id',mapID);
     }
 
     this.widgetDidAdd = function(isNew) {
+
+        var widget = this;
+        this.toolbar.find('#mapLayout-right').change( function() {
+            changeLayout.call(widget)
+        });
+        this.toolbar.find('#mapLayout-left').change( function() {
+            changeLayout.call(widget)
+        });
+
         geocoder = new google.maps.Geocoder();
 
         var mapOptions = {
@@ -190,6 +215,7 @@ function MapWidget(){
 
     this.serialize = function(){
         return {
+            leftLayout: (this.toolbar.find('#mapLayout-left:checked').length==1),
             mapCenter : [map.getCenter().k,map.getCenter().A],
             mapZoom : map.getZoom(),
             markerPos : [marker.position.k,marker.position.A],
@@ -199,6 +225,11 @@ function MapWidget(){
 
     this.deserialize = function(content){
         if( content ){
+
+            if( content.leftLayout === 'false' ) {
+                this.toolbar.find('#mapLayout-right').attr('checked','checked');
+                changeLayout.call(this);
+            }
 
             map.setCenter( new google.maps.LatLng( parseFloat(content.mapCenter[0]), parseFloat(content.mapCenter[1]) ) );
 

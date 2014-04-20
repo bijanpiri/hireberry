@@ -614,7 +614,7 @@ function init() {
                     </div>
                 </div>
                 <div class="row-fluid" id="addButtons" hidden>
-                    <div style="margin: 0 auto;position: relative;width: 612px;">
+                    <div style="margin: 0 auto;position: relative;width: 612px;text-align: center;">
                         <a class="newitem buttonFrame" type="1">
                             <i class="button centeralBackgroundImage addNewTextButton"></i>
                         </a>
@@ -628,34 +628,28 @@ function init() {
                             <i class="button centeralBackgroundImage closeButton"></i>
                         </a>
                         <a class="newitem buttonFrame" type="7">
-                            <span class="centeralBackgroundImage genericButton">Badge</span>
+                            <span class="centeralBackgroundImage genericButton">Badges</span>
                         </a>
-                        <a class="newitem buttonFrame" type="4">
-                            <i class="button centeralBackgroundImage addNewLinkButton"></i>
+                        <a class="newitem buttonFrame" type="13">
+                            <span class="centeralBackgroundImage genericButton">Separator</span>
                         </a>
                         <a class="newitem buttonFrame" type="6">
                             <i class="button centeralBackgroundImage addNewMapButton"></i>
                         </a>
                         <a class="newitem buttonFrame" type="8">
-                            <span class="centeralBackgroundImage genericButton">WorkType</span>
-                        </a>
-                        <a class="newitem buttonFrame" type="9">
-                            <span class="centeralBackgroundImage genericButton">PersonalInfo</span>
+                            <span class="centeralBackgroundImage genericButton">Work Type</span>
                         </a>
                         <a class="newitem buttonFrame" type="10">
                             <span class="centeralBackgroundImage genericButton">Resume</span>
                         </a>
                         <a class="newitem buttonFrame" type="11">
-                            <span class="centeralBackgroundImage genericButton">Else?</span>
+                            <span class="centeralBackgroundImage genericButton">Cover Letter</span>
                         </a>
                         <a class="newitem buttonFrame" type="12">
                             <span class="centeralBackgroundImage genericButton">Profiles</span>
                         </a>
-                        <a class="newitem buttonFrame" type="13">
-                            <span class="centeralBackgroundImage genericButton">Seperator</span>
-                        </a>
                         <a class="newitem buttonFrame" type="14">
-                            <span class="centeralBackgroundImage genericButton">Skill</span>
+                            <span class="centeralBackgroundImage genericButton">Skills</span>
                         </a>
                     </div>
                 </div>
@@ -1366,6 +1360,16 @@ function init() {
 
             <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3">
             <label for="workType-both" class="toolbar-widgetLabel">Both</label>
+        </div>
+    </div>
+
+    <div class="toolbar-mapWidget">
+        <div>
+            <input id="mapLayout-left" type="radio" hidden name="toolbar-mapLayout" checked>
+            <label for="mapLayout-left" class="toolbar-mapLabel">Left</label>
+
+            <input id="mapLayout-right" type="radio" hidden name="toolbar-mapLayout">
+            <label for="mapLayout-right" class="toolbar-mapLabel">Right</label>
         </div>
     </div>
 
