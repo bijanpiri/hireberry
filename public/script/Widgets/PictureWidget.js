@@ -9,34 +9,21 @@ function PictureWidget(){
 
     function initLayout1() {
         layout = this.clone('.image-widget');
-        bar=layout.find('.progress').hide();
+
+        bar = layout.find('.progress').hide();
         var fileInput = layout.find('input[type=file]');
-        layout.find('button').click(function(){
+
+        layout.find('.imageWidgetInnerContainer').click(function(e){
             fileInput.click();
+            e.stopPropagation()
         });
-        imgEditor=layout.find('.image-editor-dialog');
+
+        imgEditor = layout.find('.image-editor-dialog');
+        imgEditor.find('.image-edit-ok').click(editImage);
         imgEditor.find('.image-edit-cancel').click(function(){
             imgEditor.hide();
         });
-        imgEditor.find('.image-edit-ok').click(editImage);
 
-
-        if(editMode){
-            fileInput.fileupload({
-                url:'/flyer/upload',
-                dataType: 'json',
-                replaceFileInput:false,
-                add:add,
-                dropZone:layout,
-                send:send,
-                done: done,
-                progressall:progressall
-            });
-
-        }
-        else {
-            this.portlet.find('input[type=file]').remove();
-        }
     }
     function readerLoad(progress) {
         try {
@@ -78,8 +65,8 @@ function PictureWidget(){
 
     function done(e,data){
         bar.slideUp();
-        var img=layout.find('img');
-        img.attr('src', '/uploads/' + data.result.files[0].name);
+        var img = layout.find('img');
+        img.attr('src', '/uploads/' + data.result.files[0].name).show();;
 
     }
     function progressall(e,data){
@@ -94,26 +81,43 @@ function PictureWidget(){
 
     this.widgetDidAdd=function(){
         this.setToolbar('.toolbar-picture');
-        var widget=this;
+        var widget = this;
 
-        this.addToolbarCommand('add',function(){
-            layout.find('input[type=file]').click();
-        }).addToolbarCommand('edit',function(){
-                imgEditor.show();
-                imgly = new imglyKit({container: layout.find(".image-dialog-content")});
-                imgEditor.find('.imgly-container').empty();
-                var img=new Image();
-                img.src=layout.find('img').attr('src');
-                if(!layout.find('img').attr('src')){
-                    imgEditor.hide();
-                    alert('First of all add a picture by drag and drop or browse button.');
-                    return;
-                }
-                imgly.run(img);
+        if(this.editMode){
+            this.portlet.find('input[type=file]').fileupload({
+                url:'/flyer/upload',
+                dataType: 'json',
+                replaceFileInput:false,
+                add:add,
+                dropZone:layout,
+                send:send,
+                done: done,
+                progressall:progressall
             });
 
+            this.addToolbarCommand('add',function(){
+                layout.find('input[type=file]').click();
+            }).addToolbarCommand('edit',function(){
+                    imgEditor.show();
+                    imgly = new imglyKit({container: layout.find(".image-dialog-content")});
+                    imgEditor.find('.imgly-container').empty();
+                    var img=new Image();
+                    img.src=layout.find('img').attr('src');
+                    if(!layout.find('img').attr('src')){
+                        imgEditor.hide();
+                        alert('First of all add a picture by drag and drop or browse button.');
+                        return;
+                    }
+                    imgly.run(img);
+                });
+        }
+        else {
+            this.portlet.find('.imageWidgetInnerContainer').remove();
+        }
     }
+
     var imgly;
+
     function editImage(){
         imgEditor.hide();
         imgly.renderToDataURL("image/jpeg", function (err, dataurl){
@@ -126,15 +130,18 @@ function PictureWidget(){
             layout.find('input[type=file]').fileupload('add',{files:blob});
         });
     }
+
     this.serialize=function(){
         return this.portlet.find('.image-widget img').attr('src');
     }
+
     this.deserialize=function(content) {
-        layout.find('.imageWidgetInnerContainer').hide();
-        var img=layout.find('img');
 
-        return img.attr('src', content);
-
+        if( content ) {
+            this.portlet.find('.imageWidgetInnerContainer').remove();
+            var img = layout.find('img');
+            return img.attr('src', content).show();
+        }
     }
 }
 PictureWidget.prototype=new Widget();
