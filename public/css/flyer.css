@@ -451,46 +451,42 @@ Portlet Creator
 .videoWidgetInputboxDone:active {top: 5px;}
 
 /**** Map Widget ****/
-.mapWidget .panel {
-    position: relative;
-    background-color: #f1f1f1;
-    height: 100%
+.mapWidget {
+    padding: 20px 40px;
 }
 
 .mapWidget .map-right {
-    position: absolute;
-    right: 20px;
-    top:20px;
-    bottom:20px;
-    width: 320px;
-    height: 170px;
-    border: solid 1px #D3D3D3;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+    border: none;
+    width: 100%;
+    height: 210px;
+    resize: none;
+    font-size: 18px;
+    border: 1px solid rgb(209, 204, 204);
+}
+
+.mapWidget .address-left:focus {
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
 }
 
 .mapWidget .address-left {
-    position: relative;
-    top: 20px;
-    left: 20px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     border: none;
-    width: 320px;
-    height: 170px;
+    width: 100%;
+    height: 210px;
     resize: none;
-    background-color: #D6D6D6;
     font-weight: 700;
+    margin: 0;
 }
 
 .mapWidget .moreInfoAboutAddress {
-    position: relative;
-    top: -5em;
-    color: rgb(182, 101, 101);
+    position: absolute;
+    bottom: 30px;
+    color: rgb(182, 68, 69);
     font-size: 1.4em;
-    left: 2em;
+    left: 10px;
+    height: 18px;
 }
 
 .text-widget{

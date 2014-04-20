@@ -129,6 +129,14 @@ function MapWidget(){
         }
     }
 
+    function changeLayout() {
+        var m = this.portlet.find('.map-right').parent().html();
+        var a = this.portlet.find('.address-left').parent().html();
+
+        this.portlet.find('.map-right').parent().html(a);
+        this.portlet.find('.address-left').parent().html(m);
+    }
+
     function initLayout() {
         layout = $('.widgets .mapWidget').clone();
 

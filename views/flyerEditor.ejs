@@ -18,7 +18,8 @@
 <script src="/chosen/chosen.jquery.js"></script>
 <link href="/chosen/chosen.css" rel="stylesheet">
 
-<script src="/script/map.google.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
+</script>
 
 <!--<link rel="stylesheet" href="../../bootstrap-modal/css/bootstrap-modal.css">-->
 <!--<script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap.js"></script>-->
@@ -830,14 +831,13 @@ function init() {
 
 <div class="container-fluid mapWidget">
     <div class="row-fluid" >
-        <div id="panel" class="offset2 span8 panel" style="height: 210px">
+        <div class="span6" style="position: relative">
             <textarea id="address" placeholder="Sydney, NSW" class="address-left"></textarea>
-            <div id="map-canvas" class="map-right"></div>
-            <img id="map-image" hidden class="map-right">
+            <div class="moreInfoAboutAddress"></div>
         </div>
-    </div>
-    <div class="row-fluid">
-        <div class="offset2 span8 moreInfoAboutAddress"></div>
+        <div class="span6">
+            <div id="map-canvas" class="map-right"></div>
+        </div>
     </div>
 </div>
 
