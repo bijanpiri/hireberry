@@ -14,7 +14,9 @@ function ProfilesWidget() {
         this.setToolbar('.toolbar-profileWidget');
         var fileInput = this.portlet.find('input[type=file]');
         var avatar = this.portlet.find('.bool-avatar-image');
-        profile.find('.bool-avatar-menu-gravatar').click(fetchAvatar);
+        profile.find('.bool-avatar-menu-gravatar').click(
+            function(){findGravatar(profile, profile.find('input[name="email"]').val())});
+
         profile.find('.bool-avatar-menu-upload').click(
             function(){
                 fileInput.click();
@@ -24,7 +26,7 @@ function ProfilesWidget() {
             profile.find('.bool-avatar-no-container').show();
             profile.find('.bool-avatar-image').hide();
         });
-        if (this.editMode==false) {
+        if (!this.editMode==false) {
             fileInput.fileupload({
                 url: '/flyer/upload',
                 dataType: 'json',
@@ -41,15 +43,6 @@ function ProfilesWidget() {
         else {
 //            this.portlet.find('input').not('input[name=personalInfo-item]').prop('readOnly','readOnly').css('cursor','default');
         }
-    }
-
-    function fetchAvatar(){
-        var email = profile.find('input[name="email"]').val();
-        var hash = CryptoJS.MD5( email.trim().toLowerCase() );
-        $('.bool-avatar-image').attr('src','http://www.gravatar.com/avatar/' + hash );
-        profile.find('.bool-avatar-no-container').hide();
-        profile.find('.bool-avatar-image').show();
-
     }
 
     function done(e, data) {
