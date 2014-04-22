@@ -26,7 +26,7 @@ function ProfilesWidget() {
             profile.find('.bool-avatar-no-container').show();
             profile.find('.bool-avatar-image').hide();
         });
-        if (!this.editMode==false) {
+        if (!this.editMode) {
             fileInput.fileupload({
                 url: '/flyer/upload',
                 dataType: 'json',
