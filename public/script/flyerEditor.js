@@ -213,7 +213,7 @@ function loadEditor() {
 }
 
 function GoToEditMode() {
-    $(document.body).addClass('edit-mode');
+    $(document.body).addClass('bool-edit-mode');
     showLoading();
 
     $('#buttonPreview').show();
