@@ -678,3 +678,6 @@ Portlet Creator
 .skillAddButton > input[type=checkbox]:checked ~ input[type=text] {
     opacity: 1.0;
 }
+.loading{
+    z-index: 30000;
+}
