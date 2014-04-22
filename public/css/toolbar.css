@@ -1,4 +1,3 @@
-
 .toolbar{
     position: absolute;
     height: 60px;
@@ -11,7 +10,13 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     color: #f1f1f1;
+    z-index: 1000;
+    display: none;
 }
+.bool-portlet-active .toolbar{
+    display: inline-block;
+}
+
 .toolbar label{
     display: inline;
 }

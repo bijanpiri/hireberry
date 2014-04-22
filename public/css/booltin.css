@@ -284,3 +284,9 @@ Modals
     border: 1px solid #2F995F;
     background: #37B36F;
 }
+.ui-dialog{
+    z-index: 30003;
+}
+.ui-widget-overlay{
+    z-index: 30002  ;
+}

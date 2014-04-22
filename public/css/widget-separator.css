@@ -3,14 +3,14 @@
 /****
 Flat Section
 ****/
-/*Todo : ask mohammad about sizes*/
+/*Todo : ask mohammad about font sizes*/
 
 .flatSection{
     margin: 30px 10px;
     position: relative;
 
 }
-.bool-editbox{
+.bool-edit-box{
     position: relative;
     display: inline-block;
 }
@@ -19,7 +19,7 @@ Flat Section
     min-width: 100px;
     margin: 10px;
     outline: none;
-    border: 1px dashed #1F1F1F;
+    border: none;
     background: #f1f1f1;
     position: relative;
     z-index: 2;
@@ -29,19 +29,8 @@ Flat Section
     line-height: 36px;
     color: #9c9c9c;
 }
-.bool-editbox-close{
-    background-image: url("/images/nflyer-icons.png");
-    display: inline-block;
-    cursor: pointer;
-    position: absolute;
-    top:0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    background-position:-100px -570px;
-    width: 30px;
-    height: 30px;
-    z-index: 5;
+.bool-edit-mode .bool-portlet-active .bool-editable{
+    border: 2px dashed #B3B3B3;
 }
 .bool-editable br{
     display: none;
@@ -54,50 +43,51 @@ Flat Section
     display: inline-block;
     width: 100%;
     height: 4px;
-    margin: auto;
     padding: 0;
-    position: relative;
-    bottom:60px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom:0;
 }
-/*.flatSection {*/
-    /*position: relative;*/
-    /*display: inline-block;*/
-    /*width: 100%;*/
-    /*height: 14em;*/
-/*}*/
+.bool-edit-box-add{
+    display: none;
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    background-position: -100px -570px;
+    cursor: pointer;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
 
-/*.flatSection span {*/
-    /*position: relative;*/
-    /* left: 0; */
-    /* right: 0; */
-    /* min-width: 100px; */
-    /* max-width: 1000px; */
-    /*margin: auto;*/
-    /*bottom: 0;*/
-    /*top: 2em;*/
-    /*font-size: 3em;*/
-    /*background-color: #f1f1f1;*/
-    /*text-align: center;*/
-    /*color: #9c9c9c;*/
-    /*white-space: nowrap;*/
-    /*outline: none;*/
-    /*z-index: 10;*/
-    /*height: 20px;*/
-/*}*/
-/*.flatSection span *{*/
-    /*white-space: nowrap;*/
-    /*display: inline;*/
-/*}*/
-/*.flatSection>.bool-divider {*/
-    /*border: none;*/
-    /*background: #9c9c9c;*/
-    /*margin: auto;*/
-    /*top: 0;*/
-    /*bottom: 0;*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*display: inline-block;*/
-    /*width: 100%;*/
-    /*height: 4px;*/
-    /*position: absolute;*/
-/*}*/
+}
+.bool-edit-mode .bool-portlet-active .bool-edit-box-add{
+    display: inline-block;
+}
+.bool-edit-box-close{
+    background-image: url("/images/nflyer-icons.png");
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top:0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    background-position:-100px -570px;
+    width: 30px;
+    height: 30px;
+    z-index: 5;
+
+}
+.bool-edit-mode .bool-portlet-active .bool-edit-box-close{
+    display: inline-block;
+}

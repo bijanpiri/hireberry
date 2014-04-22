@@ -41,7 +41,6 @@ function TextWidget(){
             function(widget,args)
             {
                 widget.portlet.find('.text-widget').css('color',args[1]);
-                widget.toolbar.find('.bool-current-color').css('background',args[1]);
             });
 
         this.addToolbarCommand('size',

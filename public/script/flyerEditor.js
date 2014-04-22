@@ -22,6 +22,7 @@ $(function() {
 
 
     if( editMode ) {
+        $(document.body).addClass('bool-edit-mode');
 
         if( existFlyer )
             loadEditor();
@@ -131,6 +132,7 @@ $(function() {
                     var doc = getDoc(iframe[0]);
                     var docRoot = doc.body ? doc.body : doc.documentElement;
                     var data = docRoot.innerHTML;
+
                     //data is returned from server.
                 });
             }
@@ -211,7 +213,7 @@ function loadEditor() {
 }
 
 function GoToEditMode() {
-
+    $(document.body).addClass('edit-mode');
     showLoading();
 
     $('#buttonPreview').show();
@@ -229,7 +231,7 @@ function GoToEditMode() {
 };
 
 function GoToViewMode() {
-
+    $(document.body).removeClass('bool-edit-mode')
     var height = $('#portletsBox').height();
 
     showLoading();

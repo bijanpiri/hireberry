@@ -17,20 +17,24 @@ function Flyer(options) {
 
     $(document).mousedown(function(event){
         if($(event.target).parents().index($('.portletStack'))==-1)
-            $('.toolbar').hide();
+            $('.bool-portlet-active').removeClass('bool-portlet-active');
     });
 
     $(document).delegate('.portlet','focusin',
         function(){
-            $('.toolbar').hide();
-            $(this).parent().find('.toolbar').show();
+            $('.bool-portlet-active').removeClass('bool-portlet-active');
+            $(this)
+                .parent().addClass('bool-portlet-active');
+
+
         });
     $(document).delegate('.portlet-container *','mousedown',
         function(event){
-            $('.toolbar').hide();
+            $('.bool-portlet-active').removeClass('bool-portlet-active');
 
             if( $(this).hasClass('move-btn')==false && $(this).hasClass('delete-btn')==false )
-                $(this).closest('.portlet-container').find('.toolbar').show();
+                $(this).closest('.portlet-container')
+                    .addClass('bool-portlet-active');
             else
                 event.stopPropagation();
         });
@@ -41,14 +45,14 @@ function Flyer(options) {
 
     $(document).delegate('.portlet-container' ,'mousedown',
         function(event){
-            $('.toolbar').hide();
+            $('.bool-portlet-active')
+                .removeClass('bool-portlet-active');
+
             event.stopPropagation();
         });
 
     if( editMode==false )
-    {
         $('.portletCreator').hide();
-    }
     else
         $('.portletSubmittion').hide();
 
@@ -89,7 +93,7 @@ function Flyer(options) {
 
         if(wData.isNew)
         {
-            $(widget.toolbar).show();
+            widget.addClass('.bool-portlet-active');
             widget.widgetFocus();
         }
     };

@@ -22,7 +22,9 @@ $.fn.ColorPicker=function(){
                             .attr('command','color '+c)
                             .css('background',c))
                     .click(function(){
+
                         var c=$(this).children('.bool-color-item').css('background-color').replace(/\s/g,'');
+                        $(this).closest('.dropdown').find('.bool-current-color').css('background-color',c);
                         if(recentColors.indexOf(c)<0)
                             $(document)
                                 .find('.bool-color-picker-recent')

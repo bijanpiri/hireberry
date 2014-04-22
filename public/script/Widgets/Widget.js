@@ -9,7 +9,7 @@ function Widget(options){
     this.type=0;
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container');
-    this.toolbar = $('<div>').addClass('toolbar').hide();
+    this.toolbar = $('<div>').addClass('toolbar');
     this.flyerID = '';
 
     this.editMode = options ? options.editMode : true;
