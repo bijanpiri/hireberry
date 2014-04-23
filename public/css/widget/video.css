@@ -1,0 +1,83 @@
+/*** Video Widget ***/
+
+.videoWidget {
+    position: absolute;
+    width: 300px;
+    height: 180px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 18px;
+
+}
+
+.videoWidgetOuter {
+    background-color: #b3b3b3;
+    text-align: center;
+}
+.videoWidgetInputboxOutter {
+    display: inline-block;
+    margin: 20px;
+}
+.videoWidgetInputboxOutterToolbar {
+    border: solid 2px #9c9c9c;
+    height: 50px;
+    width: 700px;
+    border-radius: 5px;
+}
+input.videoWidgetInputboxText {
+    height: 44px;
+    width: 490px;
+    border: 0;
+    color:#B3B3B3;
+    font-size: 18px;
+    line-height: 18px;
+
+}
+.videoWidgetInputboxTextToolbar {
+    height: 45px;
+    width: 600px;
+    border: 0;
+    line-height: 40px;
+    color: #ffffff;
+    background-color: transparent;
+}
+.videoWidgetInputboxFooter {
+    color: white;
+    font-size: 18px;
+    text-align: left;
+}
+a.videoWidgetInputboxDone {
+    width: 100px;
+    display: inline-block;
+    line-height: 44px;
+    background: #666;
+    border-radius: 4px;
+    height: 44px;
+    font-size: 18px;
+    margin: 10px;
+    cursor: pointer;
+    color: #B3B3B3;
+    text-decoration: none;
+
+}
+a.videoWidgetInputboxDone:hover {
+   background: #4C4C4C;
+}
+
+.videoWidgetInputboxDoneToolbar {
+    width: 70px;
+    padding: 2px;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+    height: 35px;
+    top: -7px;
+    right: 3px;
+}
+
+.videoWidgetInputboxDone:hover {top: -2px;}
+.videoWidgetInputboxDone:active {top: 5px;}
+

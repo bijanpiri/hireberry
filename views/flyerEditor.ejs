@@ -7,10 +7,13 @@
 <script src="/script/rasterizeHTML.allinone.js"></script>
 
 <script src="/html2canvas.js"></script>
+
 <link href="/css/toolbar.css" rel="stylesheet">
-<link href="/css/widget-profile.css" rel="stylesheet">
-<link href="/css/widget-separator.css" rel="stylesheet">
+<link href="/css/widget/profile.css" rel="stylesheet">
+<link href="/css/widget/video.css" rel="stylesheet">
+<link href="/css/widget/separator.css" rel="stylesheet">
 <link href="/css/flyer.css" rel="stylesheet">
+
 <link href="/css/imgly.css" rel="stylesheet">
 
 <!--<link href="/css/font-awesome.css" rel="stylesheet" />-->
@@ -399,6 +402,17 @@
         <a class="btn btn-warning btn-large pull-right image-edit-cancel"><i class="icon-remove"></i></a>
         <a class="btn btn-primary btn-large pull-right image-edit-ok" ><i class="icon-ok"></i></a>
     </div>
+</div>
+
+<div class="video-widget">
+    <div class="videoWidgetOuter">
+        <div class="videoWidgetInputboxOutter">
+            <input type="text" class="videoWidgetInputboxText" placeholder="Paste your video link here">
+            <a class="videoWidgetInputboxDone Done">Done</a>
+            <div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>
+        </div>
+    </div>
+
 </div>
 
 <div class="container-fluid mapWidget">
@@ -1000,10 +1014,7 @@
     </div>
 
     <div class="toolbar-videoWidget">
-        <div class="videoWidgetInputboxOutterToolbar">
-            <input type="text" id="videoWidgetInputboxTextToolbar"  placeholder="Paste your video link here">
-            <button  command="done" class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDoneToolbar" id="DoneToolbar">Done</button>
-        </div>
+
     </div>
 </div>
 </div>

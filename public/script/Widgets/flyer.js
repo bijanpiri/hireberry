@@ -93,7 +93,7 @@ function Flyer(options) {
 
         if(wData.isNew)
         {
-            widget.addClass('.bool-portlet-active');
+            widget.portletContainer.addClass('bool-portlet-active');
             widget.widgetFocus();
         }
     };

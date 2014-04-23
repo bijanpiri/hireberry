@@ -94,19 +94,10 @@ function VideoWidget(){
     }
 
     function initLayout() {
-        var emptyStateHtml = '<div class="videoWidgetOuter">'+
-            '<div class="videoWidgetInputboxOutter">'+
-            '<input type="text" id="videoWidgetInputboxText" placeholder="Paste your video link here">'+
-            '<button class="wbtn wbtn-2 wbtn-2a videoWidgetInputboxDone" id="Done">Done</button>'+
-            '<div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>'+
-            '</div></div></div>';
-
-
-        layout = $(emptyStateHtml);
-
-        layout.find('#Done').click( (function(widget){
+        layout = this.clone('.video-widget');
+        layout.find('.Done').click( (function(widget){
             return function(){
-                widget.videoSourceURL = widget.portlet.find('#videoWidgetInputboxText').val();
+                widget.videoSourceURL = widget.portlet.find('.videoWidgetInputboxText').val();
                 showPreview.call(widget);
             }
         }(this)));
@@ -118,7 +109,7 @@ function VideoWidget(){
 
     this.widgetFocus=function()
     {
-       this.portlet.find('#videoWidgetInputboxText').focus();
+       this.portlet.find('.videoWidgetInputboxText').focus();
     }
 
     this.widgetDidAdd=function(){
