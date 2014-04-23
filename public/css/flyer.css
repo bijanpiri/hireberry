@@ -351,20 +351,20 @@ Portlet Creator
     margin: 0 auto 20px auto;
 }
 .imageWidgetOuterContainer {
-    background-color: #f1f1f1;
+    background-color: #B3B3B3;
     text-align: center;
     font-weight: 700;
     font-size: 18px;
     line-height: 28px;
     padding: 20px;
-    color: #9c9c9c;
+    color: #585858;
 }
 .imageWidgetOuterContainer p {
     margin: 0;
 }
 .imageWidgetInnerContainer {
     padding: 40px;
-    border: dashed 2px #999;
+    border: dashed 2px #585858;
     cursor: pointer;
 }
 

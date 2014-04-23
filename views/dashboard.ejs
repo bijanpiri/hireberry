@@ -35,28 +35,6 @@ $(function(){
         evaluate: /\{\%(.+?)\%\}/g
     };
 
-    $('#full-clndr').clndr({
-        template: $('#full-clndr-template').html(),
-        events:  [
-            { date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' },
-            { date: '2014-04-19', title: 'Cat Frisbee', location: 'Jefferson Park' },
-            { date: '2014-04-08', title: 'Kitten Demonstration', location: 'Center for Beautiful Cats' },
-            { date: '2014-04-02', title: 'Small Cat Photo Session', location: 'Center for Cat Photography' }
-        ],
-        clickEvents: {
-            click: function(target) {
-                console.log(target);
-            },
-            onMonthChange: function(month) {
-                console.log('you just went to ' + month.format('MMMM, YYYY'));
-            }
-        },
-        doneRendering: function() {
-            console.log('this would be a fine place to attach custom event handlers.');
-        }
-    });
-
-
     refresh(false);
 
     $('#applicationPreview').dialog({
@@ -128,6 +106,7 @@ function refresh(once) {
     getStat();
     getInvitatinos();
     fillAskedForComments();
+    fillCalendar();
 
     if(once==false)
         setTimeout( refresh, 30000 );
@@ -445,6 +424,42 @@ function fillTable() {
     });
 }
 
+function fillCalendar() {
+    $.get('/event').done( function(events) {
+
+        var eventsList = events.map( function(event) {
+            var m = new moment(event.time);
+
+            return {
+                date: m.format('YYYY-MM-DD'),
+                title: (event.title || 'Event'),
+                location:  m.format('DD MMM[,] ddd')  + ' ( ' + m.fromNow() + ' ) '
+            };
+        });
+
+        /*
+         [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
+         */
+
+        $('#full-clndr').clndr({
+            template: $('#full-clndr-template').html(),
+            events:  eventsList,
+            clickEvents: {
+                click: function(target) {
+                    console.log(target);
+                },
+                onMonthChange: function(month) {
+                    console.log('you just went to ' + month.format('MMMM, YYYY'));
+                }
+            },
+            doneRendering: function() {
+                console.log('this would be a fine place to attach custom event handlers.');
+            }
+        });
+
+    });
+}
+
 // Make a triple parameters function
 function handlerMaker(a,b,c) {
     return (function(p1,p2,p3){
@@ -593,7 +608,18 @@ function loadDecisionBox(activity,applicationID) {
             var inviteBtn = $('<button>')
                     .text('Send an invitation')
                     .addClass('btn btn-primary')
-                    .click( handlerMaker(applicationID,'INVITED',[note,interviewDate,interviewTime]) );
+                    .click( handlerMaker(applicationID,'INVITED',[note,interviewDate,interviewTime]) )
+                    .click( function() {
+                        var addToEvents = confirm('Add this event to calendar?');
+                        if( addToEvents )
+                            $.post( '/event', {
+                                time: new Date(interviewDate.val() + ' ' +interviewTime.val()),
+                                contributors: [],
+                                title: note.val()
+                            }).done( function() {
+                                        alert('This event is added to calendar.');
+                                    });
+                    });
 
             actionPanel.append(interviewDate)
                     .append(interviewTime)

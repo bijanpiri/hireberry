@@ -25,6 +25,7 @@ function PictureWidget(){
         });
 
     }
+
     function readerLoad(progress) {
         try {
             imgly = new imglyKit({container: layout.find(".image-dialog-content")});
@@ -44,6 +45,7 @@ function PictureWidget(){
             }
         }
     }
+
     var dudata;
     function add(e,data){
         dudata=data;
@@ -66,13 +68,15 @@ function PictureWidget(){
     function done(e,data){
         bar.slideUp();
         var img = layout.find('img');
-        img.attr('src', '/uploads/' + data.result.files[0].name).show();;
+        img.attr('src', '/uploads/' + data.result.files[0].name)
+            .show();
+        this.portlet.find('.imageWidgetOuterContainer').css('background-color','#f1f1f1');
 
     }
+
     function progressall(e,data){
         var progress = parseInt(data.loaded / data.total * 100, 10);
         bar.find('.bar').css('width',progress + '%');
-
     }
 
     initLayout1.call(this);
@@ -101,7 +105,8 @@ function PictureWidget(){
                     imgEditor.show();
                     imgly = new imglyKit({container: layout.find(".image-dialog-content")});
                     imgEditor.find('.imgly-container').empty();
-                    var img=new Image();
+
+                    var img = new Image();
                     img.src=layout.find('img').attr('src');
                     if(!layout.find('img').attr('src')){
                         imgEditor.hide();
@@ -121,6 +126,7 @@ function PictureWidget(){
     function editImage(){
         imgEditor.hide();
         imgly.renderToDataURL("image/jpeg", function (err, dataurl){
+
             //shows preview
             layout.find('img').attr('src',dataurl);
 
@@ -139,6 +145,7 @@ function PictureWidget(){
 
         if( content ) {
             this.portlet.find('.imageWidgetInnerContainer').remove();
+            this.portlet.find('.imageWidgetOuterContainer').css('background-color','#f1f1f1');
             var img = layout.find('img');
             return img.attr('src', content).show();
         }

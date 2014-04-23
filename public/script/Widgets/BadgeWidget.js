@@ -23,7 +23,7 @@ function BadgeWidget(){
     this.setLayout(layout);
 
     this.widgetDidAdd = function() {
-       
+
         this.setToolbar('.toolbar-badgeWidget');
         var badges=this.portlet;
         var widget=this;

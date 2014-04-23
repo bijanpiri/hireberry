@@ -162,6 +162,13 @@ BTeams = mongoose.model( 'teams', {
     members: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
 })
 
+BEvents = mongoose.model( 'events', {
+    title: String,
+    contributors: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
+    team: {type : mongoose.Schema.ObjectId, ref : 'teams'},
+    time: Date
+})
+
 BInvitations = mongoose.model( 'invitations', {
     inviterTeam: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     invitedEmail: String,
@@ -511,6 +518,7 @@ app.post('/api/setting/password', function(req,res) {
 
     });
 });
+
 app.post('/api/setting/basicinfo', function(req,res) {
     var userID = req.user._id;
     var displayName = req.body.displayName;
@@ -546,6 +554,38 @@ app.get('/search/users', function(req,res){
         }
 
         res.send(results);
+    });
+});
+
+app.post('/event', function(req,res) {
+
+    var time = new Date(req.body.time);
+    var title = req.body.title;
+    var teamID = req.user.teamID;
+    var contributor = [req.user._id];
+
+    addEvent( title, time, contributor,  teamID, function() {
+            res.send(200);
+        }
+    )
+});
+
+app.get('/event', function(req,res) {
+
+    var time = new Date(req.body.time);
+    var title = req.body.title;
+    var teamID = req.user.teamID;
+    var userID = req.user._id;
+
+    BTeams.count({ _id:teamID, admin:userID }, function(err,count){
+        if( err || count==0)
+            BEvents.find( { contributors:userID }, function(err,events) {
+                res.send(200,events);
+            })
+        else
+            BEvents.find( {team:teamID}, function(err,events) {
+                res.send(200,events);
+            })
     });
 });
 
@@ -643,11 +683,11 @@ app.post('/flyer/publish', function(req,res){
 
     function saveInDatabase(param,successMessage) {
         BFlyers.update({_id:flyer.flyerid}, param,{upsert:true}, function(err){
-                if(!err){
-                    res.send(200,{message:successMessage});
-                }else
-                    res.send(500,{result:'DB Error'});
-            });
+            if(!err){
+                res.send(200,{message:successMessage});
+            }else
+                res.send(500,{result:'DB Error'});
+        });
     }
 
 });
@@ -1333,6 +1373,15 @@ function getComments(entityID ,entityType, callback) {
         })
 }
 
+function addEvent(what,when,who,by,callback) {
+    BEvents({
+        time: when,
+        title: what,
+        team: by,
+        contributors: who}).save( function(err) {
+            callback();
+        });
+}
 
 function BLog(text){
 
