@@ -107,6 +107,7 @@ function refresh(once) {
     getInvitatinos();
     fillAskedForComments();
     fillCalendar();
+    fillUserTeams();
 
     if(once==false)
         setTimeout( refresh, 30000 );
@@ -458,6 +459,25 @@ function fillCalendar() {
         });
 
     });
+}
+
+function fillUserTeams() {
+
+    $('#userTeams').html('');
+
+    $.get('/api/user/teams').done( function(teams) {
+        teams.forEach( function(team) {
+            $('#userTeams').append( $('<option>').text(team.name).attr('name',team._id) );
+        });
+
+        $('#changeUserTeam').unbind('click').click( function() {
+            var teamID = $('#userTeams :selected').attr('name');
+
+            $.post('/api/user/changeTeam', {teamID:teamID}).done( function() {
+                refresh(true);
+            })
+        })
+    })
 }
 
 // Make a triple parameters function
@@ -856,9 +876,14 @@ function getPositionComments(appID) {
 <div class="container teamContainer sectionContainer" hidden>
     <div class="row-fluid teamHeader">
         <div class="span4">
-            <span id="teamNameTitle">Team:</span>
+            <span id="teamNameTitle">Team Name:</span>
             <span id="teamName"></span>
             <span id="teamNameChange" hidden><a>Change</a></span>
+        </div>
+        <div class="span4">
+            <span>Switch Team:</span>
+            <span><select id="userTeams"></select></span>
+            <span><a id="changeUserTeam" href="#">Switch</a></span>
         </div>
         <div class="span4">
             <span id="teamAdminTitle">Admin:</span>

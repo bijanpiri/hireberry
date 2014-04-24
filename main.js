@@ -948,6 +948,23 @@ app.get('/api/application/comments',function(req,res){
     })
 });
 
+app.get('/api/user/teams', function(req,res) {
+   BTeams.find({members:req.user._id}, function(err,teams){
+       res.send(200,teams);
+   })
+});
+
+app.post('/api/user/changeTeam', function(req,res) {
+    var userID = req.user._id;
+    var teamID = req.body.teamID;
+
+    BUsers.update({_id:userID},{teamID:teamID}, function(err) {
+        if(err)
+            res.send(307);
+        else
+            res.send(200);
+    });
+})
 
 app.get('/api/form/comments',function(req,res){
 
@@ -1101,13 +1118,13 @@ app.post('/api/user/team/join', function(req,res){
     BInvitations.remove( {_id:invitationID} ,function() {
 
         if( answer === 'accept' ) {
-            changeRoleInTeam( userID, oldTeamID, 'user', function(err) {
-                leaveTeam( userID, oldTeamID, function(err) {
+            //changeRoleInTeam( userID, oldTeamID, 'user', function(err) {
+                //leaveTeam( userID, oldTeamID, function(err) {
                     joinToTeam( userID, newTeamID, function(err) {
                         res.send(200);
                     });
-                })
-            })
+                //})
+            //})
         }
         else {
             res.send(200);
