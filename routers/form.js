@@ -1,6 +1,9 @@
 /**
  * Created by coybit on 3/16/14.
  */
+
+var request=require('request');
+
 module.exports.dropboxAuthentication = function (req,res){
 
     var flyerID = req.query.flyerid;
@@ -43,7 +46,41 @@ module.exports.dropboxAuthentication = function (req,res){
 }
 
 module.exports.findLinkedInProfile = function (req,res) {
-    linkedin_client.apiCall('GET', '/people-search',
+
+    //***************************************************************************************
+    //Reference code  :  https://github.com/tgig/Node.js-for-Bing-API/blob/master/web.js
+    //***************************************************************************************
+    var searchTerm = req.params.q.trim().replace(" ","%20")+"%20linkedin";
+    var apiKey = 'Vxa0lRW5bpcIJx2yqL5QXC2u+g9wrsBf7kAXc+qIYRY';
+    var callURI ='https://api.datamarket.azure.com/Bing/Search/v1/Web?$format=json&Query=%27'+searchTerm+'%27';
+
+    var options = {
+        method: 'GET',
+        uri: callURI,
+        headers: {
+            'Authorization': 'Basic ' + new Buffer(apiKey + ':' + apiKey).toString('base64')
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            //return body;
+            res.send(200,body);
+        }
+        else if (error) {
+            console.log("error: " + error);
+            //return 'error, check console log';
+            res.send(500,'error, check console log');
+        }
+        else {
+            console.log("Response code: " + response.statusCode + "\nContent: " + body);
+            //return 'error, check console log';
+            res.send(500,'error, check console log');
+        }
+    });
+
+    //CoyBit code
+   /*linkedin_client.apiCall('GET', '/people-search',
         {
             token: {
                 oauth_token: '3eb3752a-f1c9-4221-9ea3-c555000bf673',
@@ -54,7 +91,7 @@ module.exports.findLinkedInProfile = function (req,res) {
         , function (error, result) {
             res.send(200, {error:error,result:result} );
         }
-    );
+    );*/
 }
 
 module.exports.findGravatarProfile = function (req,res){

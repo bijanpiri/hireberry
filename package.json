@@ -16,6 +16,7 @@
         "node-mandrill":"*",
         "dropbox": "*",
         "node-twitter-api": "*",
-        "linkedin-js": "*"
+        "linkedin-js": "*",
+        "request":"*"
     }
 }

@@ -178,27 +178,110 @@ function findTwitterProfile(profile,q,p) {
         });
 }
 
+//CoyBit code
+//function findLinkedinProfile(profile,fullname) {
+//
+//    var baseURL = 'http://linkedin.com/in/';
+//    /*
+//     $.get('/liprofile/' + q )
+//     .done( function(res){
+//     $('#liprofile').val(res);
+//     dataIsReceived('linkedin',res);
+//     });
+//     */
+//    var case1 = fullname.replace(' ','.');
+//    var case2 = fullname.split(' ').pop(-1);
+//    var results = {};
+//
+//    check404( baseURL + case1, function() {
+//            console.log('Error');
+//        },
+//        function(){
+//            console.log('OK');
+//        })
+//}
+
+
+//Call Bing search API client Side
+/*function findLinkedinProfile(profile,fullname) {
+
+    var searchTerm = fullname.trim().replace(" ","%20")+"%20linkedin";
+
+    var Bing_accountKey='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+    $.ajax({
+        type: "GET",
+        url:'https://api.datamarket.azure.com/Bing/Search/v1/Web?Query=%27'+searchTerm+'%27',
+        dataType: "json",
+        // crossDomain:"true",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic '+btoa(':'+Bing_accountKey));
+        },
+        success: function(result,status,xhr) {
+            LinkedinSearchCompleted(result,fullname.trim(),profile);
+        },
+        error: function(jqXHR, textStatus,errorThrown) {
+            console.log("Something hasn't worked :" + textStatus)
+        }
+    });
+}*/
+
+//Call Bing search API server Side
 function findLinkedinProfile(profile,fullname) {
 
-    var baseURL = 'http://linkedin.com/in/';
-    /*
-     $.get('/liprofile/' + q )
-     .done( function(res){
-     $('#liprofile').val(res);
-     dataIsReceived('linkedin',res);
-     });
-     */
-    var case1 = fullname.replace(' ','.');
-    var case2 = fullname.split(' ').pop(-1);
-    var results = {};
-
-    check404( baseURL + case1, function() {
-            console.log('Error');
+   $.ajax({
+        type: "GET",
+        url:'/liprofile/'+fullname.trim(),
+        //data:{q:fullname},
+        dataType:'json',
+        success: function(result,status,xhr) {
+            LinkedinSearchCompleted(result,fullname.trim(),profile);
         },
-        function(){
-            console.log('OK');
-        })
+        error: function(jqXHR, textStatus,errorThrown) {
+            console.log("Something hasn't worked :" + textStatus)
+            }
+        });
 }
+
+function LinkedinSearchCompleted(response,search_term,profile)
+{
+    var pattern=/^(http:\/\/)*([w]{3}|[a-zA-Z]{2})(.linkedin.com\/)(in|pub)((\/)[\w.+\/-]+)*$/;
+    var split_st=search_term.trim().split(" ");
+    var keyWords=new Array();
+    for(var i=0;i<split_st.length;i++)
+    {
+        if(split_st[i]!="")
+            keyWords.push(split_st[i].toLowerCase());
+    }
+    var results = response.d.results;
+    var matchResults=new Array();
+    if(results.length>0)
+    {
+        for(i=0;i<results.length;i++)
+        {
+            if(pattern.test(results[i].Url))
+            {
+                var valid=true;
+                for(var k=0;k<keyWords.length;k++)
+                {
+                    if(results[i].Title.toLowerCase().search(keyWords[k])<0)
+                    {
+                        valid=false;
+                        break;
+                    }
+                }
+                if(valid)
+                    matchResults.push( results[i].Url);
+            }
+        }
+        if( matchResults.length>0 )
+            fillProfileAddress( profile.find('input[name=liprofile]'), matchResults[0], true);
+        else
+            fillProfileAddress( profile.find('input[name=liprofile]'), "", false);
+
+        dataIsReceived('linkedin',matchResults);
+    }
+}
+
 
 function check404(url, callback) {
     var request = false;
