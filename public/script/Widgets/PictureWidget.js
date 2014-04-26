@@ -28,10 +28,10 @@ function PictureWidget(){
 
     function readerLoad(progress) {
         try {
-            imgly = new imglyKit({container: layout.find(".image-dialog-content")});
+//            imgly = new imglyKit({container: layout.find(".image-dialog-content")});
             imgEditor.find('.imgly-container').empty();
             var d=progress.target.result;
-            imgly.run(d);
+//            imgly.run(d);
 
 
         } catch (ex) {
