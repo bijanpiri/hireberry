@@ -3,8 +3,7 @@ function PictureWidget(){
     Widget.call(this);
 
     var layout = "";
-
-    var imgEditor;
+    var widget=this;
     var bar;
 
     function initLayout1() {
@@ -18,26 +17,65 @@ function PictureWidget(){
             e.stopPropagation()
         });
 
-        imgEditor = layout.find('.image-editor-dialog');
-        imgEditor.find('.image-edit-ok').click(editImage);
-        imgEditor.find('.image-edit-cancel').click(function(){
-            imgEditor.hide();
-        });
+    }
 
+    function showEditButtons() {
+        widget.toolbar.find(
+                '[command=crop],' +
+                '[command=undo],' +
+                '[command=redo],' +
+                '[command=save],' +
+                '[command=rotate-left],' +
+                '[command=rotate-right]').show();
+        widget.toolbar.find('[command=edit]').hide();
+
+    }
+    function hideEditButton(){
+        widget.toolbar.find(
+                '[command=crop],' +
+                '[command=undo],' +
+                '[command=redo],' +
+                '[command=save],' +
+                '[command=rotate-left],' +
+                '[command=rotate-right]').hide();
+        widget.toolbar.find('[command=edit]').show();
+
+    }
+    function showCropButtons(){
+        widget.toolbar.find(
+                '[command=crop],' +
+                '[command=undo],' +
+                '[command=redo],' +
+                '[command=save],' +
+                '[command=rotate-left],' +
+                '[command=rotate-right]').hide();
+        widget.toolbar.find(
+                '[command=accept],' +
+                '[command=cancel]' ).show();
+    }
+    function hideCropButtons(){
+        widget.toolbar.find(
+                '[command=accept],' +
+                '[command=cancel]' ).hide();
+        widget.toolbar.find(
+                '[command=crop],' +
+                '[command=undo],' +
+                '[command=redo],' +
+                '[command=save],' +
+                '[command=rotate-left],' +
+                '[command=rotate-right]').show();
     }
 
     function readerLoad(progress) {
         try {
-//            imgly = new imglyKit({container: layout.find(".image-dialog-content")});
-            imgEditor.find('.imgly-container').empty();
             var d=progress.target.result;
-//            imgly.run(d);
-
-
+            layout.find('.imageWidgetInnerContainer').hide();
+            layout.find('.image-container').empty().append('<img>');
+            layout.find('img').attr('src',d).show();
+            new Darkroom(layout.find('img')[0]);
+            showEditButtons();
         } catch (ex) {
             console.log(ex);
-            imgEditor.hide();
-
             if(ex.name == "NoSupportError") {
                 alert("Your browser does not support canvas.");
             } else if(ex.name == "InvalidError") {
@@ -45,13 +83,11 @@ function PictureWidget(){
             }
         }
     }
-
     var dudata;
     function add(e,data){
         dudata=data;
         var obj=data.files[0];
         if(obj instanceof File){
-            imgEditor.show();
             var reader = new FileReader();
             reader.onload =readerLoad;
             reader.readAsDataURL(data.files[0]);
@@ -68,15 +104,13 @@ function PictureWidget(){
     function done(e,data){
         bar.slideUp();
         var img = layout.find('img');
-        img.attr('src', '/uploads/' + data.result.files[0].name)
-            .show();
-        this.portlet.find('.imageWidgetOuterContainer').css('background-color','#f1f1f1');
+        img.attr('src', '/uploads/' + data.result.files[0].name).show();;
 
     }
-
     function progressall(e,data){
         var progress = parseInt(data.loaded / data.total * 100, 10);
         bar.find('.bar').css('width',progress + '%');
+
     }
 
     initLayout1.call(this);
@@ -99,44 +133,28 @@ function PictureWidget(){
                 progressall:progressall
             });
 
-            this.addToolbarCommand('add',function(){
-                layout.find('input[type=file]').click();
-            }).addToolbarCommand('edit',function(){
-                    imgEditor.show();
-                    imgly = new imglyKit({container: layout.find(".image-dialog-content")});
-                    imgEditor.find('.imgly-container').empty();
-
-                    var img = new Image();
-                    img.src=layout.find('img').attr('src');
-                    if(!layout.find('img').attr('src')){
-                        imgEditor.hide();
-                        alert('First of all add a picture by drag and drop or browse button.');
-                        return;
-                    }
-                    imgly.run(img);
-                });
+            this.addToolbarCommand('add',function(){layout.find('input[type=file]').click();
+            }).addToolbarCommand('edit',function(){showEditButtons();new Darkroom(layout.find('img')[0]);
+            }).addToolbarCommand('crop',function(){layout.find('.darkroom-icon-crop').click();showCropButtons();
+            }).addToolbarCommand('accept',function(){layout.find('.darkroom-icon-accept').click();hideCropButtons();
+            }).addToolbarCommand('cancel',function(){layout.find('.darkroom-icon-cancel').click();hideCropButtons();
+            }).addToolbarCommand('undo',function(){layout.find('.darkroom-icon-back').click();
+            }).addToolbarCommand('redo',function(){layout.find('.darkroom-icon-forward').click();
+            }).addToolbarCommand('rotate-left',function(){layout.find('.darkroom-icon-rotate-left').click();
+            }).addToolbarCommand('rotate-right',function(){layout.find('.darkroom-icon-rotate-right').click();
+            }).addToolbarCommand('save',function(){hideEditButton();layout.find('.darkroom-icon-save').click();//save();
+            });
         }
         else {
             this.portlet.find('.imageWidgetInnerContainer').remove();
         }
     }
+    function save(){
+        var ulr=layout.find('img');
+        var blob=dataURLtoBlob(d);
+        layout.find('input[type=file]').fileupload('add',{files:blob});
 
-    var imgly;
-
-    function editImage(){
-        imgEditor.hide();
-        imgly.renderToDataURL("image/jpeg", function (err, dataurl){
-
-            //shows preview
-            layout.find('img').attr('src',dataurl);
-
-            //convert to blob in order to upload it.
-            var blob=dataURLtoBlob(dataurl);
-
-            layout.find('input[type=file]').fileupload('add',{files:blob});
-        });
     }
-
     this.serialize=function(){
         return this.portlet.find('.image-widget img').attr('src');
     }
@@ -145,7 +163,6 @@ function PictureWidget(){
 
         if( content ) {
             this.portlet.find('.imageWidgetInnerContainer').remove();
-            this.portlet.find('.imageWidgetOuterContainer').css('background-color','#f1f1f1');
             var img = layout.find('img');
             return img.attr('src', content).show();
         }

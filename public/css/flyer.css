@@ -367,7 +367,12 @@ Portlet Creator
     border: dashed 2px #585858;
     cursor: pointer;
 }
-
+.darkroom-toolbar{
+    display: none;
+}
+.canvas-container{
+    margin: auto;
+}
 
 /**** Map Widget ****/
 .mapWidget {

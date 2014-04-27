@@ -2,9 +2,13 @@
 
 <!--<script src="/script/jquery.Jcrop.js"></script>-->
 <!--<script src="/script/load-image.min.js"></script>-->
-<link rel="stylesheet" href="/css/darkroom.min.css">
+
 <script src="/script/fabric.js"></script>
 <script src="/script/darkroom.js"></script>
+<script src="/script/plugins/darkroom.crop.js"></script>
+<script src="/script/plugins/darkroom.history.js"></script>
+<script src="/script/plugins/darkroom.rotate.js"></script>
+<script src="/script/plugins/darkroom.save.js"></script>
 
 
 <script src="/script/canvas-to-blob.min.js"></script>
@@ -13,15 +17,12 @@
 
 <script src="/html2canvas.js"></script>
 
+<link href="/css/darkroom.css" rel="stylesheet">
 <link href="/css/toolbar.css" rel="stylesheet">
 <link href="/css/widget/profile.css" rel="stylesheet">
 <link href="/css/widget/video.css" rel="stylesheet">
 <link href="/css/widget/separator.css" rel="stylesheet">
 <link href="/css/flyer.css" rel="stylesheet">
-
-<!--<link href="/css/imgly.css" rel="stylesheet">-->
-
-<!--<link href="/css/font-awesome.css" rel="stylesheet" />-->
 <link href="/css/font-awesome.css" rel="stylesheet">
 
 <script src="/chosen/chosen.jquery.js"></script>
@@ -29,18 +30,9 @@
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
 </script>
-
-<!--<link rel="stylesheet" href="../../bootstrap-modal/css/bootstrap-modal.css">-->
-<!--<script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap.js"></script>-->
-<!--<script src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>-->
-<!--<script src="../../bootstrap/js/bootstrap.min.js"></script>-->
-<!--<script src="../../bootstrap-modal/js/bootstrap-modalmanager.js"></script>-->
-<!--<script src="../../bootstrap-modal/js/bootstrap-modal.js"></script>-->
-
-<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">-->
 <link href="/css/job.css" rel="stylesheet">
-<link href="/css/jquery.Jcrop.css" rel="stylesheet">
 <link href="/css/toggle-switch.css" rel="stylesheet">
+
 <script src="/script/Widgets/ColorPicker.js"></script>
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
@@ -390,23 +382,18 @@
     <div class="progress">
         <div class="bar" style="width: 0%;"></div>
     </div>
-
     <div class="imageWidgetOuterContainer">
         <div class="imageWidgetInnerContainer">
             <i class="imageWidgetCamera"></i>
             <p>Choose a picture</p>
             <p>or just drop it here</p>
-        </div><img hidden>
+        </div>
+        <div class="image-container">
+
+        </div>
         <input type="file" name="picture" hidden>
     </div>
 
-    <div class="image-editor-dialog">
-        <div class="image-dialog-content imgly-container" >
-
-        </div>
-        <a class="btn btn-warning btn-large pull-right image-edit-cancel"><i class="icon-remove"></i></a>
-        <a class="btn btn-primary btn-large pull-right image-edit-ok" ><i class="icon-ok"></i></a>
-    </div>
 </div>
 
 <div class="video-widget">
@@ -876,8 +863,16 @@
 
     <div class="toolbar-picture">
         <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
-        <a class="btn btn-large" command="edit"><i class="icon-edit"></i></a>
-        <a class="btn btn-large hide" command="crop"><i class="icon-edit"></i></a>
+        <a class="btn btn-large hide" command="edit" ><i class="icon-edit"></i></a>
+        <a class="btn btn-large hide" command="crop"><i class="darkroom-icon-crop"></i></a>
+        <a class="btn btn-large hide" command="accept" ><i class="icon-ok"></i></a>
+        <a class="btn btn-large hide" command="cancel" ><i class="icon-remove"></i></a>
+        <a class="btn btn-large hide" command="undo"><i class="icon-undo"></i></a>
+        <a class="btn btn-large hide" command="redo"><i class="icon-undo"></i></a>
+        <a class="btn btn-large hide" command="rotate-left"><i class="darkroom-icon-rotate-left"></i></a>
+        <a class="btn btn-large hide" command="rotate-right"><i class="darkroom-icon-rotate-right"></i></a>
+        <a class="btn btn-large hide" command="save"><i class="icon-save"></i></a>
+
     </div>
 
     <div class="toolbar-separatorWidget">
