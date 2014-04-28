@@ -15,7 +15,7 @@ function ProfilesWidget() {
         var fileInput = this.portlet.find('input[type=file]');
         var avatar = this.portlet.find('.bool-avatar-image');
         profile.find('.bool-avatar-menu-gravatar').click(
-            function(){findGravatar(profile, profile.find('input[name="email"]').val())});
+            function(){findGravatar(profile, profile.find('input[name="email"]').val());updateAvatarUrl();});
 
         profile.find('.bool-avatar-menu-upload').click(
             function(){
@@ -44,13 +44,16 @@ function ProfilesWidget() {
 //            this.portlet.find('input').not('input[name=personalInfo-item]').prop('readOnly','readOnly').css('cursor','default');
         }
     }
-
+    function updateAvatarUrl(){
+        var src=profile.find('.bool-avatar-image').attr('src');
+        profile.find('.bool-avatar-image-url').val(src);
+    }
     function done(e, data) {
         var avatar=profile.find('.bool-avatar-image');
         profile.find('.bool-avatar-no-container').hide();
         avatar.show();
         avatar.attr('src', "/uploads/" + data.result.files[0].name);
-
+        updateAvatarUrl();
     }
 
     profile.find('input[type=button]').each(function (i, input) {
@@ -64,6 +67,10 @@ function ProfilesWidget() {
     });
     profile.delegate('[name=email]','blur',function(){
        fillProfiles.call(profile);
+        updateAvatarUrl();
+    });
+    profile.delegate('.bool-avatar-image','load',function(){
+        updateAvatarUrl();
     });
 
      this.toolbar.find('.bool-btn').each(function (i, btn) {

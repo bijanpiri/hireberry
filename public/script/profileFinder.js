@@ -87,6 +87,7 @@ function findGravatar(profile,q) {
                 profile.find('.bool-avatar-container').css('border-color', rgb1)
             }).show();
 
+        profile.find('.bool-avatar-image-url').val(url);
         profile.find('.bool-avatar-no-container').hide();
 
         scaleElement( profile.find('.profilePic'), 0, 1.2, function() {

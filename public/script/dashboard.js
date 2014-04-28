@@ -422,6 +422,7 @@ function fillTable() {
             var candidateObj = $('#candidateInstance').clone().show().addClass('candidate grid-candidate');
             var candidate = res.rows[i];
 
+            candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
             candidateObj.find('.candidate-name').text(candidate.name);
             candidateObj.find('.candidate-job').text(candidate.position);
             candidateObj.find('.candidate-stage').text(candidate.lastActivity);
