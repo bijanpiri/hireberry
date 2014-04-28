@@ -598,3 +598,18 @@ Portlet Creator
 .loading{
     z-index: 30000;
 }
+.bool-dragging-item{
+    border: 3px dashed #9c9c9c;
+    background: lightgoldenrodyellow;
+    height: 200px;
+    width: 100%;
+    z-index: 20000;
+    display: none;
+}
+.portletStack .bool-dragging-item {
+    display: block;
+}
+
+.portletStack a.newitem>i{
+    display: none;
+}

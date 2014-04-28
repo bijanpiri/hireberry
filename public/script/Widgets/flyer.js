@@ -72,7 +72,10 @@ function Flyer(options) {
         var portlet = widget.content();
 
         widget.type = wData.type;
-        pStack.append(portlet);
+        if(wData.place)
+            wData.place.replaceWith(portlet);
+        else
+            pStack.append(portlet);
 
         // Parameter: is it new?
         widget.widgetDidAdd( (wData.content==null) );
@@ -188,16 +191,34 @@ function Flyer(options) {
         // Initialization
         if( editMode ){
             pStack.sortable({
-                connectWith: ".portletStack",
+//                connectWith: ".portletStack",
                 cursor: "move",
                 axis: "y",
 
                 handle: ".move-btn-frame"
             })//.disableSelection();
 
+            $('.bool-add-widget>a[type]').draggable({
+                connectToSortable: ".portletStack",
+                helper: function(){
+                    type=parseInt(this.type);
+
+                },
+//                helper: "clone",
+//                helper:function(){return $('<div>').addClass('bool-dragging-item');},
+                revert: "invalid",
+                stop:replaceWidgets
+            });
         }
 
-
+        function replaceWidgets(){
+            $('.portletStack>a.newitem').each(
+                function(){
+                    var type=parseInt(this.type);
+                    createPortlet({type:type,isNew:true,place:$(this)});
+                }
+            );
+        }
         // Set click event
         $(function(){
 
@@ -209,7 +230,7 @@ function Flyer(options) {
 
         // templateID=0 means 'don't use template'
         if( options.flyerid)
-            this.json2flyer( options.templateID, options.flyerid )
+            this.json2flyer( options.templateID, options.flyerid );
     }
 
     // Public functions
