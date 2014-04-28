@@ -200,12 +200,19 @@ function Flyer(options) {
 
             $('.bool-add-widget>a[type]').draggable({
                 connectToSortable: ".portletStack",
-                helper: function(){
-                    type=parseInt(this.type);
-
-                },
-//                helper: "clone",
-//                helper:function(){return $('<div>').addClass('bool-dragging-item');},
+//                helper: function(){
+//                    type=parseInt(this.type);
+//
+//                },
+                helper: "clone",
+//                helper:function(){
+//                    Widgets[wData.type].instances--;
+//                    var type=parseInt(this.type);
+//                    var widget = new Widgets[type]();
+//                    widget.editMode = true;
+//                    widget.flyerID = $('input[name=flyerid]').val();
+//                    return widget.content();
+//                },
                 revert: "invalid",
                 stop:replaceWidgets
             });
@@ -218,6 +225,7 @@ function Flyer(options) {
                     createPortlet({type:type,isNew:true,place:$(this)});
                 }
             );
+            $('.portletStack>a.newitem').remove();
         }
         // Set click event
         $(function(){

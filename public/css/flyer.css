@@ -603,13 +603,27 @@ Portlet Creator
     background: lightgoldenrodyellow;
     height: 200px;
     width: 100%;
-    z-index: 20000;
-    display: none;
-}
-.portletStack .bool-dragging-item {
-    display: block;
-}
+    position: relative;
+    display: inline-block;
+    z-index:32700;
 
-.portletStack a.newitem>i{
-    display: none;
 }
+.portletStack a.buttonFrame .centeralBackgroundImage{
+    display: none;
+    border-radius: 0;
+}
+.portletStack a.buttonFrame{
+    /*position: absolute;*/
+    margin: 5px;
+    display: inline-block;
+    width: 100%;
+    border-radius: 4px;
+    height: 80px;
+}
+/*.portletStack .bool-dragging-item {*/
+    /*display: block;*/
+/*}*/
+
+/*.portletStack a.newitem>i{*/
+    /*display: none;*/
+/*}*/
