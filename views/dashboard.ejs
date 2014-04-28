@@ -470,11 +470,25 @@ function fillUserTeams() {
             $('#userTeams').append( $('<option>').text(team.name).attr('name',team._id) );
         });
 
+        $('#switchButton').unbind('click').click( function() {
+            $('#switchTeamEdit').show();
+            $('#switchTeamView').hide();
+        });
+
+
+        $('#cancelChangeUserTeam').unbind('click').click( function() {
+            $('#switchTeamView').show();
+            $('#switchTeamEdit').hide();
+        });
+
         $('#changeUserTeam').unbind('click').click( function() {
             var teamID = $('#userTeams :selected').attr('name');
 
             $.post('/api/user/changeTeam', {teamID:teamID}).done( function() {
                 refresh(true);
+
+                $('#switchTeamView').show();
+                $('#switchTeamEdit').hide();
             })
         })
     })
@@ -713,6 +727,8 @@ function getTeamInfo(callback) {
         $('#teamName').text( res.teamName );
         $('#teamAdmin').text( res.teamAdminEmail );
 
+        $('#currentTeamName').text( res.teamName );
+
         if( res.isAdmin===true ) {
             $('#teamNameChange').show();
             $('#teamAdminChange').show();
@@ -808,215 +824,226 @@ function getPositionComments(appID) {
 </script>
 
 <div id="wrap">
-<div class="container menu">
-    <div class="row-fluid">
-        <div class="span2 item" forContainer="analyticsContainer">Overview</div>
-        <div class="span2 item" forContainer="teamContainer">Team</div>
-        <div class="span2 item" forContainer="positionsContainer">Positions</div>
-        <div class="span2 item" forContainer="applicationsContainer">Applications</div>
-        <div class="span2 item" forContainer="commentsContainer">Requests<span id="comments_badge"></span></div>
-        <div class="span2 item" forContainer="billingContainer">Billing</div>
-    </div>
-</div>
-
-<div class="container analyticsContainer sectionContainer">
-    <div class="row-fluid statisticsRow">
-        <div class="span3 statBox">
-            <div class="number" id="numForms"></div>
-            <div class="text">Open Position</div>
-        </div>
-
-        <div class="span3 statBox">
-            <div class="number" id="numApplications"></div>
-            <div class="text">Applications</div>
-        </div>
-
-        <div class="span3 statBox">
-            <div class="number" id="numNewApplications"></div>
-            <div class="text">Unvisited Applications</div>
-        </div>
-
-        <div class="span3 statBox">
-            <div class="number" id="numTodayApplications"></div>
-            <div class="text">Today Applications</div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span12">
-
-            <div id="full-clndr" class="clearfix">
-                <script type="text/template" id="full-clndr-template">
-                    <div class="clndr-grid">
-                        <div class="days-of-the-week clearfix">
-                            {% _.each(daysOfTheWeek, function(day) { %}
-                            <div class="header-day">{{ day }}</div>
-                            {% }); %}
+    <div class="container-fluid">
+        <div class="row-fluid" style="background: #f1f1f1">
+            <div class="span2">
+                <div class="menu">
+                    <div class="menu-header">
+                        <div id="switchTeamView">
+                            <div id="currentTeamName">Current Team</div>
+                            <button id="switchButton" class="btn btn-mini">Switch</button>
                         </div>
-                        <div class="days clearfix">
-                            {% _.each(days, function(day) { %}
-                            <div class="{{ day.classes }}" id="{{ day.id }}"><span class="day-number">{{ day.day }}</span></div>
-                            {% }); %}
+
+                        <div id="switchTeamEdit" hidden>
+                        <select id="userTeams" style="width: 100%;"></select>
+                        <a id="changeUserTeam" href="#" class="btn btn-mini btn-success">OK</a>
+                        <a id="cancelChangeUserTeam" href="#" class="btn btn-mini btn-danger">Cancel</a>
                         </div>
                     </div>
-                    <div class="event-listing">
-                        <div class="event-listing-title">EVENTS THIS MONTH</div>
-                        {% _.each(eventsThisMonth, function(event) { %}
-                        <div class="event-item">
-                            <div class="event-item-name">{{ event.title }}</div>
-                            <div class="event-item-location">{{ event.location }}</div>
+                    <div class="item" forContainer="analyticsContainer">Overview</div>
+                    <div class="item" forContainer="teamContainer">Team</div>
+                    <div class="item" forContainer="positionsContainer">Positions</div>
+                    <div class="item" forContainer="applicationsContainer">Applications</div>
+                    <div class="item" forContainer="commentsContainer">Requests<span id="comments_badge"></span></div>
+                    <div class="item" forContainer="billingContainer">Billing</div>
+                </div>
+            </div>
+            <div class="span10 right-panel">
+                <div class="container-fluid analyticsContainer sectionContainer">
+                    <div class="row-fluid statisticsRow">
+                        <div class="span3 statBox">
+                            <div class="number" id="numForms"></div>
+                            <div class="text">Open Position</div>
                         </div>
-                        {% }); %}
+
+                        <div class="span3 statBox">
+                            <div class="number" id="numApplications"></div>
+                            <div class="text">Applications</div>
+                        </div>
+
+                        <div class="span3 statBox">
+                            <div class="number" id="numNewApplications"></div>
+                            <div class="text">Unvisited Applications</div>
+                        </div>
+
+                        <div class="span3 statBox">
+                            <div class="number" id="numTodayApplications"></div>
+                            <div class="text">Today Applications</div>
+                        </div>
                     </div>
-                </script>
+                    <div class="row-fluid">
+                        <div class="span12">
+
+                            <div id="full-clndr" class="clearfix">
+                                <script type="text/template" id="full-clndr-template">
+                                    <div class="clndr-grid">
+                                        <div class="days-of-the-week clearfix">
+                                            {% _.each(daysOfTheWeek, function(day) { %}
+                                            <div class="header-day">{{ day }}</div>
+                                            {% }); %}
+                                        </div>
+                                        <div class="days clearfix">
+                                            {% _.each(days, function(day) { %}
+                                            <div class="{{ day.classes }}" id="{{ day.id }}"><span class="day-number">{{ day.day }}</span></div>
+                                            {% }); %}
+                                        </div>
+                                    </div>
+                                    <div class="event-listing">
+                                        <div class="event-listing-title">EVENTS THIS MONTH</div>
+                                        {% _.each(eventsThisMonth, function(event) { %}
+                                        <div class="event-item">
+                                            <div class="event-item-name">{{ event.title }}</div>
+                                            <div class="event-item-location">{{ event.location }}</div>
+                                        </div>
+                                        {% }); %}
+                                    </div>
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid teamContainer sectionContainer" hidden>
+                    <div class="row-fluid teamHeader">
+                        <div class="span4">
+                            <span id="teamNameTitle">Team Name:</span>
+                            <span id="teamName"></span>
+                            <span id="teamNameChange" hidden><a>Change</a></span>
+                        </div>
+                        <div class="span4">
+                        </div>
+                        <div class="span4">
+                            <span id="teamAdminTitle">Admin:</span>
+                            <span id="teamAdmin"></span>
+                            <span id="teamAdminChange" hidden><a>Change</a></span>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div id="teamMembers"></div>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="teamInvitationPanel">
+                                <p>Send invatation to other members of your team to join:</p>
+                                <input type="email" id="inviteEmail" placeholder="yourfriend@yourorg.com">
+                                <button id="inviteToTeam" class="btn btn-warning">Invite</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="container-fluid positionsContainer sectionContainer" hidden>
+
+                    <div style="padding-bottom: 40px; font-size: 1.7em;">
+                        <a id="teamJobsPage">Jobs page</a>
+                    </div>
+
+                    <div class="row-fluid positionsHeaderRow">
+                        <div class="span3 colTitle">Name</div>
+                        <div class="span1 colStatus">Status</div>
+                        <div class="span3 colCreator">Creator</div>
+                        <div class="span3 colAssignedTo">Assigned To</div>
+                        <div class="span2 colOperations">Operatinos</div>
+                    </div>
+
+                </div>
+
+                <div class="container-fluid applicationsContainer sectionContainer" hidden>
+                    <div class="row-fluid tableRow">
+                        <div class="span12">
+                            <div id="applicationsTable"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid commentsContainer sectionContainer" hidden>
+                    <div class="row-fluid tableRow">
+                        <div class="span12">
+                            <ul id="askedForCommentList"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid billingContainer sectionContainer" hidden>
+                    <div class="row-fluid tableRow">
+                        <div class="offset3 span2">
+                            <div class="plan">
+                                <div class="planTitle">1 Month</div>
+                                <div class="planDescription">
+                                    <ul>
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                    </ul>
+                                </div>
+                                <div class="planButton">
+                                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                                            data-button="subscribe"
+                                            data-name="booltin - 1 month subscribtion"
+                                            data-amount="15"
+                                            data-currency="USD"
+                                            data-recurrence="2"
+                                            data-period="M"
+                                            data-env="sandbox"></script>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="span2">
+                            <div class="plan">
+                                <div class="planTitle">3 Month</div>
+                                <div class="planDescription">
+                                    <ul>
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                    </ul>
+                                </div>
+                                <div class="planButton">
+                                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                                            data-button="subscribe"
+                                            data-name="booltin - 1 month subscribtion"
+                                            data-amount="15"
+                                            data-currency="USD"
+                                            data-recurrence="2"
+                                            data-period="M"
+                                            data-env="sandbox"></script>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="span2">
+                            <div class="plan">
+                                <div class="planTitle">12 Month</div>
+                                <div class="planDescription">
+                                    <ul>
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                    </ul>
+                                </div>
+                                <div class="planButton">
+                                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
+                                            data-button="subscribe"
+                                            data-name="booltin - 1 month subscribtion"
+                                            data-amount="15"
+                                            data-currency="USD"
+                                            data-recurrence="2"
+                                            data-period="M"
+                                            data-env="sandbox"></script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="container teamContainer sectionContainer" hidden>
-    <div class="row-fluid teamHeader">
-        <div class="span4">
-            <span id="teamNameTitle">Team Name:</span>
-            <span id="teamName"></span>
-            <span id="teamNameChange" hidden><a>Change</a></span>
-        </div>
-        <div class="span4">
-            <span>Switch Team:</span>
-            <span><select id="userTeams"></select></span>
-            <span><a id="changeUserTeam" href="#">Switch</a></span>
-        </div>
-        <div class="span4">
-            <span id="teamAdminTitle">Admin:</span>
-            <span id="teamAdmin"></span>
-            <span id="teamAdminChange" hidden><a>Change</a></span>
-        </div>
-    </div>
-
-    <div class="row-fluid">
-        <div class="span12">
-            <div id="teamMembers"></div>
-        </div>
-    </div>
-
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="teamInvitationPanel">
-                <p>Send invatation to other members of your team to join:</p>
-                <input type="email" id="inviteEmail" placeholder="yourfriend@yourorg.com">
-                <button id="inviteToTeam" class="btn btn-warning">Invite</button>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="container positionsContainer sectionContainer" hidden>
-
-    <div style="padding-bottom: 40px; font-size: 1.7em;">
-        <a id="teamJobsPage">Jobs page</a>
-    </div>
-
-    <div class="row-fluid positionsHeaderRow">
-        <div class="span3 colTitle">Name</div>
-        <div class="span1 colStatus">Status</div>
-        <div class="span3 colCreator">Creator</div>
-        <div class="span3 colAssignedTo">Assigned To</div>
-        <div class="span2 colOperations">Operatinos</div>
-    </div>
-
-</div>
-
-<div class="container applicationsContainer sectionContainer" hidden>
-    <div class="row-fluid tableRow">
-        <div class="span12">
-            <div id="applicationsTable"></div>
-        </div>
-    </div>
-</div>
-
-<div class="container commentsContainer sectionContainer" hidden>
-    <div class="row-fluid tableRow">
-        <div class="span12">
-            <ul id="askedForCommentList"></ul>
-        </div>
-    </div>
-</div>
-
-<div class="container billingContainer sectionContainer" hidden>
-    <div class="row-fluid tableRow">
-        <div class="offset3 span2">
-            <div class="plan">
-                <div class="planTitle">1 Month</div>
-                <div class="planDescription">
-                    <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
-                <div class="planButton">
-                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
-                            data-button="subscribe"
-                            data-name="booltin - 1 month subscribtion"
-                            data-amount="15"
-                            data-currency="USD"
-                            data-recurrence="2"
-                            data-period="M"
-                            data-env="sandbox"></script>
-                </div>
-            </div>
-        </div>
-
-        <div class="span2">
-            <div class="plan">
-                <div class="planTitle">3 Month</div>
-                <div class="planDescription">
-                    <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
-                <div class="planButton">
-                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
-                            data-button="subscribe"
-                            data-name="booltin - 1 month subscribtion"
-                            data-amount="15"
-                            data-currency="USD"
-                            data-recurrence="2"
-                            data-period="M"
-                            data-env="sandbox"></script>
-                </div>
-            </div>
-        </div>
-
-        <div class="span2">
-            <div class="plan">
-                <div class="planTitle">12 Month</div>
-                <div class="planDescription">
-                    <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
-                <div class="planButton">
-                    <script src="https://www.paypalobjects.com/js/external/paypal-button.min.js?merchant=coybit@gmail.com"
-                            data-button="subscribe"
-                            data-name="booltin - 1 month subscribtion"
-                            data-amount="15"
-                            data-currency="USD"
-                            data-recurrence="2"
-                            data-period="M"
-                            data-env="sandbox"></script>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 </div>
 
 <div id="activitiesModal">

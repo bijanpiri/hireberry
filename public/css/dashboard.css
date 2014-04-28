@@ -2,21 +2,31 @@
 #wrap {
     position: relative;
     top: 15em;
+    padding: 0 10em;
 }
 
 .menu {
     font-size: 2.0em;
     text-align: center;
-    padding: 10px 30px;
     line-height: 1.4em;
-    margin-bottom: 0.5em;
 }
+
+.menu .menu-header {
+    color: #419244;
+    background-color: #D5D5D5;
+    line-height: 2.0em;
+    font-weight: 700;
+    border-radius: 0 0 7px 0;
+    padding: 0.5em 0;
+}
+
 .menu .item {
-    border-bottom: 4px solid transparent;
+    border-left: 4px solid transparent;
+    padding: 1em 0;
 }
 
 .menu .item:hover {
-    border-bottom: 4px solid green;
+    border-left: 4px solid green;
     cursor: pointer;
 }
 
@@ -25,11 +35,10 @@
 }
 
 .menu .item-selected:hover {
-    border: none;
 }
 
 
-#wrap .container {
+#wrap .right-panel .container-fluid {
     background-color: #f1f1f1;
     position: relative;
     left: 0;
@@ -130,25 +139,28 @@
 
 .statBox {
     border-radius: 7px;
-    border: 2px solid #9A9A9A;
+    border: 3px solid green;
     background-color: #fff;
     margin-bottom: 40px;
-    height: 200px;
     padding: 0.5em;
 }
 
 .statBox .number {
-    font-size: 8em;
+    font-size: 2.5em;
     line-height: 1.6em;
-    color: #487C96;
+    color: green;
     text-align: center;
     font-weight: 700;
+    display: inline-block;
+    margin: 0 0.3em;
+    vertical-align: sub;
 }
 .statBox .text {
-    font-size: 2em;
-    color: #99C7DE;
+    font-size: 1.5em;
+    color: #1BBD27;
     text-align: center;
     font-weight: 700;
+    display: inline-block;
 }
 
 #tableTitle {
