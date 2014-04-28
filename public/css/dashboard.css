@@ -5,6 +5,45 @@
     padding: 0 10em;
 }
 
+#notificationCenter {
+    position: absolute;
+    width: 300px;
+    right: 0;
+    bottom: 1em;
+    top: 10em;
+    overflow: hidden;
+}
+
+#notificationCenter .tongue {
+    position: relative;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #6EB87D;
+    border-radius: 4px 0 0 4px;
+    text-align: center;
+    line-height: 1.6em;
+    font-size: 2em;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+#notificationCenter .panel {
+    position: absolute;
+    width: 260px;
+    left: 40px;
+    bottom: 0;
+    top: 0;
+    background-color: #6EB87D;
+}
+
+#notificationCenter .panel .nc-header {
+    font-size: 2em;
+    text-align: center;
+    margin: 0.5em 0;
+    color: #fff;
+}
+
 .menu {
     font-size: 2.0em;
     text-align: center;
@@ -26,12 +65,13 @@
 }
 
 .menu .item:hover {
-    border-left: 4px solid green;
+    background-color: rgb(200, 230, 200);
     cursor: pointer;
 }
 
 .menu .item-selected {
-    color: rgb(55, 145, 38);
+    background-color: rgb(200, 230, 200);
+    border-left: 4px solid green;
 }
 
 .menu .item-selected:hover {
@@ -374,7 +414,6 @@
     width: 24px;
     height: 24px;
     display: inline-block;
-    vertical-align: top;
     color: #fff;
     font-weight: 700;
     line-height: 1.3em;
@@ -391,7 +430,7 @@
 }
 
 #askedForCommentList li .comment_date {
-    color: #949494;
+    color: #ffffff;
 }
 
 #askedForCommentList li div {
@@ -399,7 +438,6 @@
 }
 
 #askedForCommentList li textarea {
-    width: 400px;
     margin: 10px 0;
     height: 75px;
     font-size: 1.6em;
@@ -426,5 +464,32 @@
 }
 
 .planButton {
+}
 
+.candidate {
+    box-shadow: 1px 1px 5px #c6c6c6;
+    -webkit-box-shadow: 1px 1px 5px #c6c6c6;
+    cursor: pointer;
+    font-size: 2em;
+}
+
+.grid-candidate {
+    width: 40%;
+    height: 260px;
+    padding: 10px;
+    background-color: #fff;
+    margin: 15px;
+    float: left;
+}
+.grid-candidate-expanded {
+    width: 100%;
+    height: 400px;
+}
+
+.list-candidate {
+    height: 190px;
+    width: 100%;
+    margin: 15px;
+    padding: 10px;
+    background-color: #fff;
 }
