@@ -181,6 +181,7 @@ BApplications = mongoose.model( 'applications', {
     email:String,
     tel:String,
     website:String,
+    avatarURL: String,
     skills:[],
     applyTime:String,
     workPlace:String,

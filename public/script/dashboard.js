@@ -414,8 +414,23 @@ function fillPositionsList( callback ) {
 function fillTable() {
 
     $('#applicationsTable').html('');
+    $('#candidatesCollection .candidate').remove();
 
-    $('.candidate').unbind('click').click( function() {
+    $.get('/api/applications').done( function(res) {
+
+        for( var i=0; i<res.rows.length; i++ ) {
+            var candidateObj = $('#candidateInstance').clone().show().addClass('candidate grid-candidate');
+            var candidate = res.rows[i];
+
+            candidateObj.find('.candidate-name').text(candidate.name);
+            candidateObj.find('.candidate-job').text(candidate.position);
+            candidateObj.find('.candidate-stage').text(candidate.lastActivity);
+            candidateObj.find('.candidate-skills').text(candidate.skills);
+            candidateObj.find('.candidate-conditions').text(candidate.workTime + ' @' + candidate.workPlace);
+            $('#candidatesCollection').append( candidateObj );
+        }
+
+        $('.candidate').unbind('click').click( function() {
         if( $(this).hasClass('grid-candidate') == false )
             return;
 
@@ -451,6 +466,8 @@ function fillTable() {
 
             $('#candidatesCollection .list-candidate').animate({'opacity':1},300);
         });
+    });
+
     });
 
     $('#applicationsTable').WATable({

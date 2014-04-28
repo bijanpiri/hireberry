@@ -168,6 +168,7 @@ module.exports.apply = function (req,res) {
         email:req.body.email,
         tel:req.body.tel,
         website:req.body.website,
+        avatarURL: req.body.avatarURL,
         applyTime: new Date(),
         skills:JSON.stringify(skills),
         workPlace:req.body.workPlace,

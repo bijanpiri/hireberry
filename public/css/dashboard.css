@@ -6,7 +6,7 @@
 }
 
 #notificationCenter {
-    position: absolute;
+    position: fixed;
     width: 300px;
     right: 0;
     bottom: 1em;
@@ -470,7 +470,6 @@
     box-shadow: 1px 1px 5px #c6c6c6;
     -webkit-box-shadow: 1px 1px 5px #c6c6c6;
     cursor: pointer;
-    font-size: 2em;
 }
 
 .grid-candidate {
@@ -481,9 +480,55 @@
     margin: 15px;
     float: left;
 }
+
+.grid-candidate .candidate-avatar {
+    background-image: url("http://www.gravatar.com/avatar/ab6c4eccf143a9f6c8b162d50aaf8d70");
+    display: inline-block;
+    height: 84px;
+    width: 84px;
+    border-radius: 50%;
+    border: 3px solid #8B8B8B;
+}
+
+.grid-candidate .candidate-basicInfo {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 1.8em;
+    margin: 0.0em 0.5em;
+}
+
+.grid-candidate .candidate-name {
+    font-size: 2.7em;
+    line-height: 1.6em;
+}
+
+.grid-candidate .candidate-job {
+    font-size: 1.5em;
+    color: #B8B8B8;
+}
+
+.grid-candidate .candidate-stage {
+    font-size: 1.5em;
+    color: #B8B8B8;
+}
+
+.grid-candidate .candidate-conditions {
+    font-size: 1.5em;
+    line-height: 3em;
+    border-top: 1px solid #c9c9c9;
+}
+
+.grid-candidate .candidate-skills {
+    font-size: 1.5em;
+    line-height: 3em;
+    border-top: 1px solid #c9c9c9;
+}
+
+
 .grid-candidate-expanded {
     width: 100%;
     height: 400px;
+    background-color: rgb(253, 253, 207);
 }
 
 .list-candidate {

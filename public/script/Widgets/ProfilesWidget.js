@@ -81,7 +81,9 @@ function ProfilesWidget() {
 
         var data = {
             profiles: this.toolbar
-                .find('.toolbar-profileWidget input').serialize().replace(/p=/gi, '').split('&')};
+                .find('.toolbar-profileWidget input').serialize().replace(/p=/gi, '').split('&'),
+            avatar: this.portlet.find('.bool-avatar-image').attr('src')
+        };
 
         return data;
     }
@@ -92,6 +94,8 @@ function ProfilesWidget() {
                 $(input).prop('checked', data.profiles.indexOf(input.value) >= 0).change();
             }
         );
+
+        this.portlet.find('.bool-avatar-image').attr('src',data.avatar)
     }
 }
 ProfilesWidget.prototype=new Widget();
