@@ -71,9 +71,24 @@ Whole Paper
     font-size: 2em;
 }
 
+.portletFooter {
+    height: 80px;
+    background-color: #f1f1f1;
+    position: relative;
+    padding: 0 20px;
+    border-radius: 0 0 7px 7px;
+    margin: 0 38px;
+    margin-bottom: 10em;
+    display: none;
+}
+.bool-edit-mode .portletFooter{
+    display: block;
+}
+
 .portletStack {
     margin: 0;
     background-color: transparent;
+
 }
 
 .portletCreator  {
@@ -84,10 +99,15 @@ Whole Paper
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    margin: 0 38px;
-    height: 200px;
-    border-radius: 0 0 7px 7px;
+    margin: 0 ;
+    height: 100px;
     padding: 10px 0;
+    position: fixed;
+    width:100%;
+    display: none;
+}
+.bool-edit-mode .portletCreator{
+    display: inline-block;
 }
 
 .portletSubmittion {
@@ -627,3 +647,9 @@ Portlet Creator
 /*.portletStack a.newitem>i{*/
     /*display: none;*/
 /*}*/
+
+.bool-add-widget{
+    margin: 0;
+    position: relative;
+    text-align: center;
+}
