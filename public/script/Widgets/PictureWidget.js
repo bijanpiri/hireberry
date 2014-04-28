@@ -1,4 +1,5 @@
 //ToDo: When user change a picture it must be deleted in server.
+
 function PictureWidget(){
     Widget.call(this);
 
@@ -142,7 +143,7 @@ function PictureWidget(){
             }).addToolbarCommand('redo',function(){layout.find('.darkroom-icon-forward').click();
             }).addToolbarCommand('rotate-left',function(){layout.find('.darkroom-icon-rotate-left').click();
             }).addToolbarCommand('rotate-right',function(){layout.find('.darkroom-icon-rotate-right').click();
-            }).addToolbarCommand('save',function(){hideEditButton();layout.find('.darkroom-icon-save').click();//save();
+            }).addToolbarCommand('save',function(){save();
             });
         }
         else {
@@ -150,8 +151,22 @@ function PictureWidget(){
         }
     }
     function save(){
-        var ulr=layout.find('img');
-        var blob=dataURLtoBlob(d);
+
+        hideEditButton();
+//        var canvas=new fabric.Canvas(widget.portlet.find('.lower-canvas')[0]);
+//        var data= canvas.toDataURL({
+//            format: 'jpeg',
+//            quality: 1
+//        });
+        var data=widget.portlet.find('.lower-canvas')[0].toDataURL('image/jpeg');
+        layout.find('.image-container').empty().append($('<img>').attr('src',data));
+
+//        layout.find('.darkroom-icon-save').click();
+
+//        layout
+//        layout.find('.darkroom-icon-save').click();
+//        var ulr=layout.find('img');
+        var blob=dataURLtoBlob(data);
         layout.find('input[type=file]').fileupload('add',{files:blob});
 
     }
