@@ -159,7 +159,9 @@ BComments = mongoose.model( 'comments', {
 BTeams = mongoose.model( 'teams', {
     name: String,
     admin: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    members: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
+    members: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
+    tel:String,
+    address:String
 })
 
 BEvents = mongoose.model( 'events', {
@@ -172,7 +174,8 @@ BEvents = mongoose.model( 'events', {
 BInvitations = mongoose.model( 'invitations', {
     inviterTeam: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     invitedEmail: String,
-    inviteTime: String
+    inviteTime: String,
+    note:String
 })
 
 BApplications = mongoose.model( 'applications', {
@@ -638,7 +641,7 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
     }
     else { // Load a pre-built template
 
-        var templates = require('./templates.js');
+        var templates = require('./../templates.js');
 
         if( 0 < templateID && templateID < 10)
             res.send( templates.FlyerTemplates[ templateID ] );
@@ -828,7 +831,7 @@ app.post('/api/team/name',function(req,res){
 
     BTeams.update({admin:userID,_id:teamID},{name:newName}, function(err,affected) {
         if( err || affected==0 )
-            return res.send(401)
+            return res.send(401);
         res.send(200);
     })
 });
