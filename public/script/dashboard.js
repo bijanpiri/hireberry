@@ -85,7 +85,7 @@ $(function(){
     })
 
     $('#notificationCenter .tongue').click( function() {
-       var isOpen = ($(this).attr('isOpen') == 'true');
+        var isOpen = ($(this).attr('isOpen') == 'true');
         var ncObj = $('#notificationCenter');
 
         if(isOpen){
@@ -123,7 +123,7 @@ function refresh(once) {
     fillUserTeams();
 
     if(once==false)
-        setTimeout( refresh, 30000 );
+        ;// setTimeout( refresh, 30000 );
 }
 
 function fillAskedForComments() {
@@ -432,42 +432,60 @@ function fillTable() {
         }
 
         $('.candidate').unbind('click').click( function() {
-        if( $(this).hasClass('grid-candidate') == false )
-            return;
 
-        var isExpanded = ($(this).attr('isExpanded') === 'true');
+            // ToDo: Sequential selection has problem
 
-        if( isExpanded==false ){
-            $(this).css('clear','both').addClass('grid-candidate-expanded');
-            $(this).next().css('clear','both');
-        }
-        else {
-            $(this).css('clear','none').removeClass('grid-candidate-expanded');
-            $(this).next().css('clear','none');
-        }
+            if( $(this).hasClass('grid-candidate') == false )
+                return;
 
-        $(this).attr('isExpanded', !isExpanded );
-    });
+            var isExpanded = ($(this).attr('isExpanded') === 'true');
 
-    $('#candidatesGridButton').unbind('click').click( function() {
-        $('#candidatesCollection .list-candidate').animate({'opacity':0},300, function() {
-            $('#candidatesCollection .list-candidate')
-                .removeClass('list-candidate')
-                .addClass('grid-candidate');
+            if( isExpanded==false ){
+                // Deselect Current Selection
+                $('#candidatesCollection .candidate-expanded')
+                    .css('clear','none')
+                    .removeClass('candidate-expanded')
+                    .next()
+                    .css('clear','none');
 
-            $('#candidatesCollection .grid-candidate').animate({'opacity':1},300);
+                $(this).css('clear','both').addClass('candidate-expanded');
+                $(this).next().css('clear','both');
+
+                $('#candidatesCollection .candidate')
+                    .filter( function(i,obj) { return !$(obj).hasClass('candidate-expanded') })
+                    .animate({'opacity':0.3},300);
+                $('#candidatesCollection .candidate-expanded').css('opacity',1)
+            }
+            else {
+                $(this).css('clear','none').removeClass('candidate-expanded');
+                $(this).next().css('clear','none');
+
+                $('#candidatesCollection .candidate')
+                    .animate({'opacity':1},300);
+            }
+
+            $(this).attr('isExpanded', !isExpanded );
         });
-    });
 
-    $('#candidatesListButton').unbind('click').click( function() {
-        $('#candidatesCollection .grid-candidate').animate({'opacity':0},300, function() {
-            $('#candidatesCollection .grid-candidate')
-                .removeClass('grid-candidate')
-                .addClass('list-candidate');
+        $('#candidatesGridButton').unbind('click').click( function() {
+            $('#candidatesCollection .list-candidate').animate({'opacity':0},300, function() {
+                $('#candidatesCollection .list-candidate')
+                    .removeClass('list-candidate')
+                    .addClass('grid-candidate');
 
-            $('#candidatesCollection .list-candidate').animate({'opacity':1},300);
+                $('#candidatesCollection .grid-candidate').animate({'opacity':1},300);
+            });
         });
-    });
+
+        $('#candidatesListButton').unbind('click').click( function() {
+            $('#candidatesCollection .grid-candidate').animate({'opacity':0},300, function() {
+                $('#candidatesCollection .grid-candidate')
+                    .removeClass('grid-candidate')
+                    .addClass('list-candidate');
+
+                $('#candidatesCollection .list-candidate').animate({'opacity':1},300);
+            });
+        });
 
     });
 
