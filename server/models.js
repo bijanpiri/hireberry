@@ -18,7 +18,7 @@ var options = {
 
 mongoose.connect(mongoHQConenctionString,options);
 
-global.BUsers = mongoose.model( 'users', {
+BUsers = mongoose.model( 'users', {
     email: String,
     displayName: String,
     password: Buffer,    salt: Buffer,
@@ -42,7 +42,7 @@ global.BUsers = mongoose.model( 'users', {
     teamID: String
 });
 
-global.BFlyers = mongoose.model( 'flyers', {
+BFlyers = mongoose.model( 'flyers', {
     flyer: Object,
     owner: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     creator: {type : mongoose.Schema.ObjectId, ref : 'users'},
@@ -53,7 +53,7 @@ global.BFlyers = mongoose.model( 'flyers', {
     askedForPublish: Boolean
 });
 
-global.BComments = mongoose.model( 'comments', {
+BComments = mongoose.model( 'comments', {
     note: String,
     comment: String,
     subjectType: String,
@@ -64,7 +64,7 @@ global.BComments = mongoose.model( 'comments', {
     askingTime: String
 })
 
-global.BTeams = mongoose.model( 'teams', {
+BTeams = mongoose.model( 'teams', {
     name: String,
     admin: {type : mongoose.Schema.ObjectId, ref : 'users'},
     members: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
@@ -72,21 +72,21 @@ global.BTeams = mongoose.model( 'teams', {
     address:String
 })
 
-global.BEvents = mongoose.model( 'events', {
+BEvents = mongoose.model( 'events', {
     title: String,
     contributors: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
     team: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     time: Date
 })
 
-global.BInvitations = mongoose.model( 'invitations', {
+BInvitations = mongoose.model( 'invitations', {
     inviterTeam: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     invitedEmail: String,
     inviteTime: String,
     note:String
 })
 
-global.BApplications = mongoose.model( 'applications', {
+BApplications = mongoose.model( 'applications', {
     flyerID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     name:String,
     email:String,
