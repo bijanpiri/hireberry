@@ -1,7 +1,6 @@
 express = require('express');
 util = require('util');
 everyauth = require('everyauth');
-mongoose =  require('mongoose');
 Promise = require('promise');
 engine = require('ejs-locals');
 crypto = require('crypto');
@@ -14,6 +13,7 @@ twitterAPI = require('node-twitter-api');
 linkedin_client = require('linkedin-js')('75ybminxyl9mnq', 'KsgqEUNsLSXMAKg6', 'callbackURL')
 routerForm = require('./routers/form');
 routerDashboard = require('./routers/dashboard');
+model=require('./models');
 
 //region Initialization
 var LINKEDIN_CONSUMER_KEY = "77pqtwladavveq";
@@ -24,13 +24,10 @@ var GOOGLE_CLIENT_ID = '892388590141-l0qsh6reni9i0k3007dl7q4340l7nkos.apps.googl
 var GOOGLE_CLIENT_SECRET = 'YzysmahL5LX4GLIydqBXN1zz';
 var Facebook_AppID='241341676042668';
 var Facebook_AppSecret='2e748d80c87a8594e792eeb482f7c87d';
-var mongoHQConenctionString = 'mongodb://admin:admin124578@widmore.mongohq.com:10000/booltindb';
+
 
 var keySize=512;
 var hashIteration=1;
-
-if(process.argv.indexOf('--client')>=0)
-    mongoHQConenctionString = 'mongodb://127.0.0.1:27017/booltindb';
 
 dbclient = new Dropbox.Client({
     key: "7bdvs2t8zrdqdw8",
@@ -51,17 +48,7 @@ twitter = new twitterAPI({
 });
 
 var app = express();
-var options = {
-    server: {
-        socketOptions: {
-            connectTimeoutMS: 1000000000 ,
-            keepAlive: 1 }},
-    replset:{
-        socketOptions : {
-            keepAlive: 1 }}
-};
 
-mongoose.connect(mongoHQConenctionString,options);
 everyauth.debug = true;
 everyauth.helpExpress(app);
 
@@ -109,95 +96,6 @@ upload.on('error', function (e) {
 
 //endregion
 
-//region Mongose Models
-var BUsers = mongoose.model( 'users', {
-    email: String,
-    displayName: String,
-    password: Buffer,    salt: Buffer,
-    twittername:String,
-    twitterid:String,
-    twitterAccessToken:String,
-    twitterAccessSecretToken:String,
-    facebookName:String,
-    facebookid:String,
-    facebookAccessToken:String,
-    facebookAccessTokenExtra:String,
-    googlename:String,
-    googleid:String,
-    googleAccessToken:String,
-    googleAccessSecretToken:String,
-    linkedinname:String,
-    linkedinid:String,
-    linkedinAccessToken:String,
-    linkedinAccessSecretToken:String,
-    tempToken:String,
-    teamID: String
-});
-
-BFlyers = mongoose.model( 'flyers', {
-    flyer: Object,
-    owner: {type : mongoose.Schema.ObjectId, ref : 'teams'},
-    creator: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    publishTime: String,
-    disqusShortname: String,
-    dbToken:String,
-    autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    askedForPublish: Boolean
-});
-
-BComments = mongoose.model( 'comments', {
-    note: String,
-    comment: String,
-    subjectType: String,
-    formID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
-    applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
-    commenter: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    commentTime: String,
-    askingTime: String
-})
-
-BTeams = mongoose.model( 'teams', {
-    name: String,
-    admin: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    members: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
-    tel:String,
-    address:String
-})
-
-BEvents = mongoose.model( 'events', {
-    title: String,
-    contributors: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
-    team: {type : mongoose.Schema.ObjectId, ref : 'teams'},
-    time: Date
-})
-
-BInvitations = mongoose.model( 'invitations', {
-    inviterTeam: {type : mongoose.Schema.ObjectId, ref : 'teams'},
-    invitedEmail: String,
-    inviteTime: String,
-    note:String
-})
-
-BApplications = mongoose.model( 'applications', {
-    flyerID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
-    name:String,
-    email:String,
-    tel:String,
-    website:String,
-    avatarURL: String,
-    skills:[],
-    applyTime:String,
-    workPlace:String,
-    workTime:String,
-    profiles:String,
-    anythingelse:String,
-    resumePath:String,
-    dbToken:String,
-    activities:[],
-    assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
-});
-
-//endregion
 
 //region Configure every modules in everyauth
 everyauth.everymodule
@@ -386,9 +284,9 @@ everyauth.password
 app.configure(function() {
     app.engine('ejs',engine);
     app.set('view engine', 'ejs');
-    app.set('views', __dirname + '/views');
+    app.set('views', __dirname + '/../views');
     app.use(express.logger('dev'));
-    app.use(express.static(__dirname + '/public'));
+    app.use(express.static(__dirname + '/../public'));
     app.use(express.logger());
     app.use(express.cookieParser());
     app.use('/flyer/upload', upload.fileHandler());
