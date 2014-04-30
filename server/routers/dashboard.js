@@ -137,29 +137,22 @@ module.exports.applications = function (req,res) {
                     // Reason: When skills contains just one item, it convert to string automatically
                     if( typeof(skills) === 'string' )
                         skills = [skills];
-
-                    var selectedSkill = '';
-                    for (var j=0; j<skills.length; j++)
-                        selectedSkill += '<span class="spanBox">' + skills[j] + '</span>';
-                    form.skills = selectedSkill;
+                    form.skills = skills;
 
                     // Profiles
                     form.profiles = form.profiles || '{}';
                     var profiles = JSON.parse( form.profiles );
-                    var selectedProfiles = '';
+                    var selectedProfiles = {};
                     for (var profile in profiles)
                         if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
-                            selectedProfiles +=
-                                '<span class="spanBox">' +
-                                    makeLinkTag(profile,profiles[profile],false) +
-                                    '</span>';
+                            selectedProfiles[profile] = profiles[profile];
                     form.profiles = selectedProfiles;
 
                     // Workplace
                     //form.workPlace = (form.workPlace=='fulltime') ?
 
                     // Email
-                    form.email = makeLinkTag( form.email, form.email, true );
+                    form.email = form.email;
 
                     // Apply Date
                     var date = new Date( form.applyTime );

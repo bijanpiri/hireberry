@@ -8,6 +8,7 @@
 <script src="/script/jquery.watable.js" type="text/javascript" charset="utf-8"></script>
 <link rel='stylesheet' href='/css/watable.css'/>
 <link rel='stylesheet' href='/css/dashboard.css'>
+<link rel='stylesheet/less' href='/css/dashboard-applications.less'>
 <link rel='stylesheet' href='/css/job.css'>
 ​
 <!--<link rel='stylesheet' href='/clndr/clndr.css'>-->
@@ -152,26 +153,32 @@
     <div class="row-fluid tableRow">
         <div class="span12">
             <div style="clear: both"></div>
-            <div id="candidatesCollection">
+            <div id="candidatesCollection" class="grid-layout">
                 <div id="candidateInstance" hidden>
-                    <div class="candidate-avatar"></div>
-                    <div class="candidate-basicInfo">
-                        <div class="candidate-name">Jon Doe</div>
-                        <div class="candidate-job">Front-End Web Developer</div>
-                        <div class="candidate-stage">Waiting for Planing an Interview</div>
+                    <div class="candidate-summary">
+                        <div class="candidate-avatar"></div>
+                        <div class="candidate-basicInfo">
+                            <div class="candidate-name">Jon Doe</div>
+                            <div class="candidate-profiles">Profiles</div>
+                            <div class="candidate-job">Front-End Web Developer</div>
+                            <div class="candidate-stage">Waiting for Planing an Interview</div>
+                        </div>
+                        <div class="candidate-conditions">
+                            <span>Part-Time</span>
+                            <span>@Home</span>
+                        </div>
+                        <div class="candidate-skills">CSS, jQuery, Nodejs</div>
                     </div>
-                    <div class="candidate-conditions">
-                        <span>Part-Time</span>
-                        <span>@Home</span>
-                    </div>
-                    <div class="candidate-skills">CSS, jQuery, Nodejs</div>
                     <div class="candidate-details">
                         <div class="candidate-leftColumn">
                             <div class="candidate-details-box">
                                 <div class="candidate-details-box-title">Contact Info.</div>
+                                <div class="candidate-tel"></div>
+                                <div class="candidate-website"></div>
                             </div>
                             <div class="candidate-details-box">
                                 <div class="candidate-details-box-title">Cover Letter</div>
+                                <div class="candidate-coverLetter"></div>
                             </div>
                         </div>
                         <div class="candidate-rightColumn">
@@ -184,10 +191,13 @@
                             <button class="btn pull-right">Ask For Comment</button>
                         </div>
                         <div class="candidate-addComment">
-                            <textarea class="candidate-commentBox" placeholder="Write your opinion about this candidate ..."></textarea>
+                            <div class="candidate-commentBox">
+                                <textarea placeholder="Write your opinion about this candidate ..."></textarea>
+                                <button class="btn">Send</button>
+                            </div>
                         </div>
                         <div class="candidate-newComments">
-                            New Comments
+                            Comments
                         </div>
                     </div>
                 </div>

@@ -96,7 +96,7 @@ $(function(){
         }
 
         $(this).attr('isOpen', !isOpen);
-    });
+    }).click();
 });
 
 function refresh(once) {
@@ -419,7 +419,7 @@ function fillTable() {
     $.get('/api/applications').done( function(res) {
 
         for( var i=0; i<res.rows.length; i++ ) {
-            var candidateObj = $('#candidateInstance').clone().show().addClass('candidate grid-candidate');
+            var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
             var candidate = res.rows[i];
 
             candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
@@ -428,17 +428,23 @@ function fillTable() {
             candidateObj.find('.candidate-stage').text(candidate.lastActivity);
             candidateObj.find('.candidate-skills').text(candidate.skills);
             candidateObj.find('.candidate-conditions').text(candidate.workTime + ' @' + candidate.workPlace);
+            candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
+            candidateObj.find('.candidate-tel').text(candidate.tel);
+            candidateObj.find('.candidate-website').text(candidate.website);
+
+            for( var profile in candidate.profiles )
+                candidate.profiles[ profile ];
+
             $('#candidatesCollection').append( candidateObj );
         }
 
+        $('.candidate .candidate-actions').show();
+        $('.candidate .candidate-newComments').hide();
+        $('.candidate .candidate-addComment').hide();
+
         $('.candidate').unbind('click').click( function() {
 
-            // ToDo: Sequential selection has problem
-
-            if( $(this).hasClass('grid-candidate') == false )
-                return;
-
-            var isExpanded = ($(this).attr('isExpanded') === 'true');
+            var isExpanded = $(this).hasClass('candidate-expanded');
 
             if( isExpanded==false ){
                 // Deselect Current Selection
@@ -448,42 +454,50 @@ function fillTable() {
                     .next()
                     .css('clear','none');
 
-                $(this).css('clear','both').addClass('candidate-expanded');
-                $(this).next().css('clear','both');
+                $(this).css('clear','both')
+                    .addClass('candidate-expanded')
+                    .next()
+                    .css('clear','both');
 
                 $('#candidatesCollection .candidate')
                     .filter( function(i,obj) { return !$(obj).hasClass('candidate-expanded') })
-                    .animate({'opacity':0.3},300);
+                    .css('opacity',0.3);
                 $('#candidatesCollection .candidate-expanded').css('opacity',1)
             }
             else {
-                $(this).css('clear','none').removeClass('candidate-expanded');
-                $(this).next().css('clear','none');
+                $(this).css('clear','none')
+                    .removeClass('candidate-expanded')
+                    .next()
+                    .css('clear','none');
 
-                $('#candidatesCollection .candidate')
-                    .animate({'opacity':1},300);
+                $('#candidatesCollection .candidate').css('opacity',1);
             }
 
-            $(this).attr('isExpanded', !isExpanded );
         });
 
+        // Go to Grid-mode layout
         $('#candidatesGridButton').unbind('click').click( function() {
-            $('#candidatesCollection .list-candidate').animate({'opacity':0},300, function() {
-                $('#candidatesCollection .list-candidate')
-                    .removeClass('list-candidate')
-                    .addClass('grid-candidate');
 
-                $('#candidatesCollection .grid-candidate').animate({'opacity':1},300);
+            $('#candidatesCollection').animate({'opacity':0},300, function() {
+
+                $('#candidatesCollection')
+                    .removeClass('list-layout')
+                    .addClass('grid-layout')
+                    .animate({'opacity':1},300);
+
             });
         });
 
+        // Go to List-mode layout
         $('#candidatesListButton').unbind('click').click( function() {
-            $('#candidatesCollection .grid-candidate').animate({'opacity':0},300, function() {
-                $('#candidatesCollection .grid-candidate')
-                    .removeClass('grid-candidate')
-                    .addClass('list-candidate');
 
-                $('#candidatesCollection .list-candidate').animate({'opacity':1},300);
+            $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
+
+                $('#candidatesCollection')
+                    .removeClass('grid-layout')
+                    .addClass('list-layout')
+                    .animate({'opacity':1},300);
+
             });
         });
 
