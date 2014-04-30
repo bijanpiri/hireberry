@@ -175,7 +175,7 @@ function PictureWidget(){
     }
 
     this.deserialize=function(content) {
-
+        hideEditButton();
         if( content ) {
             this.portlet.find('.imageWidgetInnerContainer').remove();
             var img = layout.find('.image-container').empty().append($('<img>').attr('src',content));

@@ -5,6 +5,12 @@ body { height: 100%; }
 /****
 Fix Toolbar
 ****/
+.widgets {
+    display: none;
+}
+.toolbars{
+    display: none;
+}
 #fixToolbar {
     position: fixed;
     top: 88px;

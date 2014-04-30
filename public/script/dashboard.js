@@ -6,7 +6,7 @@ var userID = '<%=userID%>';
 var teamMembers = [];
 var forms = [];
 
-google.load("visualization", "1");
+//google.load("visualization", "1");
 
 $(function(){
 
