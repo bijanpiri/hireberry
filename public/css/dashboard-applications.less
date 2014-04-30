@@ -10,6 +10,7 @@
       -webkit-box-shadow: 1px 1px 5px #c6c6c6;
       cursor: pointer;
       background-color: #fff;
+      border-radius: 4px;
 
       &.candidate-collapsed {}
 
@@ -25,6 +26,7 @@
 
           .candidate-profiles {
             display: inline-block;
+            margin: 0 2em;
 
             .candidate-profile {}
           }
@@ -35,29 +37,35 @@
           width: 100%;
           padding: 20px;
 
+          .candidate-leftColumn {
+            display: inline-block;
+            width: 49%;
+            vertical-align: top;
+          }
+
+          .candidate-rightColumn {
+            display: inline-block;
+            width: 49%;
+            vertical-align: top;
+          }
+
           .candidate-details-box {
             min-height: 100px;
             background-color: #fff;
-            border: 1px solid #616161;
-            margin: 10px 0;
-
-            .candidate-leftColumn {
-              display: inline-block;
-              width: 49%;
-              vertical-align: top;
-            }
-
-            .candidate-rightColumn {
-              display: inline-block;
-              width: 49%;
-              vertical-align: top;
-            }
+            border: 1px solid #D1D1D1;
+            margin: 10px 10px;
 
             .candidate-details-box-title {
-              background-color: rgb(202, 197, 197);
+              background-color: #E9E9E9;
+              color: rgb(155, 155, 155);
               text-align: center;
               font-size: 2em;
               padding: 0.5em;
+            }
+
+            .candidate-tel, .candidate-website {
+              padding: 0.5em 1em;
+              font-size: 1.5em;
             }
 
             .candidate-coverLetter {
@@ -107,21 +115,18 @@
   &.grid-layout {
 
     .candidate {
-      width: 40%;
-      //height: 200px;
-      margin: 15px;
+      width: 400px;
+      margin: 10px;
       float: left;
-      padding: 10px;
 
       .candidate-summary {
 
         .candidate-avatar {
-          background-image: url("http://www.gravatar.com/avatar/ab6c4eccf143a9f6c8b162d50aaf8d70");
           display: inline-block;
           height: 84px;
           width: 84px;
           border-radius: 50%;
-          border: 3px solid #8B8B8B;
+          border: 3px solid #cecece;
           margin: 10px 10px 0px 10px
         }
 
@@ -130,13 +135,13 @@
           vertical-align: top;
           line-height: 1.8em;
           margin: 10px 0;
-          width: 200px;
         }
 
         .candidate-name {
           font-size: 2em;
           line-height: 1.6em;
           color: @head1-color;
+          display: inline-block;
         }
 
         .candidate-profiles {
@@ -159,14 +164,14 @@
         .candidate-conditions {
           font-size: 1.5em;
           line-height: 3em;
-          border-top: 2px solid #8D8D8D;
+          border-top: 2px solid #e0e0e0;
           padding: 0 10px;
         }
 
         .candidate-skills {
           font-size: 1.5em;
           line-height: 3em;
-          border-top: 2px solid #8D8D8D;
+          border-top: 2px solid #e0e0e0;
           padding: 0 10px;
         }
       }

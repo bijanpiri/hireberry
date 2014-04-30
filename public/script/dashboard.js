@@ -424,13 +424,22 @@ function fillTable() {
 
             candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
             candidateObj.find('.candidate-name').text(candidate.name);
-            candidateObj.find('.candidate-job').text(candidate.position);
-            candidateObj.find('.candidate-stage').text(candidate.lastActivity);
-            candidateObj.find('.candidate-skills').text(candidate.skills);
-            candidateObj.find('.candidate-conditions').text(candidate.workTime + ' @' + candidate.workPlace);
+            candidateObj.find('.candidate-job .value').text(candidate.position);
+            candidateObj.find('.candidate-stage .value').text(candidate.lastActivity);
+            candidateObj.find('.candidate-skills .value').text(candidate.skills);
+            candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
             candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
             candidateObj.find('.candidate-tel').text(candidate.tel);
             candidateObj.find('.candidate-website').text(candidate.website);
+
+            for( var i=0; i<candidate.activities.length; i++ ) {
+                var activity = candidate.activities[i];
+                var timeObj = $('<div>').addClass('activity-time').text( activity.timeStamp);
+                var typeObj = $('<div>').addClass('activity-type').text( activity.type );
+                var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
+
+                candidateObj.find('.candidate-activities').append( activityObj );
+            }
 
             for( var profile in candidate.profiles )
                 candidate.profiles[ profile ];
@@ -925,4 +934,3 @@ function getPositionComments(appID) {
         });
     });
 }
-
