@@ -24,11 +24,29 @@
             width: auto;
           }
 
+          .candidate-conditions, .candidate-skills, .candidate-stage {
+            display: none;
+          }
+
+          .candidate-resume {
+            display: inline-block;
+            margin: 0 2em;
+            vertical-align: baseline;
+          }
+
+          .candidate-time {
+            display: inline-block;
+          }
+
           .candidate-profiles {
             display: inline-block;
             margin: 0 2em;
 
-            .candidate-profile {}
+            .profile {
+              width: 24px;
+              height: 24px;
+              vertical-align: bottom;
+            }
           }
         }
 
@@ -37,25 +55,38 @@
           width: 100%;
           padding: 20px;
 
+
           .candidate-leftColumn {
-            display: inline-block;
-            width: 49%;
-            vertical-align: top;
+            float: left;
           }
 
           .candidate-rightColumn {
-            display: inline-block;
-            width: 49%;
-            vertical-align: top;
+            float: right;
           }
 
-          .candidate-details-box {
+          .candidate-leftColumn, .candidate-rightColumn {
+            display: inline-block;
+            width: 50%;
+            vertical-align: top;
+
+            > *{
+              clear: both;
+            }
+
+          }
+
+          .candidate-rightColumn + * {
+            clear: both;
+          }
+
+          .mbox {
+            width: 100%;
             min-height: 100px;
             background-color: #fff;
             border: 1px solid #D1D1D1;
-            margin: 10px 10px;
+            height: 200px;
 
-            .candidate-details-box-title {
+            .mbox-title {
               background-color: #E9E9E9;
               color: rgb(155, 155, 155);
               text-align: center;
@@ -63,7 +94,19 @@
               padding: 0.5em;
             }
 
-            .candidate-tel, .candidate-website {
+            .candidate-conditions {
+              font-size: 1.5em;
+              line-height: 2em;
+              padding: 0 10px;
+            }
+
+            .candidate-skills {
+              font-size: 1.5em;
+              line-height: 2em;
+              padding: 0 10px;
+            }
+
+            .candidate-tel, .candidate-website, .candidate-email {
               padding: 0.5em 1em;
               font-size: 1.5em;
             }
@@ -71,6 +114,22 @@
             .candidate-coverLetter {
               padding: 10px 20px;
               font-size: 1.5em;
+            }
+
+            .candidate-activities {
+              .activity {
+                margin: 1em;
+                padding: 0.5em;
+                border-left: 2px solid #37883A;
+
+                .activity-time {
+                  font-size: 1.3em;
+                  color: #A29D9D;
+                }
+                .activity-type {
+
+                }
+              }
             }
           }
 
@@ -118,8 +177,21 @@
       width: 400px;
       margin: 10px;
       float: left;
+      padding: 10px;
 
       .candidate-summary {
+        position: relative;
+
+        .sticky {
+          position: absolute;
+          right: 0;
+          top: -1em;
+          background-color: #DCEEA1;
+          border: 1px solid #B5C487;
+          padding: 2px 5px;
+          border-radius: 0 0 4px 4px;
+          font-weight: 700;
+        }
 
         .candidate-avatar {
           display: inline-block;
@@ -127,7 +199,7 @@
           width: 84px;
           border-radius: 50%;
           border: 3px solid #cecece;
-          margin: 10px 10px 0px 10px
+          margin: 0 10px 0px 10px
         }
 
         .candidate-basicInfo {
@@ -144,34 +216,47 @@
           display: inline-block;
         }
 
+        .candidate-resume {
+          display: none;
+        }
+
         .candidate-profiles {
           display: none;
 
-          .candidate-profile {
+          .profile {}
+        }
+
+        .candidate-job, .candidate-time {
+          font-size: 1.5em;
+          color: @head2-color;
+
+          .value {
+            font-weight: 700;
           }
         }
 
-        .candidate-job {
-          font-size: 1.5em;
-          color: @head2-color;
+        .candidate-time {
+          display: none;
         }
 
         .candidate-stage {
           font-size: 1.5em;
-          color: @head2-color;
+          line-height: 2em;
+          border-top: 2px solid #eee;
+          padding: 0 10px;
         }
 
         .candidate-conditions {
           font-size: 1.5em;
-          line-height: 3em;
-          border-top: 2px solid #e0e0e0;
+          line-height: 2em;
+          border-top: 2px solid #eee;
           padding: 0 10px;
         }
 
         .candidate-skills {
           font-size: 1.5em;
-          line-height: 3em;
-          border-top: 2px solid #e0e0e0;
+          line-height: 2em;
+          border-top: 2px solid #eee;
           padding: 0 10px;
         }
       }
@@ -191,6 +276,18 @@
       padding: 10px;
 
       .candidate-summary {
+        position: relative;
+
+        .sticky {
+          position: absolute;
+          right: 0;
+          top: -1em;
+          background-color: #DCEEA1;
+          border: 1px solid #B5C487;
+          padding: 2px 5px;
+          border-radius: 0 0 4px 4px;
+          font-weight: 700;
+        }
 
         .candidate-avatar {
           background-size: 30px 30px;
@@ -215,10 +312,8 @@
           color: @head1-color;
         }
 
-        .candidate-profiles {
+        .candidate-profiles, .candidate-resume, .candidate-time {
           display: none;
-
-          .candidate-profile {}
         }
 
         .candidate-job {
@@ -231,9 +326,8 @@
 
         .candidate-stage {
           font-size: 1.5em;
-          color: @head2-color;
           display: inline-block;
-          vertical-align: middle;
+          vertical-align: top;
           margin: 0 0.5em;
         }
 

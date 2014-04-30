@@ -156,21 +156,23 @@
             <div id="candidatesCollection" class="grid-layout">
                 <div id="candidateInstance" hidden>
                     <div class="candidate-summary">
+                        <div class="sticky">Unread</div>
                         <div class="candidate-avatar"></div>
                         <div class="candidate-basicInfo">
                             <div class="candidate-name">Jon Doe</div>
+                            <button class="btn candidate-resume">View Resume</button>
                             <div class="candidate-profiles">
-                                <img src="http://static.iconarchive.com/static/images/social/facebook-icon.png">
-                                <img src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
-                                <img src="http://static.iconarchive.com/static/images/social/google-plus-icon.png">
+                                <img class="profile" src="http://static.iconarchive.com/static/images/social/facebook-icon.png">
+                                <img class="profile" src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
+                                <img class="profile" src="http://static.iconarchive.com/static/images/social/google-plus-icon.png">
                             </div>
                             <div class="candidate-job">
-                                <strong>For:</strong>
+                                Applied for
                                 <span class="value">Front-End Web Developer</span>
                             </div>
-                            <div class="candidate-stage">
-                                <strong>Stage:</strong>
-                                <span class="value">Waiting for Planing an Interview</span>
+                            <div class="candidate-time">
+                                Applied at
+                                <span class="value"></span>
                             </div>
                         </div>
                         <div class="candidate-conditions">
@@ -181,28 +183,66 @@
                             <strong>Skills:</strong>
                             <span class="value">CSS, jQuery, Nodejs</span>
                         </div>
+                        <div class="candidate-stage">
+                            <strong>Stage:</strong>
+                            <span class="value">Waiting for Planing an Interview</span>
+                        </div>
                     </div>
                     <div class="candidate-details">
                         <div class="candidate-leftColumn">
-                            <div class="candidate-details-box">
-                                <div class="candidate-details-box-title">Contact Info.</div>
-                                <div class="candidate-tel"></div>
-                                <div class="candidate-website"></div>
-                            </div>
-                            <div class="candidate-details-box">
-                                <div class="candidate-details-box-title">Cover Letter</div>
-                                <div class="candidate-coverLetter"></div>
+                            <div class="mbox">
+                                <div class="candidate-conditions">
+                                    <strong>Conditions:</strong>
+                                    <span class="value">Part-Time @Home</span>
+                                </div>
+                                <div class="candidate-skills">
+                                    <strong>Skills:</strong>
+                                    <span class="value">CSS, jQuery, Nodejs</span>
+                                </div>
                             </div>
                         </div>
                         <div class="candidate-rightColumn">
-                            <div class="candidate-details-box" style="max-height: 400px;min-height: 210px;">
-                                <div class="candidate-details-box-title">Activities</div>
+                            <div class="mbox">
+                                <div class="mbox-title">Contact Info.</div>
+                                <div class="candidate-email">
+                                    <strong>Email:</strong>
+                                    <span class="value"></span>
+                                </div>
+                                <div class="candidate-tel">
+                                    <strong>Tel:</strong>
+                                    <span class="value"></span>
+                                </div>
+                                <div class="candidate-website">
+                                    <strong>Website:</strong>
+                                    <span class="value"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mbox">
+                            <div class="mbox-title">Cover Letter</div>
+                            <div class="candidate-coverLetter"></div>
+                        </div>
+
+                        <div class="candidate-leftColumn">
+                            <div class="mbox">
+                                <div class="mbox-title">Activities</div>
                                 <div class="candidate-activities"></div>
                             </div>
                         </div>
+                        <div class="candidate-rightColumn">
+                            <div class="mbox">
+                                <div class="mbox-title">Comments</div>
+                                <div class="candidate-comments">
+                                </div>
+                                <div style="text-align: center;padding: 1em;">
+                                    <button class="btn btn-danger">Ask For Comment</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="candidate-actions">
                             <button class="btn pull-right">Archive</button>
-                            <button class="btn pull-right">Ask For Comment</button>
                         </div>
                         <div class="candidate-addComment">
                             <div class="candidate-commentBox">
