@@ -7,7 +7,6 @@ twitterAPI = require('node-twitter-api');
 linkedin_client = require('linkedin-js')('75ybminxyl9mnq', 'KsgqEUNsLSXMAKg6', 'callbackURL')
 
 everyauth.debug = true;
-everyauth.helpExpress(app);
 
 //region Initialization
 var LINKEDIN_CONSUMER_KEY = "77pqtwladavveq";

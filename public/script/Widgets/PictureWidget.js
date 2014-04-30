@@ -178,8 +178,8 @@ function PictureWidget(){
 
         if( content ) {
             this.portlet.find('.imageWidgetInnerContainer').remove();
-            var img = layout.find('img');
-            return img.attr('src', content).show();
+            var img = layout.find('.image-container').empty().append($('<img>').attr('src',content));
+
         }
     }
 }

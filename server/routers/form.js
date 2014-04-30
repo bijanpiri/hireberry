@@ -224,7 +224,7 @@ module.exports.apply = function (req,res) {
             dbclient.makeUrl(resumeFileName,{}, function(err,data) {
 
                 if( !err )
-                    MApplyForm.update({_id:applicationID},{resumePath:data.url}, function() {
+                    BApplications.update({_id:applicationID},{resumePath:data.url}, function() {
                         res.send(200,{});
                     });
                 else
