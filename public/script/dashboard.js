@@ -205,28 +205,10 @@ function fillAskedForComments() {
                 .text('You are asked to put your comment about ')
                 .append( $('<a>').attr('href', '/flyer/embeded/' + a4c.formID._id).text('this form') );
 
-            var textAreaObj = $('<textarea>')
-                .attr('id','comment_form_' + a4c.formID._id)
-                .css('display','block')
-                .attr('placeholder','Your comment ...');
-
-            var sendBtnObj = $('<button>')
-                .text('Send')
-                .click( function() {
-                    $.post('/api/user/comment', {
-                        askForCommentID:a4c._id,
-                        comment:$('#comment_form_' + a4c.formID._id).val()
-                    }).done( function() {
-                            $('#' + objID).remove();
-                            decreaseBudgeNumber();
-                        });
-                });
 
             $('#askedForCommentList').append( $('<li>').attr('id',objID)
                 .append(dateObj)
-                .append(titleObj)
-                .append(textAreaObj)
-                .append(sendBtnObj) );
+                .append(titleObj));
         });
     }
 

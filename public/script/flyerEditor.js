@@ -138,6 +138,8 @@ $(function() {
             }
         });
     }
+
+    initCommentView();
 });
 
 function loadFlyer() {
@@ -180,8 +182,8 @@ function loadTemplateChooser() {
 
 function initCommentView() {
 
+    // ToDo: Manage comment view permission
     var canViewComments = true;
-    var canPutComment = true;
 
     // Get Comments
     if( canViewComments ) {
@@ -256,8 +258,6 @@ function initCommentView() {
         }
 
     });
-
-
 
     $('#buttonComment').click( function() {
         $('.portlet-comments').toggle();
