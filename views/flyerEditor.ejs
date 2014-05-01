@@ -89,7 +89,7 @@
     <% if(editMode) { %>
     <div class="row-fluid">
         <div class="span2">
-            <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
+            <button type="button" class="btn btn-primary pull-right" id="buttonSave">Save</button>
         </div>
         <div class="span8" style="text-align: center">
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
@@ -212,7 +212,13 @@
 
         </form>
 
-
+        <div class="portlet-commentsView">
+            <a id="buttonComment" class="btn ">Show comments</a>
+            <div class="portlet-askedForComment-list">
+            </div>
+            <div class="portlet-comments">
+            </div>
+        </div>
 
     </div>
 </div>

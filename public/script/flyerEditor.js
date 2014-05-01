@@ -13,13 +13,13 @@ var teamMembers = [];
 
 $(function() {
     $('form').submit(false);
+
     if( viewMode=='embeded') {
         // Hidden bars
         $('nav').remove();
         $('#fixToolbar').remove();
         $('body > .container-fluid').css('margin-top','1em');
     }
-
 
     if( editMode ) {
         $(document.body).addClass('bool-edit-mode');
@@ -40,7 +40,6 @@ $(function() {
         document.getElementById('resumefile').onchange = function () {
             $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
         };
-
         function getDoc(frame) {
             var doc = null;
 
@@ -64,6 +63,7 @@ $(function() {
             }
             return doc;
         }
+
         $("#submit_btn").click(function(e) {
 
             /*
@@ -152,6 +152,19 @@ function loadFlyer() {
 
 function loadTemplateChooser() {
 
+    $('.thumbnail').unbind('click').click(function(){
+        // Deselect old selected item
+        if( selectedThumbID )
+            $('.thumbnail[thumbnailID='+ selectedThumbID +']').removeClass('selected');
+
+        // Select recent selected item
+        selectedThumbID = $(this).attr('thumbnailID');
+        $(this).find('img').first().addClass('selected');
+
+        $('.thumbnailPreview').find('.caption').text( $(this).attr('caption') );
+        $('.thumbnailPreview').find('.description').text( $(this).attr('description') );
+    }) ;
+
     $('.templateRow').show();
     $('#GoToEditor').click( function() {
 
@@ -165,6 +178,97 @@ function loadTemplateChooser() {
 
 }
 
+function initCommentView() {
+
+    var canViewComments = true;
+    var canPutComment = true;
+
+    // Get Comments
+    if( canViewComments ) {
+        $.get('/api/form/comments', {formID:flyerid}).done( function(res){
+
+            $('.portlet-comments').html('');
+
+            if( res.comments.length == 0 )
+                $('.portlet-comments').text('There is no comments.')
+            else {
+                res.comments.forEach( function(comment) {
+
+                    if( comment.commentTime.length > 0 ) {
+
+                        var commentObj = $('<div>').addClass('portlet-comment');
+                        commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
+                        commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
+                        commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s comment:") );
+                        commentObj.append( $('<div>').addClass('commentBody').text(comment.comment) );
+                        commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
+
+                        $('.portlet-comments').append( commentObj );
+                    }
+                });
+            }
+        });
+    }
+
+    $.get('/api/user/form/askedForComment').done( function(resForm){
+
+        $('.portlet-askedForComment-list').html('');
+
+        if( resForm.forms.length == 0 )
+            $('.portlet-askedForComment-list').text('There is no "Asked For Comment" request.');
+        else {
+            resForm.forms.forEach( function(a4c) {
+
+                if( a4c.formID._id == flyerid ) {
+                    var objID = 'askedForComment_'+a4c._id;
+
+                    var dateObj = $('<div>')
+                        .text( 'At ' + (new Date(a4c.askingTime)).toLocaleString() )
+                        .addClass('comment_date');
+
+                    var titleObj = $('<div>')
+                        .text('You are asked to put your comment about ')
+                        .append( $('<a>').attr('href', '/flyer/embeded/' + a4c.formID._id).text('this form') );
+
+                    var textAreaObj = $('<textarea>')
+                        .attr('id','comment_form_' + a4c.formID._id)
+                        .css('display','block')
+                        .attr('placeholder','Your comment ...');
+
+                    var sendBtnObj = $('<button>')
+                        .text('Send')
+                        .click( function() {
+                            $.post('/api/user/comment', {
+                                askForCommentID:a4c._id,
+                                comment:$('#comment_form_' + a4c.formID._id).val()
+                            }).done( function() {
+                                    $('#' + objID).remove();
+                                });
+                        });
+
+                    $('.portlet-askedForComment-list').append( $('<li>').attr('id',objID)
+                        .append(dateObj)
+                        .append(titleObj)
+                        .append(textAreaObj)
+                        .append(sendBtnObj) );
+                }
+            });
+        }
+
+    });
+
+
+
+    $('#buttonComment').click( function() {
+        $('.portlet-comments').toggle();
+        $('.portlet-askedForComment-list').toggle();
+
+        var isVisible = !($('.portlet-comments').css('display')==='none');
+
+        $('#buttonComment').text( isVisible ? 'Hide comments' : 'Show Comments' )
+    })
+}
+
 function loadEditor() {
 
     $('.templateRow').hide();
@@ -173,6 +277,8 @@ function loadEditor() {
     $('#buttonEditview').hide();
 
     loadFlyer();
+
+    initCommentView();
 
     $('#buttonPublish').click( function() {
         loadPublishPanel();
@@ -220,6 +326,7 @@ function GoToEditMode() {
     $('#buttonSave').show();
     $('#buttonPublish').show();
     $('#buttonEditview').hide();
+    $('.portletCreator').show().animate({height:100},500);
 
     setTimeout(function(){
         hideLoading()
@@ -240,6 +347,7 @@ function GoToViewMode() {
     $('#buttonSave').hide();
     $('#buttonPublish').hide();
     $('#buttonEditview').show();
+    $('.portletCreator').animate({height:0},500, function(){$(this).hide()});
 
     // ToDo: Do a better work when saving is faild (before shwoing preview)
     saveFlyer( function(saveSuccessfuly) {
@@ -408,17 +516,3 @@ function viewModeChanged(e) {
         GoToEditMode();
 }
 
-function init() {
-    $('.thumbnail').click(function(){
-        // Unselect old selected item
-        if( selectedThumbID )
-            $('.thumbnail[thumbnailID='+ selectedThumbID +']').removeClass('selected');
-
-        // Select recent selected item
-        selectedThumbID = $(this).attr('thumbnailID');
-        $(this).find('img').first().addClass('selected');
-
-        $('.thumbnailPreview').find('.caption').text( $(this).attr('caption') );
-        $('.thumbnailPreview').find('.description').text( $(this).attr('description') );
-    }) ;
-}
