@@ -411,6 +411,13 @@ function fillTable() {
                 candidateObj.find('.candidate-tel .value').text(candidate.tel);
                 candidateObj.find('.candidate-website .value').text(candidate.website);
                 candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
+                candidateObj.find('.askForCommentButton').attr('appID',candidate._id).click( function() {
+                    // ToDo: Ask which user should be asked
+                    $.post('/api/team/application/askForComment', {
+                        applicationID: $(this).attr('appID'),
+                        userID: '???'
+                    } )
+                });
 
                 for( var j=0; j<candidate.activities.length; j++ ) {
                     var activity = candidate.activities[j];
@@ -624,14 +631,6 @@ function changeApplicationState(appID,newState,inputElements) {
     $.post( '/api/applications/' + appID, { activity:newState, data:data }).done( function(res) {
         fillTable();
     })
-}
-
-function Application(appID) {
-    $.post( '/api/applications/' + appID, {
-        activity:'INVITED'
-    }).done( function(res) {
-            fillTable();
-        })
 }
 
 function getStat() {
