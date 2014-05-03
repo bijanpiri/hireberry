@@ -110,7 +110,7 @@ nav li a {
     font-size: 1.5em;
 }
 
-.dropdown-menu {
+.navbar .dropdown-menu {
     top: 60px;
     right: 20px;
 }

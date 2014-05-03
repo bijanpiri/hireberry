@@ -161,7 +161,15 @@
             <button class="btn btn-mini pull-right" id="candidatesListButton">List</button>
         </div>
         <div class="span2">
-            <a>Sort by Name</a>
+            <div class="dropdown application-sort">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    Sort by <span class="application-sortType">Sate</span>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li role="presentation"><a class="sortByDate" role="menuitem" tabindex="-1" href="#">Date</a></li>
+                    <li role="presentation"><a class="sortByName" role="menuitem" tabindex="-1" href="#">Name</a></li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="row-fluid tableRow">

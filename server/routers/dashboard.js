@@ -99,9 +99,15 @@ module.exports.applications = function (req,res) {
 
     var teamID = req.user.teamID;
     var userID = req.user._id;
-    var query = req.query.q..replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
-    query = query ? '(' + req.query.q.trim().replace(/ +/g,')|(') + ')' : ''; // Ask bijan about this line!
+    var query = req.query.q;
+    if( query ) {
+        query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
+        query = query ? '(' + req.query.q.trim().replace(/ +/g,')|(') + ')' : ''; // Ask bijan about this line!
+    }
 
+    var sortBy = {applyTime:+1};
+    if( req.query.sort === 'name' )
+        sortBy = {name:+1}
 
     BTeams.count({_id:teamID,admin:userID}, function(err,count) {
         if( err )
@@ -128,7 +134,7 @@ module.exports.applications = function (req,res) {
                 {workPlace: new RegExp(query, "i")},
                 {workTime: new RegExp(query, "i")},
                 {skills: new RegExp(query, "i")}
-            ]}).populate('flyerID').exec(function(err,forms) {
+            ]}).sort(sortBy).populate('flyerID').exec(function(err,forms) {
                 if( err )
                     return res.send(303,{error:err});
 

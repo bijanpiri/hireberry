@@ -391,7 +391,8 @@ function fillTable() {
     $('#candidatesCollection .candidate').remove();
 
     $.get('/api/applications',{
-        q: $('.application-searchBox').val()
+        q: $('.application-searchBox').val(),
+        sort: $('.application-sort').attr('sortBy')
     }).done( function(res) {
 
             for( var i=0; i<res.rows.length; i++ ) {
@@ -431,12 +432,25 @@ function fillTable() {
             $('.candidate .candidate-addComment').hide();
 
 
+            // Search Box
             $('.application-searchBox').unbind('keydown').keydown( function(e) {
                 if(e.keyCode==13)
                     $('.application-searchButton').click()
             });
 
             $('.application-searchButton').unbind('click').click( function() {
+                fillTable();
+            });
+
+            // Sorting
+            $('.application-sort .sortByDate').unbind('click').click( function() {
+                $('.application-sort').attr('sortBy','date');
+                $('.application-sortType').text('Date');
+                fillTable();
+            });
+            $('.application-sort .sortByName').unbind('click').click( function() {
+                $('.application-sort').attr('sortBy','name');
+                $('.application-sortType').text('Name');
                 fillTable();
             });
 
