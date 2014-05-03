@@ -85,6 +85,7 @@
             background-color: #fff;
             border: 1px solid #D1D1D1;
             height: 200px;
+            overflow: auto;
 
             .mbox-title {
               background-color: #E9E9E9;
@@ -163,8 +164,35 @@
               width: 100%;
             }
           }
-        }
 
+          .candidate-workflow {
+            .candidate-workflow-stages {
+              padding: 1em 2em;
+              font-size: 2em;
+              line-height: 1.5em;
+
+              .candidate-workflow-stage {
+                margin: 1em 0;
+
+                a {
+                  display: block;
+                  padding: 0.1em 0.1em;
+                  border-bottom: 1px solid #5ca9fc;
+                  border-left: 4px solid #5ca9fc;
+                }
+
+
+                a:hover {
+                  background-color: #D1E5F5;
+                  text-decoration: none;
+                  border-bottom: 1px solid rgb(54, 117, 185);
+                  border-left: 4px solid rgb(54, 117, 185);
+                }
+              }
+            }
+          }
+
+        }
       }
     }
 

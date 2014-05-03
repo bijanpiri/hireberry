@@ -8,6 +8,7 @@ app.get('/liprofile/:q', routerForm.findLinkedInProfile )
 app.get('/gravatar/:email', routerForm.findGravatarProfile )
 app.get('/twprofile/:q', routerForm.findTwitterProfile )
 app.post('/apply', routerForm.apply );
+app.get('/api/resume', routerForm.getResume );
 app.get('/dashboard', routerDashboard.showDashboard );
 app.get('/api/forms', routerDashboard.forms );
 app.get('/api/applications', routerDashboard.applications );

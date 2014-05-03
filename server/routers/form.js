@@ -256,3 +256,19 @@ module.exports.apply = function (req,res) {
 
     }
 };
+
+module.exports.getResume = function(req,res) {
+
+    var resumeURI = decodeURI(req.query.f);
+
+    request({
+        uri: resumeURI,
+        method: "GET",
+        timeout: 10000,
+        followRedirect: true,
+        maxRedirects: 10
+    }, function(error, response, body) {
+        // ToDo: Convert this byte array to file and send to client
+        res.send( JSON.parse(body) );
+    });
+}

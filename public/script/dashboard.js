@@ -410,6 +410,7 @@ function fillTable() {
                 candidateObj.find('.candidate-email .value').text(candidate.email);
                 candidateObj.find('.candidate-tel .value').text(candidate.tel);
                 candidateObj.find('.candidate-website .value').text(candidate.website);
+                candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
 
                 for( var j=0; j<candidate.activities.length; j++ ) {
                     var activity = candidate.activities[j];
@@ -716,113 +717,7 @@ function rowClicked(data) {
 
 function loadDecisionBox(activity,applicationID) {
 
-    $('#decisionBox').html('');
-
-    var actionPanel = $('<div>').addClass('activity-actionPanel');
-    var currentState = $('<p>').html('This application is in <b>' + activity['type'] + '</b> state.').addClass('activity-title');
-    var title = $('<p>').text('Make a decision').addClass('activity-title');
-    var note = $('<textarea>').attr('placeholder','Enter a note about your decision causes')
-        .addClass('activity-note')
-        .attr('name','note') ;
-    actionPanel.append(currentState).append(title).append(note).append('<br>');
-
-    switch( activity['type'] ) {
-        case 'NEW':
-            var ignoreBtn = $('<button>')
-                .text('Ignore')
-                .addClass('btn btn-danger')
-                .click( handlerMaker(applicationID,'IGNORED',[note]) );
-
-            var planBtn = $('<button>')
-                .text('Plan an interview')
-                .addClass('btn btn-primary')
-                .click( handlerMaker(applicationID,'PLANNING',[note]) );
-
-            actionPanel.append(ignoreBtn).append(planBtn);
-            break;
-        case 'PLANNING':
-            var interviewDate = $('<input type=date>')
-                .attr('name','interviewDate');
-            var interviewTime = $('<input type=time>')
-                .attr('name','interviewTime')
-
-            var ignoreBtn = $('<button>')
-                .text('Ignore')
-                .addClass('btn btn-danger')
-                .click( handlerMaker(applicationID,'IGNORED',[note]) );
-
-            var inviteBtn = $('<button>')
-                .text('Send an invitation')
-                .addClass('btn btn-primary')
-                .click( handlerMaker(applicationID,'INVITED',[note,interviewDate,interviewTime]) )
-                .click( function() {
-                    var addToEvents = confirm('Add this event to calendar?');
-                    if( addToEvents )
-                        $.post( '/event', {
-                            time: new Date(interviewDate.val() + ' ' +interviewTime.val()),
-                            contributors: [],
-                            title: note.val()
-                        }).done( function() {
-                                alert('This event is added to calendar.');
-                            });
-                });
-
-            actionPanel.append(interviewDate)
-                .append(interviewTime)
-                .append('<br>')
-                .append(ignoreBtn)
-                .append(inviteBtn);
-            break;
-        case 'INVITED':
-            var ignoreBtn = $('<button>')
-                .text('Approved')
-                .addClass('btn btn-success')
-                .click( handlerMaker(applicationID,'APPROVED',[note]) );
-
-            var inviteBtn = $('<button>')
-                .text('Decline')
-                .addClass('btn btn-danger')
-                .click( handlerMaker(applicationID,'DECLINED',[note]) );
-
-            actionPanel.append(ignoreBtn).append(inviteBtn);
-            break;
-        case 'APPROVED':
-        case 'DECLINED':
-        case 'IGNORED':
-            var BackToListBtn = $('<button>')
-                .text('Back to list')
-                .addClass('btn btn-primary')
-                .click( handlerMaker(applicationID,'NEW',[note]) );
-            actionPanel.append(BackToListBtn);
-            break
-    }
-
-    $('#decisionBox').append(actionPanel)
-}
-
-function loadTimeline(rows) {
-
-    // Create and populate a data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('datetime', 'start');
-    data.addColumn('datetime', 'end');
-    data.addColumn('string', 'content');
-
-    data.addRows(rows);
-
-    // specify options
-    var options = {
-        "width":  "450px",
-        "height": "200px",
-        "style": "box",
-        "showCurrentTime": true
-    };
-
-    // Instantiate our timeline object.
-    var timeline = new links.Timeline(document.getElementById('timeline'));
-
-    // Draw our timeline with the created data and options
-    timeline.draw(data, options);
+    loadWorkflowStage(0,1);
 }
 
 function getAvatar(email) {
@@ -936,4 +831,15 @@ function getPositionComments(appID) {
             $('#positionComments .comments').append( commentObj );
         });
     });
+}
+
+function loadWorkflowStage(stageNo,subStageNo) {
+
+    var stages = ['pending','interviewing','offered','archived'];
+    subStageNo = subStageNo || 1;
+
+    $('.candidate-workflow-substage').hide();
+
+    var cssSelector = '.candidate-workflow-stage.' + stages[stageNo]  + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
+    $(cssSelector).show();
 }
