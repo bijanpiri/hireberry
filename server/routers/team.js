@@ -8,10 +8,10 @@ app.post('/api/team/settings',function(req,res){
         return;
     var userID = req.user._id;
     var teamID = req.user.teamID;
-    var newName = req.body.newName;
-    var newAddress=req.body.newAddress;
-    var newTel=req.body.newTel;
-    var newAdmin=req.body.newAdmin;
+    var newName = req.body.teamName;
+    var newAddress=req.body.teamAddress;
+    var newTel=req.body.teamTel;
+    var newAdmin=req.body.teamAdmin;
 
     BTeams.update(
         {admin:userID,_id:teamID},
@@ -22,6 +22,21 @@ app.post('/api/team/settings',function(req,res){
             res.send(200);
         })
 });
+
+app.get('/api/team/settings',function(req,res){
+
+    if(!checkUser(req,res))
+        return;
+    var teamID=req.user.teamID;
+    BTeams.findOne({_id:teamID})
+        .populate('members','_id displayName email')
+        .populate('admin','_id displayName email')
+        .exec(function(err,team){
+            res.send(200,team);
+        });
+
+})
+
 app.post('/api/team/name',function(req,res){
 
     if( !checkUser(req,res) )

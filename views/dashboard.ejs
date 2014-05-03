@@ -22,7 +22,9 @@
 
 <div id="wrap">
 <div class="container-fluid">
+
 <div class="row-fluid" style="background: #f1f1f1">
+
 <div class="span2">
     <div class="menu">
         <div class="menu-header">
@@ -30,6 +32,7 @@
                 <div id="currentTeamName">Current Team</div>
                 <button id="switchButton" class="btn btn-mini">Switch</button>
             </div>
+
 
             <div id="switchTeamEdit" hidden>
                 <select id="userTeams" style="width: 100%;"></select>
@@ -44,7 +47,9 @@
         <div class="item" forContainer="billingContainer">Billing</div>
     </div>
 </div>
+
 <div class="span10 right-panel">
+
 <div class="container-fluid analyticsContainer sectionContainer">
     <div class="row-fluid statisticsRow">
         <div class="span3 statBox">
@@ -80,7 +85,8 @@
                         </div>
                         <div class="days clearfix">
                             {% _.each(days, function(day) { %}
-                            <div class="{{ day.classes }}" id="{{ day.id }}"><span class="day-number">{{ day.day }}</span></div>
+                            <div class="{{ day.classes }}" id="{{ day.id }}"><span
+                                        class="day-number">{{ day.day }}</span></div>
                             {% }); %}
                         </div>
                     </div>
@@ -102,8 +108,11 @@
 <div class="container-fluid teamContainer sectionContainer" hidden>
     <div class="row-fluid">
         <div class="offset9 span3">
-            <button id="teamSettingButton" class="pull-right">Team Setting</button>
-            <button id="teamInviteButton" class="pull-right">Invite</button>
+
+
+            <a href="#team-settings-dialog" role="button"
+               class="btn btn-large btn-danger" data-toggle="modal">Team Settings</a>
+            <!-- Modal -->
         </div>
     </div>
 
@@ -117,7 +126,6 @@
             <div id="teamMembers"></div>
         </div>
     </div>
-
 </div>
 
 <div class="container-fluid positionsContainer sectionContainer" hidden>
@@ -148,6 +156,7 @@
     <div class="offset1 span5">
         <div>
             <input class="application-searchBox" placeholder="Search through applicants ...">
+
             <div>
                 <a>Advanced Option</a>
             </div>
@@ -183,10 +192,14 @@
                     <div class="candidate-basicInfo">
                         <div class="candidate-name">Jon Doe</div>
                         <a class="btn candidate-resume" target="_blank">View Resume</a>
+
                         <div class="candidate-profiles">
-                            <img class="profile" src="http://static.iconarchive.com/static/images/social/facebook-icon.png">
-                            <img class="profile" src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
-                            <img class="profile" src="http://static.iconarchive.com/static/images/social/google-plus-icon.png">
+                            <img class="profile"
+                                 src="http://static.iconarchive.com/static/images/social/facebook-icon.png">
+                            <img class="profile"
+                                 src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
+                            <img class="profile"
+                                 src="http://static.iconarchive.com/static/images/social/google-plus-icon.png">
                         </div>
                         <div class="candidate-job">
                             Applied for
@@ -445,7 +458,87 @@
 </div>
 </div>
 
+<form id='teamSettingForm' class="form-horizontal no-border-box" method="post">
+    <div id="team-settings-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="teamSetLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Team Settings Dialog</h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group">
+                <label class="control-label" for="teamAdminList">Team Admin</label>
+
+                <div class="controls">
+
+                    <div class="btn-group bool-combo ">
+                        <a class="bool-team-admin dropdown">
+
+                        </a>
+                        <ul class="dropdown-menu bool-team-members">
+                        </ul>
+                    </div>
+                </div>
+                <input type="hidden"
+                       name="teamAdmin">
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="teamNameInput">Team Name</label>
+
+                <div class="controls">
+                    <input type="text"
+                           placeholder="My Team Name"
+                           name="teamName">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="teamAddress">Team address</label>
+
+                <div class="controls">
+                    <textarea
+                            placeholder="eg. 32, Mountain View, California"
+                            name="teamAddress"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="teamTel">Tel</label>
+
+                <div class="controls">
+                    <input type="text"
+                           placeholder="eg 88-55-32-3"
+                           name="teamTel">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button type="submit" class="btn btn-primary"
+
+                    data-loading-text="Saving...">Save changes
+            </button>
+        </div>
+    </div>
+    <div class="bool-alert-group">
+        <div class="alert alert-dismissable alert-info bool-alert-toast hide">
+            <a class="close" data-dismiss="alert">&times;</a>
+            <strong>Updating </strong> Team settings...
+        </div>
+        <div class="alert alert-dismissable alert-danger bool-alert-toast hide">
+            <a class="close" data-dismiss="alert">&times;</a>
+            <strong>Faield </strong> to update team settings. Retrying in
+            <span class="bool-retry-timeout">10</span>s...
+            <button type="submit" class="btn btn-info" data-loading-text="Updating ...">Try now</button>
+        </div>
+        <div class="alert alert-dismissable alert-success bool-alert-toast hide">
+            <a class="close" data-dismiss="alert">&times;</a>
+            Team settings has been updated
+            <stron>successfully.</stron>
+        </div>
+    </div>
+</form>
+
 <div id="notificationCenter">
+
     <div class="tongue" isOpen="true">
         <span id="comments_badge"></span>
     </div>
@@ -457,7 +550,8 @@
 
 <div id="activitiesModal">
     <div class="container-fluid">
-        <div class="row-fluid" style="padding: 10px;background-color: #CEDFCE;margin: 10px 0;border: 2px solid #2B6F3B;border-radius: 4px;">
+        <div class="row-fluid"
+             style="padding: 10px;background-color: #CEDFCE;margin: 10px 0;border: 2px solid #2B6F3B;border-radius: 4px;">
             <div class="span12">
                 <select id="teamMembersForComment" style="margin: 0"></select>
                 <button id="askForCommentOnApplication">Ask For Comment</button>
@@ -479,20 +573,6 @@
 </div>
 
 <div id="applicationPreview">
-</div>
-
-<div id="teamSettingModal">
-    <div>
-        <span id="teamAdminTitle">Admin:</span>
-        <span id="teamAdmin"></span>
-        <span id="teamAdminChange" hidden><a>Change</a></span>
-    </div>
-
-    <div>
-        <span id="teamNameTitle">Team Name:</span>
-        <span id="teamName"></span>
-        <span id="teamNameChange" hidden><a>Change</a></span>
-    </div>
 </div>
 
 <div id="teamInvitationModal">

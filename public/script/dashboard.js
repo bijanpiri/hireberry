@@ -7,9 +7,65 @@ var teamMembers = [];
 var forms = [];
 
 //google.load("visualization", "1");
+function teamSettings(){
+    $('#teamSettingForm').submit(function(event){
+        $.post('/api/team/settings',
+            $(this).serialize())
+        .always(function(data){
+                fillTeamSetting();
+//                alert(data);
+                $('#team-settings-dialog').modal('hide');
+            });
+        event.preventDefault();
+        return false;
+    });
+}
 
+function showAdmin(admin){
+    if(admin) {
+        $('.bool-team-admin')
+            .replaceWith(
+            generateMemberElement(admin)
+                .addClass('bool-team-admin')
+                .addClass('dropdown')
+                .attr('data-toggle', 'dropdown')
+                .append('<span class="caret"></span>')
+        );
+        $('[name=teamAdmin]').val(admin._id);
+    }
+}
+function fillTeamSetting(){
+    $.get('/api/team/settings',
+        function (data) {
+            $('[name=teamAdmin]').val(data.admin._id);
+            $('[name=teamName]').val(data.name);
+            $('[name=teamAddress]').val(data.address);
+            $('[name=teamTel]').val(data.tel);
+            showAdmin(data.admin);
+            var memList = $('.bool-team-members').empty();
+            $.each(data.members, function (i, member) {
+                memList.append(
+                    $('<li>')
+                        .append(generateMemberElement(member))
+                        .click(function () {
+                            var member = $(this).children('a').data('member');
+                            showAdmin(member)
+                        })
+                );
+            })
+        }
+    );
+}
 $(function(){
-
+    teamSettings();
+    fillTeamSetting();
+    $('button[data-loading-text]').click(function(){
+        var btn=$(this);
+        btn.button('loading');
+        setTimeout(function(){
+           btn.button('reset');
+        },3000);
+    });
     _.templateSettings = {
         interpolate: /\{\{(.+?)\}\}/g,
         escape: /\{\{\-(.+?)\}\}/g,
@@ -54,16 +110,6 @@ $(function(){
         width: 400,
         height: 300
     });
-
-    $('#teamSettingModal').dialog({
-        resizable: false,
-        autoOpen: false,
-        modal: true,
-        title: "Invite",
-        width: 400,
-        height: 300
-    });
-
 
     $('#teamNameChange').click( function() {
         var newName = prompt('Enter new name:');
@@ -121,7 +167,7 @@ function refresh(once) {
     fillAskedForComments();
     fillCalendar();
     fillUserTeams();
-
+    fillTeamSetting();
     if(once==false)
         ;// setTimeout( refresh, 30000 );
 }
@@ -732,10 +778,6 @@ function getTeamInfo(callback) {
 
         $('#currentTeamName').text( res.teamName );
 
-        $('#teamSettingButton').unbind('click').click( function() {
-            $('#teamSettingModal').dialog("open");
-        });
-
         $('#teamInviteButton').unbind('click').click( function() {
             $('#teamInvitationModal').dialog("open");
         });
@@ -831,14 +873,29 @@ function getPositionComments(appID) {
         });
     });
 }
-
 function loadWorkflowStage(stageNo,subStageNo) {
 
-    var stages = ['pending','interviewing','offered','archived'];
+    var stages = ['pending', 'interviewing', 'offered', 'archived'];
     subStageNo = subStageNo || 1;
 
     $('.candidate-workflow-substage').hide();
 
-    var cssSelector = '.candidate-workflow-stage.' + stages[stageNo]  + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
+    var cssSelector = '.candidate-workflow-stage.' + stages[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
     $(cssSelector).show();
+}
+function generateMemberElement(member){
+
+    var imgurl = 'http://www.gravatar.com/avatar/'+
+        CryptoJS.MD5(member.email)+'?size=50';
+
+    return $('<a>')
+        .addClass('bool-user-item')
+        .append($('<img>')
+            .attr('src',imgurl))
+        .append(
+        $('<ul>')
+            .append($('<li>').append(member.displayName))
+            .append($('<li>').append(member.email)
+        )
+    ).data('member',member);
 }

@@ -5,11 +5,15 @@
 *, *:before, *:after {
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
+.no-border-box,.no-border-box * {
+    -moz-box-sizing: content-box; -webkit-box-sizing: content-box; box-sizing: content-box;
+
+}
 body {
     background-color: #E2DECA;
     overflow-y: scroll;
 }
-body,h1,h2,h3,h4,h5 {
+body{
     font-family: "Roboto",cursive;
     font-weight: 400;
     font-size: 10px;
@@ -108,11 +112,6 @@ nav  ~ .container, nav ~ .container-fluid {
 
 nav li a {
     font-size: 1.5em;
-}
-
-.navbar .dropdown-menu {
-    top: 60px;
-    right: 20px;
 }
 
 
@@ -290,4 +289,16 @@ Modals
 }
 .ui-widget-overlay{
     z-index: 30002  ;
+}
+.bool-alert-toast{
+    position: relative;
+    left: -50%;
+    top: 0;
+}
+.bool-alert-group{
+    position: fixed;
+    top:0;
+    left: 50%;
+    z-index: 2000;
+
 }

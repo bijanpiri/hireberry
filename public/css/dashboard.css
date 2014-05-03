@@ -336,9 +336,6 @@
     cursor: pointer;
 }
 
-#teamAdmin {
-    font-size: 1.7em;
-}
 
 #teamAdminTitle {
     font-size: 1.5em;
@@ -473,6 +470,7 @@
 .planButton {
 }
 
+
 .application-searchBox {
     padding: 8px;
     width: 100%;
@@ -483,4 +481,32 @@
 
 .application-searchButton {
     height: 2.4em;
+}
+.modal-body{
+    overflow-y: visible;
+}
+.bool-user-item{
+    cursor: pointer;
+    width: 250px;
+    font-size: 14px;
+    display: inline-block;
+    padding: 3px 20px;
+    text-decoration: none;
+    color: #4C4C4C;
+}
+.bool-user-item>img{
+    border-radius: 40px;
+    border: 2px solid #9c9c9c;
+    vertical-align: middle;
+}
+.bool-user-item>ul{
+
+    padding: 0;
+    display: inline-block;
+    list-style: none;
+    vertical-align: middle;
+}
+.bool-user-item>ul>li{
+
+
 }
