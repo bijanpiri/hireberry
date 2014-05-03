@@ -394,106 +394,112 @@ function fillTable() {
         q: $('.application-searchBox').val()
     }).done( function(res) {
 
-        for( var i=0; i<res.rows.length; i++ ) {
-            var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
-            var candidate = res.rows[i];
+            for( var i=0; i<res.rows.length; i++ ) {
+                var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
+                var candidate = res.rows[i];
 
-            candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
-            candidateObj.find('.candidate-name').text(candidate.name);
-            candidateObj.find('.candidate-job .value').text(candidate.position);
-            candidateObj.find('.candidate-time .value').text(candidate.applyTime);
-            candidateObj.find('.candidate-stage .value').text(candidate.lastActivity);
-            candidateObj.find('.candidate-skills .value').text(candidate.skills);
-            candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
-            candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
-            candidateObj.find('.candidate-email .value').text(candidate.email);
-            candidateObj.find('.candidate-tel .value').text(candidate.tel);
-            candidateObj.find('.candidate-website .value').text(candidate.website);
+                candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
+                candidateObj.find('.candidate-name').text(candidate.name);
+                candidateObj.find('.candidate-job .value').text(candidate.position);
+                candidateObj.find('.candidate-time .value').text(candidate.applyTime);
+                candidateObj.find('.candidate-stage .value').text(candidate.lastActivity);
+                candidateObj.find('.candidate-skills .value').text(candidate.skills);
+                candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
+                candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
+                candidateObj.find('.candidate-email .value').text(candidate.email);
+                candidateObj.find('.candidate-tel .value').text(candidate.tel);
+                candidateObj.find('.candidate-website .value').text(candidate.website);
 
-            for( var j=0; j<candidate.activities.length; j++ ) {
-                var activity = candidate.activities[j];
-                var mTimestamp = new moment(activity.timestamp);
-                var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
-                var typeObj = $('<div>').addClass('activity-type').text( activity.type );
-                var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
+                for( var j=0; j<candidate.activities.length; j++ ) {
+                    var activity = candidate.activities[j];
+                    var mTimestamp = new moment(activity.timestamp);
+                    var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
+                    var typeObj = $('<div>').addClass('activity-type').text( activity.type );
+                    var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
 
-                candidateObj.find('.candidate-activities').append( activityObj );
+                    candidateObj.find('.candidate-activities').append( activityObj );
+                }
+
+                for( var profile in candidate.profiles )
+                    candidate.profiles[ profile ];
+
+                $('#candidatesCollection').append( candidateObj );
             }
 
-            for( var profile in candidate.profiles )
-                candidate.profiles[ profile ];
+            $('.candidate .candidate-actions').show();
+            $('.candidate .candidate-newComments').hide();
+            $('.candidate .candidate-addComment').hide();
 
-            $('#candidatesCollection').append( candidateObj );
-        }
 
-        $('.candidate .candidate-actions').show();
-        $('.candidate .candidate-newComments').hide();
-        $('.candidate .candidate-addComment').hide();
+            $('.application-searchBox').unbind('keydown').keydown( function(e) {
+                if(e.keyCode==13)
+                    $('.application-searchButton').click()
+            });
 
-        $('.application-searchButton').unbind('click').click( function() {
-           fillTable();
-        });
+            $('.application-searchButton').unbind('click').click( function() {
+                fillTable();
+            });
 
-        $('.candidate').unbind('click').click( function() {
+            $('.candidate').unbind('click').click( function() {
 
-            var isExpanded = $(this).hasClass('candidate-expanded');
+                var isExpanded = $(this).hasClass('candidate-expanded');
 
-            if( isExpanded==false ){
-                // Deselect Current Selection
-                $('#candidatesCollection .candidate-expanded')
-                    .css('clear','none')
-                    .removeClass('candidate-expanded')
-                    .next()
-                    .css('clear','none');
+                if( isExpanded==false ){
+                    // Deselect Current Selection
+                    $('#candidatesCollection .candidate-expanded')
+                        .css('clear','none')
+                        .removeClass('candidate-expanded')
+                        .next()
+                        .css('clear','none');
 
-                $(this).css('clear','both')
-                    .addClass('candidate-expanded')
-                    .next()
-                    .css('clear','both');
+                    $(this).css('clear','both')
+                        .addClass('candidate-expanded')
+                        .next()
+                        .css('clear','both');
 
-                $('#candidatesCollection .candidate')
-                    .filter( function(i,obj) { return !$(obj).hasClass('candidate-expanded') })
-                    .css('opacity',0.3);
-                $('#candidatesCollection .candidate-expanded').css('opacity',1)
-            }
-            else {
-                $(this).css('clear','none')
-                    .removeClass('candidate-expanded')
-                    .next()
-                    .css('clear','none');
+                    $('#candidatesCollection .candidate')
+                        .filter( function(i,obj) { return !$(obj).hasClass('candidate-expanded') })
+                        .css('opacity',0.3);
+                    $('#candidatesCollection .candidate-expanded').css('opacity',1)
+                }
+                else {
+                    $(this).css('clear','none')
+                        .removeClass('candidate-expanded')
+                        .next()
+                        .css('clear','none');
 
-                $('#candidatesCollection .candidate').css('opacity',1);
-            }
-
-        });
-
-        // Go to Grid-mode layout
-        $('#candidatesGridButton').unbind('click').click( function() {
-
-            $('#candidatesCollection').animate({'opacity':0},300, function() {
-
-                $('#candidatesCollection')
-                    .removeClass('list-layout')
-                    .addClass('grid-layout')
-                    .animate({'opacity':1},300);
+                    $('#candidatesCollection .candidate').css('opacity',1);
+                }
 
             });
-        });
 
-        // Go to List-mode layout
-        $('#candidatesListButton').unbind('click').click( function() {
+            // Go to Grid-mode layout
+            $('#candidatesGridButton').unbind('click').click( function() {
 
-            $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
+                $('#candidatesCollection').animate({'opacity':0},300, function() {
 
-                $('#candidatesCollection')
-                    .removeClass('grid-layout')
-                    .addClass('list-layout')
-                    .animate({'opacity':1},300);
+                    $('#candidatesCollection')
+                        .removeClass('list-layout')
+                        .addClass('grid-layout')
+                        .animate({'opacity':1},300);
 
+                });
             });
-        });
 
-    });
+            // Go to List-mode layout
+            $('#candidatesListButton').unbind('click').click( function() {
+
+                $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
+
+                    $('#candidatesCollection')
+                        .removeClass('grid-layout')
+                        .addClass('list-layout')
+                        .animate({'opacity':1},300);
+
+                });
+            });
+
+        });
 
     $('#applicationsTable').WATable({
         url: '/api/applications',

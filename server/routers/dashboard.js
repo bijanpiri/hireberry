@@ -99,7 +99,9 @@ module.exports.applications = function (req,res) {
 
     var teamID = req.user.teamID;
     var userID = req.user._id;
-    var query = req.query.q;
+    var query = req.query.q..replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
+    query = query ? '(' + req.query.q.trim().replace(/ +/g,')|(') + ')' : ''; // Ask bijan about this line!
+
 
     BTeams.count({_id:teamID,admin:userID}, function(err,count) {
         if( err )
@@ -120,8 +122,13 @@ module.exports.applications = function (req,res) {
     function fetchApplications(flyersID,flyersName) {
         BApplications.find( {
             flyerID:{$in:flyersID},
-            name: new RegExp(query, "i")
-        }).populate('flyerID').exec(function(err,forms) {
+            $or:[
+                {name: new RegExp(query, "i")},
+                {anythingelse: new RegExp(query, "i")},
+                {workPlace: new RegExp(query, "i")},
+                {workTime: new RegExp(query, "i")},
+                {skills: new RegExp(query, "i")}
+            ]}).populate('flyerID').exec(function(err,forms) {
                 if( err )
                     return res.send(303,{error:err});
 
