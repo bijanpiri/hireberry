@@ -328,7 +328,10 @@ function fillPositionsList( callback ) {
 
             var titleObj = $('<span>')
                 .addClass('positionTitle')
-                .text(form.formName);
+                .text(form.formName)
+                .click( function() {
+                    window.open('/flyer/edit/0?flyerid=' + form.formID);
+                });
 
             var stateObj = $('<span>')
                 .addClass('positionMode')
@@ -368,22 +371,11 @@ function fillPositionsList( callback ) {
                     window.open('/flyer/view/0?flyerid=' + form.formID);
                 });
 
-            var deleteBtnObj = $('<a>')
-                .addClass('btn btn-mini btn-danger')
-                .attr('formID',form.formID)
-                .text('comments')
-                .click( function() {
-                    //window.open('/flyer/remove?flyerid=' + form.formID);
-                    $('#positionComments').dialog('open')
-                    var formID = $(this).attr('formID')
-                    getPositionComments( formID );
-                });
-
             row.find('.colTitle').html('').append(titleObj);
             row.find('.colStatus').html('').append(stateObj);
             row.find('.colCreator').html('').append(creatorObj);
             row.find('.colAssignedTo').html('').append(assigneeObj);
-            row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj).append(deleteBtnObj);
+            //row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj);
 
             row.addClass('position').attr('id',form.formID);
             $('.positionsContainer').append( row );

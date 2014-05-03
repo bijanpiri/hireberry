@@ -157,6 +157,11 @@
 
 .position .positionTitle {
     font-size: 0.9em;
+    cursor: pointer;
+}
+
+.position .positionTitle:hover {
+    text-decoration: underline;
 }
 
 .position .positionMode {

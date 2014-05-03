@@ -278,8 +278,6 @@ function loadEditor() {
 
     loadFlyer();
 
-    initCommentView();
-
     $('#buttonPublish').click( function() {
         loadPublishPanel();
     })

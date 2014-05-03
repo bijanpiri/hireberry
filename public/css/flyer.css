@@ -101,6 +101,7 @@ Whole Paper
     padding: 1em 1em;
     border-radius: 7px;
     margin: 1em 0;
+    display: none;
 }
 
 .portlet-commentsView .portlet-comments .portlet-comment {
@@ -117,6 +118,7 @@ Whole Paper
     padding: 1em 1em;
     border-radius: 7px;
     margin: 1em 0;
+    display: none;
 }
 
 
@@ -128,7 +130,7 @@ Whole Paper
 
 .portletCreator  {
     background-color: #000;
-    opacity: 0.75;
+    opacity: 0.9;
     bottom: 0;
     overflow: hidden;
     box-sizing: border-box;
