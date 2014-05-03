@@ -3,6 +3,11 @@
  */
 
 var request=require('request');
+var Parse = require('node-parse-api').Parse;
+
+var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
+var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
+var parseApp = new Parse(APP_ID, MASTER_KEY);
 
 module.exports.dropboxAuthentication = function (req,res){
 
@@ -193,13 +198,28 @@ module.exports.apply = function (req,res) {
 
                 // Find dropbox token
                 BFlyers.findOne( {_id:req.body.flyerid}, function(err,flyer) {
-                    saveOnDropbox( flyer.dbToken, data, resumeFileName, applicationID );
+
+                    if( flyer.dbToken )
+                        saveOnDropbox( flyer.dbToken, data, resumeFileName, applicationID );
+                    else
+                        saveOnParse( data, resumeFileName, applicationID);
                 })
             });
         }
         else {
             res.send(200,{});
         }
+    }
+
+    var saveOnParse = function(data, resumeFileName, applicationID) {
+        parseApp.insertFile(resumeFileName, data, null, function (err, response) {
+            var fileLink = response.url;
+            var parseName = response.name;
+
+            BApplications.update({_id:applicationID},{resumePath:fileLink}, function() {
+                res.send(200,{});
+            });
+        });
     }
 
     var saveOnDropbox = function( dbToken, data, resumeFileName, applicationID ) {

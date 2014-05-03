@@ -17,6 +17,7 @@
         "dropbox": "*",
         "node-twitter-api": "*",
         "linkedin-js": "*",
-        "request":"*"
+        "request":"*",
+        "node-parse-api": "*"
     }
 }
