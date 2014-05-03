@@ -99,6 +99,7 @@ module.exports.applications = function (req,res) {
 
     var teamID = req.user.teamID;
     var userID = req.user._id;
+    var query = req.query.q;
 
     BTeams.count({_id:teamID,admin:userID}, function(err,count) {
         if( err )
@@ -117,9 +118,10 @@ module.exports.applications = function (req,res) {
     });
 
     function fetchApplications(flyersID,flyersName) {
-        BApplications.find( {flyerID:{$in:flyersID} })
-            .populate('flyerID')
-            .exec(function(err,forms) {
+        BApplications.find( {
+            flyerID:{$in:flyersID},
+            name: new RegExp(query, "i")
+        }).populate('flyerID').exec(function(err,forms) {
                 if( err )
                     return res.send(303,{error:err});
 
@@ -148,18 +150,16 @@ module.exports.applications = function (req,res) {
                             selectedProfiles[profile] = profiles[profile];
                     form.profiles = selectedProfiles;
 
-                    // Workplace
-                    //form.workPlace = (form.workPlace=='fulltime') ?
+                    // Worktype
 
                     // Email
-                    form.email = form.email;
 
                     // Apply Date
                     var date = new Date( form.applyTime );
                     form.applyTime = date.toLocaleDateString();
 
                     // Resume
-                    form.resumePath = (form.resumePath==='-') ? '' : makeLinkTag( 'link', form.resumePath, false);
+                    form.resumePath = (form.resumePath==='-') ? '' : form.resumePath;
 
                     // Last Activity
                     if( form.activities && form.activities.length > 0 )

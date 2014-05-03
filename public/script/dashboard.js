@@ -390,7 +390,9 @@ function fillTable() {
     $('#applicationsTable').html('');
     $('#candidatesCollection .candidate').remove();
 
-    $.get('/api/applications').done( function(res) {
+    $.get('/api/applications',{
+        q: $('.application-searchBox').val()
+    }).done( function(res) {
 
         for( var i=0; i<res.rows.length; i++ ) {
             var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
@@ -427,6 +429,10 @@ function fillTable() {
         $('.candidate .candidate-actions').show();
         $('.candidate .candidate-newComments').hide();
         $('.candidate .candidate-addComment').hide();
+
+        $('.application-searchButton').unbind('click').click( function() {
+           fillTable();
+        });
 
         $('.candidate').unbind('click').click( function() {
 
