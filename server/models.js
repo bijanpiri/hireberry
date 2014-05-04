@@ -101,6 +101,7 @@ BApplications = mongoose.model( 'applications', {
     anythingelse:String,
     resumePath:String,
     dbToken:String,
+    stage:{},
     activities:[],
     assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
 });

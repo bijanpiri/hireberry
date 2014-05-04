@@ -10,8 +10,8 @@ var forms = [];
 function teamSettings(){
     $('#teamSettingForm').submit(function(event){
         $.post('/api/team/settings',
-            $(this).serialize())
-        .always(function(data){
+                $(this).serialize())
+            .always(function(data){
                 fillTeamSetting();
 //                alert(data);
                 $('#team-settings-dialog').modal('hide');
@@ -25,12 +25,12 @@ function showAdmin(admin){
     if(admin) {
         $('.bool-team-admin')
             .replaceWith(
-            generateMemberElement(admin)
-                .addClass('bool-team-admin')
-                .addClass('dropdown')
-                .attr('data-toggle', 'dropdown')
-                .append('<span class="caret"></span>')
-        );
+                generateMemberElement(admin)
+                    .addClass('bool-team-admin')
+                    .addClass('dropdown')
+                    .attr('data-toggle', 'dropdown')
+                    .append('<span class="caret"></span>')
+            );
         $('[name=teamAdmin]').val(admin._id);
     }
 }
@@ -63,7 +63,7 @@ $(function(){
         var btn=$(this);
         btn.button('loading');
         setTimeout(function(){
-           btn.button('reset');
+            btn.button('reset');
         },3000);
     });
     _.templateSettings = {
@@ -449,7 +449,7 @@ function fillTable() {
                 candidateObj.find('.candidate-name').text(candidate.name);
                 candidateObj.find('.candidate-job .value').text(candidate.position);
                 candidateObj.find('.candidate-time .value').text(candidate.applyTime);
-                candidateObj.find('.candidate-stage .value').text(candidate.lastActivity);
+                candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
                 candidateObj.find('.candidate-skills .value').text(candidate.skills);
                 candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
                 candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
@@ -477,6 +477,9 @@ function fillTable() {
 
                 for( var profile in candidate.profiles )
                     candidate.profiles[ profile ];
+
+                initWorkflow(candidateObj,candidate);
+                changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
 
                 $('#candidatesCollection').append( candidateObj );
             }
@@ -592,6 +595,49 @@ function fillTable() {
     });
 }
 
+function initWorkflow(candidateObj,candidate) {
+
+    candidateObj.find('.archiveButton').click( function() {
+        gotoNewStage(4,1);
+    });
+
+    candidateObj.find('.interviewButton').click( function() {
+        gotoNewStage(2,1);
+    });
+
+    candidateObj.find('.offerButton').click( function() {
+        gotoNewStage(3,1);
+    });
+
+    candidateObj.find('.askForCommentButton').click( function() {
+        alert('A4C');
+    });
+
+
+    function gotoNewStage(newStage,newSubStage) {
+        $.post( '/api/applications/' + candidate._id, {
+            activity:0,
+            data:{ stage:newStage ,subStage:newSubStage }
+        }).done( function(res) {
+                changeWorkflowStage(candidateObj,candidate,newStage,newSubStage);
+            });
+    }
+}
+
+function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
+
+    var stages = ['pending', 'interviewing', 'offered', 'archived'];
+    stageNo--; // Convert to zero-base index
+    subStageNo = subStageNo || 1;
+
+    // Hide all
+    candidateObj.find('.candidate-workflow-substage').hide();
+
+    // Show selected stage
+    var cssSelector = '.candidate-workflow-stage.' + stages[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
+    candidateObj.find(cssSelector).show();
+}
+
 function fillCalendar() {
     $.get('/event').done( function(events) {
 
@@ -657,25 +703,6 @@ function fillUserTeams() {
                 $('#switchTeamEdit').hide();
             })
         })
-    })
-}
-
-// Make a triple parameters function
-function handlerMaker(a,b,c) {
-    return (function(p1,p2,p3){
-        return function(){changeApplicationState(p1,p2,p3)}
-    })(a,b,c);
-}
-
-function changeApplicationState(appID,newState,inputElements) {
-
-    var data = {};
-
-    for(var i=0; i<inputElements.length; i++)
-        data[ inputElements[i].attr('name') ] = inputElements[i].val();
-
-    $.post( '/api/applications/' + appID, { activity:newState, data:data }).done( function(res) {
-        fillTable();
     })
 }
 
@@ -873,16 +900,7 @@ function getPositionComments(appID) {
         });
     });
 }
-function loadWorkflowStage(stageNo,subStageNo) {
 
-    var stages = ['pending', 'interviewing', 'offered', 'archived'];
-    subStageNo = subStageNo || 1;
-
-    $('.candidate-workflow-substage').hide();
-
-    var cssSelector = '.candidate-workflow-stage.' + stages[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
-    $(cssSelector).show();
-}
 function generateMemberElement(member){
 
     var imgurl = 'http://www.gravatar.com/avatar/'+
@@ -893,9 +911,9 @@ function generateMemberElement(member){
         .append($('<img>')
             .attr('src',imgurl))
         .append(
-        $('<ul>')
-            .append($('<li>').append(member.displayName))
-            .append($('<li>').append(member.email)
-        )
-    ).data('member',member);
+            $('<ul>')
+                .append($('<li>').append(member.displayName))
+                .append($('<li>').append(member.email)
+                )
+        ).data('member',member);
 }

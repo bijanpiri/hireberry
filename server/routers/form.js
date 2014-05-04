@@ -181,7 +181,8 @@ module.exports.apply = function (req,res) {
         profiles:JSON.stringify(profiles),
         anythingelse:req.body.anythingElse,
         resumePath:resumeFileName,
-        activities:[{type:'NEW',timestamp:new Date()}]
+        stage: { stage:1, subStage:1 },
+        activities:[{type:'Application is sent',timestamp:new Date()}]
     }).save( function(err, application) {
             if(err){
                 res.send(404,{});

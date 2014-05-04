@@ -205,15 +205,36 @@ module.exports.applications = function (req,res) {
 }
 
 module.exports.updateApplication = function(req,res) {
+
+    var activities = [
+        'Stage Changing',
+        'Asking For Comment'
+    ];
+
     var appID = req.params.applicationID;
     var activity = {
-        type:req.body.activity,
-        data:req.body.data,
-        timestamp: new Date() };
+        type: activities[ req.body.activity ],
+        data: req.body.data,
+        timestamp: new Date()
+    };
 
-    BApplications.update({_id:appID}, {$push:{activities:activity}}, function(err) {
-        res.send(200);
-    })
+    if( req.body.activity == 0 ) {
+        var newStage = {
+            stage: req.body.data.stage,
+            subStage: req.body.data.subStage
+        };
+
+        BApplications.update({_id:appID}, {
+            $push:{activities:activity},
+            stage:newStage
+        }, function(err) {
+            res.send(200);
+        })
+    } else {
+        BApplications.update({_id:appID}, { $push:{activities:activity} }, function(err) {
+            res.send(200);
+        })
+    }
 }
 
 module.exports.statisticalInfo = function(req,res) {
