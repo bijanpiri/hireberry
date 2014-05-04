@@ -7,7 +7,7 @@
     <style>
         .box {
             background-color: #f1f1f1;
-            display: inline-block;
+            display: none;
             padding: 20px 40px;
             box-shadow: 1px 1px 1px #D1CDCD;
             border-radius: 4px;
@@ -22,21 +22,26 @@
             text-align: center;
             font-size: 1.5em;
         }
+
+        .box .title {
+            font-size: 1.8em;
+            margin-bottom: 1.5em;
+        }
     </style>
 </head>
 <body>
-<div class="box">
-    <div class="title">Title</div>
-    <div class="interview" hidden>
+<div class="box interview" hidden>
+    <div class="title">Invitation</div>
+    <div class="">
         <div>You are invited to an interview</div>
         <button class="interview_yesButton">I will come</button>
         <button class="interview_noButton">I can't come</button>
     </div>
 </div>
 
-<div class="box">
-    <div class="title">Title</div>
-    <div class="offer" hidden>
+<div class="box offer" hidden>
+    <div class="title">Job Offer</div>
+    <div class="">
         <div>You are offer a job.</div>
         <button>Accept</button>
         <button>Decline</button>
