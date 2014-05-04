@@ -18,6 +18,7 @@
 <script src="http://kylestetz.github.io/CLNDR/js/underscore.js" type="text/javascript"></script>
 <script src="/clndr/moment.js" type="text/javascript"></script>
 <script src="/clndr/clndr.js" type="text/javascript"></script>
+<script src="/script/usersCombo.js"></script>
 <script src="/script/dashboard.js"></script>
 
 <div id="wrap">
@@ -500,22 +501,12 @@
             <div class="control-group">
                 <label class="control-label" for="teamAdminList">Team Admin</label>
 
-                <div class="controls">
+                <div class="controls team-admin-combo">
 
-                    <div class="btn-group bool-combo ">
-                        <a class="bool-team-admin dropdown">
-
-                        </a>
-                        <ul class="dropdown-menu bool-team-members">
-                        </ul>
-                    </div>
                 </div>
-                <input type="hidden"
-                       name="teamAdmin">
             </div>
             <div class="control-group">
                 <label class="control-label" for="teamNameInput">Team Name</label>
-
                 <div class="controls">
                     <input type="text"
                            placeholder="My Team Name"
@@ -524,7 +515,6 @@
             </div>
             <div class="control-group">
                 <label class="control-label" for="teamAddress">Team address</label>
-
                 <div class="controls">
                     <textarea
                             placeholder="eg. 32, Mountain View, California"
@@ -533,7 +523,6 @@
             </div>
             <div class="control-group">
                 <label class="control-label" for="teamTel">Tel</label>
-
                 <div class="controls">
                     <input type="text"
                            placeholder="eg 88-55-32-3"
@@ -544,7 +533,6 @@
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
             <button type="submit" class="btn btn-primary"
-
                     data-loading-text="Saving...">Save changes
             </button>
         </div>

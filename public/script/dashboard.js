@@ -6,7 +6,7 @@ var userID = '<%=userID%>';
 var teamMembers = [];
 var forms = [];
 
-//google.load("visualization", "1");
+
 function teamInvitation(){
     $('#teamInvitationForm').submit(function(){
         var form=$(this);
@@ -22,13 +22,15 @@ function teamInvitation(){
                 $('#invitationEmail').val('');
                 $('#invitationNote').val('');
                 getTeamInfo();
-            }).fail(function(){
+            })
+            .fail(function(){
                 form.find('.alert-danger').show();
             });
         return false;
 
     })
 }
+
 function teamSettings(){
     $('#teamSettingForm').submit(function(event){
         var form=$(this);
@@ -39,31 +41,18 @@ function teamSettings(){
                 $('.alert').hide();
                 $('#team-settings-dialog').modal('hide');
                 refresh(true);
-
-            }).fail(function(data){
+            })
+            .fail(function(data){
                 form.find('.alert-danger').show();
-            }).done(function(data){
+            })
+            .done(function(data){
                 form.find('.alert-success').show().delay(2000).fadeOut();
-
             });
         event.preventDefault();
         return false;
     });
 }
 
-function showAdmin(admin){
-    if(admin) {
-        $('.bool-team-admin')
-            .replaceWith(
-                generateMemberElement(admin)
-                    .addClass('bool-team-admin')
-                    .addClass('dropdown')
-                    .attr('data-toggle', 'dropdown')
-                    .append('<span class="caret"></span>')
-            );
-        $('[name=teamAdmin]').val(admin._id);
-    }
-}
 function fillTeamSetting(){
     $.get('/api/team/settings',
         function (data) {
@@ -71,21 +60,11 @@ function fillTeamSetting(){
             $('[name=teamName]').val(data.name);
             $('[name=teamAddress]').val(data.address);
             $('[name=teamTel]').val(data.tel);
-            showAdmin(data.admin);
-            var memList = $('.bool-team-members').empty();
-            $.each(data.members, function (i, member) {
-                memList.append(
-                    $('<li>')
-                        .append(generateMemberElement(member))
-                        .click(function () {
-                            var member = $(this).children('a').data('member');
-                            showAdmin(member)
-                        })
-                );
-            })
+            $('.team-admin-combo').populateUserCombo(data.members,data.admin,'teamAdmin');
         }
     );
 }
+
 $(function(){
     teamSettings();
     fillTeamSetting();
@@ -232,7 +211,8 @@ function fillAskedForComments() {
 
             var titleObj = $('<div>')
                 .text('You are asked to put your comment about ')
-                .append( $('<a>').attr('applicationID',a4c.applicationID._id).text('this application').click( function() {
+                .append( $('<a>').attr('applicationID',a4c.applicationID._id).text('this application')
+                    .click( function() {
                     showApplicationPreview( $(this).attr('applicationID') );
                 }))
 
