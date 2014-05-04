@@ -2,39 +2,39 @@
  * Created by Bijan on 05/04/2014.
  */
 $.fn.populateUserCombo=function(members,selectedMember, inputName){
+    $(this).each(function(){
+        if(!selectedMember)
+            selectedMember=0;
 
-    if(!selectedMember)
-        selectedMember=0;
+        if(!inputName)
+            inputName='name';
 
-    if(!inputName)
-        inputName='name';
+        var container=$(this).empty();
+        var x=
+            $('<div class="btn-group bool-combo ">' +
+                '<a class="bool-combo-selected dropdown"> </a>' +
+                '<ul class="dropdown-menu bool-team-members">  </ul>' +
+                '<input type="hidden"></div>');
 
-    var container=$(this).empty();
-    var x=
-        $('<div class="btn-group bool-combo ">' +
-        '<a class="bool-combo-selected dropdown"> </a>' +
-        '<ul class="dropdown-menu bool-team-members">  </ul>' +
-        '<input type="hidden"></div>');
+        x.find('input').attr('name',inputName);
 
-    x.find('input').attr('name',inputName);
-
-    container.append(x);
-    var memList = x.find('ul').empty();
-    $.each(members, function (i, member) {
-        memList.append(
-            $('<li>')
-                .append(generateMemberElement(member))
-                .click(function () {
-                    var member = $(this).children('a').data('member');
-                    showSelected(member,x);
-                })
-        );
-    })
-    if(selectedMember._id)
-        showSelected(selectedMember,x);
-    else
-        showSelected(members[selectedMember],x);
-
+        container.append(x);
+        var memList = x.find('ul').empty();
+        $.each(members, function (i, member) {
+            memList.append(
+                $('<li>')
+                    .append(generateMemberElement(member))
+                    .click(function () {
+                        var member = $(this).children('a').data('member');
+                        showSelected(member,x);
+                    })
+            );
+        })
+        if(selectedMember._id)
+            showSelected(selectedMember,x);
+        else
+            showSelected(members[selectedMember],x);
+    });
 }
 function generateMemberElement(member){
 

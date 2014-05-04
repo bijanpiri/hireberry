@@ -99,7 +99,7 @@ module.exports.applications = function (req,res) {
 
     var teamID = req.user.teamID;
     var userID = req.user._id;
-    var query = req.query.q;
+    var query = req.query.q || '';
     if( query ) {
         query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
         query = query ? '(' + req.query.q.trim().replace(/ +/g,')|(') + ')' : ''; // Ask bijan about this line!

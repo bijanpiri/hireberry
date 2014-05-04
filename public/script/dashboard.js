@@ -64,7 +64,9 @@ function fillTeamSetting(){
         }
     );
 }
-
+function fillAsk4Comment(){
+    $('.bool-ask-4-comment-users').populateUserCombo(teamMembers,0,'ask');
+}
 $(function(){
     teamSettings();
     fillTeamSetting();
@@ -160,15 +162,17 @@ function refresh(once) {
                 $('.colAssignedTo select').append( option.clone() );
 
             }
+            fillAsk4Comment();
 
         });
     });
-    fillTable()
+    fillTable();
     getStat();
     fillAskedForComments();
     fillCalendar();
     fillUserTeams();
     fillTeamSetting();
+
     if(once==false)
         ;// setTimeout( refresh, 30000 );
 }
@@ -484,6 +488,7 @@ function fillTable() {
                 changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
 
                 $('#candidatesCollection').append( candidateObj );
+
             }
 
             $('.candidate .candidate-actions').show();
@@ -572,7 +577,9 @@ function fillTable() {
                 });
             });
 
-        });
+
+
+    });
 
     $('#applicationsTable').WATable({
         url: '/api/applications',
