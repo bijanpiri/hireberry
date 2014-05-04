@@ -105,3 +105,9 @@ BApplications = mongoose.model( 'applications', {
     activities:[],
     assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
 });
+
+BApplicantsResponses = mongoose.model( 'applicantsResponses', {
+    applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
+    request: {},
+    response: {}
+});

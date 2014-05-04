@@ -218,23 +218,66 @@ module.exports.updateApplication = function(req,res) {
         timestamp: new Date()
     };
 
-    if( req.body.activity == 0 ) {
-        var newStage = {
-            stage: req.body.data.stage,
-            subStage: req.body.data.subStage
-        };
 
-        BApplications.update({_id:appID}, {
-            $push:{activities:activity},
-            stage:newStage
-        }, function(err) {
-            res.send(200);
-        })
-    } else {
-        BApplications.update({_id:appID}, { $push:{activities:activity} }, function(err) {
-            res.send(200);
-        })
+    if( req.body.activity == 0 ) { // Changing stage activity;
+
+        // Inviting for an interview
+        if( req.body.data.stage==2 && req.body.data.subStage==1 ) {
+
+            var message = {
+                "html": "<p>Example HTML content</p>",
+                "text": "You are invited to an interview.",
+                "subject": "Interview Invitation",
+                "from_email": "message.from_email@example.com",
+                "from_name": "Booltin",
+                "to": [{
+                    "email": req.body.data.invitedEmail,
+                    "name": "Recipient Name",
+                    "type": "to"
+                }],
+                "headers": {
+                    "Reply-To": "message.reply@example.com"
+                }
+            };
+
+            // 1- Save invitation
+            BApplicantsResponses({applicationID:appID,request:message}).save( function(err,invitation) {
+
+                // 2- Send invitation email
+                message.html += invitation._id;
+                mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
+
+                // 3- Save new stage
+                var newStage = {
+                    stage: req.body.data.stage,
+                    subStage: req.body.data.subStage,
+                    invitation: invitation._id
+                };
+
+                BApplications.update({_id:appID}, {stage:newStage}, function(err) {
+
+                    // 4- Add new activity
+                    addNewActivity(appID,activity, function() {
+                        res.send(200)
+                    });
+
+                })
+            })
+
+        }
+        else {
+            BApplications.update({_id:appID}, {stage:newStage}, function(err) { res.send(200) })
+        }
     }
+    else { // General Activities
+        addNewActivity(appID,activity);
+    }
+}
+
+function addNewActivity(applicationID,activity,callback) {
+    BApplications.update({_id:applicationID}, { $push:{activities:activity} }, function(err) {
+        callback(err);
+    })
 }
 
 module.exports.statisticalInfo = function(req,res) {

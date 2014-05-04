@@ -597,27 +597,35 @@ function fillTable() {
 
 function initWorkflow(candidateObj,candidate) {
 
-    candidateObj.find('.archiveButton').click( function() {
+    candidateObj.find('.archiveButton').click( function(e) {
+        e.stopPropagation();
         gotoNewStage(4,1);
     });
 
-    candidateObj.find('.interviewButton').click( function() {
-        gotoNewStage(2,1);
+    candidateObj.find('.interviewButton').click( function(e) {
+        e.stopPropagation();
+
+        var to = prompt('To:');
+        if( to ) {
+            gotoNewStage(2,1,to);
+        }
     });
 
-    candidateObj.find('.offerButton').click( function() {
+    candidateObj.find('.offerButton').click( function(e) {
+        e.stopPropagation();
         gotoNewStage(3,1);
     });
 
-    candidateObj.find('.askForCommentButton').click( function() {
+    candidateObj.find('.askForCommentButton').click( function(e) {
+        e.stopPropagation();
         alert('A4C');
     });
 
 
-    function gotoNewStage(newStage,newSubStage) {
+    function gotoNewStage(newStage,newSubStage,invitedEmail) {
         $.post( '/api/applications/' + candidate._id, {
             activity:0,
-            data:{ stage:newStage ,subStage:newSubStage }
+            data:{ stage:newStage ,subStage:newSubStage, invitedEmail:invitedEmail }
         }).done( function(res) {
                 changeWorkflowStage(candidateObj,candidate,newStage,newSubStage);
             });

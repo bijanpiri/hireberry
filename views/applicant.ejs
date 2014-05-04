@@ -1,0 +1,68 @@
+
+<html>
+<head>
+    <title>Booltin | Applicant Relationship Management</title>
+    <script src="/script/jquery.min.js"></script>
+
+    <style>
+        .box {
+            background-color: #f1f1f1;
+            display: inline-block;
+            padding: 20px 40px;
+            box-shadow: 1px 1px 1px #D1CDCD;
+            border-radius: 4px;
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+            width: 40%;
+            top: 0;
+            bottom: 0;
+            height: 40%;
+            text-align: center;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="title">Title</div>
+    <div class="interview" hidden>
+        <div>You are invited to an interview</div>
+        <button class="interview_yesButton">I will come</button>
+        <button class="interview_noButton">I can't come</button>
+    </div>
+</div>
+
+<div class="box">
+    <div class="title">Title</div>
+    <div class="offer" hidden>
+        <div>You are offer a job.</div>
+        <button>Accept</button>
+        <button>Decline</button>
+    </div>
+</div>
+
+<script>
+    var messageType = '<%= messageType %>';
+    var messageID = '<%= messageID %>';
+
+    $( function() {
+        if( messageType === '1' )
+            $('.interview').show();
+        else if(messageType === '2' )
+            $('.offer').show();
+
+        $('.interview_yesButton').click( function() {
+            $.post('/applicant/message/' + messageType + '/' + messageID,{response:'YES'});
+        })
+
+        $('.interview_noButton').click( function() {
+            $.post('/applicant/message/' + messageType + '/' +  messageID,{response:'NO'});
+        })
+    })
+
+</script>
+
+</body>
+</html>

@@ -9,6 +9,9 @@ var server = require('http').createServer(app)
 var io = require('socket.io').listen(server);
 server.listen(5001);
 
+// Mandrill
+mandrill_client = new mandrill.Mandrill('suHojSqi5KWbijUgT-nzsQ');
+
 //region Configure Express
 app.configure(function() {
     app.engine('ejs',engine);
