@@ -314,7 +314,7 @@ module.exports.updateApplication = function(req,res) {
                 // 3- Save new stage
                 var newStage = {
                     stage: req.body.data.stage,
-                    subStage: req.body.data.subStage,
+                    subStage: req.body.data.subStage
                 };
 
                 BApplications.update({_id:appID}, {stage:newStage}, function(err) {
@@ -329,6 +329,10 @@ module.exports.updateApplication = function(req,res) {
 
         }
         else {
+            var newStage = {
+                stage: req.body.data.stage,
+                subStage: req.body.data.subStage
+            };
             BApplications.update({_id:appID}, {stage:newStage}, function(err) { res.send(200) })
         }
     }

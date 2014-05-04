@@ -3,14 +3,19 @@
 <head>
     <title>Booltin | Applicant Relationship Management</title>
     <script src="/script/jquery.min.js"></script>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        .box {
+        body {
             background-color: #f1f1f1;
+        }
+
+        .box {
+            background-color: #FFFFFF;
             display: none;
             padding: 20px 40px;
-            box-shadow: 1px 1px 1px #D1CDCD;
-            border-radius: 4px;
+            box-shadow: 1px 1px 5px #B3B3B3;
+            border-radius: 7px;
             position: absolute;
             margin: auto;
             left: 0;
@@ -25,27 +30,52 @@
 
         .box .title {
             font-size: 1.8em;
-            margin-bottom: 1.5em;
+            padding-bottom: 0.5em;
+            border-bottom: 2px solid #000;
+            margin-bottom: 2em;
+        }
+
+        .box .actions {
+            position: absolute;
+            bottom: 1em;
+            left: 0;
+            right: 0;
+        }
+
+        .footer {
+            text-align: center;
+            position: absolute;
+            bottom: 1em;
+            left: 0;
+            right: 0;
         }
     </style>
 </head>
 <body>
 <div class="box interview" hidden>
     <div class="title">Invitation</div>
-    <div class="">
-        <div>You are invited to an interview</div>
-        <button class="interview_yesButton">I will come</button>
-        <button class="interview_noButton">I can't come</button>
+    <div class="body">
+        <div class="message">You are invited to an interview</div>
+    </div>
+    <div class="actions">
+        <button class="interview_yesButton btn btn-success">I Will Come</button>
+        <button class="interview_noButton btn btn-danger">I Can't Come</button>
     </div>
 </div>
 
 <div class="box offer" hidden>
     <div class="title">Job Offer</div>
-    <div class="">
-        <div>You are offer a job.</div>
-        <button class="interview_yesButton">Accept</button>
-        <button class="interview_noButton">Decline</button>
+    <div class="body">
+        <div class="message">You are offer a job.</div>
     </div>
+    <div class="actions">
+        <button class="interview_yesButton btn btn-success">Accept</button>
+        <button class="interview_noButton btn btn-danger">Decline</button>
+    </div>
+</div>
+
+<div class="footer">
+    Powered by <a href="http://boolt.in">Booltin</a>
 </div>
 
 <script>

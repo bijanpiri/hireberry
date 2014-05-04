@@ -2,6 +2,7 @@
  * Created by coybit on 5/4/14.
  */
 
+// Show message to applicant
 app.get('/applicant/message/view/:messageType/:messageID', function (req,res){
     res.render('applicant.ejs',{
         messageType: req.params.messageType,
@@ -9,6 +10,7 @@ app.get('/applicant/message/view/:messageType/:messageID', function (req,res){
     });
 });
 
+// Save response of applicant
 app.post('/applicant/message/:messageType/:messageID', function (req,res){
 
     var messageID = req.params.messageID;
@@ -24,7 +26,6 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
 
             if( messageType==='1' ) { // Interview invitation
                     newStage = ( response==="YES") ? {stage:2,subStage:3} : {stage:2,subStage:2}
-                    newStage.interviewDate = '';
             }
             else if(messageType==='2' ) { // Job offer
                 newStage = ( response==="YES") ? {stage:3,subStage:2} : {stage:3,subStage:3}
@@ -46,6 +47,7 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
 
 });
 
+// Get response of applicant
 app.get('/applicant/message/:messageID', function (req,res){
 
     var messageID = req.params.messageID;
