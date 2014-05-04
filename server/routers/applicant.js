@@ -22,16 +22,24 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
 
             var newStage = {};
 
-            if( messageType===1 ) { // Interview invitation
+            if( messageType==='1' ) { // Interview invitation
                     newStage = ( response==="YES") ? {stage:2,subStage:3} : {stage:2,subStage:2}
+                    newStage.interviewDate = '';
             }
-            else if(messageType===2 ) { // Job offer
+            else if(messageType==='2' ) { // Job offer
                 newStage = ( response==="YES") ? {stage:3,subStage:2} : {stage:3,subStage:3}
             }
 
-            BApplications.update( {_id:message.applicationID}, {stage:newStage}, function(err){
-                res.send(200);
+            BApplications.findOne( {_id:message.applicationID}, function(err,application){
+
+                newStage.interviewDate = application.stage.interviewDate;
+
+                BApplications.update( {_id:message.applicationID}, {stage:newStage}, function(err){
+                    res.send(200);
+                })
+
             })
+
         })
 
     })

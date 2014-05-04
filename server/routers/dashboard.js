@@ -180,6 +180,11 @@ module.exports.applications = function (req,res) {
                     else
                         form.lastActivity = 'NEW'
 
+                    // Move stage if it is interview and the date is over
+                    // ToDo: This task must be done by a crone job or something like this
+                    checkNeedForChangingStage(form.stage,form._id);
+
+
                     submittedForms.rows.push( form );
                 }
 
@@ -201,6 +206,18 @@ module.exports.applications = function (req,res) {
             var teamFlyersName = flyers.map( function(flyer) { return flyer.name } );
             callback(userFlyersID,teamFlyersName)
         });
+    }
+
+    function checkNeedForChangingStage(stage,applicationID) {
+
+        if( stage.stage===2 && stage.subStage==3 ) { // Interview
+            if( (new Date())  - (new Date(stage.interviewDate)) > 0 ) { // Date is over
+                BApplications.update({_id:applicationID}, {
+                    stage:{stage:2,subStage:4,interviewDate:stage.interviewDate}
+                }, function(err) { res.send(200) })
+            }
+        }
+
     }
 }
 
@@ -244,14 +261,60 @@ module.exports.updateApplication = function(req,res) {
             BApplicantsResponses({applicationID:appID,request:message}).save( function(err,invitation) {
 
                 // 2- Send invitation email
-                message.html += invitation._id;
+                // ToDo: Change base url
+                message.html += '<a href="http://localhost:5000/applicant/message/view/1/' + invitation._id + '">Invitation</a>';
                 mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
 
                 // 3- Save new stage
                 var newStage = {
                     stage: req.body.data.stage,
                     subStage: req.body.data.subStage,
-                    invitation: invitation._id
+                    invitation: invitation._id,
+                    interviewDate: req.body.data.interviewDate
+                };
+
+                BApplications.update({_id:appID}, {stage:newStage}, function(err) {
+
+                    // 4- Add new activity
+                    addNewActivity(appID,activity, function() {
+                        res.send(200)
+                    });
+
+                })
+            })
+
+        }
+        // Job offer
+        else if( req.body.data.stage==3 && req.body.data.subStage==1 ) {
+
+            var message = {
+                "html": "<p>Example HTML content</p>",
+                "text": "You are offer a job.",
+                "subject": "Job Offer",
+                "from_email": "message.from_email@example.com",
+                "from_name": "Booltin",
+                "to": [{
+                    "email": req.body.data.offeredEmail,
+                    "name": "Recipient Name",
+                    "type": "to"
+                }],
+                "headers": {
+                    "Reply-To": "message.reply@example.com"
+                }
+            };
+
+            // 1- Save invitation
+            BApplicantsResponses({applicationID:appID,request:message}).save( function(err,invitation) {
+
+                // 2- Send invitation email
+                // ToDo: Change base url
+                message.html += '<a href="http://localhost:5000/applicant/message/view/2/' + invitation._id + '">Invitation</a>';
+                mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
+
+                // 3- Save new stage
+                var newStage = {
+                    stage: req.body.data.stage,
+                    subStage: req.body.data.subStage,
                 };
 
                 BApplications.update({_id:appID}, {stage:newStage}, function(err) {

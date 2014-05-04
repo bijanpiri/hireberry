@@ -628,14 +628,20 @@ function initWorkflow(candidateObj,candidate) {
         e.stopPropagation();
 
         var to = prompt('To:');
+        var date = '2015-05-07';
         if( to ) {
-            gotoNewStage(2,1,to);
+            gotoNewStage(2,1,{invitedEmail:to,interviewDate:date});
         }
     });
 
     candidateObj.find('.offerButton').click( function(e) {
         e.stopPropagation();
-        gotoNewStage(3,1);
+
+        var to = prompt('To:');
+        var date = '2015-05-07';
+        if( to ) {
+            gotoNewStage(3,1,{offeredEmail:to});
+        }
     });
 
     candidateObj.find('.askForCommentButton').click( function(e) {
@@ -644,10 +650,15 @@ function initWorkflow(candidateObj,candidate) {
     });
 
 
-    function gotoNewStage(newStage,newSubStage,invitedEmail) {
+    function gotoNewStage(newStage,newSubStage,moreData) {
+        var data = { stage:newStage ,subStage:newSubStage };
+
+        for( var key in moreData )
+            data[key] = moreData[key];
+
         $.post( '/api/applications/' + candidate._id, {
             activity:0,
-            data:{ stage:newStage ,subStage:newSubStage, invitedEmail:invitedEmail }
+            data:data
         }).done( function(res) {
                 changeWorkflowStage(candidateObj,candidate,newStage,newSubStage);
             });
@@ -666,6 +677,9 @@ function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
     // Show selected stage
     var cssSelector = '.candidate-workflow-stage.' + stages[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
     candidateObj.find(cssSelector).show();
+
+    if( stageNo==1 )
+        candidateObj.find('.candidate-workflow-stage.' + stages[1] +' .interviewDate').text( candidate.stage.interviewDate );
 }
 
 function fillCalendar() {
