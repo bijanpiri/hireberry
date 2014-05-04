@@ -104,17 +104,42 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
-            <div class="container-fluid teamContainer sectionContainer" hidden>
-                <div class="row-fluid">
-                    <div class="offset9 span3">
+<div class="container-fluid teamContainer sectionContainer" hidden>
+    <div class="row-fluid">
+        <div class="offset9 span3">
+            <a href="#team-settings-dialog" role="button"
+               class="btn btn-warning " data-toggle="modal" hidden>
+                <i class="icon-cog "></i>
+                Team Settings</a>
+            <a href="#team-invitation-dialog" role="button"
+               class="btn btn-success " data-toggle="modal" hidden>
+                <i class="bool-icon bool-icon-email"></i>
+                Invite</a>
+        </div>
+    </div>
 
+    <div class="row-fluid teamHeader">
+        <div class="span6 ">
+            <button type="button" class="btn btn-default btn-lg ">
+                <i class="icon-home"></i>
+            </button>
+            <span class="teamAddress"></span>
+        </div>
+        <div class="span3 ">
+            <button type="button" class="btn btn-default btn-lg no-border-box">
+               <i class="glyphicon glyphicon-phone "></i>
+            </button>
+            <span class="teamPhone"></span>
 
-                        <a href="#team-settings-dialog" role="button"
-                           class="btn btn-large btn-danger" data-toggle="modal">Team Settings</a>
-                        <!-- Modal -->
-                    </div>
-                </div>
+        </div>
+        <div class="span3 ">
+
+        </div>
+    </div>
 
                 <div class="row-fluid teamHeader">
                     <div class="span3 offset9">
@@ -521,7 +546,7 @@
     </div>
     <div class="bool-alert-group">
         <div class="alert alert-dismissable alert-info bool-alert-toast hide">
-            <a class="close" data-dismiss="alert">&times;</a>
+            <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
             <strong>Updating </strong> Team settings...
         </div>
         <div class="alert alert-dismissable alert-danger bool-alert-toast hide">
@@ -531,9 +556,9 @@
             <button type="submit" class="btn btn-info" data-loading-text="Updating ...">Try now</button>
         </div>
         <div class="alert alert-dismissable alert-success bool-alert-toast hide">
-            <a class="close" data-dismiss="alert">&times;</a>
+            <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
             Team settings has been updated
-            <stron>successfully.</stron>
+            <strong>successfully.</strong>
         </div>
     </div>
 </form>
@@ -576,12 +601,59 @@
 <div id="applicationPreview">
 </div>
 
-<div id="teamInvitationModal">
-    <p>Send invatation to other members of your team to join:</p>
-    <textarea placeholder="Write a note ..."></textarea>
-    <input type="email" id="inviteEmail" placeholder="example@example.com">
-    <button id="sendInvitationButton" class="btn btn-warning">Send Invitation</button>
-</div>
+
+<form id='teamInvitationForm' class="form-horizontal no-border-box" method="post">
+    <div id="team-invitation-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="invitationSetLabel">Invitation Form</h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group">
+                <label class="control-label" for="invitationNote">Note</label>
+                <div class="controls">
+                    <textarea
+                            id="invitationNote"
+                            placeholder="You are invited to join our group"
+                            name="note"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="invitationEmail">Email</label>
+                <div class="controls">
+                    <input type="text" id="invitationEmail"
+                           placeholder="Enter email address to invite"
+                           name="email">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button type="submit" class="btn btn-primary"
+
+                    data-loading-text="Sending...">Send Invitation
+            </button>
+        </div>
+    </div>
+    <div class="bool-alert-group">
+        <div class="alert alert-dismissable alert-info bool-alert-toast hide">
+            <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
+            <strong>Sending </strong> Team invitation...
+        </div>
+        <div class="alert alert-dismissable alert-danger bool-alert-toast hide">
+            <a class="close" data-dismiss="alert">&times;</a>
+            <strong>Faield </strong> to send invitation. Retrying in
+            <span class="bool-retry-timeout">10</span>s...
+            <button type="submit" class="btn btn-info" data-loading-text="Sending ...">Try now</button>
+        </div>
+        <div class="alert alert-dismissable alert-success bool-alert-toast hide">
+            <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
+            Team invitation has been sent
+            <strong>successfully.</strong>
+        </div>
+    </div>
+</form>
 
 <div id="positionComments">
     <div class="comments"></div>

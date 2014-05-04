@@ -2,7 +2,7 @@
  * Created by Bijan on 04/29/2014.
  */
 
-// region Team
+
 app.post('/api/team/settings',function(req,res){
     if(!checkUser(req,res))
         return;
@@ -76,8 +76,8 @@ app.post('/api/team/invite', function(req,res){
 
     var teamID = req.user.teamID;
     var invitedEmail = req.body.email;
-
-    inviteToTeam( invitedEmail, teamID, function() {
+    var note=req.body.note;
+    inviteToTeam( invitedEmail, teamID, note, function() {
         res.send(200);
     });
 
@@ -222,39 +222,18 @@ app.get('/api/team/members',function(req,res){
     var teamID = req.user.teamID;
     var members = [];
 
-    BTeams.findOne({_id:teamID}).populate('members admin').exec( function(err,team){
+    BTeams.findOne({_id:teamID})
+        .populate('members','_id displayName email')
+        .populate('admin','_id displayName email')
+        .exec( function(err,team){
         if(err || !team)
             return res.send(305);
-
-        members = team.members.map( function(member) {
-            return {
-                _id: member._id,
-                email: member.email,
-                displayName: member.displayName,
-                status:'joint',
-                role: (member._id.toString()==team.admin._id.toString() ? 'admin' : 'member')
-            }
-        })
-
-        BInvitations.find({inviterTeam:teamID}, function(err,invitedPersons) {
-            if(err)
-                return res.send(305);
-
-            for(var i=0; i<invitedPersons.length; i++) {
-                members.push({
-                    email: invitedPersons[i].invitedEmail,
-                    status:'invited',
-                    role: 'member'
-                });
-            }
-
+        BTeamInvitations.find({team:teamID},{email:1}, function(err,invitedPersons) {
 
             res.send(200,{
-                teamID: team._id,
-                teamName: team.name,
-                teamAdminEmail: team.admin.email,
-                isAdmin: (team.admin._id.toString()===req.user._id.toString()),
-                members: members
+                team:team,
+                user :req.user._id,
+                invited:invitedPersons
             });
         });
 
@@ -293,4 +272,4 @@ app.get('/api/team/:teamID/positions',function(req,res){
         })
 });
 
-// endregion
+

@@ -79,10 +79,10 @@ BEvents = mongoose.model( 'events', {
     time: Date
 })
 
-BInvitations = mongoose.model( 'invitations', {
-    inviterTeam: {type : mongoose.Schema.ObjectId, ref : 'teams'},
-    invitedEmail: String,
-    inviteTime: String,
+BTeamInvitations = mongoose.model( 'invitations', {
+    team: {type : mongoose.Schema.ObjectId, ref : 'teams'},
+    email: String,
+    time: String,
     note:String
 })
 

@@ -168,11 +168,12 @@ changeRoleInTeam=function(userID,teamID,newRole,callback) {
     }
 }
 
-inviteToTeam=function( invitedEmail, teamID, callback ) {
-    BInvitations({
-        invitedEmail: invitedEmail,
-        inviterTeam: teamID,
-        inviteTime: new Date()})
+inviteToTeam=function( invitedEmail, teamID, note, callback ) {
+    BTeamInvitations({
+        email: invitedEmail,
+        team: teamID,
+        note: note,
+        time: new Date()})
         .save( function(err) {
             callback(err);
         })

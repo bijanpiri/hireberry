@@ -23,8 +23,8 @@ app.get('/api/user/invitations', function(req,res){
 
     var email = req.user.email;
 
-    BInvitations.find({invitedEmail:email})
-        .populate('inviterTeam')
+    BTeamInvitations.find({email:email})
+        .populate('team')
         .exec(function(err,invitations) {
             if(!err)
                 res.send(200,invitations);
@@ -43,7 +43,7 @@ app.post('/api/user/team/join', function(req,res){
     var invitationID = req.body.invitationID;
     var answer = req.body.answer;
 
-    BInvitations.remove( {_id:invitationID} ,function() {
+    BTeamInvitations.remove( {_id:invitationID} ,function() {
 
         if( answer === 'accept' ) {
             //changeRoleInTeam( userID, oldTeamID, 'user', function(err) {

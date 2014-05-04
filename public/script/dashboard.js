@@ -7,14 +7,51 @@ var teamMembers = [];
 var forms = [];
 
 //google.load("visualization", "1");
+function teamInvitation(){
+    $('#teamInvitationForm').submit(function(){
+        var form=$(this);
+        form.find('.alert-info').show();
+        $.post('/api/team/invite',form.serialize())
+            .always(function(){
+                $('.alert').hide();
+                $('#team-invitation-dialog').modal('hide');
+                refresh(true);
+            })
+            .done( function() {
+                form.find('.alert-success').show().delay(2000).fadeOut();
+                $('#invitationEmail').val('');
+                $('#invitationNote').val('');
+                getTeamInfo();
+            }).fail(function(){
+                form.find('.alert-danger').show();
+            });
+        return false;
+
+    })
+}
 function teamSettings(){
     $('#teamSettingForm').submit(function(event){
+        var form=$(this);
+        form.find('.alert-info').show();
         $.post('/api/team/settings',
+<<<<<<< HEAD
                 $(this).serialize())
             .always(function(data){
                 fillTeamSetting();
 //                alert(data);
+=======
+            form.serialize())
+            .always(function(data){
+                $('.alert').hide();
+>>>>>>> Added team invitation
                 $('#team-settings-dialog').modal('hide');
+                refresh(true);
+
+            }).fail(function(data){
+                form.find('.alert-danger').show();
+            }).done(function(data){
+                form.find('.alert-success').show().delay(2000).fadeOut();
+
             });
         event.preventDefault();
         return false;
@@ -59,6 +96,7 @@ function fillTeamSetting(){
 $(function(){
     teamSettings();
     fillTeamSetting();
+    teamInvitation();
     $('button[data-loading-text]').click(function(){
         var btn=$(this);
         btn.button('loading');
@@ -102,14 +140,6 @@ $(function(){
         height: 400
     });
 
-    $('#teamInvitationModal').dialog({
-        resizable: false,
-        autoOpen: false,
-        modal: true,
-        title: "Invite",
-        width: 400,
-        height: 300
-    });
 
     $('#teamNameChange').click( function() {
         var newName = prompt('Enter new name:');
@@ -152,12 +182,11 @@ function refresh(once) {
             $('.colAssignedTo select option').remove();
 
             for( var i=0; i<teamMembers.length; i++ ){
-                if( teamMembers[i].status === 'joint') {
-                    var option = $('<option>')
-                        .attr('userID',teamMembers[i]._id)
-                        .text(teamMembers[i].displayName);
-                    $('.colAssignedTo select').append( option.clone() );
-                }
+                var option = $('<option>')
+                    .attr('userID',teamMembers[i]._id)
+                    .text(teamMembers[i].displayName);
+                $('.colAssignedTo select').append( option.clone() );
+
             }
 
         });
@@ -261,16 +290,16 @@ function fillAskedForComments() {
     function showInvitations(resInvitations) {
         for( var i=0; i<resInvitations.length; i++ ) {
 
-            var teamID = resInvitations[i].inviterTeam._id;
+            var teamID = resInvitations[i].team._id;
             var invitationID = resInvitations[i]._id;
             var objID = 'invitation_' + invitationID;
 
             var dateObj = $('<div>')
-                .text( 'At ' + (new Date(resInvitations[i].inviteTime)).toLocaleString() )
+                .text( 'At ' + (new Date(resInvitations[i].time)).toLocaleString() )
                 .addClass('comment_date');
 
             var titleObj = $('<div>')
-                .text('Invited to ' +  resInvitations[i].inviterTeam.name);
+                .text('Invited to ' +  resInvitations[i].team.name);
 
             var acceptBtnObj = $('<a>').addClass('btn btn-success btn-mini')
                 .attr('invitationID',invitationID)
@@ -784,7 +813,7 @@ function rowClicked(data) {
     $('#teamMembersForComment option').remove();
 
     for( var i=0; i<teamMembers.length; i++ ){
-        if( teamMembers[i].status === 'joint' ) {
+
             var option = $('<option>')
                 .attr('name',teamMembers[i]._id)
                 .attr('id',teamMembers[i]._id)
@@ -792,7 +821,7 @@ function rowClicked(data) {
             $('#teamMembersForAssign').append( option.clone() );
             $('#teamMembersForComment').append( option.clone() );
         }
-    }
+
 }
 
 function loadDecisionBox(activity,applicationID) {
@@ -807,31 +836,30 @@ function getAvatar(email) {
 
 function getTeamInfo(callback) {
     $.get('/api/team/members').done( function(res){
-        $('#teamJobsPage').attr('href','/team/' +  res.teamID + '/jobs')
-        $('#teamName').text( res.teamName );
-        $('#teamAdmin').text( res.teamAdminEmail );
+        $('#teamJobsPage').attr('href','/team/' +  res.team._id + '/jobs')
+        $('#teamName').text( res.team.name);
+        $('#teamAdmin').text( res.team.admin.email);
 
-        $('#currentTeamName').text( res.teamName );
-
-        $('#teamInviteButton').unbind('click').click( function() {
-            $('#teamInvitationModal').dialog("open");
-        });
+        $('#currentTeamName').text( res.team.name);
 
         if( res.isAdmin===true ) {
             $('#teamNameChange').show();
             $('#teamAdminChange').show();
         }
 
-        teamMembers = res.members;
+        teamMembers = res.team.members;
 
-        $('#assignTo').html('')
+        $('#assignTo').html('');
         $('#teamMembers').html('');
+        var userAdmin=res.team.admin._id==res.user;
+        for( var i=0; i<res.team.members.length; i++ ){
+            var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.team.members[i].email));
+            var emailObj = $('<div>').addClass('teamMemberEmail').text(res.team.members[i].displayName);
+            var roleObj = $('<div>').addClass('teamMemberRole').text(
+                    res.team.members[i]._id==res.team.admin._id ?
+                        'Hiring Manager': 'Member');
 
-        for( var i=0; i<res.members.length; i++ ){
-            var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.members[i].email) );
-            var emailObj = $('<div>').addClass('teamMemberEmail').text(res.members[i].displayName);
-            var roleObj = $('<div>').addClass('teamMemberRole').text( res.members[i].role );
-            var makeAdminObj = $('<div>').attr('userID',res.members[i]._id)
+            var makeAdminObj = $('<div>').attr('userID',res.team.members[i]._id)
                 .addClass('teamMemberMakeAdmin btn')
                 .hide()
                 .text( 'Make Admin')
@@ -841,29 +869,26 @@ function getTeamInfo(callback) {
                         refresh(true)
                     })
                 });
-            var statusObj = $('<div>').addClass('teamMemberStatus').text( res.members[i].status );
+
             var memberObj = $('<div>').addClass('teamMember')
                 .append( avatarObj )
                 .append( emailObj )
-                .append( res.isAdmin ? makeAdminObj : '' )
-                .append( roleObj )
-                .append( statusObj );
-
+                .append( userAdmin ? makeAdminObj : '' )
+                .append( roleObj );
 
             $('#teamMembers').append( memberObj );
         }
 
+         $('a[href=#team-settings-dialog]').toggleClass('hide',!userAdmin);
+         $('a[href=#team-invitation-dialog]').toggleClass('hide',!userAdmin);
+        $('a[href=#team-]').hide();
+        $('.teamAddress').html(res.team.address)
+        $('.teamPhone').html(res.team.tel);
+
         callback();
     });
 
-    $('#sendInvitationButton').click( function() {
-        $.post('/api/team/invite',{ email: $('#inviteEmail').val() })
-            .done( function() {
-                alert('Invitation is sent.')
-                $('#inviteEmail').val('');
-                getTeamInfo();
-            });
-    });
+
 }
 
 function selectAssignedToFromList() {

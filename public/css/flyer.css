@@ -141,6 +141,7 @@ Whole Paper
     padding: 10px 0;
     position: fixed;
     width:100%;
+    overflow: visible;
 }
 
 .portletSubmittion {
