@@ -34,16 +34,9 @@ function teamSettings(){
         var form=$(this);
         form.find('.alert-info').show();
         $.post('/api/team/settings',
-<<<<<<< HEAD
-                $(this).serialize())
-            .always(function(data){
-                fillTeamSetting();
-//                alert(data);
-=======
             form.serialize())
             .always(function(data){
                 $('.alert').hide();
->>>>>>> Added team invitation
                 $('#team-settings-dialog').modal('hide');
                 refresh(true);
 
