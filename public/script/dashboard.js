@@ -459,14 +459,15 @@ function fillPositionsList( callback ) {
                     });;
 
                     // ToDo: Use enumeration instead of string for comparing
+                    var mode = form.mode.toLocaleLowerCase();
                     if( userAdmin ) {
-                        if(form.mode==='published')
+                        if(mode==='published')
                             modal.find('.jobStatus-next').append(draftOption)// Draft
                         else
                             modal.find('.jobStatus-next').append(publishOption) // Publish
                     }
                     else {
-                        if(form.mode==='published' || form.mode==='asked for publish')
+                        if(mode==='published' || mode==='asked for publish')
                             modal.find('.jobStatus-next').append(draftOption) // Draft
                         else
                             modal.find('.jobStatus-next').append(askForPublishOption) // Ask For Publish
@@ -479,6 +480,7 @@ function fillPositionsList( callback ) {
                     modal.find('.saveButton').click( function() {
                         var responderID = $('[name=jobResponder]').val();
                         $.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
+                        modal.modal('hide')
                     })
 
                     modal.modal();
