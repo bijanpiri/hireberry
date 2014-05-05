@@ -36,7 +36,7 @@ function teamSettings(){
         var form=$(this);
         form.find('.alert-info').show();
         $.post('/api/team/settings',
-            form.serialize())
+                form.serialize())
             .always(function(data){
                 $('.alert').hide();
                 $('#team-settings-dialog').modal('hide');
@@ -187,15 +187,23 @@ function fillAskedForComments() {
 
             $.get('/api/user/invitations').done( function(resInvitations){
 
-                var A4C_applicatinos = resApp.applications;
-                var A4C_forms = resForm.forms;
+                $.get('/api/user/form/askedForPublish').done( function(askedForPublish){
 
-                var badgeNum = resApp.applications.length + resForm.forms.length + resInvitations.length;
-                $('#comments_badge').text(badgeNum);
+                    var A4P_forms = askedForPublish;
+                    var A4C_applicatinos = resApp.applications;
+                    var A4C_forms = resForm.forms;
 
-                showApplications(A4C_applicatinos);
-                showForms(A4C_forms);
-                showInvitations(resInvitations);
+                    var badgeNum = resApp.applications.length
+                        + resForm.forms.length
+                        + resInvitations.length
+                        + A4P_forms.length;
+                    $('#comments_badge').text(badgeNum);
+
+                    showAskedForPublish(A4P_forms);
+                    showApplications(A4C_applicatinos);
+                    showForms(A4C_forms);
+                    showInvitations(resInvitations);
+                });
             });
         });
     })
@@ -212,15 +220,13 @@ function fillAskedForComments() {
             var dateObj = $('<div>')
                 .text( 'At ' + (new Date(a4c.askingTime)).toLocaleString() )
                 .addClass('comment_date');
-            if(!a4c.applicationID)
-                a4c.applicationID={_id:'33'};
 
             var titleObj = $('<div>')
                 .text('You are asked to put your comment about ')
                 .append( $('<a>').attr('applicationID',a4c.applicationID._id).text('this application')
                     .click( function() {
-                    showApplicationPreview( $(this).attr('applicationID') );
-                }))
+                        showApplicationPreview( $(this).attr('applicationID') );
+                    }))
 
             var textAreaObj = $('<textarea>')
                 .attr('id','comment_app_' + a4c.applicationID._id)
@@ -365,7 +371,29 @@ function fillAskedForComments() {
 
         $('#applicationPreview').dialog('open');
     }
+
+    function showAskedForPublish(akedForPublishList) {
+
+        for( var i=0; i<akedForPublishList.length; i++ ) {
+
+            var formID = akedForPublishList[i];
+
+            var titleObj = $('<div>')
+                .text('You are aksed for publish a form');
+            var actionObj = $('<a>')
+                .text('Revise it')
+                .attr('href','/' + formID)
+                .click( function() {
+                    // ToDo: Remove this notification from database
+                    // ToDo: Remove element from DOM
+                    decreaseBudgeNumber();
+                });
+
+            $('#askedForCommentList').append( $('<li>').append(titleObj).append(actionObj) );
+        }
+    }
 }
+
 
 function fillPositionsList( callback ) {
 
@@ -382,21 +410,13 @@ function fillPositionsList( callback ) {
 
             var titleObj = $('<span>')
                 .addClass('positionTitle')
-                .text(form.formName)
-                .click( function() {
-                    window.open('/flyer/edit/0?flyerid=' + form.formID);
-                });
+                .text(form.formName);
 
             var stateObj = $('<span>')
                 .addClass('positionMode')
                 .text(form.mode);
 
-            var creatorObj = $('<span>')
-                .addClass('positionCreator')
-                .text( form.creator.displayName);
-
-            var assigneeObj = $('<select>')
-                .attr('formID', form.formID)
+            var assigneeObj = $('<span>')
                 .addClass('positionAssignee')
                 .text((form.autoAssignedTo ? form.autoAssignedTo.displayName : 'No One') )
                 .change( function(){
@@ -409,27 +429,25 @@ function fillPositionsList( callback ) {
                         });
                 })
 
-            var editBtnObj = $('<a>')
-                .addClass('btn btn-mini btn-primary')
-                .attr('href','')
-                .text('edit')
+            var settingBtnObj = $('<a>')
+                .addClass('fa fa-cogs')
+                .attr('href','#')
                 .click( function() {
-                    window.open('/flyer/edit/0?flyerid=' + form.formID);
+                    $('#job-setting-dialog').modal();
                 });
 
+            var editBtnObj = $('<a>')
+                .addClass('fa fa-pencil-square-o')
+                .attr('href','/flyer/edit/0?flyerid=' + form.formID);
+
             var viewBtnObj = $('<a>')
-                .addClass('btn btn-mini btn-warning')
-                .attr('href','')
-                .text('view')
-                .click( function() {
-                    window.open('/flyer/view/0?flyerid=' + form.formID);
-                });
+                .addClass('fa fa-eye')
+                .attr('href','/flyer/embeded/' + form.formID);
 
             row.find('.colTitle').html('').append(titleObj);
             row.find('.colStatus').html('').append(stateObj);
-            row.find('.colCreator').html('').append(creatorObj);
             row.find('.colAssignedTo').html('').append(assigneeObj);
-            //row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj);
+            row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj).append(settingBtnObj);
 
             row.addClass('position').attr('id',form.formID);
             $('.positionsContainer').append( row );
@@ -438,6 +456,7 @@ function fillPositionsList( callback ) {
         callback();
     })
 }
+
 
 function fillTable() {
 
@@ -470,7 +489,7 @@ function fillTable() {
                     .submit( function() {
                         var form=$(this);
                         $.post('/api/team/application/askForComment',
-                            form.serialize())
+                                form.serialize())
                             .always(function(){
                                 $('.alert').hide();
 //                                refresh(true);
@@ -594,7 +613,7 @@ function fillTable() {
 
 
 
-    });
+        });
 
     $('#applicationsTable').WATable({
         url: '/api/applications',
@@ -629,21 +648,42 @@ function initWorkflow(candidateObj,candidate) {
     candidateObj.find('.interviewButton').click( function(e) {
         e.stopPropagation();
 
-        var to = prompt('To:');
-        var date = '2015-05-07';
-        if( to ) {
-            gotoNewStage(2,1,{invitedEmail:to,interviewDate:date});
-        }
+        // Prepare interview invitation modal and show it
+        var modal = $('#interview-invitation-dialog');
+        modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.sendButton').unbind('click').click( function() {
+            gotoNewStage(2,1,{
+                invitedName: candidate.name,
+                invitedEmail: modal.find('.emailAddress').val(),
+                invitationMessage: modal.find('.invitationMessage').val(),
+                interviewDate: modal.find('.interviewDate').val() + ' ' + modal.find('.interviewTime').val()
+            });
+            modal.modal('hide')
+        });
+        modal.modal();
     });
 
     candidateObj.find('.offerButton').click( function(e) {
         e.stopPropagation();
 
-        var to = prompt('To:');
-        var date = '2015-05-07';
-        if( to ) {
-            gotoNewStage(3,1,{offeredEmail:to});
-        }
+        // Prepare job offer modal and show it
+        var modal = $('#job-offer-dialog');
+        modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.sendButton').unbind('click').click( function() {
+            gotoNewStage(3,1,{
+                offeredEmail: modal.find('.emailAddress').val(),
+                offerMessage:  modal.find('.offerMessage').val()
+            });
+            modal.modal('hide')
+        });
+        modal.modal();
+    });
+
+    candidateObj.find('.askForCommentButton').click( function(e) {
+        e.stopPropagation();
+
+        // ToDo: Connect to real ask for comment function
+        alert('A4C');
     });
 
 
@@ -818,13 +858,13 @@ function rowClicked(data) {
 
     for( var i=0; i<teamMembers.length; i++ ){
 
-            var option = $('<option>')
-                .attr('name',teamMembers[i]._id)
-                .attr('id',teamMembers[i]._id)
-                .text(teamMembers[i].displayName);
-            $('#teamMembersForAssign').append( option.clone() );
-            $('#teamMembersForComment').append( option.clone() );
-        }
+        var option = $('<option>')
+            .attr('name',teamMembers[i]._id)
+            .attr('id',teamMembers[i]._id)
+            .text(teamMembers[i].displayName);
+        $('#teamMembersForAssign').append( option.clone() );
+        $('#teamMembersForComment').append( option.clone() );
+    }
 
 }
 
@@ -860,8 +900,8 @@ function getTeamInfo(callback) {
             var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.team.members[i].email));
             var emailObj = $('<div>').addClass('teamMemberEmail').text(res.team.members[i].displayName);
             var roleObj = $('<div>').addClass('teamMemberRole').text(
-                    res.team.members[i]._id==res.team.admin._id ?
-                        'Hiring Manager': 'Member');
+                res.team.members[i]._id==res.team.admin._id ?
+                    'Hiring Manager': 'Member');
 
             var makeAdminObj = $('<div>').attr('userID',res.team.members[i]._id)
                 .addClass('teamMemberMakeAdmin btn')
@@ -883,8 +923,8 @@ function getTeamInfo(callback) {
             $('#teamMembers').append( memberObj );
         }
 
-         $('a[href=#team-settings-dialog]').toggleClass('hide',!userAdmin);
-         $('a[href=#team-invitation-dialog]').toggleClass('hide',!userAdmin);
+        $('a[href=#team-settings-dialog]').toggleClass('hide',!userAdmin);
+        $('a[href=#team-invitation-dialog]').toggleClass('hide',!userAdmin);
         $('a[href=#team-]').hide();
         $('.teamAddress').html(res.team.address)
         $('.teamPhone').html(res.team.tel);
