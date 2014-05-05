@@ -36,7 +36,7 @@ function teamSettings(){
         var form=$(this);
         form.find('.alert-info').show();
         $.post('/api/team/settings',
-            form.serialize())
+                form.serialize())
             .always(function(data){
                 $('.alert').hide();
                 $('#team-settings-dialog').modal('hide');
@@ -187,15 +187,23 @@ function fillAskedForComments() {
 
             $.get('/api/user/invitations').done( function(resInvitations){
 
-                var A4C_applicatinos = resApp.applications;
-                var A4C_forms = resForm.forms;
+                $.get('/api/user/form/askedForPublish').done( function(askedForPublish){
 
-                var badgeNum = resApp.applications.length + resForm.forms.length + resInvitations.length;
-                $('#comments_badge').text(badgeNum);
+                    var A4P_forms = askedForPublish;
+                    var A4C_applicatinos = resApp.applications;
+                    var A4C_forms = resForm.forms;
 
-                showApplications(A4C_applicatinos);
-                showForms(A4C_forms);
-                showInvitations(resInvitations);
+                    var badgeNum = resApp.applications.length
+                        + resForm.forms.length
+                        + resInvitations.length
+                        + A4P_forms.length;
+                    $('#comments_badge').text(badgeNum);
+
+                    showAskedForPublish(A4P_forms);
+                    showApplications(A4C_applicatinos);
+                    showForms(A4C_forms);
+                    showInvitations(resInvitations);
+                });
             });
         });
     })
@@ -217,8 +225,8 @@ function fillAskedForComments() {
                 .text('You are asked to put your comment about ')
                 .append( $('<a>').attr('applicationID',a4c.applicationID._id).text('this application')
                     .click( function() {
-                    showApplicationPreview( $(this).attr('applicationID') );
-                }))
+                        showApplicationPreview( $(this).attr('applicationID') );
+                    }))
 
             var textAreaObj = $('<textarea>')
                 .attr('id','comment_app_' + a4c.applicationID._id)
@@ -362,6 +370,27 @@ function fillAskedForComments() {
 
 
         $('#applicationPreview').dialog('open');
+    }
+
+    function showAskedForPublish(akedForPublishList) {
+
+        for( var i=0; i<akedForPublishList.length; i++ ) {
+
+            var formID = akedForPublishList[i];
+
+            var titleObj = $('<div>')
+                .text('You are aksed for publish a form');
+            var actionObj = $('<a>')
+                .text('Revise it')
+                .attr('href','/' + formID)
+                .click( function() {
+                    // ToDo: Remove this notification from database
+                    // ToDo: Remove element from DOM
+                    decreaseBudgeNumber();
+                });
+
+            $('#askedForCommentList').append( $('<li>').append(titleObj).append(actionObj) );
+        }
     }
 }
 
@@ -569,7 +598,7 @@ function fillTable() {
 
 
 
-    });
+        });
 
     $('#applicationsTable').WATable({
         url: '/api/applications',
@@ -632,7 +661,7 @@ function initWorkflow(candidateObj,candidate) {
             });
             modal.modal('hide')
         });
-       modal.modal();
+        modal.modal();
     });
 
     candidateObj.find('.askForCommentButton').click( function(e) {
@@ -814,13 +843,13 @@ function rowClicked(data) {
 
     for( var i=0; i<teamMembers.length; i++ ){
 
-            var option = $('<option>')
-                .attr('name',teamMembers[i]._id)
-                .attr('id',teamMembers[i]._id)
-                .text(teamMembers[i].displayName);
-            $('#teamMembersForAssign').append( option.clone() );
-            $('#teamMembersForComment').append( option.clone() );
-        }
+        var option = $('<option>')
+            .attr('name',teamMembers[i]._id)
+            .attr('id',teamMembers[i]._id)
+            .text(teamMembers[i].displayName);
+        $('#teamMembersForAssign').append( option.clone() );
+        $('#teamMembersForComment').append( option.clone() );
+    }
 
 }
 
@@ -856,8 +885,8 @@ function getTeamInfo(callback) {
             var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.team.members[i].email));
             var emailObj = $('<div>').addClass('teamMemberEmail').text(res.team.members[i].displayName);
             var roleObj = $('<div>').addClass('teamMemberRole').text(
-                    res.team.members[i]._id==res.team.admin._id ?
-                        'Hiring Manager': 'Member');
+                res.team.members[i]._id==res.team.admin._id ?
+                    'Hiring Manager': 'Member');
 
             var makeAdminObj = $('<div>').attr('userID',res.team.members[i]._id)
                 .addClass('teamMemberMakeAdmin btn')
@@ -879,8 +908,8 @@ function getTeamInfo(callback) {
             $('#teamMembers').append( memberObj );
         }
 
-         $('a[href=#team-settings-dialog]').toggleClass('hide',!userAdmin);
-         $('a[href=#team-invitation-dialog]').toggleClass('hide',!userAdmin);
+        $('a[href=#team-settings-dialog]').toggleClass('hide',!userAdmin);
+        $('a[href=#team-invitation-dialog]').toggleClass('hide',!userAdmin);
         $('a[href=#team-]').hide();
         $('.teamAddress').html(res.team.address)
         $('.teamPhone').html(res.team.tel);

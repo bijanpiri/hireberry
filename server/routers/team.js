@@ -155,6 +155,22 @@ app.get('/api/user/form/askedForComment',function(req,res){
     })
 });
 
+app.get('/api/user/form/askedForPublish',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    BTeams.count({_id:req.user.teamID,admin:req.user._id}, function(err,count){
+        if( !err && count > 0 ) {
+            BFlyers.find({owner:req.user.teamID, askedForPublish:true}, function(err,askedForPublishList) {
+                res.send(200, askedForPublishList.map( function(item) {return item._id} ))
+            })
+        } else {
+            res.send(200,[]);
+        }
+    })
+});
+
 app.get('/api/application/comments',function(req,res){
 
     if( !checkUser(req,res) )
