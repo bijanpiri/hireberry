@@ -37,7 +37,7 @@ module.exports.forms = function(req,res){
                 ]
             });
         else    // Team member
-            findFlyers({owner: teamID, $or:[{creator:userID}, {autoAssignedTo:userID}]});
+            findFlyers({owner: teamID, $or:[{autoAssignedTo:userID}]});
     });
 
     function findFlyers(query) {
