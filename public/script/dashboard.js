@@ -614,21 +614,31 @@ function initWorkflow(candidateObj,candidate) {
     candidateObj.find('.interviewButton').click( function(e) {
         e.stopPropagation();
 
-        var to = prompt('To:');
-        var date = '2015-05-07';
-        if( to ) {
-            gotoNewStage(2,1,{invitedEmail:to,interviewDate:date});
-        }
+        // Prepare interview invitation modal and show it
+        $('#interview-invitation-dialog .emailAddress').val( candidate.email || '' );
+        $('#interview-invitation-dialog .sendButton').unbind('click').click( function() {
+            gotoNewStage(2,1,{
+                invitedEmail:$('#interview-invitation-dialog .emailAddress').val(),
+                invitationMessage: $('#interview-invitation-dialog .invitationMessage').val()
+            });
+            $('#interview-invitation-dialog').modal('hide')
+        });
+        $('#interview-invitation-dialog').modal();
     });
 
     candidateObj.find('.offerButton').click( function(e) {
         e.stopPropagation();
 
-        var to = prompt('To:');
-        var date = '2015-05-07';
-        if( to ) {
-            gotoNewStage(3,1,{offeredEmail:to});
-        }
+        // Prepare job offer modal and show it
+        $('#job-offer-dialog .emailAddress').val( candidate.email || '' );
+        $('#job-offer-dialog .sendButton').unbind('click').click( function() {
+            gotoNewStage(3,1,{
+                offeredEmail:$('#job-offer-dialog .emailAddress').val(),
+                offerMessage: $('#job-offer-dialog .offerMessage').val()
+            });
+            $('#job-offer-dialog').modal('hide')
+        });
+        $('#job-offer-dialog').modal();
     });
 
     candidateObj.find('.askForCommentButton').click( function(e) {

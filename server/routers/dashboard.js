@@ -242,8 +242,8 @@ module.exports.updateApplication = function(req,res) {
         if( req.body.data.stage==2 && req.body.data.subStage==1 ) {
 
             var message = {
-                "html": "<p>Example HTML content</p>",
-                "text": "You are invited to an interview.",
+                "html": req.body.data.invitationMessage,
+                "text": req.body.data.invitationMessage ,
                 "subject": "Interview Invitation",
                 "from_email": "message.from_email@example.com",
                 "from_name": "Booltin",
@@ -262,7 +262,7 @@ module.exports.updateApplication = function(req,res) {
 
                 // 2- Send invitation email
                 // ToDo: Change base url
-                message.html += '<a href="http://localhost:5000/applicant/message/view/1/' + invitation._id + '">Invitation</a>';
+                message.html += '<a href="http://localhost:5000/applicant/message/view/1/' + invitation._id + '">Response to invitation</a>';
                 mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
 
                 // 3- Save new stage
@@ -288,8 +288,8 @@ module.exports.updateApplication = function(req,res) {
         else if( req.body.data.stage==3 && req.body.data.subStage==1 ) {
 
             var message = {
-                "html": "<p>Example HTML content</p>",
-                "text": "You are offer a job.",
+                "html": req.body.data.offerMessage,
+                "text": req.body.data.offerMessage,
                 "subject": "Job Offer",
                 "from_email": "message.from_email@example.com",
                 "from_name": "Booltin",
@@ -308,7 +308,7 @@ module.exports.updateApplication = function(req,res) {
 
                 // 2- Send invitation email
                 // ToDo: Change base url
-                message.html += '<a href="http://localhost:5000/applicant/message/view/2/' + invitation._id + '">Invitation</a>';
+                message.html += '<a href="http://localhost:5000/applicant/message/view/2/' + invitation._id + '">Response to the offer</a>';
                 mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
 
                 // 3- Save new stage

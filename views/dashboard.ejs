@@ -201,34 +201,50 @@
     </div>
 </div>
 <div class="row-fluid tableRow">
-    <div class="span12">
-        <div style="clear: both"></div>
-        <div id="candidatesCollection" class="grid-layout">
-            <div id="candidateInstance" hidden>
-                <div class="candidate-summary">
-                    <div class="sticky">Unread</div>
-                    <div class="candidate-avatar"></div>
-                    <div class="candidate-basicInfo">
-                        <div class="candidate-name">Jon Doe</div>
-                        <a class="btn candidate-resume" target="_blank">View Resume</a>
+<div class="span12">
+<div style="clear: both"></div>
+<div id="candidatesCollection" class="grid-layout">
+    <div id="candidateInstance" hidden>
+        <div class="candidate-summary">
+            <div class="sticky">Unread</div>
+            <div class="candidate-avatar"></div>
+            <div class="candidate-basicInfo">
+                <div class="candidate-name">Jon Doe</div>
+                <a class="btn candidate-resume" target="_blank">View Resume</a>
 
-                        <div class="candidate-profiles">
-                            <img class="profile"
-                                 src="http://static.iconarchive.com/static/images/social/facebook-icon.png">
-                            <img class="profile"
-                                 src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
-                            <img class="profile"
-                                 src="http://static.iconarchive.com/static/images/social/google-plus-icon.png">
-                        </div>
-                        <div class="candidate-job">
-                            Applied for
-                            <span class="value">Front-End Web Developer</span>
-                        </div>
-                        <div class="candidate-time">
-                            Applied at
-                            <span class="value"></span>
-                        </div>
-                    </div>
+                <div class="candidate-profiles">
+                    <img class="profile"
+                         src="http://static.iconarchive.com/static/images/social/facebook-icon.png">
+                    <img class="profile"
+                         src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
+                    <img class="profile"
+                         src="http://static.iconarchive.com/static/images/social/google-plus-icon.png">
+                </div>
+                <div class="candidate-job">
+                    Applied for
+                    <span class="value">Front-End Web Developer</span>
+                </div>
+                <div class="candidate-time">
+                    Applied at
+                    <span class="value"></span>
+                </div>
+            </div>
+            <div class="candidate-conditions">
+                <strong>Conditions:</strong>
+                <span class="value">Part-Time @Home</span>
+            </div>
+            <div class="candidate-skills">
+                <strong>Skills:</strong>
+                <span class="value">CSS, jQuery, Nodejs</span>
+            </div>
+            <div class="candidate-stage">
+                <strong>Stage:</strong>
+                <span class="value">Waiting for Planing an Interview</span>
+            </div>
+        </div>
+        <div class="candidate-details">
+            <div class="candidate-leftColumn">
+                <div class="mbox">
                     <div class="candidate-conditions">
                         <strong>Conditions:</strong>
                         <span class="value">Part-Time @Home</span>
@@ -237,174 +253,158 @@
                         <strong>Skills:</strong>
                         <span class="value">CSS, jQuery, Nodejs</span>
                     </div>
-                    <div class="candidate-stage">
-                        <strong>Stage:</strong>
-                        <span class="value">Waiting for Planing an Interview</span>
-                    </div>
                 </div>
-                <div class="candidate-details">
-                    <div class="candidate-leftColumn">
-                        <div class="mbox">
-                            <div class="candidate-conditions">
-                                <strong>Conditions:</strong>
-                                <span class="value">Part-Time @Home</span>
-                            </div>
-                            <div class="candidate-skills">
-                                <strong>Skills:</strong>
-                                <span class="value">CSS, jQuery, Nodejs</span>
-                            </div>
-                        </div>
+            </div>
+            <div class="candidate-rightColumn">
+                <div class="mbox">
+                    <div class="mbox-title">Contact Info.</div>
+                    <div class="candidate-email">
+                        <strong>Email:</strong>
+                        <span class="value"></span>
                     </div>
-                    <div class="candidate-rightColumn">
-                        <div class="mbox">
-                            <div class="mbox-title">Contact Info.</div>
-                            <div class="candidate-email">
-                                <strong>Email:</strong>
-                                <span class="value"></span>
-                            </div>
-                            <div class="candidate-tel">
-                                <strong>Tel:</strong>
-                                <span class="value"></span>
-                            </div>
-                            <div class="candidate-website">
-                                <strong>Website:</strong>
-                                <span class="value"></span>
-                            </div>
-                        </div>
+                    <div class="candidate-tel">
+                        <strong>Tel:</strong>
+                        <span class="value"></span>
                     </div>
-
-                    <div class="mbox">
-                        <div class="mbox-title">Cover Letter</div>
-                        <div class="candidate-coverLetter"></div>
-                    </div>
-
-                    <div class="candidate-leftColumn">
-                        <div class="mbox">
-                            <div class="mbox-title">Activities</div>
-                            <div class="candidate-activities"></div>
-                        </div>
-                    </div>
-                    <div class="candidate-rightColumn">
-                        <div class="mbox">
-                            <div class="mbox-title">Comments</div>
-                            <div class="candidate-comments">
-                            </div>
-                            <div style="text-align: center;padding: 1em;">
-                                <div class="bool-ask-4-comment-users"></div>
-                                <button class="btn btn-danger askForCommentButton">Ask For Comment</button>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mbox" style="height: auto">
-                        <div class="mbox-title">Workflow</div>
-                        <div class="candidate-workflow">
-                            <div class="candidate-workflow-stages">
-
-                                <div class="candidate-workflow-stage pending">
-                                    <div class="candidate-workflow-substage" sub-stage="1">
-                                        <div>Application is in <strong>Pending</strong> stage. You can:</div>
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="interviewButton">Make an interview</a>
-                                        <a class="offerButton">Offer a job</a>
-                                        <br/>
-                                        Don't know what to do?
-                                        <a class="askForCommentButton">Ask for comment</a>
-                                    </div>
-                                </div>
-
-                                <div class="candidate-workflow-stage interviewing">
-
-                                    <div class="candidate-workflow-substage" sub-stage="1">
-                                        <div>Application is in <strong>Interviewing</strong> stage.</div>
-                                        You planned an interview on <span class="interviewDate">Date-Time</span>.
-                                        We're waiting for applicant's response. Although you can:
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="interviewButton">Reschedule an interview</a>
-                                        <a class="offerButton">Offer a job</a>
-                                    </div>
-
-                                    <div class="candidate-workflow-substage" sub-stage="2">
-                                        <div>Application is in <strong>Interviewing</strong> stage.</div>
-                                        Applicant can't come on <span class="interviewDate">Date-Time</span>. You can:
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="interviewButton">Reschedule an interview</a>
-                                    </div>
-
-                                    <div class="candidate-workflow-substage" sub-stage="3">
-                                        <div>Application is in <strong>Interviewing</strong> stage.</div>
-                                        Interview will be hold on <span class="interviewDate">Date-Time</span>.
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="interviewButton">Reschedule an interview</a>
-                                    </div>
-
-                                    <div class="candidate-workflow-substage" sub-stage="4">
-                                        <div>Application is in <strong>Interviewing</strong> stage.</div>
-                                        Interview is hold on <span class="interviewDate">Date-Time</span>.
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="interviewButton">Make an other interview</a>
-                                        <a class="offerButton">Offer a job</a>
-                                        <br/>
-                                        Don't know what to do?
-                                        <a class="askForCommentButton">Ask for comment</a>
-                                    </div>
-                                </div>
-
-                                <div class="candidate-workflow-stage offered">
-                                    <div class="candidate-workflow-substage" sub-stage="1">
-                                        <div>Application is in <strong>Offered</strong> stage.</div>
-                                        We're waiting for applicant's response.
-                                        Although you can:
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="interviewButton">Make an other interview</a>
-                                    </div>
-                                    <div class="candidate-workflow-substage" sub-stage="2">
-                                        <div>Application is in <strong>Offered</strong> stage.</div>
-                                        This is applicant response: <span>Accepted</span>
-                                        You can:
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="archiveButton">Archive it and notify somebody about this response</a>
-                                    </div>
-                                    <div class="candidate-workflow-substage" sub-stage="3">
-                                        <div>Application is in <strong>Offered</strong> stage.</div>
-                                        This is applicant response: <span>Declined</span>
-                                        You can:
-                                        <a class="archiveButton">Archive it</a>
-                                        <a class="archiveButton">Archive it and notify somebody about this response</a>
-                                    </div>
-                                </div>
-
-                                <div class="candidate-workflow-stage archived">
-                                    <div class="candidate-workflow-substage" sub-stage="1">
-                                        <div>Application is in <strong>Archived</strong> stage. You can:</div>
-                                        <a class="interviewButton">Make an interview</a>
-                                        <a class="offerButton">Offer a job</a>
-                                        <br/>
-                                        Don't know what to do?
-                                        <a class="askForCommentButton">Ask for comment</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="candidate-actions">
-                    </div>
-                    <div class="candidate-addComment">
-                        <div class="candidate-commentBox">
-                            <textarea placeholder="Write your opinion about this candidate ..."></textarea>
-                            <button class="btn">Send</button>
-                        </div>
-                    </div>
-                    <div class="candidate-newComments">
-                        Comments
+                    <div class="candidate-website">
+                        <strong>Website:</strong>
+                        <span class="value"></span>
                     </div>
                 </div>
             </div>
+
+            <div class="mbox">
+                <div class="mbox-title">Cover Letter</div>
+                <div class="candidate-coverLetter"></div>
+            </div>
+
+            <div class="candidate-leftColumn">
+                <div class="mbox">
+                    <div class="mbox-title">Activities</div>
+                    <div class="candidate-activities"></div>
+                </div>
+            </div>
+            <div class="candidate-rightColumn">
+                <div class="mbox">
+                    <div class="mbox-title">Comments</div>
+                    <div class="candidate-comments">
+                    </div>
+                    <div style="text-align: center;padding: 1em;">
+                        <div class="bool-ask-4-comment-users"></div>
+                        <button class="btn btn-danger askForCommentButton">Ask For Comment</button>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="mbox" style="height: auto">
+                <div class="mbox-title">Workflow</div>
+                <div class="candidate-workflow">
+                    <div class="candidate-workflow-stages">
+
+                        <div class="candidate-workflow-stage pending">
+                            <div class="candidate-workflow-substage" sub-stage="1">
+                                <div>Application is in <strong>Pending</strong> stage. You can:</div>
+                                <a class="archiveButton">Archive it</a>
+                                <a class="interviewButton">Make an interview</a>
+                                <a class="offerButton">Offer a job</a>
+                                <br/>
+                                Don't know what to do?
+                                <a class="askForCommentButton">Ask for comment</a>
+                            </div>
+                        </div>
+
+                        <div class="candidate-workflow-stage interviewing">
+
+                            <div class="candidate-workflow-substage" sub-stage="1">
+                                <div>Application is in <strong>Interviewing</strong> stage.</div>
+                                You planned an interview on <span class="interviewDate">Date-Time</span>.
+                                We're waiting for applicant's response. Although you can:
+                                <a class="archiveButton">Archive it</a>
+                                <a class="interviewButton">Reschedule an interview</a>
+                                <a class="offerButton">Offer a job</a>
+                            </div>
+
+                            <div class="candidate-workflow-substage" sub-stage="2">
+                                <div>Application is in <strong>Interviewing</strong> stage.</div>
+                                Applicant can't come on <span class="interviewDate">Date-Time</span>. You can:
+                                <a class="archiveButton">Archive it</a>
+                                <a class="interviewButton">Reschedule an interview</a>
+                            </div>
+
+                            <div class="candidate-workflow-substage" sub-stage="3">
+                                <div>Application is in <strong>Interviewing</strong> stage.</div>
+                                Interview will be hold on <span class="interviewDate">Date-Time</span>.
+                                <a class="archiveButton">Archive it</a>
+                                <a class="interviewButton">Reschedule an interview</a>
+                            </div>
+
+                            <div class="candidate-workflow-substage" sub-stage="4">
+                                <div>Application is in <strong>Interviewing</strong> stage.</div>
+                                Interview is hold on <span class="interviewDate">Date-Time</span>.
+                                <a class="archiveButton">Archive it</a>
+                                <a class="interviewButton">Make an other interview</a>
+                                <a class="offerButton">Offer a job</a>
+                                <br/>
+                                Don't know what to do?
+                                <a class="askForCommentButton">Ask for comment</a>
+                            </div>
+                        </div>
+
+                        <div class="candidate-workflow-stage offered">
+                            <div class="candidate-workflow-substage" sub-stage="1">
+                                <div>Application is in <strong>Offered</strong> stage.</div>
+                                We're waiting for applicant's response.
+                                Although you can:
+                                <a class="archiveButton">Archive it</a>
+                                <a class="interviewButton">Make an other interview</a>
+                            </div>
+                            <div class="candidate-workflow-substage" sub-stage="2">
+                                <div>Application is in <strong>Offered</strong> stage.</div>
+                                This is applicant response: <span>Accepted</span>
+                                You can:
+                                <a class="archiveButton">Archive it</a>
+                                <a class="archiveButton">Archive it and notify somebody about this response</a>
+                            </div>
+                            <div class="candidate-workflow-substage" sub-stage="3">
+                                <div>Application is in <strong>Offered</strong> stage.</div>
+                                This is applicant response: <span>Declined</span>
+                                You can:
+                                <a class="archiveButton">Archive it</a>
+                                <a class="archiveButton">Archive it and notify somebody about this response</a>
+                            </div>
+                        </div>
+
+                        <div class="candidate-workflow-stage archived">
+                            <div class="candidate-workflow-substage" sub-stage="1">
+                                <div>Application is in <strong>Archived</strong> stage. You can:</div>
+                                <a class="interviewButton">Make an interview</a>
+                                <a class="offerButton">Offer a job</a>
+                                <br/>
+                                Don't know what to do?
+                                <a class="askForCommentButton">Ask for comment</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="candidate-actions">
+            </div>
+            <div class="candidate-addComment">
+                <div class="candidate-commentBox">
+                    <textarea placeholder="Write your opinion about this candidate ..."></textarea>
+                    <button class="btn">Send</button>
+                </div>
+            </div>
+            <div class="candidate-newComments">
+                Comments
+            </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 </div>
 
@@ -554,7 +554,6 @@
 </form>
 
 <div id="notificationCenter">
-
     <div class="tongue" isOpen="true">
         <span id="comments_badge"></span>
     </div>
@@ -564,33 +563,55 @@
     </div>
 </div>
 
-<div id="activitiesModal">
-    <div class="container-fluid">
-        <div class="row-fluid"
-             style="padding: 10px;background-color: #CEDFCE;margin: 10px 0;border: 2px solid #2B6F3B;border-radius: 4px;">
-            <div class="span12">
-                <select id="teamMembersForComment" style="margin: 0"></select>
-                <button id="askForCommentOnApplication">Ask For Comment</button>
-                <span id="askForCommentMessage" style="font-size: 1.2em;color: green;padding-left: 1em;"></span>
+<div id="job-offer-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="invitationSetLabel">Offer a job</h3>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <label class="control-label" for="invitationEmail">Email</label>
+            <div class="controls">
+                <input type="text" class="emailAddress" placeholder="Enter email address to invite" name="email">
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span4">
-                <div class="contain" style="max-height: 400px; overflow-y: auto"></div>
-                <div class="commentsHeader">Comments</div>
-                <div class="comments"></div>
-            </div>
-            <div class="span8">
-                <div id="timeline"></div>
-                <div id="decisionBox"></div>
+        <div class="control-group">
+            <label class="control-label" for="invitationNote">Note</label>
+            <div class="controls">
+                <textarea class="offerMessage" placeholder="You are invited to join our group" name="note"></textarea>
             </div>
         </div>
     </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary sendButton" data-loading-text="Sending...">Send Offer</button>
+    </div>
 </div>
 
-<div id="applicationPreview">
+<div id="interview-invitation-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="invitationSetLabel">Interview Invitation Form</h3>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <label class="control-label" for="invitationEmail">Email</label>
+            <div class="controls">
+                <input type="text" class="emailAddress" placeholder="Enter email address to invite" name="email">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="invitationNote">Note</label>
+            <div class="controls">
+                <textarea class="invitationMessage" placeholder="You are invited to join our group" name="note"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary sendButton" data-loading-text="Sending...">Send Invitation</button>
+    </div>
 </div>
-
 
 <form id='teamInvitationForm' class="form-horizontal no-border-box" method="post">
     <div id="team-invitation-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
@@ -620,10 +641,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button type="submit" class="btn btn-primary"
-
-                    data-loading-text="Sending...">Send Invitation
-            </button>
+            <button type="submit" class="btn btn-primary" data-loading-text="Sending...">Send Invitation</button>
         </div>
     </div>
     <div class="bool-alert-group">
