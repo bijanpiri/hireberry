@@ -82,8 +82,12 @@
   min-height: 100px;
   background-color: #fff;
   border: 1px solid #D1D1D1;
-  height: 200px;
+  height: 500px;
   overflow: auto;
+}
+#candidatesCollection.grid-layout .candidate.candidate-expanded .candidate-details .mbox.overflow,
+#candidatesCollection.list-layout .candidate.candidate-expanded .candidate-details .mbox.overflow {
+  overflow: visible;
 }
 #candidatesCollection.grid-layout .candidate.candidate-expanded .candidate-details .mbox .mbox-title,
 #candidatesCollection.list-layout .candidate.candidate-expanded .candidate-details .mbox .mbox-title {
@@ -191,6 +195,15 @@
   float: left;
   padding: 10px;
 }
+#candidatesCollection.grid-layout .candidate.candidate-expanded .icon-plus {
+  display: none;
+}
+#candidatesCollection.grid-layout .candidate .icon-minus {
+  display: none;
+}
+#candidatesCollection.grid-layout .candidate.candidate-expanded .icon-minus {
+  display: inline-block;
+}
 #candidatesCollection.grid-layout .candidate .candidate-summary {
   position: relative;
 }
@@ -204,13 +217,25 @@
   border-radius: 0 0 4px 4px;
   font-weight: 700;
 }
+#candidatesCollection.grid-layout .candidate .candidate-summary .bool-toggle-application {
+  position: absolute;
+  right: 0;
+  top: -1em;
+  background-color: #DCEEA1;
+  border: 1px solid #B5C487;
+  padding: 2px 5px;
+  border-radius: 0 0 4px 4px;
+  font-weight: 700;
+  left: 0;
+  right: inherit;
+}
 #candidatesCollection.grid-layout .candidate .candidate-summary .candidate-avatar {
   display: inline-block;
   height: 84px;
   width: 84px;
   border-radius: 50%;
   border: 3px solid #cecece;
-  margin: 0 10px 0px 10px;
+  margin: 0 10px 0px 50px;
 }
 #candidatesCollection.grid-layout .candidate .candidate-summary .candidate-basicInfo {
   display: inline-block;

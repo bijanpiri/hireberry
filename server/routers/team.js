@@ -122,10 +122,10 @@ app.post('/api/team/application/askForComment', function(req,res){
 
     //var userID = req.user._id;
     var userID = req.body.userID;
-    var applicationID = req.body.applicationID;
-
+    var appID = req.body.appID;
+    var note=req.body.note;
     // Check whether current user is admin or not
-    askForCommentOnApplication('',userID, applicationID, function(err) {
+    askForCommentOnApplication(note,userID, appID, function(err) {
         res.send(200)
     } );
 

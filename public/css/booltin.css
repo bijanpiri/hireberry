@@ -303,3 +303,6 @@ Modals
     z-index: 2000;
 
 }
+.bool-overflow-visible{
+    overflow: visible;
+}
