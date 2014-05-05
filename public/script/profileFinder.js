@@ -21,12 +21,15 @@ function fillProfiles() {
         this.find('.profileAddress input').val('').css('border-bottom','2px solid black');
 
         findGravatar(this, puserInfo.email );
-        findGithubProfile(this, puserInfo.name, puserInfo.pUsername );
-        findDribbbleProfile(this, puserInfo.pUsername, puserInfo.pUsername );
-        findTwitterProfile(this, puserInfo.name, puserInfo.pUsername );
-        findStackoverflowProfile(this, puserInfo.name, puserInfo.pUsername );
+
+        findBehanceProfile(this, puserInfo.pUsername, puserInfo.name);
+        //findDribbbleProfile(this, puserInfo.pUsername, puserInfo.pUsername );
+        //findTwitterProfile(this, puserInfo.name, puserInfo.pUsername );
+
+        findGithubProfile(this, puserInfo.name, puserInfo.pUsername,puserInfo.email );
+        //findStackoverflowProfile(this, puserInfo.name, puserInfo.pUsername );
+
         findLinkedinProfile(this, puserInfo.name)
-        findBehanceProfile(this, puserInfo.pUsername, puserInfo.pUsername );
     }
 }
 
@@ -95,78 +98,285 @@ function findGravatar(profile,q) {
         } );
     }
 
-    $.get('/gravatar/' + q )
+   $.get('/gravatar/' + q )
         .done( function(res) {
             showImage(res.url);
         })
 }
 
-function findGithubProfile(profile,q,p) {
+function findGithubProfile(profile,fullname,username,email) {
 
-    $.get('https://api.github.com/search/users?q=' + q )
+    //https://api.github.com/users/[username]
+    var Result=undefined;
+    var md5=undefined;
+    if(validateEmail(email))
+        md5 = CryptoJS.MD5(email.trim().toLowerCase())
+
+    $.get('https://api.github.com/search/users?q=' + (fullname.replace(' ','%20')).toLocaleLowerCase() )
         .done( function(res){
 
-            if( res.items.length > 0 ){
-                fillProfileAddress( profile.find('input[name=ghprofile]'), res.items[0].login, true);
-            }
-            else {
-                fillProfileAddress( profile.find('input[name=ghprofile]'), p, false);
-            }
+            if( res.items.length > 0 )
+            {
+                if(md5)
+                {
+                    for(var i=0;i<res.items.length;i++)
+                    {
+                        if(res.items[i].gravatar_id==md5)
+                        {
+                            Result=res.items[i];
+                            break;
+                        }
+                    }
+                }
+                else
+                    Result=res.items[0];
 
-            dataIsReceived('github',res);
+                showResultGithubProfile(profile,fullname,Result,md5);
+            }
+            else
+            {
+                if(md5)
+                {
+                    $.get('https://api.github.com/search/users?q=' + email.trim().toLowerCase() )
+                        .done( function(res1){
+                            if( res1.items.length > 0 )
+                            {
+                                for(var i=0;i<res1.items.length;i++)
+                                {
+                                    if(res1.items[i].gravatar_id==md5)
+                                    {
+                                        Result=res1.items[i];
+                                        break;
+                                    }
+                                    else
+                                        Result=res1.items[0];
+                                }
+                            }
+                            showResultGithubProfile(profile,fullname,Result,md5);
+                        });
+                }
+                else
+                    showResultGithubProfile(profile,fullname,Result,md5);
+            }
         });
 }
+function showResultGithubProfile(profile,fullname,Result,md5_gravatar)
+{
+    if(Result)
+        fillProfileAddress( profile.find('input[name=ghprofile]'), Result.login, true);
+    else
+        fillProfileAddress( profile.find('input[name=ghprofile]'),'', false);
 
-function findStackoverflowProfile(profile, q, p) {
+    dataIsReceived('github',Result);
+    findStackoverflowProfile(profile,fullname,Result,md5_gravatar);
+}
 
-    $.get('https://api.stackexchange.com/2.2/users?site=stackoverflow&inname=' + q )
+function findStackoverflowProfile(profile, fullname, githubResult,md5_gravatar) {
+
+
+    var Result=undefined;
+    //$.get('https:/vav/api.stackexchange.com/2.2/users?site=stackoverflow&inname=' + (fullname.replace(' ','%20')).toLocaleLowerCase() )
+    $.get('http://api.stackexchange.com/2.2/users?page=1&pagesize=100&sort=name&site=stackoverflow&inname=' + (fullname.replace(' ','%20')).toLocaleLowerCase() )
         .done( function(res){
+            if( res.items && res.items.length > 0 )
+            {
+                //=====================================================
+                if(md5_gravatar)
+                {
 
-            if( res.items && res.items.length > 0 ) {
-                var endOfURL = res.items[0].link.split('/').splice(3,4).join('/'); // Keep 3 last part of url /user/{uid}/{displayname}
-                fillProfileAddress( profile.find('input[name=soprofile]'), endOfURL, true);
+                    for(var i=0;i<res.items.length;i++)
+                    {
+                        if(res.items[i].profile_image.search(md5_gravatar)>=0)
+                        {
+                            Result=res.items[i];
+                            break;
+                        }
+                    }
+                }
+                else
+                    Result=res.items[0];
+                //=====================================================
+                if(Result)
+                    showResultStackoverflow(profile,Result);
+                else if(githubResult)
+                {
+                    $.get('http://api.stackexchange.com/2.2/users?page=1&pagesize=100&sort=name&site=stackoverflow&inname=' + githubResult.login )
+                        .done( function(res1){
+                            if( res1.items && res1.items.length > 0 )
+                            {
+                                if(md5_gravatar)
+                                {
+                                    for(var i=0;i<res1.items.length;i++)
+                                    {
+                                        if(res1.items[i].profile_image.search(md5_gravatar)>=0)
+                                        {
+                                            Result=res1.items[i];
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                    Result=res1.items[0];
+                            }
+                            showResultStackoverflow(profile,Result);
+                        });
+                }
+                else
+                    showResultStackoverflow(profile,Result);
 
-                var parts = res.items[0].link.split('/');
-                var uid = parts[ parts.length-2 ];
-                $('.soflair').attr('src','http://stackoverflow.com/users/flair/' + uid + '.png');
             }
-            else {
-                fillProfileAddress( profile.find('input[name=soprofile]'), p, false);
+            else if( githubResult)
+            {
+                $.get('http://api.stackexchange.com/2.2/users?page=1&pagesize=100&sort=name&site=stackoverflow&inname=' + githubResult.login )
+                    .done( function(res1){
+                        if( res1.items && res1.items.length > 0 )
+                        {
+                            if(md5_gravatar)
+                            {
+                                for(var i=0;i<res1.items.length;i++)
+                                {
+                                    if(res1.items[i].profile_image.search(md5_gravatar)>=0)
+                                    {
+                                        Result=res1.items[i];
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                                Result=res1.items[0];
+                        }
+                        showResultStackoverflow(profile,Result);
+                    });
             }
-
-            dataIsReceived('stackoverflow',res);
+            else
+                showResultStackoverflow(profile,Result);
         });
 }
+function showResultStackoverflow(profile,Result)
+{
+    if(Result)
+    {
+        var endOfURL = Result.link.split('/').splice(3,4).join('/'); // Keep 3 last part of url /user/{uid}/{displayname}
+        fillProfileAddress( profile.find('input[name=soprofile]'), endOfURL, true);
+        var parts = Result.link.split('/');
+        var uid = parts[ parts.length-2 ];
+        $('.soflair').attr('src','http://stackoverflow.com/users/flair/' + uid + '.png');
+    }
+    else
+        fillProfileAddress( profile.find('input[name=soprofile]'), '', false);
 
-function findDribbbleProfile(profile,q,p) {
+    dataIsReceived('stackoverflow',Result);
+}
+
+function findDribbbleProfile(profile,username,resBehance,useBehance) {
+    var searchTerm=undefined;
+    if(useBehance==true)
+        searchTerm=resBehance.username;
+    else
+        searchTerm=username;
+
     $.ajax({
         dataType: "jsonp",
         timeout: 10000,
-        url: 'http://api.dribbble.com/players/' + q,
+        url: 'http://api.dribbble.com/players/' + searchTerm,
         complete: function(res) {}
     })
         .success(function(data) {
-            fillProfileAddress( profile.find('input[name=drprofile]'), data.username, true);
-            dataIsReceived('dribbble',data);
+
+            if(resBehance!=null)
+            {
+                var dribbleLocation=data.location.split(',');
+                var resBehanceLocation=resBehance.location.split(',');
+                var fullname=(resBehance.first_name+' '+resBehance.last_name).toLowerCase();
+                if(data.name.toLowerCase()==fullname &&
+                    dribbleLocation[0].trim()==resBehanceLocation[0].trim() && dribbleLocation[1].trim()==resBehanceLocation[1].trim())
+                {
+
+                    fillProfileAddress( profile.find('input[name=drprofile]'), data.username, true);
+                    dataIsReceived('dribbble',data);
+                }
+                else
+                {
+                    fillProfileAddress( profile.find('input[name=drprofile]'), '', false);
+                    dataIsReceived('dribbble',{});
+                }
+                findTwitterProfile(profile,puserInfo.name,data);
+            }
+            else
+            {
+                fillProfileAddress( profile.find('input[name=drprofile]'), data.username, true);
+                dataIsReceived('dribbble',data);
+                findTwitterProfile(profile,puserInfo.name,data);
+            }
         })
         .error(function() {
-            fillProfileAddress( profile.find('input[name=drprofile]'), p, false);
+            fillProfileAddress( profile.find('input[name=drprofile]'), '', false);
             dataIsReceived('dribbble',{});
+            findTwitterProfile(profile,puserInfo.name,null);
         });
 }
 
-function findBehanceProfile(profile,q,p) {
-    $.getJSON('https://www.behance.net/v2/users?api_key=FnneyRH4STbpcKoqK8M2aQwdHkdAfXzb&q=' + q + "&callback=?" ,
+function findBehanceProfile(profile,username,fullname) {
+    var fn = fullname.trim().replace(" ","%20");
+    $.getJSON('https://www.behance.net/v2/users?api_key=FnneyRH4STbpcKoqK8M2aQwdHkdAfXzb&q=' + fn + "&callback=?" ,
         function(res){
             if( res.users.length > 0)
+            {
                 fillProfileAddress( profile.find('input[name=beprofile]'), res.users[0].username, true);
-            else
-                fillProfileAddress( profile.find('input[name=beprofile]'), p, false);
+                findDribbbleProfile(profile, username, res.users[0],true );
 
+            }
+            else
+            {
+                $.getJSON('https://www.behance.net/v2/users?api_key=FnneyRH4STbpcKoqK8M2aQwdHkdAfXzb&q=' + username + "&callback=?" ,
+                function(res1){
+                    if( res1.users.length > 0)
+                    {
+                        fillProfileAddress( profile.find('input[name=beprofile]'), res1.users[0].username, true);
+                        findDribbbleProfile(profile, username, res.users[0],false );
+                    }
+                    else
+                    {
+                        fillProfileAddress( profile.find('input[name=beprofile]'), '', false);
+                        findDribbbleProfile(profile, username, null,false );
+                    }
+                });
+
+            }
             dataIsReceived('behance',res);
         });
 }
 
+
+ function findTwitterProfile(profile,fullname,dribbleResult) {
+     var searchTerm=undefined;
+     if(dribbleResult!=null )
+     {
+
+         if( dribbleResult.name.toLowerCase()==fullname.toLowerCase())
+         {
+             searchTerm=dribbleResult.twitter_screen_name;
+         }
+         else
+             searchTerm=fullname;
+     }
+     else
+         searchTerm =fullname;
+
+     $.get('/twprofile/' +searchTerm )
+         .done( function(res){
+             if( res.statuses )
+                 fillProfileAddress( profile.find('input[name=twprofile]'), res.statuses[0].user.screen_name, true);
+             else
+                 fillProfileAddress( profile.find('input[name=twprofile]'), '', false);
+
+             dataIsReceived('twitter',res);
+         });
+ }
+
+
+
+/*
 function findTwitterProfile(profile,q,p) {
     $.get('/twprofile/' + q )
         .done( function(res){
@@ -177,7 +387,7 @@ function findTwitterProfile(profile,q,p) {
 
             dataIsReceived('twitter',res);
         });
-}
+}*/
 
 //CoyBit code
 //function findLinkedinProfile(profile,fullname) {
@@ -275,11 +485,18 @@ function LinkedinSearchCompleted(response,search_term,profile)
             }
         }
         if( matchResults.length>0 )
-            fillProfileAddress( profile.find('input[name=liprofile]'), matchResults[0], true);
+        {
+            var substrIdx=matchResults[0].search("linkedin.com/");
+            var substr="";
+            if(substrIdx>=0)
+            var substr=matchResults[0].substr(substrIdx+13);
+            fillProfileAddress( profile.find('input[name=liprofile]'), substr , true);
+        }
+
         else
             fillProfileAddress( profile.find('input[name=liprofile]'), "", false);
 
-        dataIsReceived('linkedin',matchResults);
+            dataIsReceived('linkedin',matchResults);
     }
 }
 
@@ -296,7 +513,6 @@ function check404(url, callback) {
         request.open("GET", url);
         if (request.status == 200) { return true; }
     }
-
     return false;
 }
 
