@@ -380,21 +380,13 @@ function fillPositionsList( callback ) {
 
             var titleObj = $('<span>')
                 .addClass('positionTitle')
-                .text(form.formName)
-                .click( function() {
-                    window.open('/flyer/edit/0?flyerid=' + form.formID);
-                });
+                .text(form.formName);
 
             var stateObj = $('<span>')
                 .addClass('positionMode')
                 .text(form.mode);
 
-            var creatorObj = $('<span>')
-                .addClass('positionCreator')
-                .text( form.creator.displayName);
-
-            var assigneeObj = $('<select>')
-                .attr('formID', form.formID)
+            var assigneeObj = $('<span>')
                 .addClass('positionAssignee')
                 .text((form.autoAssignedTo ? form.autoAssignedTo.displayName : 'No One') )
                 .change( function(){
@@ -407,27 +399,25 @@ function fillPositionsList( callback ) {
                         });
                 })
 
-            var editBtnObj = $('<a>')
-                .addClass('btn btn-mini btn-primary')
-                .attr('href','')
-                .text('edit')
+            var settingBtnObj = $('<a>')
+                .addClass('fa fa-cogs')
+                .attr('href','#')
                 .click( function() {
-                    window.open('/flyer/edit/0?flyerid=' + form.formID);
+                    $('#job-setting-dialog').modal();
                 });
 
+            var editBtnObj = $('<a>')
+                .addClass('fa fa-pencil-square-o')
+                .attr('href','/flyer/edit/0?flyerid=' + form.formID);
+
             var viewBtnObj = $('<a>')
-                .addClass('btn btn-mini btn-warning')
-                .attr('href','')
-                .text('view')
-                .click( function() {
-                    window.open('/flyer/view/0?flyerid=' + form.formID);
-                });
+                .addClass('fa fa-eye')
+                .attr('href','/flyer/embeded/' + form.formID);
 
             row.find('.colTitle').html('').append(titleObj);
             row.find('.colStatus').html('').append(stateObj);
-            row.find('.colCreator').html('').append(creatorObj);
             row.find('.colAssignedTo').html('').append(assigneeObj);
-            //row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj);
+            row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj).append(settingBtnObj);
 
             row.addClass('position').attr('id',form.formID);
             $('.positionsContainer').append( row );
