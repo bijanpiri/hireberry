@@ -20,15 +20,28 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
     BApplicantsResponses.update({_id:messageID},{response:response}, function(err){
 
         // Move application to next stage (response is received)
-        BApplicantsResponses.findOne({_id:messageID}, function(err,message){
+        BApplicantsResponses.findOne({_id:messageID}).populate('applicationID').exec( function(err,message){
 
             var newStage = {};
 
             if( messageType==='1' ) { // Interview invitation
                     newStage = ( response==="YES") ? {stage:2,subStage:3} : {stage:2,subStage:2}
+
+                if( response==="YES" ){
+                    addEvent('Interview with ' + message.applicationID.stage.invitedName,
+                        message.applicationID.stage.interviewDate,
+                        message.applicationID.stage.interviewer,
+                        message.applicationID.stage.interviewTeam, function() {})
+
+                    // ToDo: Notify responder & HM
+                }
             }
             else if(messageType==='2' ) { // Job offer
                 newStage = ( response==="YES") ? {stage:3,subStage:2} : {stage:3,subStage:3}
+
+                if( response==="YES" ){
+                    // ToDo: Notify responder & HM
+                }
             }
 
             BApplications.findOne( {_id:message.applicationID}, function(err,application){

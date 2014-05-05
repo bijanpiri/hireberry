@@ -619,7 +619,8 @@ function initWorkflow(candidateObj,candidate) {
         modal.find('.emailAddress').val( candidate.email || '' );
         modal.find('.sendButton').unbind('click').click( function() {
             gotoNewStage(2,1,{
-                invitedEmail:modal.find('.emailAddress').val(),
+                invitedName: candidate.name,
+                invitedEmail: modal.find('.emailAddress').val(),
                 invitationMessage: modal.find('.invitationMessage').val(),
                 interviewDate: modal.find('.interviewDate').val() + ' ' + modal.find('.interviewTime').val()
             });

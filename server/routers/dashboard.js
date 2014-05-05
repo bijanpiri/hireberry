@@ -270,7 +270,10 @@ module.exports.updateApplication = function(req,res) {
                     stage: req.body.data.stage,
                     subStage: req.body.data.subStage,
                     invitation: invitation._id,
-                    interviewDate: req.body.data.interviewDate
+                    invitedName: req.body.data.invitedName,
+                    interviewDate: req.body.data.interviewDate,
+                    interviewTeam: req.user.teamID,
+                    interviewer: req.user._id
                 };
 
                 BApplications.update({_id:appID}, {stage:newStage}, function(err) {
@@ -279,7 +282,6 @@ module.exports.updateApplication = function(req,res) {
                     addNewActivity(appID,activity, function() {
                         res.send(200)
                     });
-
                 })
             })
 
@@ -323,10 +325,8 @@ module.exports.updateApplication = function(req,res) {
                     addNewActivity(appID,activity, function() {
                         res.send(200)
                     });
-
                 })
-            })
-
+            });
         }
         else {
             var newStage = {
