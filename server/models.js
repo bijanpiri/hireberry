@@ -61,7 +61,8 @@ BComments = mongoose.model( 'comments', {
     applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
     commenter: {type : mongoose.Schema.ObjectId, ref : 'users'},
     commentTime: String,
-    askingTime: String
+    askingTime: String,
+    askerNotified: Boolean
 })
 
 BTeams = mongoose.model( 'teams', {

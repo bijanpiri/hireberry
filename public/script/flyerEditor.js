@@ -410,13 +410,13 @@ function loadPublishPanel() {
     $.get('/api/team/members').done( function(res) {
         teamMembers = res;
 
-        res.members.forEach( function(item) {
-            if( item.status === 'joint' ) {
+        res.team.members.forEach( function(item) {
+            //if( item.status === 'joint' ) {
                 var option = $('<option>').attr('id',item._id).text(item.displayName);
 
                 $('#askForComment').append( option.clone() );
                 $('#autoAssignTo').append( option.clone() );
-            }
+            //}
         });
         console.log(res);
     });
