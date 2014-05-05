@@ -171,8 +171,8 @@
                             <img class="avatar" style="width: 30px;border-radius: 50%;border:2px solid green" src="#">
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/setting" class="navbar-button">Setting</a></li>
-                            <li><a href="/logout" class="navbar-button">Logout</a></li>
+                            <li><a href="/setting" class="navbar-button"><i class="fa fa-cog"></i> Setting</a></li>
+                            <li><a href="/logout" class="navbar-button"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </li>
                     <%} else {%>
@@ -186,7 +186,9 @@
                 </ul>
                 <% if(everyauth.loggedIn){ %>
                 <ul class="nav pull-right">
-                    <li><a href="/flyer/new" id="createFlyerButton" class="navbar-button">Create Job</a></li>
+                    <li><a href="/flyer/new" id="createFlyerButton" class="navbar-button">
+                            <i class="fa fa-plus"></i> New Job
+                        </a></li>
                     <li><a href="/dashboard" class="navbar-button">Dashboard</a></li>
                 </ul>
                 <%}%>
