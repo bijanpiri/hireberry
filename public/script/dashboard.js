@@ -615,34 +615,39 @@ function initWorkflow(candidateObj,candidate) {
         e.stopPropagation();
 
         // Prepare interview invitation modal and show it
-        $('#interview-invitation-dialog .emailAddress').val( candidate.email || '' );
-        $('#interview-invitation-dialog .sendButton').unbind('click').click( function() {
+        var modal = $('#interview-invitation-dialog');
+        modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.sendButton').unbind('click').click( function() {
             gotoNewStage(2,1,{
-                invitedEmail:$('#interview-invitation-dialog .emailAddress').val(),
-                invitationMessage: $('#interview-invitation-dialog .invitationMessage').val()
+                invitedEmail:modal.find('.emailAddress').val(),
+                invitationMessage: modal.find('.invitationMessage').val(),
+                interviewDate: modal.find('.interviewDate').val() + ' ' + modal.find('.interviewTime').val()
             });
-            $('#interview-invitation-dialog').modal('hide')
+            modal.modal('hide')
         });
-        $('#interview-invitation-dialog').modal();
+        modal.modal();
     });
 
     candidateObj.find('.offerButton').click( function(e) {
         e.stopPropagation();
 
         // Prepare job offer modal and show it
-        $('#job-offer-dialog .emailAddress').val( candidate.email || '' );
-        $('#job-offer-dialog .sendButton').unbind('click').click( function() {
+        var modal = $('#job-offer-dialog');
+        modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.sendButton').unbind('click').click( function() {
             gotoNewStage(3,1,{
-                offeredEmail:$('#job-offer-dialog .emailAddress').val(),
-                offerMessage: $('#job-offer-dialog .offerMessage').val()
+                offeredEmail: modal.find('.emailAddress').val(),
+                offerMessage:  modal.find('.offerMessage').val()
             });
-            $('#job-offer-dialog').modal('hide')
+            modal.modal('hide')
         });
-        $('#job-offer-dialog').modal();
+       modal.modal();
     });
 
     candidateObj.find('.askForCommentButton').click( function(e) {
         e.stopPropagation();
+
+        // ToDo: Connect to real ask for comment function
         alert('A4C');
     });
 
