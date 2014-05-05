@@ -10,31 +10,47 @@ $.fn.populateUserCombo=function(members,selectedMember, inputName){
             inputName='name';
 
         var container=$(this).empty();
-        var x=
+        var contents=
             $('<div class="btn-group bool-combo ">' +
                 '<a class="bool-combo-selected dropdown"> </a>' +
                 '<ul class="dropdown-menu bool-team-members">  </ul>' +
                 '<input type="hidden"></div>');
 
-        x.find('input').attr('name',inputName);
+        contents.find('input').attr('name',inputName);
 
-        container.append(x);
-        var memList = x.find('ul').empty();
+        container.append(contents);
+        var memList = contents.find('ul').empty();
         $.each(members, function (i, member) {
             memList.append(
                 $('<li>')
                     .append(generateMemberElement(member))
                     .click(function () {
                         var member = $(this).children('a').data('member');
-                        showSelected(member,x);
+                        showSelected(member,contents);
                     })
             );
         })
         if(selectedMember._id)
-            showSelected(selectedMember,x);
+            showSelected(selectedMember,contents);
         else
-            showSelected(members[selectedMember],x);
+            showSelected(members[selectedMember],contents);
+
+        function showSelected(admin){
+            if(admin) {
+                contents.find('.bool-combo-selected')
+                    .replaceWith(
+                    generateMemberElement(admin)
+                        .addClass('bool-combo-selected')
+                        .addClass('dropdown')
+                        .attr('data-toggle', 'dropdown')
+                        .append('<span class="caret"></span>')
+                );
+                contents.find('input').val(admin._id);
+            }
+        }
     });
+
+
 }
 function generateMemberElement(member){
 
@@ -51,19 +67,5 @@ function generateMemberElement(member){
             .append($('<li>').append(member.email)
         )
     ).data('member',member);
-}
-
-function showSelected(admin,x){
-    if(admin) {
-        x.find('.bool-combo-selected')
-            .replaceWith(
-            generateMemberElement(admin)
-                .addClass('bool-combo-selected')
-                .addClass('dropdown')
-                .attr('data-toggle', 'dropdown')
-                .append('<span class="caret"></span>')
-        );
-        x.find('input').val(admin._id);
-    }
 }
 
