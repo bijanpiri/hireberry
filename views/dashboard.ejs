@@ -630,7 +630,7 @@
 <div id="applicationPreview">
 </div>
 
-<div id="job-setting-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
+<div id="job-setting-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
      aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -638,41 +638,36 @@
     </div>
     <div class="modal-body">
         <div class="control-group">
-            <label class="control-label" for="invitationNote">Responder</label>
+            <label class="control-label" for="invitationEmail">Public Link</label>
             <div class="controls">
-                <select>
-                </select>
+                <input type="URL" class="publicLink" readonly style="cursor: text">
             </div>
         </div>
+        <hr/>
+        <div class="control-group">
+            <label class="control-label" for="invitationNote">Responder</label>
+            <div class="controls">
+                <div id="jobResponderList"></div>
+            </div>
+        </div>
+        <hr/>
         <div class="control-group">
             <label class="control-label" for="invitationEmail">State</label>
             <div class="controls">
-                <select>
-                    <option>Draft</option>
-                    <option>Ask for publish</option>
-                    <option>Publish</option>
-                </select>
+                This job is in <span class="jobStatus-current">-</span>. You can <span class="jobStatus-next"></span> it.
             </div>
         </div>
+        <hr/>
         <div class="control-group">
             <label class="control-label" for="invitationEmail">Google Analytic</label>
             <div class="controls">
                 <input type="text">
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label" for="invitationEmail">Share</label>
-            <div class="controls">
-                <input type="URL">
-                <img class="profile" src="http://static.iconarchive.com/static/images/social/facebook-icon.png">
-                <img class="profile" src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
-                <img class="profile" src="http://static.iconarchive.com/static/images/social/google-plus-icon.png">
-            </div>
-        </div>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button type="submit" class="btn btn-primary" data-loading-text="Sending...">Save</button>
+        <button type="submit" class="btn btn-primary saveButton" data-loading-text="Sending...">Save</button>
     </div>
 </div>
 

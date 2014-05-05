@@ -162,6 +162,11 @@
     border-left: 3px solid rgb(84, 177, 84);
     text-align: center;
     line-height: 1.3em;
+    cursor: pointer;
+}
+
+.position:hover {
+    background-color: #EBE9C3;
 }
 
 .position .positionTitle {

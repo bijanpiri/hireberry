@@ -83,6 +83,41 @@ app.post('/flyer/publish', function(req,res){
 
 });
 
+app.post('/flyer/changeMode', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var flyerID = req.body.flyerID;
+    var userID = req.user._id;
+    var teamID = req.user.teamID;
+    var newMode = req.body.mode.toLowerCase();
+
+    if(newMode==='draft') {
+        saveInDatabase({askedForPublish:false, publishTime:''})
+    }
+    else {
+        BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+            if(count>0 && newMode==='publish') { // User is admin
+                saveInDatabase({askedForPublish:false, publishTime:new Date()})
+            }
+            else if(newMode==='ask for publish') {
+                saveInDatabase({askedForPublish:true, publishTime:''});
+            }
+        });
+    }
+
+    function saveInDatabase(param,successMessage) {
+        BFlyers.update({_id:flyerID}, param, function(err){
+            if(!err){
+                res.send(200,{message:'Changed'});
+            }else
+                res.send(500,{result:'DB Error'});
+        });
+    }
+
+});
+
 app.post('/flyer/inactive', function(req,res){
 
     var flyerID = req.body.flyerID;

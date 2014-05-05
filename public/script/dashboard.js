@@ -4,6 +4,7 @@
 var teamID = '<%=teamID%>';
 var userID = '<%=userID%>';
 var teamMembers = [];
+var userAdmin = null;
 var forms = [];
 
 
@@ -432,8 +433,57 @@ function fillPositionsList( callback ) {
             var settingBtnObj = $('<a>')
                 .addClass('fa fa-cogs')
                 .attr('href','#')
-                .click( function() {
-                    $('#job-setting-dialog').modal();
+                .click( function(e) {
+
+                    // Initializing modal fields
+                    var modal = $('#job-setting-dialog');
+
+                    // Responder
+                    modal.find('#jobResponderList').populateUserCombo(teamMembers, form.autoAssignedTo,'jobResponder');
+
+                    // Public links & Social networks button
+                    var publicLink = window.location.origin + '/flyer/embeded/' + form.formID;
+                    modal.find('.publicLink').val(publicLink);
+
+                    // Current Status
+                    modal.find('.jobStatus-current').text(form.mode);
+                    modal.find('.jobStatus-next').empty();
+                    var publishOption = $('<button>').attr('name','publish').text('Publish').click( function() {
+                        changeJobMode('publish')
+                    });
+                    var draftOption = $('<button>').attr('name','draft').text('Draft').click( function() {
+                        changeJobMode('draft')
+                    });;
+                    var askForPublishOption = $('<button>').attr('name','askForPublish').text('Ask for publish').click( function() {
+                        changeJobMode('ask for publish')
+                    });;
+
+                    // ToDo: Use enumeration instead of string for comparing
+                    if( userAdmin ) {
+                        if(form.mode==='published')
+                            modal.find('.jobStatus-next').append(draftOption)// Draft
+                        else
+                            modal.find('.jobStatus-next').append(publishOption) // Publish
+                    }
+                    else {
+                        if(form.mode==='published' || form.mode==='asked for publish')
+                            modal.find('.jobStatus-next').append(draftOption) // Draft
+                        else
+                            modal.find('.jobStatus-next').append(askForPublishOption) // Ask For Publish
+                    }
+
+                    function changeJobMode(mode) {
+                        $.post('/flyer/changeMode',{mode:mode,flyerID:form.formID});
+                    }
+
+                    modal.find('.saveButton').click( function() {
+                        var responderID = $('[name=jobResponder]').val();
+                        $.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
+                    })
+
+                    modal.modal();
+
+                    e.stopPropagation();
                 });
 
             var editBtnObj = $('<a>')
@@ -447,9 +497,11 @@ function fillPositionsList( callback ) {
             row.find('.colTitle').html('').append(titleObj);
             row.find('.colStatus').html('').append(stateObj);
             row.find('.colAssignedTo').html('').append(assigneeObj);
-            row.find('.colOperations').html('').append(editBtnObj).append(viewBtnObj).append(settingBtnObj);
+            row.find('.colOperations').html('').append(settingBtnObj);
 
-            row.addClass('position').attr('id',form.formID);
+            row.addClass('position').attr('id',form.formID).click( function() {
+                window.open('/flyer/edit/0?flyerid=' + form.formID);
+            });
             $('.positionsContainer').append( row );
         });
 
@@ -895,7 +947,7 @@ function getTeamInfo(callback) {
 
         $('#assignTo').html('');
         $('#teamMembers').html('');
-        var userAdmin=res.team.admin._id==res.user;
+        userAdmin = res.team.admin._id==res.user;
         for( var i=0; i<res.team.members.length; i++ ){
             var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.team.members[i].email));
             var emailObj = $('<div>').addClass('teamMemberEmail').text(res.team.members[i].displayName);
