@@ -597,9 +597,20 @@ function fillTable() {
                 if(!candidateSection.commentFetched){
                     $.get('/api/application/comments',{appID:candidate._id},function(data){
                         var comments=data.comments;
-                        var userID=data.user;
-                        var form=$('.reply-for-comment-form').clone().show();
-                        form.parent().append(form);
+
+                        comments.forEach(function(comment){
+                            var form=$('.reply-for-comment-form:first').clone().show();
+
+                            candidateSection.find('.bool-application-comments').append(form);
+
+                            form.find('.user-note-avatar')
+                                .replaceWith(generateMemberElement(comment.user,true,false));
+                            form.find('.commenter-note-avatar')
+                                .replaceWith(generateMemberElement(comment.commenter,true,false));
+                            form.find('.bool-application-comments-note').html(comment.note);
+
+                        })
+
                         candidateSection.commentFetched=true;
                     })
                 }

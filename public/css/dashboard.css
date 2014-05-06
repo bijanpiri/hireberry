@@ -494,6 +494,7 @@
 .modal-body{
     overflow-y: visible;
 }
+
 .bool-user-item{
     cursor: pointer;
     width: 250px;
@@ -514,8 +515,50 @@
     display: inline-block;
     list-style: none;
     vertical-align: middle;
+    margin-left: 10px;
 }
 .bool-user-item>ul>li{
 
 
+}
+.bool-single-user-item{
+    font-size: 14px;
+    display: inline-block;
+    text-decoration: none;
+    color: #4C4C4C;
+    text-align: center;
+    vertical-align: top;
+}
+.bool-single-user-item>img{
+    border-radius: 40px;
+    border: 2px solid #9c9c9c;
+}
+.bool-single-user-item>ul{
+    padding: 0;
+    margin: 0;
+    display: block;
+    list-style: none;
+}
+.bool-single-user-item>ul>li{
+
+
+}
+.bool-application-comments-note{
+    font-size: 14px;
+    display: inline-block;
+    border: 2px solid #B3B3B3;
+    border-radius: 4px;
+    padding: 10px;
+    width: 300px;
+    text-align: left;
+}
+.bool-application-comments-comment{
+    width: 300px;
+    min-height:100px;
+    resize: none;
+    border: 2px solid #B3B3B3;
+    border-radius: 4px;
+}
+form{
+    text-align: left;
 }

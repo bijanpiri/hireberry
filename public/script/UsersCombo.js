@@ -52,19 +52,21 @@ $.fn.populateUserCombo=function(members,selectedMember, inputName){
 
 
 }
-function generateMemberElement(member){
-
+function generateMemberElement(member,showDisplayName,showEmail){
+    showDisplayName= showDisplayName!==undefined ? showDisplayName :true;
+    showEmail=showEmail!==undefined ? showEmail :true;
     var imgurl = 'http://www.gravatar.com/avatar/'+
         CryptoJS.MD5(member.email)+'?size=50';
 
     return $('<a>')
-        .addClass('bool-user-item')
+        .addClass( showDisplayName && showEmail ?
+            'bool-user-item':'bool-single-user-item')
         .append($('<img>')
             .attr('src',imgurl))
         .append(
         $('<ul>')
-            .append($('<li>').append(member.displayName))
-            .append($('<li>').append(member.email)
+            .append($('<li>').append(showDisplayName? member.displayName:""))
+            .append($('<li>').append(showEmail ? member.email:"")
         )
     ).data('member',member);
 }

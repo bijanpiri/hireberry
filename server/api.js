@@ -226,10 +226,12 @@ getAskedForCommentApplications=function(userID,callback) {
         });
 }
 getApplicationComments=function(appID,callback){
-    BComments.find({applicationID:appID},function(err,comments){
-        if(!err)
-        callback(err,comments);
-    })
+    BComments.find({applicationID:appID})
+        .populate('user commenter','_id displayName email')
+        .exec(function(err,comments){
+            if(!err)
+                callback(err,comments);
+        })
 }
 getAskedForCommentForms=function(userID,callback) {
     BComments.find({commenter:userID,subjectType:'form',commentTime:''})
