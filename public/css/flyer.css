@@ -112,6 +112,11 @@ Whole Paper
     text-align: left;
 }
 
+.portlet-commentsView .portlet-comments .portlet-comment .commentTime {
+    font-size: 0.75em;
+    color: #b1b1b1;
+}
+
 
 .portlet-commentsView .portlet-askedForComment-list {
     background-color: #f1f1f1;

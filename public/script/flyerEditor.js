@@ -196,7 +196,7 @@ function initCommentView() {
             else {
                 res.comments.forEach( function(comment) {
 
-                    if( comment.commentTime.length > 0 ) {
+                    if( comment.commentTime && comment.commentTime.length > 0 ) {
 
                         var commentObj = $('<div>').addClass('portlet-comment');
                         commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
