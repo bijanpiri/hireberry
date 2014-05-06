@@ -1,7 +1,7 @@
 /**
  * Created by Bijan on 05/06/2014.
  */
-$(document).delegate('textarea[flexible]','input propertychange keydown keyup change paste ',
+$(document).delegate('textarea[flexible]','input propertyChange keydown keyup change paste ',
 function(){
     var div=$('<pre>').html(this.value).width($(this).width()).addClass(this.className).hide();
     $(this).parent().append(div);

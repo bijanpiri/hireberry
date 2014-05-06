@@ -41,7 +41,6 @@ everyauth.everymodule
     });
 //endregion
 
-
 //region LinkedIn Authentication Configuration
 everyauth.linkedin
     .consumerKey(LINKEDIN_CONSUMER_KEY)

@@ -149,7 +149,7 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
         existFlyer: true
     });
 
-})
+});
 
 app.get('/flyer/:mode/:tid', function(req,res){
 
@@ -236,6 +236,164 @@ app.get('/flyer/remove/:id', function(req,res){
             }
         });
     }
+});
+
+app.post('/api/team/form/assign', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    //var userID = req.user._id;
+    var userID = req.body.userID;
+    var formID = req.body.formID;
+
+    // Check whether current user is admin or not
+    assignForm(userID, formID, function(err) {
+        res.send(200)
+    } );
+
+});
+
+app.post('/api/team/form/askForComment', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    //var userID = req.user._id;
+    var userID = req.body.userID;
+    var formID = req.body.formID;
+
+    // Check whether current user is admin or not
+    askForCommentOnForm('',userID, formID, function(err) {
+        res.send(200)
+    } );
+
+});
+
+app.get('/api/user/form/askedForComment',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+
+    getAskedForCommentForms(userID, function(err,forms) {
+        res.send(200,{forms:forms});
+    })
+});
+
+app.get('/api/user/form/askedForPublish',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    BTeams.count({_id:req.user.teamID,admin:req.user._id}, function(err,count){
+        if( !err && count > 0 ) {
+            BFlyers.find({owner:req.user.teamID, askedForPublish:true}, function(err,askedForPublishList) {
+                res.send(200, askedForPublishList.map( function(item) {return item._id} ))
+            })
+        } else {
+            res.send(200,[]);
+        }
+    })
+});
+
+app.get('/api/form/comments',function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    // ToDo: (Security) Check wheter user can access this applicationID or no.
+    var userID = req.user._id;
+    var formID = req.query.formID;
+
+    getComments(formID, 'form', function(err,comments) {
+        res.send(200,{comments:comments});
+    })
+});
+
+app.get('/api/team/:teamID/positions',function(req,res){
+
+    var teamID = req.params.teamID;
+    var teamName = '';
+
+    BFlyers.find({owner:teamID, publishTime:{$ne:''}})
+        .populate('owner')
+        .exec(function(err,positions){
+            if(err)
+                return res.send(305);
+
+            var positionsList = positions.map( function(position) {
+                return {
+                    id: position._id,
+                    title: position.flyer.description
+                }
+            })
+
+            BTeams.findOne({_id:teamID}, function(err,team){
+                res.send(200, {
+                    teamName: team.name ,
+                    positions: positionsList
+                });
+            })
+
+        })
+});
+
+// Return all the created forms (template)
+app.get('/api/forms',  function(req,res){
+    var teamID = req.user.teamID;
+    var userID = req.user._id;
+
+    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+        if( err )
+            return res.send(204);
+
+        if( count > 0 ) // Admin
+        // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
+            findFlyers({
+                owner: teamID,
+                $or:[
+                    {publishTime:{$ne:''}},
+                    {creator: userID},
+                    {askedForPublish:true}
+                ]
+            });
+        else    // Team member
+            findFlyers({owner: teamID, $or:[{autoAssignedTo:userID}]});
+    });
+
+    function findFlyers(query) {
+
+        BFlyers.find(query).populate('creator owner autoAssignedTo').exec( function(err,flyers) {
+            if( err )
+                return res.send(502,{error:err});
+
+            // Reduce
+            // ToDo: Make reducing async
+            var forms = flyers.map( function(flyer) {
+                var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
+                var currentMode;
+
+                if( flyer.askedForPublish == true )
+                    currentMode = 'Asked For Publish';
+                else
+                    currentMode = flyer.publishTime ? "published" : "drafted";
+
+                return {
+                    formName:description,
+                    formID:flyer._id,
+                    autoAssignedTo: flyer.autoAssignedTo,
+                    creator: flyer.creator,
+                    mode: currentMode
+                }
+            } );
+
+            res.send( {forms: forms} );
+        });
+
+    }
+
 });
 
 // endregion

@@ -83,125 +83,66 @@ app.post('/api/team/invite', function(req,res){
 
 });
 
-app.post('/api/team/form/assign', function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    //var userID = req.user._id;
-    var userID = req.body.userID;
-    var formID = req.body.formID;
-
-    // Check whether current user is admin or not
-    assignForm(userID, formID, function(err) {
-        res.send(200)
-    } );
-
-});
-
-app.post('/api/team/form/askForComment', function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    //var userID = req.user._id;
-    var userID = req.body.userID;
-    var formID = req.body.formID;
-
-    // Check whether current user is admin or not
-    askForCommentOnForm('',userID, formID, function(err) {
-        res.send(200)
-    } );
-
-});
-
-app.post('/api/team/application/askForComment', function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    //var userID = req.user._id;
-    var userID = req.body.userID;
-    var appID = req.body.appID;
-    var note=req.body.note;
-    // Check whether current user is admin or not
-    askForCommentOnApplication(note,userID,req.user._id, appID, function(err) {
-        res.send(200)
-    } );
-
-});
-
-app.get('/api/user/application/askedForComment',function(req,res){
+// Get current team information
+app.get('/api/user/team',function(req,res){
 
     if( !checkUser(req,res) )
         return;
 
     var userID = req.user._id;
 
-    getAskedForCommentApplications(userID, function(err,applications) {
-        res.send(200,{applications:applications});
+    getUserTeam(userID, function(err,team) {
+        res.send(200,{team:team});
     })
 });
 
-app.get('/api/user/form/askedForComment',function(req,res){
+// Get invitations of user
+app.get('/api/user/invitations', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var email = req.user.email;
+
+    BTeamInvitations.find({email:email})
+        .populate('team')
+        .exec(function(err,invitations) {
+            if(!err)
+                res.send(200,invitations);
+        });
+
+});
+
+// Accept an invitation
+app.post('/api/user/team/join', function(req,res){
 
     if( !checkUser(req,res) )
         return;
 
     var userID = req.user._id;
+    var oldTeamID = req.user.teamID;
+    var newTeamID = req.body.teamID;
+    var invitationID = req.body.invitationID;
+    var answer = req.body.answer;
 
-    getAskedForCommentForms(userID, function(err,forms) {
-        res.send(200,{forms:forms});
-    })
-});
+    BTeamInvitations.remove( {_id:invitationID} ,function() {
 
-app.get('/api/user/form/askedForPublish',function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    BTeams.count({_id:req.user.teamID,admin:req.user._id}, function(err,count){
-        if( !err && count > 0 ) {
-            BFlyers.find({owner:req.user.teamID, askedForPublish:true}, function(err,askedForPublishList) {
-                res.send(200, askedForPublishList.map( function(item) {return item._id} ))
-            })
-        } else {
-            res.send(200,[]);
-        }
-    })
-});
-
-
-app.get('/api/application/comments',function(req,res){
-    if(!checkUser(req,res))
-        return;
-    var appID=req.query.appID;
-    getApplicationComments(appID,function(err,comments){
-        res.send(200,
-            {
-                comments:comments,
-                user:req.user._id
+        if( answer === 'accept' ) {
+            //changeRoleInTeam( userID, oldTeamID, 'user', function(err) {
+            //leaveTeam( userID, oldTeamID, function(err) {
+            joinToTeam( userID, newTeamID, function(err) {
+                res.send(200);
             });
-    });
-});
-app.post('/api/application/comments',function(req,res) {
-    if(!checkUser(req,res))
-        return;
-
-    var commentID=req.body.commentID;
-    var comment=req.body.comment;
-    BComments.update(
-        {_id:commentID,commenter:req.user._id},
-        {comment:comment,commentTime:new Date()},
-        function(err,affected){
-            if(affected==0)
-                res.send(401)
-            else if(err)
-                res.send(500);
-            else
+            //})
+            //})
+        }
+        else {
             res.send(200);
         }
-    )
+
+    })
+
+
 });
 
 app.get('/api/user/teams', function(req,res) {
@@ -221,20 +162,6 @@ app.post('/api/user/changeTeam', function(req,res) {
             res.send(200);
     });
 })
-
-app.get('/api/form/comments',function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    // ToDo: (Security) Check wheter user can access this applicationID or no.
-    var userID = req.user._id;
-    var formID = req.query.formID;
-
-    getComments(formID, 'form', function(err,comments) {
-        res.send(200,{comments:comments});
-    })
-});
 
 app.post('/api/user/comment',function(req,res){
 
@@ -279,32 +206,6 @@ app.get('/team/:teamID/jobs', function(req,res) {
     res.render('hubpage.ejs',{title:'Hubpage',teamID:req.params.teamID});
 })
 
-app.get('/api/team/:teamID/positions',function(req,res){
 
-    var teamID = req.params.teamID;
-    var teamName = '';
-
-    BFlyers.find({owner:teamID, publishTime:{$ne:''}})
-        .populate('owner')
-        .exec(function(err,positions){
-            if(err)
-                return res.send(305);
-
-            var positionsList = positions.map( function(position) {
-                return {
-                    id: position._id,
-                    title: position.flyer.description
-                }
-            })
-
-            BTeams.findOne({_id:teamID}, function(err,team){
-                res.send(200, {
-                    teamName: team.name ,
-                    positions: positionsList
-                });
-            })
-
-        })
-});
 
 

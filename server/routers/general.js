@@ -3,58 +3,15 @@
  */
 
 // region General
-
 app.get('/', function(req,res) {
     if( req.user )
         res.redirect('/dashboard');
     else
         res.redirect('/login');
 });
+// endregion
 
-app.get('/afterLoginWithGoolge', function(req,res){
-    if(req.cookies.iDevice == 1)
-        res.redirect('/openapp');
-    else
-        res.redirect('/');
-})
-
-app.get('/web/auth/google', function(req,res){
-    res.cookie('iDevice',0);
-    res.redirect('/auth/google');
-});
-
-app.get('/idevice/auth/google', function(req,res){
-    res.cookie('iDevice',1);
-    res.redirect('/auth/google');
-});
-
-app.get('/info', function(req,res) {
-    res.send('Version ?.?.? - 920926-15:23');
-});
-
-app.get('/openapp', function(req,res) {
-
-    if( req.user ){
-        crypto.randomBytes(48, function(ex, buf) {
-            var token = buf.toString('hex');
-
-            BUsers.update(
-                {_id:req.user.id},
-                {$set:{tempToken:token}},
-                function (err) {
-                    if (err)
-                        return handleError(err);
-                    else {
-                        var url = '"booltin://?temptoken=' + token +'"';
-                        res.send('<script type="text/javascript">window.location = ' + url + '</script><a href=' + url + '>Successed - open</a>');
-                    }
-                });
-        });
-    }
-    else
-        res.send('<script type="text/javascript">window.location = "booltin://?"</script><a href="booltin://?">Faild - open</a>');
-});
-
+// region Setting
 app.get('/setting', function(req,res){
 
     if( !checkUser(req,res))
@@ -124,7 +81,9 @@ app.post('/api/setting/basicinfo', function(req,res) {
                 res.send(200,{});
         });
 });
+// endregion
 
+// region Search
 app.get('/search/users', function(req,res){
     var query = req.query.q;
 
@@ -149,6 +108,9 @@ app.get('/search/users', function(req,res){
     });
 });
 
+// endregion
+
+// region Event
 app.post('/event', function(req,res) {
 
     var time = new Date(req.body.time);
@@ -180,5 +142,4 @@ app.get('/event', function(req,res) {
             })
     });
 });
-
 // endregion
