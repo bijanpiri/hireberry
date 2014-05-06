@@ -106,17 +106,30 @@ function findGravatar(profile,q) {
 
 function findGithubProfile(profile,fullname,username,email) {
 
-    //https://api.github.com/users/[username]
+    /*********************************************** search algorithm for github profile *****************************************************
+    // 1- First search github profile by fullname
+    // 2- If number of results more than one, then go to step 3 else if gravatar (email) exist go to step 5 else go to step 8 (null result).
+    // 3- If gravatar (email) exist, then find github profile from result of step 2 by gravatar md5 code and go to step 4 else select first item of search result as final result and go to step 8
+    // 4- If github profile is found then show result else go to step 5
+    // 5- Search github profile by email
+    // 6- If number of results more than one, find github profile from result of step 5 by gravatar md5 code and go to step 7 else go to step 8 (null result).
+    // 7- if github profile found go to step 8 else select first item of search result as final result and go to step 8
+    // 8- Show result and start searching stackoverflow profile by github profile result.
+    *****************************************************************************************************************************************/
+
     var Result=undefined;
     var md5=undefined;
     if(validateEmail(email))
         md5 = CryptoJS.MD5(email.trim().toLowerCase())
 
+    //**** Step [1] ****
     $.get('https://api.github.com/search/users?q=' + (fullname.replace(' ','%20')).toLocaleLowerCase() )
         .done( function(res){
 
+            //**** Step [2] ****
             if( res.items.length > 0 )
             {
+                //**** Step [3] ****
                 if(md5)
                 {
                     for(var i=0;i<res.items.length;i++)
@@ -127,18 +140,47 @@ function findGithubProfile(profile,fullname,username,email) {
                             break;
                         }
                     }
+                    //**** Step [4] ****
+                    if(!Result)
+                    {
+                        //**** Step [5] ****
+                        $.get('https://api.github.com/search/users?q=' + email.trim().toLowerCase() )
+                            .done( function(res1){
+
+                                //**** Step [6] ****
+                                if( res1.items.length > 0 )
+                                {
+                                    for(var j=0;j<res1.items.length;j++)
+                                    {
+                                        if(res1.items[j].gravatar_id==md5)
+                                        {
+                                            Result=res1.items[j];
+                                            break;
+                                        }
+                                    }
+                                    if(!Result)
+                                        Result=res1.items[0];
+                                }
+                                //**** Step [8] ****
+                                showResultGithubProfile(profile,fullname,Result,md5);
+                            });
+                    }
                 }
                 else
                     Result=res.items[0];
 
+                //**** Step [8] ****
                 showResultGithubProfile(profile,fullname,Result,md5);
             }
             else
             {
                 if(md5)
                 {
+                    //**** Step [5] ****
                     $.get('https://api.github.com/search/users?q=' + email.trim().toLowerCase() )
                         .done( function(res1){
+
+                            //**** Step [6] ****
                             if( res1.items.length > 0 )
                             {
                                 for(var i=0;i<res1.items.length;i++)
@@ -148,14 +190,17 @@ function findGithubProfile(profile,fullname,username,email) {
                                         Result=res1.items[i];
                                         break;
                                     }
-                                    else
-                                        Result=res1.items[0];
                                 }
+                                //**** Step [7] ****
+                                if(!Result)
+                                Result=res1.items[0];
                             }
+                            //**** Step [8] ****
                             showResultGithubProfile(profile,fullname,Result,md5);
                         });
                 }
                 else
+                    //**** Step [8] ****
                     showResultGithubProfile(profile,fullname,Result,md5);
             }
         });
@@ -174,16 +219,31 @@ function showResultGithubProfile(profile,fullname,Result,md5_gravatar)
 function findStackoverflowProfile(profile, fullname, githubResult,md5_gravatar) {
 
 
+    /*********************************************** search algorithm for stackoverflow profile ***********************************************
+     // 1- First search stackoverflow profile by fullname
+     // 2- If number of results more than one, then go to step 3 else if github result exist go to step 5 else go to step 8 (null result).
+     // 3- If gravatar (email) exist, then find stackoverflow profile from result of step 2 by gravatar md5 code and go to step 4 else select first item of search result  as final result and go to step 8
+     // 4- If stackoverflow profile is found then go to step 8 else if github result exist go to step 5 else go to step 8 (null result).
+     // 5- Search stackoverflow profile by github result.
+     // 6- If number of results more than one go to step 7 else go to step 8 (null result).
+     // 7- If gravatar (email) exist find stackoverflow profile from result of step 5 by gravatar md5 code and go to step 8 else select first item of search result as final result and go to step 8
+     // 8- Show result.
+     *****************************************************************************************************************************************/
+
+
     var Result=undefined;
+
+    //**** Step [1] ****
     //$.get('https:/vav/api.stackexchange.com/2.2/users?site=stackoverflow&inname=' + (fullname.replace(' ','%20')).toLocaleLowerCase() )
     $.get('http://api.stackexchange.com/2.2/users?page=1&pagesize=100&sort=name&site=stackoverflow&inname=' + (fullname.replace(' ','%20')).toLocaleLowerCase() )
         .done( function(res){
+
+            //**** Step [2] ****
             if( res.items && res.items.length > 0 )
             {
-                //=====================================================
+                //**** Step [3] ****
                 if(md5_gravatar)
                 {
-
                     for(var i=0;i<res.items.length;i++)
                     {
                         if(res.items[i].profile_image.search(md5_gravatar)>=0)
@@ -196,14 +256,20 @@ function findStackoverflowProfile(profile, fullname, githubResult,md5_gravatar) 
                 else
                     Result=res.items[0];
                 //=====================================================
+                //**** Step [4] ****
                 if(Result)
+                     //**** Step [8] ****
                     showResultStackoverflow(profile,Result);
                 else if(githubResult)
                 {
+                    //**** Step [5] ****
                     $.get('http://api.stackexchange.com/2.2/users?page=1&pagesize=100&sort=name&site=stackoverflow&inname=' + githubResult.login )
                         .done( function(res1){
+
+                            //**** Step [6] ****
                             if( res1.items && res1.items.length > 0 )
                             {
+                                //**** Step [7] ****
                                 if(md5_gravatar)
                                 {
                                     for(var i=0;i<res1.items.length;i++)
@@ -218,19 +284,25 @@ function findStackoverflowProfile(profile, fullname, githubResult,md5_gravatar) 
                                 else
                                     Result=res1.items[0];
                             }
+                            //**** Step [8] ****
                             showResultStackoverflow(profile,Result);
                         });
                 }
                 else
+                    //**** Step [8] ****
                     showResultStackoverflow(profile,Result);
 
             }
             else if( githubResult)
             {
+                //**** Step [5] ****
                 $.get('http://api.stackexchange.com/2.2/users?page=1&pagesize=100&sort=name&site=stackoverflow&inname=' + githubResult.login )
                     .done( function(res1){
+
+                        //**** Step [6] ****
                         if( res1.items && res1.items.length > 0 )
                         {
+                            //**** Step [7] ****
                             if(md5_gravatar)
                             {
                                 for(var i=0;i<res1.items.length;i++)
@@ -269,6 +341,8 @@ function showResultStackoverflow(profile,Result)
 }
 
 function findDribbbleProfile(profile,username,resBehance,useBehance) {
+
+
     var searchTerm=undefined;
     if(useBehance==true)
         searchTerm=resBehance.username;
@@ -317,26 +391,45 @@ function findDribbbleProfile(profile,username,resBehance,useBehance) {
 }
 
 function findBehanceProfile(profile,username,fullname) {
+
+    /*********************************************** search algorithm for Behance profile *****************************************************
+     // 1- First search Behance profile by fullname
+     // 2- If number of results more than one, then go to step 5 else  go to step 3.
+     // 3- Search Behance profile by username (email).
+     // 4- If number of results more than one go to step 5 else go to step 6
+     // 5- Select first item of search result and show it, then start searching Dribbble profile
+     // 6- show null result and start searching Dribbble profile.
+     *****************************************************************************************************************************************/
+
     var fn = fullname.trim().replace(" ","%20");
+
+    //**** Step [1] ****
     $.getJSON('https://www.behance.net/v2/users?api_key=FnneyRH4STbpcKoqK8M2aQwdHkdAfXzb&q=' + fn + "&callback=?" ,
         function(res){
+
+            //**** Step [2] ****
             if( res.users.length > 0)
             {
+                //**** Step [5] ****
                 fillProfileAddress( profile.find('input[name=beprofile]'), res.users[0].username, true);
                 findDribbbleProfile(profile, username, res.users[0],true );
 
             }
             else
             {
+                //**** Step [3] ****
                 $.getJSON('https://www.behance.net/v2/users?api_key=FnneyRH4STbpcKoqK8M2aQwdHkdAfXzb&q=' + username + "&callback=?" ,
                 function(res1){
+                    //**** Step [4] ****
                     if( res1.users.length > 0)
                     {
+                        //**** Step [5] ****
                         fillProfileAddress( profile.find('input[name=beprofile]'), res1.users[0].username, true);
                         findDribbbleProfile(profile, username, res.users[0],false );
                     }
                     else
                     {
+                        //**** Step [6] ****
                         fillProfileAddress( profile.find('input[name=beprofile]'), '', false);
                         findDribbbleProfile(profile, username, null,false );
                     }
@@ -346,7 +439,6 @@ function findBehanceProfile(profile,username,fullname) {
             dataIsReceived('behance',res);
         });
 }
-
 
  function findTwitterProfile(profile,fullname,dribbleResult) {
      var searchTerm=undefined;
@@ -455,7 +547,7 @@ function findLinkedinProfile(profile,fullname) {
 
 function LinkedinSearchCompleted(response,search_term,profile)
 {
-    var pattern=/^(http:\/\/)*([w]{3}|[a-zA-Z]{2})(.linkedin.com\/)(in|pub)((\/)[\w.+\/-]+)*$/;
+    var pattern=/^(http:\/\/)*([w]{3}|[a-zA-Z]{2})(.linkedin.com\/)(in|pub)((\/)[\w.%&+\/-]+)*$/;
     var split_st=search_term.trim().split(" ");
     var keyWords=new Array();
     for(var i=0;i<split_st.length;i++)

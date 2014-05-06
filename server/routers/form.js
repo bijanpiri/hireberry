@@ -103,7 +103,7 @@ module.exports.findGravatarProfile = function (req,res){
     var crypto = require('crypto');
     var email = req.params.email.trim().toLowerCase();
     var md5 = require('crypto').createHash('md5').update(email).digest('hex');
-    var path = 'public/gravatar/' + md5;
+    var path = '../public/gravatar/' + md5;
 
     var options = {
         host: 'www.gravatar.com',
