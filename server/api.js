@@ -191,9 +191,9 @@ assignForm=function(assigneeUserID,assignedFormID,callback) {
 askForCommentOnForm=function(note,userID,formID,callback) {
     BComments({
         note: note,
-        comment: '',
+        comment: null,
         askingTime: new Date(),
-        commentTime:'',
+        commentTime:null,
         commenter:userID,
         subjectType:'form',
         formID:formID
@@ -202,13 +202,14 @@ askForCommentOnForm=function(note,userID,formID,callback) {
     });
 }
 
-askForCommentOnApplication=function(note,userID,applicationID,callback) {
+askForCommentOnApplication=function(note,userID,reqUserID,applicationID,callback) {
     BComments({
         note: note,
         comment: '',
         askingTime: new Date(),
         commentTime:'',
         commenter:userID,
+        user:reqUserID,
         subjectType:'application',
         applicationID:applicationID
     }).save(function(err){
@@ -219,11 +220,17 @@ askForCommentOnApplication=function(note,userID,applicationID,callback) {
 getAskedForCommentApplications=function(userID,callback) {
     BComments.find({commenter:userID,subjectType:'application',commentTime:''})
         .populate('applicationID')
+        .populate('user','_id displayName email')
         .exec( function(err,applications) {
             callback( err, applications )
         });
 }
-
+getApplicationComments=function(appID,callback){
+    BComments.find({applicationID:appID},function(err,comments){
+        if(!err)
+        callback(err,comments);
+    })
+}
 getAskedForCommentForms=function(userID,callback) {
     BComments.find({commenter:userID,subjectType:'form',commentTime:''})
         .populate('formID')

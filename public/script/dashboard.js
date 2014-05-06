@@ -115,18 +115,6 @@ $(function(){
         height: 400
     });
 
-
-    $('#teamNameChange').click( function() {
-        var newName = prompt('Enter new name:');
-        $.post('/api/team/name',{newName:newName}).done( function() {
-            $('#teamName').text(newName);
-        });
-    });
-
-    $('#teamAdminChange').click( function() {
-        $('.teamMemberMakeAdmin').show();
-    });
-
     $('.menu .item').click( function(e) {
         var sectionContainerClass = '.' + $(e.target).attr('forContainer');
         $('.sectionContainer').hide();
@@ -177,37 +165,34 @@ function refresh(once) {
     if(once==false)
         ;// setTimeout( refresh, 30000 );
 }
-
+var badgeNum=0;
+function add2NotificationBadge(x){
+    badgeNum+=x
+    $('#comments_badge').text(badgeNum);
+}
 function fillAskedForComments() {
 
-    $('#askedForCommentList').html('');
+    $('#askedForCommentList').empty();
+    $.get('/api/user/application/askedForComment').done( function(resApp) {
+        var apps = resApp.applications;
+        showApplications(apps);
+        add2NotificationBadge(apps.length);
 
-    $.get('/api/user/application/askedForComment').done( function(resApp){
-
-        $.get('/api/user/form/askedForComment').done( function(resForm){
-
-            $.get('/api/user/invitations').done( function(resInvitations){
-
-                $.get('/api/user/form/askedForPublish').done( function(askedForPublish){
-
-                    var A4P_forms = askedForPublish;
-                    var A4C_applicatinos = resApp.applications;
-                    var A4C_forms = resForm.forms;
-
-                    var badgeNum = resApp.applications.length
-                        + resForm.forms.length
-                        + resInvitations.length
-                        + A4P_forms.length;
-                    $('#comments_badge').text(badgeNum);
-
-                    showAskedForPublish(A4P_forms);
-                    showApplications(A4C_applicatinos);
-                    showForms(A4C_forms);
-                    showInvitations(resInvitations);
-                });
-            });
-        });
-    })
+    });
+    $.get('/api/user/form/askedForComment').done( function(resForm) {
+        var A4C_forms = resForm.forms;
+        showForms(A4C_forms);
+        add2NotificationBadge(resForm.forms.length);
+    });
+    $.get('/api/user/invitations').done( function(resInvitations) {
+        showInvitations(resInvitations);
+        add2NotificationBadge(resInvitations.length);
+    });
+    $.get('/api/user/form/askedForPublish').done( function(askedForPublish) {
+        var A4P_forms = askedForPublish;
+        showAskedForPublish(A4P_forms);
+        add2NotificationBadge( A4P_forms.length);
+    });
 
     function decreaseBudgeNumber() {
         var num = parseInt( $('#comments_badge').text() );
@@ -605,8 +590,19 @@ function fillTable() {
             });
 
             $('.bool-toggle-application').unbind('click').click( function() {
-                var candidate=$(this).closest('.candidate');
-                var isExpanded = candidate.hasClass('candidate-expanded');
+                var candidateSection=$(this).closest('.candidate');
+
+                var isExpanded = candidateSection.hasClass('candidate-expanded');
+
+                if(!candidateSection.commentFetched){
+                    $.get('/api/application/comments',{appID:candidate._id},function(data){
+                        var comments=data.comments;
+                        var userID=data.user;
+                        var form=$('.reply-for-comment-form').clone().show();
+
+                        candidateSection.commentFetched=true;
+                    })
+                }
 
                 if(!isExpanded ){
                     // Deselect Current Selection
@@ -616,7 +612,7 @@ function fillTable() {
                         .next()
                         .css('clear','none');
 
-                    candidate.css('clear','both')
+                    candidateSection.css('clear','both')
                         .addClass('candidate-expanded')
                         .next()
                         .css('clear','both');
@@ -626,9 +622,10 @@ function fillTable() {
                         .css('opacity',0.3);
                     $('#candidatesCollection .candidate-expanded').css('opacity',1);
 
+
                 }
                 else {
-                    candidate.css('clear','none')
+                    candidateSection.css('clear','none')
                         .removeClass('candidate-expanded')
                         .next()
                         .css('clear','none');
@@ -669,27 +666,6 @@ function fillTable() {
 
         });
 
-    $('#applicationsTable').WATable({
-        url: '/api/applications',
-        preFill: true,
-        pageSize: 10,
-        sorting: true,
-        filter: true,
-        sortEmptyLast: true,
-        hidePagerOnEmpty: true,
-        checkboxes: true,
-        actions: {
-            filter: true, //Toggle visibility
-            columnPicker: true, //Toggle visibility
-            custom: [
-                $('<a href="#">someLink</a>'),
-                $('<a href="#">anotherLink</a>')
-            ]
-        },
-        rowClicked: function(data) {
-            rowClicked(data);
-        }
-    });
 }
 
 function initWorkflow(candidateObj,candidate) {
@@ -850,83 +826,6 @@ function getStat() {
     });
 }
 
-function rowClicked(data) {
-
-    var activitiesObj = $('<div>').addClass('activities');
-    var appID = data.row._id;
-    var activities = data.row.activities;
-    var timelineRows = [];
-
-    for( var i=0; i<activities.length; i++ ) {
-
-        var activity = activities[i];
-        var dateTime = new Date(activity['timestamp']);
-        var activityItem = $('<div>').addClass('activity');
-        var timeStamp = $('<div>').addClass('activity-timestamp').text( dateTime.toLocaleString() );
-        var activityType = $('<div>').addClass('activity-type').text( activity['type'] );
-        var separator = $('<hr>').addClass('activity-separator');
-        var aboutDecision ='';
-
-        if( i > 0 ) {
-            var decisionTitle = $('<div>').append('Decision: ' +  activities[i-1]['type'] + ' &#10140; ' + activities[i]['type']);
-            var decisionBody = $('<div>');
-
-            var moreData = activities[i].data;
-            for( var key in moreData)
-                decisionBody.append('<b>' + key + '</b>' + ': ' + moreData[key] + '<br/>');
-
-            aboutDecision = $('<div>')
-                .addClass('activity-decision')
-                .append(decisionTitle)
-                .append(decisionBody);
-        }
-
-        activityItem.append(timeStamp).append(activityType).append(aboutDecision)
-        activitiesObj.prepend( activityItem );
-        timelineRows.push([dateTime,, activity['type']]);
-    }
-
-    $('#activitiesModal').find('.contain').html( activitiesObj );
-    $('#activitiesModal').dialog('open');
-
-    // Showing timeline must be called just after removing hidden property
-    loadTimeline(timelineRows);
-
-    var lastActivity = data.row.activities[ data.row.activities.length-1 ];
-    loadDecisionBox( lastActivity, appID );
-    getApplicationComments( appID );
-
-    // AskForComment section
-    $('#askForCommentOnApplication').unbind('click');
-    $('#askForCommentOnApplication').click( function() {
-        $.post('/api/team/application/askForComment', {
-            applicationID: appID,
-            userID: $('#teamMembersForComment :selected').attr('id')
-        }).done( function() {
-                $('#askForCommentMessage').text('Request is sent to ' + $('#teamMembersForComment :selected').text() );
-            });
-    });
-
-    $('#teamMembersForAssign option').remove();
-    $('#teamMembersForComment option').remove();
-
-    for( var i=0; i<teamMembers.length; i++ ){
-
-        var option = $('<option>')
-            .attr('name',teamMembers[i]._id)
-            .attr('id',teamMembers[i]._id)
-            .text(teamMembers[i].displayName);
-        $('#teamMembersForAssign').append( option.clone() );
-        $('#teamMembersForComment').append( option.clone() );
-    }
-
-}
-
-function loadDecisionBox(activity,applicationID) {
-
-    loadWorkflowStage(0,1);
-}
-
 function getAvatar(email) {
     var hash = CryptoJS.MD5( email.trim().toLowerCase() );
     return 'http://www.gravatar.com/avatar/' + hash;
@@ -937,18 +836,12 @@ function getTeamInfo(callback) {
         $('#teamJobsPage').attr('href','/team/' +  res.team._id + '/jobs')
         $('#teamName').text( res.team.name);
         $('#teamAdmin').text( res.team.admin.email);
-
         $('#currentTeamName').text( res.team.name);
 
-        if( res.isAdmin===true ) {
-            $('#teamNameChange').show();
-            $('#teamAdminChange').show();
-        }
 
         teamMembers = res.team.members;
-
-        $('#assignTo').html('');
-        $('#teamMembers').html('');
+        $('#assignTo').empty();
+        $('#teamMembers').empty();
         userAdmin = res.team.admin._id==res.user;
         for( var i=0; i<res.team.members.length; i++ ){
             var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(res.team.members[i].email));
@@ -989,62 +882,5 @@ function getTeamInfo(callback) {
 
 }
 
-function selectAssignedToFromList() {
-    var selectedFormID = $('#formsList :selected').attr('id');
 
-    forms.forEach( function(form) {
-        if( form.formID == selectedFormID )
-            $('#assignTo option[name=' + form.assignedTo + ']').attr('selected','selected');
-    });
-}
 
-function getApplicationComments(appID) {
-    $('#activitiesModal .comments').html('');
-
-    $.get('/api/application/comments', {applicationID:appID}).done( function(res){
-        res.comments.forEach( function(comment) {
-            var commentObj = $('<div>').addClass('comment');
-            commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
-            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
-            commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s comment:") );
-            commentObj.append( $('<div>').addClass('commentBody').text(comment.comment) );
-            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
-
-            $('.comments').append( commentObj );
-        });
-    });
-}
-
-function getPositionComments(appID) {
-    $('#positionComments .comments').html('');
-
-    $.get('/api/form/comments', {formID:appID}).done( function(res){
-        res.comments.forEach( function(comment) {
-            var commentObj = $('<div>').addClass('comment');
-            commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
-            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
-            commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s comment:") );
-            commentObj.append( $('<div>').addClass('commentBody').text(comment.comment) );
-            commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
-
-            $('#positionComments .comments').append( commentObj );
-        });
-    });
-}
-
-function generateMemberElement(member){
-
-    var imgurl = 'http://www.gravatar.com/avatar/'+
-        CryptoJS.MD5(member.email)+'?size=50';
-
-    return $('<a>')
-        .addClass('bool-user-item')
-        .append($('<img>')
-            .attr('src',imgurl))
-        .append(
-            $('<ul>')
-                .append($('<li>').append(member.displayName))
-                .append($('<li>').append(member.email)
-                )
-        ).data('member',member);
-}

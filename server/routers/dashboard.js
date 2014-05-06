@@ -77,25 +77,7 @@ module.exports.forms = function(req,res){
 module.exports.applications = function (req,res) {
 
     // Data-Source template (for WaTable.js)
-    var submittedForms = {
-        cols: {
-            userId: { index: 1, type: "number", unique:true, friendly:"Num" },
-            lastActivity: { index: 2, type: "string", friendly:"Last Activity" },
-            applyTime: { index: 3, type: "string", friendly:"Application Date/Time" },
-            position: { index: 4, type: "string", friendly:"Position" },
-            name: { index: 5, type: "string", friendly:"Name" },
-            email: { index: 6, type: "string", friendly:"Email" },
-            tel: { index: 6, type: "string", friendly:"Tel" },
-            website: { index: 6, type: "string", friendly:"Website" },
-            skills: { index: 7, type: "string", friendly:"Skills"},
-            profiles: { index: 8, type: "string", friendly:"Profiles"},
-            workTime: { index: 9, type: "string", friendly:"Work Time" },
-            workPlace: { index: 10, type: "string", friendly:"Work Place" },
-            resumePath: { index: 11, type: "string", friendly:"Resume" },
-            anythingelse: { index: 12, type: "string", friendly:"Cover Letter" }
-        },
-        rows: []
-    };
+    var submittedForms = {rows: []};
 
     var teamID = req.user.teamID;
     var userID = req.user._id;
@@ -141,9 +123,6 @@ module.exports.applications = function (req,res) {
                 for( var i=0; i<forms.length; i++ ) {
                     var form = forms[i]._doc;
 
-                    // userId
-                    form.userId = i+1;
-                    form.checked = false;
                     form.position = form.flyerID.flyer.description;
 
                     // Skills
@@ -163,10 +142,6 @@ module.exports.applications = function (req,res) {
                             selectedProfiles[profile] = profiles[profile];
                     form.profiles = selectedProfiles;
 
-                    // Worktype
-
-                    // Email
-
                     // Apply Date
                     var date = new Date( form.applyTime );
                     form.applyTime = date.toLocaleDateString();
@@ -183,7 +158,6 @@ module.exports.applications = function (req,res) {
                     // Move stage if it is interview and the date is over
                     // ToDo: This task must be done by a crone job or something like this
                     checkNeedForChangingStage(form.stage,form._id);
-
 
                     submittedForms.rows.push( form );
                 }

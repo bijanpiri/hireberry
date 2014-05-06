@@ -21,7 +21,8 @@ mongoose.connect(mongoHQConenctionString,options);
 BUsers = mongoose.model( 'users', {
     email: String,
     displayName: String,
-    password: Buffer,    salt: Buffer,
+    password: Buffer,
+    salt: Buffer,
     twittername:String,
     twitterid:String,
     twitterAccessToken:String,
@@ -60,6 +61,7 @@ BComments = mongoose.model( 'comments', {
     formID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
     commenter: {type : mongoose.Schema.ObjectId, ref : 'users'},
+    user: {type : mongoose.Schema.ObjectId, ref : 'users'},
     commentTime: String,
     askingTime: String,
     askerNotified: Boolean

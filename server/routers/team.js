@@ -125,7 +125,7 @@ app.post('/api/team/application/askForComment', function(req,res){
     var appID = req.body.appID;
     var note=req.body.note;
     // Check whether current user is admin or not
-    askForCommentOnApplication(note,userID, appID, function(err) {
+    askForCommentOnApplication(note,userID,req.user._id, appID, function(err) {
         res.send(200)
     } );
 
@@ -171,19 +171,20 @@ app.get('/api/user/form/askedForPublish',function(req,res){
     })
 });
 
+
 app.get('/api/application/comments',function(req,res){
-
-    if( !checkUser(req,res) )
+    if(!checkUser(req,res))
         return;
-
-    // ToDo: (Security) Check wheter user can access this applicationID or no.
-    var userID = req.user._id;
-    var applicationID = req.query.applicationID;
-
-    getComments(applicationID, 'applciation', function(err,comments) {
-        res.send(200,{comments:comments});
-    })
+    var appID=req.query.appID;
+    getApplicationComments(appID,function(err,comments){
+        res.send(200,
+            {
+                comments:comments,
+                user:req.user._id
+            });
+    });
 });
+
 
 app.get('/api/user/teams', function(req,res) {
     BTeams.find({members:req.user._id}, function(err,teams){
