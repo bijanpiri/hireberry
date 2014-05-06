@@ -315,7 +315,7 @@
                         <a class="close" data-dismiss="alert">&times;</a>
                         <strong>Faield </strong> to send ask for commnet. Retrying in
                         <span class="bool-retry-timeout">10</span>s...
-                        <button type="submit" class="btn btn-info" data-loading-text="Sending ...">Try now</button>
+                        <button type="submit" class="btn btn-info pull-right" data-loading-text="Sending ...">Try now</button>
                     </div>
                     <div class="alert alert-dismissable alert-success bool-alert-toast hide">
                         <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
@@ -326,8 +326,7 @@
 
             </form>
             <form class="form-horizontal reply-for-comment-form" hidden>
-                <legend>Reply to user ask for comment</legend>
-                <input type="hidden" name="appID">
+                <input type="hidden" name="commentID">
                 <div style="text-align: center;padding: 1em;">
                     <div class="control-group">
 
@@ -341,12 +340,20 @@
 
                             <div class="commenter-note-avatar">
                             </div>
+
                             <textarea flexible
                                     class="bool-application-comments-comment"
-                                    name="comment"></textarea>
+                                    name="comment" placeholder="leave your comment here...">
+                                    </textarea>
 
                     </div>
-                    <button type="submit" class="btn btn-danger">Reply to ask for comment</button>
+                    <div class="control-group">
+                        <a class="bool-edit-comment-btn btn btn-info pull-right"
+                           >Edit</a>
+                        <button type="submit" class="btn btn-danger pull-right">
+                            Reply
+                        </button>
+                    </div>
 
                 </div>
                 <div class="bool-alert-group">
@@ -358,7 +365,10 @@
                         <a class="close" data-dismiss="alert">&times;</a>
                         <strong>Faield </strong> to send ask for commnet. Retrying in
                         <span class="bool-retry-timeout">10</span>s...
-                        <button type="submit" class="btn btn-info" data-loading-text="Sending ...">Try now</button>
+                        <button type="submit" class="btn btn-info"
+                                data-loading-text="Sending ...">
+                            Try now
+                        </button>
                     </div>
                     <div class="alert alert-dismissable alert-success bool-alert-toast hide">
                         <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>

@@ -205,9 +205,7 @@ askForCommentOnForm=function(note,userID,formID,callback) {
 askForCommentOnApplication=function(note,userID,reqUserID,applicationID,callback) {
     BComments({
         note: note,
-        comment: '',
         askingTime: new Date(),
-        commentTime:'',
         commenter:userID,
         user:reqUserID,
         subjectType:'application',
@@ -228,6 +226,7 @@ getAskedForCommentApplications=function(userID,callback) {
 getApplicationComments=function(appID,callback){
     BComments.find({applicationID:appID})
         .populate('user commenter','_id displayName email')
+        .sort({commentTime:+1})
         .exec(function(err,comments){
             if(!err)
                 callback(err,comments);

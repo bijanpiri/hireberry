@@ -184,7 +184,25 @@ app.get('/api/application/comments',function(req,res){
             });
     });
 });
+app.post('/api/application/comments',function(req,res) {
+    if(!checkUser(req,res))
+        return;
 
+    var commentID=req.body.commentID;
+    var comment=req.body.comment;
+    BComments.update(
+        {_id:commentID,commenter:req.user._id},
+        {comment:comment,commentTime:new Date()},
+        function(err,affected){
+            if(affected==0)
+                res.send(401)
+            else if(err)
+                res.send(500);
+            else
+            res.send(200);
+        }
+    )
+});
 
 app.get('/api/user/teams', function(req,res) {
     BTeams.find({members:req.user._id}, function(err,teams){

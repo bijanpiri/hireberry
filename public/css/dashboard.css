@@ -553,11 +553,22 @@
     text-align: left;
 }
 .bool-application-comments-comment{
+    font-size: 14px;
     width: 300px;
     min-height:100px;
     resize: none;
     border: 2px solid #B3B3B3;
     border-radius: 4px;
+    overflow: hidden;
+
+    cursor: text;
+}
+.bool-application-comments-comment[readonly] {
+    cursor: text;
+    background: #c8c7c6;
+}
+.reply-for-comment-form{
+    margin-bottom: 0;
 }
 form{
     text-align: left;
