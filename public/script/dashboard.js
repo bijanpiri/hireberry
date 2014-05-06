@@ -599,7 +599,7 @@ function fillTable() {
                         var comments=data.comments;
                         var userID=data.user;
                         var form=$('.reply-for-comment-form').clone().show();
-
+                        form.parent().append(form);
                         candidateSection.commentFetched=true;
                     })
                 }
