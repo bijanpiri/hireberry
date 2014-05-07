@@ -38,17 +38,28 @@
                 <a id="cancelChangeUserTeam" href="#" class="btn btn-mini btn-danger">Cancel</a>
             </div>
         </div>
-        <div class="item" forContainer="analyticsContainer">Overview</div>
-        <div class="item" forContainer="teamContainer">Team</div>
-        <div class="item" forContainer="positionsContainer">Jobs</div>
-        <div class="item" forContainer="applicationsContainer">Applications</div>
-        <div class="item" forContainer="billingContainer">Billing</div>
+
+        <input type="radio" id="radio-item-overview" hidden name="menuItems" checked>
+        <label class="item" for="radio-item-overview" onclick="window.location='#overviewp'">Overview</label>
+
+        <input type="radio" id="radio-item-team" hidden name="menuItems">
+        <label class="item" for="radio-item-team" onclick="window.location='#teamp'">Team</label>
+
+        <input type="radio" id="radio-item-jobs" hidden name="menuItems">
+        <label class="item" for="radio-item-jobs" onclick="window.location='#jobsp'">Jobs</label>
+
+        <input type="radio" id="radio-item-applications" hidden name="menuItems">
+        <label class="item" for="radio-item-applications" onclick="window.location='#applicationsp'">Applications</label>
+
+        <input type="radio" id="radio-item-billing" hidden name="menuItems">
+        <label class="item" for="radio-item-billing" onclick="window.location='#billingp'">Billing</label>
+
     </div>
 </div>
 
 <div class="span10 right-panel">
 
-<div class="container-fluid analyticsContainer sectionContainer">
+<div id="overviewp" class="container-fluid sectionContainer">
     <div class="row-fluid statisticsRow">
         <div class="span3 statBox">
             <div class="number" id="numForms"></div>
@@ -103,8 +114,7 @@
     </div>
 </div>
 
-
-<div class="container-fluid teamContainer sectionContainer" hidden>
+<div id="teamp" class="container-fluid sectionContainer">
     <div class="row-fluid">
         <div class="offset9 span3">
             <a href="#team-settings-dialog" role="button"
@@ -140,7 +150,7 @@
     </div>
 </div>
 
-<div class="container-fluid positionsContainer sectionContainer" hidden>
+<div id="jobsp" class="container-fluid sectionContainer">
 
     <div class="row-fluid">
         <div class="span12">
@@ -160,7 +170,7 @@
 
 </div>
 
-<div class="container-fluid applicationsContainer sectionContainer" hidden>
+<div id="applicationsp" class="container-fluid sectionContainer">
 <div class="row-fluid tableRow" hidden>
     <div class="span12">
         <div id="applicationsTable"></div>
@@ -496,7 +506,7 @@
 </div>
 </div>
 
-<div class="container-fluid billingContainer sectionContainer" hidden>
+<div id="billingp" class="container-fluid sectionContainer">
     <div class="row-fluid tableRow">
         <div class="offset3 span2">
             <div class="plan">

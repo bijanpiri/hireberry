@@ -65,9 +65,11 @@ function fillTeamSetting(){
         }
     );
 }
+
 function fillAsk4Comment(){
     $('.bool-ask-4-comment-users').populateUserCombo(teamMembers,0,'userID');
 }
+
 $(function(){
     teamSettings();
     fillTeamSetting();
@@ -116,6 +118,8 @@ $(function(){
     });
 
     $('.menu .item').click( function(e) {
+        return;
+
         var sectionContainerClass = '.' + $(e.target).attr('forContainer');
         $('.sectionContainer').hide();
         $(sectionContainerClass).show();
@@ -380,7 +384,6 @@ function fillAskedForComments() {
     }
 }
 
-
 function fillPositionsList( callback ) {
 
     $.get('/api/forms?teamID=' + teamID).done( function(res) {
@@ -495,7 +498,6 @@ function fillPositionsList( callback ) {
         callback();
     })
 }
-
 
 function fillTable() {
 

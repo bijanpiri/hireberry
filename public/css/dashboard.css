@@ -64,6 +64,14 @@
 .menu .item {
     border-left: 4px solid #D5D5D5;
     padding: 1em 0;
+    display: block;
+    color: #000;
+    margin: 0;
+    font-size: 1em;
+}
+
+.menu .item:hover {
+    text-decoration: none;
 }
 
 .menu .item:hover {
@@ -71,14 +79,21 @@
     cursor: pointer;
 }
 
-.menu .item-selected {
+.menu .item-selected:hover {
+}
+
+.menu input[type=radio]:checked + label {
     background-color: rgb(200, 230, 200);
     border-left: 4px solid green;
 }
 
-.menu .item-selected:hover {
+#wrap .right-panel #overviewp:target,
+#wrap .right-panel #teamp:target,
+#wrap .right-panel #jobsp:target,
+#wrap .right-panel #applicationsp:target,
+#wrap .right-panel #billingp:target{
+    display: block;
 }
-
 
 #wrap .right-panel .container-fluid {
     background-color: #f1f1f1;
@@ -89,6 +104,7 @@
     top: 0;
     padding: 30px;
     border-radius: 4px;
+    display: none;
 }
 
 .headerRow {
@@ -211,6 +227,7 @@
     margin: 0 0.3em;
     vertical-align: sub;
 }
+
 .statBox .text {
     font-size: 1.5em;
     color: #1BBD27;
@@ -338,19 +355,16 @@
     cursor: pointer;
 }
 
-
 #teamAdminChange {
     margin: 0 1em;
     font-size: 1.2em;
     cursor: pointer;
 }
 
-
 #teamAdminTitle {
     font-size: 1.5em;
     color: rgb(155, 152, 152);
 }
-
 
 #teamMembers {
 
