@@ -4,6 +4,19 @@
 
 
 // region Views
+app.get('/flyer/embeded/:flyerID', function(req,res){
+
+    res.render('flyerEditor.ejs',{
+        title:'-',
+        flyerid: req.params.flyerID,
+        templateID: 0,
+        editMode: false,
+        viewMode: "embeded",
+        existFlyer: true
+    });
+
+});
+
 app.get('/flyer/:mode/:tid', function(req,res){
 
     var flyerid;
@@ -68,19 +81,6 @@ app.get('/flyer/:mode/:tid', function(req,res){
     };
 
     getLastFlyer();
-});
-
-app.get('/flyer/embeded/:flyerID', function(req,res){
-
-    res.render('flyerEditor.ejs',{
-        title:'-',
-        flyerid: req.params.flyerID,
-        templateID: 0,
-        editMode: false,
-        viewMode: "embeded",
-        existFlyer: true
-    });
-
 });
 // endregion
 

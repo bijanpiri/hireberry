@@ -6,69 +6,7 @@ var userID = '<%=userID%>';
 var teamMembers = [];
 var userAdmin = null;
 var forms = [];
-
-
-function teamInvitation(){
-    $('#teamInvitationForm').submit(function(){
-        var form=$(this);
-        form.find('.alert-info').show();
-        $.post('/api/team/invite',form.serialize())
-            .always(function(){
-                $('.alert').hide();
-                $('#team-invitation-dialog').modal('hide');
-                refresh(true);
-            })
-            .done( function() {
-                form.find('.alert-success').show().delay(2000).fadeOut();
-                $('#invitationEmail').val('');
-                $('#invitationNote').val('');
-                getTeamInfo();
-            })
-            .fail(function(){
-                form.find('.alert-danger').show();
-            });
-        return false;
-
-    })
-}
-
-function teamSettings(){
-    $('#teamSettingForm').submit(function(event){
-        var form=$(this);
-        form.find('.alert-info').show();
-        $.post('/api/team/settings',
-                form.serialize())
-            .always(function(data){
-                $('.alert').hide();
-                $('#team-settings-dialog').modal('hide');
-                refresh(true);
-            })
-            .fail(function(data){
-                form.find('.alert-danger').show();
-            })
-            .done(function(data){
-                form.find('.alert-success').show().delay(2000).fadeOut();
-            });
-        event.preventDefault();
-        return false;
-    });
-}
-
-function fillTeamSetting(){
-    $.get('/api/team/settings',
-        function (data) {
-            $('[name=teamAdmin]').val(data.admin._id);
-            $('[name=teamName]').val(data.name);
-            $('[name=teamAddress]').val(data.address);
-            $('[name=teamTel]').val(data.tel);
-            $('.team-admin-combo').populateUserCombo(data.members,data.admin,'teamAdmin');
-        }
-    );
-}
-
-function fillAsk4Comment(){
-    $('.bool-ask-4-comment-users').populateUserCombo(teamMembers,0,'userID');
-}
+var badgeNum=0;
 
 $(function(){
     teamSettings();
@@ -153,27 +91,76 @@ function refresh(once) {
                     .attr('userID',teamMembers[i]._id)
                     .text(teamMembers[i].displayName);
                 $('.colAssignedTo select').append( option.clone() );
-
             }
-            fillAsk4Comment();
+
+            $('.bool-ask-4-comment-users').populateUserCombo(teamMembers,0,'userID');
 
         });
     });
-    fillTable();
+
+    fillApplications();
     getStat();
     fillAskedForComments();
     fillCalendar();
-    fillUserTeams();
+    initTeamSwtichBox();
     fillTeamSetting();
 
     if(once==false)
         ;// setTimeout( refresh, 30000 );
 }
-var badgeNum=0;
+
 function add2NotificationBadge(x){
-    badgeNum+=x
+    badgeNum += x;
     $('#comments_badge').text(badgeNum);
 }
+
+// region Overview
+function getStat() {
+    $.get('/api/applications/stat').done( function(res){
+        $('#numForms').text( res.numForms )
+        $('#numApplications').text( res.numApplications )
+        $('#numNewApplications').text( res.numNewApplications )
+        $('#numTodayApplications').text( res.numTodayApplications )
+    });
+}
+
+function fillCalendar() {
+    $.get('/event').done( function(events) {
+
+        var eventsList = events.map( function(event) {
+            var m = new moment(event.time);
+
+            return {
+                date: m.format('YYYY-MM-DD'),
+                title: (event.title || 'Event'),
+                location:  m.format('DD MMM[,] ddd')  + ' ( ' + m.fromNow() + ' ) '
+            };
+        });
+
+        /*
+         [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
+         */
+
+        $('#full-clndr').clndr({
+            template: $('#full-clndr-template').html(),
+            events:  eventsList,
+            clickEvents: {
+                click: function(target) {
+                    console.log(target);
+                },
+                onMonthChange: function(month) {
+                    console.log('you just went to ' + month.format('MMMM, YYYY'));
+                }
+            },
+            doneRendering: function() {
+                console.log('this would be a fine place to attach custom event handlers.');
+            }
+        });
+
+    });
+}
+// endregion
+
 function fillAskedForComments() {
 
     $('#askedForCommentList').empty();
@@ -216,30 +203,11 @@ function fillAskedForComments() {
                 .append( $('<a>').attr('applicationID',a4c.applicationID._id).text('this application')
                     .click( function() {
                         showApplicationPreview( $(this).attr('applicationID') );
-                    }))
-
-            var textAreaObj = $('<textarea>')
-                .attr('id','comment_app_' + a4c.applicationID._id)
-                .css('display','block')
-                .attr('placeholder','Your comment ...');
-
-            var sendBtnObj = $('<button>')
-                .text('Send')
-                .click( function() {
-                    $.post('/api/user/comment', {
-                        askForCommentID:a4c._id,
-                        comment:$('#comment_app_' + a4c.applicationID._id).val()
-                    }).done( function() {
-                            $('#' + objID).remove();
-                            decreaseBudgeNumber();
-                        });
-                });
+                    }));
 
             $('#askedForCommentList').append( $('<li>').attr('id',objID)
                 .append(dateObj)
-                .append(titleObj)
-                .append(textAreaObj)
-                .append(sendBtnObj) );
+                .append(titleObj) );
         });
     }
 
@@ -320,39 +288,57 @@ function fillAskedForComments() {
         $.get('/api/application/json/' + applicationID).done( function(app) {
             app = app[0];
 
-            var workTime = app.workTime;
-            var workPlace = app.workPlace;
-            var profiles = app.profiles.length ? JSON.parse(app.profiles) : '';
-            var coverLetter = app.anythingelse;
-            var resumePath = app.resumePath;
-            var name = app.name;
-            var email = app.email;
-            var skills = app.skills.length ? JSON.parse(app.skills) : '';
+            var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
+            var candidate = res.rows[i];
 
-            var profielsArray = [];
-            for( var profile in profiles )
-                profielsArray += '<br>' + profile + ':' + profiles[profile];
-            profiles = profielsArray;
+            candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
+            candidateObj.find('.candidate-name').text(candidate.name);
+            candidateObj.find('.candidate-job .value').text(candidate.position);
+            candidateObj.find('.candidate-time .value').text(candidate.applyTime);
+            candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
+            candidateObj.find('.candidate-skills .value').text(candidate.skills);
+            candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
+            candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
+            candidateObj.find('.candidate-email .value').text(candidate.email);
+            candidateObj.find('.candidate-tel .value').text(candidate.tel);
+            candidateObj.find('.candidate-website .value').text(candidate.website);
+            candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
+            candidateObj.find('[name="appID"]').val(candidate._id);
+            candidateObj.find('.ask-for-comment-form')
+                .submit( function() {
+                    var form=$(this);
+                    $.post('/api/team/application/askForComment',
+                            form.serialize())
+                        .always(function(){
+                            $('.alert').hide();
+//                                refresh(true);
+                        })
+                        .done( function() {
+                            form.find('.alert-success').show().delay(2000).fadeOut();
+                        })
+                        .fail(function(){
+                            form.find('.alert-danger').show();
+                        });
+                    return false;
+                });
 
-            var workTimeObj = $('<div>').text('Work Time: ' + workTime);
-            var workPlaceObj = $('<div>').text('Work Place: ' + workPlace);
-            var profilesObj = $('<div>').html('Profiles: ' + profiles);
-            var coverLetterObj = $('<div>').text('Cover Letter: ' + coverLetter);
-            var resumePathObj = $('<div>').text('Resume Path: ' + resumePath);
-            var nameObj = $('<div>').text('Name: ' + name);
-            var emailObj = $('<div>').text('Email: ' + email);
-            var skillsObj = $('<div>').text('Skills: ' + skills);
+            for( var j=0; j<candidate.activities.length; j++ ) {
+                var activity = candidate.activities[j];
+                var mTimestamp = new moment(activity.timestamp);
+                var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
+                var typeObj = $('<div>').addClass('activity-type').text( activity.type );
+                var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
 
+                candidateObj.find('.candidate-activities').append( activityObj );
+            }
 
-            var previewObj = $('<div>').addClass('applicationsPreview')
-                .append(nameObj)
-                .append(emailObj)
-                .append(workTimeObj)
-                .append(workPlaceObj)
-                .append(profilesObj)
-                .append(coverLetterObj)
-                .append(resumePathObj)
-                .append(skillsObj)
+            for( var profile in candidate.profiles )
+                candidate.profiles[ profile ];
+
+            initWorkflow(candidateObj,candidate);
+            changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
+
+            $('#candidatesCollection').append( candidateObj );
 
 
             $('#applicationPreview').append( previewObj )
@@ -384,16 +370,17 @@ function fillAskedForComments() {
     }
 }
 
+// region Jobs
 function fillPositionsList( callback ) {
 
     $.get('/api/forms?teamID=' + teamID).done( function(res) {
 
         forms = res.forms;
 
-        $('.positionsContainer .position').remove();
+        $('#jobsp .position').remove();
 
         res.forms.forEach( function(form) {
-            var row = $('.positionsContainer .positionsHeaderRow')
+            var row = $('#jobsp .positionsHeaderRow')
                 .clone()
                 .removeClass('positionsHeaderRow');
 
@@ -420,7 +407,6 @@ function fillPositionsList( callback ) {
 
             var settingBtnObj = $('<a>')
                 .addClass('fa fa-cogs')
-                .attr('href','#')
                 .click( function(e) {
 
                     // Initializing modal fields
@@ -492,14 +478,16 @@ function fillPositionsList( callback ) {
             row.addClass('position').attr('id',form.formID).click( function() {
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
             });
-            $('.positionsContainer').append( row );
+            $('#jobsp').append( row );
         });
 
         callback();
     })
 }
+// endregion
 
-function fillTable() {
+// region Applications
+function fillApplications() {
 
     $('#applicationsTable').html('');
     $('#candidatesCollection .candidate').remove();
@@ -576,19 +564,19 @@ function fillTable() {
             });
 
             $('.application-searchButton').unbind('click').click( function() {
-                fillTable();
+                fillApplications();
             });
 
             // Sorting
             $('.application-sort .sortByDate').unbind('click').click( function() {
                 $('.application-sort').attr('sortBy','date');
                 $('.application-sortType').text('Date');
-                fillTable();
+                fillApplications();
             });
             $('.application-sort .sortByName').unbind('click').click( function() {
                 $('.application-sort').attr('sortBy','name');
                 $('.application-sortType').text('Name');
-                fillTable();
+                fillApplications();
             });
 
             $('.bool-toggle-application').unbind('click').click( function() {
@@ -723,8 +711,6 @@ function fillTable() {
                 });
             });
 
-
-
         });
 
 }
@@ -809,87 +795,70 @@ function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
     if( stageNo==1 )
         candidateObj.find('.candidate-workflow-stage.' + stages[1] +' .interviewDate').text( candidate.stage.interviewDate );
 }
-
-function fillCalendar() {
-    $.get('/event').done( function(events) {
-
-        var eventsList = events.map( function(event) {
-            var m = new moment(event.time);
-
-            return {
-                date: m.format('YYYY-MM-DD'),
-                title: (event.title || 'Event'),
-                location:  m.format('DD MMM[,] ddd')  + ' ( ' + m.fromNow() + ' ) '
-            };
-        });
-
-        /*
-         [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
-         */
-
-        $('#full-clndr').clndr({
-            template: $('#full-clndr-template').html(),
-            events:  eventsList,
-            clickEvents: {
-                click: function(target) {
-                    console.log(target);
-                },
-                onMonthChange: function(month) {
-                    console.log('you just went to ' + month.format('MMMM, YYYY'));
-                }
-            },
-            doneRendering: function() {
-                console.log('this would be a fine place to attach custom event handlers.');
-            }
-        });
-
-    });
-}
-
-function fillUserTeams() {
-
-    $('#userTeams').html('');
-
-    $.get('/api/user/teams').done( function(teams) {
-        teams.forEach( function(team) {
-            $('#userTeams').append( $('<option>').text(team.name).attr('name',team._id) );
-        });
-
-        $('#switchButton').unbind('click').click( function() {
-            $('#switchTeamEdit').show();
-            $('#switchTeamView').hide();
-        });
-
-        $('#cancelChangeUserTeam').unbind('click').click( function() {
-            $('#switchTeamView').show();
-            $('#switchTeamEdit').hide();
-        });
-
-        $('#changeUserTeam').unbind('click').click( function() {
-            var teamID = $('#userTeams :selected').attr('name');
-
-            $.post('/api/user/changeTeam', {teamID:teamID}).done( function() {
-                refresh(true);
-
-                $('#switchTeamView').show();
-                $('#switchTeamEdit').hide();
-            })
-        })
-    })
-}
-
-function getStat() {
-    $.get('/api/applications/stat').done( function(res){
-        $('#numForms').text( res.numForms )
-        $('#numApplications').text( res.numApplications )
-        $('#numNewApplications').text( res.numNewApplications )
-        $('#numTodayApplications').text( res.numTodayApplications )
-    });
-}
+// endregion
 
 function getAvatar(email) {
     var hash = CryptoJS.MD5( email.trim().toLowerCase() );
     return 'http://www.gravatar.com/avatar/' + hash;
+}
+
+// region Team
+function teamInvitation(){
+    $('#teamInvitationForm').submit(function(){
+        var form=$(this);
+        form.find('.alert-info').show();
+        $.post('/api/team/invite',form.serialize())
+            .always(function(){
+                $('.alert').hide();
+                $('#team-invitation-dialog').modal('hide');
+                refresh(true);
+            })
+            .done( function() {
+                form.find('.alert-success').show().delay(2000).fadeOut();
+                $('#invitationEmail').val('');
+                $('#invitationNote').val('');
+                getTeamInfo();
+            })
+            .fail(function(){
+                form.find('.alert-danger').show();
+            });
+        return false;
+
+    })
+}
+
+function teamSettings(){
+    $('#teamSettingForm').submit(function(event){
+        var form=$(this);
+        form.find('.alert-info').show();
+        $.post('/api/team/settings',
+                form.serialize())
+            .always(function(data){
+                $('.alert').hide();
+                $('#team-settings-dialog').modal('hide');
+                refresh(true);
+            })
+            .fail(function(data){
+                form.find('.alert-danger').show();
+            })
+            .done(function(data){
+                form.find('.alert-success').show().delay(2000).fadeOut();
+            });
+        event.preventDefault();
+        return false;
+    });
+}
+
+function fillTeamSetting(){
+    $.get('/api/team/settings',
+        function (data) {
+            $('[name=teamAdmin]').val(data.admin._id);
+            $('[name=teamName]').val(data.name);
+            $('[name=teamAddress]').val(data.address);
+            $('[name=teamTel]').val(data.tel);
+            $('.team-admin-combo').populateUserCombo(data.members,data.admin,'teamAdmin');
+        }
+    );
 }
 
 function getTeamInfo(callback) {
@@ -943,5 +912,36 @@ function getTeamInfo(callback) {
 
 }
 
+function initTeamSwtichBox() {
 
+    $('#userTeams').html('');
+
+    $.get('/api/user/teams').done( function(teams) {
+        teams.forEach( function(team) {
+            $('#userTeams').append( $('<option>').text(team.name).attr('name',team._id) );
+        });
+
+        $('#switchButton').unbind('click').click( function() {
+            $('#switchTeamEdit').show();
+            $('#switchTeamView').hide();
+        });
+
+        $('#cancelChangeUserTeam').unbind('click').click( function() {
+            $('#switchTeamView').show();
+            $('#switchTeamEdit').hide();
+        });
+
+        $('#changeUserTeam').unbind('click').click( function() {
+            var teamID = $('#userTeams :selected').attr('name');
+
+            $.post('/api/user/changeTeam', {teamID:teamID}).done( function() {
+                refresh(true);
+
+                $('#switchTeamView').show();
+                $('#switchTeamEdit').hide();
+            })
+        })
+    })
+}
+// endregion
 

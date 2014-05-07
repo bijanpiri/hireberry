@@ -35,15 +35,17 @@
     left: 40px;
     bottom: 0;
     top: 0;
-    background-color: #6EB87D;
     border-radius: 7px 0 0 7px;
+    overflow-y: auto;
+    background-color: rgb(238, 238, 238);
+    border: 3px solid #6EB87D;
 }
 
 #notificationCenter .panel .nc-header {
     font-size: 2em;
     text-align: center;
     margin: 0.5em 0;
-    color: #fff;
+    color: #000;
 }
 
 .menu {
@@ -448,16 +450,18 @@
 
 #askedForCommentList {
     list-style-type: none;
+    margin: 0 10px;
 }
 
 #askedForCommentList li {
-    border-left: 3px solid #5E5E5E;
+    border-top: 1px solid #5E5E5E;
     padding: 10px;
     margin: 5px 0;
 }
 
 #askedForCommentList li .comment_date {
-    color: #ffffff;
+    color: #8A8A8A;
+    font-size: 1em;
 }
 
 #askedForCommentList li div {

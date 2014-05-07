@@ -216,7 +216,7 @@ askForCommentOnApplication=function(note,userID,reqUserID,applicationID,callback
 }
 
 getAskedForCommentApplications=function(userID,callback) {
-    BComments.find({commenter:userID,subjectType:'application',commentTime:''})
+    BComments.find({commenter:userID,subjectType:'application',commentTime:null})
         .populate('applicationID')
         .populate('user','_id displayName email')
         .exec( function(err,applications) {
@@ -233,7 +233,7 @@ getApplicationComments=function(appID,callback){
         })
 }
 getAskedForCommentForms=function(userID,callback) {
-    BComments.find({commenter:userID,subjectType:'form',commentTime:''})
+    BComments.find({commenter:userID,subjectType:'form',commentTime:null})
         .populate('formID')
         .exec( function(err,forms) {
             callback( err, forms )
