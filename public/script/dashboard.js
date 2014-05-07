@@ -286,10 +286,9 @@ function fillAskedForComments() {
         $('#applicationPreview').html('');
 
         $.get('/api/application/json/' + applicationID).done( function(app) {
-            app = app[0];
 
             var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
-            var candidate = res.rows[i];
+            var candidate = app[0];
 
             candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
             candidateObj.find('.candidate-name').text(candidate.name);
@@ -335,13 +334,7 @@ function fillAskedForComments() {
             for( var profile in candidate.profiles )
                 candidate.profiles[ profile ];
 
-            initWorkflow(candidateObj,candidate);
-            changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
-
-            $('#candidatesCollection').append( candidateObj );
-
-
-            $('#applicationPreview').append( previewObj )
+            $('#applicationPreview').append( candidateObj )
         });
 
 
@@ -454,7 +447,9 @@ function fillPositionsList( callback ) {
                     modal.find('.saveButton').click( function() {
                         var responderID = $('[name=jobResponder]').val();
                         $.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
-                        modal.modal('hide')
+                        modal.modal('hide');
+
+                        fillPositionsList();
                     })
 
                     modal.modal();
