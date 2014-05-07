@@ -155,16 +155,8 @@ function loadFlyer() {
 function loadTemplateChooser() {
 
     $('.thumbnail').unbind('click').click(function(){
-        // Deselect old selected item
-        if( selectedThumbID )
-            $('.thumbnail[thumbnailID='+ selectedThumbID +']').removeClass('selected');
-
         // Select recent selected item
-        selectedThumbID = $(this).attr('thumbnailID');
-        $(this).find('img').first().addClass('selected');
-
-        $('.thumbnailPreview').find('.caption').text( $(this).attr('caption') );
-        $('.thumbnailPreview').find('.description').text( $(this).attr('description') );
+        templateID = $(this).attr('thumbnailID');
     }) ;
 
     $('.templateRow').show();
@@ -275,11 +267,13 @@ function loadEditor() {
     $('.flyerRow').show();
     $('#fixToolbar').show();
     $('#buttonEditview').hide();
+    $('.portletCreator').show().animate({height:100},500);
 
     loadFlyer();
 
     $('#buttonPublish').click( function() {
         loadPublishPanel();
+        $('#publishModal').modal();
     })
 
     $('#plusButton').click(function(){
@@ -394,9 +388,6 @@ function hideLoading() {
 }
 
 function loadPublishPanel() {
-    $('.flyerRow').hide();
-    $('.publishRow').show();
-    $('#fixToolbar').hide();
 
     var flyerJson = flyer.flyer2json();
 
@@ -452,7 +443,13 @@ function loadPublishPanel() {
 }
 
 function loadSharePanel() {
-    $('.publishRow').hide();
+    $('#publishModal').modal('hide')
+    document.location = '/dashboard#jobsp';
+    return;
+
+    $('.flyerRow').hide();
+    $('.publishRow').show();
+    $('#fixToolbar').hide();
     $('.shareRow').show();
 
     $('#flyerName3').text( $('#flyerName2').val()  );

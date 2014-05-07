@@ -692,3 +692,20 @@ Portlet Creator
     position: relative;
     text-align: center;
 }
+
+.modal {
+    z-index: 24001;
+}
+.modal-backdrop {
+    z-index: 24000;
+}
+
+.thumbnail {
+    border: 3px solid transparent;
+    border-radius: 0;
+}
+
+.thumbnails input[type=radio]:checked + label {
+    border-bottom: 3px solid rgb(30, 114, 22);
+    background-color: rgba(31, 116, 23, 0.17);
+}

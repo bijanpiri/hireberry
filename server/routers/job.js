@@ -4,6 +4,11 @@
 
 
 // region Views
+app.get('/flyer/new',function(req,res){
+    res.cookie('flyerid','');
+    res.redirect('/flyer/editor/0');
+});
+
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
     res.render('flyerEditor.ejs',{
@@ -144,10 +149,6 @@ app.get('/api/forms',  function(req,res){
 // region Flyers
 
 
-app.get('/flyer/new',function(req,res){
-    res.redirect('/flyer/editor/0');
-});
-
 app.get('/flyer/:templateID/json/:id', function(req,res){
 
     //if(!checkUser(req,res))
@@ -169,7 +170,7 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
     }
     else { // Load a pre-built template
 
-        var templates = require('./../templates.js');
+        var templates = require('../etc/templates.js');
 
         if( 0 < templateID && templateID < 10)
             res.send( templates.FlyerTemplates[ templateID ] );
