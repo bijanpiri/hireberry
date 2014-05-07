@@ -2,7 +2,144 @@
  * Created by Bijan on 04/29/2014.
  */
 
-// region Flyers
+// region Views
+app.get('/flyer/:mode/:tid', function(req,res){
+
+    var flyerid;
+    var templateID = req.params.tid;
+    var editMode = (req.params.mode || 'view').toLowerCase() !== 'view';
+    var existFlyer = false;
+    var flyerName = '';
+
+    if( editMode && checkUser(req,res)==false )
+        return;
+
+    var renderNewFlyerView = function() {
+        res.render('flyerEditor.ejs',{
+            title:'Flyer Editor',
+            boards:[],
+            flyerid:flyerid,
+            templateID:templateID,
+            editMode: editMode,
+            viewMode: "fullpage",
+            existFlyer: existFlyer
+        });
+    }
+
+    var getLastFlyer = function() {
+
+        flyerid = req.query.flyerid;
+
+        if( flyerid ) { // Edit Flyer (FlyerID is passed by Query String)
+            if(editMode)
+                res.cookie('flyerid',flyerid);
+            existFlyer = true;
+            renderNewFlyerView();
+        }
+        else {          // Query String is empty
+            flyerid = req.cookies.flyerid;
+
+            if( !flyerid ) {        // Cookie is empty. So make a new flyer
+
+                BFlyers({
+                    owner: req.user.teamID,
+                    creator: req.user._id
+                }).save(function (err,newflyer) {
+                        flyerid = newflyer._id;
+                        res.cookie('flyerid',flyerid);
+                        renderNewFlyerView();
+                    });
+
+            } else {        // Cookie isn't empty. So laod it
+                BFlyers.count({_id:flyerid}, function(err,count){
+                    if(!err && count>0){
+                        existFlyer = true;
+                        renderNewFlyerView();
+                    }
+                    else {  // Flyer Draft is deleted.
+                        // ToDo: Handle this situation better
+                        res.clearCookie('flyerid');
+                        return res.redirect('/flyer/new');
+                    }
+                });
+            }
+        }
+    };
+
+    getLastFlyer();
+});
+
+app.get('/flyer/embeded/:flyerID', function(req,res){
+
+    res.render('flyerEditor.ejs',{
+        title:'-',
+        flyerid: req.params.flyerID,
+        templateID: 0,
+        editMode: false,
+        viewMode: "embeded",
+        existFlyer: true
+    });
+
+});
+// endregion
+
+
+// Return all the created forms (template)
+app.get('/api/forms',  function(req,res){
+    var teamID = req.user.teamID;
+    var userID = req.user._id;
+
+    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+        if( err )
+            return res.send(204);
+
+        if( count > 0 ) // Admin
+        // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
+            findFlyers({
+                owner: teamID,
+                $or:[
+                    {publishTime:{$ne:''}},
+                    {creator: userID},
+                    {askedForPublish:true}
+                ]
+            });
+        else    // Team member
+            findFlyers({owner: teamID, $or:[{autoAssignedTo:userID}]});
+    });
+
+    function findFlyers(query) {
+
+        BFlyers.find(query).populate('creator owner autoAssignedTo').exec( function(err,flyers) {
+            if( err )
+                return res.send(502,{error:err});
+
+            // Reduce
+            // ToDo: Make reducing async
+            var forms = flyers.map( function(flyer) {
+                var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
+                var currentMode;
+
+                if( flyer.askedForPublish == true )
+                    currentMode = 'Asked For Publish';
+                else
+                    currentMode = flyer.publishTime ? "published" : "drafted";
+
+                return {
+                    formName:description,
+                    formID:flyer._id,
+                    autoAssignedTo: flyer.autoAssignedTo,
+                    creator: flyer.creator,
+                    mode: currentMode
+                }
+            } );
+
+            res.send( {forms: forms} );
+        });
+
+    }
+
+});
+
 app.get('/flyer/new',function(req,res){
     res.redirect('/flyer/editor/0');
 });
@@ -35,15 +172,6 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
         else
             res.send(200)
     }
-});
-
-app.get('/flyer/publish/:flyerid', function(req,res){
-    var flyerid = req.params.flyerid;
-
-    res.render('flyerPublish.ejs', {
-        title:'Publish Flyer',
-        flyerid:flyerid
-    });
 });
 
 app.post('/flyer/publish', function(req,res){
@@ -136,85 +264,6 @@ app.post('/flyer/save', function(req,res){
 
         res.send(200,{});
     });
-});
-
-app.get('/flyer/embeded/:flyerID', function(req,res){
-
-    res.render('flyerEditor.ejs',{
-        title:'-',
-        flyerid: req.params.flyerID,
-        templateID: 0,
-        editMode: false,
-        viewMode: "embeded",
-        existFlyer: true
-    });
-
-});
-
-app.get('/flyer/:mode/:tid', function(req,res){
-
-    var flyerid;
-    var templateID = req.params.tid;
-    var editMode = (req.params.mode || 'view').toLowerCase() !== 'view';
-    var existFlyer = false;
-    var flyerName = '';
-
-    if( editMode && checkUser(req,res)==false )
-        return;
-
-    var renderNewFlyerView = function() {
-        res.render('flyerEditor.ejs',{
-            title:'Flyer Editor',
-            boards:[],
-            flyerid:flyerid,
-            templateID:templateID,
-            editMode: editMode,
-            viewMode: "fullpage",
-            existFlyer: existFlyer
-        });
-    }
-
-    var getLastFlyer = function() {
-
-        flyerid = req.query.flyerid;
-
-        if( flyerid ) { // Edit Flyer (FlyerID is passed by Query String)
-            if(editMode)
-                res.cookie('flyerid',flyerid);
-            existFlyer = true;
-            renderNewFlyerView();
-        }
-        else {          // Query String is empty
-            flyerid = req.cookies.flyerid;
-
-            if( !flyerid ) {        // Cookie is empty. So make a new flyer
-
-                BFlyers({
-                    owner: req.user.teamID,
-                    creator: req.user._id
-                }).save(function (err,newflyer) {
-                    flyerid = newflyer._id;
-                    res.cookie('flyerid',flyerid);
-                    renderNewFlyerView();
-                });
-
-            } else {        // Cookie isn't empty. So laod it
-                BFlyers.count({_id:flyerid}, function(err,count){
-                    if(!err && count>0){
-                        existFlyer = true;
-                        renderNewFlyerView();
-                    }
-                    else {  // Flyer Draft is deleted.
-                        // ToDo: Handle this situation better
-                        res.clearCookie('flyerid');
-                        return res.redirect('/flyer/new');
-                    }
-                });
-            }
-        }
-    };
-
-    getLastFlyer();
 });
 
 app.get('/flyer/remove/:id', function(req,res){
@@ -340,60 +389,3 @@ app.get('/api/team/:teamID/positions',function(req,res){
         })
 });
 
-// Return all the created forms (template)
-app.get('/api/forms',  function(req,res){
-    var teamID = req.user.teamID;
-    var userID = req.user._id;
-
-    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
-        if( err )
-            return res.send(204);
-
-        if( count > 0 ) // Admin
-        // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
-            findFlyers({
-                owner: teamID,
-                $or:[
-                    {publishTime:{$ne:''}},
-                    {creator: userID},
-                    {askedForPublish:true}
-                ]
-            });
-        else    // Team member
-            findFlyers({owner: teamID, $or:[{autoAssignedTo:userID}]});
-    });
-
-    function findFlyers(query) {
-
-        BFlyers.find(query).populate('creator owner autoAssignedTo').exec( function(err,flyers) {
-            if( err )
-                return res.send(502,{error:err});
-
-            // Reduce
-            // ToDo: Make reducing async
-            var forms = flyers.map( function(flyer) {
-                var description = (flyer.flyer && flyer.flyer.description && flyer.flyer.description.length > 0)  ? flyer.flyer.description : 'Untitlted';
-                var currentMode;
-
-                if( flyer.askedForPublish == true )
-                    currentMode = 'Asked For Publish';
-                else
-                    currentMode = flyer.publishTime ? "published" : "drafted";
-
-                return {
-                    formName:description,
-                    formID:flyer._id,
-                    autoAssignedTo: flyer.autoAssignedTo,
-                    creator: flyer.creator,
-                    mode: currentMode
-                }
-            } );
-
-            res.send( {forms: forms} );
-        });
-
-    }
-
-});
-
-// endregion

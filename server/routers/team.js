@@ -2,6 +2,12 @@
  * Created by Bijan on 04/29/2014.
  */
 
+// region Views
+app.get('/team/:teamID/jobs', function(req,res) {
+    res.render('hubpage.ejs',{title:'Hubpage',teamID:req.params.teamID});
+})
+// endregion
+
 
 app.post('/api/team/settings',function(req,res){
     if(!checkUser(req,res))
@@ -201,11 +207,6 @@ app.get('/api/team/members',function(req,res){
 
     })
 });
-
-app.get('/team/:teamID/jobs', function(req,res) {
-    res.render('hubpage.ejs',{title:'Hubpage',teamID:req.params.teamID});
-})
-
 
 
 

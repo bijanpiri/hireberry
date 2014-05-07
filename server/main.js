@@ -17,8 +17,8 @@ engine = require('ejs-locals');
 crypto = require('crypto');
 fs = require('fs');
 http = require('http');
-authentication = require('./authentication');
-fileupload = require('./upload');
+authentication = require('./etc/authentication');
+fileupload = require('./etc/upload');
 express = require('express');
 
 app = express();
@@ -53,14 +53,13 @@ app.listen(port, function() {
 module.exports = app;
 //endregion
 
-
-models = require('./models');
-routerDashboard = require('./routers/dashboard');
-utilities = require('./utilities');
-routerFlyer = require('./routers/flyer');
-generalFlyer = require('./routers/general');
-teamFlyer = require('./routers/team');
-application = require('./routers/application');
-applicantRelationship = require('./routers/applicant');
+models = require('./etc/models');
+dashboardRouters = require('./routers/dashboard');
+utilitiesRouters = require('./etc/utilities');
+jobRouters = require('./routers/job');
+generalRouters = require('./routers/general');
+teamRouters = require('./routers/team');
+applicationRouters = require('./routers/application');
+applicantRelationshipRouters = require('./routers/applicant');
 
 

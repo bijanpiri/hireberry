@@ -84,7 +84,7 @@ app.post('/api/setting/basicinfo', function(req,res) {
 // endregion
 
 // region Search
-app.get('/search/users', function(req,res){
+app.get('/api/search/users', function(req,res){
     var query = req.query.q;
 
     // ToDo: Protect against SQLInjection Attack

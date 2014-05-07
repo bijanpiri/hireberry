@@ -2,6 +2,7 @@
  * Created by coybit on 3/16/14.
  */
 
+// region Views
 app.get('/dashboard', function (req,res) {
 
     if( !req.user )
@@ -16,6 +17,7 @@ app.get('/dashboard', function (req,res) {
         teamID: teamID
     });
 } );
+// endregion
 
 app.get('/api/applications/stat', function(req,res) {
 
