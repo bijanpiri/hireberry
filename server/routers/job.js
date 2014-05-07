@@ -2,6 +2,7 @@
  * Created by Bijan on 04/29/2014.
  */
 
+
 // region Views
 app.get('/flyer/:mode/:tid', function(req,res){
 
@@ -139,6 +140,9 @@ app.get('/api/forms',  function(req,res){
     }
 
 });
+
+// region Flyers
+
 
 app.get('/flyer/new',function(req,res){
     res.redirect('/flyer/editor/0');
