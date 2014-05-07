@@ -614,6 +614,7 @@ function fillTable() {
                             var replyBtn=form.find('[type=submit]');
                             commentBox.html(comment.comment);
                             var editBtn = form.find('.bool-edit-comment-btn').hide();
+                            var cancleBtn = form.find('.bool-cancel-comment-btn').hide();
                             if(comment.comment || data.user!==comment.commenter._id) {
                                 commentBox
                                     .attr('readonly', 'readonly')
@@ -626,8 +627,16 @@ function fillTable() {
 
                             editBtn.click(function(){
                                 replyBtn.show();
+                                cancleBtn.show();
                                 commentBox.removeAttr('readonly')
-                                $(this).hide();
+                                editBtn.hide();
+                            });
+                            cancleBtn.click(function(){
+                                replyBtn.hide();
+                                cancleBtn.hide();
+                                editBtn.show();
+                                commentBox.attr('readonly','readonly');
+                                commentBox.val(comment.comment);
                             });
 
                             form.submit(function(){
@@ -643,6 +652,7 @@ function fillTable() {
                                     .done(function(data){
                                         form.find('.alert-success').show().delay(3000).fadeOut();
                                         replyBtn.hide();
+                                        cancleBtn.hide();
                                         editBtn.show();
                                         commentBox.attr('readonly','readonly');
                                     });
