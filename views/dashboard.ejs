@@ -660,30 +660,33 @@
     </div>
     <div class="modal-body">
         <div class="control-group">
+            <label class="control-label" for="invitationEmail">Title:</label>
+            <div class="controls">
+                <input type="text" id="jobTitle" style="cursor: text">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="invitationEmail">Thanks Message:</label>
+            <div class="controls">
+                <input type="text" id="jobThanksMessage" style="cursor: text">
+            </div>
+        </div>
+        <div class="control-group">
             <label class="control-label" for="invitationEmail">Public Link</label>
             <div class="controls">
                 <input type="URL" class="publicLink" readonly style="cursor: text">
             </div>
         </div>
-        <hr/>
         <div class="control-group">
             <label class="control-label" for="invitationNote">Responder</label>
             <div class="controls">
                 <div id="jobResponderList"></div>
             </div>
         </div>
-        <hr/>
         <div class="control-group">
             <label class="control-label" for="invitationEmail">State</label>
             <div class="controls">
                 This job is in <span class="jobStatus-current">-</span>. You can <span class="jobStatus-next"></span> it.
-            </div>
-        </div>
-        <hr/>
-        <div class="control-group">
-            <label class="control-label" for="invitationEmail">Google Analytic</label>
-            <div class="controls">
-                <input type="text">
             </div>
         </div>
     </div>

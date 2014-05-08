@@ -404,6 +404,15 @@ function fillPositionsList( callback ) {
 
                     // Initializing modal fields
                     var modal = $('#job-setting-dialog');
+                    var flyer;
+
+                    $.get('/flyer/0/json/'+form.formID)
+                        .done(function(data){
+                            flyer = data;
+
+                            modal.find('#jobTitle').val( data.description );
+                            modal.find('#jobThanksMessage').val( data.thanksMessage );
+                        });
 
                     // Responder
                     modal.find('#jobResponderList').populateUserCombo(teamMembers, form.autoAssignedTo,'jobResponder');
@@ -447,6 +456,12 @@ function fillPositionsList( callback ) {
                     modal.find('.saveButton').click( function() {
                         var responderID = $('[name=jobResponder]').val();
                         $.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
+
+                        flyer.description = modal.find('#jobTitle').val();
+                        flyer.thanksMessage = modal.find('#jobThanksMessage').val();
+
+                        $.post('/flyer/save',{flyer:flyer});
+
                         modal.modal('hide');
 
                         fillPositionsList();
@@ -456,14 +471,6 @@ function fillPositionsList( callback ) {
 
                     e.stopPropagation();
                 });
-
-            var editBtnObj = $('<a>')
-                .addClass('fa fa-pencil-square-o')
-                .attr('href','/flyer/edit/0?flyerid=' + form.formID);
-
-            var viewBtnObj = $('<a>')
-                .addClass('fa fa-eye')
-                .attr('href','/flyer/embeded/' + form.formID);
 
             row.find('.colTitle').html('').append(titleObj);
             row.find('.colStatus').html('').append(stateObj);
