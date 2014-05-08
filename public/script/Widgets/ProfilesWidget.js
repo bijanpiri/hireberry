@@ -65,10 +65,7 @@ function ProfilesWidget() {
     this.toolbar.delegate('input[name=p]','change',function () {
         profile.find('[for^="' + this.value+'"]').parent().css('display', this.checked ? '' : 'none');
     });
-    profile.delegate('[name=email]','blur',function(){
-       fillProfiles.call(profile);
-        updateAvatarUrl();
-    });
+
     profile.delegate('.bool-avatar-image','load',function(){
         updateAvatarUrl();
     });
@@ -95,6 +92,25 @@ function ProfilesWidget() {
     }
 
     this.deserialize = function (data) {
+
+        // Last filed which must be filled before starting profile finding
+        var lastFieldIsEmail = false;
+        for( var i=0; i<data.profiles.length; i++ ) {
+            if(data.profiles[i]==='email')
+                lastFieldIsEmail = true;
+        }
+
+        if( lastFieldIsEmail )
+            profile.delegate('[name=email]','blur',function(){
+                fillProfiles.call(profile);
+                updateAvatarUrl();
+            });
+        else
+            profile.delegate('[name=name]','blur',function(){
+                fillProfiles.call(profile);
+                updateAvatarUrl();
+            });
+
         this.toolbar.find('input[name=p]').each(
             function (i, input) {
                 $(input).prop('checked', data.profiles.indexOf(input.value) >= 0).change();
