@@ -1,5 +1,30 @@
 <% layout('layout') -%>
 <script>
+    $( function() {
+        function update() {
+
+            var height = $('nav').height();
+
+            if ($(window).scrollTop() > 200) {
+                $('nav').animate({
+                    "top": -height
+                }, 300);
+                $('#pageNavigation').animate({
+                    "top": '0px'
+                }, 300);
+            } else {
+                $('nav').animate({
+                    "top": '0px'
+                }, 300);
+                $('#pageNavigation').animate({
+                    "top": height
+                }, 300);
+            }
+        }
+
+        setInterval(update, 500);
+    })
+
     function validateEmail(email){
         var pattern = /^[\w.+]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
         return pattern.test(email);
@@ -29,8 +54,6 @@
 
     }
 
-</script>
-<script type="text/javascript">
     function check(pass)
     {
         var level = 0;
@@ -146,54 +169,222 @@
         margin-left: 20%;
         margin-right: 20%;
     }
+
+    .title {
+        font-size: 3em;
+    }
+
+    .body {
+        font-size: 1.5em;
+    }
+
+    h5 {
+        margin: 20px 0;
+    }
+
+    h3,h4,h5 {
+        margin-left: 40px;
+        margin-right: 40px;
+    }
+
+    #pageNavigation {
+        position: fixed;
+        top: 8.8em;
+        left: 0;
+        right: 0;
+        padding: 1em 12em;
+        background-color: #37B36F;
+        z-index: 1;
+        border-top: 1px solid #fff;
+    }
+    #pageNavigation a{
+        color: #fff;
+        font-size: 1.8em;
+        padding: 0 1em;
+    }
+
+    .container-fluid {
+        padding: 0;
+        margin: 0; !important
+    }
+
+    .row-fluid {
+        padding: 30px 15%;
+    }
 </style>
 
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12" style="height: 200px;background-color: #fff;position: relative">
+<img src="images/cover.jpg">
+<div id="pageNavigation">
+    <a href="#WhatIs">What is Booltin</a>
+    <a href="#Features">Features</a>
+    <a href="#Why">Why Booltin</a>
+    <a href="#Pricing">Pricing</a>
+</div>
 
-            <div class="registerBox">
+<div class="container-fluid" style="margin: 0;">
+    <div id="WhatIs" class="row-fluid" style="background-color: #7ccedb">
+        <div class="span12" style="position: relative">
+            <h2 class="title">What is Booltin</h2>
+            <h3 class="body">
+                Booltin is a web-based applicant tracking system and recruiting software , suitable for startups, small and medium size businesses in IT industry and help them to hire the best fit. With Booltin you can design easy-to-fill-out application form with D&D, simple and fast, promote it, as job ad, by posting it on online job boards and major social networks. Also you can easily collaborate with your team members in whole recruiting process and use searching, filtering and consulting mechanism to find the best match to your needs. Track applicants’ status, schedule an interview [with considering applicant] and build an organized talent pool over time are other features that Booltin give to you.
+                It is everything you need to have a successful hiring.
+            </h3>
 
-                <div style="text-align: center; background-color: #949079; line-height: 80px;border-radius: 10px 10px 0 0">
-                    <p class="registerBoxHeader">
-                        Get a FREE account NOW
-                    </p>
-                </div>
-
-                <div style="background-color: #E0DAB7">
-                    <form class="registerForm" action="/register"  method="post" onsubmit="return registerstate();">
-                        <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Email address">
-                        <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Password">
-                        <div id="prog_bar"></div>
-                        <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Password (Again)">
-                        <button type="submit" class="wbtn wbtn-2 wbtn-2a">Register for FREE</button>
-
-                        <p class="moreOption">Already have an account? <a href="/login">Login</a></p>
-
-                    </form>
-                </div>
-
-                <div style="text-align: center; background-color: #C7C2A3;border-radius: 0 0 10px 10px;height: 120px;">
-
-                    <div style="display: inline-block;margin: 34px 0;">
-                        <a href="/auth/linkedin">
-                            <div style="background-color: rgba(0, 0, 0, 0.25);border-radius: 4px;padding: 5px;">
-                                <div style="display: inline-block;background-color: #327AB9;padding: 10px;vertical-align: top;border-radius: 4px 0 0 4px;font-size: 1.7em;color: #fff;line-height: 32px;">
-                                    or Register with
-                                </div><div style="background-color: #fff;padding: 6px 5px;display: inline-block;height: 52px;border-radius: 0 4px 4px 0;">
-                                    <i class="mainSpritImage" style="display: inline-block;width: 120px;height: 32px;background-position: 0 -115px;background-color: #fff;margin: 4px;"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
         </div>
     </div>
-    <div class="row-fluid">
+    <div id="Features" class="row-fluid" style="background-color: #db769b" >
         <div class="span12" style="position: relative">
+            <h2 class="title">Features</h2>
+            <h3 class="subTitle">Create an elegant career page with easy-to-fill-out application forms</h3>
+            <h4>
+                Making a career page is a time and money consuming task. Beside, the weak ones can cause talents and experts escape. Booltin help you to solve these problems.
+            </h4>
+            <h5>
+                -Design an elegant career page, fast and simple
+                Whether you're using a template or starting from scratch, with Drag & Drop interface, it takes only seconds to design your stylish career page which empower your brand.
+            </h5>
+            <h5>
+                -Easy to fill out application form
+                Don't kill time of yours and applicants by tedious application form. Cut to the chase, give and capture worthwhile information at the same time, and just in time of 1 click.
+            </h5>
 
+            <h3 class="subTitle">Market your job ad</h3>
+            <h4>
+                Just the same way you would advertise your product to attract potential customer, you have to promote your job to attract top talents.
+            </h4>
+
+            <h5>
+                - Let your job ads go viral
+                Twitter, Facebook, Google plus and LinkedIn have more than million active users.  Use the power of the social networks to spread the world of your ad job.
+            </h5>
+            <h5>
+                - Post job ad on online job boards
+                Extend your reach and get more exposure, quickly post your job ad on free and paid (related) online job boards.
+            </h5>
+            <h5>
+                - Measuring your marketing success by referral resources
+                Find out how visitors are discovering your job ad, which channel is generating more traffic and made wiser decision about where to invest your marketing dollars.
+            </h5>
+
+            <h3 class="subTitle">Find the best match’s applicants</h3>
+            <h4>
+                The most important step of recruiting is finding the right person to the right opening jobs. With Booltin you can do it well.
+            </h4>
+            <h5>
+                - A full view of each applicant
+                At a glance, everything you need to know about an applicant and his/her recruiting process history.
+            </h5>
+            <h5>
+                - Sifting through applications
+                Use powerful searching, filtering and sorting tools for sifting through applications and find exactly what you want.
+            </h5>
+            <h5>
+                - Store applicants’ resumes on your Dropbox
+                Connect your Dropbox account to Booltin. After that all the resume will be stored directly on your Dropbox and you can take full advantage of Dropbox features.
+            </h5>
+
+            <h3 class="subTitle">Manage and Track Applicants</h3>
+            <h4>
+                It's never been easier to track applicants and manage recruiting process.
+            </h4>
+
+            <h5>
+                - Simplified Applicant Tracking
+                Manage recruiting process by tracking applicant from receiving their applications to hiring them, whole from one place.
+            </h5>
+            <h5>
+                - Schedule an Interviews and be Reminded
+                Schedule an interview in collaboration with applicant. Pull of being late. Booltin will remind you your interviews.
+            </h5>
+            <h5>
+                - Dynamic Talent Pool
+                Make a dynamic talent pool over time and use it in rainy day.
+            </h5>
+
+            <h3 class="subTitle">Collaborate with your team</h3>
+            <h4>
+                Booltin facilitates collaboration in recruiting process, from ad job creation to hire the best fit.[...]
+            </h4>
+
+            <h5>
+                - Create job opening position in a collaboration
+                Easily ask your teammate idea by notes and get their feedback, during creating career page and application form. It will speed up the design process and fit right into your team needs.
+            </h5>
+            <h5>
+                - Consult over an applicant
+                By inside comment and notification system you can easily discuss and  share your opinion with your teammates about an applicant.
+            </h5>
+            <h5>
+                - Break down recruiting tasks
+                You can break down recruiting tasks and assign responsibility of filling each job opening position to a specific teammate. [...]
+            </h5>
+        </div>
+    </div>
+    <div id="Why" class="row-fluid" style="background-color: #8c8bdb">
+        <div class="span12" style="position: relative">
+            <h2 class="title">Why Booltin</h2>
+            <h3 class="body">
+
+                To use your valuable time in the best way
+                Working for a small business means wearing a lots of hats.  So there is no extra time to waste. By Booltin use your time wisely and pass the tedious(lengthy) recruiting process.
+
+                To catch the big fish / To attract top talents
+                As you face to top talents you have to be quick off the mark. Boring application form and inefficient recruiting process is exactly (what talents hate | what cause lose talents). Booltin solve these problems and make a good hiring experience for your applicants.
+
+                To avoid the cost of bad hire
+                Replacement of an employee can range from 2x to 7x his/her salary. Hiring and training costs can vary from 25% to 200% of annual compensation. Booltin will help you to make a right decision to hire right person, someone who valuable to cost.
+
+                To empower your brand
+                A job ad is not just ad for your job opening but it is also an ad for your company. With Booltin you can create a simple, elegant and visually appealing career page, easily, with D&D.
+
+                To start a powerful recruiting for free
+                The basic plan of Booltin is free. It is suitable for small business or testing purpose. Give it a shot and upgrade to premium plan when you need extra features.
+            </h3>
+        </div>
+    </div>
+    <div id="Pricing" class="row-fluid" style="background-color: #c0db85">
+        <div class="span12" style="position: relative">
+            <h2 class="title">Pricing</h2>
+            <h3>
+                Booltin is FREE now.
+            </h3>
+        </div>
+    </div>
+</div>
+
+<div class="registerBox">
+
+    <div style="text-align: center; background-color: #949079; line-height: 80px;border-radius: 10px 10px 0 0">
+        <p class="registerBoxHeader">
+            Get a FREE account NOW
+        </p>
+    </div>
+
+    <div style="background-color: #E0DAB7">
+        <form class="registerForm" action="/register"  method="post" onsubmit="return registerstate();">
+            <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Email address">
+            <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Password">
+            <div id="prog_bar"></div>
+            <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Password (Again)">
+            <button type="submit" class="wbtn wbtn-2 wbtn-2a">Register for FREE</button>
+
+            <p class="moreOption">Already have an account? <a href="/login">Login</a></p>
+
+        </form>
+    </div>
+
+    <div style="text-align: center; background-color: #C7C2A3;border-radius: 0 0 10px 10px;height: 120px;">
+
+        <div style="display: inline-block;margin: 34px 0;">
+            <a href="/auth/linkedin">
+                <div style="background-color: rgba(0, 0, 0, 0.25);border-radius: 4px;padding: 5px;">
+                    <div style="display: inline-block;background-color: #327AB9;padding: 10px;vertical-align: top;border-radius: 4px 0 0 4px;font-size: 1.7em;color: #fff;line-height: 32px;">
+                        or Register with
+                    </div><div style="background-color: #fff;padding: 6px 5px;display: inline-block;height: 52px;border-radius: 0 4px 4px 0;">
+                        <i class="mainSpritImage" style="display: inline-block;width: 120px;height: 32px;background-position: 0 -115px;background-color: #fff;margin: 4px;"></i>
+                    </div>
+                </div>
+            </a>
         </div>
 
     </div>
