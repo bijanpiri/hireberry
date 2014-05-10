@@ -8,7 +8,7 @@ app.get('/api/applications', function (req,res) {
     var submittedForms = {rows: []};
 
     var teamID = req.user.teamID;
-    var userID = req.user._id;
+    var userID = req.user ? req.user._id: '';
     var query = req.query.q || '';
     if( query ) {
         query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
@@ -27,6 +27,9 @@ app.get('/api/applications', function (req,res) {
             fetchTeamFlyers( function(teamFlyersID) {
                 fetchApplications(teamFlyersID);
             })
+        }
+        else if(userID==='') { // Public Viewer
+            res.send(200)
         }
         else { // User is member
             fetchAssignedFlyers( function(userFlyersID) {

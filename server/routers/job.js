@@ -11,14 +11,21 @@ app.get('/flyer/new',function(req,res){
 
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
-    res.render('flyerEditor.ejs',{
-        title:'-',
-        flyerid: req.params.flyerID,
-        templateID: 0,
-        editMode: false,
-        viewMode: "embeded",
-        existFlyer: true
+    BFlyers.count({_id:req.params.flyerID,publishTime:{$ne:''}} , function(err,count) {
+        if( err || count==0 )
+            res.send(404);
+        else
+            res.render('flyerEditor.ejs',{
+                title:'-',
+                flyerid: req.params.flyerID,
+                templateID: 0,
+                editMode: false,
+                viewMode: "embeded",
+                existFlyer: true
+            });
+
     });
+
 
 });
 
@@ -158,7 +165,7 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
     var templateID = req.params.templateID;
 
     if( templateID==0 ) { // Load stored flyer
-        BFlyers.findOne({_id:flyerid}, function(err,flyer){
+        BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}}, function(err,flyer){
             if(err)
                 res.send('Oh oh error');
 
