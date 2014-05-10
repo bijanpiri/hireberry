@@ -52,11 +52,16 @@ $.fn.populateUserCombo=function(members,selectedMember, inputName){
 
 
 }
+
+function getAvatar(email) {
+    var hash = CryptoJS.MD5( email.trim().toLowerCase() );
+    return 'http://www.gravatar.com/avatar/' + hash;
+}
+
 function generateMemberElement(member,showDisplayName,showEmail){
     showDisplayName= showDisplayName!==undefined ? showDisplayName :true;
     showEmail=showEmail!==undefined ? showEmail :true;
-    var imgurl = 'http://www.gravatar.com/avatar/'+
-        CryptoJS.MD5(member.email)+'?size=50';
+    var imgurl = getAvatar(member.email)+'?size=50';
 
     return $('<a>')
         .addClass( showDisplayName && showEmail ?
