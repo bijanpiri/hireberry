@@ -1,7 +1,6 @@
 @head1-color: #000;
 @head2-color: #B8B8B8;
 
-#candidatesCollection {
 
   &.grid-layout, &.list-layout {
 
@@ -11,7 +10,8 @@
       background-color: #fff;
       border-radius: 4px;
 
-      &.candidate-collapsed {}
+      &.candidate-collapsed {
+      }
 
       &.candidate-expanded {
         width: 100%;
@@ -54,7 +54,6 @@
           width: 100%;
           padding: 20px;
 
-
           .candidate-leftColumn {
             float: left;
           }
@@ -68,7 +67,7 @@
             width: 50%;
             vertical-align: top;
 
-            > *{
+            > * {
               clear: both;
             }
 
@@ -85,7 +84,7 @@
             border: 1px solid #D1D1D1;
             height: 500px;
             overflow: auto;
-            &.overflow{
+            &.overflow {
               overflow: visible;
             }
             .mbox-title {
@@ -182,7 +181,6 @@
                   border-left: 4px solid #5ca9fc;
                 }
 
-
                 a:hover {
                   background-color: #D1E5F5;
                   text-decoration: none;
@@ -196,11 +194,8 @@
         }
       }
     }
-
   }
-
-
-  &.grid-layout {
+  .grid-layout {
 
     .candidate {
       width: 400px;
@@ -310,7 +305,7 @@
     }
   }
 
-  &.list-layout {
+  .list-layout {
 
     .candidate {
       min-height: 50px;
@@ -394,5 +389,5 @@
       }
     }
   }
-}
+
 

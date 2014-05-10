@@ -521,11 +521,24 @@
     padding: 3px 20px;
     text-decoration: none;
     color: #4C4C4C;
+
+}
+.bool-combo-selected{
+
+    border: 2px solid #B3B3B3;
+    border-radius: 4px;
+}
+.bool-combo-selected:hover {
+    background-color: lightgoldenrodyellow;
+}
+.dropdown-menu>li>a.bool-user-item{
+    display: inline-block;
 }
 .bool-user-item>img{
     border-radius: 40px;
     border: 2px solid #9c9c9c;
     vertical-align: middle;
+    float: left;
 }
 .bool-user-item>ul{
 
@@ -534,6 +547,8 @@
     list-style: none;
     vertical-align: middle;
     margin-left: 10px;
+    float: left;
+    text-align: left;
 }
 .bool-user-item>ul>li{
 
@@ -590,4 +605,7 @@
 }
 form{
     text-align: left;
+}
+a{
+    cursor: pointer;
 }

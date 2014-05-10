@@ -78,9 +78,116 @@ $(function(){
 
         $(this).attr('isOpen', !isOpen);
     }).click();
+    $(document).delegate('.bool-toggle-application','click',function() {
+        var candidateSection=$(this).closest('.candidate');
+        var candidate=candidateSection.data('candidate')
+        var isExpanded = candidateSection.hasClass('candidate-expanded');
+
+
+        if(!isExpanded ){
+//                if(!candidateSection.commentFetched){
+            $.get('/api/application/comments',{appID:candidate._id},function(data){
+                var comments=data.comments;
+
+                comments.forEach(function(comment){
+                    var form=$('.reply-for-comment-form:first').clone().show();
+
+                    candidateSection.find('.bool-application-comments').append(form);
+                    form.find('[name=commentID]').val(comment._id);
+                    form.find('.user-note-avatar')
+                        .replaceWith(generateMemberElement(comment.user,true,false));
+                    form.find('.commenter-note-avatar')
+                        .replaceWith(generateMemberElement(comment.commenter,true,false));
+                    form.find('.bool-application-comments-note').html(comment.note);
+                    var commentBox = form.find('.bool-application-comments-comment');
+                    var replyBtn=form.find('[type=submit]');
+                    commentBox.html(comment.comment);
+                    var editBtn = form.find('.bool-edit-comment-btn').hide();
+                    var cancleBtn = form.find('.bool-cancel-comment-btn').hide();
+                    if(comment.comment || data.user!==comment.commenter._id) {
+                        commentBox
+                            .attr('readonly', 'readonly')
+                            .attr('placeholder', 'No comment left');
+                        replyBtn.hide();
+                        if(data.user===comment.commenter._id)
+                            editBtn.show();
+
+                    }
+
+                    editBtn.click(function(){
+                        replyBtn.show();
+                        cancleBtn.show();
+                        commentBox.removeAttr('readonly')
+                        editBtn.hide();
+                    });
+                    cancleBtn.click(function(){
+                        replyBtn.hide();
+                        cancleBtn.hide();
+                        editBtn.show();
+                        commentBox.attr('readonly','readonly');
+                        commentBox.val(comment.comment);
+                    });
+
+                    form.submit(function(){
+                        form.find('.alert-info').show();
+                        $.post('/api/application/comments',
+                            form.serialize())
+                            .always(function(data){
+                                $('.alert').hide();
+                            })
+                            .fail(function(data){
+                                form.find('.alert-danger').show();
+                            })
+                            .done(function(data){
+                                form.find('.alert-success').show().delay(3000).fadeOut();
+                                replyBtn.hide();
+                                cancleBtn.hide();
+                                editBtn.show();
+                                commentBox.attr('readonly','readonly');
+                            });
+                        return false;
+                    })
+
+                })
+
+//                        candidateSection.commentFetched=true;
+            });
+//                }
+            // Deselect Current Selection
+            $('#candidatesCollection .candidate-expanded')
+                .css('clear','none')
+                .removeClass('candidate-expanded')
+                .next()
+                .css('clear','none');
+
+            candidateSection.css('clear','both')
+                .addClass('candidate-expanded')
+                .next()
+                .css('clear','both');
+
+            $('#candidatesCollection .candidate')
+                .filter( function(i,obj) { return !$(obj).hasClass('candidate-expanded') })
+                .css('opacity',0.3);
+            $('#candidatesCollection .candidate-expanded').css('opacity',1);
+
+
+        }
+        else {
+            candidateSection.css('clear','none')
+                .removeClass('candidate-expanded')
+                .next()
+                .css('clear','none');
+
+            $('#candidatesCollection .candidate').css('opacity',1);
+
+        }
+
+    });
+
 });
 
 function refresh(once) {
+    badgeNum=0;
     // First fill Forms list, then fill table according to current selected form
     fillPositionsList( function() {
         getTeamInfo( function() {
@@ -282,13 +389,15 @@ function fillAskedForComments() {
     }
 
     function showApplicationPreview(applicationID) {
-
-        $('#applicationPreview').html('');
+        var prevContainer=$('#applicationPreview').empty();
 
         $.get('/api/application/json/' + applicationID).done( function(app) {
 
-            var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
             var candidate = app[0];
+            var candidateObj =
+                $('#candidateInstance')
+                    .clone().show().addClass('candidate')
+                    .data('candidate',candidate);
 
             candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
             candidateObj.find('.candidate-name').text(candidate.name);
@@ -334,11 +443,11 @@ function fillAskedForComments() {
             for( var profile in candidate.profiles )
                 candidate.profiles[ profile ];
 
-            $('#applicationPreview').append( candidateObj )
+            prevContainer.addClass('grid-layout').append( candidateObj )
         });
 
 
-        $('#applicationPreview').dialog('open');
+        prevContainer.dialog('open');
     }
 
     function showAskedForPublish(akedForPublishList) {
@@ -472,10 +581,12 @@ function fillPositionsList( callback ) {
                     e.stopPropagation();
                 });
 
-            row.find('.colTitle').html('').append(titleObj);
-            row.find('.colStatus').html('').append(stateObj);
-            row.find('.colAssignedTo').html('').append(assigneeObj);
-            row.find('.colOperations').html('').append(settingBtnObj);
+
+            row.find('.colTitle').empty().append(titleObj);
+            row.find('.colStatus').empty().append(stateObj);
+            row.find('.colAssignedTo').empty().append(assigneeObj);
+            row.find('.colOperations').empty().append(settingBtnObj);
+
 
             row.addClass('position').attr('id',form.formID).click( function() {
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
@@ -491,7 +602,7 @@ function fillPositionsList( callback ) {
 // region Applications
 function fillApplications() {
 
-    $('#applicationsTable').html('');
+    $('#applicationsTable').empty();
     $('#candidatesCollection .candidate').remove();
 
     $.get('/api/applications',{
@@ -500,8 +611,11 @@ function fillApplications() {
     }).done( function(res) {
 
             for( var i=0; i<res.rows.length; i++ ) {
-                var candidateObj = $('#candidateInstance').clone().show().addClass('candidate');
                 var candidate = res.rows[i];
+                var candidateObj = $('#candidateInstance')
+                    .clone().show()
+                    .addClass('candidate')
+                    .data('candidate',candidate);
 
                 candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
                 candidateObj.find('.candidate-name').text(candidate.name);
@@ -581,111 +695,6 @@ function fillApplications() {
                 fillApplications();
             });
 
-            $('.bool-toggle-application').unbind('click').click( function() {
-                var candidateSection=$(this).closest('.candidate');
-
-                var isExpanded = candidateSection.hasClass('candidate-expanded');
-
-
-                if(!isExpanded ){
-//                if(!candidateSection.commentFetched){
-                    $.get('/api/application/comments',{appID:candidate._id},function(data){
-                        var comments=data.comments;
-
-                        comments.forEach(function(comment){
-                            var form=$('.reply-for-comment-form:first').clone().show();
-
-                            candidateSection.find('.bool-application-comments').append(form);
-                            form.find('[name=commentID]').val(comment._id);
-                            form.find('.user-note-avatar')
-                                .replaceWith(generateMemberElement(comment.user,true,false));
-                            form.find('.commenter-note-avatar')
-                                .replaceWith(generateMemberElement(comment.commenter,true,false));
-                            form.find('.bool-application-comments-note').html(comment.note);
-                            var commentBox = form.find('.bool-application-comments-comment');
-                            var replyBtn=form.find('[type=submit]');
-                            commentBox.html(comment.comment);
-                            var editBtn = form.find('.bool-edit-comment-btn').hide();
-                            var cancleBtn = form.find('.bool-cancel-comment-btn').hide();
-                            if(comment.comment || data.user!==comment.commenter._id) {
-                                commentBox
-                                    .attr('readonly', 'readonly')
-                                    .attr('placeholder', 'No comment left');
-                                replyBtn.hide();
-                                if(data.user===comment.commenter._id)
-                                    editBtn.show();
-
-                            }
-
-                            editBtn.click(function(){
-                                replyBtn.show();
-                                cancleBtn.show();
-                                commentBox.removeAttr('readonly')
-                                editBtn.hide();
-                            });
-                            cancleBtn.click(function(){
-                                replyBtn.hide();
-                                cancleBtn.hide();
-                                editBtn.show();
-                                commentBox.attr('readonly','readonly');
-                                commentBox.val(comment.comment);
-                            });
-
-                            form.submit(function(){
-                                form.find('.alert-info').show();
-                                $.post('/api/application/comments',
-                                    form.serialize())
-                                    .always(function(data){
-                                        $('.alert').hide();
-                                    })
-                                    .fail(function(data){
-                                        form.find('.alert-danger').show();
-                                    })
-                                    .done(function(data){
-                                        form.find('.alert-success').show().delay(3000).fadeOut();
-                                        replyBtn.hide();
-                                        cancleBtn.hide();
-                                        editBtn.show();
-                                        commentBox.attr('readonly','readonly');
-                                    });
-                                return false;
-                            })
-
-                        })
-
-//                        candidateSection.commentFetched=true;
-                    });
-//                }
-                    // Deselect Current Selection
-                    $('#candidatesCollection .candidate-expanded')
-                        .css('clear','none')
-                        .removeClass('candidate-expanded')
-                        .next()
-                        .css('clear','none');
-
-                    candidateSection.css('clear','both')
-                        .addClass('candidate-expanded')
-                        .next()
-                        .css('clear','both');
-
-                    $('#candidatesCollection .candidate')
-                        .filter( function(i,obj) { return !$(obj).hasClass('candidate-expanded') })
-                        .css('opacity',0.3);
-                    $('#candidatesCollection .candidate-expanded').css('opacity',1);
-
-
-                }
-                else {
-                    candidateSection.css('clear','none')
-                        .removeClass('candidate-expanded')
-                        .next()
-                        .css('clear','none');
-
-                    $('#candidatesCollection .candidate').css('opacity',1);
-
-                }
-
-            });
 
             // Go to Grid-mode layout
             $('#candidatesGridButton').unbind('click').click( function() {
@@ -916,7 +925,7 @@ function getTeamInfo(callback) {
 
 function initTeamSwtichBox() {
 
-    $('#userTeams').html('');
+    $('#userTeams').empty();
 
     $.get('/api/user/teams').done( function(teams) {
         teams.forEach( function(team) {

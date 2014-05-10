@@ -43,7 +43,7 @@ $.fn.populateUserCombo=function(members,selectedMember, inputName){
                         .addClass('bool-combo-selected')
                         .addClass('dropdown')
                         .attr('data-toggle', 'dropdown')
-                        .append('<span class="caret"></span>')
+                        .prepend('<span class="caret"></span>')
                 );
                 contents.find('input').val(admin._id);
             }
