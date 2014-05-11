@@ -16,8 +16,16 @@ function TextWidget(){
     });
     var size;
     this.widgetDidAdd=function(isNew){
-        var id='#'+this.layout.find('.text-widget').attr('id');
         var widget=this;
+        var id='#'+this.layout
+            .find('.text-widget')
+            .on('mouseup keyup mouseout',
+            function(){
+                var size=document.queryCommandValue('fontSize');
+                var sizeText={'4':'Small','6':'Medium','7':'Large'};
+                widget.toolbar.find('.bool-combo-text').html(sizeText[size] );
+            })
+            .attr('id');
 
         this.toolbar
             .attr('data-role','editor-toolbar')
@@ -97,8 +105,8 @@ function TextWidget(){
             text:text.html(),
             align:text.css('text-align'),
             headline:text.hasClass('header'),
-            foreColor:text.css('color'),
-            fontSize:text.css('font-size')
+            foreColor:text.css('color')
+//            ,fontSize:text.css('font-size')
         }
         return data;
     }
@@ -117,8 +125,8 @@ function TextWidget(){
             .html(data.text)
             .css('text-align',data.align)
             .css('color',data.foreColor)
-            .css('font-size',data.fontSize)
-            .css('line-height',data.fontSize);
+//            .css('font-size',data.fontSize)
+//            .css('line-height',data.fontSize);
 
     }
 

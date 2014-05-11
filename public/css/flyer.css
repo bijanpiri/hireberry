@@ -475,7 +475,7 @@ Portlet Creator
 .text-widget{
     width: 100%;
     font-size: 18px;
-    line-height: 27px;
+    line-height: normal;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

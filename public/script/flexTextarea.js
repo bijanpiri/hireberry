@@ -3,7 +3,8 @@
  */
 $(document).delegate('textarea[flexible]','input propertyChange keydown keyup change paste ',
 function(){
-    var div=$('<pre>').html(this.value).width($(this).width()).addClass(this.className).hide();
+    var div=$('<pre>').html(this.value).width($(this).width())
+        .addClass(this.className).hide();
     $(this).parent().append(div);
     $(this).height(div.height()+10);
     div.remove();
