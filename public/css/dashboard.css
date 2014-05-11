@@ -510,7 +510,7 @@
     height: 2.4em;
 }
 .modal-body{
-    overflow-y: visible;
+
 }
 
 .bool-user-item{
@@ -608,4 +608,11 @@ form{
 }
 a{
     cursor: pointer;
+}
+#application-preview-dialog.modal>.modal-bodyd {
+    height: 1200px;
+}
+#application-preview-dialog.modal{
+    width: 1024px;
+
 }

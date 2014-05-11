@@ -172,7 +172,9 @@ function fillAskedForComments() {
     }
 
     function showApplicationPreview(applicationID) {
-        var prevContainer=$('#applicationPreview').empty();
+        var prevContainer=
+            $('#application-preview-dialog')
+            .find('.grid-layout').empty();
 
         $.get('/api/application/json/' + applicationID).done( function(app) {
 
@@ -216,7 +218,8 @@ function fillAskedForComments() {
             for( var j=0; j<candidate.activities.length; j++ ) {
                 var activity = candidate.activities[j];
                 var mTimestamp = new moment(activity.timestamp);
-                var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
+                var timeObj = $('<div>').addClass('activity-time')
+                    .text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
                 var typeObj = $('<div>').addClass('activity-type').text( activity.type );
                 var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
 
@@ -226,11 +229,11 @@ function fillAskedForComments() {
             for( var profile in candidate.profiles )
                 candidate.profiles[ profile ];
 
-            prevContainer.addClass('grid-layout').append( candidateObj )
+            prevContainer.append( candidateObj )
         });
 
 
-        prevContainer.dialog('open');
+        prevContainer.closest('.modal').modal('show');
     }
 
     function showAskedForPublish(akedForPublishList) {

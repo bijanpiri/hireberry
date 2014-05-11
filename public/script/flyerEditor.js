@@ -164,8 +164,8 @@ function loadTemplateChooser() {
 
         newFlyerName = $('#flyerName1').val();
 
-        if( newFlyerName.length === 0 )
-            newFlyerName = 'Untitled - ' + (new Date()).toDateString();
+        //if( newFlyerName.length === 0 )
+        //    newFlyerName = 'Untitled - ' + (new Date()).toDateString();
 
         loadEditor();
     })

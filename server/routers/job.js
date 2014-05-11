@@ -271,6 +271,9 @@ app.post('/flyer/inactive', function(req,res){
 app.post('/flyer/save', function(req,res){
     var flyer = req.body.flyer;
 
+    if( !flyer.description || flyer.description.length() == 0 )
+        flyer.description = "Untitled" + (new Date()).toDateString();
+
     BFlyers.update({_id:flyer.flyerid}, {$set:{flyer:flyer}}, function(err){
         if(err) return res.send(401,{});
 
