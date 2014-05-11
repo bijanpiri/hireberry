@@ -315,9 +315,27 @@ app.post('/api/application/comments',function(req,res) {
 });
 
 app.get('/api/application/json/:appID', function(req,res) {
-    BApplications.find( {_id:req.params.appID} , function(err,application) {
+
+
+     if( !checkUser(req,res) )
+        return;
+
+    BApplications.findOne( {_id:req.params.appID}).exec(  function(err,application) {
         if( err )
             return res.send(306)
-        res.send(application);
+
+        BFlyers.findOne({_id:application.flyerID}).populate('owner', 'admin').exec( function(err,flyer) {
+
+            var teamID = flyer.owner.admin;
+            var responderID = flyer.autoAssignedTo;
+
+            if( req.user._id.toString()===teamID.toString() || req.user._id.toString()===responderID.toString())
+                application._doc.currentUser = 'allowed';
+            else
+                application._doc.currentUser = 'denied';
+
+                res.send(application);
+        })
+
     })
 })

@@ -178,7 +178,7 @@ function fillAskedForComments() {
 
         $.get('/api/application/json/' + applicationID).done( function(app) {
 
-            var candidate = app[0];
+            var candidate = app;
             var candidateObj =
                 $('#candidateInstance')
                     .clone().show().addClass('candidate')
@@ -197,6 +197,8 @@ function fillAskedForComments() {
             candidateObj.find('.candidate-website .value').text(candidate.website);
             candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
             candidateObj.find('[name="appID"]').val(candidate._id);
+
+            candidateObj.find('.candidate-workflow').parent().hide();
             candidateObj.find('.ask-for-comment-form')
                 .submit( function() {
                     var form=$(this);
@@ -230,6 +232,8 @@ function fillAskedForComments() {
                 candidate.profiles[ profile ];
 
             prevContainer.append( candidateObj )
+            candidateObj.find('.bool-toggle-application').click();
+
         });
 
 

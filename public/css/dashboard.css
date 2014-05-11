@@ -609,10 +609,11 @@ form{
 a{
     cursor: pointer;
 }
-#application-preview-dialog.modal>.modal-bodyd {
-    height: 1200px;
+#application-preview-dialog.modal>.modal-body {
+    max-height: 700px;
 }
 #application-preview-dialog.modal{
     width: 1024px;
+    margin-left:-512px;
 
 }
