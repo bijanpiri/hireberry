@@ -11,120 +11,126 @@ function fillApplications() {
         sort: $('.application-sort').attr('sortBy')
     }).done( function(res) {
 
-        for( var i=0; i<res.rows.length; i++ ) {
-            var candidate = res.rows[i];
-            var candidateObj = $('#candidateInstance')
-                .clone().show()
-                .addClass('candidate')
-                .data('candidate',candidate);
+            for( var i=0; i<res.rows.length; i++ ) {
+                var candidate = res.rows[i];
+                var candidateObj = $('#candidateInstance')
+                    .clone().show()
+                    .addClass('candidate')
+                    .data('candidate',candidate);
 
-            candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
-            candidateObj.find('.candidate-name').text(candidate.name);
-            candidateObj.find('.candidate-job .value').text(candidate.position);
-            candidateObj.find('.candidate-time .value').text(candidate.applyTime);
-            candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
-            candidateObj.find('.candidate-skills .value').text(candidate.skills);
-            candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
-            candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
-            candidateObj.find('.candidate-email .value').text(candidate.email);
-            candidateObj.find('.candidate-tel .value').text(candidate.tel);
-            candidateObj.find('.candidate-website .value').text(candidate.website);
-            candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
-            candidateObj.find('[name="appID"]').val(candidate._id);
-            candidateObj.find('.ask-for-comment-form')
-                .submit( function() {
-                    var form=$(this);
-                    $.post('/api/team/application/askForComment',
-                        form.serialize())
-                        .always(function(){
-                            $('.alert').hide();
-//                                refresh(true);
-                        })
-                        .done( function() {
-                            form.find('.alert-success').show().delay(2000).fadeOut();
-                        })
-                        .fail(function(){
-                            form.find('.alert-danger').show();
-                        });
-                    return false;
-                });
+                candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
+                candidateObj.find('.candidate-name').text(candidate.name);
+                candidateObj.find('.candidate-job .value').text(candidate.position);
+                candidateObj.find('.candidate-time .value').text(candidate.applyTime);
+                candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
+                candidateObj.find('.candidate-skills .value').text(candidate.skills);
+                candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
+                candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
+                candidateObj.find('.candidate-email .value').text(candidate.email);
+                candidateObj.find('.candidate-tel .value').text(candidate.tel);
+                candidateObj.find('.candidate-website .value').text(candidate.website);
+                candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
+                candidateObj.find('[name="appID"]').val(candidate._id);
+                candidateObj.find('.applicationAskForCommentButton').click( function() {
+                    $('#a4c-dialog').find('[name=appID]').val(candidate._id);
+                    $('#a4c-dialog').modal('show');
+                })
 
-            for( var j=0; j<candidate.activities.length; j++ ) {
-                var activity = candidate.activities[j];
-                var mTimestamp = new moment(activity.timestamp);
-                var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
-                var typeObj = $('<div>').addClass('activity-type').text( activity.type );
-                var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
+                for( var j=0; j<candidate.activities.length; j++ ) {
+                    var activity = candidate.activities[j];
+                    var mTimestamp = new moment(activity.timestamp);
+                    var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
+                    var typeObj = $('<div>').addClass('activity-type').text( activity.type );
+                    var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
 
-                candidateObj.find('.candidate-activities').append( activityObj );
+                    candidateObj.find('.candidate-activities').append( activityObj );
+                }
+
+                for( var profile in candidate.profiles )
+                    candidate.profiles[ profile ];
+
+                initWorkflow(candidateObj,candidate);
+                changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
+
+                $('#candidatesCollection').append( candidateObj );
+
             }
 
-            for( var profile in candidate.profiles )
-                candidate.profiles[ profile ];
-
-            initWorkflow(candidateObj,candidate);
-            changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
-
-            $('#candidatesCollection').append( candidateObj );
-
-        }
-
-        $('.candidate .candidate-actions').show();
-        $('.candidate .candidate-newComments').hide();
-        $('.candidate .candidate-addComment').hide();
+            $('.candidate .candidate-actions').show();
+            $('.candidate .candidate-newComments').hide();
+            $('.candidate .candidate-addComment').hide();
 
 
-        // Search Box
-        $('.application-searchBox').unbind('keydown').keydown( function(e) {
-            if(e.keyCode==13)
-                $('.application-searchButton').click()
-        });
+            // Ask For Comment Modal
 
-        $('.application-searchButton').unbind('click').click( function() {
-            fillApplications();
-        });
-
-        // Sorting
-        $('.application-sort .sortByDate').unbind('click').click( function() {
-            $('.application-sort').attr('sortBy','date');
-            $('.application-sortType').text('Date');
-            fillApplications();
-        });
-        $('.application-sort .sortByName').unbind('click').click( function() {
-            $('.application-sort').attr('sortBy','name');
-            $('.application-sortType').text('Name');
-            fillApplications();
-        });
-
-
-        // Go to Grid-mode layout
-        $('#candidatesGridButton').unbind('click').click( function() {
-
-            $('#candidatesCollection').animate({'opacity':0},300, function() {
-
-                $('#candidatesCollection')
-                    .removeClass('list-layout')
-                    .addClass('grid-layout')
-                    .animate({'opacity':1},300);
-
+            // Search Box
+            $('.application-searchBox').unbind('keydown').keydown( function(e) {
+                if(e.keyCode==13)
+                    $('.application-searchButton').click()
             });
-        });
 
-        // Go to List-mode layout
-        $('#candidatesListButton').unbind('click').click( function() {
-
-            $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
-
-                $('#candidatesCollection')
-                    .removeClass('grid-layout')
-                    .addClass('list-layout')
-                    .animate({'opacity':1},300);
-
+            $('.application-searchButton').unbind('click').click( function() {
+                fillApplications();
             });
+
+            // Sorting
+            $('.application-sort .sortByDate').unbind('click').click( function() {
+                $('.application-sort').attr('sortBy','date');
+                $('.application-sortType').text('Date');
+                fillApplications();
+            });
+            $('.application-sort .sortByName').unbind('click').click( function() {
+                $('.application-sort').attr('sortBy','name');
+                $('.application-sortType').text('Name');
+                fillApplications();
+            });
+
+
+            // Go to Grid-mode layout
+            $('#candidatesGridButton').unbind('click').click( function() {
+
+                $('#candidatesCollection').animate({'opacity':0},300, function() {
+
+                    $('#candidatesCollection')
+                        .removeClass('list-layout')
+                        .addClass('grid-layout')
+                        .animate({'opacity':1},300);
+
+                });
+            });
+
+            // Go to List-mode layout
+            $('#candidatesListButton').unbind('click').click( function() {
+
+                $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
+
+                    $('#candidatesCollection')
+                        .removeClass('grid-layout')
+                        .addClass('list-layout')
+                        .animate({'opacity':1},300);
+
+                });
+            });
+
         });
 
-    });
-
+    $('.ask-for-comment-form')
+        .submit( function() {
+            var form=$(this);
+            $.post('/api/team/application/askForComment',
+                    form.serialize())
+                .always(function(){
+                    $('.alert').hide();
+//                                refresh(true);
+                })
+                .done( function() {
+                    form.find('.alert-success').show().delay(2000).fadeOut();
+                })
+                .fail(function(){
+                    form.find('.alert-danger').show();
+                });
+            return false;
+        });
 }
 
 function initWorkflow(candidateObj,candidate) {
@@ -186,8 +192,8 @@ function initWorkflow(candidateObj,candidate) {
             activity:0,
             data:data
         }).done( function(res) {
-            changeWorkflowStage(candidateObj,candidate,newStage,newSubStage);
-        });
+                changeWorkflowStage(candidateObj,candidate,newStage,newSubStage);
+            });
     }
 }
 

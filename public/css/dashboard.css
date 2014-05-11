@@ -534,6 +534,11 @@
 .dropdown-menu>li>a.bool-user-item{
     display: inline-block;
 }
+
+.reply-for-comment-form {
+    border-bottom: 1px solid #000;
+}
+
 .bool-user-item>img{
     border-radius: 40px;
     border: 2px solid #9c9c9c;
@@ -563,13 +568,14 @@
     vertical-align: top;
 }
 .bool-single-user-item>img{
-    border-radius: 40px;
-    border: 2px solid #9c9c9c;
+    border-radius: 50%;
+    height: 30px;
+    border: 1px solid #9c9c9c;
 }
 .bool-single-user-item>ul{
     padding: 0;
     margin: 0;
-    display: block;
+    display: inline-block;
     list-style: none;
 }
 .bool-single-user-item>ul>li{
@@ -579,26 +585,27 @@
 .bool-application-comments-note{
     font-size: 14px;
     display: inline-block;
-    border: 2px solid #B3B3B3;
     border-radius: 4px;
     padding: 10px;
     width: 300px;
     text-align: left;
+    background-color: #B3E9AA;
 }
 .bool-application-comments-comment{
     font-size: 14px;
     width: 300px;
     min-height:100px;
     resize: none;
-    border: 2px solid #B3B3B3;
+    border: 1px solid #BBBBBB;
     border-radius: 4px;
     overflow: hidden;
-
+    background-color: #EBEBEB;
     cursor: text;
 }
 .bool-application-comments-comment[readonly] {
     cursor: text;
-    background: #c8c7c6;
+    background: #B3E9AA;
+    border: 0;
 }
 .reply-for-comment-form{
     margin-bottom: 0;

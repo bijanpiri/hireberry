@@ -58,7 +58,9 @@ function getAvatar(email) {
     return 'http://www.gravatar.com/avatar/' + hash;
 }
 
-function generateMemberElement(member,showDisplayName,showEmail){
+function generateMemberElement(member,showDisplayName,showEmail,alightRight){
+
+    alightRight = alightRight || false;
     showDisplayName= showDisplayName!==undefined ? showDisplayName :true;
     showEmail=showEmail!==undefined ? showEmail :true;
     var imgurl = getAvatar(member.email)+'?size=50';
@@ -66,8 +68,8 @@ function generateMemberElement(member,showDisplayName,showEmail){
     return $('<a>')
         .addClass( showDisplayName && showEmail ?
             'bool-user-item':'bool-single-user-item')
-        .append($('<img>')
-            .attr('src',imgurl))
+        .append($('<img>').attr('src',imgurl).addClass( alightRight ? 'pull-right' : '' ))
+
         .append(
         $('<ul>')
             .append($('<li>').append(showDisplayName? member.displayName:""))

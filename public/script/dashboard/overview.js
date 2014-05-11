@@ -179,10 +179,18 @@ function fillAskedForComments() {
         $.get('/api/application/json/' + applicationID).done( function(app) {
 
             var candidate = app;
+
             var candidateObj =
                 $('#candidateInstance')
                     .clone().show().addClass('candidate')
                     .data('candidate',candidate);
+
+            //if( candidate.currentUser==='denied') {
+                candidateObj.find('.candidate-workflow').parent().remove();
+                candidateObj.find('.applicationAskForCommentButton').remove();
+                candidateObj.find('.bool-application-comments').css('height','auto');
+                candidateObj.find('.bool-application-activities').css('height','auto');
+            //}
 
             candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
             candidateObj.find('.candidate-name').text(candidate.name);

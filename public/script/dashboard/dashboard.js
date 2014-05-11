@@ -1,6 +1,7 @@
 /**
  * Created by Bijan on 05/10/2014.
  */
+
 $(function(){
     teamSettings();
     fillTeamSetting();
@@ -86,12 +87,12 @@ $(function(){
                 comments.forEach(function(comment){
                     var form=$('.reply-for-comment-form:first').clone().show();
 
-                    candidateSection.find('.bool-application-comments').append(form);
+                    candidateSection.find('.candidate-comments').append(form);
                     form.find('[name=commentID]').val(comment._id);
                     form.find('.user-note-avatar')
                         .replaceWith(generateMemberElement(comment.user,true,false));
                     form.find('.commenter-note-avatar')
-                        .replaceWith(generateMemberElement(comment.commenter,true,false));
+                        .replaceWith(generateMemberElement(comment.commenter,true,false,true))
                     form.find('.bool-application-comments-note').html(comment.note);
                     var commentBox = form.find('.bool-application-comments-comment');
                     var replyBtn=form.find('[type=submit]');
