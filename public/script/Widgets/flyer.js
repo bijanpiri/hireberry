@@ -190,7 +190,7 @@ function Flyer(options) {
     var initPortletsStack = function () {
         // Initialization
         if( editMode ){
-//            var draggingItem;
+
             pStack.sortable({
 //                connectWith: ".portletStack",
                 cursor: "move",
@@ -200,19 +200,7 @@ function Flyer(options) {
 
             $('.bool-add-widget>a[type]').draggable({
                 connectToSortable: ".portletStack",
-//                helper: function(){
-//                    type=parseInt(this.type);
-//
-//                },
                 helper: "clone",
-//                helper:function(){
-//                    Widgets[wData.type].instances--;
-//                    var type=parseInt(this.type);
-//                    var widget = new Widgets[type]();
-//                    widget.editMode = true;
-//                    widget.flyerID = $('input[name=flyerid]').val();
-//                    return widget.content();
-//                },
                 revert: "invalid",
                 stop:replaceWidgets,
                 drag:dragging

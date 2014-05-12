@@ -270,7 +270,7 @@ app.get('/api/resume', function(req,res) {
         maxRedirects: 10
     }, function(error, response, body) {
         // ToDo: Convert this byte array to file and send to client
-        res.send( JSON.parse(body) );
+        res.send(200, JSON.parse(body) );
     });
 } );
 

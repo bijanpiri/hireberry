@@ -3,11 +3,13 @@
  */
 upload = require('jquery-file-upload-middleware'); // Don't Forget Creating /public/tmp and /public/uploads
 
+var cwd=process.cwd();
+
 // configure upload middleware
 upload.configure({
-    tmpDir: __dirname + '/../public/tmp',
-    uploadDir: __dirname + '/../public/uploads',
-    uploadUrl: '/../flyer/upload',
+    tmpDir: cwd + '/public/tmp',
+    uploadDir: cwd+ '/public/uploads',
+    uploadUrl: '/flyer/upload',
     imageVersions: {
         thumbnail: {
             width: 80,
