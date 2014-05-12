@@ -111,6 +111,7 @@ BApplications = mongoose.model( 'applications', {
 
 BApplicantsResponses = mongoose.model( 'applicantsResponses', {
     applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
+    text: String,
     request: {},
     response: {}
 });

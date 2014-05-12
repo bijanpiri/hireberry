@@ -276,9 +276,15 @@ app.get('/api/resume', function(req,res) {
 
 // Show message to applicant
 app.get('/applicant/message/view/:messageType/:messageID', function (req,res){
-    res.render('applicant.ejs',{
-        messageType: req.params.messageType,
-        messageID: req.params.messageID
+
+    BApplicantsResponses.findOne({_id:req.params.messageID}, function(err,message) {
+
+        res.render('applicant.ejs',{
+            messageType: req.params.messageType,
+            messageID: req.params.messageID,
+            messageText: message.text
+        });
+
     });
 });
 

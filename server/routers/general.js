@@ -5,7 +5,7 @@
 // region General
 app.get('/', function(req,res) {
     if( req.user )
-        res.redirect('/dashboard');
+        res.redirect('/dashboard#overviewp');
     else
         res.redirect('/login');
 });

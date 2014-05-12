@@ -32,7 +32,7 @@
             font-size: 1.8em;
             padding-bottom: 0.5em;
             border-bottom: 2px solid #000;
-            margin-bottom: 2em;
+            margin-bottom: 1em;
         }
 
         .box .actions {
@@ -55,7 +55,10 @@
 <div class="box interview" hidden>
     <div class="title">Invitation</div>
     <div class="body">
-        <div class="message">You are invited to an interview</div>
+        <div class="message">
+            <p class="invitationText" style="text-align: left;line-height: 1.5em;"></p>
+        </div>
+
     </div>
     <div class="actions">
         <button class="interview_yesButton btn btn-success">I Will Come</button>
@@ -66,7 +69,9 @@
 <div class="box offer" hidden>
     <div class="title">Job Offer</div>
     <div class="body">
-        <div class="message">You are offer a job.</div>
+        <div class="message">
+            <p class="invitationText" style="text-align: left;line-height: 1.5em;"></p>
+        </div>
     </div>
     <div class="actions">
         <button class="interview_yesButton btn btn-success">Accept</button>
@@ -95,6 +100,10 @@
         $('.interview_noButton').click( function() {
             $.post('/applicant/message/' + messageType + '/' +  messageID,{response:'NO'});
         })
+
+        var msg = '<%=messageText%>';
+        msg = msg.replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+        $('.invitationText').html(msg);
     })
 
 </script>

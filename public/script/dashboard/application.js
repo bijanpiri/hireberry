@@ -24,7 +24,7 @@ function fillApplications() {
                 candidateObj.find('.candidate-time .value').text(candidate.applyTime);
                 candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
                 candidateObj.find('.candidate-skills .value').text(candidate.skills);
-                candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
+                candidateObj.find('.candidate-conditions .value').text((candidate.workTime||'') + (candidate.workPlace ? ' @' + candidate.workPlace : '') );
                 candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
                 candidateObj.find('.candidate-email .value').text(candidate.email);
                 candidateObj.find('.candidate-tel .value').text(candidate.tel);
@@ -167,7 +167,8 @@ function initWorkflow(candidateObj,candidate) {
         modal.find('.sendButton').unbind('click').click( function() {
             gotoNewStage(3,1,{
                 offeredEmail: modal.find('.emailAddress').val(),
-                offerMessage:  modal.find('.offerMessage').val()
+                offerMessage:  modal.find('.offerMessage').val(),
+                offeredName: candidate.name
             });
             modal.modal('hide')
         });

@@ -589,7 +589,7 @@
     padding: 10px;
     width: 300px;
     text-align: left;
-    background-color: #B3E9AA;
+    background-color: rgba(55, 179, 111, 0.57);
 }
 .bool-application-comments-comment{
     font-size: 14px;
@@ -604,7 +604,7 @@
 }
 .bool-application-comments-comment[readonly] {
     cursor: text;
-    background: #B3E9AA;
+    background: rgba(55, 179, 111, 0.57);
     border: 0;
 }
 .reply-for-comment-form{

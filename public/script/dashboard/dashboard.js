@@ -84,6 +84,8 @@ $(function(){
             $.get('/api/application/comments',{appID:candidate._id},function(data){
                 var comments=data.comments;
 
+                candidateSection.find('.candidate-comments').empty();
+
                 comments.forEach(function(comment){
                     var form=$('.reply-for-comment-form:first').clone().show();
 
