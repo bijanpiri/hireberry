@@ -167,7 +167,9 @@
 		$(window).bind('touchend', function (e) {
 			var isInside = (editor.is(e.target) || editor.has(e.target).length > 0),
 				currentRange = getCurrentRange(),
-				clear = currentRange && (currentRange.startContainer === currentRange.endContainer && currentRange.startOffset === currentRange.endOffset);
+				clear = currentRange &&
+                    (currentRange.startContainer === currentRange.endContainer &&
+                        currentRange.startOffset === currentRange.endOffset);
 			if (!clear || isInside) {
 				saveSelection();
 				updateToolbar();

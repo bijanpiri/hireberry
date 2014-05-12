@@ -667,9 +667,13 @@ Portlet Creator
     z-index:32700;
 
 }
-.portletStack a.buttonFrame .centeralBackgroundImage{
-    display: none;
-    border-radius: 0;
+/*.portletStack a.buttonFrame .centeralBackgroundImage{*/
+    /*display: none;*/
+    /*border-radius: 0;*/
+/*}*/
+.newitem.buttonFrame.ui-draggable.ui-draggable-dragging.ui-sortable-helper{
+    /*display: none;*/
+
 }
 .portletStack a.buttonFrame{
     /*position: absolute;*/

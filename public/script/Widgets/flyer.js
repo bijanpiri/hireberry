@@ -190,11 +190,11 @@ function Flyer(options) {
     var initPortletsStack = function () {
         // Initialization
         if( editMode ){
+//            var draggingItem;
             pStack.sortable({
 //                connectWith: ".portletStack",
                 cursor: "move",
                 axis: "y",
-
                 handle: ".move-btn-frame"
             })//.disableSelection();
 
@@ -214,10 +214,16 @@ function Flyer(options) {
 //                    return widget.content();
 //                },
                 revert: "invalid",
-                stop:replaceWidgets
+                stop:replaceWidgets,
+                drag:dragging
             });
         }
 
+        function dragging(){
+            $('.bool-add-widget .ui-draggable-dragging')
+                .css('width','')
+                .css('height','');
+        }
         function replaceWidgets(){
             $('.portletStack>a.newitem').each(
                 function(){
