@@ -3,11 +3,6 @@
  */
 
 var request=require('request');
-var Parse = require('node-parse-api').Parse;
-
-var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
-var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
-var parseApp = new Parse(APP_ID, MASTER_KEY);
 
 app.get('/job/dropboxAuth', function (req,res){
 
@@ -203,7 +198,7 @@ app.post('/apply', function (req,res) {
                     if( flyer.dbToken )
                         saveOnDropbox( flyer.dbToken, data, resumeFileName, applicationID );
                     else
-                        saveOnParse( data, resumeFileName, applicationID);
+                        saveOnParse( data, resumeFileName, applicationID,req.files.resume.path);
                 })
             });
         }
@@ -212,8 +207,29 @@ app.post('/apply', function (req,res) {
         }
     }
 
-    var saveOnParse = function(data, resumeFileName, applicationID) {
+    var saveOnParse = function(data, resumeFileName, applicationID,path) {
+
+        var parseFile = new Parse.File(resumeFileName, data).then;
+        parseFile.save().then(function() {
+            // The file has been saved to Parse.
+            var url=parseFile.url();
+
+            BApplications.update({_id:applicationID},{resumePath:url}, function() {
+                res.send(200,{});
+            });
+
+
+        }, function(error) {
+            res.send(500,error);
+        });
+    }
+    var saveOnParse_old = function(data, resumeFileName, applicationID) {
         parseApp.insertFile(resumeFileName, data, null, function (err, response) {
+            if(err)
+            {
+                res.send(err.type);
+                return;
+            }
             var fileLink = response.url;
             var parseName = response.name;
 

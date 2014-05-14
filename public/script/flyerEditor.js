@@ -11,9 +11,21 @@ var autosaveTimer;
 var autosaveInterval = 60*1000;
 var teamMembers = [];
 
-$(function() {
-    $('form').submit(false);
+Parse.initialize("4Femn58dGqOY09K6Mj7QjlhnqViEquBSRhf9N8LA",
+    "YhTSUbxy54XmnPfE3YqT0vc0tS0FCwO3IYtLPi4r");
 
+
+$(function() {
+
+    var TestObject = Parse.Object.extend("TestObject");
+    var testObject = new TestObject();
+    testObject
+        .save({foo: "bar"})
+        .then(function(object) {
+
+    });
+
+    $('form').submit(false);
     if( viewMode=='embeded') {
         // Hidden bars
         $('nav').remove();

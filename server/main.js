@@ -11,6 +11,12 @@ dbclient = new Dropbox.Client({
 });
 dbclient.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
 
+var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
+var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
+
+Parse = require('parse').Parse;
+Parse.initialize(APP_ID,MASTER_KEY);
+
 util = require('util');
 Promise = require('promise');
 engine = require('ejs-locals');

@@ -18,7 +18,7 @@
         "node-twitter-api": "*",
         "linkedin-js": "*",
         "request":"*",
-        "node-parse-api": "*",
+        "parse":"*",
         "mandrill-api": "*"
     }
 }

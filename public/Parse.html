@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="//www.parsecdn.com/js/parse-1.2.18.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+</head>
+<body>
+    <input type='file'>
+    <button id='upload' > Upload Resume</button>
+    <a hidden> Download</a>
+    <script>
+        $('#upload').click( function(){
+
+            Parse.initialize(
+                    "4Femn58dGqOY09K6Mj7QjlhnqViEquBSRhf9N8LA",
+                    "YhTSUbxy54XmnPfE3YqT0vc0tS0FCwO3IYtLPi4r");
+            var fileUploadControl = $("input")[0];
+            alert(fileUploadControl);
+            if (fileUploadControl.files.length > 0) {
+                var file = fileUploadControl.files[0];
+                var name = "resume";
+
+                var parseFile = new Parse.File(name, file);
+                parseFile.save().then(function() {
+                    // The file has been saved to Parse.
+                    $('a').show().attr('href',parseFile.url());
+                }, function(error) {
+                    alert(error);
+                });
+            }
+        });
+
+    </script>
+
+</body>
+</html>
