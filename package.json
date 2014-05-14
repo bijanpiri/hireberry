@@ -19,6 +19,8 @@
         "linkedin-js": "*",
         "request":"*",
         "parse":"*",
-        "mandrill-api": "*"
+        "mandrill-api": "*",
+        "mandrill-api": "*",
+        "paypal-rest-sdk": "*"
     }
 }

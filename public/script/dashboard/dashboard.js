@@ -181,4 +181,23 @@ $(function(){
 
     });
 
+    $('#payButton').click( function() {
+        var amount = $('#paymentAmount :selected').attr('name')
+        window.open( '/pay?amount=' + amount, '_blank');
+    })
+
+    $.get('/api/billing').done( function(res) {
+        $('#billing_balance').text( res.balance );
+
+        for( var i=0; i<res.billings.length; i++ ) {
+            var date = new Date(res.billings[i].time);
+
+            var billingRow = $('<div>')
+                .append( $('<span>').text(date.toLocaleDateString()))
+                .append( $('<span>').text(res.billings[i].amount))
+                .append( $('<span>').text(res.billings[i].state));
+
+            $('#billingsList').append( billingRow );
+        }
+    })
 });

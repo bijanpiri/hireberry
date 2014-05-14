@@ -464,10 +464,35 @@
 </div>
 </div>
 
+<style>
+    #billingsList {
+        font-size: 1.8em
+    }
+
+    #billingsList div {
+        padding: 0.5em 0;
+        border-top: 1px solid rgb(209, 222, 238);
+        background-color: #fff;
+    }
+
+    #billingsList div span {
+        margin: 1em;
+    }
+</style>
+
 <div id="billingp" class="container-fluid sectionContainer">
     <div class="row-fluid">
-        <p style="font-size: 2em;">Your current plan is FREE.</p>
-
+        <p style="font-size: 2em;">Your current plan is FREE.<br/><br/>
+            Balance:<span id="billing_balance">0.00</span>$
+            <div id="billingsList"></div>
+        </p>
+        <select id="paymentAmount">
+            <option name="10">10.00 $</option>
+            <option name="20">20.00 $</option>
+            <option name="30">30.00 $</option>
+            <option name="50">50.00 $</option>
+        </select>
+        <button class="btn btn-success" id="payButton">Pay</button>
     </div>
 </div>
 

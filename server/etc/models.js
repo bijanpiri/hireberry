@@ -109,6 +109,16 @@ BApplications = mongoose.model( 'applications', {
     assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'}
 });
 
+BTransactions = mongoose.model( 'transactions', {
+    teamID: {type : mongoose.Schema.ObjectId, ref : 'teams'},
+    paymentTime: Date,
+    amount: String,
+    state: String,
+    PAYToken: String,
+    ECToken: String,
+    payer: {}
+});
+
 BApplicantsResponses = mongoose.model( 'applicantsResponses', {
     applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
     text: String,

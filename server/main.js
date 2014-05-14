@@ -62,6 +62,7 @@ module.exports = app;
 
 models = require('./etc/models');
 dashboardRouters = require('./routers/dashboard');
+billing = require('./etc/billing');
 utilitiesRouters = require('./etc/utilities');
 jobRouters = require('./routers/job');
 generalRouters = require('./routers/general');
