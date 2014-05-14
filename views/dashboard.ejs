@@ -465,8 +465,12 @@
 </div>
 
 <style>
+    #billingHistory {
+        font-size: 2em
+    }
+
     #billingsList {
-        font-size: 1.8em
+        font-size: 0.8em;
     }
 
     #billingsList div {
@@ -478,21 +482,60 @@
     #billingsList div span {
         margin: 1em;
     }
+
+    #paypalPay {
+        margin: 2em 0;
+        background-color: #FFF;
+        padding: 1em;
+        font-size: 2em;
+        border: 1px solid rgb(213, 213, 213);
+        border-radius: 4px;
+    }
+
+    #paymentAmount {
+        margin: 0;
+    }
+
+    #billing_balance {
+        display: inline-block;
+        font-size: 1.5em;
+        color: rgb(213, 82, 82);
+        font-weight: 700;
+    }
 </style>
 
 <div id="billingp" class="container-fluid sectionContainer">
     <div class="row-fluid">
-        <p style="font-size: 2em;">Your current plan is FREE.<br/><br/>
-            Balance:<span id="billing_balance">0.00</span>$
-            <div id="billingsList"></div>
-        </p>
-        <select id="paymentAmount">
-            <option name="10">10.00 $</option>
-            <option name="20">20.00 $</option>
-            <option name="30">30.00 $</option>
-            <option name="50">50.00 $</option>
-        </select>
-        <button class="btn btn-success" id="payButton">Pay</button>
+        <div style="font-size: 2em;">
+            Your current plan is <span id="billing_plan">...</span>.
+            <button class="btn btn-primary pull-right" id="premiumPlanButton">Go to Premium Plan</button>
+            <button class="btn btn-primary pull-right" id="freePlanButton">Go to Free Plan</button>
+            <br/><br/>
+
+            Balance:
+            <div id="billing_balance">
+                <span>0.00</span>$
+            </div>
+        </div>
+
+        <div id="paypalPay">
+            <img class="pull-right" src="images/paypal.png">
+            <p>Make a one time PayPal payment:</p>
+            <select id="paymentAmount">
+                <option name="10">10.00 $</option>
+                <option name="20">20.00 $</option>
+                <option name="30">30.00 $</option>
+                <option name="50">50.00 $</option>
+            </select>
+            <button class="btn btn-success" id="payButton">Pay</button>
+        </div>
+
+        <div id="billingHistory">
+            Billing History:
+            <div id="billingsList">
+            </div>
+        </div>
+
     </div>
 </div>
 

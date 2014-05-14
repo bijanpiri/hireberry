@@ -186,8 +186,34 @@ $(function(){
         window.open( '/pay?amount=' + amount, '_blank');
     })
 
+    $('#premiumPlanButton').click( function() {
+        $.get('/api/plan/change',{new_plan:1}).done(loadBilling);
+    });
+
+    $('#freePlanButton').click( function() {
+        $.get('/api/plan/change',{new_plan:0}).done(loadBilling);
+    });
+
+    loadBilling();
+
+});
+
+function loadBilling() {
     $.get('/api/billing').done( function(res) {
-        $('#billing_balance').text( res.balance );
+        var plan = (res.plan==0) ? 'Free' : 'Premium';
+
+        $('#billing_plan').text( plan + '(' + (new moment(res.lastRenew)).fromNow() + ')' );
+        $('#billing_balance span').text( res.balance );
+
+        if( res.plan == 0 ) {
+            $('#freePlanButton').hide();
+            $('#premiumPlanButton').show();
+        } else {
+            $('#freePlanButton').show();
+            $('#premiumPlanButton').hide();
+        }
+
+        $('#billingsList').empty();
 
         for( var i=0; i<res.billings.length; i++ ) {
             var date = new Date(res.billings[i].time);
@@ -200,4 +226,4 @@ $(function(){
             $('#billingsList').append( billingRow );
         }
     })
-});
+}

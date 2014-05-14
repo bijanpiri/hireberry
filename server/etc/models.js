@@ -72,7 +72,9 @@ BTeams = mongoose.model( 'teams', {
     admin: {type : mongoose.Schema.ObjectId, ref : 'users'},
     members: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
     tel:String,
-    address:String
+    address:String,
+    plan: Number,
+    planLastRenewDate: Date
 })
 
 BEvents = mongoose.model( 'events', {

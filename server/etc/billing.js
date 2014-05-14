@@ -14,7 +14,10 @@ var config_opts = {
 
 paypal_api.configure(config_opts);
 
-function pay( teamID, callback ) {
+var plansCost = [0,1.00];
+
+
+function pay( teamID, amount, callback ) {
 
     BTransactions( {teamID: teamID, state: 'init' }).save( function(err,transaction) {
 
@@ -30,9 +33,9 @@ function pay( teamID, callback ) {
             "transactions": [{
                 "amount": {
                     "currency": "USD",
-                    "total": "1.00"
+                    "total": amount
                 },
-                "description": "This is the payment description."
+                "description": "Increasing credit for {Team} in Booltin"
             }]
         };
 
@@ -41,7 +44,7 @@ function pay( teamID, callback ) {
                 callback(err);
 
             if (res) {
-                BTransactions.update({_id:transaction._id},{state:'created',amount:'1.0',PAYToken:res.id}, function(err){
+                BTransactions.update({_id:transaction._id},{state:'created',amount:amount,PAYToken:res.id}, function(err){
                     for( var i=0; i<res.links.length; i++ )
                         if( res.links[i].rel==='approval_url' )
                             callback(null,res.links[i].href);
@@ -52,8 +55,79 @@ function pay( teamID, callback ) {
     });
 }
 
+// This function must be called every day
+function monthlyInvoiceGenerating() {
+    BTeams.find({}, function(err,teams) {
+
+        for( var i=0; i<teams.length; i++ ) {
+            var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+            var today = new Date();
+            var lastRenew = new Date( team.planLastRenewDate );
+            var diffDays = Math.round(Math.abs((today.getTime() - lastRenew.getTime())/(oneDay)));
+
+            if( diffDays >= 31 )
+                generateInvoice(teams[i], function(){});
+        }
+    });
+
+}
+
+function generateInvoice(teamID, callback) {
+
+    BTeams.findOne({_id:teamID}, function(err,team) {
+
+        var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+        var today = new Date();
+        var lastRenew = new Date( team.planLastRenewDate );
+        var diffDays = Math.round(Math.abs((today.getTime() - lastRenew.getTime())/(oneDay)));
+        var plan = team.plan;
+
+        var amount = -1 * parseInt(100*( plansCost[plan]*(diffDays/31)))/100
+
+        BTransactions( {
+            teamID: teamID,
+            state: 'invoice',
+            amount: amount,
+            paymentTime: new Date()
+        }).save( function(err) {
+                BTeams.update({_id:teamID},{planLastRenewDate:new Date()}, function(err) {
+                    callback({error:err});
+                });
+            });
+
+
+    });
+}
+
+function changePlan( newPlan, teamID, callback ) {
+
+    generateInvoice(teamID, function() {
+
+        checkBalance( teamID, plansCost[newPlan] ,function(err, isOK) {
+            if(!err.error && isOK ) {
+                BTeams.update({_id:teamID},{plan:newPlan}, function(err) {
+                    callback({error:err});
+                });
+            } else {
+
+            }
+        })
+    });
+}
+
+function checkBalance(teamID, minBalance, callback) {
+    BTransactions.find( {teamID: teamID, $or:[{state:'sold'},{state:'invoice'}]}, function(err,transactions) {
+        var balance = 0;
+
+        for( var i=0; i<transactions.length; i++ )
+            balance += parseFloat(transactions[i].amount);
+
+        callback({error:null}, (balance >= minBalance) );
+    });
+}
+
 app.get('/pay', function(req,res) {
-    pay( req.user.teamID, function(err, approval_url) {
+    pay( req.user.teamID, req.query.amount, function(err, approval_url) {
         if( !err )
             res.redirect(approval_url);
     } );
@@ -69,10 +143,15 @@ app.get('/api/billing', function(req,res) {
             billings.push( { state:transactions[i].state, time: transactions[i].paymentTime, amount:transactions[i].amount} );
         }
 
-        res.send(200,{
-            balance: balance,
-            billings: billings
-        });
+        BTeams.findOne({_id:req.user.teamID}, function(err,team){
+            res.send(200,{
+                plan: team.plan,
+                lastRenew: team.planLastRenewDate,
+                balance: balance,
+                billings: billings
+            });
+        })
+
     });
 });
 
@@ -113,4 +192,10 @@ app.get('/paypal', function(req,res) {
             })
         }
     });
+})
+
+app.get('/api/plan/change', function(req,res) {
+    changePlan( req.query.new_plan, req.user.teamID, function() {
+        res.send(200);
+    })
 })
