@@ -269,6 +269,10 @@ app.post('/flyer/inactive', function(req,res){
 });
 
 app.post('/flyer/save', function(req,res){
+
+    if( !req.user )
+        res.send(304);
+
     var flyer = req.body.flyer;
 
     if( !flyer.description || flyer.description.length == 0 )
