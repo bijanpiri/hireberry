@@ -116,7 +116,7 @@ getUserTeam=function(userID,callback) {
 
 createTeam=function(teamName,callback) {
 
-    BTeams({name:teamName}).save( function(err,team){
+    BTeams({name:teamName,plan:0,planLastRenewDate:new Date()}).save( function(err,team){
         if(err)
             callback(err,null);
         else
