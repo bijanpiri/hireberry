@@ -41,7 +41,8 @@ function fillApplications() {
                     var mTimestamp = new moment(activity.timestamp);
                     var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
                     var typeObj = $('<div>').addClass('activity-type').text( activity.type );
-                    var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
+                    var stoneObj = $('<div>').addClass('activity-stone');
+                    var activityObj = $('<div>').addClass('activity').append(stoneObj).append(timeObj).append(typeObj);
 
                     candidateObj.find('.candidate-activities').append( activityObj );
                 }

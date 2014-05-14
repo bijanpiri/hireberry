@@ -247,53 +247,6 @@
     font-size: 1.5em;
 }
 
-.activity {
-}
-
-.activity-timestamp {
-    font-size: 1.2em;
-    color: #9c9c9c;
-    display: inline-block;
-}
-
-.activity-separator {
-    border-color: #000;
-}
-
-.activity-type {
-    font-size: 1.4em;
-    display: inline-block;
-    padding-left: 0.5em;
-}
-
-.activity-decision {
-    padding: 1em 0 2em 1em;
-    background-color: #DFDFDF;
-    font-size: 1.2em;
-    border-left: 3px solid #AFAFAF;
-}
-
-.activity-actionPanel {
-    background-color: #dfdfdf;
-    vertical-align: middle;
-    text-align: center;
-    padding: 10px 0;
-    margin: 10px 0;
-    border-radius: 7px;
-}
-
-.activity-actionPanel button {
-    margin: 0 5px;
-}
-
-.activity-note {
-    resize: none;
-}
-
-.activity-title {
-    font-size: 1.3em;
-}
-
 .reminders {
     border: 2px solid #000;
     height: 100px;

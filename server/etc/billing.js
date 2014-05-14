@@ -95,7 +95,6 @@ function generateInvoice(teamID, callback) {
                 });
             });
 
-
     });
 }
 
@@ -140,7 +139,9 @@ app.get('/api/billing', function(req,res) {
 
         for( var i=0; i<transactions.length; i++ ) {
             balance += parseFloat(transactions[i].amount);
-            billings.push( { state:transactions[i].state, time: transactions[i].paymentTime, amount:transactions[i].amount} );
+
+            if( Math.abs(transactions[i].amount) > 0 )
+                billings.push( { state:transactions[i].state, time: transactions[i].paymentTime, amount:transactions[i].amount} );
         }
 
         BTeams.findOne({_id:req.user.teamID}, function(err,team){
@@ -171,7 +172,7 @@ app.get('/paypal', function(req,res) {
                 paypal_api.payment.execute( transaction.PAYToken, execute_payment_details, function(error, payment){
                     if(error){
                         console.error(error);
-                        res.send(error);
+                        res.redirect('/dashboard#billing');
                     } else {
 
                         BTransactions.update({_id:transactionID},{
@@ -180,7 +181,7 @@ app.get('/paypal', function(req,res) {
                             paymentTime: payment.update_time
                         }, function(err){
                             console.log(payment);
-                            res.send(payment);
+                            res.redirect('/dashboard#billing');
                         });
                     }
                 });
@@ -188,7 +189,7 @@ app.get('/paypal', function(req,res) {
         }
         else {
             BTransactions.update({_id:transaction._id},{state:'canceled',ECToken:ECToken}, function(err){
-                res.send('Canceled');
+                res.redirect('/dashboard#billing');
             })
         }
     });

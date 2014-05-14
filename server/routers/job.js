@@ -69,7 +69,8 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
                 BFlyers({
                     owner: req.user.teamID,
-                    creator: req.user._id
+                    creator: req.user._id,
+                    autoAssignedTo: req.user._id
                 }).save(function (err,newflyer) {
                         flyerid = newflyer._id;
                         res.cookie('flyerid',flyerid);

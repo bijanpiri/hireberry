@@ -149,9 +149,23 @@
 
             .candidate-activities {
               .activity {
-                margin: 1em;
-                padding: 0.5em;
-                border-left: 2px solid #37883A;
+                position: relative;
+                margin: 0 8px;
+                padding: 1em;
+                border-left: 3px solid #37883A;
+
+                .activity-stone {
+                  width: 16px;
+                  height: 16px;
+                  background-color: green;
+                  border-radius: 50%;
+                  position: absolute;
+                  left: -8px;
+                  top: 0;
+                  bottom: 0;
+                  margin: auto;
+                }
+
 
                 .activity-time {
                   font-size: 1.3em;

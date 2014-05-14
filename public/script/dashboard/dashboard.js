@@ -183,7 +183,7 @@ $(function(){
 
     $('#payButton').click( function() {
         var amount = $('#paymentAmount :selected').attr('name')
-        window.open( '/pay?amount=' + amount, '_blank');
+        document.location =  '/pay?amount=' + amount;
     })
 
     $('#premiumPlanButton').click( function() {
