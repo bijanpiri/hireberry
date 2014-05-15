@@ -55,23 +55,6 @@ function pay( teamID, amount, callback ) {
     });
 }
 
-// This function must be called every day
-function monthlyInvoiceGenerating() {
-    BTeams.find({}, function(err,teams) {
-
-        for( var i=0; i<teams.length; i++ ) {
-            var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-            var today = new Date();
-            var lastRenew = new Date( team.planLastRenewDate );
-            var diffDays = Math.round(Math.abs((today.getTime() - lastRenew.getTime())/(oneDay)));
-
-            if( diffDays >= 31 )
-                generateInvoice(teams[i], function(){});
-        }
-    });
-
-}
-
 function generateInvoice(teamID, callback) {
 
     BTeams.findOne({_id:teamID}, function(err,team) {
