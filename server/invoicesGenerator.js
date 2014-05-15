@@ -11,18 +11,23 @@ function monthlyInvoiceGenerating() {
     BTeams.find({}, function(err,teams) {
 
         for( var i=0; i<teams.length; i++ ) {
-            console.log('##-----[ ' + teams[i].name + ']-----');
+            var log = '## [' + teams[i].name + ']: ';
 
             var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
             var today = new Date();
             var lastRenew = new Date( teams[i].planLastRenewDate );
             var diffDays = Math.round(Math.abs((today.getTime() - lastRenew.getTime())/(oneDay)));
 
-            console.log('## ' + diffDays + ' days');
+           log +=  diffDays + ' days ...';
             if( diffDays >= 31 ) {
-                console.log('## Generating... ');
+                log += 'generating.';
                 generateInvoice(teams[i], function(){});
             }
+            else {
+                log += 'ignored.';
+            }
+
+            console.log( log );
         }
 
         console.log('#### INVOICE GENERATOR FINISHED ####');
