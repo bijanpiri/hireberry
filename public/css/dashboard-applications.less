@@ -2,129 +2,137 @@
 @head2-color: #B8B8B8;
 
 
-  &.grid-layout, &.list-layout {
+&.grid-layout, &.list-layout {
 
-    .candidate {
-      box-shadow: 1px 1px 5px #c6c6c6;
-      -webkit-box-shadow: 1px 1px 5px #c6c6c6;
-      background-color: #fff;
-      border-radius: 4px;
+  .candidate {
+    box-shadow: 1px 1px 5px #c6c6c6;
+    -webkit-box-shadow: 1px 1px 5px #c6c6c6;
+    background-color: #fff;
+    border-radius: 4px;
 
-      .sticky {
-        position: absolute;
-        right: 0;
-        top: -1em;
-        background-color: #DCEEA1;
-        border: 1px solid #B5C487;
-        padding: 2px 5px;
-        border-radius: 0 0 4px 4px;
-        font-weight: 700;
-        display: none;
-      }
+    .sticky {
+      position: absolute;
+      right: 0;
+      top: -1em;
+      background-color: #DCEEA1;
+      border: 1px solid #B5C487;
+      padding: 2px 5px;
+      border-radius: 0 0 4px 4px;
+      font-weight: 700;
+      display: none;
+    }
 
-      .bool-toggle-application{
-        .sticky();
-        left: 0;
-        right: initial;
-        cursor: pointer;
-        display: inline-block;
-      }
+    .bool-toggle-application{
+      .sticky();
+      left: 0;
+      right: initial;
+      cursor: pointer;
+      display: inline-block;
+    }
 
-      &.candidate-expanded .icon-plus{
-        display: none;
-      }
-      .icon-minus{
-        display: none;
-      }
-      &.candidate-expanded .icon-minus{
-        display: inline-block;
-      }
+    &.candidate-expanded .icon-plus{
+      display: none;
+    }
+    .icon-minus{
+      display: none;
+    }
+    &.candidate-expanded .icon-minus{
+      display: inline-block;
+    }
 
-      &.candidate-collapsed {
-      }
+    &.candidate-collapsed {
+    }
 
-      &.candidate-expanded {
-        width: 100%;
-        height: auto;
+    &.candidate-expanded {
+      width: 100%;
+      height: auto;
 
-        .candidate-summary {
+      .candidate-summary {
 
 
-          .candidate-basicInfo {
-            width: auto;
-          }
-
-          .candidate-conditions, .candidate-skills, .candidate-stage {
-            display: none;
-          }
-
-          .candidate-resume {
-            display: inline-block;
-            margin: 0 2em;
-            vertical-align: baseline;
-          }
-
-          .candidate-time {
-            display: inline-block;
-          }
-
-          .candidate-profiles {
-            display: inline-block;
-            margin: 0 2em;
-
-            .profile {
-              width: 24px;
-              height: 24px;
-              vertical-align: bottom;
-            }
-          }
+        .candidate-basicInfo {
+          width: auto;
         }
 
+        .candidate-conditions, .candidate-skills, .candidate-stage {
+          display: none;
+        }
 
-        .candidate-details {
+        .candidate-resume {
           display: inline-block;
-          width: 100%;
-          padding: 20px;
+          margin: 0 2em;
+          vertical-align: baseline;
+        }
 
-          .candidate-leftColumn {
-            float: left;
+        .candidate-time {
+          display: inline-block;
+        }
+
+        .candidate-profiles {
+          display: inline-block;
+          margin: 0 2em;
+
+          .profile {
+            width: 24px;
+            height: 24px;
+            vertical-align: bottom;
           }
+        }
+      }
 
-          .candidate-rightColumn {
-            float: right;
-          }
 
-          .candidate-leftColumn, .candidate-rightColumn {
-            display: inline-block;
-            width: 50%;
-            vertical-align: top;
+      .candidate-details {
+        display: inline-block;
+        width: 100%;
+        padding: 20px;
 
-            > * {
-              clear: both;
-            }
+        .candidate-leftColumn {
+          float: left;
+        }
 
-          }
+        .candidate-rightColumn {
+          float: right;
+        }
 
-          .candidate-rightColumn + * {
+        .candidate-leftColumn, .candidate-rightColumn {
+          display: inline-block;
+          width: 50%;
+          vertical-align: top;
+
+          > * {
             clear: both;
+          }
+
+        }
+
+        .candidate-rightColumn + * {
+          clear: both;
+        }
+
+        .mbox-container{
+          padding: 4px;
+
+          .mbox-title {
+            background-color: #37B36F;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 1.8em;
+            padding: 0.2em;
+            border-radius: 7px 7px 0 0;
           }
 
           .mbox {
             width: 100%;
             min-height: 100px;
             background-color: #fff;
-            border: 1px solid #D1D1D1;
+            border-left: 1px solid #37B36F;
+            border-right: 1px solid #37B36F;
+            border-bottom: 1px solid #37B36F;
+
             height: 500px;
             overflow: auto;
             &.overflow {
               overflow: visible;
-            }
-            .mbox-title {
-              background-color: #37B36F;
-              color: #FFFFFF;
-              text-align: center;
-              font-size: 1.8em;
-              padding: 0.2em;
             }
 
             .candidate-conditions {
@@ -181,255 +189,256 @@
             }
           }
 
-          .candidate-addComment {
-            position: relative;
-            height: 140px;
-            background-color: #E4E4E4;
-            padding: 20px 0;
+        }
+        .candidate-addComment {
+          position: relative;
+          height: 140px;
+          background-color: #E4E4E4;
+          padding: 20px 0;
+        }
+
+        .candidate-actions {
+          height: 30px;
+        }
+
+        .candidate-newComments {
+          padding: 10px;
+          background-color: #E4E4E4;
+          font-size: 1.4em;
+        }
+
+        .candidate-commentBox {
+          width: 400px;
+          height: 100px;
+          position: absolute;
+          left: 0;
+          right: 0;
+          margin: auto;
+
+          textarea {
+            display: block;
+            width: 100%;
           }
+        }
 
-          .candidate-actions {
-            height: 30px;
-          }
+        .candidate-workflow {
+          .candidate-workflow-stages {
+            padding: 1em 2em;
+            font-size: 2em;
+            line-height: 1.5em;
 
-          .candidate-newComments {
-            padding: 10px;
-            background-color: #E4E4E4;
-            font-size: 1.4em;
-          }
+            .candidate-workflow-stage {
+              margin: 1em 0;
 
-          .candidate-commentBox {
-            width: 400px;
-            height: 100px;
-            position: absolute;
-            left: 0;
-            right: 0;
-            margin: auto;
+              a {
+                display: block;
+                padding: 0.1em 0.1em;
+                border-left: 4px solid #000;
+                width: 300px;
+                color: #fff;
+                margin: 0.3em 0;
+                border-radius: 0 7px 7px 0;
+              }
 
-            textarea {
-              display: block;
-              width: 100%;
-            }
-          }
+              a:hover {
+                width: 350px;
+                text-decoration: none;
+                border-left: 4px solid #000;
+                color: #fff;
+              }
 
-          .candidate-workflow {
-            .candidate-workflow-stages {
-              padding: 1em 2em;
-              font-size: 2em;
-              line-height: 1.5em;
+              .offerButton {
+                background-color: #00ba00;
+              }
 
-              .candidate-workflow-stage {
-                margin: 1em 0;
+              .interviewButton {
+                background-color: #68a5ba;
+              }
 
-                a {
-                  display: block;
-                  padding: 0.1em 0.1em;
-                  border-left: 4px solid #000;
-                  width: 300px;
-                  color: #fff;
-                  margin: 0.3em 0;
-                  border-radius: 0 7px 7px 0;
-                }
+              .archiveButton {
+                background-color: #c9c434;
+              }
 
-                a:hover {
-                  width: 350px;
-                  text-decoration: none;
-                  border-left: 4px solid #000;
-                  color: #fff;
-                }
-
-                .offerButton {
-                  background-color: #00ba00;
-                }
-
-                .interviewButton {
-                  background-color: #68a5ba;
-                }
-
-                .archiveButton {
-                  background-color: #c9c434;
-                }
-
-                .askForCommentButton {
-                  background-color: #D84E69;
-                }
+              .askForCommentButton {
+                background-color: #D84E69;
               }
             }
           }
-
         }
+
       }
     }
   }
-  .grid-layout {
+}
+.grid-layout {
 
-    .candidate {
-      width: 400px;
-      margin: 10px;
-      float: left;
-      padding: 10px;
+  .candidate {
+    width: 400px;
+    margin: 10px;
+    float: left;
+    padding: 10px;
 
-      .candidate-summary {
-        position: relative;
+    .candidate-summary {
+      position: relative;
 
-        .candidate-avatar {
-          display: inline-block;
-          height: 84px;
-          width: 84px;
-          border-radius: 50%;
-          border: 3px solid #cecece;
-          margin: 0 10px 0px 50px
-        }
-
-        .candidate-basicInfo {
-          display: inline-block;
-          vertical-align: top;
-          line-height: 1.8em;
-          margin: 10px 0;
-        }
-
-        .candidate-name {
-          font-size: 2em;
-          line-height: 1.6em;
-          color: @head1-color;
-          display: inline-block;
-        }
-
-        .candidate-resume {
-          display: none;
-        }
-
-        .candidate-profiles {
-          display: none;
-
-          .profile {}
-        }
-
-        .candidate-job, .candidate-time {
-          font-size: 1.5em;
-          color: @head2-color;
-
-          .value {
-            font-weight: 700;
-          }
-        }
-
-        .candidate-time {
-          display: none;
-        }
-
-        .candidate-stage {
-          font-size: 1.5em;
-          line-height: 2em;
-          border-top: 2px solid #eee;
-          padding: 0 10px;
-        }
-
-        .candidate-conditions {
-          font-size: 1.5em;
-          line-height: 2em;
-          border-top: 2px solid #eee;
-          padding: 0 10px;
-        }
-
-        .candidate-skills {
-          font-size: 1.5em;
-          line-height: 2em;
-          border-top: 2px solid #eee;
-          padding: 0 10px;
-        }
+      .candidate-avatar {
+        display: inline-block;
+        height: 84px;
+        width: 84px;
+        border-radius: 50%;
+        border: 3px solid #cecece;
+        margin: 0 10px 0px 50px
       }
 
-      .candidate-details {
+      .candidate-basicInfo {
+        display: inline-block;
+        vertical-align: top;
+        line-height: 1.8em;
+        margin: 10px 0;
+      }
+
+      .candidate-name {
+        font-size: 2em;
+        line-height: 1.6em;
+        color: @head1-color;
+        display: inline-block;
+      }
+
+      .candidate-resume {
         display: none;
       }
-    }
-  }
 
-  .list-layout {
+      .candidate-profiles {
+        display: none;
 
-    .candidate {
-      min-height: 50px;
-      width: 100%;
-      margin: 5px 15px;
-      padding: 10px;
+        .profile {}
+      }
 
-      .candidate-summary {
-        position: relative;
+      .candidate-job, .candidate-time {
+        font-size: 1.5em;
+        color: @head2-color;
 
-        .sticky {
-          position: absolute;
-          right: 0;
-          top: -1em;
-          background-color: #DCEEA1;
-          border: 1px solid #B5C487;
-          padding: 2px 5px;
-          border-radius: 0 0 4px 4px;
+        .value {
           font-weight: 700;
         }
-
-        .candidate-avatar {
-          background-size: 30px 30px;
-          display: inline-block;
-          height: 30px;
-          width: 30px;
-          border-radius: 50%;
-          border: 1px solid #8B8B8B;
-          margin: 5px;
-          box-sizing: border-box;
-        }
-
-        .candidate-basicInfo {
-          display: inline-block;
-          vertical-align: top;
-        }
-
-        .candidate-name {
-          font-size: 1.8em;
-          display: inline-block;
-          vertical-align: middle;
-          color: @head1-color;
-        }
-
-        .candidate-profiles, .candidate-resume, .candidate-time {
-          display: none;
-        }
-
-        .candidate-job {
-          font-size: 1.5em;
-          color: @head2-color;
-          display: inline-block;
-          vertical-align: middle;
-          margin: 0 0.5em;
-        }
-
-        .candidate-stage {
-          font-size: 1.5em;
-          display: inline-block;
-          vertical-align: top;
-          margin: 0 0.5em;
-        }
-
-        .candidate-conditions {
-          font-size: 1.5em;
-          vertical-align: top;
-          display: inline-block;
-          margin: 0 0.5em;
-        }
-
-        .candidate-skills {
-          font-size: 1.5em;
-          vertical-align: top;
-          display: inline-block;
-          margin: 0 0.5em;
-        }
       }
 
-      .candidate-details {
+      .candidate-time {
         display: none;
       }
+
+      .candidate-stage {
+        font-size: 1.5em;
+        line-height: 2em;
+        border-top: 2px solid #eee;
+        padding: 0 10px;
+      }
+
+      .candidate-conditions {
+        font-size: 1.5em;
+        line-height: 2em;
+        border-top: 2px solid #eee;
+        padding: 0 10px;
+      }
+
+      .candidate-skills {
+        font-size: 1.5em;
+        line-height: 2em;
+        border-top: 2px solid #eee;
+        padding: 0 10px;
+      }
+    }
+
+    .candidate-details {
+      display: none;
     }
   }
+}
+
+.list-layout {
+
+  .candidate {
+    min-height: 50px;
+    width: 100%;
+    margin: 5px 15px;
+    padding: 10px;
+
+    .candidate-summary {
+      position: relative;
+
+      .sticky {
+        position: absolute;
+        right: 0;
+        top: -1em;
+        background-color: #DCEEA1;
+        border: 1px solid #B5C487;
+        padding: 2px 5px;
+        border-radius: 0 0 4px 4px;
+        font-weight: 700;
+      }
+
+      .candidate-avatar {
+        background-size: 30px 30px;
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        border: 1px solid #8B8B8B;
+        margin: 5px;
+        box-sizing: border-box;
+      }
+
+      .candidate-basicInfo {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .candidate-name {
+        font-size: 1.8em;
+        display: inline-block;
+        vertical-align: middle;
+        color: @head1-color;
+      }
+
+      .candidate-profiles, .candidate-resume, .candidate-time {
+        display: none;
+      }
+
+      .candidate-job {
+        font-size: 1.5em;
+        color: @head2-color;
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 0.5em;
+      }
+
+      .candidate-stage {
+        font-size: 1.5em;
+        display: inline-block;
+        vertical-align: top;
+        margin: 0 0.5em;
+      }
+
+      .candidate-conditions {
+        font-size: 1.5em;
+        vertical-align: top;
+        display: inline-block;
+        margin: 0 0.5em;
+      }
+
+      .candidate-skills {
+        font-size: 1.5em;
+        vertical-align: top;
+        display: inline-block;
+        margin: 0 0.5em;
+      }
+    }
+
+    .candidate-details {
+      display: none;
+    }
+  }
+}
 
 .modal .bool-toggle-application{
   display: none;
