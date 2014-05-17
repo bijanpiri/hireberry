@@ -6,6 +6,8 @@ var editMode
 
 function Widget(options){
     Widget.instances=1000;
+    var widget=this;
+    var preparedCallback;
     this.type=0;
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container');
@@ -121,6 +123,13 @@ function Widget(options){
 
     this.restated=function(){
         console.log('restated');
+    }
+    this.getReady=function(){
+        preparedCallback();
+    }
+    this.prepare=function(prepareCallback){
+        preparedCallback=prepareCallback;
+        widget.getReady();
     }
 }
 Widget.prototype.constructor = Widget;

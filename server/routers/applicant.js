@@ -3,7 +3,15 @@
  */
 
 var request=require('request');
+var Parse = require('parse').Parse;
 
+//var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
+//var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
+var APP_ID='qoMkGPujIUWxjrHi28WCcOoSrl755V8CgFYrdC59';
+var JavaScript_Key='xCzRaCEshLWlg6XGvnBxLdRRcv6BRGNY4MUQhgvn';
+
+//Parse.initialize(APP_ID, JavaScript_Key);
+//var Resume=Parse.Object.extend("Resume");
 app.get('/job/dropboxAuth', function (req,res){
 
     var flyerID = req.query.flyerid;
@@ -12,9 +20,7 @@ app.get('/job/dropboxAuth', function (req,res){
         if (error)
             return res.send(502,{error:error})
 
-        BFlyers.update( {_id:flyerID},
-            {dbToken:client._oauth._token},
-            function(err){
+        BFlyers.update( {_id:flyerID}, {dbToken:client._oauth._token}, function(err){
 
             if(!err)
                 res.send(200, { token: client._oauth._token } )
@@ -146,6 +152,7 @@ app.get('/twprofile/:q', function (req,res){
 app.post('/apply', function (req,res) {
 
     var resumeFileName;
+    var resumeUrl=req.body.resumeUrl;
 
     if(  req.files.resume && req.files.resume.size > 0 )
         resumeFileName = req.files.resume.path.replace(/^.*[\\\/]/, '') + req.files.resume.name;
@@ -177,14 +184,14 @@ app.post('/apply', function (req,res) {
         workTime:req.body.workTime,
         profiles:JSON.stringify(profiles),
         anythingelse:req.body.anythingElse,
-        resumePath:resumeFileName,
+        resumePath: resumeUrl || resumeFileName,
         stage: { stage:1, subStage:1 },
         activities:[{type:'Application is sent',timestamp:new Date()}]
     }).save( function(err, application) {
         if(err){
             res.send(404,{});
         } else {
-//            uploadResume( application._id );
+            uploadResume( application._id );
         }
     });
 
@@ -199,8 +206,8 @@ app.post('/apply', function (req,res) {
 
                     if( flyer.dbToken )
                         saveOnDropbox( flyer.dbToken, data, resumeFileName, applicationID );
-                    else
-                        saveOnParse( data, resumeFileName, applicationID,req.files.resume.path);
+//                    else
+//                        saveOnParse( data, resumeFileName, applicationID);
                 })
             });
         }
@@ -209,37 +216,6 @@ app.post('/apply', function (req,res) {
         }
     }
 
-    var saveOnParse = function(data, resumeFileName, applicationID,path) {
-
-        var parseFile = new Parse.File(resumeFileName, data);
-        parseFile.save().then(function() {
-            // The file has been saved to Parse.
-            var url=parseFile.url();
-
-            BApplications.update({_id:applicationID},{resumePath:url}, function() {
-                res.send(200,{});
-            });
-
-
-        }, function(error) {
-            res.send(500,error);
-        });
-    }
-    var saveOnParse_old = function(data, resumeFileName, applicationID) {
-        parseApp.insertFile(resumeFileName, data, null, function (err, response) {
-            if(err)
-            {
-                res.send(err.type);
-                return;
-            }
-            var fileLink = response.url;
-            var parseName = response.name;
-
-            BApplications.update({_id:applicationID},{resumePath:fileLink}, function() {
-                res.send(200,{});
-            });
-        });
-    }
 
     var saveOnDropbox = function( dbToken, data, resumeFileName, applicationID ) {
 
@@ -254,7 +230,7 @@ app.post('/apply', function (req,res) {
         // ToDo: Choose Unique Name
         dbclient.writeFile(resumeFileName, data, function(error, stat) {
             if (error) {
-//                return showError(error);  // Something went wrong.
+                return showError(error);  // Something went wrong.
             }
 
             fs.unlink( req.files.resume.path );
@@ -263,9 +239,7 @@ app.post('/apply', function (req,res) {
             dbclient.makeUrl(resumeFileName,{}, function(err,data) {
 
                 if( !err )
-                    BApplications.update({_id:applicationID},
-                        {resumePath:data.url},
-                        function() {
+                    BApplications.update({_id:applicationID},{resumePath:data.url}, function() {
                         res.send(200,{});
                     });
                 else

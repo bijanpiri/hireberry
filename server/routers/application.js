@@ -39,15 +39,30 @@ app.get('/api/applications', function (req,res) {
     });
 
     function fetchApplications(flyersID,flyersName) {
+//                    {$and:[
+//                        {name : {$type:10}},
+//                        {anythingelse : {$type:10}},
+//                        {workPlace : {$type:10}},
+//                        {skills: {$type:10}}]}
         BApplications.find( {
             flyerID:{$in:flyersID},
-            $or:[
-                {name: new RegExp(query, "i")},
-                {anythingelse: new RegExp(query, "i")},
-                {workPlace: new RegExp(query, "i")},
-                {workTime: new RegExp(query, "i")},
-                {skills: new RegExp(query, "i")}
-            ]}).sort(sortBy).populate('flyerID').exec(function(err,forms) {
+             $or:[ {name:new RegExp(query, "i")},
+                    {anythingelse: new RegExp(query, "i")},
+                    {workPlace: new RegExp(query, "i")},
+                    {workTime: new RegExp(query, "i")},
+                    {skills: new RegExp(query, "i")},
+                query?
+                    {$and:[
+                        {name : {$type:6}},
+                        {anythingelse : {$type:6}},
+                        {workPlace : {$type:6}},
+                        {skills: {$type:6}}]}
+                    :{}
+
+                 ]
+                }
+//                :{}}
+    ).sort(sortBy).populate('flyerID').exec(function(err,forms) {
                 if( err )
                     return res.send(303,{error:err});
 
