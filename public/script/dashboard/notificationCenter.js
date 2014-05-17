@@ -1,57 +1,19 @@
 /**
  * Created by Bijan on 05/10/2014.
  */
-function getStat() {
-    $.get('/api/applications/stat').done( function(res){
-        $('#numForms').text( res.numForms )
-        $('#numApplications').text( res.numApplications )
-        $('#numNewApplications').text( res.numNewApplications )
-        $('#numTodayApplications').text( res.numTodayApplications )
-    });
-}
 
-function fillCalendar() {
-    $.get('/event').done( function(events) {
-
-        var eventsList = events.map( function(event) {
-            var m = new moment(event.time);
-
-            return {
-                date: m.format('YYYY-MM-DD'),
-                title: (event.title || 'Event'),
-                location:  m.format('DD MMM[,] ddd')  + ' ( ' + m.fromNow() + ' ) '
-            };
-        });
-
-        /*
-         [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
-         */
-
-        $('#full-clndr').clndr({
-            template: $('#full-clndr-template').html(),
-            events:  eventsList,
-            clickEvents: {
-                click: function(target) {
-                    console.log(target);
-                },
-                onMonthChange: function(month) {
-                    console.log('you just went to ' + month.format('MMMM, YYYY'));
-                }
-            },
-            doneRendering: function() {
-                console.log('this would be a fine place to attach custom event handlers.');
-            }
-        });
-
-    });
-}
 
 function add2NotificationBadge(x){
     badgeNum += x;
     $('#comments_badge').text(badgeNum);
 }
 
-function fillAskedForComments() {
+function decreaseBudgeNumber() {
+    var num = parseInt( $('#comments_badge').text() );
+    $('#comments_badge').text(--num);
+}
+
+function initNotificationCenter() {
 
     $('#askedForCommentList').empty();
     $.get('/api/user/application/askedForComment').done( function(resApp) {
@@ -74,11 +36,6 @@ function fillAskedForComments() {
         showAskedForPublish(A4P_forms);
         add2NotificationBadge( A4P_forms.length);
     });
-
-    function decreaseBudgeNumber() {
-        var num = parseInt( $('#comments_badge').text() );
-        $('#comments_badge').text(--num);
-    }
 
     function showApplications(A4C_applicatinos) {
         A4C_applicatinos.forEach( function(a4c) {

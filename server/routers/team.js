@@ -151,9 +151,9 @@ app.post('/api/user/team/join', function(req,res){
 
 });
 
-app.get('/api/user/teams', function(req,res) {
+app.get('/api/teams', function(req,res) {
     BTeams.find({members:req.user._id}, function(err,teams){
-        res.send(200,teams);
+        res.send(200,{teams:teams});
     })
 });
 
@@ -183,7 +183,8 @@ app.post('/api/user/comment',function(req,res){
     })
 });
 
-app.get('/api/team/members',function(req,res){
+app.get('/api/team',function(req,res){
+
     if( !checkUser(req,res) )
         return;
 
@@ -194,18 +195,27 @@ app.get('/api/team/members',function(req,res){
         .populate('members','_id displayName email')
         .populate('admin','_id displayName email')
         .exec( function(err,team){
-        if(err || !team)
-            return res.send(305);
-        BTeamInvitations.find({team:teamID},{email:1}, function(err,invitedPersons) {
+            if(err || !team)
+                return res.send(305);
 
-            res.send(200,{
-                team:team,
-                user :req.user._id,
-                invited:invitedPersons
+            BTeamInvitations.find({team:teamID},{email:1}, function(err,invitedPersons) {
+
+                res.send(200,{
+                    admin: team.admin,
+                    user :req.user._id,
+                    info: {
+                        id: team._id,
+                        name: team.name,
+                        tel: team.tel,
+                        address: team.address
+                    },
+                    members: team.members,
+                    invited: invitedPersons
+                });
+
             });
-        });
 
-    })
+        })
 });
 
 

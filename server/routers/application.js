@@ -93,7 +93,7 @@ app.get('/api/applications', function (req,res) {
                     submittedForms.rows.push( form );
                 }
 
-                res.send(submittedForms);
+                res.send({candidates:submittedForms.rows});
             })
     }
 

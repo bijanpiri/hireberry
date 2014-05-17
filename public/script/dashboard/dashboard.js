@@ -1,11 +1,22 @@
 /**
  * Created by Bijan on 05/10/2014.
  */
+teamID = '<%=teamID%>';
+userID = '<%=userID%>';
+teamMembers = [];
+userAdmin = null;
+forms = [];
+badgeNum=0;
+
+_.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g,
+    escape: /\{\{\-(.+?)\}\}/g,
+    evaluate: /\{\%(.+?)\%\}/g
+};
 
 $(function(){
-    teamSettings();
-    fillTeamSetting();
-    teamInvitation();
+
+    /***** One-Time Init *****/
     $('button[data-loading-text]').click(function(){
         var btn=$(this);
         btn.button('loading');
@@ -13,13 +24,6 @@ $(function(){
             btn.button('reset');
         },3000);
     });
-    _.templateSettings = {
-        interpolate: /\{\{(.+?)\}\}/g,
-        escape: /\{\{\-(.+?)\}\}/g,
-        evaluate: /\{\%(.+?)\%\}/g
-    };
-
-    refresh(false);
 
     // Initializing modals
     $('#applicationPreview').dialog({
@@ -27,24 +31,6 @@ $(function(){
         autoOpen: false,
         modal: true,
         title: "Application Preview",
-        width: 400,
-        height: 400
-    });
-
-    $('#activitiesModal').dialog({
-        resizable: false,
-        autoOpen: false,
-        modal: true,
-        title: "Activities",
-        width: 800,
-        height: 450
-    });
-
-    $('#positionComments').dialog({
-        resizable: false,
-        autoOpen: false,
-        modal: true,
-        title: "Activities",
         width: 400,
         height: 400
     });
@@ -128,7 +114,7 @@ $(function(){
                     form.submit(function(){
                         form.find('.alert-info').show();
                         $.post('/api/application/comments',
-                            form.serialize())
+                                form.serialize())
                             .always(function(data){
                                 $('.alert').hide();
                             })
@@ -181,49 +167,271 @@ $(function(){
 
     });
 
+    refresh();
+});
+
+function refresh() {
+    badgeNum = 0;
+
+    initOverviewPage();
+    initNotificationCenter();
+    initTeamPage();
+    initApplicationPage();
+    initBillingPage();
+
+    stat.fetch();
+    calendar.fetch();
+    teams.fetch();
+    team.fetch();
+    applications.fetch()
+    jobs.fetch();
+    billing.fetch()
+}
+
+function initOverviewPage() {
+    $('#full-clndr').clndr({template: $('#full-clndr-template').html()});
+}
+
+function initTeamPage() {
+    teamSettings();
+    teamInvitation();
+
+    // Switch Button
+    $('#switchButton').unbind('click').click( function() {
+        $('#switchTeamEdit').show();
+        $('#switchTeamView').hide();
+    });
+
+    // Cancel Button
+    $('#cancelChangeUserTeam').unbind('click').click( function() {
+        $('#switchTeamView').show();
+        $('#switchTeamEdit').hide();
+    });
+
+    // OK Button
+    $('#changeUserTeam').unbind('click').click( function() {
+        var teamID = $('#userTeams :selected').attr('name');
+
+        $.post('/api/user/changeTeam', {teamID:teamID}).done( function() {
+
+            refresh();
+
+            $('#switchTeamView').show();
+            $('#switchTeamEdit').hide();
+        })
+    })
+
+    function teamInvitation(){
+        $('#teamInvitationForm').submit(function(){
+            var form=$(this);
+            form.find('.alert-info').show();
+            $.post('/api/team/invite',form.serialize())
+                .always(function(){
+                    $('.alert').hide();
+                    $('#team-invitation-dialog').modal('hide');
+                    refresh(true);
+                })
+                .done( function() {
+                    form.find('.alert-success').show().delay(2000).fadeOut();
+                    $('#invitationEmail').val('');
+                    $('#invitationNote').val('');
+                    getTeamInfo();
+                })
+                .fail(function(){
+                    form.find('.alert-danger').show();
+                });
+            return false;
+
+        })
+    }
+
+    function teamSettings(){
+        $('#teamSettingForm').submit(function(event){
+            var form=$(this);
+            form.find('.alert-info').show();
+            $.post('/api/team/settings',
+                    form.serialize())
+                .always(function(data){
+                    $('.alert').hide();
+                    $('#team-settings-dialog').modal('hide');
+                    refresh(true);
+                })
+                .fail(function(data){
+                    form.find('.alert-danger').show();
+                })
+                .done(function(data){
+                    form.find('.alert-success').show().delay(2000).fadeOut();
+                });
+            event.preventDefault();
+            return false;
+        });
+    }
+}
+
+function initBillingPage() {
     $('#payButton').click( function() {
         var amount = $('#paymentAmount :selected').attr('name')
         document.location =  '/pay?amount=' + amount;
     })
 
     $('#premiumPlanButton').click( function() {
-        $.get('/api/plan/change',{new_plan:1}).done(loadBilling);
+        $.get('/api/plan/change',{new_plan:1}).done(refresh);
     });
 
     $('#freePlanButton').click( function() {
-        $.get('/api/plan/change',{new_plan:0}).done(loadBilling);
+        $.get('/api/plan/change',{new_plan:0}).done(refresh);
+    });
+}
+
+function initApplicationPage() {
+
+    // Search Box
+    $('.application-searchBox').unbind('keydown').keydown( function(e) {
+        if(e.keyCode==13)
+            $('.application-searchButton').click()
     });
 
-    loadBilling();
+    $('.application-searchButton').unbind('click').click( function() {
+        applications.fetch();
+    });
 
-});
+    // Sorting
+    $('.application-sort .sortByDate').unbind('click').click( function() {
+        $('.application-sort').attr('sortBy','date');
+        $('.application-sortType').text('Date');
+        applications.fetch();
+    });
+    $('.application-sort .sortByName').unbind('click').click( function() {
+        $('.application-sort').attr('sortBy','name');
+        $('.application-sortType').text('Name');
+        applications.fetch();
+    });
 
-function loadBilling() {
-    $.get('/api/billing').done( function(res) {
-        var plan = (res.plan==0) ? 'Free' : 'Premium';
 
-        $('#billing_plan').text( plan + '(' + (new moment(res.lastRenew)).fromNow() + ')' );
-        $('#billing_balance span').text( res.balance );
+    // Go to Grid-mode layout
+    $('#candidatesGridButton').unbind('click').click( function() {
 
-        if( res.plan == 0 ) {
-            $('#freePlanButton').hide();
-            $('#premiumPlanButton').show();
-        } else {
-            $('#freePlanButton').show();
-            $('#premiumPlanButton').hide();
-        }
+        $('#candidatesCollection').animate({'opacity':0},300, function() {
 
-        $('#billingsList').empty();
+            $('#candidatesCollection')
+                .removeClass('list-layout')
+                .addClass('grid-layout')
+                .animate({'opacity':1},300);
 
-        for( var i=0; i<res.billings.length; i++ ) {
-            var date = new Date(res.billings[i].time);
+        });
+    });
 
-            var billingRow = $('<div>')
-                .append( $('<span>').text(date.toLocaleDateString()))
-                .append( $('<span>').text(res.billings[i].amount))
-                .append( $('<span>').text(res.billings[i].state));
+    // Go to List-mode layout
+    $('#candidatesListButton').unbind('click').click( function() {
 
-            $('#billingsList').append( billingRow );
-        }
-    })
+        $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
+
+            $('#candidatesCollection')
+                .removeClass('grid-layout')
+                .addClass('list-layout')
+                .animate({'opacity':1},300);
+
+        });
+    });
+
+    $('.ask-for-comment-form')
+        .submit( function() {
+            var form=$(this);
+            $.post('/api/team/application/askForComment',
+                    form.serialize())
+                .always(function(){
+                    $('.alert').hide();
+//                                refresh(true);
+                })
+                .done( function() {
+                    form.find('.alert-success').show().delay(2000).fadeOut();
+                })
+                .fail(function(){
+                    form.find('.alert-danger').show();
+                });
+            return false;
+        });
 }
+
+function initWorkflow(candidateObj,candidate) {
+
+    candidateObj.find('.archiveButton').click( function(e) {
+        e.stopPropagation();
+        gotoNewStage(4,1);
+    });
+
+    candidateObj.find('.interviewButton').click( function(e) {
+        e.stopPropagation();
+
+        // Prepare interview invitation modal and show it
+        var modal = $('#interview-invitation-dialog');
+        modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.sendButton').unbind('click').click( function() {
+            gotoNewStage(2,1,{
+                invitedName: candidate.name,
+                invitedEmail: modal.find('.emailAddress').val(),
+                invitationMessage: modal.find('.invitationMessage').val(),
+                interviewDate: modal.find('.interviewDate').val() + ' ' + modal.find('.interviewTime').val()
+            });
+            modal.modal('hide')
+        });
+        modal.modal();
+    });
+
+    candidateObj.find('.offerButton').click( function(e) {
+        e.stopPropagation();
+
+        // Prepare job offer modal and show it
+        var modal = $('#job-offer-dialog');
+        modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.sendButton').unbind('click').click( function() {
+            gotoNewStage(3,1,{
+                offeredEmail: modal.find('.emailAddress').val(),
+                offerMessage:  modal.find('.offerMessage').val(),
+                offeredName: candidate.name
+            });
+            modal.modal('hide')
+        });
+        modal.modal();
+    });
+
+    candidateObj.find('.askForCommentButton').click( function(e) {
+        e.stopPropagation();
+
+        // ToDo: Connect to real ask for comment function
+        alert('A4C');
+    });
+
+
+    function gotoNewStage(newStage,newSubStage,moreData) {
+        var data = { stage:newStage ,subStage:newSubStage };
+
+        for( var key in moreData )
+            data[key] = moreData[key];
+
+        $.post( '/api/applications/' + candidate._id, {
+            activity:0,
+            data:data
+        }).done( function(res) {
+                changeWorkflowStage(candidateObj,candidate,newStage,newSubStage);
+            });
+    }
+}
+
+function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
+
+    var stages = ['pending', 'interviewing', 'offered', 'archived'];
+    stageNo--; // Convert to zero-base index
+    subStageNo = subStageNo || 1;
+
+    // Hide all
+    candidateObj.find('.candidate-workflow-substage').hide();
+
+    // Show selected stage
+    var cssSelector = '.candidate-workflow-stage.' + stages[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
+    candidateObj.find(cssSelector).show();
+
+    if( stageNo==1 )
+        candidateObj.find('.candidate-workflow-stage.' + stages[1] +' .interviewDate').text( candidate.stage.interviewDate );
+}
+

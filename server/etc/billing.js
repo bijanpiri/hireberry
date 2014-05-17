@@ -129,10 +129,12 @@ app.get('/api/billing', function(req,res) {
 
         BTeams.findOne({_id:req.user.teamID}, function(err,team){
             res.send(200,{
-                plan: team.plan,
-                lastRenew: team.planLastRenewDate,
-                balance: balance,
-                billings: billings
+                billing: {
+                    plan: team.plan,
+                    lastRenew: team.planLastRenewDate,
+                    balance: balance,
+                    billings: billings
+                }
             });
         })
 

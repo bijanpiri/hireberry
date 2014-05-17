@@ -111,7 +111,7 @@ app.get('/api/search/users', function(req,res){
 // endregion
 
 // region Event
-app.post('/event', function(req,res) {
+app.post('/api/calendar/event', function(req,res) {
 
     var time = new Date(req.body.time);
     var title = req.body.title;
@@ -124,7 +124,7 @@ app.post('/event', function(req,res) {
     )
 });
 
-app.get('/event', function(req,res) {
+app.get('/api/calendar', function(req,res) {
 
     var time = new Date(req.body.time);
     var title = req.body.title;
@@ -134,11 +134,11 @@ app.get('/event', function(req,res) {
     BTeams.count({ _id:teamID, admin:userID }, function(err,count){
         if( err || count==0)
             BEvents.find( { contributors:userID }, function(err,events) {
-                res.send(200,events);
+                res.send(200,{events:events});
             })
         else
             BEvents.find( {team:teamID}, function(err,events) {
-                res.send(200,events);
+                res.send(200,{events:events});
             })
     });
 });

@@ -12,14 +12,13 @@
 <script src="/script/underscore.js" type="text/javascript"></script>
 <script src="/clndr/moment.js" type="text/javascript"></script>
 <script src="/clndr/clndr.js" type="text/javascript"></script>
+<script src="/backbone/backbone-min.js"></script>
 
 <script src="/script/UsersCombo.js"></script>
 
-<script src="/script/dashboard/global.js"></script>
-<script src="/script/dashboard/overview.js"></script>
-<script src="/script/dashboard/jobs.js"></script>
-<script src="/script/dashboard/team.js"></script>
-<script src="/script/dashboard/application.js"></script>
+<script src="/script/dashboard/models.js"></script>
+<script src="/script/dashboard/views.js"></script>
+<script src="/script/dashboard/notificationCenter.js"></script>
 <script src="/script/dashboard/dashboard.js"></script>
 
 <script src="/script/flexTextarea.js"></script>
@@ -209,8 +208,8 @@
                 Sort by <span class="application-sortType">Date</span>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation"><a class="sortByDate" role="menuitem" tabindex="-1" href="#">Date</a></li>
-                <li role="presentation"><a class="sortByName" role="menuitem" tabindex="-1" href="#">Name</a></li>
+                <li role="presentation"><a class="sortByDate" role="menuitem" tabindex="-1">Date</a></li>
+                <li role="presentation"><a class="sortByName" role="menuitem" tabindex="-1">Name</a></li>
             </ul>
         </div>
     </div>
@@ -623,30 +622,6 @@
     </div>
 </div>
 
-<div id="activitiesModal">
-    <div class="container-fluid">
-        <div class="row-fluid"
-             style="padding: 10px;background-color: #CEDFCE;margin: 10px 0;border: 2px solid #2B6F3B;border-radius: 4px;">
-            <div class="span12">
-                <select id="teamMembersForComment" style="margin: 0"></select>
-                <button id="askForCommentOnApplication">Ask For Comment</button>
-                <span id="askForCommentMessage" style="font-size: 1.2em;color: green;padding-left: 1em;"></span>
-            </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span4">
-                <div class="contain" style="max-height: 400px; overflow-y: auto"></div>
-                <div class="commentsHeader">Comments</div>
-                <div class="comments"></div>
-            </div>
-            <div class="span8">
-                <div id="timeline"></div>
-                <div id="decisionBox"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="applicationPreview">
 </div>
 
@@ -851,8 +826,6 @@
     </div>
 </form>
 
-
-
 <div id="application-preview-dialog"
      class="modal hide fade" tabindex="-1"
      role="dialog" aria-labelledby="applicationPreviewLabel"
@@ -870,7 +843,4 @@
     </div>
 </div>
 
-<div id="positionComments">
-    <div class="comments"></div>
-</div>
 
