@@ -10,6 +10,7 @@
 
 </head>
 <body>
+
     <input type='file'>
     <button id='upload' > Upload Resume</button>
     <a hidden> Download</a>
@@ -17,10 +18,10 @@
         $('#upload').click( function(){
 
             Parse.initialize(
-                    "4Femn58dGqOY09K6Mj7QjlhnqViEquBSRhf9N8LA",
-                    "YhTSUbxy54XmnPfE3YqT0vc0tS0FCwO3IYtLPi4r");
+                    "E4hnlZNvCycYZ9EjpaK41wq6CTva8X7h2rBS0E7O",
+                    "88bm7e9TUPVnKRITxx21THDDTjRtJzHmJw5BY8x3");
             var fileUploadControl = $("input")[0];
-            alert(fileUploadControl);
+
             if (fileUploadControl.files.length > 0) {
                 var file = fileUploadControl.files[0];
                 var name = "resume";

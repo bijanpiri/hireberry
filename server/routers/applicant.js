@@ -12,7 +12,9 @@ app.get('/job/dropboxAuth', function (req,res){
         if (error)
             return res.send(502,{error:error})
 
-        BFlyers.update( {_id:flyerID}, {dbToken:client._oauth._token}, function(err){
+        BFlyers.update( {_id:flyerID},
+            {dbToken:client._oauth._token},
+            function(err){
 
             if(!err)
                 res.send(200, { token: client._oauth._token } )
@@ -182,7 +184,7 @@ app.post('/apply', function (req,res) {
         if(err){
             res.send(404,{});
         } else {
-            uploadResume( application._id );
+//            uploadResume( application._id );
         }
     });
 
@@ -209,7 +211,7 @@ app.post('/apply', function (req,res) {
 
     var saveOnParse = function(data, resumeFileName, applicationID,path) {
 
-        var parseFile = new Parse.File(resumeFileName, data).then;
+        var parseFile = new Parse.File(resumeFileName, data);
         parseFile.save().then(function() {
             // The file has been saved to Parse.
             var url=parseFile.url();
@@ -252,7 +254,7 @@ app.post('/apply', function (req,res) {
         // ToDo: Choose Unique Name
         dbclient.writeFile(resumeFileName, data, function(error, stat) {
             if (error) {
-                return showError(error);  // Something went wrong.
+//                return showError(error);  // Something went wrong.
             }
 
             fs.unlink( req.files.resume.path );
@@ -261,7 +263,9 @@ app.post('/apply', function (req,res) {
             dbclient.makeUrl(resumeFileName,{}, function(err,data) {
 
                 if( !err )
-                    BApplications.update({_id:applicationID},{resumePath:data.url}, function() {
+                    BApplications.update({_id:applicationID},
+                        {resumePath:data.url},
+                        function() {
                         res.send(200,{});
                     });
                 else

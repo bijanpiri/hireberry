@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="script/dropbox.js"></script>
+    <script src="script/jquery.min.js"></script>
+    <script>
+        var client;
+        client = new Dropbox.Client({key: "06p3gxkcx05qpc9"});
+        var out;
+        $(document).ready(function(){
+            out=$('#out');
+
+//            _credentials: Object
+//            key: "06p3gxkcx05qpc9"
+//            token: "lGejEJEmhr0AAAAAAAB1QJX24NlHj9vE8crHmFoiIa7KvvosTolFSE8GmJe-O0Xf"
+//            uid: "4548036"
+
+            function uploadDropBox() {
+                var xhrListener = function (dbXhr) {
+                    dbXhr.xhr.upload.onprogress("progress",
+                            function (event) {
+                                // event.loaded bytes received,
+                                // event.total bytes must be received
+                                reportProgress(event.loaded, event.total);
+                            });
+                    return true;  // otherwise, the XMLHttpRequest is canceled
+                };
+                client.onXhr.addListener(xhrListener);
+                client.writeFile("resume", data, function (error, stat) {
+
+                });
+                client.onXhr.removeListener(xhrListener);
+            }
+
+        });
+        function authenticate(){
+            if(!client.isAuthenticated())
+                client.setCredentials({key: "06p3gxkcx05qpc9"});
+            client.authenticate(
+                    function(error, client) {
+                        if(error){
+                            out.append($('<div>').append(error.description));
+                            return;
+                        }
+                        if(client.isAuthenticated())
+                            out.append($('<div>').append('authenticated'))
+
+                    }
+            );
+        }
+        function signoff(){
+            client.signOff()
+
+        }
+        function signin(){
+            client.setCredentials({
+                key: "06p3gxkcx05qpc9",
+                token:
+                    'lGejEJEmhr0AAAAAAAB1QJX24NlHj9vE8crHmFoiIa7KvvosTolFSE8GmJe-O0Xf'})
+        }
+    </script>
+</head>
+<body>
+<div id="out"></div>
+
+<button onclick="signoff()">Sign out</button>
+<button  onclick="signin()">Sign in</button>
+<button  onclick="authenticate()">Authenticate</button>
+</body>
+</html>
