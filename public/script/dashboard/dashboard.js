@@ -7,7 +7,13 @@ teamMembers = [];
 userAdmin = null;
 forms = [];
 badgeNum=0;
-
+var stagesName = ['pending', 'interviewing', 'offered', 'archived'];
+var subStagesName =[
+    [''],
+    ['wait for response', 'declined', 'accepted', 'interviewed'],
+    ['wait for response', 'accepted', 'declined'],
+    ['']
+]
 _.templateSettings = {
     interpolate: /\{\{(.+?)\}\}/g,
     escape: /\{\{\-(.+?)\}\}/g,
@@ -16,7 +22,11 @@ _.templateSettings = {
 
 $(function(){
 
-    /***** One-Time Init *****/
+    initOverviewPage();
+    initTeamPage();
+    initApplicationPage();
+    initBillingPage();
+
     $('button[data-loading-text]').click(function(){
         var btn=$(this);
         btn.button('loading');
@@ -173,11 +183,7 @@ $(function(){
 function refresh() {
     badgeNum = 0;
 
-    initOverviewPage();
     initNotificationCenter();
-    initTeamPage();
-    initApplicationPage();
-    initBillingPage();
 
     stat.fetch();
     calendar.fetch();
@@ -420,7 +426,6 @@ function initWorkflow(candidateObj,candidate) {
 
 function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
 
-    var stages = ['pending', 'interviewing', 'offered', 'archived'];
     stageNo--; // Convert to zero-base index
     subStageNo = subStageNo || 1;
 
@@ -428,10 +433,10 @@ function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
     candidateObj.find('.candidate-workflow-substage').hide();
 
     // Show selected stage
-    var cssSelector = '.candidate-workflow-stage.' + stages[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
+    var cssSelector = '.candidate-workflow-stage.' + stagesName[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
     candidateObj.find(cssSelector).show();
 
     if( stageNo==1 )
-        candidateObj.find('.candidate-workflow-stage.' + stages[1] +' .interviewDate').text( candidate.stage.interviewDate );
+        candidateObj.find('.candidate-workflow-stage.' + stagesName[1] +' .interviewDate').text( candidate.stage.interviewDate );
 }
 

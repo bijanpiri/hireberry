@@ -342,7 +342,14 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
 
                 newStage.interviewDate = application.stage.interviewDate;
 
-                BApplications.update( {_id:message.applicationID}, {stage:newStage}, function(err){
+                var activity = {
+                    type: 'Stage Changing', // ToDo: Use constant for type instead of literal
+                    data: newStage,
+                    timestamp: new Date()
+                };
+
+                BApplications.update( {_id:message.applicationID}, {stage:newStage,$push:{activities:activity}}, function(err){
+
                     res.send(200);
                 })
 

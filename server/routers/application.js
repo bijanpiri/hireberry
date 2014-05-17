@@ -257,7 +257,11 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                 stage: req.body.data.stage,
                 subStage: req.body.data.subStage
             };
-            BApplications.update({_id:appID}, {stage:newStage}, function(err) { res.send(200) })
+            BApplications.update({_id:appID}, {stage:newStage}, function(err) {
+                addNewActivity(appID,activity, function() {
+                    res.send(200)
+                });
+            })
         }
     }
     else { // General Activities

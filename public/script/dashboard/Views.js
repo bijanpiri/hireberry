@@ -90,17 +90,38 @@ BApplicationsView = Backbone.View.extend({
 
             for( var j=0; j<candidate.activities.length; j++ ) {
                 var activity = candidate.activities[j];
+
+                var stageChangingDetails = null;
+                if(activity.data){
+                    var stage = activity.data.stage;
+                    var subStage = activity.data.subStage;
+
+                    if( stage && subStage )
+                        stageChangingDetails = stagesName[stage-1] + '-' + subStagesName[stage-1][subStage-1];
+                }
+
                 var mTimestamp = new moment(activity.timestamp);
                 var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
-                var typeObj = $('<div>').addClass('activity-type').text( activity.type );
+                var typeObj = $('<div>').addClass('activity-type').text( stageChangingDetails || activity.type );
                 var stoneObj = $('<div>').addClass('activity-stone');
                 var activityObj = $('<div>').addClass('activity').append(stoneObj).append(timeObj).append(typeObj);
 
                 candidateObj.find('.candidate-activities').append( activityObj );
             }
 
-            for( var profile in candidate.profiles )
-                candidate.profiles[ profile ];
+            var profilesObj = {
+                twitter: '.twitter-profile',
+                behance: '.behance-profile',
+                dribbble: '.dribbble-profile',
+                stackoverflow: '.stackoverflow-profile',
+                github: '.github-profile',
+                linkedin: '.linkedin-profile'
+            };
+
+            for( var profile in candidate.profiles ){
+                var profileObj = candidateObj.find(profilesObj[profile]);
+                profileObj.show().attr('href', profileObj.attr('href') + '/' + candidate.profiles[ profile ] );
+            }
 
             initWorkflow(candidateObj,candidate);
             changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
@@ -109,9 +130,6 @@ BApplicationsView = Backbone.View.extend({
 
         }
 
-        $('.candidate .candidate-actions').show();
-        $('.candidate .candidate-newComments').hide();
-        $('.candidate .candidate-addComment').hide();
         return this;
     }
 });
@@ -206,7 +224,10 @@ BJobsView = Backbone.View.extend({
                     }
 
                     function changeJobMode(mode) {
-                        $.post('/flyer/changeMode',{mode:mode,flyerID:form.formID});
+                        $.post('/flyer/changeMode',{mode:mode,flyerID:form.formID}).done( function() {
+                            jobs.fetch();
+                            modal.modal('hide');
+                        });
                     }
 
                     modal.find('.saveButton').click( function() {
@@ -220,7 +241,7 @@ BJobsView = Backbone.View.extend({
 
                         modal.modal('hide');
 
-                        fillPositionsList();
+                        jobs.fetch();
                     })
 
                     modal.modal();
