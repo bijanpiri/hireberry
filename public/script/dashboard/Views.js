@@ -81,13 +81,17 @@ BApplicationsView = Backbone.View.extend({
             candidateObj.find('.candidate-email .value').text(candidate.email);
             candidateObj.find('.candidate-tel .value').text(candidate.tel);
             candidateObj.find('.candidate-website .value').text(candidate.website);
-            candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
             candidateObj.find('[name="appID"]').val(candidate._id);
             candidateObj.find('.applicationAskForCommentButton').click( function() {
                 $('#a4c-dialog').find('[name=appID]').val(candidate._id);
                 $('#a4c-dialog').modal('show');
             })
+            if( candidate.resumePath )
+                candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
+            else
+                candidateObj.find('.candidate-resume').remove();
 
+            // Activities
             for( var j=0; j<candidate.activities.length; j++ ) {
                 var activity = candidate.activities[j];
 
@@ -109,6 +113,7 @@ BApplicationsView = Backbone.View.extend({
                 candidateObj.find('.candidate-activities').append( activityObj );
             }
 
+            // Profiles
             var profilesObj = {
                 twitter: '.twitter-profile',
                 behance: '.behance-profile',
@@ -117,7 +122,6 @@ BApplicationsView = Backbone.View.extend({
                 github: '.github-profile',
                 linkedin: '.linkedin-profile'
             };
-
             for( var profile in candidate.profiles ){
                 var profileObj = candidateObj.find(profilesObj[profile]);
                 profileObj.show().attr('href', profileObj.attr('href') + '/' + candidate.profiles[ profile ] );
