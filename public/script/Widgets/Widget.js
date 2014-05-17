@@ -130,6 +130,7 @@ function Widget(options){
     this.prepare=function(prepareCallback){
         preparedCallback=prepareCallback;
         widget.getReady();
+        preparedCallback=null;
     }
 }
 Widget.prototype.constructor = Widget;

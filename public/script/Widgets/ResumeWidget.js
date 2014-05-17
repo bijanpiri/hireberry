@@ -4,6 +4,7 @@ function ResumeWidget(){
     var layout = '';
     this.dropboxToken = null;
     var widget=this;
+    var ready=true;
     function connectionStateChanged() {
         if( this.dropboxToken )
             this.toolbar.find('button[name=connectToDropBox]').text('Disconnect from Dropbox');
@@ -62,6 +63,7 @@ function ResumeWidget(){
             document.getElementById('resumefile').onchange = function () {
                 $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
                 if(!widget.dropboxToken){
+                    ready=false;
                     var resume = new Resume();
                     var file = new Parse.File('resume-file', this.files[0]);
 
@@ -74,6 +76,10 @@ function ResumeWidget(){
                             widget.portlet.find('[name=resume]').val('');
                             widget.portlet.find('[name=resumeUrl]').val(file.url());
 
+                            ready=true;
+                            if(preparedCall)
+                                preparedCall();
+
                         }
                     });
                 }
@@ -81,7 +87,8 @@ function ResumeWidget(){
         }
     }
     this.getReady=function(){
-
+        if(ready)
+            preparedCall();
     }
 
     //ToDo: dropbox token mustn't be retrieve when users are applying for a job otherwise dropbox can be invaded

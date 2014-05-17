@@ -182,6 +182,12 @@ function PictureWidget(){
 
         }
     }
+
+    var ready=false;
+    this.getReady=function(){
+        if(ready)
+            preparedCallback();
+    }
 }
 PictureWidget.prototype=new Widget();
 PictureWidget.prototype.constructor=PictureWidget;
