@@ -11,7 +11,7 @@ $.fn.populateUserCombo=function(members,selectedMember, inputName){
 
         var container=$(this).empty();
         var contents=
-            $('<div class="btn-group bool-combo ">' +
+            $('<div class="btn-group">' +
                 '<a class="bool-combo-selected dropdown"> </a>' +
                 '<ul class="dropdown-menu bool-team-members">  </ul>' +
                 '<input type="hidden"></div>');
@@ -63,7 +63,7 @@ function generateMemberElement(member,showDisplayName,showEmail,alightRight){
     alightRight = alightRight || false;
     showDisplayName= showDisplayName!==undefined ? showDisplayName :true;
     showEmail=showEmail!==undefined ? showEmail :true;
-    var imgurl = getAvatar(member.email)+'?size=50';
+    var imgurl = member.email ? getAvatar(member.email)+'?size=50' : '';
 
     return $('<a>')
         .addClass( showDisplayName && showEmail ?

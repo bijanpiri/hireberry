@@ -412,13 +412,11 @@ function loadPublishPanel() {
 
     $.get('/api/team').done( function(res) {
         var teamMembers = res.members;
+        var teamMembersWithNone = JSON.parse(JSON.stringify(res.members));
+        teamMembersWithNone.unshift({displayName:'None'});
 
-        teamMembers.forEach( function(item) {
-            var option = $('<option>').attr('id',item._id).text(item.displayName);
-
-            $('#askForComment').append( option.clone() );
-            $('#autoAssignTo').append( option.clone() );
-        });
+        $('#askForComment').populateUserCombo(teamMembersWithNone,null,'askForComment_userID');
+        $('#autoAssignTo').populateUserCombo(teamMembers,null,'autoAssignedTo_userID');
     });
 
     $('#buttonPublishSaveAsDraft').click( function() {
@@ -434,13 +432,12 @@ function loadPublishPanel() {
         flyerJson.description = $('#flyerName2').val() ;
         flyerJson.thanksMessage = $('#thanksMessage').val();
 
-        var askForComment = $('#askForComment :selected').attr('id');
-        var autoAssignTo = $('#autoAssignTo :selected').attr('id');
+        var askForComment = $('[name=askForComment_userID]').val();
+        var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
 
-        if( autoAssignTo != '0' ) // 0 == None
-            $.post('/api/team/form/assign', {formID: flyerid, userID: autoAssignTo});
+        $.post('/api/team/form/assign', {formID: flyerid, userID: autoAssignTo});
 
-        if( askForComment != '0' ) // 0 == None
+        if( askForComment.length > 0 ) // It isn't None
             $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
 
 
