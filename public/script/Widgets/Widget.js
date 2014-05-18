@@ -7,7 +7,7 @@ var editMode
 function Widget(options){
     Widget.instances=1000;
     var widget=this;
-    var preparedCallback;
+    this.prepared=null;
     this.type=0;
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container');
@@ -125,12 +125,16 @@ function Widget(options){
         console.log('restated');
     }
     this.getReady=function(){
-        preparedCallback();
+        widget.prepared();
     }
     this.prepare=function(prepareCallback){
-        preparedCallback=prepareCallback;
+        this.prepared=prepareCallback;
         widget.getReady();
-        preparedCallback=null;
+
+    }
+
+    this.changed=function(){
+
     }
 }
 Widget.prototype.constructor = Widget;

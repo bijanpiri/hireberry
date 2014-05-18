@@ -6,6 +6,23 @@ function PictureWidget(){
     var layout = "";
     var widget=this;
     var bar;
+    var gettingReady=false;
+    var statesAction={
+        none:function(){
+           widget.prepared();
+        },
+        add:function(){
+            gettingReady=true;
+            save();
+        },
+        uploading:function(){
+            gettingReady=true;
+        },
+        uploaded:function(){
+            widget.prepared();
+
+        }};
+    var action=statesAction.none;
 
     function initLayout1() {
         layout = this.clone('.image-widget');
@@ -75,13 +92,10 @@ function PictureWidget(){
             layout.find('img').attr('src',d).show();
             new Darkroom(layout.find('img')[0]);
             showEditButtons();
+            action=statesAction.add;
         } catch (ex) {
             console.log(ex);
-            if(ex.name == "NoSupportError") {
-                alert("Your browser does not support canvas.");
-            } else if(ex.name == "InvalidError") {
-                alert("The given file is not an image");
-            }
+
         }
     }
     var dudata;
@@ -92,20 +106,25 @@ function PictureWidget(){
             var reader = new FileReader();
             reader.onload =readerLoad;
             reader.readAsDataURL(data.files[0]);
-
         }else
             data.submit();
     }
 
     function send(){
+        action=statesAction.uploading;
         bar.slideDown();
         layout.find('.imageWidgetInnerContainer').hide();
     }
 
     function done(e,data){
+        action=statesAction.uploaded;
         bar.slideUp();
         var img = layout.find('img');
-        img.attr('src', '/uploads/' + data.result.files[0].name).show();;
+        img.attr('src', '/uploads/' + data.result.files[0].name).show();
+        if(gettingReady){
+            gettingReady=false;
+            widget.prepared();
+        }
 
     }
     function progressall(e,data){
@@ -135,14 +154,20 @@ function PictureWidget(){
             });
 
             this.addToolbarCommand('add',function(){layout.find('input[type=file]').click();
+                widget.changed();
             }).addToolbarCommand('edit',function(){showEditButtons();new Darkroom(layout.find('img')[0]);
             }).addToolbarCommand('crop',function(){layout.find('.darkroom-icon-crop').click();showCropButtons();
             }).addToolbarCommand('accept',function(){layout.find('.darkroom-icon-accept').click();hideCropButtons();
+                widget.changed();
             }).addToolbarCommand('cancel',function(){layout.find('.darkroom-icon-cancel').click();hideCropButtons();
             }).addToolbarCommand('undo',function(){layout.find('.darkroom-icon-back').click();
+                widget.changed();
             }).addToolbarCommand('redo',function(){layout.find('.darkroom-icon-forward').click();
+                widget.changed();
             }).addToolbarCommand('rotate-left',function(){layout.find('.darkroom-icon-rotate-left').click();
+                widget.changed();
             }).addToolbarCommand('rotate-right',function(){layout.find('.darkroom-icon-rotate-right').click();
+                widget.changed();
             }).addToolbarCommand('save',function(){save();
             });
         }
@@ -153,19 +178,10 @@ function PictureWidget(){
     function save(){
 
         hideEditButton();
-//        var canvas=new fabric.Canvas(widget.portlet.find('.lower-canvas')[0]);
-//        var data= canvas.toDataURL({
-//            format: 'jpeg',
-//            quality: 1
-//        });
+
         var data=widget.portlet.find('.lower-canvas')[0].toDataURL('image/jpeg');
         layout.find('.image-container').empty().append($('<img>').attr('src',data));
 
-//        layout.find('.darkroom-icon-save').click();
-
-//        layout
-//        layout.find('.darkroom-icon-save').click();
-//        var ulr=layout.find('img');
         var blob=dataURLtoBlob(data);
         layout.find('input[type=file]').fileupload('add',{files:blob});
 
@@ -176,17 +192,19 @@ function PictureWidget(){
 
     this.deserialize=function(content) {
         hideEditButton();
+        action=statesAction.none;
         if( content ) {
             this.portlet.find('.imageWidgetInnerContainer').remove();
             var img = layout.find('.image-container').empty().append($('<img>').attr('src',content));
-
+            action=statesAction.uploaded;
         }
     }
 
-    var ready=false;
     this.getReady=function(){
-        if(ready)
-            preparedCallback();
+        action();
+    }
+    this.changed=function(){
+        action=statesAction.add;
     }
 }
 PictureWidget.prototype=new Widget();

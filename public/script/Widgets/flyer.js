@@ -135,7 +135,7 @@ function Flyer(options) {
             });
     }
 
-    var flyer2json = function() {
+    var flyer2json = function(preparedCallback) {
 
         var portlets = pStack.find('.portlet');
 
@@ -148,17 +148,26 @@ function Flyer(options) {
             count: portlets.length,
             widgets:[]
         };
-
+        var widgetCount=portlets.length+1;//+1 for times when there is no widget(Empty Flyer)
+        checkReady();
         portlets.each(function(index) {
             var widget = $(this).data('widget');
-            flyer.widgets.push( {
-                "type": widget.type,
-                'layoutIndex':widget.layoutIndex,
-                "Contents":  ( widget  && widget.serialize())
+            widget.prepare(function(){
+                flyer.widgets.push( {
+                    "type": widget.type,
+                    'layoutIndex':widget.layoutIndex,
+                    "Contents":  ( widget  && widget.serialize())
+                });
+                checkReady();
             });
         });
+        function checkReady(){
+            widgetCount--;
+            if(widgetCount==0)
+                preparedCallback(flyer);
+        }
 
-        return flyer;
+
     }
 
     var getThumbnail = function (flyerid,callback){

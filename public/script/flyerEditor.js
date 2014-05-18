@@ -481,30 +481,35 @@ function rotate(element, degree) {
 
 function saveFlyer(callback) {
 
+    clearTimeout(autosaveTimer);
+
     callback = callback || function(a){}
 
-    $('#buttonSave').text('Saving...').addClass('disabled');
+    $('#buttonSave').button('loading');
 
-    var flyerjson = flyer.flyer2json();
-    flyerjson.thumbnail = '';
+    flyer.flyer2json(
+        function(flyerjson){
+            flyerjson.thumbnail = '';
 
-    if( !existFlyer )
-        flyerjson.description = newFlyerName;
+            if( !existFlyer )
+                flyerjson.description = newFlyerName;
 
-    $.post( '/flyer/save', {flyer:flyerjson} )
-        .done(function(data){
-            callback(true);
-            $('#buttonSave').text('Save').removeClass('disabled');
-        })
-        .fail(function(data){
-            callback(false)
-            $('#buttonSave').text('Save*').removeClass('disabled');
-        });
+            $.post( '/flyer/save', {flyer:flyerjson} )
+                .done(function(data){
+                    callback(true);
+                    $('#buttonSave').text('Save').button('reset');
+                })
+                .fail(function(data){
+                    callback(false)
+                    $('#buttonSave').text('Save*').button('reset');
+                });
+            autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
+
+        }
+    );
 
 
-    // Set next auto save time
-    clearTimeout(autosaveTimer);
-    autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
+
 }
 
 function viewModeChanged(e) {
