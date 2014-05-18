@@ -6,8 +6,44 @@
   -webkit-box-shadow: 4px 4px 0 darken(@dark-gray, 5%);
   box-shadow: 4px 4px 0 darken(@dark-gray, 5%);
 
+  .clndr-controls {
+    .month {
+      display: inline-block;
+      width: 70%;
+      float: left;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+    }
+    .clndr-previous-button, .clndr-next-button {
+      font-size: 3em;
+      display: inline-block;
+      width: 15%;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -webkit-transition: background-color 0.5s;
+      -moz-transition: background-color 0.5s;
+      -ms-transition: background-color 0.5s;
+      -o-transition: background-color 0.5s;
+      transition: background-color 0.5s;
+    }
+    .clndr-previous-button{
+      float: left;
+    }
+    .clndr-next-button {
+      float: left;
+    }
+  }
+
   .clndr-grid
   {
+    clear: both;
     float: left;
     width: 65%;
     border-right: 2px solid white;

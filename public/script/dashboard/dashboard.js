@@ -195,7 +195,7 @@ function refresh() {
 }
 
 function initOverviewPage() {
-    $('#full-clndr').clndr({template: $('#full-clndr-template').html()});
+    //$('#full-clndr').clndr({template: $('#full-clndr-template').html()});
 }
 
 function initTeamPage() {
