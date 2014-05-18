@@ -199,6 +199,19 @@ BJobsView = Backbone.View.extend({
                     var publicLink = window.location.origin + '/flyer/embeded/' + form.formID;
                     modal.find('.publicLink').val(publicLink);
 
+                    // Delete
+                    modal.find('.deleteJobButton').click( function() {
+                        $.ajax({
+                            url: '/api/job/' + form.formID,
+                            type: 'DELETE',
+                            success: function() {
+                                refresh();
+                                modal.modal('hide');
+                            }
+                        });
+                    });
+
+
                     // Current Status
                     modal.find('.jobStatus-current').text(form.mode);
                     modal.find('.jobStatus-next').empty();

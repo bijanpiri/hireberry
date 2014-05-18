@@ -157,6 +157,28 @@ app.get('/api/forms',  function(req,res){
 // region Flyers
 
 
+app.delete('/api/job/:flyerID', function(req,res){
+
+    if( !req.user )
+        res.send(304);
+
+    BFlyers.findOne({_id:req.params.flyerID}).populate('owner').exec( function(err,flyer){
+
+        if( err || !flyer )
+            return res.send(504);
+
+        if( flyer.owner.admin.toString() === req.user._id.toString() ) // Hiring Manager
+            BFlyers.remove({_id:req.params.flyerID}, function(err) {
+                res.send(200);
+            });
+        else    // Responder
+            BFlyers.remove({_id:req.params.flyerID, autoAssignedTo:req.user._id}, function(err) {
+                res.send(200);
+            });
+    });
+
+});
+
 app.get('/flyer/:templateID/json/:id', function(req,res){
 
     //if(!checkUser(req,res))
