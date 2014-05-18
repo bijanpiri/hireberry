@@ -273,11 +273,16 @@ app.get('/applicant/message/view/:messageType/:messageID', function (req,res){
 
     BApplicantsResponses.findOne({_id:req.params.messageID}, function(err,message) {
 
-        res.render('applicant.ejs',{
-            messageType: req.params.messageType,
-            messageID: req.params.messageID,
-            messageText: message.text
-        });
+        if( message.response ) {
+            res.send(200,'This invitation is responded already!')
+        }
+        else {
+            res.render('applicant.ejs',{
+                messageType: req.params.messageType,
+                messageID: req.params.messageID,
+                messageText: message.text
+            });
+        }
 
     });
 });

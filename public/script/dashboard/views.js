@@ -198,6 +198,7 @@ BJobsView = Backbone.View.extend({
                     // Public links & Social networks button
                     var publicLink = window.location.origin + '/flyer/embeded/' + form.formID;
                     modal.find('.publicLink').val(publicLink);
+                    modal.find('.publicLinkOpener').attr('href',publicLink);
 
                     // Delete
                     modal.find('.deleteJobButton').click( function() {
@@ -328,12 +329,15 @@ BTeamView = Backbone.View.extend({
         $('#teamMembers').empty();
         for( var i=0; i<members.length; i++ ){
             var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(members[i].email));
-            var emailObj = $('<div>').addClass('teamMemberEmail').text(members[i].displayName);
+            var nameObj = $('<div>').addClass('teamMemberName').text(members[i].displayName);
+            var emailObj = $('<span>').addClass('teamMemberEmail').text('(' + members[i].email + ')');
+
             var roleObj = $('<div>').addClass('teamMemberRole').text(
                 members[i]._id == teamAdmin._id ? 'Hiring Manager': 'Member');
 
             var memberObj = $('<div>').addClass('teamMember')
                 .append( avatarObj )
+                .append( nameObj )
                 .append( emailObj )
                 .append( roleObj );
 

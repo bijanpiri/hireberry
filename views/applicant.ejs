@@ -94,11 +94,15 @@
             $('.offer').show();
 
         $('.interview_yesButton').click( function() {
-            $.post('/applicant/message/' + messageType + '/' + messageID,{response:'YES'});
+            $.post('/applicant/message/' + messageType + '/' + messageID,{response:'YES'}).done( function() {
+                window.close();
+            });
         })
 
         $('.interview_noButton').click( function() {
-            $.post('/applicant/message/' + messageType + '/' +  messageID,{response:'NO'});
+            $.post('/applicant/message/' + messageType + '/' +  messageID,{response:'NO'}).done( function() {
+                window.close();
+            });;
         })
 
         var msg = '<%=messageText%>';
