@@ -60,6 +60,7 @@ BApplicationsView = Backbone.View.extend({
     },
     render: function() {
         var candidates = this.model.get('candidates');
+        var stagesName = ['pending','interviewing','offering','archived'];
 
         $('#candidatesCollection .candidate').remove();
 
@@ -87,7 +88,7 @@ BApplicationsView = Backbone.View.extend({
                 $('#a4c-dialog').modal('show');
             })
             if( candidate.resumePath )
-                candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
+                candidateObj.find('.candidate-resume').attr('href', candidate.resumePath );
             else
                 candidateObj.find('.candidate-resume').remove();
 
@@ -127,11 +128,12 @@ BApplicationsView = Backbone.View.extend({
                 profileObj.show().attr('href', profileObj.attr('href') + '/' + candidate.profiles[ profile ] );
             }
 
+            candidateObj.addClass('candidate-filter-' + stagesName[candidate.stage.stage]);
+
             initWorkflow(candidateObj,candidate);
             changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
 
             $('#candidatesCollection').append( candidateObj );
-
         }
 
         return this;

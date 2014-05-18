@@ -69,6 +69,37 @@ $(function(){
         $(this).attr('isOpen', !isOpen);
     }).click();
 
+    refresh();
+});
+
+function refresh() {
+    badgeNum = 0;
+
+    initNotificationCenter();
+
+    stat.fetch();
+    calendar.fetch();
+    teams.fetch();
+    team.fetch();
+    applications.fetch()
+    jobs.fetch();
+    billing.fetch()
+}
+
+function initOverviewPage() {
+    //$('#full-clndr').clndr({template: $('#full-clndr-template').html()});
+
+    $('#applications-filters [name=application-filter]').on('change', function(e,i) {
+        var filterClass =  $(e.target).attr('filter-class');
+
+        if( filterClass ) {
+            $('#candidatesCollection .candidate').hide();
+            $('#candidatesCollection .' + filterClass ).show();
+        } else {
+            $('#candidatesCollection .candidate').show();
+        }
+    });
+
     $(document).delegate('.bool-toggle-application','click',function() {
         var candidateSection=$(this).closest('.candidate');
         var candidate=candidateSection.data('candidate')
@@ -76,7 +107,8 @@ $(function(){
 
 
         if(!isExpanded ){
-//                if(!candidateSection.commentFetched){
+
+            // Get Comments
             $.get('/api/application/comments',{appID:candidate._id},function(data){
                 var comments=data.comments;
 
@@ -142,10 +174,8 @@ $(function(){
                     })
 
                 })
-
-//                        candidateSection.commentFetched=true;
             });
-//                }
+
             // Deselect Current Selection
             $('#candidatesCollection .candidate-expanded')
                 .css('clear','none')
@@ -176,27 +206,16 @@ $(function(){
         }
 
     });
-
-    refresh();
-});
-
-function refresh() {
-    badgeNum = 0;
-
-    initNotificationCenter();
-
-    stat.fetch();
-    calendar.fetch();
-    teams.fetch();
-    team.fetch();
-    applications.fetch()
-    jobs.fetch();
-    billing.fetch()
 }
 
-function initOverviewPage() {
-    //$('#full-clndr').clndr({template: $('#full-clndr-template').html()});
+function mouseEnterEvent(date) {
+    $('.calendar-day-' + date).addClass('active-event');
 }
+
+function mouseLeaveEvent(date) {
+    $('.calendar-day-' + date).removeClass('active-event');
+}
+
 
 function initTeamPage() {
     teamSettings();
