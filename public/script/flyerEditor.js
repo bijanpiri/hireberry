@@ -23,7 +23,7 @@ $(function() {
         .save({foo: "bar"})
         .then(function(object) {
 
-    });
+        });
 
     $('form').submit(false);
     if( viewMode=='embeded') {
@@ -410,18 +410,15 @@ function loadPublishPanel() {
 
     $('#thanksMessage').val( flyerJson.thanksMessage );
 
-    $.get('/api/team/members').done( function(res) {
-        teamMembers = res;
+    $.get('/api/team').done( function(res) {
+        var teamMembers = res.members;
 
-        res.team.members.forEach( function(item) {
-            //if( item.status === 'joint' ) {
-                var option = $('<option>').attr('id',item._id).text(item.displayName);
+        teamMembers.forEach( function(item) {
+            var option = $('<option>').attr('id',item._id).text(item.displayName);
 
-                $('#askForComment').append( option.clone() );
-                $('#autoAssignTo').append( option.clone() );
-            //}
+            $('#askForComment').append( option.clone() );
+            $('#autoAssignTo').append( option.clone() );
         });
-        console.log(res);
     });
 
     $('#buttonPublishSaveAsDraft').click( function() {
