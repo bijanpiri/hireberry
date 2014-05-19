@@ -196,33 +196,51 @@ askForCommentOnForm=function(note,userID,formID,callback) {
         commentTime:null,
         commenter:userID,
         subjectType:'form',
-        formID:formID
+        formID:formID,
+        team: teamID
     }).save(function(err){
         callback(err)
     });
 }
 
-askForCommentOnApplication=function(note,userID,reqUserID,applicationID,callback) {
+askForCommentOnApplication=function(note,userID,reqUserID,applicationID,teamID,callback) {
     BComments({
         note: note,
         askingTime: new Date(),
         commenter:userID,
         user:reqUserID,
         subjectType:'application',
-        applicationID:applicationID
+        applicationID:applicationID,
+        team: teamID
     }).save(function(err){
         callback(err)
     });
 }
 
-getAskedForCommentApplications=function(userID,callback) {
-    BComments.find({commenter:userID,subjectType:'application',commentTime:null})
+getNewComments=function(userID, teamID, callback) {
+    BComments.find({user:userID, team:teamID, commentTime:{$ne:null}, askerNotified:{$exists:false}})
+        .populate('applicationID')
+        .populate('commenter','_id displayName email')
+        .exec( function(err,applications) {
+            callback( err, applications )
+        });
+}
+
+markCommentAsRead=function(userID, teamID, commentID, callback) {
+    BComments.update({_id:commentID, user:userID, team:teamID},{askerNotified:true}, function(err) {
+            callback( err )
+        });
+}
+
+getAskedForCommentApplications=function(userID, teamID, callback) {
+    BComments.find({commenter:userID, team: teamID, subjectType:'application', commentTime:null})
         .populate('applicationID')
         .populate('user','_id displayName email')
         .exec( function(err,applications) {
             callback( err, applications )
         });
 }
+
 getApplicationComments=function(appID,callback){
     BComments.find({applicationID:appID})
         .populate('user commenter','_id displayName email')
@@ -232,8 +250,8 @@ getApplicationComments=function(appID,callback){
                 callback(err,comments);
         })
 }
-getAskedForCommentForms=function(userID,callback) {
-    BComments.find({commenter:userID,subjectType:'form',commentTime:null})
+getAskedForCommentForms=function(userID, teamID, callback) {
+    BComments.find({commenter:userID, team: teamID, subjectType:'form', commentTime:null})
         .populate('formID')
         .exec( function(err,forms) {
             callback( err, forms )

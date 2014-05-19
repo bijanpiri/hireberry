@@ -34,7 +34,7 @@
       top: -1em;
       background-color: #DCEEA1;
       border: 1px solid #B5C487;
-      padding: 2px 5px;
+      padding: 2px 4px;
       border-radius: 0 0 4px 4px;
       font-weight: 700;
       display: none;
@@ -48,13 +48,17 @@
       display: inline-block;
     }
 
-    &.candidate-expanded .icon-plus{
+    .fa-expand {
+      vertical-align: middle;
+    }
+    &.candidate-expanded .fa-expand{
       display: none;
     }
-    .icon-minus{
+    .fa-compress{
       display: none;
+      vertical-align: middle;
     }
-    &.candidate-expanded .icon-minus{
+    &.candidate-expanded .fa-compress{
       display: inline-block;
     }
 
@@ -153,21 +157,30 @@
               overflow: visible;
             }
 
-            .candidate-conditions {
+            .candidate-resume {
+            }
+
+            .candidate-profiles {
+
+              .profile {
+                margin: 0 4px;
+              }
+
+              .profile:hover {
+                text-decoration: none;
+              }
+            }
+
+            .candidate-conditions, .candidate-skills, .candidate-resume {
               font-size: 1.5em;
               line-height: 2em;
               padding: 0 10px;
             }
 
-            .candidate-skills {
+            .candidate-tel, .candidate-website, .candidate-email, .candidate-profiles {
+              padding: 0em 10px;
               font-size: 1.5em;
               line-height: 2em;
-              padding: 0 10px;
-            }
-
-            .candidate-tel, .candidate-website, .candidate-email {
-              padding: 0.5em 1em;
-              font-size: 1.5em;
             }
 
             .candidate-coverLetter {
@@ -305,7 +318,7 @@
         width: 84px;
         border-radius: 50%;
         border: 3px solid #cecece;
-        margin: 0 10px 0px 50px
+        margin: 0 10px 0px 20px
       }
 
       .candidate-basicInfo {
@@ -320,16 +333,6 @@
         line-height: 1.6em;
         color: @head1-color;
         display: inline-block;
-      }
-
-      .candidate-resume {
-        display: none;
-      }
-
-      .candidate-profiles {
-        display: none;
-
-        .profile {}
       }
 
       .candidate-job, .candidate-time {

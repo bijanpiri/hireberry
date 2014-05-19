@@ -64,7 +64,8 @@ BComments = mongoose.model( 'comments', {
     user: {type : mongoose.Schema.ObjectId, ref : 'users'},
     commentTime: String,
     askingTime: String,
-    askerNotified: Boolean
+    askerNotified: Boolean,
+    team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
 })
 
 BTeams = mongoose.model( 'teams', {
@@ -127,3 +128,4 @@ BApplicantsResponses = mongoose.model( 'applicantsResponses', {
     request: {},
     response: {}
 });
+

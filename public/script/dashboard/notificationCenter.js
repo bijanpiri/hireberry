@@ -36,6 +36,11 @@ function initNotificationCenter() {
         showAskedForPublish(A4P_forms);
         add2NotificationBadge( A4P_forms.length);
     });
+    $.get('/api/comments/news').done( function(resApp) {
+        var comments = resApp.comments;
+        showNewComments(comments);
+        add2NotificationBadge(comments.length);
+    });
 
     function showApplications(A4C_applicatinos) {
         A4C_applicatinos.forEach( function(a4c) {
@@ -77,6 +82,44 @@ function initNotificationCenter() {
         });
     }
 
+    function showNewComments(newComments) {
+        newComments.forEach( function(comment) {
+
+            var dateObj = $('<div>')
+                .text( 'At ' + (new Date(comment.askingTime)).toLocaleString() )
+                .addClass('comment_date');
+
+            var linkObj = '';
+
+            if( comment.applicationID ) {
+                linkObj = $('<a>').attr('applicationID', comment.applicationID._id).text('this application')
+                    .click( function() {
+                        showApplicationPreview( $(this).attr('applicationID') );
+                    })
+            }
+            else {
+                linkObj = $('<a>').attr('href', '/flyer/embeded/' + comment.formID._id).text('this form');
+            }
+
+            var titleObj = $('<div>')
+                .text( comment.commenter.displayName + ' is left a new comment on ')
+                .append( linkObj );
+
+            var notificationObj = $('<li>').attr('id','')
+                .append(dateObj)
+                .append(titleObj);
+
+            linkObj.click( function() {
+                // ToDo: Mark As Read
+                $.post('/api/comments/mark-as-read',{commentID:comment._id});
+                notificationObj.remove();
+                decreaseBudgeNumber();
+            })
+
+            $('#askedForCommentList').append(notificationObj);
+        });
+    }
+
     function showInvitations(resInvitations) {
         for( var i=0; i<resInvitations.length; i++ ) {
 
@@ -100,10 +143,10 @@ function initNotificationCenter() {
                         teamID:teamID,
                         invitationID: $(this).attr('invitationID')
                     }).done( function(res) {
-                        alert('You\'ve joint.');
-                        decreaseBudgeNumber();
-                        $('#'+objID).remove();
-                    })
+                            alert('You\'ve joint.');
+                            decreaseBudgeNumber();
+                            $('#'+objID).remove();
+                        })
                 });
 
             var declineBtnObj = $('<a>').addClass('btn btn-danger btn-mini')
@@ -115,9 +158,9 @@ function initNotificationCenter() {
                         teamID:teamID,
                         invitationID: $(this).attr('invitationID')
                     }).done( function(res) {
-                        $('#'+objID).remove();
-                        decreaseBudgeNumber();
-                    })
+                            $('#'+objID).remove();
+                            decreaseBudgeNumber();
+                        })
                 });
 
             $('#askedForCommentList').append( $('<li>').attr('id','#'+objID)
@@ -131,7 +174,7 @@ function initNotificationCenter() {
     function showApplicationPreview(applicationID) {
         var prevContainer=
             $('#application-preview-dialog')
-            .find('.grid-layout').empty();
+                .find('.grid-layout').empty();
 
         $.get('/api/application/json/' + applicationID).done( function(app) {
 
@@ -143,10 +186,10 @@ function initNotificationCenter() {
                     .data('candidate',candidate);
 
             //if( candidate.currentUser==='denied') {
-                candidateObj.find('.candidate-workflow').parent().remove();
-                candidateObj.find('.applicationAskForCommentButton').remove();
-                candidateObj.find('.bool-application-comments').css('height','auto');
-                candidateObj.find('.bool-application-activities').css('height','auto');
+            candidateObj.find('.candidate-workflow').parent().remove();
+            candidateObj.find('.applicationAskForCommentButton').remove();
+            candidateObj.find('.bool-application-comments').css('height','auto');
+            candidateObj.find('.bool-application-activities').css('height','auto');
             //}
 
             candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
@@ -168,7 +211,7 @@ function initNotificationCenter() {
                 .submit( function() {
                     var form=$(this);
                     $.post('/api/team/application/askForComment',
-                        form.serialize())
+                            form.serialize())
                         .always(function(){
                             $('.alert').hide();
 //                                refresh(true);

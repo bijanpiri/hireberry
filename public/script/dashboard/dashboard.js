@@ -7,7 +7,7 @@ teamMembers = [];
 userAdmin = null;
 forms = [];
 badgeNum=0;
-var stagesName = ['pending', 'interviewing', 'offered', 'archived'];
+var stagesName = ['pending', 'interviewing', 'offering', 'archived'];
 var subStagesName =[
     [''],
     ['wait for response', 'declined', 'accepted', 'interviewed'],

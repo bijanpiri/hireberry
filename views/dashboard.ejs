@@ -243,34 +243,12 @@
 <div class="candidate-summary">
     <div class="sticky">Unread</div>
     <div class="bool-toggle-application">
-        <i class="icon-plus"></i>
-        <i class="icon-minus"></i>
+        <i class="fa fa-expand fa-2x"></i>
+        <i class="fa fa-compress fa-2x"></i>
     </div>
     <div class="candidate-avatar"></div>
     <div class="candidate-basicInfo">
         <div class="candidate-name">Jon Doe</div>
-        <a class="btn candidate-resume" target="_blank">View Resume</a>
-
-        <div class="candidate-profiles">
-            <a class="profile behance-profile" href="http://www.behance.com" hidden>
-                <img src="http://static.iconarchive.com/static/images/social/behance-icon.png">
-            </a>
-            <a class="profile dribbble-profile" href="http://www.dribbble.com" hidden>
-                <img src="http://static.iconarchive.com/static/images/social/dribbble-icon.png">
-            </a>
-            <a class="profile twitter-profile" href="http://www.twitter.com" hidden>
-                <img src="http://static.iconarchive.com/static/images/social/twitter-icon.png">
-            </a>
-            <a class="profile github-profile" href="http://www.github.com" hidden>
-                <img src="http://static.iconarchive.com/static/images/social/github-icon.png">
-            </a>
-            <a class="profile linkedin-profile" href="http://www.linkedin.com" hidden>
-                <img src="http://static.iconarchive.com/static/images/social/linkedin-icon.png">
-            </a>
-            <a class="profile stackoverflow-profile" href="http://www.stackoverflow.com" hidden>
-                <img src="http://static.iconarchive.com/static/images/social/stackoverflow-icon.png">
-            </a>
-        </div>
         <div class="candidate-job">
             Applied for
             <span class="value">Front-End Web Developer</span>
@@ -296,8 +274,10 @@
 <div class="candidate-details">
 <div class="candidate-leftColumn">
     <div class="mbox-container">
-        <div class="mbox-title">Professional Info.</div>
-        <div class="mbox" style="height: 110px">
+        <div class="mbox-title">
+            <i class="fa fa-question-circle"></i> Professional Info.
+        </div>
+        <div class="mbox" style="height: 130px">
             <div class="candidate-conditions">
                 <strong>Conditions:</strong>
                 <span class="value">Part-Time @Home</span>
@@ -306,16 +286,22 @@
                 <strong>Skills:</strong>
                 <span class="value">CSS, jQuery, Nodejs</span>
             </div>
+            <div class="candidate-resume">
+                <strong>Resume:</strong>
+                <a class="btn btn-mini btn-warning candidate-resume-button" target="_blank">View Resume</a>
+            </div>
         </div>
     </div>
 </div>
 <div class="candidate-rightColumn">
     <div class="mbox-container">
-        <div class="mbox-title">Contact Info.</div>
-        <div class="mbox" style="height: 110px">
+        <div class="mbox-title">
+            <i class="fa fa-envelope-square"></i> Contact Info.
+        </div>
+        <div class="mbox" style="height: 130px">
             <div class="candidate-email">
                 <strong>Email:</strong>
-                <span class="value"></span>
+                <a class="value"></a>
             </div>
             <div class="candidate-tel">
                 <strong>Tel:</strong>
@@ -323,14 +309,37 @@
             </div>
             <div class="candidate-website">
                 <strong>Website:</strong>
-                <span class="value"></span>
+                <a class="value"></a>
+            </div>
+            <div class="candidate-profiles">
+                <strong>Social Networks:</strong>
+                <a class="profile behance-profile" href="http://www.behance.com" hidden>
+                    <i class="fa fa-behance fa-1x"></i>
+                </a>
+                <a class="profile dribbble-profile" href="http://www.dribbble.com" hidden>
+                    <i class="fa fa-dribbble fa-1x"></i>
+                </a>
+                <a class="profile twitter-profile" href="http://www.twitter.com" hidden>
+                    <i class="fa fa-twitter fa-1x"></i>
+                </a>
+                <a class="profile github-profile" href="http://www.github.com" hidden>
+                    <i class="fa fa-github fa-1x"></i>
+                </a>
+                <a class="profile linkedin-profile" href="http://www.linkedin.com" hidden>
+                    <i class="fa fa-linkedin fa-1x"></i>
+                </a>
+                <a class="profile stackoverflow-profile" href="http://www.stackoverflow.com" hidden>
+                    <i class="fa fa-stackiverflow fa-1x"></i>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
 <div class="mbox-container">
-    <div class="mbox-title">Cover Letter</div>
+    <div class="mbox-title">
+        <i class="fa fa-file"></i> Cover Letter
+    </div>
     <div class="mbox" style="height: 150px">
         <div class="candidate-coverLetter"></div>
     </div>
@@ -338,7 +347,7 @@
 
 <div class="candidate-leftColumn">
     <div class="mbox-container">
-        <div class="mbox-title">Activities</div>
+        <div class="mbox-title"><i class="fa fa-history"></i> Activities</div>
         <div class="mbox bool-application-activities">
             <div class="candidate-activities"></div>
         </div>
@@ -347,7 +356,7 @@
 <div class="candidate-rightColumn">
     <div class="mbox-container">
         <div class="mbox-title">
-            Comments <a class="applicationAskForCommentButton btn btn-mini pull-right">New Ask For Comment</a>
+            <i class="fa fa-comments"></i> Comments <a class="applicationAskForCommentButton btn btn-mini btn-danger pull-right">New Ask For Comment</a>
         </div>
         <div class="mbox bool-application-comments">
             <div class="candidate-comments"></div>
@@ -369,10 +378,12 @@
                         </textarea>
                     </div>
                     <div class="control-group">
-                        <a class="bool-edit-comment-btn btn btn-mini btn-info pull-right"
-                                >Edit</a>
-                        <a class="bool-cancel-comment-btn btn btn-mini btn-danger pull-right" hidden
-                                >Cancel</a>
+                        <a class="bool-edit-comment-btn btn btn-mini pull-right">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="bool-cancel-comment-btn btn btn-mini btn-danger pull-right" hidden>
+                            Cancel
+                        </a>
                         <button type="submit" class="btn btn-mini btn-success pull-right">
                             Reply
                         </button>
@@ -406,7 +417,9 @@
 </div>
 
 <div class="mbox-container">
-    <div class="mbox-title">Workflow</div>
+    <div class="mbox-title">
+        <i class="fa fa-retweet"></i> Workflow
+    </div>
 
     <div class="mbox" style="height: auto">
         <div class="candidate-workflow">
@@ -661,7 +674,7 @@
         <span id="comments_badge"></span>
     </div>
     <div class="panel">
-        <div class="nc-header">Notification Center</div>
+        <div class="nc-header"><i class="fa fa-bell"></i>Notifications</div>
         <ul id="askedForCommentList"></ul>
     </div>
 </div>

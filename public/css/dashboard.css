@@ -413,9 +413,11 @@
 }
 
 #askedForCommentList li {
-    border-top: 1px solid #5E5E5E;
     padding: 10px;
     margin: 5px 0;
+    background-color: #fff;
+    box-shadow: 1px 1px 5px #DADADA;
+    border-radius: 4px;
 }
 
 #askedForCommentList li .comment_date {
@@ -479,7 +481,7 @@
     padding: 10px;
     width: 300px;
     text-align: left;
-    background-color: rgba(55, 179, 111, 0.57);
+    background-color: #E9E9E9
 }
 .bool-application-comments-comment{
     font-size: 14px;
@@ -494,7 +496,7 @@
 }
 .bool-application-comments-comment[readonly] {
     cursor: text;
-    background: rgba(55, 179, 111, 0.57);
+    background: #E9E9E9;
     border: 0;
 }
 .reply-for-comment-form{

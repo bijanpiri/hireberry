@@ -60,7 +60,6 @@ BApplicationsView = Backbone.View.extend({
     },
     render: function() {
         var candidates = this.model.get('candidates');
-        var stagesName = ['pending','interviewing','offering','archived'];
 
         $('#candidatesCollection .candidate').remove();
 
@@ -71,26 +70,29 @@ BApplicationsView = Backbone.View.extend({
                 .addClass('candidate')
                 .data('candidate',candidate);
 
+            if( candidate.website && candidate.website.length>0 && candidate.website.indexOf('://') == -1 )
+                candidate.website = 'http://' + candidate.website;
+
             candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
             candidateObj.find('.candidate-name').text(candidate.name);
             candidateObj.find('.candidate-job .value').text(candidate.position);
             candidateObj.find('.candidate-time .value').text(candidate.applyTime);
-            candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
+            candidateObj.find('.candidate-stage .value').text( stagesName[candidate.stage.stage-1] + '-' + subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1]);
             candidateObj.find('.candidate-skills .value').text(candidate.skills);
             candidateObj.find('.candidate-conditions .value').text((candidate.workTime||'') + (candidate.workPlace ? ' @' + candidate.workPlace : '') );
             candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
-            candidateObj.find('.candidate-email .value').text(candidate.email);
+            candidateObj.find('.candidate-email .value').attr('href','mailto:'+candidate.email).text(candidate.email);
             candidateObj.find('.candidate-tel .value').text(candidate.tel);
-            candidateObj.find('.candidate-website .value').text(candidate.website);
+            candidateObj.find('.candidate-website .value').attr('href',candidate.website).text(candidate.website);
             candidateObj.find('[name="appID"]').val(candidate._id);
             candidateObj.find('.applicationAskForCommentButton').click( function() {
                 $('#a4c-dialog').find('[name=appID]').val(candidate._id);
                 $('#a4c-dialog').modal('show');
             })
             if( candidate.resumePath )
-                candidateObj.find('.candidate-resume').attr('href', candidate.resumePath );
+                candidateObj.find('.candidate-resume-button').attr('href', candidate.resumePath );
             else
-                candidateObj.find('.candidate-resume').remove();
+                candidateObj.find('.candidate-resume-button').remove();
 
             // Activities
             for( var j=0; j<candidate.activities.length; j++ ) {
@@ -128,7 +130,7 @@ BApplicationsView = Backbone.View.extend({
                 profileObj.show().attr('href', profileObj.attr('href') + '/' + candidate.profiles[ profile ] );
             }
 
-            candidateObj.addClass('candidate-filter-' + stagesName[candidate.stage.stage]);
+            candidateObj.addClass('candidate-filter-' + stagesName[candidate.stage.stage-1]);
 
             initWorkflow(candidateObj,candidate);
             changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );

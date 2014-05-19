@@ -299,9 +299,11 @@ app.post('/api/team/application/askForComment', function(req,res){
     //var userID = req.user._id;
     var userID = req.body.userID;
     var appID = req.body.appID;
-    var note=req.body.note;
+    var note = req.body.note;
+    var teamID = req.user.teamID;
+
     // Check whether current user is admin or not
-    askForCommentOnApplication(note,userID,req.user._id, appID, function(err) {
+    askForCommentOnApplication(note,userID,req.user._id, appID, teamID, function(err) {
         res.send(200)
     } );
 
@@ -313,10 +315,38 @@ app.get('/api/user/application/askedForComment',function(req,res){
         return;
 
     var userID = req.user._id;
+    var teamID = req.user.teamID;
 
-    getAskedForCommentApplications(userID, function(err,applications) {
+    getAskedForCommentApplications(userID, teamID, function(err,applications) {
         res.send(200,{applications:applications});
     })
+});
+
+app.get('/api/comments/news',function(req,res){
+
+    if(!checkUser(req,res))
+        return;
+
+    var userID = req.user._id;
+    var teamID = req.user.teamID;
+
+    getNewComments(userID, teamID,function(err,comments){
+        res.send(200, {comments:comments});
+    });
+});
+
+app.post('/api/comments/mark-as-read',function(req,res){
+
+    if(!checkUser(req,res))
+        return;
+
+    var userID = req.user._id;
+    var teamID = req.user.teamID;
+    var commentID = req.body.commentID;
+
+    markCommentAsRead(userID, teamID, commentID,function(err){
+        res.send(200, {});
+    });
 });
 
 app.get('/api/application/comments',function(req,res){

@@ -354,9 +354,10 @@ app.post('/api/team/form/askForComment', function(req,res){
     //var userID = req.user._id;
     var userID = req.body.userID;
     var formID = req.body.formID;
+    var teamID = req.body.teamID;
 
     // Check whether current user is admin or not
-    askForCommentOnForm('',userID, formID, function(err) {
+    askForCommentOnForm('',userID, formID, teamID, function(err) {
         res.send(200)
     } );
 
@@ -368,8 +369,9 @@ app.get('/api/user/form/askedForComment',function(req,res){
         return;
 
     var userID = req.user._id;
+    var teamID = req.body.teamID;
 
-    getAskedForCommentForms(userID, function(err,forms) {
+    getAskedForCommentForms(userID, teamID, function(err,forms) {
         res.send(200,{forms:forms});
     })
 });
