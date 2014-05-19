@@ -4,7 +4,7 @@ function ResumeWidget(){
     var layout = '';
     this.dropboxToken = null;
     var widget=this;
-    var ready=true;
+    var getReady=false;
     function connectionStateChanged() {
         if( this.dropboxToken )
             this.toolbar.find('button[name=connectToDropBox]').text('Disconnect from Dropbox');
@@ -31,6 +31,7 @@ function ResumeWidget(){
     initLayout.call(this);
 
     this.setLayout(layout);
+    var uploading=false;
 
     this.widgetDidAdd = function() {
 
@@ -63,7 +64,18 @@ function ResumeWidget(){
             document.getElementById('resumefile').onchange = function () {
                 $('#dropzone').html('Your Résumé :<br/>' + this.value.replace(/^.*[\\\/]/, ''));
                 if(!widget.dropboxToken){
-                    ready=false;
+
+                    var size=(this.files[0].size/(1024*1024));
+
+                    if(size>5){
+                        alert("Resume file mustn't be larger than 5 MB ");
+                        return;
+                    }
+
+                    uploading=true;
+
+                    $('#dropzone').html('Uploading your resume ...');
+
                     var resume = new Resume();
                     var file = new Parse.File('resume-file', this.files[0]);
 
@@ -71,32 +83,35 @@ function ResumeWidget(){
 
                     resume.save(null, {
                         success: function (resume) {
-                            //ToDo: What happens if resume not uploaded yet
-
+                            $('#dropzone').html('Your resume uploaded successfully.');
                             widget.portlet.find('[name=resume]').val('');
                             widget.portlet.find('[name=resumeUrl]').val(file.url());
+                            uploading=false;
 
-                            ready=true;
-                            if(preparedCall)
-                                preparedCall();
+                            if(getReady)
+                                widget.prepared2Submit();
 
+                            getReady=false;
                         }
                     });
                 }
             };
         }
-    }
-    this.getReady=function(){
-        if(ready)
-            preparedCall();
-    }
+    };
 
     //ToDo: dropbox token mustn't be retrieve when users are applying for a job otherwise dropbox can be invaded
     this.serialize = function() {
         return {
             dbToken: this.dropboxToken
         }
-    }
+    };
+
+    this.getReady4Submit=function(){
+        if(uploading)
+            getReady=true;
+        else
+            widget.prepared2Submit();
+    };
 
     this.deserialize = function( content ) {
         this.dropboxToken = content.dbToken;

@@ -200,7 +200,7 @@ function PictureWidget(){
         }
     }
 
-    this.getReady=function(){
+    this.getReady4Save=function(){
         action();
     }
     this.changed=function(){

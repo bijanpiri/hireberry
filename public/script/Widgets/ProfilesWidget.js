@@ -2,6 +2,7 @@ function ProfilesWidget() {
     Widget.call(this);
 
     var profile = '';
+    var useGravatar=true;
 
     function initLayout() {
         profile = this.clone('.profilesWidget');
@@ -15,7 +16,11 @@ function ProfilesWidget() {
         var fileInput = this.portlet.find('input[type=file]');
         var avatar = this.portlet.find('.bool-avatar-image');
         profile.find('.bool-avatar-menu-gravatar').click(
-            function(){findGravatar(profile, profile.find('input[name="email"]').val());updateAvatarUrl();});
+            function(){
+                useGravatar=true;
+                findGravatar(profile, profile.find('input[name="email"]').val());
+                updateAvatarUrl();
+            });
 
         profile.find('.bool-avatar-menu-upload').click(
             function(){
@@ -23,6 +28,7 @@ function ProfilesWidget() {
             }
         );
         profile.find('.bool-avatar-menu-remove').click(function(){
+            useGravatar=false;
             profile.find('.bool-avatar-no-container').show();
             profile.find('.bool-avatar-image').hide();
         });
@@ -43,12 +49,13 @@ function ProfilesWidget() {
         else {
 //            this.portlet.find('input').not('input[name=personalInfo-item]').prop('readOnly','readOnly').css('cursor','default');
         }
-    }
+    };
     function updateAvatarUrl(){
         var src=profile.find('.bool-avatar-image').attr('src');
         profile.find('.bool-avatar-image-url').val(src);
     }
     function done(e, data) {
+        useGravatar=false;
         var avatar=profile.find('.bool-avatar-image');
         profile.find('.bool-avatar-no-container').hide();
         avatar.show();
@@ -78,7 +85,7 @@ function ProfilesWidget() {
     });
     this.portlet.delegate('.bool-clear-btn', 'click', function () {
         $(this).parent().parent().find('input').val('');
-    })
+    });
 
 
     this.serialize = function () {
@@ -89,7 +96,7 @@ function ProfilesWidget() {
         };
 
         return data;
-    }
+    };
 
     this.deserialize = function (data) {
 
@@ -102,6 +109,8 @@ function ProfilesWidget() {
 
         if( lastFieldIsEmail )
             profile.delegate('[name=email]','blur',function(){
+                if(!useGravatar)
+                    return;
                 fillProfiles.call(profile);
                 updateAvatarUrl();
             });

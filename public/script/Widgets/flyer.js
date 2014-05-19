@@ -152,7 +152,7 @@ function Flyer(options) {
         checkReady();
         portlets.each(function(index) {
             var widget = $(this).data('widget');
-            widget.prepare(function(){
+            widget.prepare2Save(function(){
                 flyer.widgets.push( {
                     "type": widget.type,
                     'layoutIndex':widget.layoutIndex,
@@ -167,6 +167,23 @@ function Flyer(options) {
                 preparedCallback(flyer);
         }
 
+
+    }
+    var flyer4Submit=function(preparedCallback){
+        var portlets = pStack.find('.portlet');
+        var widgetCount=portlets.length+1;//+1 for times when there is no widget(Empty Flyer)
+        checkReady();
+        portlets.each(function(index) {
+            var widget = $(this).data('widget');
+            widget.prepare2Submit(function(){
+                checkReady();
+            });
+        });
+        function checkReady(){
+            widgetCount--;
+            if(widgetCount==0)
+                preparedCallback(flyer);
+        }
 
     }
 
@@ -251,6 +268,7 @@ function Flyer(options) {
     this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
     this.setLogo = setLogo;
+    this.flyer4Submit=flyer4Submit;
 
     initPortletsStack.call(this);
 

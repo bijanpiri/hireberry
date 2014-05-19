@@ -276,13 +276,13 @@ app.get('/applicant/message/view/:messageType/:messageID', function (req,res){
         if( message.response ) {
             res.send(200,'This invitation is responded already!')
         }
-        else {
-            res.render('applicant.ejs',{
+        else
+
+            res.render('applicant.ejs', {
                 messageType: req.params.messageType,
                 messageID: req.params.messageID,
                 messageText: message.text
             });
-        }
 
     });
 });

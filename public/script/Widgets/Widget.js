@@ -8,6 +8,8 @@ function Widget(options){
     Widget.instances=1000;
     var widget=this;
     this.prepared=null;
+    this.prepared2Submit=null;
+
     this.type=0;
     this.portlet = $('<div>').addClass('portlet').data('widget',this);
     this.portletContainer = $('<div>').addClass('portlet-container');
@@ -110,9 +112,6 @@ function Widget(options){
     this.addToolbarCommand=function(command,callback){
         var widget=this;
         var events='click';
-//            'blur focus focusin focusout load resize scroll unload click '
-//                +'dblclick mousedown mouseup mousemove mouseover mouseout mouseenter '
-//                +'mouseleave change select submit keydown keypress keyup error';
 
         this.toolbar.delegate('[command^='+command+']',events,function(event){
             if((!this.event && event.type=='click')|| (this.even && this.event.indexOf(event.type)>=0 ))
@@ -124,13 +123,20 @@ function Widget(options){
     this.restated=function(){
         console.log('restated');
     }
-    this.getReady=function(){
+    this.getReady4Save=function(){
         widget.prepared();
     }
-    this.prepare=function(prepareCallback){
-        this.prepared=prepareCallback;
-        widget.getReady();
+    this.prepare2Save=function(prepareCallback){
+        widget.prepared=prepareCallback;
+        widget.getReady4Save();
 
+    }
+    this.getReady4Submit=function(){
+        widget.prepared2Submit();
+    }
+    this.prepare2Submit=function(submitCallback){
+        widget.prepared2Submit=submitCallback;
+        widget.getReady4Submit();
     }
 
     this.changed=function(){

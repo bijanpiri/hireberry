@@ -11,19 +11,7 @@ var autosaveTimer;
 var autosaveInterval = 60*1000;
 var teamMembers = [];
 
-Parse.initialize("4Femn58dGqOY09K6Mj7QjlhnqViEquBSRhf9N8LA",
-    "YhTSUbxy54XmnPfE3YqT0vc0tS0FCwO3IYtLPi4r");
-
-
 $(function() {
-
-    var TestObject = Parse.Object.extend("TestObject");
-    var testObject = new TestObject();
-    testObject
-        .save({foo: "bar"})
-        .then(function(object) {
-
-        });
 
     $('form').submit(false);
     if( viewMode=='embeded') {
@@ -93,20 +81,16 @@ $(function() {
              return false;
              }
              */
+            $('.applyNowButton').button('loading');
 
             $('.error').hide();
-
-            var form = document.getElementById('applyForm');
-            var formObj = $('#applyForm');
-            var formURL = formObj.attr("action");
-
-            if(window.FormData !== undefined)  // for HTML5 browsers
-            {
-                var formData = new FormData( form );
+            flyer.flyer4Submit(function(){
+                var form = $('#applyForm');
+                var formURL = form.attr("action");
                 $.ajax({
                     url: formURL,
                     type: 'POST',
-                    data:  formData,
+                    data:  new FormData(form[0]),
                     mimeType:"multipart/form-data",
                     contentType: false,
                     cache: false,
@@ -121,33 +105,7 @@ $(function() {
                     }
                 });
                 e.preventDefault();
-                $('.applyNowButton').val('Sending...').attr('disabled','disabled');
-            }
-            else  //for olden browsers
-            {
-                //generate a random id
-                var  iframeId = 'unique' + (new Date().getTime());
-
-                //create an empty iframe
-                var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
-
-                //hide it
-                iframe.hide();
-
-                //set form target to iframe
-                formObj.attr('target',iframeId);
-
-                //Add iframe to body
-                iframe.appendTo('body');
-                iframe.load(function(e)
-                {
-                    var doc = getDoc(iframe[0]);
-                    var docRoot = doc.body ? doc.body : doc.documentElement;
-                    var data = docRoot.innerHTML;
-
-                    //data is returned from server.
-                });
-            }
+            })
         });
     }
 
@@ -234,7 +192,8 @@ function initCommentView() {
 
                     var titleObj = $('<div>')
                         .text('You are asked to put your comment about ')
-                        .append( $('<a>').attr('href', '/flyer/embeded/' + a4c.formID._id).text('this form') );
+                        .append( $('<a>').attr('href', '/flyer/embeded/' + a4c.formID._id)
+                            .text('this form') );
 
                     var textAreaObj = $('<textarea>')
                         .attr('id','comment_form_' + a4c.formID._id)
@@ -401,14 +360,15 @@ function hideLoading() {
 
 function loadPublishPanel() {
 
-    var flyerJson = flyer.flyer2json();
+    flyer.flyer2json(function(flyerJson) {
 
-    if( existFlyer )
-        $('#flyerName2').val( flyer.description );
-    else
-        $('#flyerName2').val( newFlyerName );
+        if (existFlyer)
+            $('#flyerName2').val(flyer.description);
+        else
+            $('#flyerName2').val(newFlyerName);
 
-    $('#thanksMessage').val( flyerJson.thanksMessage );
+        $('#thanksMessage').val(flyerJson.thanksMessage);
+
 
     $.get('/api/team').done( function(res) {
         var teamMembers = res.members;
@@ -419,18 +379,19 @@ function loadPublishPanel() {
         $('#autoAssignTo').populateUserCombo(teamMembers,null,'autoAssignedTo_userID');
     });
 
-    $('#buttonPublishSaveAsDraft').click( function() {
-        saveAsDraftOrPublish(true);
-    });
+        $('#buttonPublishSaveAsDraft').click(function () {
+            saveAsDraftOrPublish(true);
+        });
 
 
-    $('#buttonPublishDone').click( function() {
-        saveAsDraftOrPublish(false);
-    });
+        $('#buttonPublishDone').click(function () {
+            saveAsDraftOrPublish(false);
+        });
 
-    function saveAsDraftOrPublish(saveAsDraft) {
-        flyerJson.description = $('#flyerName2').val() ;
-        flyerJson.thanksMessage = $('#thanksMessage').val();
+        function saveAsDraftOrPublish(saveAsDraft) {
+            flyerJson.description = $('#flyerName2').val();
+            flyerJson.thanksMessage = $('#thanksMessage').val();
+
 
         var askForComment = $('[name=askForComment_userID]').val();
         var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
@@ -441,11 +402,13 @@ function loadPublishPanel() {
             $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
 
 
-        $.post( '/flyer/publish', {saveAsDraft:saveAsDraft,flyer:flyerJson} ).done(function(data){
-            $('#publishFinalMessage').text(data.message);
-            loadSharePanel();
-        });
-    }
+
+            $.post('/flyer/publish', {saveAsDraft: saveAsDraft, flyer: flyerJson}).done(function (data) {
+                $('#publishFinalMessage').text(data.message);
+                loadSharePanel();
+            });
+        }
+    });
 }
 
 function loadSharePanel() {

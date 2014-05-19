@@ -214,8 +214,11 @@
             <div class="portletSubmittion container-fluid" style="background-color: #d1d1d1;">
                 <div class="row-fluid"  id="text">
                     <div class="span6 offset3">
-                        <input type="button" name="submit" class="btn3d btn3d-2 btn3d-2a applyNowButton"
-                               style="font-weight: 700" id="submit_btn" value="APPLY NOW"/>
+                        <input type="button" name="submit"
+                               class="btn3d btn3d-2 btn3d-2a applyNowButton"
+
+                               style="font-weight: 700" id="submit_btn"
+                               value="APPLY NOW" data-loading-text="Sending"/>
                         <p class="error" style="display: none;color: red;text-align: center;font-size: 2em;"></p>
                     </div>
                 </div>
@@ -947,7 +950,7 @@
         <input id="workType-place" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-place" no="2">
         <label for="workType-place" class="toolbar-widgetLabel">Place</label>
 
-        <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3">
+        <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3" checked>
         <label for="workType-both" class="toolbar-widgetLabel">Both</label>
     </div>
 </div>
