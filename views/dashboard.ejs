@@ -129,15 +129,17 @@
 
 <div id="teamp" class="container-fluid sectionContainer">
     <div class="row-fluid">
-        <div class="offset9 span3" style="margin-bottom: 1em">
-            <a href="#team-settings-dialog" role="button"
-               class="btn btn-warning " data-toggle="modal" hidden>
+        <div class="span2" style="margin-bottom: 1em">
+            <a href="#team-settings-dialog" role="button" class="btn btn-warning" data-toggle="modal" hidden>
                 <i class="icon-cog "></i>
-                Team Settings</a>
-            <a href="#team-invitation-dialog" role="button"
-               class="btn btn-success " data-toggle="modal" hidden>
+                Team Settings
+            </a>
+            </div>
+            <div class="span1" style="margin-bottom: 1em">
+            <a href="#team-invitation-dialog" role="button" class="btn btn-success" data-toggle="modal" hidden>
                 <i class="bool-icon bool-icon-email"></i>
-                Invite</a>
+                Invite
+            </a>
         </div>
     </div>
 
@@ -149,10 +151,6 @@
         <div class="span3 ">
             <i class="fa fa-phone fa-2x"></i>
             <span class="teamPhone" style="font-size: 1.5em;line-height: 2em;"></span>
-
-        </div>
-        <div class="span3 ">
-
         </div>
     </div>
 
@@ -562,7 +560,7 @@
 
 <div id="billingp" class="container-fluid sectionContainer">
     <div class="row-fluid">
-        <div style="font-size: 2em;">
+        <div id="billing-plan" style="font-size: 2em;">
             Your current plan is <span id="billing_plan">...</span>.
             <button class="btn btn-primary pull-right" id="premiumPlanButton">Go to Premium Plan (1$/mo)</button>
             <button class="btn btn-primary pull-right" id="freePlanButton">Go to Free Plan</button>

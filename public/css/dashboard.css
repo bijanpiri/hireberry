@@ -363,11 +363,11 @@
 
 .teamMemberRole {
     display: inline-block;
-    float: right;
     font-weight: 700;
-    margin: 0 20px;
     width: 200px;
     text-align: center;
+    position: absolute;
+    right: 1em;
 }
 
 .teamMemberStatus {
@@ -393,6 +393,7 @@
     padding: 10px;
     border-left: 3px solid rgb(84, 177, 84);
     cursor: default;
+    position: relative;
 }
 
 .teamMember:hover {
@@ -529,4 +530,51 @@ a{
     width: 1024px;
     margin-left:-512px;
 
+}
+
+@media (max-width: 1024px) {
+}
+
+@media (max-width: 979px) {
+    #wrap {
+        padding: 0;
+        top: 0;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .teamMemberEmail {
+        display: none;
+    }
+
+}
+
+@media (max-width: 780px) {
+    .positionsHeaderRow {
+        display: none;
+    }
+    .position {
+        border-bottom: 1px solid #C5C5C5;
+    }
+    .grid-layout .candidate {
+        width: 100% !important;
+    }
+    #paypal {
+        text-align: center;
+    }
+    #paypalPay img {
+        float: none;
+    }
+    #billing-plan{
+        text-align: center;
+    }
+    #premiumPlanButton,#freePlanButton {
+        float:none;
+        margin: 2em 0;
+    }
+    .teamMemberRole {
+        position: relative;
+        right: 0;
+    }
 }
