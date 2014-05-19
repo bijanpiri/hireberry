@@ -392,6 +392,20 @@
     font-size: 1.7em;
     padding: 10px;
     border-left: 3px solid rgb(84, 177, 84);
+    cursor: default;
+}
+
+.teamMember:hover {
+    background-color: #EBE9C3;
+}
+
+.team-disjoint-button {
+    display: none;
+    margin-left: 8px;
+}
+
+.teamMember:hover .team-disjoint-button {
+    display: inline-block;
 }
 
 /*** Asked For Comment ***/

@@ -151,6 +151,41 @@ app.post('/api/user/team/join', function(req,res){
 
 });
 
+app.post('/api/team/member/remove', function(req,res){
+
+    if( !checkUser(req,res) )
+        return;
+
+    var userID = req.user._id;
+    var teamID = req.user.teamID;
+    var disjoinedUserID = req.body.userID;
+
+    // Check whether current user is hiring manager or not
+    BTeams.count({_id:teamID,admin:userID}, function(err,count){
+        if( err || count==0 )
+            return res.send(304);
+
+        // Find user's other teams
+        BTeams.find({members:disjoinedUserID,_id:{$ne:teamID}}, function(err,teams){
+            if( err || !teams || teams.length===0)
+                return res.send(504);
+
+            // Disjoin user from team and join to another one
+            leaveTeam( disjoinedUserID, teamID, function() {
+                BUsers.update({_id:disjoinedUserID},{teamID:teams[0]._id}, function(err) {
+
+                    // Assign the flyers which this user is their responder to hiring manager
+                    BFlyers.update({owner:teamID,autoAssignedTo:disjoinedUserID},{autoAssignedTo:userID}, function(err){
+                        res.send(200);
+                    })
+
+                });
+            })
+        })
+    })
+
+});
+
 app.get('/api/teams', function(req,res) {
     BTeams.find({members:req.user._id}, function(err,teams){
         res.send(200,{teams:teams});

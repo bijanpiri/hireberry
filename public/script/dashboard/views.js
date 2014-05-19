@@ -336,14 +336,33 @@ BTeamView = Backbone.View.extend({
             var nameObj = $('<div>').addClass('teamMemberName').text(members[i].displayName);
             var emailObj = $('<span>').addClass('teamMemberEmail').text('(' + members[i].email + ')');
 
-            var roleObj = $('<div>').addClass('teamMemberRole').text(
-                members[i]._id == teamAdmin._id ? 'Hiring Manager': 'Member');
+            var roleObj = $('<div>').addClass('teamMemberRole').text(members[i]._id === teamAdmin._id ? 'Hiring Manager': 'Member');
+
+            var disjointButtonObj = '';
+            if(userAdmin && members[i]._id !== teamAdmin._id) {
+                disjointButtonObj = $('<a>')
+                    .addClass('btn btn-danger btn-mini team-disjoint-button')
+                    .text('Disjoint')
+                    .attr('userID',members[i]._id)
+                    .click( function() {
+                        $.post('/api/team/member/remove',{ userID: $(this).attr('userID') }).done( function() {
+                            refresh();
+                        })
+                    });
+            }
 
             var memberObj = $('<div>').addClass('teamMember')
                 .append( avatarObj )
                 .append( nameObj )
                 .append( emailObj )
-                .append( roleObj );
+                .append( disjointButtonObj )
+                .append( roleObj )
+                .mouseenter( function() {
+                    memberObj.find('team-disjoint-button').show();
+                })
+                .mouseleave( function() {
+                    memberObj.find('team-disjoint-button').hide();
+                });
 
             $('#teamMembers').append( memberObj );
         }

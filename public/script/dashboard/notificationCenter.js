@@ -18,23 +18,31 @@ function initNotificationCenter() {
     $('#askedForCommentList').empty();
     $.get('/api/user/application/askedForComment').done( function(resApp) {
         var apps = resApp.applications;
-        showApplications(apps);
-        add2NotificationBadge(apps.length);
+        if(apps) {
+            showApplications(apps);
+            add2NotificationBadge(apps.length);
+        }
 
     });
     $.get('/api/user/form/askedForComment').done( function(resForm) {
-        var A4C_forms = resForm.forms;
-        showForms(A4C_forms);
-        add2NotificationBadge(resForm.forms.length);
+        var forms = resForm.forms;
+        if(forms) {
+            showForms(forms);
+            add2NotificationBadge(forms.length);
+        }
     });
     $.get('/api/user/invitations').done( function(resInvitations) {
-        showInvitations(resInvitations);
-        add2NotificationBadge(resInvitations.length);
+        if( resInvitations ){
+            showInvitations(resInvitations);
+            add2NotificationBadge(resInvitations.length);
+        }
     });
     $.get('/api/user/form/askedForPublish').done( function(askedForPublish) {
-        var A4P_forms = askedForPublish;
-        showAskedForPublish(A4P_forms);
-        add2NotificationBadge( A4P_forms.length);
+        var forms = askedForPublish;
+        if( forms ){
+            showAskedForPublish(forms);
+            add2NotificationBadge( forms.length);
+        }
     });
     $.get('/api/comments/news').done( function(resApp) {
         var comments = resApp.comments;
