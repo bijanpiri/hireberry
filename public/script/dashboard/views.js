@@ -89,10 +89,16 @@ BApplicationsView = Backbone.View.extend({
                 $('#a4c-dialog').find('[name=appID]').val(candidate._id);
                 $('#a4c-dialog').modal('show');
             })
-            if( candidate.resumePath )
-                candidateObj.find('.candidate-resume-button').attr('href', candidate.resumePath );
-            else
-                candidateObj.find('.candidate-resume-button').remove();
+
+            var viewer = 'https://docs.google.com/viewer?embedded=true&url=';
+            if( candidate.resumePath ) {
+                candidateObj.find('.candidate-resume-view-button').attr('href', viewer + candidate.resumePath );
+                candidateObj.find('.candidate-resume-download-button').attr('href', candidate.resumePath );
+            }
+            else {
+                candidateObj.find('.candidate-resume-view-button').remove();
+                candidateObj.find('.candidate-resume-download-button').remove();
+            }
 
             // Activities
             for( var j=0; j<candidate.activities.length; j++ ) {
