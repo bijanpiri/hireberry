@@ -9,39 +9,41 @@
 <script>
     var teamID = '<%=teamID%>';
 
-            $(document).ready( function() {
+    $(document).ready( function() {
 
 
-                $.get('/api/team/' +  teamID + '/positions').done( function(res) {
+        $.get('/api/team/' +  teamID + '/positions').done( function(res) {
 
-                    $('.caption').text( res.teamName );
-                    $('.team-tel').text( res.teamTel );
-                    $('.team-address').text( res.teamAddress );
+            $('.caption').text( res.teamName );
+            $('.team-tel').text( res.teamTel );
+            $('.team-address').text( res.teamAddress );
 
-                    res.positions.forEach( function(position) {
-                       var applyButtonObj = $('<a>').addClass('btn btn-success position-apply')
-                               .attr('href','/flyer/embeded/' + position.id)
-                               .text('Apply Now');
+            res.positions.forEach( function(position) {
+                var applyButtonObj = $('<a>').addClass('btn btn-success position-apply')
+                        .attr('href','/flyer/embeded/' + position.id)
+                        .text('Apply Now');
 
-                        var positioDescObj = $('<div>').addClass('position-description')
-                                .text( position.title);
+                var positioDescObj = $('<div>').addClass('position-description')
+                        .text( position.title);
 
-                        // ToDo:
-                        var positionLocationObj = $('<div>').addClass('position-location');
-                        var mapWidgets = position.flyer.widgets.filter( function(widget) {return widget.type==='6'});
-                        if( mapWidgets.length > 0 )
-                            positionLocationObj.text(mapWidgets[0].Contents.address);
+                // ToDo:
+                var positionLocationObj = $('<div>').addClass('position-location');
+                if( position.flyer.widgets ) {
+                    var mapWidgets = position.flyer.widgets.filter( function(widget) {return widget.type==='6'});
+                    if( mapWidgets.length > 0 )
+                        positionLocationObj.text(mapWidgets[0].Contents.address);
+                }
 
-                        var positionObj = $('<div>').addClass('position')
-                                .append( positioDescObj )
-                                .append( positionLocationObj )
-                                .append( applyButtonObj );
+                var positionObj = $('<div>').addClass('position')
+                        .append( positioDescObj )
+                        .append( positionLocationObj )
+                        .append( applyButtonObj );
 
-                        $('.positions').append( positionObj )
+                $('.positions').append( positionObj )
 
-                    });
-                })
             });
+        })
+    });
 </script>
 
 <style>
