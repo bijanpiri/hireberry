@@ -420,7 +420,8 @@ app.get('/api/team/:teamID/positions',function(req,res){
             var positionsList = positions.map( function(position) {
                 return {
                     id: position._id,
-                    title: position.flyer.description
+                    title: position.flyer.description,
+                    flyer: position.flyer
                 }
             })
 

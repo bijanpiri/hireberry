@@ -26,8 +26,15 @@
                         var positioDescObj = $('<div>').addClass('position-description')
                                 .text( position.title);
 
+                        // ToDo:
+                        var positionLocationObj = $('<div>').addClass('position-location');
+                        var mapWidgets = position.flyer.widgets.filter( function(widget) {return widget.type==='6'});
+                        if( mapWidgets.length > 0 )
+                            positionLocationObj.text(mapWidgets[0].Contents.address);
+
                         var positionObj = $('<div>').addClass('position')
                                 .append( positioDescObj )
+                                .append( positionLocationObj )
                                 .append( applyButtonObj );
 
                         $('.positions').append( positionObj )
@@ -65,8 +72,30 @@
         margin: 10px 0;
     }
 
+    .position-location {
+        color: #A7A7A7;
+        font-size: 0.8em;
+    }
+
     .position-apply {
-        margin-top: 2em;
+        margin-top: 1em;
+    }
+
+    .team-info {
+        padding: 20px;
+        border-radius: 4px;
+        background-color: #f1f1f1;
+        margin: 10px 0;
+        font-size: 2em;
+        line-height: 2em;
+    }
+
+    .team-info-title {
+        border-bottom: 1px solid;
+    }
+
+    .team-info-label {
+        color: #c6c6c6;
     }
 
     .team-info {
