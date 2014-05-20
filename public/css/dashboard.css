@@ -532,15 +532,30 @@ a{
 
 }
 
-@media (max-width: 1024px) {
-}
 
 @media (max-width: 979px) {
+
+    /* General */
     #wrap {
         padding: 0;
         top: 0;
     }
+
+    #notificationCenter {
+        top: 6em;
+    }
+
+    .navbar .nav > li > a {
+        padding: 0;
+    }
+
+    /* Application */
+    .candidate-leftColumn,
+    .candidate-rightColumn {
+        width: 100% !important;
+    }
 }
+
 
 @media (max-width: 900px) {
 
@@ -550,16 +565,49 @@ a{
 
 }
 
-@media (max-width: 780px) {
+@media (max-width: 767px) {
+    /* Menu */
+    .menu {
+        border-bottom: 1px solid rgb(179, 179, 179);
+    }
+
+    .menu .item {
+        border-left: none;
+        display: inline-block;
+        font-size: 0.8em;
+    }
+
+    .menu input[type=radio]:checked + label {
+        background-color: rgb(200, 230, 200);
+        border-left: none;
+        border-bottom: 4px solid green;
+    }
+
+    /* Overview */
+    .statBox {
+        margin-bottom: 10px;
+    }
+
+    /* Team */
+    .teamMemberRole {
+        position: relative;
+        right: 0;
+    }
+
+    /* Jobs */
     .positionsHeaderRow {
         display: none;
     }
     .position {
         border-bottom: 1px solid #C5C5C5;
     }
+
+    /* Applications */
     .grid-layout .candidate {
         width: 100% !important;
     }
+
+    /* Billing */
     #paypal {
         text-align: center;
     }
@@ -573,8 +621,5 @@ a{
         float:none;
         margin: 2em 0;
     }
-    .teamMemberRole {
-        position: relative;
-        right: 0;
-    }
+
 }
