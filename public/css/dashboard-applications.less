@@ -405,13 +405,16 @@
         width: 30px;
         border-radius: 50%;
         border: 1px solid #8B8B8B;
-        margin: 5px;
+        margin: 5px 5px 5px 30px;
         box-sizing: border-box;
       }
 
       .candidate-basicInfo {
         display: inline-block;
         vertical-align: top;
+        line-height: 35px;
+
+        .candidate-job strong {display: none}
       }
 
       .candidate-name {
@@ -438,6 +441,8 @@
         display: inline-block;
         vertical-align: top;
         margin: 0 0.5em;
+        line-height: 35px;
+        strong {display: none}
       }
 
       .candidate-conditions {
@@ -445,13 +450,12 @@
         vertical-align: top;
         display: inline-block;
         margin: 0 0.5em;
+        line-height: 35px;
+        strong {display: none}
       }
 
       .candidate-skills {
-        font-size: 1.5em;
-        vertical-align: top;
-        display: inline-block;
-        margin: 0 0.5em;
+        display: none;
       }
     }
 
