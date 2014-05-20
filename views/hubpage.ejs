@@ -14,8 +14,9 @@
 
                 $.get('/api/team/' +  teamID + '/positions').done( function(res) {
 
-                    $('.caption').text( res.teamName + '\'s Jobs' );
-
+                    $('.caption').text( res.teamName );
+                    $('.team-tel').text( res.teamTel );
+                    $('.team-address').text( res.teamAddress );
 
                     res.positions.forEach( function(position) {
                        var applyButtonObj = $('<a>').addClass('btn btn-success position-apply')
@@ -37,8 +38,20 @@
 </script>
 
 <style>
+    .header {
+        background-color: #f1f1f1;
+        border-radius: 7px;
+    }
+
     .caption {
-        font-size: 2em;
+        font-size: 3em;
+        padding: 40px 0 0 40px;
+        margin: 0;
+    }
+    .sub-caption {
+        font-size: 1.7em;
+        padding: 0 0 40px 40px;
+        margin: 0;
     }
 
     .positions {
@@ -48,20 +61,60 @@
     .position {
         padding: 20px;
         border-radius: 4px;
-        background-color: #fff;
+        background-color: #f1f1f1;
         margin: 10px 0;
     }
 
     .position-apply {
         margin-top: 2em;
     }
+
+    .team-info {
+        padding: 20px;
+        border-radius: 4px;
+        background-color: #f1f1f1;
+        margin: 10px 0;
+        font-size: 2em;
+        line-height: 2em;
+    }
+
+    .team-info-title {
+        border-bottom: 1px solid;
+    }
+
+    .team-info-label {
+        color: #c6c6c6;
+    }
 </style>
 
-<div class="container">
-    <div class="row">
-        <div class="span6 offset3">
-            <h2 class="caption"></h2>
+<div class="container-fluid" style="margin-top:1em">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="header">
+                <h2 class="caption"></h2>
+                <h3 class="sub-caption">Open positions</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="offset1 span6">
             <div class="positions"></div>
+        </div>
+        <div class="span4">
+            <div class="team-info">
+                <div>
+                    <span class="team-info-title">Contact Info</span>
+                </div>
+                <div>
+                    <span class="team-info-label">Tel:</span>
+                    <span class="team-tel"></span>
+                </div>
+                <div>
+                    <span class="team-info-label">Address:</span>
+                    <span class="team-address"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

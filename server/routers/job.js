@@ -426,7 +426,9 @@ app.get('/api/team/:teamID/positions',function(req,res){
 
             BTeams.findOne({_id:teamID}, function(err,team){
                 res.send(200, {
-                    teamName: team.name ,
+                    teamName: team.name,
+                    teamTel: team.tel,
+                    teamAddress: team.address,
                     positions: positionsList
                 });
             })
