@@ -1,4 +1,21 @@
 <% layout('layout') -%>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: '/login',
+            type: 'post',
+            dataType: 'json',
+            data: "email=&password=&LoadingTime=1",
+            error: function(data){
+                if(data.status != 0)
+                {}
+            },
+            success: function(data){
+                window.location='/';
+            }
+        })
+    });
+</script>
 
 <script>
     window.fbAsyncInit = function() {
@@ -132,6 +149,10 @@
                     <input type="password"
                            name=<%=everyauth.password.passwordFormFieldName%>
                            placeholder='Enter Password'>
+
+
+                    <span  >Remember Me</span>
+                    <input type="checkbox"  name="RememberMe">
 
                     <div>
                         <button type="submit" class="wbtn wbtn-2 wbtn-2a" >Login</button>

@@ -123,6 +123,13 @@ Login & Register
     color: #949079
 }
 
+.loginForm  span{
+    margin:10px 0px 0px 0px;
+    font-size:1.6em ;
+    float: left;height: 40px;
+    font-weight: 700;
+}
+
 .loginForm input {
     height: 45px;
     display: block;
@@ -132,6 +139,19 @@ Login & Register
     font-weight: 700;
     border-color: #B3AE92;
     padding: 0 20px;
+}
+
+.loginForm  input[type="checkbox"]{
+    height: 20px;
+    display: block;
+    width: 20px;
+    box-sizing: border-box;
+    font-size: 1.6em;
+    font-weight: 700;
+    border-color: #B3AE92;
+    padding: 0 20px;
+    margin: 10px 0px 0px 10px;
+    float: left;
 }
 
 .loginForm input:focus {

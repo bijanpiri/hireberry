@@ -18,6 +18,13 @@ var options = {
 
 mongoose.connect(mongoHQConenctionString,options);
 
+BPersistLogin= mongoose.model( 'persistentLogins', {
+    username: String,
+    expireDate:String,
+    lastRequestDate:String,
+    token:Buffer
+});
+
 BUsers = mongoose.model( 'users', {
     email: String,
     displayName: String,
