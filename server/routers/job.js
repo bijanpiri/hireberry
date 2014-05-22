@@ -223,6 +223,7 @@ app.post('/flyer/publish', function(req,res){
         return;
 
     var flyer = req.body.flyer;
+    var flyerID = flyer.flyerID;
     var userID = req.user._id;
     var teamID = req.user.teamID;
     var saveAsDraft = Boolean( req.body.saveAsDraft );
@@ -387,7 +388,7 @@ app.post('/api/team/form/askForComment', function(req,res){
     //var userID = req.user._id;
     var userID = req.body.userID;
     var formID = req.body.formID;
-    var teamID = req.body.teamID;
+    var teamID = req.user.teamID;
 
     // Check whether current user is admin or not
     askForCommentOnForm('',userID, formID, teamID, function(err) {
@@ -402,26 +403,10 @@ app.get('/api/user/form/askedForComment',function(req,res){
         return;
 
     var userID = req.user._id;
-    var teamID = req.body.teamID;
+    var teamID = req.user.teamID;
 
     getAskedForCommentForms(userID, teamID, function(err,forms) {
         res.send(200,{forms:forms});
-    })
-});
-
-app.get('/api/user/form/askedForPublish',function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    BTeams.count({_id:req.user.teamID,admin:req.user._id}, function(err,count){
-        if( !err && count > 0 ) {
-            BFlyers.find({owner:req.user.teamID, askedForPublish:true}, function(err,askedForPublishList) {
-                res.send(200, askedForPublishList.map( function(item) {return item._id} ))
-            })
-        } else {
-            res.send(200,[]);
-        }
     })
 });
 

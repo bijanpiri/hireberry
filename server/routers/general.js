@@ -150,17 +150,29 @@ app.get('/api/notifications', function(req,res) {
     Invitations
     Responses
     Ask for comment
-    Ask for publish
-    New comment
-    Job state changing
+    Ask for publish [OK]
+    New comment [OK]
+    Job state changing [OK]
     */
 
     if( !checkUser(req,res) )
         return;
 
-    var notificatinos = {};
+    var notifications = {};
     var teamID = req.user.teamID;
     var userID = req.user._id;
+
+    function getAksedForCommentOnForm(callback) {
+        getAskedForCommentForms(userID, teamID, function(err,forms) {
+            callback({forms:forms});
+        })
+    }
+
+    function getAskedForCommentOnApplication(callback) {
+        getAskedForCommentApplications(userID, teamID, function(err,applications) {
+            callback({applications:applications});
+        })
+    }
 
     function getNewMemberNotifications(callback) {
         BTeams.count({_id:teamID,admin:userID}, function(err,count){
@@ -216,18 +228,26 @@ app.get('/api/notifications', function(req,res) {
     }
 
     getNewMemberNotifications( function(notif) {
-        notificatinos.newMembers = notif;
+        notifications.newMembers = notif;
 
         getNewCommentsNotifications( function(notif) {
-            notificatinos.newComments = notif;
+            notifications.newComments = notif;
 
             getJobStateChangingNotfications( function(notif) {
-                notificatinos.jobStateChanging = notif;
+                notifications.jobStateChanging = notif;
 
                 getAskedForPublishNotificatinos( function(notif) {
-                    notificatinos.askedForPublish = notif;
+                    notifications.askedForPublish = notif;
 
-                    res.send(200,notificatinos);
+                    getAksedForCommentOnForm( function(notif) {
+                        notifications.askedForCommentOnForms = notif;
+
+                        getAskedForCommentOnApplication( function(notif) {
+                            notifications.askedForCommentOnApplication = notif;
+
+                            res.send(200,notifications);
+                        })
+                    })
                 })
             })
         })

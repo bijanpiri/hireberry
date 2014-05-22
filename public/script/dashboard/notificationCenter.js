@@ -16,22 +16,6 @@ function decreaseBudgeNumber() {
 function initNotificationCenter() {
 
     $('#askedForCommentList').empty();
-    $.get('/api/user/application/askedForComment').done( function(resApp) {
-        var apps = resApp.applications;
-        if(apps) {
-            showApplications(apps);
-            add2NotificationBadge(apps.length);
-        }
-
-    });
-
-    $.get('/api/user/form/askedForComment').done( function(resForm) {
-        var forms = resForm.forms;
-        if(forms) {
-            showForms(forms);
-            add2NotificationBadge(forms.length);
-        }
-    });
 
     $.get('/api/user/invitations').done( function(resInvitations) {
         if( resInvitations ){
@@ -63,6 +47,12 @@ function initNotificationCenter() {
 
         showAskedForPublish(responses.askedForPublish);
         add2NotificationBadge( responses.askedForPublish.length);
+
+        showForms(responses.askedForCommentOnForms.forms);
+        add2NotificationBadge(responses.askedForCommentOnForms.forms.length);
+
+        showApplications(responses.askedForCommentOnApplication.applications);
+        add2NotificationBadge(responses.askedForCommentOnApplication.applications.length);
     });
 
 
@@ -282,7 +272,7 @@ function initNotificationCenter() {
                 .text('You are aksed for publish a form');
             var actionObj = $('<a>')
                 .text('Revise it')
-                .attr('href','/' + formID)
+                .attr('href','/flyer/edit/0?flyerid=' + formID)
                 .click( function() {
                     // ToDo: Remove this notification from database
                     // ToDo: Remove element from DOM
@@ -299,7 +289,7 @@ function initNotificationCenter() {
 
             var titleObj = $('<div>')
                 .text(newComment.commenter.displayName + ' has left a new comment on ')
-                .append( $('<a>').attr('applicationID',newComment.applicationID).text('this application')
+                .append( $('<a>').attr('applicationID',newComment.applicationID._id).text('this application')
                     .click( function() {
                         showApplicationPreview( $(this).attr('applicationID') );
                     }));
