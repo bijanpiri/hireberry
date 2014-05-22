@@ -613,3 +613,6 @@ Map portlet
     background: #f1f1f1;
     margin: 0 38px;
 }
+.ui-sortable-helper{
+    display: none;
+}

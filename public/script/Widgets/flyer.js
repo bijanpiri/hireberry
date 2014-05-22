@@ -227,7 +227,16 @@ function Flyer(options) {
                 drag: "y",
                 placeholder:'bool-placeholder',
                 items:'.portlet-container',
-                handle: ".move-btn-frame"
+                handle: ".move-btn-frame",
+                start: function() {
+                    $('.bool-flyer-empty').hide();
+                },
+//                drag: function() {
+//                    alert('drag')
+//                },
+                stop: function() {
+//                    alert('stop')
+                }
             })//.disableSelection();
 
             $('.bool-widget-btn').draggable({
