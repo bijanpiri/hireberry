@@ -11,21 +11,29 @@ app.get('/flyer/new',function(req,res){
 
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
+    console.log( "In: " + req.headers['referer'] )
+
     BFlyers.count({_id:req.params.flyerID,publishTime:{$ne:''}} , function(err,count) {
         if( err || count==0 )
             res.send(404);
         else
-            res.render('flyerEditor.ejs',{
-                title:'-',
-                flyerid: req.params.flyerID,
-                templateID: 0,
-                editMode: false,
-                viewMode: "embeded",
-                existFlyer: true
-            });
-
+            BVisitStat({
+                referer: req.headers['referer'],
+                visitedUrl: req.url,
+                visitTime: Date(),
+                visitorIP: req.ip, //OR req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+                flyerID: req.params.flyerID
+            }).save( function(err) {
+                    res.render('flyerEditor.ejs',{
+                        title:'-',
+                        flyerid: req.params.flyerID,
+                        templateID: 0,
+                        editMode: false,
+                        viewMode: "embeded",
+                        existFlyer: true
+                    });
+                });
     });
-
 
 });
 

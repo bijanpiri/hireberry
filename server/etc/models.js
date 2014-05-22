@@ -136,3 +136,10 @@ BApplicantsResponses = mongoose.model( 'applicantsResponses', {
     response: {}
 });
 
+BVisitStat = mongoose.model( 'visitStat', {
+    flyerID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
+    visitTime: Date,
+    referer: String,
+    visitedUrl: String,
+    visitorIP: String
+});
