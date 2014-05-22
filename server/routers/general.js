@@ -203,6 +203,18 @@ app.get('/api/notifications', function(req,res) {
 
     }
 
+    function getAskedForPublishNotificatinos(callback) {
+        BTeams.count({_id:req.user.teamID,admin:req.user._id}, function(err,count){
+            if( !err && count > 0 ) {
+                BFlyers.find({owner:req.user.teamID, askedForPublish:true}, function(err,askedForPublishList) {
+                    callback( askedForPublishList.map( function(item) {return item._id} ))
+                })
+            } else {
+                callback([]);
+            }
+        })
+    }
+
     getNewMemberNotifications( function(notif) {
         notificatinos.newMembers = notif;
 
@@ -212,7 +224,11 @@ app.get('/api/notifications', function(req,res) {
             getJobStateChangingNotfications( function(notif) {
                 notificatinos.jobStateChanging = notif;
 
-                res.send(200,notificatinos);
+                getAskedForPublishNotificatinos( function(notif) {
+                    notificatinos.askedForPublish = notif;
+
+                    res.send(200,notificatinos);
+                })
             })
         })
 

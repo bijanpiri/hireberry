@@ -242,7 +242,9 @@ app.post('/flyer/publish', function(req,res){
                 })
             }
             else {
-                saveInDatabase({flyer:flyer, askedForPublish:true, publishTime:''}, 'Ask For Publish request is sent.');
+                addNotification( 'askForPublish', {flyerID: flyerID}, function() {
+                    saveInDatabase({flyer:flyer, askedForPublish:true, publishTime:''}, 'Ask For Publish request is sent.');
+                });
             }
         });
     }

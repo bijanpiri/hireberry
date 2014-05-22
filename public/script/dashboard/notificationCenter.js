@@ -40,14 +40,6 @@ function initNotificationCenter() {
         }
     });
 
-    $.get('/api/user/form/askedForPublish').done( function(askedForPublish) {
-        var forms = askedForPublish;
-        if( forms ){
-            showAskedForPublish(forms);
-            add2NotificationBadge( forms.length);
-        }
-    });
-
     $.get('/api/comments/news').done( function(resApp) {
         var comments = resApp.comments;
         showNewComments(comments);
@@ -68,6 +60,9 @@ function initNotificationCenter() {
 
         showJobStateChanging(responses.jobStateChanging);
         add2NotificationBadge(responses.jobStateChanging.length);
+
+        showAskedForPublish(responses.askedForPublish);
+        add2NotificationBadge( responses.askedForPublish.length);
     });
 
 
