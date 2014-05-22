@@ -159,12 +159,17 @@ app.get('/api/notifications', function(req,res) {
         return;
 
     var notificatinos = {};
-    var teamID = req.user.team;
+    var teamID = req.user.teamID;
     var userID = req.user._id;
 
     function getNewMemberNotifications(callback) {
-        BNotifications.find({type:1,'moreInfo.teamID':teamID}, function(err,notifications){
-            callback(notifications)
+        BTeams.count({_id:teamID,admin:userID}, function(err,count){
+            if( err || count == 0 )
+                callback([]);
+            else
+                BNotifications.find({type:'1','more.teamID':teamID}, function(err,notifications){
+                    callback(notifications)
+                });
         })
     }
 
@@ -187,7 +192,15 @@ app.get('/api/notifications', function(req,res) {
     }
 
     function getJobStateChangingNotfications(callback) {
-        callback([])
+        BFlyers.find({autoAssignedTo:userID}, function(err,jobs) {
+
+            var jobsID = jobs.map( function(job){ return job._id.toString() });
+
+            BNotifications.find({type:'4','more.flyerID':{$in:jobsID}}, function(err,notifications){
+                callback(notifications)
+            })
+        });
+
     }
 
     getNewMemberNotifications( function(notif) {

@@ -65,6 +65,9 @@ function initNotificationCenter() {
 
         showNewComments(responses.newComments);
         add2NotificationBadge(responses.newComments.length);
+
+        showJobStateChanging(responses.jobStateChanging);
+        add2NotificationBadge(responses.jobStateChanging.length);
     });
 
 
@@ -318,6 +321,19 @@ function initNotificationCenter() {
             var titleObj = $('<div>')
                 .text('A new member is joined to team')
                 .append( $('<a>').attr('href', '#teamp').text('(View team)') );
+
+            $('#askedForCommentList').append( $('<li>').attr('id',objID)
+                .append(titleObj) );
+        });
+    }
+
+    function showJobStateChanging(jobsChanging) {
+        jobsChanging.forEach( function(jobChanging) {
+            var objID = 'newMember'+jobChanging._id;
+
+            var titleObj = $('<div>')
+                .text('Hiring manager has changed state of a job to ' + jobChanging.more.newState)
+                .append( $('<a>').attr('href', '/flyer/embeded/' + jobChanging.more.flyerID).text('(View job)') );
 
             $('#askedForCommentList').append( $('<li>').attr('id',objID)
                 .append(titleObj) );

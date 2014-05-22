@@ -39,7 +39,10 @@ logout=function(res,tempToken) {
 }
 
 notificationsType = {
-    'join' : 1
+    'join' : 1,
+    'commentOnApplication': 2,
+    'commentOnJob': 3,
+    'jobStateChanging': 4
 };
 
 addNotification = function( notifType, notifMoreInfo, callback ) {
