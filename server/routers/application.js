@@ -29,7 +29,7 @@ app.get('/api/applications', function (req,res) {
             })
         }
         else if(userID==='') { // Public Viewer
-            res.send(200)
+            return res.send(200)
         }
         else { // User is member
             fetchAssignedFlyers( function(userFlyersID) {
@@ -108,7 +108,7 @@ app.get('/api/applications', function (req,res) {
                     submittedForms.rows.push( form );
                 }
 
-                res.send({candidates:submittedForms.rows});
+                return res.send({candidates:submittedForms.rows});
             })
     }
 
