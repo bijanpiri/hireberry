@@ -102,23 +102,6 @@ app.get('/api/user/team',function(req,res){
     })
 });
 
-// Get invitations of user
-app.get('/api/user/invitations', function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    var email = req.user.email;
-
-    BTeamInvitations.find({email:email})
-        .populate('team')
-        .exec(function(err,invitations) {
-            if(!err)
-                res.send(200,invitations);
-        });
-
-});
-
 // Accept an invitation
 app.post('/api/user/team/join', function(req,res){
 

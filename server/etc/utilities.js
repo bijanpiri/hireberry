@@ -206,19 +206,20 @@ assignForm=function(assigneeUserID,assignedFormID,callback) {
     })
 }
 
-askForCommentOnForm=function(note,userID,formID,teamID,callback) {
+askForCommentOnForm=function(note,userID,reqUserID,formID,teamID,callback) {
     BComments({
         note: note,
         comment: null,
         askingTime: new Date(),
         commentTime:null,
         commenter:userID,
+        user:reqUserID,
         subjectType:'form',
         formID:formID,
         team: teamID
     }).save(function(err){
-        callback(err)
-    });
+            callback(err)
+        });
 }
 
 askForCommentOnApplication=function(note,userID,reqUserID,applicationID,teamID,callback) {
@@ -231,23 +232,53 @@ askForCommentOnApplication=function(note,userID,reqUserID,applicationID,teamID,c
         applicationID:applicationID,
         team: teamID
     }).save(function(err){
-        callback(err)
-    });
+            callback(err)
+        });
 }
 
 getNewComments=function(userID, teamID, callback) {
-    BComments.find({user:userID, team:teamID, commentTime:{$ne:null}, askerNotified:{$exists:false}})
-        .populate('applicationID')
-        .populate('commenter','_id displayName email')
-        .exec( function(err,applications) {
-            callback( err, applications )
+
+    // Forms
+    function newCommentsOnForms(callback) {
+
+        BFlyers.find({autoAssignedTo:userID,owner:teamID}, function(err,jobs) {
+            var jobsID = jobs.map(function(job){return job._id});
+
+            BComments.find({formID:{$in:jobsID}, commentTime:{$ne:null}, askerNotified:{$exists:false}})
+                .populate('formID')
+                .populate('commenter','_id displayName email')
+                .exec( function(err, fcomments) {
+                    callback( err, fcomments, jobsID )
+                });
         });
+    }
+
+    // Application
+    function newCommentsOnApplications(jobsID, callback) {
+
+        BApplications.find({flyerID:{$in:jobsID}}, function(err,applications) {
+            var applicationsID = applications.map(function(application){return application._id});
+
+            BComments.find({applicationID:{$in:applicationsID}, commentTime:{$ne:null}, askerNotified:{$exists:false}})
+                .populate('applicationID')
+                .populate('commenter','_id displayName email')
+                .exec( function(err, acomments) {
+                    callback( err, acomments )
+                });
+        });
+    }
+
+    newCommentsOnForms( function(err, fcomments, jobsID) {
+        newCommentsOnApplications( jobsID, function(err,acomments) {
+            callback(err,fcomments.concat( acomments ));
+        })
+    })
 }
 
 markCommentAsRead=function(userID, teamID, commentID, callback) {
     BComments.update({_id:commentID, user:userID, team:teamID},{askerNotified:true}, function(err) {
-            callback( err )
-        });
+        callback( err )
+    });
 }
 
 getAskedForCommentApplications=function(userID, teamID, callback) {
@@ -302,6 +333,6 @@ addEvent=function(what,when,who,by,callback) {
         title: what,
         team: by,
         contributors: who}).save( function(err) {
-        callback();
-    });
+            callback();
+        });
 }

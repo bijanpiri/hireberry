@@ -347,49 +347,6 @@ app.post('/api/application/:appID/visitedState',function(req,res){
     });
 });
 
-app.get('/api/applicant/responds',function(req,res){
-
-    if(!checkUser(req,res))
-        return;
-
-    var userID = req.user._id;
-
-    BFlyers.find({autoAssignedTo:userID}, function(err,jobs) {
-        var jobsID = jobs.map( function(job){ return job._id });
-
-        BApplications.find({flyerID:{$in:jobsID}}, function(err, applications) {
-
-            var applicationsID = applications.map( function(application){ return application._id });
-
-            BApplicantsResponses.find({
-                applicationID:{$in:applicationsID},
-                response:{$exists:true},
-                responderNotified:{$ne:true}
-            }).populate('applicationID','name').exec( function(err,responds){
-                    if( err )
-                        res.send(504);
-                    else
-                        res.send(200,responds);
-                });
-        });
-
-
-    })
-});
-
-app.get('/api/comments/news',function(req,res){
-
-    if(!checkUser(req,res))
-        return;
-
-    var userID = req.user._id;
-    var teamID = req.user.teamID;
-
-    getNewComments(userID, teamID,function(err,comments){
-        res.send(200, {comments:comments});
-    });
-});
-
 app.post('/api/comments/mark-as-read',function(req,res){
 
     if(!checkUser(req,res))
@@ -447,7 +404,7 @@ app.get('/api/application/json/:appID', function(req,res) {
 
     BApplications.findOne( {_id:req.params.appID}).exec(  function(err,application) {
         if( err )
-            return res.send(306)
+            return res.send(306);
 
         BFlyers.findOne({_id:application.flyerID}).populate('owner', 'admin').exec( function(err,flyer) {
 

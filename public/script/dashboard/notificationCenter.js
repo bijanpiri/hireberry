@@ -17,24 +17,6 @@ function initNotificationCenter() {
 
     $('#askedForCommentList').empty();
 
-    $.get('/api/user/invitations').done( function(resInvitations) {
-        if( resInvitations ){
-            showInvitations(resInvitations);
-            add2NotificationBadge(resInvitations.length);
-        }
-    });
-
-    $.get('/api/comments/news').done( function(resApp) {
-        var comments = resApp.comments;
-        showNewComments(comments);
-        add2NotificationBadge(comments.length);
-    });
-
-    $.get('/api/applicant/responds').done( function(responses) {
-        showNewResponses(responses);
-        add2NotificationBadge(responses.length);
-    });
-
     $.get('/api/notifications').done( function(responses) {
         showNewMembers(responses.newMembers);
         add2NotificationBadge(responses.newMembers.length);
@@ -53,6 +35,15 @@ function initNotificationCenter() {
 
         showApplications(responses.askedForCommentOnApplication.applications);
         add2NotificationBadge(responses.askedForCommentOnApplication.applications.length);
+
+        showNewResponses(responses.newResponses);
+        add2NotificationBadge(responses.newResponses.length);
+
+        showInvitations(responses.teamInvitations);
+        add2NotificationBadge(responses.teamInvitations.length);
+
+        showNewComments(responses.newComments);
+        add2NotificationBadge(responses.newComments.length);
     });
 
 
@@ -287,12 +278,21 @@ function initNotificationCenter() {
         newComments.forEach( function(newComment) {
             var objID = 'newMember'+newComment._id;
 
-            var titleObj = $('<div>')
-                .text(newComment.commenter.displayName + ' has left a new comment on ')
-                .append( $('<a>').attr('applicationID',newComment.applicationID._id).text('this application')
-                    .click( function() {
-                        showApplicationPreview( $(this).attr('applicationID') );
-                    }));
+            var titleObj;
+
+            if( newComment.applicationID ) {
+                titleObj = $('<div>')
+                    .text(newComment.commenter.displayName + ' has left a new comment on ')
+                    .append( $('<a>').attr('applicationID',newComment.applicationID._id).text('this application')
+                        .click( function() {
+                            showApplicationPreview( $(this).attr('applicationID') );
+                        }));
+            }
+            else {
+                titleObj = $('<div>')
+                    .text(newComment.commenter.displayName + ' has left a new comment on ')
+                    .append( $('<a>').attr('href','/flyer/embeded/' + newComment.formID._id).text('this form') );
+            }
 
             $('#askedForCommentList').append( $('<li>').attr('id',objID)
                 .append(titleObj) );

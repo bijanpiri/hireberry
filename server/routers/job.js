@@ -385,13 +385,13 @@ app.post('/api/team/form/askForComment', function(req,res){
     if( !checkUser(req,res) )
         return;
 
-    //var userID = req.user._id;
+    var reqUserID = req.user._id;
     var userID = req.body.userID;
     var formID = req.body.formID;
     var teamID = req.user.teamID;
 
     // Check whether current user is admin or not
-    askForCommentOnForm('',userID, formID, teamID, function(err) {
+    askForCommentOnForm('',userID, reqUserID, formID, teamID, function(err) {
         res.send(200)
     } );
 

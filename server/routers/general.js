@@ -148,7 +148,7 @@ app.get('/api/notifications', function(req,res) {
 
     /* ToDo: Add all kind of notifications here
     Invitations
-    Responses
+    Responses [OK]
     Ask for comment
     Ask for publish [OK]
     New comment [OK]
@@ -161,6 +161,25 @@ app.get('/api/notifications', function(req,res) {
     var notifications = {};
     var teamID = req.user.teamID;
     var userID = req.user._id;
+
+    function getNewLeftComments(callback) {
+        getNewComments(userID, teamID, function(err,comments){
+            callback(comments);
+        });
+    }
+
+    function getTeamInvitations(callback) {
+        var email = req.user.email;
+
+        BTeamInvitations.find({email:email})
+            .populate('team')
+            .exec(function(err,invitations) {
+                if(!err)
+                    callback(invitations);
+                else
+                    callback([]);
+            });
+    }
 
     function getAksedForCommentOnForm(callback) {
         getAskedForCommentForms(userID, teamID, function(err,forms) {
@@ -227,6 +246,32 @@ app.get('/api/notifications', function(req,res) {
         })
     }
 
+    function getNewApplicantResponses(callback) {
+
+        BFlyers.find({autoAssignedTo:userID}, function(err,jobs) {
+
+            var jobsID = jobs.map( function(job){ return job._id });
+
+            BApplications.find({flyerID:{$in:jobsID}}, function(err, applications) {
+
+                var applicationsID = applications.map( function(application){ return application._id });
+
+                BApplicantsResponses.find({
+                    applicationID:{$in:applicationsID},
+                    response:{$exists:true},
+                    responderNotified:{$ne:true}
+                }).populate('applicationID','name').exec( function(err,responds){
+                        if( err )
+                            callback([]);
+                        else
+                            callback(responds);
+                    });
+            });
+
+
+        })
+    }
+
     getNewMemberNotifications( function(notif) {
         notifications.newMembers = notif;
 
@@ -245,7 +290,19 @@ app.get('/api/notifications', function(req,res) {
                         getAskedForCommentOnApplication( function(notif) {
                             notifications.askedForCommentOnApplication = notif;
 
-                            res.send(200,notifications);
+                            getNewApplicantResponses( function(notif) {
+                                notifications.newResponses = notif;
+
+                                getTeamInvitations( function(notif) {
+                                    notifications.teamInvitations = notif;
+
+                                    getNewLeftComments( function(notif) {
+                                        notifications.newComments = notif;
+
+                                        res.send(200,notifications);
+                                    })
+                                })
+                            })
                         })
                     })
                 })
