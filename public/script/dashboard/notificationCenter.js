@@ -24,6 +24,7 @@ function initNotificationCenter() {
         }
 
     });
+
     $.get('/api/user/form/askedForComment').done( function(resForm) {
         var forms = resForm.forms;
         if(forms) {
@@ -31,12 +32,14 @@ function initNotificationCenter() {
             add2NotificationBadge(forms.length);
         }
     });
+
     $.get('/api/user/invitations').done( function(resInvitations) {
         if( resInvitations ){
             showInvitations(resInvitations);
             add2NotificationBadge(resInvitations.length);
         }
     });
+
     $.get('/api/user/form/askedForPublish').done( function(askedForPublish) {
         var forms = askedForPublish;
         if( forms ){
@@ -44,11 +47,26 @@ function initNotificationCenter() {
             add2NotificationBadge( forms.length);
         }
     });
+
     $.get('/api/comments/news').done( function(resApp) {
         var comments = resApp.comments;
         showNewComments(comments);
         add2NotificationBadge(comments.length);
     });
+
+    $.get('/api/applicant/responds').done( function(responses) {
+        showNewResponses(responses);
+        add2NotificationBadge(responses.length);
+    });
+
+    $.get('/api/notifications').done( function(responses) {
+        showNewMembers(responses.newMembers);
+        add2NotificationBadge(responses.newMembers.length);
+
+        showNewComments(responses.newComments);
+        add2NotificationBadge(responses.newComments.length);
+    });
+
 
     function showApplications(A4C_applicatinos) {
         A4C_applicatinos.forEach( function(a4c) {
@@ -275,5 +293,50 @@ function initNotificationCenter() {
 
             $('#askedForCommentList').append( $('<li>').append(titleObj).append(actionObj) );
         }
+    }
+
+    function showNewComments(newComments) {
+        newComments.forEach( function(newComment) {
+            var objID = 'newMember'+newComment._id;
+
+            var titleObj = $('<div>')
+                .text(newComment.commenter.displayName + ' has left a new comment on ')
+                .append( $('<a>').attr('applicationID',newComment.applicationID).text('this application')
+                    .click( function() {
+                        showApplicationPreview( $(this).attr('applicationID') );
+                    }));
+
+            $('#askedForCommentList').append( $('<li>').attr('id',objID)
+                .append(titleObj) );
+        });
+    }
+
+    function showNewMembers(newMembers) {
+        newMembers.forEach( function(newMember) {
+            var objID = 'newMember'+newMember._id;
+
+            var titleObj = $('<div>')
+                .text('A new member is joined to team')
+                .append( $('<a>').attr('href', '#teamp').text('(View team)') );
+
+            $('#askedForCommentList').append( $('<li>').attr('id',objID)
+                .append(titleObj) );
+        });
+    }
+
+    function showNewResponses(responses) {
+        responses.forEach( function(response) {
+            var objID = 'response'+response._id;
+
+            var titleObj = $('<div>')
+                .text(response.applicationID.name + ' responded: ' + response.response)
+                .append( $('<a>').attr('applicationID',response.applicationID._id).text('(See application)')
+                    .click( function() {
+                        showApplicationPreview( $(this).attr('applicationID') );
+                    }));
+
+            $('#askedForCommentList').append( $('<li>').attr('id',objID)
+                .append(titleObj) );
+        });
     }
 }

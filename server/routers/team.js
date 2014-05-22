@@ -134,13 +134,11 @@ app.post('/api/user/team/join', function(req,res){
     BTeamInvitations.remove( {_id:invitationID} ,function() {
 
         if( answer === 'accept' ) {
-            //changeRoleInTeam( userID, oldTeamID, 'user', function(err) {
-            //leaveTeam( userID, oldTeamID, function(err) {
             joinToTeam( userID, newTeamID, function(err) {
-                res.send(200);
+                addNotification('join',{teamID:newTeamID,userID:userID}, function() {
+                    res.send(200);
+                })
             });
-            //})
-            //})
         }
         else {
             res.send(200);
@@ -190,6 +188,12 @@ app.get('/api/teams', function(req,res) {
     BTeams.find({members:req.user._id}, function(err,teams){
         res.send(200,{teams:teams});
     })
+});
+
+app.get('/api/teams/newMembers', function(req,res) {
+    BTeams.find({HiringManagerNotified:{$ne:true}}, function(err,members){
+        res.send(200,{teams:teams});
+    });
 });
 
 app.post('/api/user/changeTeam', function(req,res) {

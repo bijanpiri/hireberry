@@ -143,3 +143,65 @@ app.get('/api/calendar', function(req,res) {
     });
 });
 // endregion
+
+app.get('/api/notifications', function(req,res) {
+
+    /* ToDo: Add all kind of notifications here
+    Invitations
+    Responses
+    Ask for comment
+    Ask for publish
+    New comment
+    Job state changing
+    */
+
+    if( !checkUser(req,res) )
+        return;
+
+    var notificatinos = {};
+    var teamID = req.user.team;
+    var userID = req.user._id;
+
+    function getNewMemberNotifications(callback) {
+        BNotifications.find({type:1,'moreInfo.teamID':teamID}, function(err,notifications){
+            callback(notifications)
+        })
+    }
+
+    function getNewCommentsNotifications(callback) {
+        BFlyers.find({autoAssignedTo:userID}, function(err,jobs) {
+
+            var jobsID = jobs.map( function(job){ return job._id });
+
+            BApplications.find({flyerID:{$in:jobsID}}, function(err, applications) {
+
+                var applicationsID = applications.map( function(application){ return application._id });
+
+                BComments.find({applicationID:{$in:applicationsID}})
+                    .populate('commenter','displayName')
+                    .exec( function(err,comments){
+                        callback(comments);
+                    });
+            });
+        });
+    }
+
+    function getJobStateChangingNotfications(callback) {
+        callback([])
+    }
+
+    getNewMemberNotifications( function(notif) {
+        notificatinos.newMembers = notif;
+
+        getNewCommentsNotifications( function(notif) {
+            notificatinos.newComments = notif;
+
+            getJobStateChangingNotfications( function(notif) {
+                notificatinos.jobStateChanging = notif;
+
+                res.send(200,notificatinos);
+            })
+        })
+
+    })
+});

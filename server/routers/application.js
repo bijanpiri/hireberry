@@ -347,6 +347,35 @@ app.post('/api/application/:appID/visitedState',function(req,res){
     });
 });
 
+app.get('/api/applicant/responds',function(req,res){
+
+    if(!checkUser(req,res))
+        return;
+
+    var userID = req.user._id;
+
+    BFlyers.find({autoAssignedTo:userID}, function(err,jobs) {
+        var jobsID = jobs.map( function(job){ return job._id });
+
+        BApplications.find({flyerID:{$in:jobsID}}, function(err, applications) {
+
+            var applicationsID = applications.map( function(application){ return application._id });
+
+            BApplicantsResponses.find({
+                applicationID:{$in:applicationsID},
+                response:{$exists:true},
+                responderNotified:{$ne:true}
+            }).populate('applicationID','name').exec( function(err,responds){
+                    if( err )
+                        res.send(504);
+                    else
+                        res.send(200,responds);
+                });
+        });
+
+
+    })
+});
 
 app.get('/api/comments/news',function(req,res){
 
@@ -403,7 +432,9 @@ app.post('/api/application/comments',function(req,res) {
             else if(err)
                 res.send(500);
             else
-                res.send(200);
+                addNotification('commentOnApplication',{commentID:commentID}, function(){
+                    res.send(200);
+                })
         }
     )
 });

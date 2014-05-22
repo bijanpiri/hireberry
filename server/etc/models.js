@@ -82,7 +82,8 @@ BTeams = mongoose.model( 'teams', {
     tel:String,
     address:String,
     plan: Number,
-    planLastRenewDate: Date
+    planLastRenewDate: Date,
+    HiringManagerNotified: Boolean
 })
 
 BEvents = mongoose.model( 'events', {
@@ -133,6 +134,7 @@ BTransactions = mongoose.model( 'transactions', {
 BApplicantsResponses = mongoose.model( 'applicantsResponses', {
     applicationID: {type : mongoose.Schema.ObjectId, ref : 'applications'},
     text: String,
+    responderNotified: Boolean,
     request: {},
     response: {}
 });
@@ -143,4 +145,11 @@ BVisitStat = mongoose.model( 'visitStat', {
     referer: String,
     visitedUrl: String,
     visitorIP: String
+});
+
+BNotifications = mongoose.model( 'notifications', {
+    time: Date,
+    type: String,
+    notified: Boolean,
+    more: {}
 });

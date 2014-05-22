@@ -38,6 +38,21 @@ logout=function(res,tempToken) {
         });
 }
 
+notificationsType = {
+    'join' : 1
+};
+
+addNotification = function( notifType, notifMoreInfo, callback ) {
+
+    BNotifications({
+        type: notificationsType[notifType],
+        time: new Date(),
+        more: notifMoreInfo
+    }).save( function(err){
+            callback(err)
+        });
+}
+
 findTempTokenOwner=function(res,temptoken){
     BUsers.findOne({tempToken:temptoken}, function(err,user){
         if(err) res.send(200,'{}');
