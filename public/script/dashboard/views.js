@@ -138,6 +138,29 @@ BApplicationsView = Backbone.View.extend({
 
             candidateObj.addClass('candidate-filter-' + stagesName[candidate.stage.stage-1]);
 
+            candidateObj.find('.markAsVisited').click( function() {
+                var el = $(this).parent().parent();
+                var appID = $(this).parent().attr('appID');
+                $.post('/api/application/' + appID + '/visitedState', {visited:true}).done( function() {
+                    el.find('.visitedState').addClass('visited').removeClass('unvisited');
+                });
+            });
+            candidateObj.find('.markAsUnvisited').click( function() {
+                var el = $(this).parent().parent();
+                var appID = $(this).parent().attr('appID');
+                $.post('/api/application/' + appID + '/visitedState', {visited:false}).done( function() {
+                    el.find('.visitedState').removeClass('visited').addClass('unvisited');
+                });
+            });
+
+            candidateObj.find('.visitedState').attr('appID',candidate._id);
+            if( candidate.visited === true )
+                candidateObj.find('.visitedState').addClass('visited');
+            else
+                candidateObj.find('.visitedState').addClass('unvisited');
+
+
+
             initWorkflow(candidateObj,candidate);
             changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
 

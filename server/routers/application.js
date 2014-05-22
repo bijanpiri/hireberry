@@ -45,24 +45,24 @@ app.get('/api/applications', function (req,res) {
 //                        {workPlace : {$type:10}},
 //                        {skills: {$type:10}}]}
         BApplications.find( {
-            flyerID:{$in:flyersID},
-             $or:[ {name:new RegExp(query, "i")},
+                flyerID:{$in:flyersID},
+                $or:[ {name:new RegExp(query, "i")},
                     {anythingelse: new RegExp(query, "i")},
                     {workPlace: new RegExp(query, "i")},
                     {workTime: new RegExp(query, "i")},
                     {skills: new RegExp(query, "i")},
-                query?
+                    query?
                     {$and:[
                         {name : {$type:6}},
                         {anythingelse : {$type:6}},
                         {workPlace : {$type:6}},
                         {skills: {$type:6}}]}
-                    :{}
+                        :{}
 
-                 ]
-                }
+                ]
+            }
 //                :{}}
-    ).sort(sortBy).populate('flyerID').exec(function(err,forms) {
+        ).sort(sortBy).populate('flyerID').exec(function(err,forms) {
                 if( err )
                     return res.send(303,{error:err});
 
@@ -224,7 +224,7 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                     'You are offered a job.<br/>' +
                     'Let we know whether you will accept or not.<br/><br/>' +
                     'Sincerely<br/>' +
-                     team.name;
+                    team.name;
 
                 var message = {
                     "html": req.body.data.offerMessage,
@@ -321,6 +321,32 @@ app.get('/api/user/application/askedForComment',function(req,res){
         res.send(200,{applications:applications});
     })
 });
+
+app.post('/api/application/:appID/visitedState',function(req,res){
+
+    if(!checkUser(req,res))
+        return;
+
+    var userID = req.user._id;
+    var appID = req.params.appID;
+    var visitedState = req.body.visited;
+
+    BApplications.findOne({_id:appID}).populate('flyerID').exec( function(err,application){
+
+        // Check whether user is responder of job or not
+        if( application.flyerID.autoAssignedTo.toString() === userID.toString() ) {
+            BApplications.update({_id:appID},{visited:visitedState}, function(err) {
+                if( err )
+                    res.send(504);
+                else
+                    res.send(200);
+            })
+        }
+        else
+            res.send(304);
+    });
+});
+
 
 app.get('/api/comments/news',function(req,res){
 

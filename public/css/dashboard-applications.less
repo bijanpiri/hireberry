@@ -37,7 +37,46 @@
       padding: 2px 4px;
       border-radius: 0 0 4px 4px;
       font-weight: 700;
-      display: none;
+    }
+
+    .visitedState {
+      .sticky();
+      cursor: pointer;
+
+      &.visited {
+        .visitedStateLabel {
+          .visitedText{ display: inline-block; }
+          .unvisitedText { display: none; }
+        }
+      }
+
+      &.unvisited {
+        .visitedStateLabel {
+          .unvisitedText{ display: inline-block; }
+          .visitedText { display: none; }
+        }
+      }
+
+      .markAsVisited, .markAsUnvisited {
+        display: none;
+      }
+
+      &:hover {
+        .visitedStateLabel {
+          display: none;
+        }
+
+        &.unvisited {
+          .markAsVisited {
+            display: inline-block;
+          }
+        }
+        &.visited {
+          .markAsUnvisited {
+            display: inline-block;
+          }
+        }
+      }
     }
 
     .bool-toggle-application{
