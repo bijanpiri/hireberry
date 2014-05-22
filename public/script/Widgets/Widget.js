@@ -2,10 +2,10 @@
  * Created by Bijan on 3/17/14.
  */
 var idCounter=1;
-var editMode
+var editMode;
 
 function Widget(options){
-    Widget.instances=1000;
+    Widget.instances=20000;
     var widget=this;
     this.prepared=null;
     this.prepared2Submit=null;
@@ -35,7 +35,6 @@ function Widget(options){
             .click((function(widget){
 
                 return function(){
-
                     $( "#dialog-confirm" ).dialog({
                         resizable: false,
                         height:150,
@@ -48,13 +47,15 @@ function Widget(options){
                                 $( this ).dialog( "close" );
                                 widget.portletContainer.remove();
                                 Widgets[widget.type].instances++;
+                                checkFlyerEmpty();
                             },
                             No: function() {
                                 $( this ).dialog( "close" );
+                                checkFlyerEmpty();
                             }
                         },
                         close: function( event,ui ) {
-                            $( this ).dialog( "destroy" )
+                            $( this ).dialog( "destroy" );
                         },
                         open:function(){
                             $(".ui-dialog-titlebar-close").hide();
@@ -144,3 +145,4 @@ function Widget(options){
     }
 }
 Widget.prototype.constructor = Widget;
+Widget.instances=1000;

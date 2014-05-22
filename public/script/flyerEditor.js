@@ -238,7 +238,7 @@ function loadEditor() {
     $('.flyerRow').show();
     $('#fixToolbar').show();
     $('#buttonEditview').hide();
-    $('.portletCreator').show().animate({height:100},500);
+    //$('.portletCreator').show().animate({width:100},500);
 
     loadFlyer();
 

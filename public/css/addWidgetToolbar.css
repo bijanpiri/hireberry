@@ -1,0 +1,165 @@
+.portletCreator  {
+    background-color: #666;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: 0 ;
+    width: 240px;
+    overflow: visible;
+    font-size: 14px;
+    font: "Arial";
+    font-weight: normal;
+    padding: 15px 0 0;
+
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+
+    /* No support for these yet, use at own risk */
+    -o-user-select: none;
+    user-select: none;
+}
+.portletCreator>h2{
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+}
+
+.bool-widget-btn{
+    text-align: left;
+    background: #f1f1f1;
+    padding: 16px;
+    display: inline-block;
+    color:#666;
+    margin: 10px 20px 0;
+    width: 200px;
+    cursor: pointer;
+}
+.bool-widget-icon{
+    display: inline-block;
+    background-image: url('../images/nflyer-icons@2x.png');
+    background-size: 186px 600px;
+    width: 20px;
+    vertical-align: middle;
+
+
+}
+.bool-widget-icon-text{background-position: 0 0;height: 14px;}
+.bool-widget-icon-picture{background-position: 0 -15px;height: 15px;}
+.bool-widget-icon-video{background-position: 0 -31px;height: 12px;}
+.bool-widget-icon-map{background-position: 0 -44px;height: 13px;}
+.bool-widget-icon-perk{background-position: 0 -59px;height: 16px;}
+.bool-widget-icon-skill{background-position: 0 -74px;height: 19px;}
+.bool-widget-icon-profile{background-position: 0 -95px;height: 16px;}
+.bool-widget-icon-condition{background-position: 0 -112px;height: 12px;}
+.bool-widget-icon-cover-letter{background-position: 0 -125px;height: 20px;}
+.bool-widget-icon-separator{background-position: 0 -146px;height: 20px;}
+
+.bool-icon-move{
+    height: 15px;
+    background-position: 0 -208px;
+    float: right;
+}
+
+/********
+Portlet Creator
+********/
+.newitem { display: inline-block; }
+
+/** Generic button - outer **/
+.buttonFrame {
+    width: 72px;
+    height: 72px;
+    background-color: #b3b3b3;
+    border-radius: 50%;
+    margin: 6px;
+    position: relative;
+    cursor: pointer;
+}
+.buttonFrame:hover {
+    width: 84px;
+    height: 84px;
+    margin: 0;
+}
+.buttonFrame:active {
+    background-color: #666;
+}
+
+/** Generic button - inner **/
+.button {
+    background: url('../images/flyer-icons.png');
+    display: block;
+}
+
+.centeralBackgroundImage { /* Set its parent to position:relative*/
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+}
+
+/** Specific button - outer **/
+.plusButtonFrame {
+    top: -20px;
+    display: inline-block;
+}
+.plusButtonFrame:hover {
+    top: 0;
+}
+
+/** Specific button - inner **/
+.genericButton {
+    height: 72px;
+    width: 72px;
+    line-height: 72px;
+    color: #000;
+}
+.addNewTextButton {
+    background-position:  0 -45px;
+    height: 40px;
+    width: 34px;
+}
+.addNewPhotoButton {
+    background-position: 0 -85px;
+    height: 32px;
+    width: 41px;
+}
+.addNewVideoButton {
+    background-position: 0 -117px;
+    height: 36px;
+    width: 43px;
+}
+.addNewVoiceButton {
+    background-position: 0 -153px;
+    height: 37px;
+    width: 52px;
+}
+.addNewLinkButton {
+    background-position: 0 -232px;
+    height: 23px;
+    width: 55px;
+}
+.addNewMapButton {
+    background-position: 0 -190px;
+    height: 42px;
+    width: 27px;
+}
+.bool-add-widget{
+    margin: 0;
+    position: relative;
+    text-align: center;
+}
+
+.bool-placeholder{
+    background:#f0f0f0;
+    border: 2px dashed #bfbfbf;
+    height: 150px;
+    display: block;
+    margin: 20px 60px;
+}

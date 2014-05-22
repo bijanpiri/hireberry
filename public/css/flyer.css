@@ -22,6 +22,7 @@ Fix Toolbar
     margin: 0;
     padding-top: 5px;
     padding-bottom: 5px;
+    display: none !important;
 }
 .navbar-fixed-top, .navbar-fixed-bottom {
     z-index: 24000;
@@ -129,24 +130,9 @@ Whole Paper
 
 .portletStack {
     margin: 0;
-    background-color: transparent;
-
+    /*background-color: transparent;*/
 }
 
-.portletCreator  {
-    background-color: #212121;
-    bottom: 0;
-    overflow: hidden;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    margin: 0 ;
-    height: 100px;
-    padding: 10px 0;
-    position: fixed;
-    width:100%;
-    overflow: visible;
-}
 
 .portletSubmittion {
     background-color: #F1F1F1;
@@ -294,106 +280,7 @@ Map portlet
     display: block;
 }
 
-/********
-Portlet Creator
-********/
-.newitem { display: inline-block; }
 
-/** Generic button - outer **/
-.buttonFrame {
-    width: 72px;
-    height: 72px;
-    background-color: #b3b3b3;
-    border-radius: 50%;
-    margin: 6px;
-    position: relative;
-    cursor: pointer;
-}
-.buttonFrame:hover {
-    width: 84px;
-    height: 84px;
-    margin: 0;
-}
-.buttonFrame:active {
-    background-color: #666;
-}
-
-/** Generic button - inner **/
-.button {
-    background: url('../images/flyer-icons.png');
-    display: block;
-}
-.centeralBackgroundImage { /* Set its parent to position:relative*/
-    position: absolute;
-    display: block;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    text-align: center;
-}
-
-/** Specific button - outer **/
-.plusButtonFrame {
-    top: -20px;
-    display: inline-block;
-}
-.plusButtonFrame:hover {
-    top: 0;
-}
-
-/** Specific button - inner **/
-.genericButton {
-    height: 72px;
-    width: 72px;
-    line-height: 72px;
-    color: #000;
-}
-
-.plusButton {
-    height: 45px;
-    width: 46px;
-}
-.addNewTextButton {
-    background-position:  0 -45px;
-    height: 40px;
-    width: 34px;
-}
-.addNewPhotoButton {
-    background-position: 0 -85px;
-    height: 32px;
-    width: 41px;
-}
-.addNewVideoButton {
-    background-position: 0 -117px;
-    height: 36px;
-    width: 43px;
-}
-.addNewVoiceButton {
-    background-position: 0 -153px;
-    height: 37px;
-    width: 52px;
-}
-.addNewLinkButton {
-    background-position: 0 -232px;
-    height: 23px;
-    width: 55px;
-}
-.addNewMapButton {
-    background-position: 0 -190px;
-    height: 42px;
-    width: 27px;
-}
-.closeButton {
-    height: 45px;
-    width: 46px;
-    -webkit-transform: rotate(45deg);
-    -moz-transform:  rotate(45deg);
-    -ms-transform:  rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
-}
 
 /*** Image Widget ***/
 .browseImgBtn {
@@ -690,11 +577,6 @@ Portlet Creator
     /*display: none;*/
 /*}*/
 
-.bool-add-widget{
-    margin: 0;
-    position: relative;
-    text-align: center;
-}
 
 .modal {
     z-index: 24001;
@@ -711,4 +593,23 @@ Portlet Creator
 .thumbnails input[type=radio]:checked + label {
     border-bottom: 3px solid rgb(30, 114, 22);
     background-color: rgba(31, 116, 23, 0.17);
+}
+
+.bool-navbar{
+    display: none;
+}
+
+.bool-flyer-editor{
+    margin: 20px 20px 20px 260px ;
+    padding: 0;
+}
+
+.bool-flyer-empty{
+    display: block;
+    height: 200px;
+    text-align: center;
+    font-size: 36px;
+    line-height: 200px;
+    background: #f1f1f1;
+    margin: 0 38px;
 }

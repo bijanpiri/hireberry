@@ -58,15 +58,19 @@ function Flyer(options) {
 
     var createPortlet = function( wData ) {
 
+
         // Create a widget and initializing it
 
-        if(Widgets[wData.type].instances==0){
-            alert("You can not use more widget of this type.");
-            return;
-        }
-        Widgets[wData.type].instances--;
+        var widgetType = Widgets[wData.type];
 
-        var widget = new Widgets[wData.type]();
+        if(widgetType.instances) {
+            if (widgetType.instances == 0) {
+                alert("You can not use more widget of this type.");
+                return;
+            }
+            widgetType.instances--;
+        }
+        var widget = new widgetType();
         widget.editMode = editMode;
         widget.flyerID = $('input[name=flyerid]').val();
         var portlet = widget.content();
@@ -77,8 +81,9 @@ function Flyer(options) {
         else
             pStack.append(portlet);
 
+        checkFlyerEmpty();
         // Parameter: is it new?
-        widget.widgetDidAdd( (wData.content==null) );
+        widget.widgetDidAdd( (wData.content==null));
 
         if( editMode ) {
             widget.portlet
@@ -86,10 +91,8 @@ function Flyer(options) {
                 .mouseleave(function(){$(this).removeClass('portlet-hover');})
         }
 
-        if(wData.layoutIndex){
+        if(wData.layoutIndex)
             widget.layoutIndex = wData.layoutIndex;
-            widget.layoutChanged();
-        }
 
         if(wData.content)
             widget.deserialize(wData.content);
@@ -123,7 +126,7 @@ function Flyer(options) {
                 for( var i=0; i<nWidgets; i++ ){
                     if( widgetData[i] )
                         createPortlet({
-                            type:widgetData[i].type,
+                            type:parseInt(widgetData[i].type),
                             content:widgetData[i].Contents,
                             layoutIndex:widgetData[i].layoutIndex,
                             isNew:false
@@ -221,36 +224,33 @@ function Flyer(options) {
 //                connectWith: ".portletStack",
                 cursor: "move",
                 axis: "y",
+                drag: "y",
+                placeholder:'bool-placeholder',
+                items:'.portlet-container',
                 handle: ".move-btn-frame"
             })//.disableSelection();
 
-            $('.bool-add-widget>a[type]').draggable({
+            $('.bool-widget-btn').draggable({
                 connectToSortable: ".portletStack",
                 helper: "clone",
                 revert: "invalid",
-                stop:replaceWidgets,
-                drag:dragging
+                stop:replaceWidgets
             });
         }
 
-        function dragging(){
-            $('.bool-add-widget .ui-draggable-dragging')
-                .css('width','')
-                .css('height','');
-        }
         function replaceWidgets(){
-            $('.portletStack>a.newitem').each(
+            $('.portletStack>.bool-widget-btn').each(
                 function(){
-                    var type=parseInt(this.type);
-                    createPortlet({type:type,isNew:true,place:$(this)});
+                    var type = parseInt($(this).attr('type'));
+                    createPortlet({type: type,isNew:true,place:$(this)});
                 }
             );
-            $('.portletStack>a.newitem').remove();
+            $('.portletStack>.bool-widget-btn').remove();
         }
         // Set click event
         $(function(){
 
-            $(".newitem").click(function(e){
+            $(".bool-widget-btn").click(function(e){
                 var itemType = parseInt($(this).attr('type'));
                 createPortlet( {type:itemType,isNew:true});
             });
@@ -259,7 +259,7 @@ function Flyer(options) {
         // templateID=0 means 'don't use template'
         if( options.flyerid)
             this.json2flyer( options.templateID, options.flyerid );
-    }
+    };
 
     // Public functions
     this.createPortlet = createPortlet;

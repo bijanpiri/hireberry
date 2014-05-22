@@ -52,9 +52,9 @@ body{
  Navbar styles
 ****/
 /* Top 60px of page is overlaid by navbar. It's for that !*/
-nav  ~ .container, nav ~ .container-fluid {
-    margin-top: 10em;
-}
+/*nav  ~ .container, nav ~ .container-fluid {*/
+    /*margin-top: 10em;*/
+/*}*/
 
 .navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner{
     box-shadow: none;

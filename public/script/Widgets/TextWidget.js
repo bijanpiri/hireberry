@@ -40,9 +40,12 @@ function TextWidget(){
         this.addToolbarCommand('align',
             function(widget,args)
             {
-                widget.toolbar.find('[command^=align]').removeClass('bool-active');
-                widget.toolbar.find('[command="align '+args[1]+'"]').addClass('bool-active');
-                widget.portlet.find('.text-widget').css('text-align',args[1]);});
+                widget.toolbar.find('[command^=align]')
+                    .removeClass('bool-active');
+                widget.toolbar.find('[command="align '+args[1]+'"]')
+                    .addClass('bool-active');
+                widget.portlet.find('.text-widget')
+                    .css('text-align',args[1]);});
 
         this.toolbar.find('.bool-color-picker:first').ColorPicker();
         this.addToolbarCommand('color',
@@ -113,8 +116,10 @@ function TextWidget(){
 
     this.deserialize = function(data){
 
-        this.toolbar.find('[command="align '+data.align+'"]').addClass('bool-active');
-        this.toolbar.find('.bool-current-color').css('background',data.foreColor);
+        this.toolbar.find('[command="align '+data.align+'"]')
+            .addClass('bool-active');
+        this.toolbar.find('.bool-current-color')
+            .css('background',data.foreColor);
 
         if(data.headline){
             this.portlet.parent().find('.headline').attr('checked','checked');
