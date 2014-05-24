@@ -13,6 +13,7 @@ var teamMembers = [];
 
 $(function() {
 
+
     $('form').submit(false);
     if( viewMode=='embeded') {
         // Hidden bars

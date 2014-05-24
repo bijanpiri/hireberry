@@ -163,3 +163,23 @@ Portlet Creator
     display: block;
     margin: 20px 60px;
 }
+
+.bool-toolbar-options{
+    list-style: none;
+    margin: 20px 0;
+    border-bottom: 1px solid #404040;
+}
+.bool-toolbar-options>li {
+    border-top:  1px solid #404040;
+    height: 50px;
+    line-height: 50px;
+    color:#f1f1f1;
+    font-size: 14px;
+    font-family: Arial,serif;
+    padding-left: 20px;
+
+}
+.bool-toolbar-options>li>.nav>.dropdown>a.bool-color-dropdown{
+
+    margin: 0;
+}
