@@ -30,11 +30,11 @@
 .bool-widget-btn{
     text-align: left;
     background: #f1f1f1;
-    padding: 16px;
+    padding: 11px;
     display: inline-block;
     color:#666;
-    margin: 10px 20px 0;
-    width: 200px;
+    margin: 5px 10px 0;
+    width: 210px;
     cursor: pointer;
 }
 .bool-widget-icon{
@@ -157,11 +157,10 @@ Portlet Creator
 }
 
 .bool-placeholder{
-    background:#f0f0f0;
     border: 2px dashed #bfbfbf;
     height: 150px;
     display: block;
-    margin: 20px 60px;
+    margin: 20px;
 }
 
 .bool-toolbar-options{
@@ -179,7 +178,17 @@ Portlet Creator
     padding-left: 20px;
 
 }
+.bool-toolbar-options>li>.nav{
+    margin: 2px;
+}
 .bool-toolbar-options>li>.nav>.dropdown>a.bool-color-dropdown{
-
     margin: 0;
+}
+.bool-toolbar-commands>li {
+    margin-bottom: 10px;
+}
+.bool-toolbar-commands{
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
 }

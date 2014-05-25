@@ -13,7 +13,8 @@ var teamMembers = [];
 
 $(function() {
 
-
+    $('.bool-color-chooser').ColorPicker();
+//    $('.bool-color-recent').ColorPicker();
     $('form').submit(false);
     if( viewMode=='embeded') {
         // Hidden bars

@@ -2,8 +2,8 @@
     position: absolute;
     height: 60px;
     top: -60px;
-    left: 14px;
-    right: 14px;
+    left: -14px;
+    right: -14px;
     padding: 0 20px 0 10px;
     background: #333;
     border-radius: 4px;
@@ -142,85 +142,6 @@
     padding: 0;
     margin: 0;
     top:100%;
-}
-.bool-color-item{
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    background: #000000;
-    float: left;
-    margin: 2px;
-    padding: 0;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    cursor: pointer;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-}
-
-.bool-current-color{
-    position: absolute;
-    display: inline-block;
-    margin: auto;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 28px;
-    height: 28px;
-    border: 3px solid white;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    background: #000000;
-    float: left;
-    padding: 0;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    cursor: pointer;
-}
-.bool-color-item:hover{
-    border: 2px solid #808080;
-}
-.nav-pills .bool-color-picker{
-    margin-left: 8px ;
-    background: #e6e6e6;
-    padding: 8px 0 0 8px;
-    overflow: hidden;
-    width: 324px;
-    height: 142px;
-    border: none;
-    border-top-left-radius: 0;
-
-}
-.nav-pills .bool-color-picker-recent{
-    margin-left: -44px ;
-    position: absolute;
-    top:52px;
-}
-.bool-color-picker-recent li:last-child{
-    display: none;
-
-}
-.bool-color-picker-recent li:first-child{
-    display: block;
-}
-.bool-no-recent{
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    color:#B3B3B3;
-    text-align: center;
-
-}
-
-.bool-color-picker>li{
-    display: inline-block;
-    float: left;
 }
 .bool-btn-drop{
     background: #B3B3B3;
@@ -367,9 +288,10 @@
     background: #e6e6e6;
 }
 .nav-pills .open>.bool-btn{
-    border-radius: 0;
-    border-top-left-radius: 6px;
-
+    border-radius: 6px 0 0 6px;
+}
+.btn-group.open .dropdown-toggle {
+    box-shadow: none;
 }
 .nav-pills>li.bool-btn:hover+li.open.bool-tab-btn:before>.bool-color-dropdown{
     border-radius: 0;

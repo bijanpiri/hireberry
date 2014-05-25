@@ -11,7 +11,31 @@ $.fn.ColorPicker=function(){
         "#e7578e","#fd746f","#fc9368","#feba62","#fdd162","#fdfb83","#e5f27d","#a2d87a","#ffffff","#ffffff",
         "#ffffff","#efefef","#d0d0d0","#b0b0b0","#959595","#6c6c6c","#464646","#313131","#1d1d1d","#000000"
     ];
-    var cp=this;
+
+    var part=$('<ul>')
+        .addClass('nav nav-pills ')
+        .append(
+            '<li class="dropdown btn-group ">'+
+                '<a class="bool-btn dropdown-toggle bool-color-dropdown"'+
+                    'data-toggle="dropdown" title="">'+
+                    '<span class="bool-current-color"></span>'+
+                '</a>'+
+                '<ul class="dropdown-menu bool-color-list" >'+
+                    '<li>' +
+                        '<ul class="bool-color-recent">'+
+                            '<li>'+
+                                '<span class="bool-color-item"'+
+                                'command="color #05283a"'+
+                                'style="background: rgb(5, 40, 58);">'+
+                                '</span>'+
+                            '</li>'+
+                        '</ul>'+
+                    '</li>'+
+                '</ul>'+
+            '</li>');
+
+    var cp=part.find('.bool-color-list');
+    $(this).append(part);
     colors.forEach(function(c){
         $(cp).addClass('bool-color-picker')
             .append(
@@ -26,7 +50,7 @@ $.fn.ColorPicker=function(){
                         var c=$(this)
                             .children('.bool-color-item')
                             .css('background-color')
-                            .replace(/\s/g,'');
+                            .replace  (/\s/g,'');
                         $(this)
                             .closest('.dropdown')
                             .find('.bool-current-color')

@@ -23,6 +23,7 @@
 <link href="/css/widget/profile.css" rel="stylesheet">
 <link href="/css/widget/video.css" rel="stylesheet">
 <link href="/css/widget/separator.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/colorPicker.css"/>
 <link href="/css/flyer.css" rel="stylesheet">
 <link href="/css/font-awesome.css" rel="stylesheet">
 
@@ -191,22 +192,26 @@
             <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
             <input type="hidden" name="flyerName">
 
-            <div class="portletHeader">
-                <input type="file" hidden="hidden" class="logofile">
-                <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
-                <div class="title">
-                    JOBS
+            <div class="bool-portlet">
+
+                <div class="portletHeader">
+                    <input type="file" hidden="hidden" class="logofile">
+                    <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
+                    <div class="title">
+                        JOBS
+                    </div>
                 </div>
-            </div>
 
-            <div class="portletStack">
+                <div class="portletStack">
 
-                <div class="bool-flyer-empty">
-                    Drop your widget here.
+                    <div class="bool-flyer-empty">
+                        Drop your widget here.
+                    </div>
+
                 </div>
-            </div>
 
-            <div class="portletFooter"></div>
+                <div class="portletFooter"></div>
+            </div>
 
             <div class="portletThanksMessage container-fluid" style="padding: 0 38px" hidden>
                 <div class="row-fluid"  id="text">
@@ -816,28 +821,9 @@
             <li><a style="font-size: 24px" data-edit="fontSize 7">Large</a></li>
         </ul>
     </div>
-    <ul class="nav nav-pills pull-left">
-        <li class="dropdown btn-group ">
-            <a class="bool-btn dropdown-toggle bool-color-dropdown"
-               data-toggle="dropdown" title="" data-original-title="Font Color">
-                <span class="bool-current-color"></span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker" >
+    <div class="bool-color-chooser pull-left">
 
-            </ul>
-
-        </li>
-        <li class="dropdown btn-group bool-tab-btn">
-            <a class="bool-tab dropdown-toggle bool-color-dropdown"
-               data-toggle="dropdown" title="" data-original-title="Font Color">
-                <i class="bool-icon bool-icon-recent"></i>
-                <span class="bool-tab-text">Recent Colors</span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
-                <li><div class="bool-no-recent">No item has been selected</div></li>
-            </ul>
-        </li>
-    </ul>
+    </div>
     <div class="bool-separator"></div>
     <a class="bool-btn"  command="align left"
        title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)">
@@ -881,26 +867,23 @@
     <div class="pull-left">
         <span  id="toolbar-labelSeparator" >Color</span>
     </div>
-    <ul class="nav nav-pills pull-left">
-        <li class="dropdown btn-group ">
-            <a class="bool-btn dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
-                <span class="bool-current-color"></span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker" >
 
-            </ul>
+    <div class="bool-color-chooser">
 
-        </li>
-        <li class="dropdown btn-group bool-tab-btn">
-            <a class="bool-tab dropdown-toggle bool-color-dropdown" data-toggle="dropdown" title="" data-original-title="Font Color">
-                <i class="bool-icon bool-icon-recent"></i>
-                <span class="bool-tab-text">Recent Colors</span>
-            </a>
-            <ul class="dropdown-menu bool-color-picker bool-color-picker-recent">
-                <li><div class="bool-no-recent">No item has been selected</div></li>
-            </ul>
-        </li>
-    </ul>
+    </div>
+
+    <!--<ul class="nav nav-pills pull-left">-->
+        <!--<li class="dropdown btn-group ">-->
+            <!--<a class="bool-btn dropdown-toggle bool-color-dropdown"-->
+               <!--data-toggle="dropdown" title="" data-original-title="Font Color">-->
+                <!--<span class="bool-current-color"></span>-->
+            <!--</a>-->
+            <!--<ul class="dropdown-menu bool-color-list" >-->
+
+            <!--</ul>-->
+
+        <!--</li>-->
+    <!--</ul>-->
 
 </div>
 
@@ -1042,47 +1025,54 @@
                 Video
                 <i class="bool-widget-icon bool-icon-move"></i>
             </span>
-            <!--<span class="bool-widget-btn " type="6" >-->
-                <!--<i class="bool-widget-icon bool-widget-icon-map"></i>-->
-                <!--Map-->
-                <!--<i class="bool-widget-icon bool-icon-move"></i>-->
-            <!--</span>-->
-            <!--<span class="bool-widget-btn " type="7" >-->
-                <!--<i class="bool-widget-icon bool-widget-icon-perk"></i>-->
-                <!--Perks-->
-                <!--<i class="bool-widget-icon bool-icon-move"></i>-->
-            <!--</span>-->
-            <!--<span class="bool-widget-btn " type="14" >-->
-                <!--<i class="bool-widget-icon bool-widget-icon-skill"></i>-->
-                <!--Skills-->
-                <!--<i class="bool-widget-icon bool-icon-move"></i>-->
-            <!--</span>-->
-            <!--<span class="bool-widget-btn " type="12" >-->
-                <!--<i class="bool-widget-icon bool-widget-icon-profile"></i>-->
-                <!--Profile-->
-                <!--<i class="bool-widget-icon bool-icon-move"></i>-->
-            <!--</span>-->
-            <!--<span class="bool-widget-btn " type="8" >-->
-                <!--<i class="bool-widget-icon bool-widget-icon-condition"></i>-->
-                <!--Conditions-->
-                <!--<i class="bool-widget-icon bool-icon-move"></i>-->
-            <!--</span>-->
-            <!--<span class="bool-widget-btn " type="11" >-->
-                <!--<i class="bool-widget-icon bool-widget-icon-cover-letter"></i>-->
-                <!--Cover Letter-->
-                <!--<i class="bool-widget-icon bool-icon-move"></i>-->
-            <!--</span>-->
-            <!--<span class="bool-widget-btn " type="13" >-->
-                <!--<i class="bool-widget-icon bool-widget-icon-separator"></i>-->
-                <!--Separator-->
-                <!--<i class="bool-widget-icon bool-icon-move"></i>-->
-            <!--</span>-->
+            <span class="bool-widget-btn " type="6" >
+                <i class="bool-widget-icon bool-widget-icon-map"></i>
+                Map
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </span>
+            <span class="bool-widget-btn " type="7" >
+                <i class="bool-widget-icon bool-widget-icon-perk"></i>
+                Perks
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </span>
+            <span class="bool-widget-btn " type="14" >
+                <i class="bool-widget-icon bool-widget-icon-skill"></i>
+                Skills
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </span>
+            <span class="bool-widget-btn " type="12" >
+                <i class="bool-widget-icon bool-widget-icon-profile"></i>
+                Profile
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </span>
+            <span class="bool-widget-btn " type="8" >
+                <i class="bool-widget-icon bool-widget-icon-condition"></i>
+                Conditions
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </span>
+            <span class="bool-widget-btn " type="11" >
+                <i class="bool-widget-icon bool-widget-icon-cover-letter"></i>
+                Cover Letter
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </span>
+            <span class="bool-widget-btn " type="13" >
+                <i class="bool-widget-icon bool-widget-icon-separator"></i>
+                Separator
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </span>
 
         </div>
     </div>
     <ul class="bool-toolbar-options">
         <li>
             Canvas
+            <div class="pull-right bool-color-chooser">
+
+            </div>
+
+        </li>
+        <li>
+            Background
             <ul class="nav nav-pills pull-right">
                 <li class="dropdown btn-group ">
                     <a class="bool-btn dropdown-toggle bool-color-dropdown"
@@ -1090,17 +1080,20 @@
 
                         <span class="bool-current-color"></span>
                     </a>
-                    <ul class="dropdown-menu bool-color-picker" >
+                    <ul class="dropdown-menu bool-color-list" >
 
                     </ul>
                 </li>
             </ul>
-        </li>
-        <li>
-            Background
-
 
         </li>
+    </ul>
+
+    <ul class="bool-toolbar-commands">
+        <li><a class="btn btn-large btn-danger">Preview</a></li>
+        <li><a class="btn btn-large btn-info ">Save & Exit</a></li>
+        <li><a class="btn btn-large btn-success ">Publish</a></li>
+
     </ul>
     <div>
 

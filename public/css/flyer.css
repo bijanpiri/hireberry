@@ -37,11 +37,11 @@ Whole Paper
 
 .portletHeader {
     height: 80px;
-    background-color: #f1f1f1;
+
     position: relative;
     padding: 0 20px;
     border-radius: 7px 7px 0 0;
-    margin: 0 38px;
+
 }
 
 .portletHeader .logo {
@@ -80,11 +80,10 @@ Whole Paper
 
 .portletFooter {
     height: 80px;
-    background-color: #f1f1f1;
+
     position: relative;
     padding: 0 20px;
     border-radius: 0 0 7px 7px;
-    margin: 0 38px;
     display: none;
 }
 
@@ -150,7 +149,7 @@ Whole Paper
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    padding: 0 38px; /* Action Button Width */
+
     background-color: transparent;
 }
 
@@ -170,13 +169,12 @@ Action Buttons
     height: 38px;
     cursor: pointer;
 }
-.portlet-container:hover .action-btn-frame { display: block; }
-.portlet-container .action-btn-frame:active { display: block; }
+.portlet-container.bool-portlet-active  .action-btn-frame { display: block; }
+.portlet-container.bool-portlet-active .action-btn-frame { display: block; }
 .portlet-container .action-btn-frame:hover { background-color: #bfbfbf; }
 
-.portlet-container .move-btn-frame { left: 0;top: 16px; border-radius: 6px 0 0 6px;}
-.portlet-container .setting-btn-frame { left: 0;top: 28px; border-radius: 0px 0 0 6px;}
-.portlet-container .delete-btn-frame { right: 0;top: 16px; border-radius: 0 6px 6px 0;}
+.portlet-container .move-btn-frame { left: -38px;top: 16px; border-radius: 6px 0 0 6px;}
+.portlet-container .delete-btn-frame { right: -38px;top: 16px; border-radius: 0 6px 6px 0;}
 
 .portlet-container .action-btn {
     background-image: url("/images/nflyer-icons.png");
@@ -216,14 +214,7 @@ Portlet
 }
 .portlet {
     height: 100%;
-    background-color: #f1f1f1;
-    border-top: 1px solid #f1f1f1;
-    border-bottom: 1px solid #f1f1f1;
-}
 
-.portlet-hover {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
 }
 
 .portlet-splitter {
@@ -366,6 +357,7 @@ Map portlet
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     padding: 20px 40px;
+    outline: none;
 }
 .text-widget li{
     list-style-position: inside;
@@ -600,7 +592,7 @@ Map portlet
 }
 
 .bool-flyer-editor{
-    margin: 20px 20px 20px 260px ;
+    margin: 20px 45px 20px 285px ;
     padding: 0;
 }
 
@@ -615,4 +607,17 @@ Map portlet
 }
 .portletStack .ui-sortable-helper{
     display: none;
+}
+.bool-flyer-back{
+    background: red;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 8px;
+}
+.bool-portlet{
+    background: red;
+    border-radius: 8px
 }
