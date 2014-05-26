@@ -41,6 +41,7 @@
     right: 38px;
     position: absolute;
     background-position: -100px -528px ;
+    cursor: default;
 }
 
 .bool-clear-container{
@@ -53,7 +54,7 @@
     border-radius: 4px;
     -moz-border-radius: 0 4px 4px 0;
     -webkit-border-radius: 0 4px 4px 0;
-
+    cursor: default;
 }
 
 .bool-clear-btn{

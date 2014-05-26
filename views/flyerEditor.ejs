@@ -97,13 +97,13 @@
 <script src="/script/flyerEditor.js"></script>
 
 <div class="container-fluid" id="fixToolbar" hidden>
-    <% if(editMode) { %>
+
     <div class="row-fluid">
         <div class="span2">
-            <button type="button"
-                    class="btn btn-primary pull-right"
-                    id="buttonSave"
-                    data-loading-text="Saving...">Save</button>
+            <!--<button type="button"-->
+                    <!--class="btn btn-primary pull-right"-->
+                    <!--id="buttonSave"-->
+                    <!--data-loading-text="Saving...">Save</button>-->
         </div>
         <div class="span8" style="text-align: center">
             <input type="hidden" name="flyertext" placeholder="Enter Flyer Description" />
@@ -120,11 +120,11 @@
         </div>
         <div class="span2">
             <div>
-                <a id="buttonPublish" class="btn btn-success pull-left">Publish</a>
+                <!--<a id="buttonPublish" class="btn btn-success pull-left">Publish</a>-->
             </div>
         </div>
     </div>
-    <% } %>
+
 </div>
 
 <div class="container-fluid bool-flyer-editor " >
@@ -1068,12 +1068,27 @@
         </li>
     </ul>
 
-    <!--<ul class="bool-toolbar-commands">-->
-        <!--<li><a class="btn btn-large btn-danger">Preview</a></li>-->
-        <!--<li><a class="btn btn-large btn-info ">Save & Exit</a></li>-->
-        <!--<li><a class="btn btn-large btn-success ">Publish</a></li>-->
-<!---->
-    <!--</ul>-->
+    <ul class="bool-toolbar-commands">
+        <li><a class="bool-toolbar-btn bool-toolbar-btn-preview" >
+                <i class="bool-widget-icon bool-toolbar-icon-preview"></i>
+                Preview
+            </a></li>
+        <li><a class="bool-toolbar-btn bool-toolbar-btn-edit"
+
+               style="display: none;">
+                <i class="bool-widget-icon bool-toolbar-icon-preview-edit"></i>
+                Back to Edit
+            </a></li>
+        <li><a class="bool-toolbar-btn bool-toolbar-btn-save"
+
+               data-loading-text="Saving...">Save & Exit</a></li>
+        <li><a class="bool-toolbar-btn bool-toolbar-btn-publish">
+                <i class="bool-widget-icon bool-toolbar-icon-publish"></i>
+                Publish
+            </a>
+        </li>
+
+    </ul>
     <div>
 
     </div>

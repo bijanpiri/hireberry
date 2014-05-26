@@ -590,8 +590,11 @@ Map portlet
 .bool-navbar{
     display: none;
 }
-
 .bool-flyer-editor{
+    margin: 0;
+    padding: 0;
+}
+.bool-edit-mode .bool-flyer-editor{
     margin: 20px 45px 20px 285px ;
     padding: 0;
 }
@@ -612,4 +615,7 @@ Map portlet
 .bool-portlet{
     background: #f1f1f1;
     border-radius: 8px
+}
+#previewFrame{
+    margin: 0 20px 0 260px;
 }

@@ -184,6 +184,10 @@ Portlet Creator
 .bool-toolbar-options>li>.nav>.dropdown>a.bool-color-dropdown{
     margin: 0;
 }
+.bool-toolbar-options .bool-color-chooser{
+    margin: 2px;
+}
+
 .bool-toolbar-commands>li {
     margin-bottom: 10px;
 }
@@ -192,6 +196,63 @@ Portlet Creator
     margin: 20px 0;
     padding: 0;
 }
-.bool-toolbar-options .bool-color-chooser{
-    margin: 2px;
+
+.bool-toolbar-btn{
+    display: block;
+    margin: 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    font-family:  Arial,sans-serif;
+    border-radius: 4px;
+    color: #fff;
 }
+.bool-toolbar-btn:hover {
+    text-decoration: none;
+    color: #fff;
+}
+.bool-toolbar-btn-preview{
+    color: #e6e6e6;
+    border: 2px solid #e6e6e6;
+}
+.bool-toolbar-btn-preview:hover {
+    color: #e6e6e6;
+}
+
+.bool-toolbar-btn-save{
+    background: #3397cb;
+}
+.bool-toolbar-btn-edit{
+    background: #b2b2b2;
+}
+.bool-toolbar-btn-publish{
+    background: #6DCB3E;
+}
+.bool-toolbar-icon-publish{
+    background-position: 0 -246px;
+    width: 18px;
+    height: 16px;
+}
+.bool-toolbar-icon-preview-edit {
+    background-position: 0 -235px;
+    width: 9px;
+    height: 14px;
+}
+
+.bool-toolbar-icon-preview{
+    background-position: 0 -224px;
+    width: 18px;
+    height: 12px;
+}
+
+
+
+.bool-toolbar-icon-preview:hover>.bool-toolbar-icon-preview{
+    background-position: -18px -251px;
+}
+
+

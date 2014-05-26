@@ -61,7 +61,7 @@ function Widget(options){
         var deleteButton = $('<div >').addClass('action-btn-frame delete-btn-frame')
             .append($('<i>').addClass('action-btn delete-btn'));
 
-        deleteButton.find('*').click(deleteWidget);
+        deleteButton.click(deleteWidget);
 
         if( this.editMode) {
             this.portletContainer

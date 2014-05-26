@@ -19,6 +19,12 @@ $(function() {
     $('.bool-color-chooser-background').ColorPicker(function(c){
         $('body').css('background',c);
     })
+    $('.bool-toolbar-btn-edit').click(function() {
+        GoToEditMode();
+    });
+    $('.bool-toolbar-btn-preview').click(function(){
+        GoToViewMode();
+    });
 
     $('form').submit(false);
     if( viewMode=='embeded') {
@@ -292,11 +298,9 @@ function GoToEditMode() {
     $(document.body).addClass('bool-edit-mode');
     showLoading();
 
-    $('#buttonPreview').show();
-    $('#buttonSave').show();
-    $('#buttonPublish').show();
-    $('#buttonEditview').hide();
-    $('.portletCreator').show().animate({height:100},500);
+    $('.bool-toolbar-btn-preview').show();
+    $('.bool-toolbar-btn-edit').hide();
+
 
     setTimeout(function(){
         hideLoading()
@@ -313,11 +317,8 @@ function GoToViewMode() {
 
     showLoading();
 
-    $('#buttonPreview').hide();
-    $('#buttonSave').hide();
-    $('#buttonPublish').hide();
-    $('#buttonEditview').show();
-    $('.portletCreator').animate({height:0},500, function(){$(this).hide()});
+    $('.bool-toolbar-btn-preview').hide();
+    $('.bool-toolbar-btn-edit').show();
 
     // ToDo: Do a better work when saving is faild (before shwoing preview)
     saveFlyer( function(saveSuccessfuly) {
@@ -467,11 +468,12 @@ function saveFlyer(callback) {
             $.post( '/flyer/save', {flyer:flyerjson} )
                 .done(function(data){
                     callback(true);
-                    $('#buttonSave').text('Save').button('reset');
+                    $('#buttonSave').button('reset');
+//                    window.location='/dashboard#jobsp'
                 })
                 .fail(function(data){
                     callback(false)
-                    $('#buttonSave').text('Save*').button('reset');
+                    $('#buttonSave').text('Save* & Exit').button('reset');
                 });
             autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
 
