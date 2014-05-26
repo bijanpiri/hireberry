@@ -608,16 +608,8 @@ Map portlet
 .portletStack .ui-sortable-helper{
     display: none;
 }
-.bool-flyer-back{
-    background: red;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-radius: 8px;
-}
+
 .bool-portlet{
-    background: red;
+    background: #f1f1f1;
     border-radius: 8px
 }

@@ -25,7 +25,7 @@ function SeperatorWidget(){
     this.widgetDidAdd = function() {
         this.setToolbar('.toolbar-separatorWidget');
 
-        this.toolbar.find('.bool-color-picker:first').ColorPicker();
+
         this.addToolbarCommand('color',
             function(widget,args)
             {

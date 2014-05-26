@@ -192,3 +192,6 @@ Portlet Creator
     margin: 20px 0;
     padding: 0;
 }
+.bool-toolbar-options .bool-color-chooser{
+    margin: 2px;
+}

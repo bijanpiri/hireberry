@@ -24,6 +24,34 @@ function Widget(options){
     this.setLayout = function(layout){
         this.layout = layout;
     };
+    function deleteWidget(){
+        $( "#dialog-confirm" ).dialog({
+            resizable: false,
+            height:150,
+            width:200,
+            modal: true,
+            draggable : false,
+            position:'middle',
+            buttons: {
+                Yes: function() {
+                    $( this ).dialog( "close" );
+                    widget.portletContainer.remove();
+                    Widgets[widget.type].instances++;
+                    checkFlyerEmpty();
+                },
+                No: function() {
+                    $( this ).dialog( "close" );
+                    checkFlyerEmpty();
+                }
+            },
+            close: function( event,ui ) {
+                $( this ).dialog( "destroy" );
+            },
+            open:function(){
+                $(".ui-dialog-titlebar-close").hide();
+            }
+        });
+    }
 
     this.content = function(){
         // Action Buttons
@@ -31,39 +59,9 @@ function Widget(options){
             .append($('<i>').addClass('action-btn move-btn'));
 
         var deleteButton = $('<div >').addClass('action-btn-frame delete-btn-frame')
-            .append($('<i>').addClass('action-btn delete-btn'))
-            .click((function(widget){
+            .append($('<i>').addClass('action-btn delete-btn'));
 
-                return function(){
-                    $( "#dialog-confirm" ).dialog({
-                        resizable: false,
-                        height:150,
-                        width:200,
-                        modal: true,
-                        draggable : false,
-                        position:'middle',
-                        buttons: {
-                            Yes: function() {
-                                $( this ).dialog( "close" );
-                                widget.portletContainer.remove();
-                                Widgets[widget.type].instances++;
-                                checkFlyerEmpty();
-                            },
-                            No: function() {
-                                $( this ).dialog( "close" );
-                                checkFlyerEmpty();
-                            }
-                        },
-                        close: function( event,ui ) {
-                            $( this ).dialog( "destroy" );
-                        },
-                        open:function(){
-                            $(".ui-dialog-titlebar-close").hide();
-                        }
-                    });
-                }
-
-            })(this));
+        deleteButton.find('*').click(deleteWidget);
 
         if( this.editMode) {
             this.portletContainer

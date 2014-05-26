@@ -47,12 +47,11 @@ function TextWidget(){
                 widget.portlet.find('.text-widget')
                     .css('text-align',args[1]);});
 
-        this.toolbar.find('.bool-color-picker:first').ColorPicker();
-        this.addToolbarCommand('color',
-            function(widget,args)
-            {
-                widget.portlet.find('.text-widget').css('color',args[1]);
-            });
+        this.toolbar.find('.bool-color-chooser').ColorPicker(
+            function(color){
+                widget.portlet.find('.text-widget').css('color',color);
+            }
+        );
 
         this.addToolbarCommand('size',
             function(widget,args)
@@ -63,11 +62,7 @@ function TextWidget(){
                     .css('font-size',size+'px')
                     .css('line-height',size*1.5+'px');
             });
-        widget.portlet.find('.text-widget').change(
-            function(){
-                alert('change')
-            }
-        );
+
         this.toolbar.delegate('.bool-btn','click',function(){
            widget.portlet.find('.text-widget *')
                .css('font-size',size+'px')

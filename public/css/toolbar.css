@@ -135,7 +135,7 @@
 }
 .nav-pills>li>a.bool-btn{
     padding: 0;
-    margin: 8px 0px 0 8px ;
+    margin: 0;
 }
 
 .dropdown-menu{
@@ -146,19 +146,7 @@
 .bool-btn-drop{
     background: #B3B3B3;
 }
-.bool-tab{
-    width: 157px;
-    height: 44px;
-    background: #B3B3B3;
-    position: absolute;
-    display: none;
-    padding: 0;
-    cursor: pointer;
-}
-.nav-pills .bool-tab-btn{
-    margin-left: 0;
-    display: none;
-}
+
 .nav-pills li.dropdown+.bool-tab-btn.open,
 .nav-pills li.dropdown.open+.bool-tab-btn{
     display: inline-block;

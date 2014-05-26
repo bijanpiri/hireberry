@@ -81,10 +81,12 @@
     position: absolute;
     color:#B3B3B3;
     text-align: center;
-
 }
 
 .bool-color-list >li{
     display: inline-block;
     float: left;
+}
+.no-margin{
+    margin: 0;
 }
