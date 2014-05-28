@@ -2,31 +2,17 @@
 
 form { margin: 0 }
 body { height: 100%; }
-/****
-Fix Toolbar
-****/
+
 .widgets {
     display: none;
 }
 .toolbars{
     display: none;
 }
-#fixToolbar {
-    position: fixed;
-    top: 88px;
-    z-index: 23001;
-    width: 100%;
-    background-color: #C7C2A3;
-    left: 0;
-    right: 0;
-    margin: 0;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    display: none !important;
-}
 .navbar-fixed-top, .navbar-fixed-bottom {
     z-index: 24000;
 }
+
 /********
 Whole Paper
 ********/
@@ -615,4 +601,8 @@ Map portlet
 }
 #previewFrame{
     margin: 0 20px 0 260px;
+}
+
+.bgi{
+    background: inherit;
 }
