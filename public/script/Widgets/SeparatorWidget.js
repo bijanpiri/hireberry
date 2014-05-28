@@ -24,7 +24,14 @@ function SeperatorWidget(){
 
     this.widgetDidAdd = function() {
         this.setToolbar('.toolbar-separatorWidget');
-
+        var widget=this;
+        this.toolbar.find('.bool-color-chooser').ColorPicker(
+            function(color){
+                widget.color = color;
+                widget.portlet.find('.bool-editable').css( 'color', color);
+                widget.portlet.find('.bool-divider').css( 'background', color);
+            }
+        );
 
         this.addToolbarCommand('color',
             function(widget,args)
@@ -36,7 +43,7 @@ function SeperatorWidget(){
         this.toolbar.find('.bool-current-color').css('background-color','#9c9c9c');
         if(editMode)
             layout.find('.bool-editable').attr('contenteditable','true');
-    }
+    };
     this.layout.delegate('.bool-edit-box-add','click',
         function(){
             layout.find('.bool-edit-box').css('visibility','visible');
@@ -46,25 +53,25 @@ function SeperatorWidget(){
             $(this).parent().css('visibility','hidden');
         }
     );
-    this.getSettingPanel = function () { return $('<div>') }
+
     this.serialize = function() {
         return {
             text: this.portlet.find('.bool-editable').html(),
             color: this.toolbar.find('.bool-current-color').css('background-color'),
             hasText:this.portlet.find('.bool-edit-box').css('visibility')
         }
-    }
+    };
 
     this.widgetFocus=function()
     {
         this.toolbar.find('input[name=text]').focus();
-    }
+    };
 
     this.deserialize = function( content ) {
         setColor.call( this, content.color );
         setText.call( this, content.text );
         this.portlet.find('.bool-edit-box').css('visibility',content.hasText);
-        this.toolbar.find('.bool-editable').val(content.text)
+        this.toolbar.find('.bool-editable').val(content.text);
 
     };
 }
