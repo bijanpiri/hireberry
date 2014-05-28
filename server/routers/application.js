@@ -10,6 +10,8 @@ app.get('/api/applications', function (req,res) {
     var teamID = req.user.teamID;
     var userID = req.user ? req.user._id: '';
     var query = req.query.q || '';
+    var jobFilter = req.query.j || '0';
+
     if( query ) {
         query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
         query = query ? '(' + req.query.q.trim().replace(/ +/g,')|(') + ')' : ''; // Ask bijan about this line!
@@ -24,17 +26,24 @@ app.get('/api/applications', function (req,res) {
             return res.send(204);
 
         if( count > 0 ) {   // User is admin
-            fetchTeamFlyers( function(teamFlyersID) {
-                fetchApplications(teamFlyersID);
-            })
+            if ( jobFilter!=='0' ) // Filter by job
+                fetchApplications([jobFilter]);
+            else
+                fetchTeamFlyers( function(teamFlyersID) {
+                    fetchApplications(teamFlyersID);
+                })
         }
         else if(userID==='') { // Public Viewer
             return res.send(200)
         }
         else { // User is member
-            fetchAssignedFlyers( function(userFlyersID) {
-                fetchApplications(userFlyersID);
-            })
+
+            if ( jobFilter!=='0' ) // Filter by job
+                fetchApplications([jobFilter]);
+            else
+                fetchAssignedFlyers( function(userFlyersID) {
+                    fetchApplications(userFlyersID);
+                })
         }
     });
 
@@ -398,26 +407,57 @@ app.post('/api/application/comments',function(req,res) {
 
 app.get('/api/application/json/:appID', function(req,res) {
 
+    if( !checkUser(req,res) )
+        return;
+
+    canCurrentUserAceessApplciation( req.user._id, req.params.appID, function(err,allowed,application) {
+        if( err )
+            return res.send(306);
+
+        if(allowed)
+            application._doc.currentUser = 'allowed';
+        else
+            application._doc.currentUser = 'denied';
+
+        res.send(application);
+    });
+})
+
+app.post('/api/application/:appID/note', function(req,res) {
 
     if( !checkUser(req,res) )
         return;
 
-    BApplications.findOne( {_id:req.params.appID}).exec(  function(err,application) {
-        if( err )
+    canCurrentUserAceessApplciation( req.user._id, req.params.appID, function(err,allowed,application) {
+        if( err || allowed==false)
             return res.send(306);
+        else
+            BApplications.update({_id:req.params.appID},{note:req.body.note},function(err) {
+                res.send(200);
+            })
+    });
+
+});
+
+function canCurrentUserAceessApplciation(userID, appID, callback) {
+
+    BApplications.findOne( {_id:appID}).exec(  function(err,application) {
+        if( err )
+            return callback(err,false,null);
 
         BFlyers.findOne({_id:application.flyerID}).populate('owner', 'admin').exec( function(err,flyer) {
+
+            if( err )
+                return callback(err,false,null);
 
             var teamID = flyer.owner.admin;
             var responderID = flyer.autoAssignedTo;
 
-            if( req.user._id.toString()===teamID.toString() || req.user._id.toString()===responderID.toString())
-                application._doc.currentUser = 'allowed';
+            if( userID.toString()===teamID.toString() || userID.toString()===responderID.toString())
+                return callback(null,true,application);
             else
-                application._doc.currentUser = 'denied';
-
-            res.send(application);
+                return callback(null,false,application);
         })
 
     })
-})
+}

@@ -40,9 +40,14 @@ team = new BTeam;
 
 BApplications = Backbone.Model.extend({
     url: function(){
-        return '/api/applications' + '' +
-            '?q=' + $('.application-searchBox').val() +
-            '&sort=' + $('.application-sort').attr('sortBy')
+        var query = $('.application-searchBox').val();
+        var job = $('.applications-filter-job :selected').attr('formID');
+        var sort = $('.application-sort').attr('sortBy');
+
+        return '/api/applications?' +
+            (query ? 'q=' + query : '' ) +
+            (job ? '&j=' + job : '' ) +
+            (sort ? '&sort=' + sort : '' )
     }
 })
 applications = new BApplications;

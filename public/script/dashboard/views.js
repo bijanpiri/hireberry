@@ -61,6 +61,8 @@ BApplicationsView = Backbone.View.extend({
     render: function() {
         var candidates = this.model.get('candidates');
 
+        $('#application-filter-all').prop('checked',true);
+
         $('#candidatesCollection .candidate').remove();
 
         for( var i=0; i<candidates.length; i++ ) {
@@ -84,6 +86,7 @@ BApplicationsView = Backbone.View.extend({
             candidateObj.find('.candidate-email .value').attr('href','mailto:'+candidate.email).text(candidate.email);
             candidateObj.find('.candidate-tel .value').text(candidate.tel);
             candidateObj.find('.candidate-website .value').attr('href',candidate.website).text(candidate.website);
+            candidateObj.find('.candidate-note').val(candidate.note);
             candidateObj.find('[name="appID"]').val(candidate._id);
             candidateObj.find('.applicationAskForCommentButton').click( function() {
                 $('#a4c-dialog').find('[name=appID]').val(candidate._id);
@@ -138,6 +141,13 @@ BApplicationsView = Backbone.View.extend({
 
             candidateObj.addClass('candidate-filter-' + stagesName[candidate.stage.stage-1]);
 
+            candidateObj.find('.candidate-note-save-button').attr('appID',candidate._id).click( function() {
+                var appID = $(this).attr('appID');
+                var note = $(this).parent().parent().find('.candidate-note').val();
+
+                $.post('/api/application/' + appID + '/note', {note: note}).done( function() {});
+            });
+
             candidateObj.find('.markAsVisited').click( function() {
                 var el = $(this).parent().parent();
                 var appID = $(this).parent().attr('appID');
@@ -145,6 +155,7 @@ BApplicationsView = Backbone.View.extend({
                     el.find('.visitedState').addClass('visited').removeClass('unvisited');
                 });
             });
+
             candidateObj.find('.markAsUnvisited').click( function() {
                 var el = $(this).parent().parent();
                 var appID = $(this).parent().attr('appID');
@@ -158,7 +169,6 @@ BApplicationsView = Backbone.View.extend({
                 candidateObj.find('.visitedState').addClass('visited');
             else
                 candidateObj.find('.visitedState').addClass('unvisited');
-
 
 
             initWorkflow(candidateObj,candidate);
@@ -182,8 +192,13 @@ BJobsView = Backbone.View.extend({
         forms = this.model.get('forms');
 
         $('#jobsp .position').remove();
+        $('.applications-filter-job').empty();
+        $('.applications-filter-job').append( $('<option>').text('All').attr('formID',0) );
 
         forms.forEach( function(form) {
+
+            $('.applications-filter-job').append( $('<option>').text(form.formName).attr('formID',form.formID) );
+
             var row = $('#jobsp .positionsHeaderRow')
                 .clone()
                 .removeClass('positionsHeaderRow');

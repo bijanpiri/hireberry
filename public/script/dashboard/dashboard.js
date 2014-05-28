@@ -316,6 +316,11 @@ function initApplicationPage() {
             $('.application-searchButton').click()
     });
 
+
+    $('.applications-filter-job').unbind('change').change( function() {
+        applications.fetch();
+    });
+
     $('.application-searchButton').unbind('click').click( function() {
         applications.fetch();
     });

@@ -118,7 +118,8 @@ BApplications = mongoose.model( 'applications', {
     stage:{},
     activities:[],
     assignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    visited: Boolean
+    visited: Boolean,
+    note:String
 });
 
 BTransactions = mongoose.model( 'transactions', {

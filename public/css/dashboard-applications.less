@@ -18,6 +18,16 @@
     border-color: #37A84E;
     color: #37A84E;
   }
+
+  select {
+    background-color: transparent;
+    border: 2px solid #37A84E;
+    color: #37A84E;
+    vertical-align: top;
+    margin: 0 4px;
+    height: 20px;
+    box-sizing: content-box;
+  }
 }
 
 &.grid-layout, &.list-layout {
@@ -227,6 +237,14 @@
               font-size: 1.5em;
             }
 
+            .candidate-note {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                border-radius: 0;
+                resize: none;
+            }
+
             .candidate-activities {
               .activity {
                 position: relative;
@@ -340,6 +358,7 @@
     }
   }
 }
+
 .grid-layout {
 
   .candidate {
