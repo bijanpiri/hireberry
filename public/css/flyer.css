@@ -115,7 +115,7 @@ Whole Paper
 
 .portletStack {
     margin: 0;
-    /*background-color: transparent;*/
+    background-color: inherit;
 }
 
 
@@ -134,7 +134,7 @@ Whole Paper
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 
-    background-color: transparent;
+    background-color: inherit;
 }
 
 .portlet-container:hover .portlet-aroundButton  {
@@ -148,7 +148,7 @@ Action Buttons
     display: none;
     position: absolute;
     /*z-index: -1; This property have problem with jQury.Sortable*/
-    background-color: #f1f1f1;
+    background: inherit;
     width: 38px;
     height: 38px;
     cursor: pointer;
@@ -198,7 +198,7 @@ Portlet
 }
 .portlet {
     height: 100%;
-
+    background: inherit;
 }
 
 .portlet-splitter {
