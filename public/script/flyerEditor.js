@@ -255,7 +255,7 @@ function loadEditor() {
 
     loadFlyer();
 
-    $('#buttonPublish').click( function() {
+    $('.bool-toolbar-btn-publish').click( function() {
         loadPublishPanel();
         $('#publishModal').modal();
     })
@@ -272,7 +272,8 @@ function loadEditor() {
 
     // Saving flyer methods
     autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
-    $('#buttonSave').click(function(){
+    $('.bool-toolbar-btn-save').click(function(){
+
         saveFlyer();
     });
 
@@ -455,8 +456,8 @@ function saveFlyer(callback) {
     clearTimeout(autosaveTimer);
 
     callback = callback || function(a){}
-
-    $('#buttonSave').button('loading');
+    var btn=$('.bool-toolbar-btn-save');
+    btn.button('loading');
 
     flyer.flyer2json(
         function(flyerjson){
@@ -468,12 +469,12 @@ function saveFlyer(callback) {
             $.post( '/flyer/save', {flyer:flyerjson} )
                 .done(function(data){
                     callback(true);
-                    $('#buttonSave').button('reset');
+                    btn.button('reset');
 //                    window.location='/dashboard#jobsp'
                 })
                 .fail(function(data){
                     callback(false)
-                    $('#buttonSave').text('Save* & Exit').button('reset');
+                    btn.text('Save* & Exit').button('reset');
                 });
             autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
 
