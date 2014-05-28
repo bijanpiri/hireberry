@@ -116,7 +116,12 @@ function Flyer(options) {
                 }
 
                 flyer.description = data.description;
-                setBackground(data.background, false);
+                $('body').css('background', data.background);
+                $('.bool-color-chooser-background .bool-current-color')
+                    .css('background',data.background);
+                $('.bool-color-chooser-canvas .bool-current-color')
+                    .css('background',data.canvasColor);
+                $('.bool-portlet').css('background',data.canvasColor);
                 setLogo(data.logo);
                 flyer.thanksMessage = data.thanksMessage;
 
@@ -145,10 +150,12 @@ function Flyer(options) {
         var flyer = {
             description: this.description,
             flyerid:  $('input[name=flyerid]').val(),
-            background: pStack.css('background-image'),
+            background: $('body').css('background'),
+            canvasColor:$('.bool-portlet').css('background'),
             logo: $('.portletHeader .logo').attr('src'),
             thanksMessage: this.thanksMessage,
             count: portlets.length,
+
             widgets:[]
         };
         var widgetCount=portlets.length+1;//+1 for times when there is no widget(Empty Flyer)
@@ -209,13 +216,6 @@ function Flyer(options) {
         }
     }
 
-    var setBackground = function (url, wrapper) {
-        pStack
-            .css('background-image', ( wrapper ? 'url("' + url + '")' : url ) )
-            .css('background-size', 'auto 100%' )
-            .css('background-repeat', 'no-repeat');
-    }
-
     var initPortletsStack = function () {
         // Initialization
         if( editMode ){
@@ -274,7 +274,6 @@ function Flyer(options) {
     this.createPortlet = createPortlet;
     this.json2flyer = json2flyer;
     this.flyer2json = flyer2json;
-    this.setBackground = setBackground;
     this.getThumbnail = getThumbnail;
     this.setLogo = setLogo;
     this.flyer4Submit=flyer4Submit;
