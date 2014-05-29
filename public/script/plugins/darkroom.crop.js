@@ -29,13 +29,13 @@
       // First lines rendering with black
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
       this._renderBorders(ctx);
-      this._renderGrid(ctx);
+//      this._renderGrid(ctx);
 
       // Re render lines in white
       ctx.lineDashOffset = dashWidth;
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
       this._renderBorders(ctx);
-      this._renderGrid(ctx);
+//      this._renderGrid(ctx);
 
       // Reset scale
       ctx.scale(1/scaleX, 1/scaleY);
