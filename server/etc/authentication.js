@@ -153,10 +153,9 @@ everyauth.password
                     });
                 res.setHeader('Set-Cookie', 'bltn.persistent.login='+user._doc.email+"&"+token+'; expires='+lastRequestDate.toString());
             }
-
             res.json({
                 success: true,
-                lastPage: '/profile.ejs'//(req.session.lastPage || '/profile.ejs')
+                lastPage: res.req.session.lastPage || '/'
             }, 200);
         }
         else
@@ -176,46 +175,46 @@ everyauth.password
             var cookieContent=persitCookie.split('&');
             login=cookieContent[0];
             BPersistLogin.findOne({ token: cookieContent[1]}, function (err, user) {
-            if (err)
-            {
-                data.res.clearCookie('bltn.persistent.login');
-                return err;
-            }
-            else if(!user)
-            {
-                data.res.clearCookie('bltn.persistent.login');
-                return promise.fulfill(['Invalid  token']);
-            }
-            else
-            {
-                var exipreDate=new Date(user.expireDate);
-                if(exipreDate && exipreDate<new Date())
+                if (err)
                 {
-                    //If expire date is invalid remove info from database and clear cookie
-                    var cookieContent=data.req.cookies['bltn.persistent.login'].split('&');
-                    BPersistLogin.remove({username : cookieContent[0], token: cookieContent[1]}, function (err, user) {
-
-                        if(err)
-                            console.log(err);
-                        else
-                            console.log(">>>>>>>> The cookie info has removed from database.")
-                    });
                     data.res.clearCookie('bltn.persistent.login');
-
-                    return promise.fulfill(['The login date has expired']);
+                    return err;
                 }
-            }
-            //========================================================
-            var errors = [];
-            if (!login)
-                errors.push('Missing login');
-            /*if (!password)
-             errors.push('Missing password');*/
-            if (errors.length)
-                return errors;
+                else if(!user)
+                {
+                    data.res.clearCookie('bltn.persistent.login');
+                    return promise.fulfill(['Invalid  token']);
+                }
+                else
+                {
+                    var exipreDate=new Date(user.expireDate);
+                    if(exipreDate && exipreDate<new Date())
+                    {
+                        //If expire date is invalid remove info from database and clear cookie
+                        var cookieContent=data.req.cookies['bltn.persistent.login'].split('&');
+                        BPersistLogin.remove({username : cookieContent[0], token: cookieContent[1]}, function (err, user) {
 
-            //var promise = everyauth.password..Promise();
-            BUsers.findOne({ email: login}, function (err, user) {
+                            if(err)
+                                console.log(err);
+                            else
+                                console.log(">>>>>>>> The cookie info has removed from database.")
+                        });
+                        data.res.clearCookie('bltn.persistent.login');
+
+                        return promise.fulfill(['The login date has expired']);
+                    }
+                }
+                //========================================================
+                var errors = [];
+                if (!login)
+                    errors.push('Missing login');
+                /*if (!password)
+                 errors.push('Missing password');*/
+                if (errors.length)
+                    return errors;
+
+                //var promise = everyauth.password..Promise();
+                BUsers.findOne({ email: login}, function (err, user) {
                     if (err)
                         return promise.fulfill([err]);
 
@@ -227,24 +226,8 @@ everyauth.password
                         return promise.fulfill(['Server authentication error.']);
 
                     promise.fulfill(user);
-
-                    /* crypto.pbkdf2( password, user.salt, hashIteration, keySize,
-                     function(err, dk) {
-                     var eq=true;
-                     var key=user.password;
-                     for(var i=0;i<keySize;i++) eq &= key[i] == dk[i];
-                     if(!eq)
-                     promise.fulfill(['Invalid password']);
-                     else
-                     promise.fulfill(user);
-                     }
-                     );*/
-
-    //            if (user.password !== password)
-    //                return promise.fulfill(['Login failed']);
                 });
             });
-        // return promise;
         }
         else{
             var errors = [];
@@ -279,15 +262,15 @@ everyauth.password
 
                     }
                 );
-
-//            if (user.password !== password)
-//                return promise.fulfill(['Login failed']);
             });
-            // return promise;
         }
         return promise;
     })
-    .loginSuccessRedirect('/')
+    .loginSuccessRedirect(function(req,res){
+        console.log(req);
+        console.log(res);
+        return res.req.session.lastPage || '/';
+    })
     .getRegisterPath('/register')
     .postRegisterPath('/register')
     .registerView('register.ejs')

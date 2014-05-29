@@ -20,7 +20,7 @@
     -o-user-select: none;
     user-select: none;
 }
-.portletCreator>h2{
+.portletCreator h2{
     font-size: 18px;
     font-weight: bold;
     text-align: center;
@@ -167,6 +167,7 @@ Portlet Creator
     list-style: none;
     margin: 20px 0;
     border-bottom: 1px solid #404040;
+    background: inherit;
 }
 .bool-toolbar-options>li {
     border-top:  1px solid #404040;
@@ -255,4 +256,10 @@ Portlet Creator
     background-position: -18px -251px;
 }
 
-
+.bool-dock-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: inherit;
+}

@@ -116,8 +116,13 @@
                     showMessage('Invalid Email Or Password.');
             },
             success: function(data){
-                showMessage('You\'re logged in successfuly. Wait...');
-                window.location='/';
+                if(data.success) {
+                    showMessage('You\'re logged in successfully. Wait...');
+                    window.location = data.lastPage;
+                }else
+                    showMessage('Login failed');
+
+
             }
         });
         return false;

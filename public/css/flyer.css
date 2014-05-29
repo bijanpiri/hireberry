@@ -155,7 +155,8 @@ Action Buttons
 }
 .portlet-container.bool-portlet-active  .action-btn-frame { display: block; }
 .portlet-container.bool-portlet-active .action-btn-frame { display: block; }
-.portlet-container .action-btn-frame:hover { background-color: #bfbfbf; }
+.portlet-container .action-btn-frame:hover {
+}
 
 .portlet-container .move-btn-frame { left: -38px;top: 16px; border-radius: 6px 0 0 6px;}
 .portlet-container .delete-btn-frame { right: -38px;top: 16px; border-radius: 0 6px 6px 0;}
@@ -597,7 +598,8 @@ Map portlet
 
 .bool-portlet{
     background: #f1f1f1;
-    border-radius: 8px
+    border-radius: 8px;
+    min-width: 500px;
 }
 #previewFrame{
     margin: 0 20px 0 260px;
@@ -605,4 +607,7 @@ Map portlet
 
 .bgi{
     background: inherit;
+}
+.bool-widget-btn-carousel{
+    
 }
