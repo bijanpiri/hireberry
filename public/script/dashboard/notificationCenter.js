@@ -41,9 +41,6 @@ function initNotificationCenter() {
 
         showInvitations(responses.teamInvitations);
         add2NotificationBadge(responses.teamInvitations.length);
-
-        showNewComments(responses.newComments);
-        add2NotificationBadge(responses.newComments.length);
     });
 
 
@@ -84,44 +81,6 @@ function initNotificationCenter() {
             $('#askedForCommentList').append( $('<li>').attr('id',objID)
                 .append(dateObj)
                 .append(titleObj));
-        });
-    }
-
-    function showNewComments(newComments) {
-        newComments.forEach( function(comment) {
-
-            var dateObj = $('<div>')
-                .text( 'At ' + (new Date(comment.askingTime)).toLocaleString() )
-                .addClass('comment_date');
-
-            var linkObj = '';
-
-            if( comment.applicationID ) {
-                linkObj = $('<a>').attr('applicationID', comment.applicationID._id).text('this application')
-                    .click( function() {
-                        showApplicationPreview( $(this).attr('applicationID') );
-                    })
-            }
-            else {
-                linkObj = $('<a>').attr('href', '/flyer/embeded/' + comment.formID._id).text('this form');
-            }
-
-            var titleObj = $('<div>')
-                .text( comment.commenter.displayName + ' is left a new comment on ')
-                .append( linkObj );
-
-            var notificationObj = $('<li>').attr('id','')
-                .append(dateObj)
-                .append(titleObj);
-
-            linkObj.click( function() {
-                // ToDo: Mark As Read
-                $.post('/api/comments/mark-as-read',{commentID:comment._id});
-                notificationObj.remove();
-                decreaseBudgeNumber();
-            })
-
-            $('#askedForCommentList').append(notificationObj);
         });
     }
 
@@ -317,7 +276,7 @@ function initNotificationCenter() {
             var closeButtonObj = $('<button>')
                 .addClass('close')
                 .text('×')
-                .click(deleteNotificationHandler);
+                .click(markAsReadCommentHandler);
 
             if( newComment.applicationID ) {
                 titleObj = $('<div>')
@@ -333,7 +292,7 @@ function initNotificationCenter() {
                     .append( $('<a>').attr('href','/flyer/embeded/' + newComment.formID._id).text('this form') );
             }
 
-            $('#askedForCommentList').append( $('<li>').attr('notificationID',objID)
+            $('#askedForCommentList').append( $('<li>').attr('commentID',objID)
                 .append(closeButtonObj).append(titleObj) );
         });
     }
@@ -408,6 +367,14 @@ function markAsReadApplicantResponseHandler() {
         success: function(result) {
         }
     });
+}
+
+function markAsReadCommentHandler() {
+    var comemntID = $(this).parent().attr('commentID');
+    $(this).parent().remove();
+    decreaseBudgeNumber();
+
+    $.post('/api/comments/mark-as-read',{commentID:comemntID});
 }
 
 function deleteNotificationHandler() {

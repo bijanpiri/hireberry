@@ -275,10 +275,52 @@ getNewComments=function(userID, teamID, callback) {
     })
 }
 
-markCommentAsRead=function(userID, teamID, commentID, callback) {
-    BComments.update({_id:commentID, user:userID, team:teamID},{askerNotified:true}, function(err) {
-        callback( err )
+isResponderOfApplication = function(appID,userID,callback) {
+    BApplications.findOne({_id:appID}, function(err,application) {
+        if( err || !application)
+            callback(false);
+        else
+            isResponderOfJob(application.flyerID,userID,callback);
     });
+}
+
+isResponderOfJob = function(jobID,userID,callback) {
+    BFlyers.count({_id:jobID,autoAssignedTo:userID}, function(err,count){
+        if( err || count==0 )
+            callback(false);
+        else
+            callback(true);
+    })
+}
+
+markCommentAsRead=function(userID, teamID, commentID, callback) {
+
+    BComments.findOne({_id:commentID}, function(err,comment) {
+        if( err )
+            return callback(err);
+        else if( comment.applicationID )
+            isResponderOfApplication(comment.applicationID, userID, function(allowed) {
+                if( allowed )
+                    markAsRead(commentID,teamID,callback);
+                else
+                    callback({error:'Not allowed'});
+            });
+        else if( comment.formID )
+            isResponderOfJob( comment.formID, userID, function(allowed) {
+                if(allowed)
+                    markAsRead(commentID,teamID,callback);
+                else
+                    callback({error:'Not allowed'});
+            })
+        else
+            callback({error:'Unknown error'});
+    });
+
+    function markAsRead(commentID, teamID, callback) {
+        BComments.update({_id:commentID, team:teamID},{askerNotified:true}, function(err) {
+            callback( err )
+        });
+    }
 }
 
 getAskedForCommentApplications=function(userID, teamID, callback) {
