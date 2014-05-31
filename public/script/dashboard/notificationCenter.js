@@ -152,6 +152,8 @@ function initNotificationCenter() {
                             decreaseBudgeNumber();
                             $('#'+objID).remove();
                         })
+                    decreaseBudgeNumber();
+                    $(this).parent().remove();
                 });
 
             var declineBtnObj = $('<a>').addClass('btn btn-danger btn-mini')
@@ -166,6 +168,8 @@ function initNotificationCenter() {
                             $('#'+objID).remove();
                             decreaseBudgeNumber();
                         })
+                    decreaseBudgeNumber();
+                    $(this).parent().remove();
                 });
 
             $('#askedForCommentList').append( $('<li>').attr('id','#'+objID)
@@ -259,10 +263,11 @@ function initNotificationCenter() {
 
             var formID = akedForPublishList[i];
 
-            var titleObj = $('<div>')
-                .text('You are aksed for publish a form');
-            var actionObj = $('<a>')
-                .text('Revise it')
+            var titleObj = $('<span>')
+                .text('You are asked for publish ');
+
+            var linkObj = $('<a>')
+                .text('this job')
                 .attr('href','/flyer/edit/0?flyerid=' + formID)
                 .click( function() {
                     // ToDo: Remove this notification from database
@@ -270,15 +275,49 @@ function initNotificationCenter() {
                     decreaseBudgeNumber();
                 });
 
-            $('#askedForCommentList').append( $('<li>').append(titleObj).append(actionObj) );
+            var draftButtonObj = $('<a>')
+                .addClass('btn btn-mini btn-warning')
+                .text('Draft it')
+                .click( function() {
+                    $.post('/flyer/changeMode',{
+                        mode:'draft',
+                        flyerID: $(this).parent().attr('formID')
+                    });
+                    decreaseBudgeNumber();
+                    $(this).parent().remove();
+                });
+
+            var publishButtonObj = $('<a>')
+                .addClass('btn btn-mini btn-success')
+                .text('Publish it')
+                .click( function() {
+                    $.post('/flyer/changeMode',{
+                        mode:'publish',
+                        flyerID: $(this).parent().attr('formID')
+                    });
+                    decreaseBudgeNumber();
+                    $(this).parent().remove();
+                });
+
+            $('#askedForCommentList').append( $('<li>').attr('formID',formID)
+                .append(titleObj)
+                .append(linkObj)
+                .append('<hr>')
+                .append(draftButtonObj)
+                .append(publishButtonObj));
         }
     }
 
     function showNewComments(newComments) {
         newComments.forEach( function(newComment) {
-            var objID = 'newMember'+newComment._id;
+            var objID = newComment._id;
 
             var titleObj;
+
+            var closeButtonObj = $('<button>')
+                .addClass('close')
+                .text('×')
+                .click(deleteNotificationHandler);
 
             if( newComment.applicationID ) {
                 titleObj = $('<div>')
@@ -294,40 +333,51 @@ function initNotificationCenter() {
                     .append( $('<a>').attr('href','/flyer/embeded/' + newComment.formID._id).text('this form') );
             }
 
-            $('#askedForCommentList').append( $('<li>').attr('id',objID)
-                .append(titleObj) );
+            $('#askedForCommentList').append( $('<li>').attr('notificationID',objID)
+                .append(closeButtonObj).append(titleObj) );
         });
     }
 
     function showNewMembers(newMembers) {
         newMembers.forEach( function(newMember) {
-            var objID = 'newMember'+newMember._id;
+            var objID = newMember._id;
+
+            var closeButtonObj = $('<button>')
+                .addClass('close')
+                .text('×')
+                .click(deleteNotificationHandler);
 
             var titleObj = $('<div>')
                 .text('A new member is joined to team')
                 .append( $('<a>').attr('href', '#teamp').text('(View team)') );
 
-            $('#askedForCommentList').append( $('<li>').attr('id',objID)
-                .append(titleObj) );
+
+            $('#askedForCommentList').append( $('<li>').attr('notificationID',objID)
+                .append(closeButtonObj).append(titleObj) );
         });
     }
 
     function showJobStateChanging(jobsChanging) {
         jobsChanging.forEach( function(jobChanging) {
-            var objID = 'newMember'+jobChanging._id;
+            var objID = jobChanging._id;
+
+            var closeButtonObj = $('<button>')
+                .addClass('close')
+                .text('×')
+                .click(deleteNotificationHandler);
 
             var titleObj = $('<div>')
                 .text('Hiring manager has changed state of a job to ' + jobChanging.more.newState)
                 .append( $('<a>').attr('href', '/flyer/embeded/' + jobChanging.more.flyerID).text('(View job)') );
 
-            $('#askedForCommentList').append( $('<li>').attr('id',objID)
-                .append(titleObj) );
+            $('#askedForCommentList').append( $('<li>').attr('notificationID',objID)
+                .append(closeButtonObj).append(titleObj) );
         });
     }
 
     function showNewResponses(responses) {
         responses.forEach( function(response) {
-            var objID = 'response'+response._id;
+            var objID = response._id;
 
             var titleObj = $('<div>')
                 .text(response.applicationID.name + ' responded: ' + response.response)
@@ -336,8 +386,39 @@ function initNotificationCenter() {
                         showApplicationPreview( $(this).attr('applicationID') );
                     }));
 
-            $('#askedForCommentList').append( $('<li>').attr('id',objID)
-                .append(titleObj) );
+            var closeButtonObj = $('<button>')
+                .addClass('close')
+                .text('×')
+                .click(markAsReadApplicantResponseHandler);
+
+            $('#askedForCommentList').append( $('<li>').attr('applicantResponseID',objID)
+                .append(closeButtonObj).append(titleObj) );
         });
     }
+}
+
+function markAsReadApplicantResponseHandler() {
+    var notificationID = $(this).parent().attr('applicantResponseID');
+    $(this).parent().remove();
+    decreaseBudgeNumber();
+
+    $.ajax({
+        url: '/applicant/message/notified/' + notificationID,
+        type: 'POST',
+        success: function(result) {
+        }
+    });
+}
+
+function deleteNotificationHandler() {
+    var notificationID = $(this).parent().attr('notificationID');
+    $(this).parent().remove();
+    decreaseBudgeNumber();
+
+    $.ajax({
+        url: '/api/notifications/' + notificationID,
+        type: 'DELETE',
+        success: function(result) {
+        }
+    });
 }

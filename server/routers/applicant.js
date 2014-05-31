@@ -268,6 +268,18 @@ app.get('/api/resume', function(req,res) {
     });
 } );
 
+// Mark as read
+app.post('/applicant/message/notified/:messageID', function (req,res){
+
+    var messageID = req.params.messageID;
+
+    // ToDo: Check whether current user is responder or not.
+
+    BApplicantsResponses.update({_id:messageID},{responderNotified:true}, function(err){
+        res.send(200);
+    })
+});
+
 // Show message to applicant
 app.get('/applicant/message/view/:messageType/:messageID', function (req,res){
 
@@ -353,4 +365,6 @@ app.get('/applicant/message/:messageID', function (req,res){
         res.send(200,message.response);
     })
 });
+
+
 

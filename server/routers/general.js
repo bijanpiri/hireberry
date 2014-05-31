@@ -144,16 +144,26 @@ app.get('/api/calendar', function(req,res) {
 });
 // endregion
 
+app.delete('/api/notifications/:notificationID', function(req,res) {
+    var notificationID = req.params.notificationID;
+
+    // ToDo: Check whether current user can remove this notification or not.
+
+    BNotifications.remove( {_id: notificationID}, function(err) {
+        res.send(200);
+    });
+});
+
 app.get('/api/notifications', function(req,res) {
 
     /* ToDo: Add all kind of notifications here
-    Invitations
-    Responses [OK]
-    Ask for comment
-    Ask for publish [OK]
-    New comment [OK]
-    Job state changing [OK]
-    */
+     Invitations
+     Responses [OK]
+     Ask for comment
+     Ask for publish [OK]
+     New comment [OK]
+     Job state changing [OK]
+     */
 
     if( !checkUser(req,res) )
         return;
@@ -162,7 +172,7 @@ app.get('/api/notifications', function(req,res) {
     var teamID = req.user.teamID;
     var userID = req.user._id;
 
-    function getNewLeftComments(callback) {
+    function getNewFormCommentsNotifications(callback) {
         getNewComments(userID, teamID, function(err,comments){
             callback(comments);
         });
@@ -194,6 +204,8 @@ app.get('/api/notifications', function(req,res) {
     }
 
     function getNewMemberNotifications(callback) {
+
+        // Are you hiring manager?
         BTeams.count({_id:teamID,admin:userID}, function(err,count){
             if( err || count == 0 )
                 callback([]);
@@ -202,24 +214,6 @@ app.get('/api/notifications', function(req,res) {
                     callback(notifications)
                 });
         })
-    }
-
-    function getNewCommentsNotifications(callback) {
-        BFlyers.find({autoAssignedTo:userID}, function(err,jobs) {
-
-            var jobsID = jobs.map( function(job){ return job._id });
-
-            BApplications.find({flyerID:{$in:jobsID}}, function(err, applications) {
-
-                var applicationsID = applications.map( function(application){ return application._id });
-
-                BComments.find({applicationID:{$in:applicationsID}})
-                    .populate('commenter','displayName')
-                    .exec( function(err,comments){
-                        callback(comments);
-                    });
-            });
-        });
     }
 
     function getJobStateChangingNotfications(callback) {
@@ -275,32 +269,28 @@ app.get('/api/notifications', function(req,res) {
     getNewMemberNotifications( function(notif) {
         notifications.newMembers = notif;
 
-        getNewCommentsNotifications( function(notif) {
-            notifications.newComments = notif;
+        getJobStateChangingNotfications( function(notif) {
+            notifications.jobStateChanging = notif;
 
-            getJobStateChangingNotfications( function(notif) {
-                notifications.jobStateChanging = notif;
+            getAskedForPublishNotificatinos( function(notif) {
+                notifications.askedForPublish = notif;
 
-                getAskedForPublishNotificatinos( function(notif) {
-                    notifications.askedForPublish = notif;
+                getAksedForCommentOnForm( function(notif) {
+                    notifications.askedForCommentOnForms = notif;
 
-                    getAksedForCommentOnForm( function(notif) {
-                        notifications.askedForCommentOnForms = notif;
+                    getAskedForCommentOnApplication( function(notif) {
+                        notifications.askedForCommentOnApplication = notif;
 
-                        getAskedForCommentOnApplication( function(notif) {
-                            notifications.askedForCommentOnApplication = notif;
+                        getNewApplicantResponses( function(notif) {
+                            notifications.newResponses = notif;
 
-                            getNewApplicantResponses( function(notif) {
-                                notifications.newResponses = notif;
+                            getTeamInvitations( function(notif) {
+                                notifications.teamInvitations = notif;
 
-                                getTeamInvitations( function(notif) {
-                                    notifications.teamInvitations = notif;
+                                getNewFormCommentsNotifications( function(notif) {
+                                    notifications.newComments = notif;
 
-                                    getNewLeftComments( function(notif) {
-                                        notifications.newComments = notif;
-
-                                        res.send(200,notifications);
-                                    })
+                                    res.send(200,notifications);
                                 })
                             })
                         })
@@ -308,6 +298,5 @@ app.get('/api/notifications', function(req,res) {
                 })
             })
         })
-
     })
 });
