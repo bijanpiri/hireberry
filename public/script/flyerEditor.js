@@ -319,8 +319,10 @@ function GoToEditMode() {
 };
 
 function GoToViewMode() {
-    $(document.body).removeClass('bool-edit-mode')
+
     var height = $('#portletsBox').height();
+
+    $(document.body).removeClass('bool-edit-mode')
 
     showLoading();
 
