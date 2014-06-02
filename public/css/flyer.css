@@ -611,3 +611,6 @@ Map portlet
 .bool-widget-btn-carousel{
     
 }
+.portletThanksMessage{
+    background: inherit;
+}
