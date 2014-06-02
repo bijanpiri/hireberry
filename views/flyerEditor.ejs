@@ -51,6 +51,7 @@
 
 <script src="/script/Widgets/common.js"></script>
 <script src="/script/Widgets/ColorPicker.js"></script>
+<script src="/script/ListSpring.js"></script>
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
 <script src="/script/Widgets/PictureWidget.js"></script>
@@ -67,7 +68,7 @@
 <script src="/script/Widgets/SkillWidget.js"></script>
 <script src="/script/Widgets/WorkTypeWidget.js"></script>
 <script src="/script/Widgets/BadgeWidget.js"></script>
-
+<script src="/script/toolbar.js"></script>
 <script src="/script/Widgets/flyer.js"></script>
 <script src="/script/jquery.hotkeys.js"></script>
 
@@ -970,8 +971,9 @@
             Content Types
         </h2>
 
-        <div class="row-fluid bool-widget-btn-carousel " id="addButtons" >
-            <ul class="bool-add-widget">
+        <div class="row-fluid bool-widget-btn-carousel "
+             id="addButtons" data-scrollable >
+            <ul class="bool-add-widget" data-list>
                 <li class="bool-widget-btn" type="1">
                     <i class="bool-widget-icon bool-widget-icon-text"></i>
                     Text
@@ -1024,6 +1026,8 @@
                 </li>
 
             </ul>
+            <div class="btn icon-arrow-down" data-scroll="down"></div>
+            <div class="btn icon-arrow-up" data-scroll="up"></div>
         </div>
     <div class="bool-dock-bottom">
 

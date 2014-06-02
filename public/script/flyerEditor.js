@@ -310,7 +310,7 @@ function GoToEditMode() {
 
 
     setTimeout(function(){
-        hideLoading()
+        hideLoading();
         $('#previewFrame iframe').remove();
         $('#previewFrame').hide();
         $('.flyerRow').show();
@@ -490,14 +490,3 @@ function saveFlyer(callback) {
 
 
 }
-
-function viewModeChanged(e) {
-
-    var isViewMode = $('input[name=viewmode]').prop('checked');
-
-    if( isViewMode )
-        GoToViewMode();
-    else
-        GoToEditMode();
-}
-

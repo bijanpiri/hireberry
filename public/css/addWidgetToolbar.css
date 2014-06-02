@@ -36,6 +36,7 @@
     margin: 5px 10px 0;
     width: 210px;
     cursor: pointer;
+    line-height: 22px;
 }
 .bool-widget-icon{
     display: inline-block;

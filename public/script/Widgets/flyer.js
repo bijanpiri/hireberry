@@ -17,6 +17,7 @@ function Flyer(options) {
 
     this.pStackNormalHeight;
 
+
     $(document).mousedown(function(event){
         if($(event.target).parents().index($('.portletStack'))==-1)
             $('.bool-portlet-active').removeClass('bool-portlet-active');
