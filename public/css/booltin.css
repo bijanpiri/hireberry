@@ -405,11 +405,12 @@ Modals
 }
 
 input[type="text"].bool-input-text {
-    height: 45px;
+    height: 40px;
     display: block;
     width: 300px;
     box-sizing: border-box;
     font-size: 1.3em;
+    line-height: 40px;
     border-color: #B3AE92;
     padding: 0 10px;
 }

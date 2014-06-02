@@ -567,9 +567,17 @@ Map portlet
     border-radius: 0;
 }
 
-.thumbnails input[type=radio]:checked + label {
-    border-bottom: 3px solid rgb(30, 114, 22);
-    background-color: rgba(31, 116, 23, 0.17);
+.thumbnails input[type=radio]:checked + label img {
+    border: 4px solid #5F5F5F;
+}
+
+.thumbnail img:hover {
+    transform: scale(2, 0.5);
+    -webkit-transform: scale(1.2, 1.2);
+}
+
+.thumbnail img {
+    border: 4px solid transparent;
 }
 
 .bool-navbar{

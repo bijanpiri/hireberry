@@ -148,13 +148,12 @@ function loadTemplateChooser() {
         templateID = $(this).attr('thumbnailID');
     }) ;
 
-    $('.templateRow').show();
+    $('#templateModal').modal();
     $('#GoToEditor').click( function() {
 
         newFlyerName = $('#flyerName1').val();
 
-        //if( newFlyerName.length === 0 )
-        //    newFlyerName = 'Untitled - ' + (new Date()).toDateString();
+        $('#templateModal').modal('hide');
 
         loadEditor();
     })
