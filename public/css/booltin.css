@@ -333,10 +333,9 @@ Modals
 /** comboUser ***/
 .bool-user-item{
     cursor: pointer;
-    width: 250px;
     font-size: 14px;
     display: inline-block;
-    padding: 3px 20px;
+    padding: 3px 10px;
     text-decoration: none;
     color: #4C4C4C;
 
@@ -358,25 +357,31 @@ Modals
 }
 
 .bool-user-item>img{
-    border-radius: 40px;
-    border: 2px solid #9c9c9c;
+    border-radius: 4px;
+    border: 1px solid #9c9c9c;
     vertical-align: middle;
     float: left;
+    width: 28px;
 }
-.bool-user-item>ul{
 
+.bool-user-item>ul{
     padding: 0;
     display: inline-block;
     list-style: none;
     vertical-align: middle;
-    margin-left: 10px;
     float: left;
     text-align: left;
+    margin: 0 0 0 10px;
+    line-height: 28px;
 }
 .bool-user-item>ul>li{
-
-
+    display: inline-block;
+    margin-right: 1em;
 }
+.bool-team-members>li>a {
+    padding: 3px 10px;
+}
+
 .bool-single-user-item{
     font-size: 14px;
     display: inline-block;
@@ -397,4 +402,22 @@ Modals
     list-style: none;
 }
 .bool-single-user-item>ul>li{
+}
+
+input[type="text"].bool-input-text {
+    height: 45px;
+    display: block;
+    width: 300px;
+    box-sizing: border-box;
+    font-size: 1.3em;
+    border-color: #B3AE92;
+    padding: 0 10px;
+}
+textarea.bool-textarea {
+    display: block;
+    box-sizing: border-box;
+    font-size: 1.1em;
+    border-color: #B3AE92;
+    padding: 10px;
+    resize: none;
 }

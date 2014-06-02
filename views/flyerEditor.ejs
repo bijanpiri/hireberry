@@ -284,38 +284,36 @@
 </div>
 
 <div class="modal hide fade" id="publishModal">
-    <div class="modal-header">
+    <div class="modal-header" style="height: 40px">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Publish</h3>
     </div>
     <div class="modal-body">
         <div class="container-fluid no-border-box">
 
             <div class="row-fluid controls-row">
                 <div class="span12" style="font-size: 1.5em;">
-                    Job open position title:
-                    <input type="text" id="flyerName2" style="width: 98%"
-                           placeholder="Flyer Name">
+                    <p>Open position title:</p>
+                    <input type="text" id="flyerName2" class="bool-input-text" style="width: 98%" placeholder="Flyer Name">
                 </div>
             </div>
 
             <div class="row-fluid controls-row">
                 <div class="span12" style="font-size: 1.5em;">
-                    A thanks message for showing to applicant just after applying
-                    <textarea id="thanksMessage" style="width: 98%"
-                              placeholder="Thanks Message" rows="5"></textarea>
+                    <p>Thanks message:</p>
+                    <textarea id="thanksMessage" class="bool-textarea" style="width: 98%" placeholder="Thanks Message" rows="5"></textarea>
                 </div>
             </div>
 
             <div class="row-fluid">
-
                 <div class="span12" style="font-size: 1.5em;">
-                    Job responder
-                    <div id="autoAssignTo"></div>
+                    <hr style="border-top: 3px solid;">
+
+                    <p style="display: inline-block">Responder:</p>
+                    <div style="display: inline-block" id="autoAssignTo"></div>
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" hidden>
                 <div class="span12" style="font-size: 1.5em;">
                     Ask For Comment
                     <div id="askForComment"></div>
@@ -325,8 +323,8 @@
 
     </div>
     <div class="modal-footer">
-        <button id="buttonPublishDone" class="btn btn-success pull-right">Publish</button>
-        <button id="buttonPublishSaveAsDraft" class="btn btn-warning pull-right" style="margin-right: 1em;">Save as draft</button>
+        <a id="buttonPublishDone" class="bool-toolbar-btn bool-toolbar-btn-green pull-right" style="margin: 0;">Publish</a>
+        <a id="buttonPublishSaveAsDraft" class="bool-toolbar-btn bool-toolbar-btn-blue pull-right" style="margin: 0 1em 0 0;">Save as draft</a>
     </div>
 </div>
 </div>
@@ -690,19 +688,19 @@
     <div class="row-fluid bgi" id="flatTitle">
         <div class="span12 bgi" >
 
-                <div class="flatSection bgi" style="text-align:center" >
+            <div class="flatSection bgi" style="text-align:center" >
                     <span class="bool-edit-box bgi" hidden="hidden">
                         <span class="bool-edit-box-close"></span>
                         <span class='bool-editable bgi' >More Info
                         </span>
                     </span>
 
-                    <div class="bool-divider">
-                        <span class="bool-edit-box-add bool-image"></span>
-                    </div>
-                    <!--</div>-->
-
+                <div class="bool-divider">
+                    <span class="bool-edit-box-add bool-image"></span>
                 </div>
+                <!--</div>-->
+
+            </div>
 
 
         </div>
@@ -781,256 +779,256 @@
 </div>
 
 <div class="toolbars">
-<div class="toolbar-text">
+    <div class="toolbar-text">
 
-    <div class="bool-combo">
+        <div class="bool-combo">
             <span class="bool-combo-icon">
                 <i class="bool-icon-size"></i>
             </span>
-        <a class="btn dropdown-toggle bool-combo-btn" data-toggle="dropdown" href="#">
-            <span class="bool-combo-text">Small</span>
-            <span class="caret bool-caret"></span>
-        </a>
-        <ul class="dropdown-menu bool-combo-list">
-            <li><a style="font-size: 18px" data-edit="fontSize 4">Small</a></li>
-            <li><a style="font-size: 20px" data-edit="fontSize 6" >Medium</a></li>
-            <li><a style="font-size: 24px" data-edit="fontSize 7">Large</a></li>
-        </ul>
-    </div>
-    <div class="bool-color-chooser pull-left bool-btn">
+            <a class="btn dropdown-toggle bool-combo-btn" data-toggle="dropdown" href="#">
+                <span class="bool-combo-text">Small</span>
+                <span class="caret bool-caret"></span>
+            </a>
+            <ul class="dropdown-menu bool-combo-list">
+                <li><a style="font-size: 18px" data-edit="fontSize 4">Small</a></li>
+                <li><a style="font-size: 20px" data-edit="fontSize 6" >Medium</a></li>
+                <li><a style="font-size: 24px" data-edit="fontSize 7">Large</a></li>
+            </ul>
+        </div>
+        <div class="bool-color-chooser pull-left bool-btn">
 
-    </div>
-    <div class="bool-separator"></div>
-    <a class="bool-btn"  command="align left"
-       title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)">
-        <i class="bool-icon-align-left"></i></a>
-    <a class="bool-btn"  command="align center"
-       title="Align Center" data-original-title="Center (Ctrl/Cmd+E)">
-        <i class="bool-icon-align-center"></i></a>
-    <a class="bool-btn"  command="align right"
-       title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)">
-        <i class="bool-icon-align-right"></i></a>
-    <div class="bool-separator"></div>
-    <a class="bool-btn" data-edit="bold" title=""
-       data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
-    <a class="bool-btn" data-edit="italic" title=""
-       data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
-    <a class="bool-btn" data-edit="underline" title=""
-       data-original-title="Underline (Ctrl/Cmd+U)">
-        <i class="bool-icon-underline"></i></a>
-    <a class="bool-btn" data-edit="insertunorderedlist"
-       title="" data-original-title="Bullet list">
-        <i class="bool-icon-list-ul"></i></a>
-    <a class="bool-btn" data-edit="insertorderedlist" title=""
-       data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
-</div>
-
-<div class="toolbar-picture">
-    <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
-    <a class="btn btn-large hide" command="edit" ><i class="icon-edit"></i></a>
-    <a class="btn btn-large hide" command="crop"><i class="darkroom-icon-crop"></i></a>
-    <a class="btn btn-large hide" command="accept" ><i class="icon-ok"></i></a>
-    <a class="btn btn-large hide" command="cancel" ><i class="icon-remove"></i></a>
-    <a class="btn btn-large hide" command="undo"><i class="icon-undo"></i></a>
-    <a class="btn btn-large hide" command="redo"><i class="icon-undo"></i></a>
-    <a class="btn btn-large hide" command="rotate-left"><i class="darkroom-icon-rotate-left"></i></a>
-    <a class="btn btn-large hide" command="rotate-right"><i class="darkroom-icon-rotate-right"></i></a>
-    <a class="btn btn-large hide" command="save"><i class="icon-save"></i></a>
-
-</div>
-
-<div class="toolbar-separatorWidget">
-    <div class="pull-left">
-        <span  id="toolbar-labelSeparator" >Color</span>
+        </div>
+        <div class="bool-separator"></div>
+        <a class="bool-btn"  command="align left"
+           title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)">
+            <i class="bool-icon-align-left"></i></a>
+        <a class="bool-btn"  command="align center"
+           title="Align Center" data-original-title="Center (Ctrl/Cmd+E)">
+            <i class="bool-icon-align-center"></i></a>
+        <a class="bool-btn"  command="align right"
+           title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)">
+            <i class="bool-icon-align-right"></i></a>
+        <div class="bool-separator"></div>
+        <a class="bool-btn" data-edit="bold" title=""
+           data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
+        <a class="bool-btn" data-edit="italic" title=""
+           data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
+        <a class="bool-btn" data-edit="underline" title=""
+           data-original-title="Underline (Ctrl/Cmd+U)">
+            <i class="bool-icon-underline"></i></a>
+        <a class="bool-btn" data-edit="insertunorderedlist"
+           title="" data-original-title="Bullet list">
+            <i class="bool-icon-list-ul"></i></a>
+        <a class="bool-btn" data-edit="insertorderedlist" title=""
+           data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
     </div>
 
-    <div class="bool-color-chooser bool-btn">
+    <div class="toolbar-picture">
+        <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
+        <a class="btn btn-large hide" command="edit" ><i class="icon-edit"></i></a>
+        <a class="btn btn-large hide" command="crop"><i class="darkroom-icon-crop"></i></a>
+        <a class="btn btn-large hide" command="accept" ><i class="icon-ok"></i></a>
+        <a class="btn btn-large hide" command="cancel" ><i class="icon-remove"></i></a>
+        <a class="btn btn-large hide" command="undo"><i class="icon-undo"></i></a>
+        <a class="btn btn-large hide" command="redo"><i class="icon-undo"></i></a>
+        <a class="btn btn-large hide" command="rotate-left"><i class="darkroom-icon-rotate-left"></i></a>
+        <a class="btn btn-large hide" command="rotate-right"><i class="darkroom-icon-rotate-right"></i></a>
+        <a class="btn btn-large hide" command="save"><i class="icon-save"></i></a>
 
     </div>
 
+    <div class="toolbar-separatorWidget">
+        <div class="pull-left">
+            <span  id="toolbar-labelSeparator" >Color</span>
+        </div>
 
-</div>
+        <div class="bool-color-chooser bool-btn">
 
-<div class="toolbar-profileWidget">
+        </div>
 
 
-    <span id="toolbar-labelprofile">Profiles : </span>
-
-    <input hidden type="checkbox" id="tool-github"   name="p" value="github" checked>
-    <label  for="tool-github" class="bool-btn" >
-        <i class="bool-icon-github" for="tool-github"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-stackoverflow"   name="p" value="stackoverflow" checked>
-    <label for="tool-stackoverflow"  class="bool-btn" >
-        <i class="bool-icon-stackoverflow"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-twitter"   name="p" value="twitter" checked>
-    <label for="tool-twitter"  class="bool-btn" >
-        <i  class="bool-icon-twitter"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-linkedin"   name="p" value="linkedin" checked>
-    <label for="tool-linkedin"  class="bool-btn" >
-        <i class="bool-icon-linkedin"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-dribbble"   name="p" value="dribbble" checked>
-    <label for="tool-dribbble"  class="bool-btn" >
-        <i class="bool-icon-dribbble"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-behance"   name="p" value="behance" checked>
-    <label for="tool-behance" class="bool-btn" >
-        <i  class="bool-icon-behance"></i>
-    </label>
-
-    <div class="bool-separator"></div>
-
-    <input hidden  type="checkbox" id="tool-email"   name="p" value="email" checked>
-    <label for="tool-email"  class="bool-btn" >
-        <i class="bool-icon-email"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-tel"   name="p" value="tel" checked>
-    <label for="tool-tel"  class="bool-btn" >
-        <i class="bool-icon-tel"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-website"   name="p" value="website" checked>
-    <label for="tool-website"  class="bool-btn" >
-        <i  class="bool-icon-website"></i>
-    </label>
-</div>
-
-<div class="toolbar-workTypeWidget">
-    <div>
-        <input id="workType-time" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-time" no="1">
-        <label  for="workType-time" class="toolbar-widgetLabel">Time</label>
-
-        <input id="workType-place" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-place" no="2">
-        <label for="workType-place" class="toolbar-widgetLabel">Place</label>
-
-        <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3" checked>
-        <label for="workType-both" class="toolbar-widgetLabel">Both</label>
     </div>
-</div>
 
-<div class="toolbar-mapWidget">
-    <div>
-        <input id="mapLayout-left" type="radio" hidden name="toolbar-mapLayout" checked>
-        <label for="mapLayout-left" class="toolbar-mapLabel">Left</label>
+    <div class="toolbar-profileWidget">
 
-        <input id="mapLayout-right" type="radio" hidden name="toolbar-mapLayout">
-        <label for="mapLayout-right" class="toolbar-mapLabel">Right</label>
+
+        <span id="toolbar-labelprofile">Profiles : </span>
+
+        <input hidden type="checkbox" id="tool-github"   name="p" value="github" checked>
+        <label  for="tool-github" class="bool-btn" >
+            <i class="bool-icon-github" for="tool-github"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-stackoverflow"   name="p" value="stackoverflow" checked>
+        <label for="tool-stackoverflow"  class="bool-btn" >
+            <i class="bool-icon-stackoverflow"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-twitter"   name="p" value="twitter" checked>
+        <label for="tool-twitter"  class="bool-btn" >
+            <i  class="bool-icon-twitter"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-linkedin"   name="p" value="linkedin" checked>
+        <label for="tool-linkedin"  class="bool-btn" >
+            <i class="bool-icon-linkedin"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-dribbble"   name="p" value="dribbble" checked>
+        <label for="tool-dribbble"  class="bool-btn" >
+            <i class="bool-icon-dribbble"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-behance"   name="p" value="behance" checked>
+        <label for="tool-behance" class="bool-btn" >
+            <i  class="bool-icon-behance"></i>
+        </label>
+
+        <div class="bool-separator"></div>
+
+        <input hidden  type="checkbox" id="tool-email"   name="p" value="email" checked>
+        <label for="tool-email"  class="bool-btn" >
+            <i class="bool-icon-email"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-tel"   name="p" value="tel" checked>
+        <label for="tool-tel"  class="bool-btn" >
+            <i class="bool-icon-tel"></i>
+        </label>
+
+        <input hidden type="checkbox" id="tool-website"   name="p" value="website" checked>
+        <label for="tool-website"  class="bool-btn" >
+            <i  class="bool-icon-website"></i>
+        </label>
     </div>
-</div>
 
-<div class="toolbar-resumeWidget">
-    <button name="connectToDropBox" class="btn">Connect to Dropbox</button>
+    <div class="toolbar-workTypeWidget">
+        <div>
+            <input id="workType-time" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-time" no="1">
+            <label  for="workType-time" class="toolbar-widgetLabel">Time</label>
 
-</div>
+            <input id="workType-place" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-place" no="2">
+            <label for="workType-place" class="toolbar-widgetLabel">Place</label>
 
-<div class="toolbar-anything">
-    <label for="anything-limit" >Limit:</label>
+            <input id="workType-both" type="radio" hidden name="toolbar-worktype" class="toolbar-workType-both" no="3" checked>
+            <label for="workType-both" class="toolbar-widgetLabel">Both</label>
+        </div>
+    </div>
 
-    <input id="anything-limit" type="number" command='limit' event='change keyup paste keydown' name="limit" value="1000" min="10" max="5000">
-    <label>you have </label>
-    <label class="remaind"></label>
-    <label> left</label>
-</div>
+    <div class="toolbar-mapWidget">
+        <div>
+            <input id="mapLayout-left" type="radio" hidden name="toolbar-mapLayout" checked>
+            <label for="mapLayout-left" class="toolbar-mapLabel">Left</label>
 
-<div class="toolbar-skillsWidget">
-</div>
+            <input id="mapLayout-right" type="radio" hidden name="toolbar-mapLayout">
+            <label for="mapLayout-right" class="toolbar-mapLabel">Right</label>
+        </div>
+    </div>
 
-<div class="toolbar-badgeWidget">
+    <div class="toolbar-resumeWidget">
+        <button name="connectToDropBox" class="btn">Connect to Dropbox</button>
 
-    <input type="checkbox" id="vacation" hidden name="badge" value="vacation" checked>
-    <label for="vacation" class="toolbar-badgeLabel">Vacation</label>
+    </div>
 
-    <input type="checkbox" id="snack" hidden name="badge" value="snack" checked>
-    <label for="snack" class="toolbar-badgeLabel">Snack</label>
+    <div class="toolbar-anything">
+        <label for="anything-limit" >Limit:</label>
 
-    <input type="checkbox" id="health" hidden name="badge" value="health" checked>
-    <label for="health" class="toolbar-badgeLabel">Health</label>
+        <input id="anything-limit" type="number" command='limit' event='change keyup paste keydown' name="limit" value="1000" min="10" max="5000">
+        <label>you have </label>
+        <label class="remaind"></label>
+        <label> left</label>
+    </div>
 
-    <input type="checkbox" id="share" hidden name="badge" value="share" checked>
-    <label for="share" class="toolbar-badgeLabel">Share</label>
+    <div class="toolbar-skillsWidget">
+    </div>
 
-</div>
+    <div class="toolbar-badgeWidget">
 
-<div class="toolbar-videoWidget">
+        <input type="checkbox" id="vacation" hidden name="badge" value="vacation" checked>
+        <label for="vacation" class="toolbar-badgeLabel">Vacation</label>
 
-</div>
+        <input type="checkbox" id="snack" hidden name="badge" value="snack" checked>
+        <label for="snack" class="toolbar-badgeLabel">Snack</label>
+
+        <input type="checkbox" id="health" hidden name="badge" value="health" checked>
+        <label for="health" class="toolbar-badgeLabel">Health</label>
+
+        <input type="checkbox" id="share" hidden name="badge" value="share" checked>
+        <label for="share" class="toolbar-badgeLabel">Share</label>
+
+    </div>
+
+    <div class="toolbar-videoWidget">
+
+    </div>
 </div>
 
 <div class="container-fluid portletCreator ">
-        <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
-            Error: There is no space for adding new portlet!
-        </div>
-        <h2>
-            Content Types
-        </h2>
+    <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
+        Error: There is no space for adding new portlet!
+    </div>
+    <h2>
+        Content Types
+    </h2>
 
-        <div class="row-fluid bool-widget-btn-carousel "
-             id="addButtons" data-scrollable >
-            <ul class="bool-add-widget" data-list>
-                <li class="bool-widget-btn" type="1">
-                    <i class="bool-widget-icon bool-widget-icon-text"></i>
-                    Text
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn" type="2">
-                    <i class="bool-widget-icon bool-widget-icon-picture"></i>
-                    Picture
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn" type="3">
-                    <i class="bool-widget-icon bool-widget-icon-video"></i>
-                    Video
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn " type="6" >
-                    <i class="bool-widget-icon bool-widget-icon-map"></i>
-                    Map
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn " type="7" >
-                    <i class="bool-widget-icon bool-widget-icon-perk"></i>
-                    Perks
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn " type="14" >
-                    <i class="bool-widget-icon bool-widget-icon-skill"></i>
-                    Skills
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn " type="12" >
-                    <i class="bool-widget-icon bool-widget-icon-profile"></i>
-                    Profile
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn " type="8" >
-                    <i class="bool-widget-icon bool-widget-icon-condition"></i>
-                    Conditions
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn " type="11" >
-                    <i class="bool-widget-icon bool-widget-icon-cover-letter"></i>
-                    Cover Letter
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
-                <li class="bool-widget-btn " type="13" >
-                    <i class="bool-widget-icon bool-widget-icon-separator"></i>
-                    Separator
-                    <i class="bool-widget-icon bool-icon-move"></i>
-                </li>
+    <div class="row-fluid bool-widget-btn-carousel "
+         id="addButtons" data-scrollable >
+        <ul class="bool-add-widget" data-list>
+            <li class="bool-widget-btn" type="1">
+                <i class="bool-widget-icon bool-widget-icon-text"></i>
+                Text
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn" type="2">
+                <i class="bool-widget-icon bool-widget-icon-picture"></i>
+                Picture
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn" type="3">
+                <i class="bool-widget-icon bool-widget-icon-video"></i>
+                Video
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn " type="6" >
+                <i class="bool-widget-icon bool-widget-icon-map"></i>
+                Map
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn " type="7" >
+                <i class="bool-widget-icon bool-widget-icon-perk"></i>
+                Perks
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn " type="14" >
+                <i class="bool-widget-icon bool-widget-icon-skill"></i>
+                Skills
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn " type="12" >
+                <i class="bool-widget-icon bool-widget-icon-profile"></i>
+                Profile
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn " type="8" >
+                <i class="bool-widget-icon bool-widget-icon-condition"></i>
+                Conditions
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn " type="11" >
+                <i class="bool-widget-icon bool-widget-icon-cover-letter"></i>
+                Cover Letter
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
+            <li class="bool-widget-btn " type="13" >
+                <i class="bool-widget-icon bool-widget-icon-separator"></i>
+                Separator
+                <i class="bool-widget-icon bool-icon-move"></i>
+            </li>
 
-            </ul>
-            <div class="btn icon-arrow-down" data-scroll="down"></div>
-            <div class="btn icon-arrow-up" data-scroll="up"></div>
-        </div>
+        </ul>
+        <div class="btn icon-arrow-down" data-scroll="down"></div>
+        <div class="btn icon-arrow-up" data-scroll="up"></div>
+    </div>
     <div class="bool-dock-bottom">
 
         <ul class="bool-toolbar-options">
@@ -1051,20 +1049,18 @@
         </ul>
 
         <ul class="bool-toolbar-commands">
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-preview" >
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-gray bool-toolbar-btn-preview" >
                     <i class="bool-widget-icon bool-toolbar-icon-preview"></i>
                     Preview
-                </a></li>
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-edit"
-
-                   style="display: none;">
+                </a>
+            </li>
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-lightGray bool-toolbar-btn-edit" style="display: none;">
                     <i class="bool-widget-icon bool-toolbar-icon-preview-edit"></i>
                     Back to Edit
-                </a></li>
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-save"
-
-                   data-loading-text="Saving...">Save & Exit</a></li>
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-publish">
+                </a>
+            </li>
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-blue bool-toolbar-btn-save" data-loading-text="Saving...">Save & Exit</a></li>
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-green bool-toolbar-btn-publish">
                     <i class="bool-widget-icon bool-toolbar-icon-publish"></i>
                     Publish
                 </a>

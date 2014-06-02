@@ -203,6 +203,7 @@ Portlet Creator
 .bool-toolbar-btn{
     display: block;
     margin: 10px 20px;
+    padding: 0 20px;
     text-decoration: none;
     cursor: pointer;
     height: 44px;
@@ -218,7 +219,7 @@ Portlet Creator
     text-decoration: none;
     color: #fff;
 }
-.bool-toolbar-btn-preview{
+.bool-toolbar-btn-gray{
     color: #e6e6e6;
     border: 2px solid #e6e6e6;
 }
@@ -226,13 +227,13 @@ Portlet Creator
     color: #e6e6e6;
 }
 
-.bool-toolbar-btn-save{
+.bool-toolbar-btn-blue{
     background: #3397cb;
 }
-.bool-toolbar-btn-edit{
+.bool-toolbar-btn-lightGray{
     background: #b2b2b2;
 }
-.bool-toolbar-btn-publish{
+.bool-toolbar-btn-green{
     background: #6DCB3E;
 }
 .bool-toolbar-icon-publish{
