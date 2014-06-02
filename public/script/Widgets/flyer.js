@@ -11,6 +11,8 @@ var editMode;
 function Flyer(options) {
 
     editMode = options.editMode;
+    var flyerLoaded = options.flyerLoaded || function(){};
+
     var pStack = this;
 
     this.pStackNormalHeight;
@@ -112,7 +114,6 @@ function Flyer(options) {
             .done(function(data){
                 if( callback ){
                     callback(data);
-                    return;
                 }
 
                 flyer.description = data.description;
@@ -267,7 +268,7 @@ function Flyer(options) {
 
         // templateID=0 means 'don't use template'
         if( options.flyerid)
-            this.json2flyer( options.templateID, options.flyerid );
+            this.json2flyer( options.templateID, options.flyerid, flyerLoaded );
     };
 
     // Public functions

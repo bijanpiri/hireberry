@@ -131,7 +131,13 @@ function loadFlyer() {
     flyer = $('.portletStack').Flyer({
         editMode: editMode,
         flyerid: flyerid,
-        templateID: templateID
+        templateID: templateID,
+        flyerLoaded: function(flyer) {
+            if( !editMode )
+                document.title = flyer.description;
+            else
+                document.title = 'Editor - ' + flyer.description;
+        }
     });
 }
 

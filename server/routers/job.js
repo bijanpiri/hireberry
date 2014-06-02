@@ -25,7 +25,7 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
                 flyerID: req.params.flyerID
             }).save( function(err) {
                     res.render('flyerEditor.ejs',{
-                        title:'-',
+                        title:'Job',
                         flyerid: req.params.flyerID,
                         templateID: 0,
                         editMode: false,
