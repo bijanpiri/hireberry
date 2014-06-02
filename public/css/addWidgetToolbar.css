@@ -37,6 +37,7 @@
     width: 210px;
     cursor: pointer;
     line-height: 22px;
+    border: 1px solid #808080;
 }
 .bool-widget-icon{
     display: inline-block;
