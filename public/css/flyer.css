@@ -87,7 +87,7 @@ Whole Paper
 .portlet-commentsView {
     position: relative;
     background: #b1b1b1;
-    width: 100%;
+    width: 300px;
     height: 100%;
     font-size: 1.4em;
 }
@@ -197,12 +197,12 @@ Action Buttons
     width: 23px;
     height: 22px;
 }
-.portlet-container .move-btn {
+.portlet-container .widget-move-btn {
     background-position: 0 -262px;
     width: 22px;
     height: 12px;
 }
-.portlet-container .delete-btn {
+.portlet-container .widget-delete-btn {
     background-position: 0 -275px;
     width: 17px;
     height: 21px;

@@ -239,7 +239,10 @@ function initCommentView() {
 
     });
 
-    toggleCommentView();
+    // Putting comment view in initialization mode
+    toggleCommentView.call( $('#buttonComment'), function() {
+        $('.portlet-commentsView-container').show();
+    });
 
     $('#ask-for-comment-btn').click( function() {
 
@@ -266,16 +269,17 @@ function initCommentView() {
     $('#buttonComment').click(toggleCommentView);
 }
 
-function toggleCommentView() {
+function toggleCommentView(callback) {
     var isOpen = $(this).attr('isOpen')==='1';
+    var callback = typeof(callback)==='function' ? callback : function(){};
 
     if( isOpen ) {
-        var width = $('.portlet-commentsView').width();
-        $('.portlet-commentsView').animate({right:-width});
+        $('.portlet-commentsView-container').animate( {width:0}, 500, callback );
         $(this).attr('isOpen','0');
     }
     else {
-        $('.portlet-commentsView').animate({right:0});
+        var width = $('.portlet-commentsView').width();
+        $('.portlet-commentsView-container').animate( {width:width}, 500 , callback );
         $(this).attr('isOpen','1');
     }
 }

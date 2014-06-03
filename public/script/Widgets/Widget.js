@@ -56,10 +56,10 @@ function Widget(options){
     this.content = function(){
         // Action Buttons
         var moveHandle = $('<div>').addClass('action-btn-frame move-btn-frame')
-            .append($('<i>').addClass('action-btn move-btn'));
+            .append($('<i>').addClass('action-btn widget-move-btn'));
 
         var deleteButton = $('<div >').addClass('action-btn-frame delete-btn-frame')
-            .append($('<i>').addClass('action-btn delete-btn'));
+            .append($('<i>').addClass('action-btn widget-delete-btn'));
 
         deleteButton.click(deleteWidget);
 
