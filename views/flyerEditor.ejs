@@ -100,233 +100,238 @@
 
 <div class="container-fluid bool-flyer-editor " >
 
-    <div class="row-fluid flyerRow" hidden>
-        <div class="span12" id="portletsBox">
+<div class="row-fluid flyerRow" hidden>
+    <div class="span12" id="portletsBox">
+        <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
 
-            <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
+            <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
+            <input type="hidden" name="flyerName">
 
-                <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
-                <input type="hidden" name="flyerName">
+            <div class="bool-portlet">
 
-                <div class="bool-portlet">
+                <div class="portletHeader">
+                    <input type="file" hidden="hidden" class="logofile">
+                    <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
+                    <div class="title">
+                        JOBS
+                    </div>
+                </div>
 
-                    <div class="portletHeader">
-                        <input type="file" hidden="hidden" class="logofile">
-                        <img class="logo" src="http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/">
-                        <div class="title">
-                            JOBS
-                        </div>
+                <div class="portletStack">
+
+                    <div class="bool-flyer-empty">
+                        Drop your widget here.
                     </div>
 
-                    <div class="portletStack">
+                </div>
 
-                        <div class="bool-flyer-empty">
-                            Drop your widget here.
+                <div class="portletFooter"></div>
+
+                <div class="portletSubmittion container-fluid" >
+                    <div class="row-fluid"  id="text">
+                        <div class="span6 offset3">
+                            <input type="button" name="submit"
+                                   class="btn3d btn3d-2 btn3d-2a applyNowButton"
+
+                                   style="font-weight: 700" id="submit_btn"
+                                   value="APPLY NOW" data-loading-text="Sending"/>
+                            <p class="error"
+                               style="display: none;color: red;text-align: center;font-size: 2em;"></p>
                         </div>
-
                     </div>
-
-                    <div class="portletFooter"></div>
-
-                    <div class="portletSubmittion container-fluid" >
-                        <div class="row-fluid"  id="text">
-                            <div class="span6 offset3">
-                                <input type="button" name="submit"
-                                       class="btn3d btn3d-2 btn3d-2a applyNowButton"
-
-                                       style="font-weight: 700" id="submit_btn"
-                                       value="APPLY NOW" data-loading-text="Sending"/>
-                                <p class="error"
-                                   style="display: none;color: red;text-align: center;font-size: 2em;"></p>
+                </div>
+                <div class="portletThanksMessage container-fluid"
+                     style="padding: 0 38px" hidden>
+                    <div class="row-fluid"  id="text">
+                        <div class="span-10 offset-1"
+                             style="font-size: 2em;padding:20px ;text-align: center;line-height: 1.6em;border-radius: 0 0 7px 7px;padding-bottom:3em;">
+                            <div class="thanksMessageContent">
+                                { Thanks }<br/><br/>
+                                We've received your application request and will notify you ASAP.<br/>
+                                If you have any question don't hesitate to
+                                <a href="mailto:hello@boolt.in">ask us</a>
+                                <br/>
+                                You can read more about booltin
+                                <a href="http://blog.boolt.in">here<br/></a><br/>
                             </div>
                         </div>
                     </div>
-                    <div class="portletThanksMessage container-fluid"
-                         style="padding: 0 38px" hidden>
-                        <div class="row-fluid"  id="text">
-                            <div class="span-10 offset-1"
-                                 style="font-size: 2em;padding:20px ;text-align: center;line-height: 1.6em;border-radius: 0 0 7px 7px;padding-bottom:3em;">
-                                <div class="thanksMessageContent">
-                                    { Thanks }<br/><br/>
-                                    We've received your application request and will notify you ASAP.<br/>
-                                    If you have any question don't hesitate to
-                                    <a href="mailto:hello@boolt.in">ask us</a>
-                                    <br/>
-                                    You can read more about booltin
-                                    <a href="http://blog.boolt.in">here<br/></a><br/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-            </form>
-
-            <% if(everyauth.user) { %>
-            <div class="portlet-commentsView">
-                <a id="buttonComment" class="btn ">Show comments</a>
-                <div class="portlet-askedForComment-list">
-                </div>
-                <div class="portlet-comments">
                 </div>
             </div>
-            <% } %>
-
-        </div>
+        </form>
     </div>
+</div>
 
-    <div class="row-fluid shareRow" hidden>
-        <div class="span6 offset3">
+<% if(everyauth.user && viewMode!=='embeded') { %>
+<div class="portlet-commentsView-container">
+    <div class="portlet-commentsView">
+        <a id="buttonComment" isOpen="1">
+            <i class="fa fa-comments"></i>
+        </a>
+        <a class="pull-right" id="ask-for-comment-btn">Ask For Comment</a>
+        <div class="askForComment-form" style="padding: 1em;" hidden>
+            <div class="askForComment-user"></div>
+            <textarea class="bool-textarea askForComment-note" placeholder="Leave a note for him ..." style="width: 100%"></textarea>
+            <a class="askForComment-send btn btn-mini pull-right">Send Request</a>
+        </div>
+        <ul class="portlet-askedForComment-list">
+        </ul>
+        <ul class="portlet-comments">
+        </ul>
+    </div>
+</div>
+<% } %>
 
-            <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
+<div class="row-fluid shareRow" hidden>
+    <div class="span6 offset3">
 
-                <div class="row-fluid controls-row">
-                    <div class="span12" style="font-size: 2em;">
-                        <p id="publishFinalMessage" style="color: #9c9c9c;text-align: center;border: 2px solid #9c9c9c;padding: 10px;margin-bottom: 30px;border-radius: 4px;background-color: #DADADA;"></p>
-                        <p id="flyerName3">Title</p>
-                    </div>
+        <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
+
+            <div class="row-fluid controls-row">
+                <div class="span12" style="font-size: 2em;">
+                    <p id="publishFinalMessage" style="color: #9c9c9c;text-align: center;border: 2px solid #9c9c9c;padding: 10px;margin-bottom: 30px;border-radius: 4px;background-color: #DADADA;"></p>
+                    <p id="flyerName3">Title</p>
                 </div>
-
-                <div class="row-fluid controls-row">
-                    <div class="span12">
-                        <input type="url" id="flyerURL" style="width: 90%">
-                    </div>
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                        <b>Share on:</b>
-                    </div>
-                    <div class="span4">
-                        <g:plus action="share" href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>"></g:plus>
-                    </div>
-                    <div class="span3">
-                        <div class="fb-share-button" data-href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-type="button_count"></div>
-                    </div>
-                    <div class="span3">
-                        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-text="We are hiring" >Tweet</a></div>
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span12">
-                        <button id="buttonShareDone" class="btn btn-danger pull-right">Close</button>
-                    </div>
-                </div>
-
             </div>
 
-        </div>
-    </div>
-
-    <div id="previewFrame" hidden>
-    </div>
-
-    <div style="position: absolute;left: 0;right: 0;font-size: 1.5em;margin-bottom: 1em;text-align: center;display: none">
-        Powered by <a href="https://boolt.in">booltin</a>
-    </div>
-
-    <div class="modal hide fade" id="publishModal">
-        <div class="modal-header" style="height: 40px">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="container-fluid no-border-box">
-
-                <div class="row-fluid controls-row">
-                    <div class="span12" style="font-size: 1.5em;">
-                        <p>Open position title:</p>
-                        <input type="text" id="flyerName2" class="bool-input-text" style="width: 98%" placeholder="Flyer Name">
-                    </div>
+            <div class="row-fluid controls-row">
+                <div class="span12">
+                    <input type="url" id="flyerURL" style="width: 90%">
                 </div>
+            </div>
 
-                <div class="row-fluid controls-row">
-                    <div class="span12" style="font-size: 1.5em;">
-                        <p>Thanks message:</p>
-                        <textarea id="thanksMessage" class="bool-textarea" style="width: 98%" placeholder="Thanks Message" rows="5"></textarea>
-                    </div>
+            <div class="row-fluid">
+                <div class="span2">
+                    <b>Share on:</b>
                 </div>
-
-                <div class="row-fluid">
-                    <div class="span12" style="font-size: 1.5em;">
-                        <hr style="border-top: 3px solid;">
-
-                        <p style="display: inline-block">Responder:</p>
-                        <div style="display: inline-block" id="autoAssignTo"></div>
-                    </div>
+                <div class="span4">
+                    <g:plus action="share" href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>"></g:plus>
                 </div>
+                <div class="span3">
+                    <div class="fb-share-button" data-href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-type="button_count"></div>
+                </div>
+                <div class="span3">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-text="We are hiring" >Tweet</a></div>
+            </div>
 
-                <div class="row-fluid" hidden>
-                    <div class="span12" style="font-size: 1.5em;">
-                        Ask For Comment
-                        <div id="askForComment"></div>
-                    </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <button id="buttonShareDone" class="btn btn-danger pull-right">Close</button>
                 </div>
             </div>
 
         </div>
-        <div class="modal-footer">
-            <a id="buttonPublishDone" class="bool-toolbar-btn bool-toolbar-btn-green pull-right" style="margin: 0;">Publish</a>
-            <a id="buttonPublishSaveAsDraft" class="bool-toolbar-btn bool-toolbar-btn-blue pull-right" style="margin: 0 1em 0 0;">Save as draft</a>
-        </div>
+
     </div>
+</div>
 
-    <div class="modal hide fade" id="templateModal">
+<div id="previewFrame" hidden>
+</div>
 
-        <div class="modal-header" style="height: 40px">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
+<div style="position: absolute;left: 0;right: 0;font-size: 1.5em;margin-bottom: 1em;text-align: center;display: none">
+    Powered by <a href="https://boolt.in">booltin</a>
+</div>
 
-        <div class="modal-body">
-            <div class="container-fluid no-border-box" style="padding: 0">
-                <div class="row-fluid">
-                    <div class="span5" style="font-size: 1.7em;">
-                        <p>Open position title:</p>
-                        <input id="flyerName1" class="bool-input-text" type="text" placeholder="e.g. Front-End Developer">
-                    </div>
+<div class="modal hide fade" id="publishModal">
+    <div class="modal-header" style="height: 40px">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid no-border-box">
+
+            <div class="row-fluid controls-row">
+                <div class="span12" style="font-size: 1.5em;">
+                    <p>Open position title:</p>
+                    <input type="text" id="flyerName2" class="bool-input-text" style="width: 98%" placeholder="Flyer Name">
                 </div>
-                <div class="row-fluid" style="margin-top: 2em">
-                    <div class="span12" style="font-size: 1.7em;">
-                        <p>Choose a template</p>
-                    </div>
+            </div>
+
+            <div class="row-fluid controls-row">
+                <div class="span12" style="font-size: 1.5em;">
+                    <p>Thanks message:</p>
+                    <textarea id="thanksMessage" class="bool-textarea" style="width: 98%" placeholder="Thanks Message" rows="5"></textarea>
                 </div>
-                <div class="row-fluid">
-                    <div class="span12" style="height: 100%">
-                        <ul class="thumbnails" class="row-fluid">
-                            <li>
-                                <input type="radio" hidden name="radio-templates" id="radio-template1">
-                                <label for="radio-template1" class="thumbnail" href="#" thumbnailID="0" caption="Blank" description="Create what you link">
-                                    <img src="http://placebox.es/100/160/9c9c9c/ffffff/Blank/" alt="...">
-                                    <span></span>
-                                </label>
-                            </li>
-                            <li>
-                                <input type="radio" hidden name="radio-templates" id="radio-template2">
-                                <label for="radio-template2" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
-                                    <img src="http://placebox.es/100/160/9c9c9c/ffffff/Front-End Developer/" alt="...">
-                                    <span></span>
-                                </label>
-                            </li>
-                            <li>
-                                <input type="radio" hidden name="radio-templates" id="radio-template3">
-                                <label for="radio-template3" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
-                                    <img src="http://placebox.es/100/160/9c9c9c/ffffff/Back-End Developer/" alt="...">
-                                    <span></span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12" style="font-size: 1.5em;">
+                    <hr style="border-top: 3px solid;">
+
+                    <p style="display: inline-block">Responder:</p>
+                    <div style="display: inline-block" id="autoAssignTo"></div>
+                </div>
+            </div>
+
+            <div class="row-fluid" hidden>
+                <div class="span12" style="font-size: 1.5em;">
+                    Ask For Comment
+                    <div id="askForComment"></div>
                 </div>
             </div>
         </div>
 
-        <div class="modal-footer">
-            <a id="GoToEditor" class="bool-toolbar-btn bool-toolbar-btn-green" style="margin: 0;">Create Job</a>
-        </div>
-
     </div>
+    <div class="modal-footer">
+        <a id="buttonPublishDone" class="bool-toolbar-btn bool-toolbar-btn-green pull-right" style="margin: 0;">Publish</a>
+        <a id="buttonPublishSaveAsDraft" class="bool-toolbar-btn bool-toolbar-btn-blue pull-right" style="margin: 0 1em 0 0;">Save as draft</a>
+        <i>You can promote this job ad just after publish it.</i>
+    </div>
+</div>
+
+<div class="modal hide fade" id="templateModal">
+
+    <div class="modal-header" style="height: 40px">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    </div>
+
+    <div class="modal-body">
+        <div class="container-fluid no-border-box" style="padding: 0">
+            <div class="row-fluid">
+                <div class="span5" style="font-size: 1.7em;">
+                    <p>Open position title:</p>
+                    <input id="flyerName1" class="bool-input-text" type="text" placeholder="e.g. Front-End Developer">
+                </div>
+            </div>
+            <div class="row-fluid" style="margin-top: 2em">
+                <div class="span12" style="font-size: 1.7em;">
+                    <p>Choose a template</p>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12" style="height: 100%">
+                    <ul class="thumbnails" class="row-fluid">
+                        <li>
+                            <input type="radio" hidden name="radio-templates" id="radio-template1">
+                            <label for="radio-template1" class="thumbnail" href="#" thumbnailID="0" caption="Blank" description="Create what you link">
+                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Blank/" alt="...">
+                                <span></span>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" hidden name="radio-templates" id="radio-template2">
+                            <label for="radio-template2" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
+                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Front-End Developer/" alt="...">
+                                <span></span>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" hidden name="radio-templates" id="radio-template3">
+                            <label for="radio-template3" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
+                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Back-End Developer/" alt="...">
+                                <span></span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a id="GoToEditor" class="bool-toolbar-btn bool-toolbar-btn-green" style="margin: 0;">Create Job</a>
+    </div>
+
+</div>
 </div>
 
 

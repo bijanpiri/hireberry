@@ -362,6 +362,7 @@ Modals
     vertical-align: middle;
     float: left;
     width: 28px;
+    height:  28px;
 }
 
 .bool-user-item>ul{

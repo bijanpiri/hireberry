@@ -180,10 +180,10 @@ function initCommentView() {
 
                         var commentObj = $('<div>').addClass('portlet-comment');
                         commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
-                        commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
-                        commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s comment:") );
-                        commentObj.append( $('<div>').addClass('commentBody').text(comment.comment) );
-                        commentObj.append( $('<div>').addClass('commentTime').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
+                        commentObj.append( $('<div>').addClass('comment-date').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
+                        commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s replied:") );
+                        commentObj.append( $('<div>').addClass('comment-body').text(comment.comment) );
+                        commentObj.append( $('<div>').addClass('comment-date').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
 
                         $('.portlet-comments').append( commentObj );
                     }
@@ -206,20 +206,19 @@ function initCommentView() {
 
                     var dateObj = $('<div>')
                         .text( 'At ' + (new Date(a4c.askingTime)).toLocaleString() )
-                        .addClass('comment_date');
+                        .addClass('comment-date');
 
                     var titleObj = $('<div>')
-                        .text('You are asked to put your comment about ')
-                        .append( $('<a>').attr('href', '/flyer/embeded/' + a4c.formID._id)
-                            .text('this form') );
+                        .text('You are asked to put your comment about this form');
 
                     var textAreaObj = $('<textarea>')
                         .attr('id','comment_form_' + a4c.formID._id)
                         .css('display','block')
+                        .addClass('bool-textarea')
                         .attr('placeholder','Your comment ...');
 
                     var sendBtnObj = $('<button>')
-                        .text('Send')
+                        .text('Reply')
                         .click( function() {
                             $.post('/api/user/comment', {
                                 askForCommentID:a4c._id,
@@ -240,14 +239,45 @@ function initCommentView() {
 
     });
 
-    $('#buttonComment').click( function() {
-        $('.portlet-comments').toggle();
+    toggleCommentView();
+
+    $('#ask-for-comment-btn').click( function() {
+
+        $('.askForComment-form').toggle();
+        var isHidden = $('.askForComment-form').css('display')==='none';
+
         $('.portlet-askedForComment-list').toggle();
+        $('.portlet-comments').toggle();
 
-        var isVisible = !($('.portlet-comments').css('display')==='none');
+        if( !isHidden )
+            $(this).text('x');
+        else
+            $(this).text('Ask For Comment');
+    });
 
-        $('#buttonComment').text( isVisible ? 'Hide comments' : 'Show Comments' )
-    })
+    $('.askForComment-send').click( function() {
+
+        var askForComment = $('[name=askForComment-selected-user]').val();
+
+        if( askForComment.length > 0 ) // It isn't None
+            $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
+    });
+
+    $('#buttonComment').click(toggleCommentView);
+}
+
+function toggleCommentView() {
+    var isOpen = $(this).attr('isOpen')==='1';
+
+    if( isOpen ) {
+        var width = $('.portlet-commentsView').width();
+        $('.portlet-commentsView').animate({right:-width});
+        $(this).attr('isOpen','0');
+    }
+    else {
+        $('.portlet-commentsView').animate({right:0});
+        $(this).attr('isOpen','1');
+    }
 }
 
 function loadEditor() {
@@ -256,7 +286,16 @@ function loadEditor() {
     $('.flyerRow').show();
     $('#fixToolbar').show();
     $('#buttonEditview').hide();
-    //$('.portletCreator').show().animate({width:100},500);
+
+    $.get('/api/team').done( function(res) {
+        var teamMembers = res.members;
+        var teamMembersWithNone = JSON.parse(JSON.stringify(res.members));
+        teamMembersWithNone.unshift({displayName:'None'});
+
+        $('#askForComment').populateUserCombo(teamMembersWithNone,null,'askForComment_userID');
+        $('#autoAssignTo').populateUserCombo(teamMembers,null,'autoAssignedTo_userID');
+        $('.askForComment-user').populateUserCombo(teamMembers,null,'askForComment-selected-user');
+    });
 
     loadFlyer();
 
@@ -385,15 +424,6 @@ function loadPublishPanel() {
 
         $('#thanksMessage').val(flyerJson.thanksMessage);
 
-
-    $.get('/api/team').done( function(res) {
-        var teamMembers = res.members;
-        var teamMembersWithNone = JSON.parse(JSON.stringify(res.members));
-        teamMembersWithNone.unshift({displayName:'None'});
-
-        $('#askForComment').populateUserCombo(teamMembersWithNone,null,'askForComment_userID');
-        $('#autoAssignTo').populateUserCombo(teamMembers,null,'autoAssignedTo_userID');
-    });
 
         $('#buttonPublishSaveAsDraft').click(function () {
             saveAsDraftOrPublish(true);
