@@ -12,7 +12,7 @@
     $.fn.scrollable = function (options) {
 
         if (!options)
-            options = {mode: 'scroll' | 'dropdown', nv: 5};
+            options = {mode: 'scroll' | 'dropdown', nv: 2};
         opt=options;
 
         scrollable=this;
@@ -69,16 +69,17 @@
             up.hide();
         else up.show();
 
-        if(start+opt.nv==allItems.length)
-            down.hide();
-        else down.show();
-
         var sumHeight=0;
-        var items=allItems
-            .slice(start);
+
+        var items=allItems;
+
         var index=0;
         var maxHeight=scrollable.height();
-        for(var i=0;i<items.length;i++) {
+        var margin=scrollable.attr('data-margin');
+        if(margin){
+            maxHeight-=parseInt(margin);}
+
+        for(var i=start;i<items.length;i++) {
             sumHeight+=$(items[i]).outerHeight(true);
             index=i;
             if (sumHeight>maxHeight) {
@@ -86,10 +87,19 @@
                 break;
             }
         }
-        while(sumHeight<maxHeight)
+        start--;
+        while(start>=0 && sumHeight+$(items[start]).outerHeight()<maxHeight )
         {
             sumHeight+=$(items[start]).outerHeight();
+            start--;
         }
-        items.slice(0,index+1).show();
+
+        start++;
+
+        if(index+1==allItems.length)
+            down.hide();
+        else down.show();
+
+        allItems.slice(start,index+1).show();
     }
 }(jQuery));

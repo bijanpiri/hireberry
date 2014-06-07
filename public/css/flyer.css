@@ -638,7 +638,6 @@ Map portlet
     background: inherit;
 }
 .bool-widget-btn-carousel{
-    background: yellow;
     position: absolute;
     top: 0;
     bottom: 320px;
