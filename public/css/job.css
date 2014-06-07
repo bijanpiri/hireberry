@@ -584,9 +584,12 @@ Badge
     text-align: center;
     margin: auto;
     width: 170px;
-    height: 120px;
     color: #262626;
     padding: 0.5em;
+}
+
+.bool-edit-mode .bool-portlet-active .badgeDescription {
+    border: 2px dashed #B3B3B3;
 }
 
 .badgeIconVacation {

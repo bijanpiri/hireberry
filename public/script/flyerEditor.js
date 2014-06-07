@@ -262,8 +262,13 @@ function initCommentView() {
 
         var askForComment = $('[name=askForComment-selected-user]').val();
 
-        if( askForComment.length > 0 ) // It isn't None
-            $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
+        if( askForComment.length > 0 ) {// It isn't None
+            $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment}).done( function() {
+                // Back to comments list
+                $('#ask-for-comment-btn').click();
+            });
+
+        }
     });
 
     $('#buttonComment').click(toggleCommentView);

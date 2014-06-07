@@ -28,6 +28,9 @@ function BadgeWidget(){
         var badges=this.portlet;
         var widget=this;
 
+        if( this.editMode )
+            this.portlet.find('.badgeDescription').prop('contenteditable',true);
+
         this.toolbar.find('input[name=badge]')
             .each(function(i,input){
                 $(input).change(function(){
@@ -40,16 +43,29 @@ function BadgeWidget(){
     }
 
     this.serialize = function() {
-        var data = {
+        var selectedPerks = {
             chosen:this.toolbar.find('.toolbar-badgeWidget input').serialize().replace(/badge=/gi,'').split('&')
         };
-        return data;
+
+        var descriptions = this.portlet.find('.badgeDescription').toArray().map( function(e) {
+            return $(e).html()
+        });
+
+        return {
+            selectedPerks: selectedPerks,
+            descriptions: descriptions
+        };
     }
 
     this.deserialize = function( data ) {
         this.toolbar.find('input[name=badge]').each(function(index,input){
-            $(input).prop('checked',data.chosen.indexOf(input.value)>=0).change();
+            $(input).prop('checked',data.selectedPerks.chosen.indexOf(input.value)>=0).change();
         });
+
+        var badgeDescriptionObjList = this.portlet.find('.badgeDescription').toArray();
+        for(var i=0; i<badgeDescriptionObjList.length; i++ ) {
+            $( badgeDescriptionObjList[i] ).html( data.descriptions[i] );
+        }
     }
 }
 BadgeWidget.prototype=new Widget();
