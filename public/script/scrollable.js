@@ -7,9 +7,9 @@
     var opt;
     var scrollable;
     $(document).ready(function(){
-        $('[data-scrollable]').listSpring();
+        $('[data-scrollable]').scrollable();
     });
-    $.fn.listSpring = function (options) {
+    $.fn.scrollable = function (options) {
 
         if (!options)
             options = {mode: 'scroll' | 'dropdown', nv: 5};
@@ -32,6 +32,7 @@
             event.preventDefault();
             event.stopPropagation();
         });
+        $(window).resize(scroll);
 
         scroll();
         return scrollable;
@@ -44,7 +45,7 @@
             down=1;
         start=Math.min(
                 start+down,
-                Math.abs(scrollable.children('ul>li').length-opt.nv));
+                Math.abs(scrollable.find('ul>li').length-opt.nv));
         scroll();
         return scrollable;
     }
@@ -59,13 +60,32 @@
         return scrollable;
     }
     function scroll() {
-        scrollable.each(
-            function () {
-                var list = scrollable.find('ul');
-                list.children('li').hide()
-                    .slice(start, start + opt.nv).show();
-            }
-        )
-    }
+        var allItems = scrollable.find('ul>li').hide();
 
+        var down=scrollable.find('[data-scroll=down]');
+        var up=scrollable.find('[data-scroll=up]');
+
+        if(start<=0)
+            up.hide();
+        else up.show();
+
+        if(start+opt.nv==allItems.length)
+            down.hide();
+        else down.show();
+
+        var sumHeight=0;
+        var items=allItems
+            .slice(start);
+        var index=0;
+        var maxHeight=scrollable.find('ul').height();
+        for(var i=0;i<items.length;i++) {
+            sumHeight+=$(items[i]).outerHeight();
+            index=i;
+            if (sumHeight>maxHeight) {
+                index--;
+                break;
+            }
+        }
+        items.slice(0,index+1).show();
+    }
 }(jQuery));
