@@ -100,64 +100,8 @@
 
 <div class="container-fluid bool-flyer-editor " >
 
-<div class="row-fluid templateRow" hidden>
-    <div class="span8 offset2">
-
-        <div class="container-fluid" style="padding: 20px;background-color: #f1f1f1;border-radius: 4px">
-            <div class="row-fluid">
-                <div class="span5" style="font-size: 1.7em;">
-                    Job open position title:
-                    <input style="width: 100%;height: 2.5em;" id="flyerName1"
-                           type="text" placeholder="Enter Flyer Name (ex. 'Front-End Developer')">
-                </div>
-            </div>
-            <div class="row-fluid" style="margin-top: 2em">
-                <div class="span12">
-                    <p style="font-size: 1.7em">
-                        Select a template for starting:
-                    </p>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12" style="height: 100%">
-                    <ul class="thumbnails" class="row-fluid">
-                        <li>
-                            <input type="radio" hidden name="radio-templates" id="radio-template1">
-                            <label for="radio-template1" class="thumbnail" href="#" thumbnailID="0" caption="Blank" description="Create what you link">
-                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Template/" alt="...">
-                                <span>Blank</span>
-                            </label>
-                        </li>
-                        <li>
-                            <input type="radio" hidden name="radio-templates" id="radio-template2">
-                            <label for="radio-template2" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
-                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Template/" alt="...">
-                                <span>Front-End Developer</span>
-                            </label>
-                        </li>
-                        <li>
-                            <input type="radio" hidden name="radio-templates" id="radio-template3">
-                            <label for="radio-template3" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
-                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Template/" alt="...">
-                                <span>Back-End Developer</span>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12">
-                    <button id="GoToEditor" class="btn btn-success pull-right">Next</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 <div class="row-fluid flyerRow" hidden>
     <div class="span12" id="portletsBox">
-
         <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
 
             <input type="hidden" name="flyerid" value="<%=flyerid%>"/>
@@ -213,25 +157,30 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
-
         </form>
+    </div>
+</div>
 
-        <% if(everyauth.user) { %>
+<% if(everyauth.user && viewMode!=='embeded') { %>
+<div class="portlet-commentsView-container" hidden>
         <div class="portlet-commentsView">
-            <a id="buttonComment" class="btn ">Show comments</a>
-            <div class="portlet-askedForComment-list">
+        <a id="buttonComment" isOpen="1">
+            <i class="fa fa-comments"></i>
+        </a>
+        <a class="pull-right" id="ask-for-comment-btn">Ask For Comment</a>
+        <div class="askForComment-form" style="padding: 1em;" hidden>
+            <div class="askForComment-user"></div>
+            <textarea class="bool-textarea askForComment-note" placeholder="Leave a note for him ..." style="width: 100%"></textarea>
+            <a class="askForComment-send btn btn-mini pull-right">Send Request</a>
             </div>
-            <div class="portlet-comments">
+        <ul class="portlet-askedForComment-list">
+        </ul>
+        <ul class="portlet-comments">
+        </ul>
             </div>
         </div>
         <% } %>
-
-    </div>
-</div>
 
 <div class="row-fluid shareRow" hidden>
     <div class="span6 offset3">
@@ -284,38 +233,36 @@
 </div>
 
 <div class="modal hide fade" id="publishModal">
-    <div class="modal-header">
+    <div class="modal-header" style="height: 40px">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Publish</h3>
     </div>
     <div class="modal-body">
         <div class="container-fluid no-border-box">
 
             <div class="row-fluid controls-row">
                 <div class="span12" style="font-size: 1.5em;">
-                    Job open position title:
-                    <input type="text" id="flyerName2" style="width: 98%"
-                           placeholder="Flyer Name">
+                    <p>Open position title:</p>
+                    <input type="text" id="flyerName2" class="bool-input-text" style="width: 98%" placeholder="Flyer Name">
                 </div>
             </div>
 
             <div class="row-fluid controls-row">
                 <div class="span12" style="font-size: 1.5em;">
-                    A thanks message for showing to applicant just after applying
-                    <textarea id="thanksMessage" style="width: 98%"
-                              placeholder="Thanks Message" rows="5"></textarea>
+                    <p>Thanks message:</p>
+                    <textarea id="thanksMessage" class="bool-textarea" style="width: 98%" placeholder="Thanks Message" rows="5"></textarea>
                 </div>
             </div>
 
             <div class="row-fluid">
-
                 <div class="span12" style="font-size: 1.5em;">
-                    Job responder
-                    <div id="autoAssignTo"></div>
+                    <hr style="border-top: 3px solid;">
+
+                    <p style="display: inline-block">Responder:</p>
+                    <div style="display: inline-block" id="autoAssignTo"></div>
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" hidden>
                 <div class="span12" style="font-size: 1.5em;">
                     Ask For Comment
                     <div id="askForComment"></div>
@@ -325,11 +272,68 @@
 
     </div>
     <div class="modal-footer">
-        <button id="buttonPublishDone" class="btn btn-success pull-right">Publish</button>
-        <button id="buttonPublishSaveAsDraft" class="btn btn-warning pull-right" style="margin-right: 1em;">Save as draft</button>
+        <a id="buttonPublishDone" class="bool-toolbar-btn bool-toolbar-btn-green pull-right" style="margin: 0;">Publish</a>
+        <a id="buttonPublishSaveAsDraft" class="bool-toolbar-btn bool-toolbar-btn-blue pull-right" style="margin: 0 1em 0 0;">Save as draft</a>
+        <i>You can promote this job ad just after publish it.</i>
     </div>
 </div>
+
+<div class="modal hide fade" id="templateModal">
+
+    <div class="modal-header" style="height: 40px">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 </div>
+
+    <div class="modal-body">
+        <div class="container-fluid no-border-box" style="padding: 0">
+            <div class="row-fluid">
+                <div class="span5" style="font-size: 1.7em;">
+                    <p>Open position title:</p>
+                    <input id="flyerName1" class="bool-input-text" type="text" placeholder="e.g. Front-End Developer">
+                </div>
+            </div>
+            <div class="row-fluid" style="margin-top: 2em">
+                <div class="span12" style="font-size: 1.7em;">
+                    <p>Choose a template</p>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12" style="height: 100%">
+                    <ul class="thumbnails" class="row-fluid">
+                        <li>
+                            <input type="radio" hidden name="radio-templates" id="radio-template1">
+                            <label for="radio-template1" class="thumbnail" href="#" thumbnailID="0" caption="Blank" description="Create what you link">
+                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Blank/" alt="...">
+                                <span></span>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" hidden name="radio-templates" id="radio-template2">
+                            <label for="radio-template2" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
+                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Front-End Developer/" alt="...">
+                                <span></span>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" hidden name="radio-templates" id="radio-template3">
+                            <label for="radio-template3" class="thumbnail" href="#" thumbnailID="1" caption="Front-End" description="Template for front-end develoepr hiring">
+                                <img src="http://placebox.es/100/160/9c9c9c/ffffff/Back-End Developer/" alt="...">
+                                <span></span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a id="GoToEditor" class="bool-toolbar-btn bool-toolbar-btn-green" style="margin: 0;">Create Job</a>
+    </div>
+
+</div>
+</div>
+
 
 
 <div class="widgets">
@@ -1051,20 +1055,20 @@
         </ul>
 
         <ul class="bool-toolbar-commands">
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-preview" >
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-gray " >
                     <i class="bool-widget-icon bool-toolbar-icon-preview"></i>
                     Preview
                 </a></li>
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-edit"
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-lightGray"
 
                    style="display: none;">
                     <i class="bool-widget-icon bool-toolbar-icon-preview-edit"></i>
                     Back to Edit
                 </a></li>
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-save"
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-blue"
 
                    data-loading-text="Saving...">Save & Exit</a></li>
-            <li><a class="bool-toolbar-btn bool-toolbar-btn-publish">
+            <li><a class="bool-toolbar-btn bool-toolbar-btn-green">
                     <i class="bool-widget-icon bool-toolbar-icon-publish"></i>
                     Publish
                 </a>

@@ -77,14 +77,18 @@
         var items=allItems
             .slice(start);
         var index=0;
-        var maxHeight=scrollable.find('ul').height();
+        var maxHeight=scrollable.height();
         for(var i=0;i<items.length;i++) {
-            sumHeight+=$(items[i]).outerHeight();
+            sumHeight+=$(items[i]).outerHeight(true);
             index=i;
             if (sumHeight>maxHeight) {
                 index--;
                 break;
             }
+        }
+        while(sumHeight<maxHeight)
+        {
+            sumHeight+=$(items[start]).outerHeight();
         }
         items.slice(0,index+1).show();
     }
