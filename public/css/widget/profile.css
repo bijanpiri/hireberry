@@ -74,15 +74,13 @@
     background-position: -100px -512px;
 }
 .bool-field{
-    /*float: left;*/
     margin: 0 10px;
-    /*text-align: right;*/
-    width: 435px;
+    width: 100%;
     display: inline-block;
 }
 
 .bool-iconic-input-container{
-    width: 435px;
+    width: 100%;
     float: left;
     margin: 10px;
 }
