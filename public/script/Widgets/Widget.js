@@ -77,7 +77,7 @@ function Widget(options){
         this.portlet.append(this.layout);
 
         return this.portletContainer.append( this.portlet );
-    }
+    };
 
     this.widgetDidAdd = function(isNew) {}
 
@@ -101,12 +101,12 @@ function Widget(options){
 
             });
         return x;
-    }
+    };
 
     this.setToolbar=function(toolbar){
         this.toolbar.append($('.toolbars>'+toolbar).clone());
 
-    }
+    };
 
     this.addToolbarCommand=function(command,callback){
         var widget=this;
@@ -117,26 +117,27 @@ function Widget(options){
                 callback(widget,$(this).attr('command').split(' '),this,this.event);
         });
         return this;
-    }
+    };
 
     this.restated=function(){
         console.log('restated');
-    }
+    };
     this.getReady4Save=function(){
         widget.prepared();
-    }
+    };
     this.prepare2Save=function(prepareCallback){
         widget.prepared=prepareCallback;
         widget.getReady4Save();
 
-    }
+    };
     this.getReady4Submit=function(){
         widget.prepared2Submit();
-    }
+    };
     this.prepare2Submit=function(submitCallback){
         widget.prepared2Submit=submitCallback;
         widget.getReady4Submit();
-    }
+    };
+
 
     this.changed=function(){
 

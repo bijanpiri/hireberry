@@ -787,59 +787,107 @@
 <div class="toolbars">
 <div class="toolbar-text">
 
-    <div class="bool-combo">
+    <ul class="bool-tool-items">
+        <li>
+            <div class="bool-combo">
             <span class="bool-combo-icon">
                 <i class="bool-icon-size"></i>
             </span>
-        <a class="btn dropdown-toggle bool-combo-btn" data-toggle="dropdown" href="#">
-            <span class="bool-combo-text">Small</span>
-            <span class="caret bool-caret"></span>
-        </a>
-        <ul class="dropdown-menu bool-combo-list">
-            <li><a style="font-size: 18px" data-edit="fontSize 4">Small</a></li>
-            <li><a style="font-size: 20px" data-edit="fontSize 6" >Medium</a></li>
-            <li><a style="font-size: 24px" data-edit="fontSize 7">Large</a></li>
-        </ul>
-    </div>
-    <div class="bool-color-chooser pull-left bool-btn">
+                <a class="btn dropdown-toggle bool-combo-btn" data-toggle="dropdown" href="#">
+                    <span class="bool-combo-text">Small</span>
+                    <span class="caret bool-caret"></span>
+                </a>
+                <ul class="dropdown-menu bool-combo-list">
+                    <li><a style="font-size: 18px" data-edit="fontSize 4">Small</a></li>
+                    <li><a style="font-size: 20px" data-edit="fontSize 6" >Medium</a></li>
+                    <li><a style="font-size: 24px" data-edit="fontSize 7">Large</a></li>
+                </ul>
+            </div>
 
-    </div>
-    <div class="bool-separator"></div>
-    <a class="bool-btn"  command="align left"
-       title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)">
-        <i class="bool-icon-align-left"></i></a>
-    <a class="bool-btn"  command="align center"
-       title="Align Center" data-original-title="Center (Ctrl/Cmd+E)">
-        <i class="bool-icon-align-center"></i></a>
-    <a class="bool-btn"  command="align right"
-       title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)">
-        <i class="bool-icon-align-right"></i></a>
-    <div class="bool-separator"></div>
-    <a class="bool-btn" data-edit="bold" title=""
-       data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
-    <a class="bool-btn" data-edit="italic" title=""
-       data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
-    <a class="bool-btn" data-edit="underline" title=""
-       data-original-title="Underline (Ctrl/Cmd+U)">
-        <i class="bool-icon-underline"></i></a>
-    <a class="bool-btn" data-edit="insertunorderedlist"
-       title="" data-original-title="Bullet list">
-        <i class="bool-icon-list-ul"></i></a>
-    <a class="bool-btn" data-edit="insertorderedlist" title=""
-       data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
+        </li>
+        <li>
+            <div class="bool-color-chooser pull-left bool-btn">
+            </div>
+        </li>
+        <li class="bool-separator">
+        </li>
+        <li>
+            <a class="bool-btn"  command="align left"
+               title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)">
+                <i class="bool-icon-align-left"></i></a>
+        </li>
+        <li>
+            <a class="bool-btn"  command="align center"
+               title="Align Center" data-original-title="Center (Ctrl/Cmd+E)">
+                <i class="bool-icon-align-center"></i></a>
+        </li>
+        <li>
+            <a class="bool-btn"  command="align right"
+               title="Align Right" data-original-title="Align Right (Ctrl/Cmd+R)">
+                <i class="bool-icon-align-right"></i></a>
+        </li>
+        <li class="bool-separator">
+            <!--<div class="bool-separator"></div>-->
+        </li>
+        <li>
+            <a class="bool-btn" data-edit="bold" title=""
+               data-original-title="Bold (Ctrl/Cmd+B)"><i class="bool-icon-bold"></i></a>
+        </li>
+        <li>
+            <a class="bool-btn" data-edit="italic" title=""
+               data-original-title="Italic (Ctrl/Cmd+I)"><i class="bool-icon-italic"></i></a>
+        </li>
+        <li>
+            <a class="bool-btn" data-edit="underline" title=""
+               data-original-title="Underline (Ctrl/Cmd+U)">
+                <i class="bool-icon-underline"></i></a>
+        </li>
+        <li>
+            <a class="bool-btn" data-edit="insertunorderedlist"
+               title="" data-original-title="Bullet list">
+                <i class="bool-icon-list-ul"></i></a>
+        </li>
+        <li>
+            <a class="bool-btn" data-edit="insertorderedlist" title=""
+               data-original-title="Number list"><i class="bool-icon-list-ol"></i></a>
+
+        </li>
+    </ul>
+
+
 </div>
 
 <div class="toolbar-picture">
-    <a class="btn btn-large" command="add"><i class="icon-picture"></i></a>
-    <a class="btn btn-large hide" command="edit" ><i class="icon-edit"></i></a>
-    <a class="btn btn-large hide" command="crop"><i class="darkroom-icon-crop"></i></a>
-    <a class="btn btn-large hide" command="accept" ><i class="icon-ok"></i></a>
-    <a class="btn btn-large hide" command="cancel" ><i class="icon-remove"></i></a>
-    <a class="btn btn-large hide" command="undo"><i class="icon-undo"></i></a>
-    <a class="btn btn-large hide" command="redo"><i class="icon-undo"></i></a>
-    <a class="btn btn-large hide" command="rotate-left"><i class="darkroom-icon-rotate-left"></i></a>
-    <a class="btn btn-large hide" command="rotate-right"><i class="darkroom-icon-rotate-right"></i></a>
-    <a class="btn btn-large hide" command="save"><i class="icon-save"></i></a>
+    <!--<a class="btn btn-large hide" command="edit" ><i class="icon-edit"></i></a>-->
+    <ul class="bool-tool-items">
+        <li>
+            <a class="btn btn-large " command="crop"><i class="darkroom-icon-crop"></i></a>
+        </li>
+        <li>
+            <a class="btn btn-large hide" command="accept" ><i class="icon-ok"></i></a>
+        </li>
+        <li>
+            <a class="btn btn-large hide" command="cancel" ><i class="icon-remove"></i></a>
+        </li>
+        <li>
+            <a class="btn btn-large " command="undo"><i class="icon-undo"></i></a>
+        </li>
+        <li>
+            <a class="btn btn-large " command="redo"><i class="icon-undo"></i></a>
+        </li>
+
+        <li>
+            <a class="btn btn-large " command="rotate-left"><i class="darkroom-icon-rotate-left"></i></a>
+        </li>
+
+        <li>
+            <a class="btn btn-large " command="rotate-right"><i class="darkroom-icon-rotate-right"></i></a>
+        </li>
+
+        <li>
+            <a class="btn btn-large " command="save"><i class="icon-save"></i></a>
+        </li>
+    </ul>
 
 </div>
 

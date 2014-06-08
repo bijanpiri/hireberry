@@ -9,11 +9,7 @@
     $(document).ready(function(){
         $('[data-scrollable]').scrollable();
     });
-    $.fn.scrollable = function (options) {
-
-        if (!options)
-            options = {mode: 'scroll' | 'dropdown', nv: 2};
-        opt=options;
+    $.fn.scrollable = function () {
 
         scrollable=this;
 
@@ -40,12 +36,8 @@
     };
     $.fn.scrollDown=scrollDown;
 
-    function scrollDown(down) {
-        if(!down || down instanceof jQuery.Event)
-            down=1;
-        start=Math.min(
-                start+down,
-                Math.abs(scrollable.find('ul>li').length-opt.nv));
+    function scrollDown() {
+        start++;
         scroll();
         return scrollable;
     }

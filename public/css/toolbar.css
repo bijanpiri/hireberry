@@ -1,3 +1,14 @@
+.bool-tool-items{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+}
+.bool-tool-items>li{
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 8px;
+}
 .toolbar{
     position: absolute;
     height: 60px;
@@ -122,7 +133,6 @@
     cursor:  pointer;
     position: relative;
     float: left;
-    margin: 8px 0px 0 8px ;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -210,8 +220,8 @@
     display: inline-block;
     width: 0;
     height: 44px;
-    float: left;
-    margin: 8px 0 0 8px;
+    /*float: left;*/
+    margin: 0 ;
 }
 .bool-icon-align-left{background-position: -100px -52px;width: 18px;height: 13px;}
 .bool-icon-align-center{background-position: -100px -66px;width: 18px;height: 13px;}
@@ -296,7 +306,7 @@
     cursor:  pointer;
     position: relative;
     float: left;
-    margin: 8px ;
+
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;

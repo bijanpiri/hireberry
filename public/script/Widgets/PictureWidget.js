@@ -37,28 +37,6 @@ function PictureWidget(){
 
     }
 
-    function showEditButtons() {
-        widget.toolbar.find(
-                '[command=crop],' +
-                '[command=undo],' +
-                '[command=redo],' +
-                '[command=save],' +
-                '[command=rotate-left],' +
-                '[command=rotate-right]').show();
-        widget.toolbar.find('[command=edit]').hide();
-
-    }
-    function hideEditButton(){
-        widget.toolbar.find(
-                '[command=crop],' +
-                '[command=undo],' +
-                '[command=redo],' +
-                '[command=save],' +
-                '[command=rotate-left],' +
-                '[command=rotate-right]').hide();
-        widget.toolbar.find('[command=edit]').show();
-
-    }
     function showCropButtons(){
         widget.toolbar.find(
                 '[command=crop],' +
@@ -83,15 +61,38 @@ function PictureWidget(){
                 '[command=rotate-left],' +
                 '[command=rotate-right]').show();
     }
+    $(window).resize(function(){
+        var img=layout.find('img')[0];
+        var container=layout.find('.image-container');
 
+//        if(img && img.src)
+//            new Darkroom(img,
+//                {
+//                    maxWidth: container.width(),
+//                    maxHeight: container.width() * img.height/img.width
+//                }
+//            )
+    });
+    var dark;
+    var image;
     function readerLoad(progress) {
         try {
             var d=progress.target.result;
             layout.find('.imageWidgetInnerContainer').hide();
             layout.find('.image-container').empty().append('<img>');
             layout.find('img').attr('src',d).show();
-            new Darkroom(layout.find('img')[0]);
-            showEditButtons();
+        var container=layout.find('.image-container');
+            var img=layout.find('img')[0];
+            image=new Image();
+            image.src=d;
+//            var img=new Image();
+//            img.src=d;
+            dark=new Darkroom(img,
+                {
+                    maxWidth: container.width(),
+                    maxHeight:container.width()*img.height/img.width
+                });
+
             action=statesAction.add;
         } catch (ex) {
             console.log(ex);
@@ -153,10 +154,7 @@ function PictureWidget(){
                 progressall:progressall
             });
 
-            this.addToolbarCommand('add',function(){layout.find('input[type=file]').click();
-                widget.changed();
-            }).addToolbarCommand('edit',function(){showEditButtons();new Darkroom(layout.find('img')[0]);
-            }).addToolbarCommand('crop',function(){layout.find('.darkroom-icon-crop').click();showCropButtons();
+            this.addToolbarCommand('crop',function(){layout.find('.darkroom-icon-crop').click();showCropButtons();
             }).addToolbarCommand('accept',function(){layout.find('.darkroom-icon-accept').click();hideCropButtons();
                 widget.changed();
             }).addToolbarCommand('cancel',function(){layout.find('.darkroom-icon-cancel').click();hideCropButtons();
@@ -176,11 +174,8 @@ function PictureWidget(){
         }
     }
     function save(){
-
-        hideEditButton();
-
         var data=widget.portlet.find('.lower-canvas')[0].toDataURL('image/jpeg');
-        layout.find('.image-container').empty().append($('<img>').attr('src',data));
+//        layout.find('.image-container').empty().append($('<img>').attr('src',data));
 
         var blob=dataURLtoBlob(data);
         layout.find('input[type=file]').fileupload('add',{files:blob});
