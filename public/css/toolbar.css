@@ -196,7 +196,8 @@
 }
 .bool-btn i
 {
-    background-image: url("/images/nflyer-icons.png");
+    background-image: url("/images/nflyer-icons@2x.png");
+    background-size: 182px 600px;
     position: absolute;
     display: inline-block;
     margin: auto;
@@ -206,7 +207,8 @@
     bottom: 0;
 }
 .bool-icon{
-    background-image: url("/images/nflyer-icons.png");
+    background-image: url("/images/nflyer-icons@2x.png");
+    background-size: 182px 600px;
     display: inline-block;
     position: absolute;
     margin: auto;
@@ -235,6 +237,13 @@
 .bool-icon-email{background-position:-100px -355px;width: 27px;height: 18px;}
 .bool-icon-website{background-position:-100px -401px;width: 27px;height: 27px;}
 .bool-icon-tel{background-position:-100px -372px;width: 21px;height: 30px;}
+
+.bool-icon-rotate-right{background-position: 0 -310px;width: 25px;height: 25px;}
+.bool-icon-rotate-left{background-position: 0 -327px;width: 25px;height: 25px;}
+.bool-icon-undo{background-position: 0 -257px;width: 25px;height: 17px;}
+.bool-icon-redo{background-position: 0 -277px;width: 25px;height: 17px;}
+.bool-icon-crop{background-position: 0 -292px;width: 26px;height: 26px;}
+
 
 .bool-icon-size{
     background: url("/images/nflyer-icons.png");
