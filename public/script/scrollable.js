@@ -88,9 +88,9 @@
             }
         }
         start--;
-        while(start>=0 && sumHeight+$(items[start]).outerHeight()<maxHeight )
+        while(start>=0 && sumHeight+$(items[start]).outerHeight(true)<maxHeight )
         {
-            sumHeight+=$(items[start]).outerHeight();
+            sumHeight+=$(items[start]).outerHeight(true);
             start--;
         }
 

@@ -220,7 +220,7 @@ Portlet Creator
     text-decoration: none;
     color: #fff;
 }
-.bool-toolbar-btn-gray{
+.bool-toolbar-btn-preview {
     color: #e6e6e6;
     border: 2px solid #e6e6e6;
 }
@@ -228,13 +228,13 @@ Portlet Creator
     color: #e6e6e6;
 }
 
-.bool-toolbar-btn-blue{
+.bool-toolbar-btn-save {
     background: #3397cb;
 }
-.bool-toolbar-btn-lightGray{
+.bool-toolbar-btn-edit {
     background: #b2b2b2;
 }
-.bool-toolbar-btn-green{
+.bool-toolbar-btn-publish {
     background: #6DCB3E;
 }
 .bool-toolbar-icon-publish{
