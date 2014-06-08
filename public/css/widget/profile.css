@@ -76,11 +76,13 @@
 .bool-field{
     margin: 0 10px;
     width: 100%;
+    max-width: 435px;
     display: inline-block;
 }
 
 .bool-iconic-input-container{
     width: 100%;
+    max-width: 435px;
     float: left;
     margin: 10px;
 }
@@ -105,7 +107,7 @@
 .bool-iconic-cell-icon {
     position: relative;
     width: 44px;
-    height: 40px;
+    height: 44px;
 }
 .bool-iconic-col-label{
     display: table-cell;
