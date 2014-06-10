@@ -26,6 +26,37 @@ $(function() {
         GoToViewMode();
     });
 
+    $('.bool-btn-more-options').click( function() {
+        $('.portletCreator').css('overflow','hidden');
+        $('.bool-widget-btn-carousel').animate({left:-240}, 300, function() {
+            $(this).hide();
+        });
+        $('.bool-more-options').show().animate({left:0}, 300, function() {
+            $('.portletCreator').css('overflow','visible');
+        });
+    });
+
+    $('.bool-btn-back-to-widgets').click( function() {
+        $('.portletCreator').css('overflow','hidden');
+        $('.bool-more-options').animate({left:240}, 300, function() {
+            $(this).hide();
+        });
+        $('.bool-widget-btn-carousel').show().animate({left:0}, 300, function() {
+            $('.portletCreator').css('overflow','visible');
+        });
+    });
+
+    $('.bool-portlet-font-item').click( function() {
+        var fontFamily = $(this).css('font-family');
+
+       $('.bool-portlet').css( 'font-family', fontFamily );
+
+       $('.bool-portlet-dropdown-fonts .dropdown-toggle')
+           .css( 'font-family', fontFamily )
+           .find('.bool-current-font-name')
+           .text( $(this).attr('data-font') );
+    });
+
     $('form').submit(false);
     if( viewMode=='embeded') {
         // Hidden bars
@@ -137,6 +168,9 @@ function loadFlyer() {
                 document.title = flyer.description;
             else
                 document.title = 'Editor - ' + flyer.description;
+
+            // Set current font
+            $('.bool-portlet-dropdown-fonts .dropdown-menu [data-font-family="' + flyer.font + '"]').click();
         }
     });
 }
@@ -304,6 +338,7 @@ function loadEditor() {
         $('#askForComment').populateUserCombo(teamMembersWithNone,null,'askForComment_userID');
         $('#autoAssignTo').populateUserCombo(teamMembers,null,'autoAssignedTo_userID');
         $('.askForComment-user').populateUserCombo(teamMembers,null,'askForComment-selected-user');
+        //$('#job-responder').populateUserCombo(teamMembers,null,'job-selected-responder');
     });
 
     loadFlyer();
@@ -354,7 +389,6 @@ function GoToEditMode() {
 
     $('.bool-toolbar-btn-preview').show();
     $('.bool-toolbar-btn-edit').hide();
-
 
     setTimeout(function(){
         hideLoading();

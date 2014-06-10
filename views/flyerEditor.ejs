@@ -1015,15 +1015,9 @@
 </div>
 
 <div class="container-fluid portletCreator ">
-        <div class="row-fluid text-center" id="portletCreatorAlarm" hidden>
-            Error: There is no space for adding new portlet!
-        </div>
 
-        <div class="row-fluid bool-widget-btn-carousel "
-             id="addButtons" data-scrollable data-margin="105" >
-            <h2>
-                Content Types
-            </h2>
+    <div class="row-fluid bool-widget-btn-carousel" id="addButtons" data-scrollable data-margin="110" >
+            <h2 class="bool-sidebar-header">Content Types</h2>
             <div class="btn icon-arrow-up" data-scroll="up" style="display: block;margin: 0 10px"></div>
             <ul class="bool-add-widget" data-list>
                 <li class="bool-widget-btn" type="1">
@@ -1080,25 +1074,54 @@
             </ul>
             <div class="btn icon-arrow-down" data-scroll="down" style="display: block;margin: 5px 10px 0px;"></div>
 
-        </div>
-    <div class="bool-dock-bottom">
+             <a class="bool-pure-btn bool-btn-more-options">
+                 More Options
+                 <i class="fa fa-arrow-right"></i>
+                 </a>
+    </div>
+
+    <div class="bool-more-options" style="display: none">
+
+        <h2 class="bool-sidebar-header">More Options</h2>
 
         <ul class="bool-toolbar-options">
             <li>
                 Canvas
                 <div class="pull-right bool-color-chooser bool-color-chooser-canvas">
-
                 </div>
-
             </li>
             <li>
                 Background
                 <div class="pull-right bool-color-chooser bool-color-chooser-background">
-
+                </div>
+            </li>
+            <li>
+                Font
+                <div class="btn-group bool-portlet-dropdown-fonts pull-right">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="bool-current-font-name"></span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a tabindex="-1" href="#" class="bool-portlet-font-item" data-font="Impact" data-font-family="Impact, Charcoal, sans-serif" style='font-family: Impact, Charcoal, sans-serif'>Impact</a></li>
+                        <li><a tabindex="-1" href="#" class="bool-portlet-font-item" data-font="Arial" data-font-family="Arial, Helvetica, sans-serif" style='font-family: Arial, Helvetica, sans-serif'>Arial</a></li>
+                        <li><a tabindex="-1" href="#" class="bool-portlet-font-item" data-font="Georgia" data-font-family="Georgia, serif" style='font-family: Georgia, serif'>Georgia</a></li>
+                    </ul>
                 </div>
 
             </li>
+            <li>
+                Thanks message
+                <textarea class="bool-textarea bool-portlet-thanks-message" rows="5" ></textarea>
+            </li>
         </ul>
+
+        <a class="bool-pure-btn bool-btn-back-to-widgets">
+            <i class="fa fa-arrow-left"></i>
+            Back to main menu</a>
+    </div>
+
+    <div class="bool-dock-bottom">
 
         <ul class="bool-toolbar-commands">
             <li><a class="bool-toolbar-btn bool-toolbar-btn-preview " >

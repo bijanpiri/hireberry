@@ -118,6 +118,7 @@ function Flyer(options) {
                 }
 
                 flyer.description = data.description;
+                $('.bool-portlet').css('font-family', data.font ),
                 $('body').css('background', data.background);
                 $('.bool-color-chooser-background .bool-current-color')
                     .css('background',data.background);
@@ -157,7 +158,7 @@ function Flyer(options) {
             logo: $('.portletHeader .logo').attr('src'),
             thanksMessage: this.thanksMessage,
             count: portlets.length,
-
+            font: $('.bool-portlet').css('font-family'),
             widgets:[]
         };
         var widgetCount=portlets.length+1;//+1 for times when there is no widget(Empty Flyer)

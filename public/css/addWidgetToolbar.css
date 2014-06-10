@@ -20,11 +20,41 @@
     -o-user-select: none;
     user-select: none;
 }
-.portletCreator h2{
+.bool-widget-btn-carousel {
+    position: absolute;
+    left: 0;
+}
+
+.bool-more-options {
+    position: absolute;
+    left: 240px;
+    top: 0;
+}
+
+.bool-more-options .bool-pure-btn,
+.bool-widget-btn-carousel .bool-pure-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.bool-sidebar-header{
     font-size: 18px;
     font-weight: bold;
     text-align: center;
     color: #ffffff;
+}
+
+.bool-pure-btn,
+.bool-pure-btn:hover,
+.bool-pure-btn:visited {
+    display: block;
+    text-align: center;
+    font-size: 1.2em;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .bool-widget-btn{
@@ -167,13 +197,10 @@ Portlet Creator
 
 .bool-toolbar-options{
     list-style: none;
-    margin: 20px 0;
-    border-bottom: 1px solid #404040;
+    margin: 20px 0 40px 0;
     background: inherit;
 }
 .bool-toolbar-options>li {
-    border-top:  1px solid #404040;
-    height: 50px;
     line-height: 50px;
     color:#f1f1f1;
     font-size: 14px;

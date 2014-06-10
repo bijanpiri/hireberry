@@ -45,7 +45,7 @@ function showSelected(admin,contents){
     if(admin) {
         contents.find('.bool-combo-selected')
             .replaceWith(
-                generateMemberElement(admin)
+                generateMemberElement(admin,true,false)
                     .addClass('bool-combo-selected')
                     .addClass('dropdown')
                     .attr('data-toggle', 'dropdown')
