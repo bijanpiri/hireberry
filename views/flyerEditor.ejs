@@ -97,7 +97,6 @@
 
 <script src="/script/flyerEditor.js"></script>
 
-
 <div class="container-fluid bool-flyer-editor " >
 
 <div class="row-fluid flyerRow" hidden>
@@ -333,8 +332,6 @@
 
 </div>
 </div>
-
-
 
 <div class="widgets">
 
@@ -869,10 +866,10 @@
         <!--<li>-->
             <!--<a class="bool-btn hide" command="cancel" ><i class="icon-remove"></i></a>-->
         <!--</li>-->
-        <li>
+        <li hidden="hidden">
             <a class="bool-btn " command="undo"><i class="bool-icon-undo"></i></a>
         </li>
-        <li>
+        <li hidden="hidden">
             <a class="bool-btn " command="redo"><i class="bool-icon-redo"></i></a>
         </li>
 
@@ -884,15 +881,9 @@
             <a class="bool-btn " command="rotate-right"><i class="bool-icon-rotate-right"></i></a>
         </li>
 
-        <li>
-            <a class="bool-btn " command="save"><i class="icon-save"></i></a>
+        <li class="pull-right">
+            <a class="bool-btn bool-btn-done" command="save">Done</a>
         </li>
-        <li>
-            <a class="bool-btn"  command="align left"
-               title="Align Left" data-original-title="Align Left (Ctrl/Cmd+L)">
-                <i class="bool-icon-align-left"></i></a>
-        </li>
-
     </ul>
 
 </div>

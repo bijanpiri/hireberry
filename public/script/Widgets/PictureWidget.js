@@ -6,6 +6,20 @@ function PictureWidget(){
     var layout = "";
     var widget=this;
     var bar;
+    var clipper=$(
+
+            '<div class="bool-clipper" style="position: absolute;">'+
+//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-nw bool-handle-nw"></div>'+
+//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-ne bool-handle-ne"></div>'+
+//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-sw bool-handle-sw"></div>'+
+//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-se bool-handle-se"></div>'+
+//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-n bool-handle-n"></div>'+
+//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-s bool-handle-s"></div>'+
+//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-w bool-handle-w"></div>'+
+//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-e bool-handle-e"></div>'+
+            '<a class="bool-crop-ok bool-btn bool-btn-crop"><i></i></a>'+
+            '<a class="bool-crop-cancel bool-btn bool-btn-crop"><i></i></a>'+
+            '</div>' );
     var gettingReady=false;
     var statesAction={
         none:function(){
@@ -37,66 +51,48 @@ function PictureWidget(){
 
     }
 
-    function showCropButtons(){
-        widget.toolbar.find(
-                '[command=crop],' +
-                '[command=undo],' +
-                '[command=redo],' +
-                '[command=save],' +
-                '[command=rotate-left],' +
-                '[command=rotate-right]').hide();
-        widget.toolbar.find(
-                '[command=accept],' +
-                '[command=cancel]' ).show();
+    function showCrop(){
+        var container=layout.find('.image-container');
+        container.find('.bool-clipper').remove();
+        container.append(clipper.clone()
+            .resizable({
+                    handles: "n,s,e,w,ne,nw,se,sw",
+                    containment:'parent',
+                    minHeight: 50,
+                    minWidth: 50})
+            .draggable({ containment: "parent" })
+//            .find('.ui-icon-gripsmall-diagonal-se').remove()
+        );
+
+        container.find('.bool-crop-cancel')
+            .click(function(){
+                container.find('.bool-clipper').remove();
+            });
+        container.find('.bool-crop-ok')
+            .click(function(){
+
+            });
     }
-    function hideCropButtons(){
+    function hideCrop(){
         widget.toolbar.find(
                 '[command=accept],' +
                 '[command=cancel]' ).hide();
-        widget.toolbar.find(
-                '[command=crop],' +
-                '[command=undo],' +
-                '[command=redo],' +
-                '[command=save],' +
-                '[command=rotate-left],' +
-                '[command=rotate-right]').show();
     }
     $(window).resize(function(){
         var img=layout.find('img')[0];
         var container=layout.find('.image-container');
-
-//        if(img && img.src)
-//            new Darkroom(img,
-//                {
-//                    maxWidth: container.width(),
-//                    maxHeight: container.width() * img.height/img.width
-//                }
-//            )
     });
-    var dark;
+
     var image;
     function readerLoad(progress) {
         try {
             var d=progress.target.result;
+            var container=layout.find('.image-container');
+            container.append($('<img>').attr('src',d));
             layout.find('.imageWidgetInnerContainer').hide();
-            layout.find('.image-container').empty().append('<img>');
-            layout.find('img').attr('src',d).show();
-        var container=layout.find('.image-container');
-            var img=layout.find('img')[0];
-            image=new Image();
-            image.src=d;
-//            var img=new Image();
-//            img.src=d;
-            dark=new Darkroom(img,
-                {
-                    maxWidth: container.width(),
-                    maxHeight:container.width()*img.height/img.width
-                });
-
             action=statesAction.add;
         } catch (ex) {
             console.log(ex);
-
         }
     }
     var dudata;
@@ -154,10 +150,10 @@ function PictureWidget(){
                 progressall:progressall
             });
 
-            this.addToolbarCommand('crop',function(){layout.find('.darkroom-icon-crop').click();showCropButtons();
-            }).addToolbarCommand('accept',function(){layout.find('.darkroom-icon-accept').click();hideCropButtons();
+            this.addToolbarCommand('crop',function(){showCrop();
+            }).addToolbarCommand('accept',function(){layout.find('.darkroom-icon-accept').click();hideCrop();
                 widget.changed();
-            }).addToolbarCommand('cancel',function(){layout.find('.darkroom-icon-cancel').click();hideCropButtons();
+            }).addToolbarCommand('cancel',function(){layout.find('.darkroom-icon-cancel').click();hideCrop();
             }).addToolbarCommand('undo',function(){layout.find('.darkroom-icon-back').click();
                 widget.changed();
             }).addToolbarCommand('redo',function(){layout.find('.darkroom-icon-forward').click();
@@ -200,6 +196,32 @@ function PictureWidget(){
     }
     this.changed=function(){
         action=statesAction.add;
+    }
+
+    function resizeAndUpload() {
+
+            var tempImg = new Image();
+
+            tempImg.onload = function() {
+
+
+                var canvas = document.createElement('canvas');
+                canvas.width = tempImg.width;
+                canvas.height = tempImg.height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(this, 0, 0, tempW, tempH);
+                var dataURL = canvas.toDataURL("image/jpeg");
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(ev){
+                    document.getElementById('filesInfo').innerHTML = 'Done!';
+                };
+
+                xhr.open('POST', 'uploadResized.php', true);
+                xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                var data = 'image=' + dataURL;
+                xhr.send(data);
+            }
     }
 }
 PictureWidget.prototype=new Widget();
