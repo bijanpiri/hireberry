@@ -41,6 +41,9 @@ function initNotificationCenter() {
 
         showInvitations(responses.teamInvitations);
         add2NotificationBadge(responses.teamInvitations.length);
+
+        if(badgeNum==0)
+            $('#askedForCommentList').append('<li>There is no activity</li>');
     });
 
 

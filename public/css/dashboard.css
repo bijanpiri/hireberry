@@ -414,12 +414,13 @@
     background-color: #AC4949;
     border-radius: 50%;
     font-size: 0.9em;
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     display: inline-block;
     color: #fff;
     font-weight: 700;
-    line-height: 1.3em;
+    text-align: center;
+    line-height: 1.8;
 }
 
 #askedForCommentList {

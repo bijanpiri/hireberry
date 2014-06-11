@@ -170,16 +170,17 @@
                     <% if(everyauth.loggedIn){ %>
                     <li class="navbar-dropdown">
                         <a href="#" class="dropdown-toggle navbar-button" data-toggle="dropdown">
-                            Hello
-                            <% if(everyauth.user.displayName) { %>
-                            <%= everyauth.user.displayName %>
-                            <% } else { %>
-                            <%= 'Dude'%>
-                            <% }%>
                             <img class="avatar" style="width: 30px;border-radius: 50%;border:2px solid green" src="#">
+                            <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/setting" class="navbar-button"><i class="fa fa-cog"></i> Setting</a></li>
+                            <li><a href="/setting" class="navbar-button"><i class="fa fa-user"></i>
+                                    <% if(everyauth.user.displayName) { %>
+                                    <%= everyauth.user.displayName %>
+                                    <% } else { %>
+                                    <%= 'Account'%>
+                                    <% }%>
+                                </a></li>
                             <li><a href="/logout" class="navbar-button"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </li>
@@ -198,6 +199,14 @@
                             <i class="fa fa-plus"></i> New Job
                         </a></li>
                     <li><a href="/dashboard" class="navbar-button">Dashboard</a></li>
+                    <li class="navbar-dropdown">
+                        <a href="#" class="dropdown-toggle navbar-button" data-toggle="dropdown">
+                            Notifications
+                            <span id="comments_badge"></span>
+                        </a>
+                        <ul class="dropdown-menu"  id="askedForCommentList">
+                        </ul>
+                    </li>
                 </ul>
                 <%}%>
             </div><!-- /.nav-collapse -->
