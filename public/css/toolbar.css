@@ -558,6 +558,7 @@ Toolbar - WorkType Widget
 .ui-resizable-handle{
     background: #000000;
 }
+
 .ui-resizable-ne{right: -5px;top:-5px;cursor: ne-resize;background: #d8dfea;opacity: .5;width: 10px;height: 10px;}
 .ui-resizable-sw{left: -5px;bottom:-5px;cursor:sw-resize;background: #d8dfea;opacity: .5;width: 10px;height: 10px;}
 .ui-resizable-se{right: -5px;bottom:-5px;cursor: se-resize;background: #d8dfea;opacity: .5;width: 10px;height: 10px;}
@@ -566,6 +567,7 @@ Toolbar - WorkType Widget
 .ui-resizable-s{cursor:s-resize; border-top: 2px dashed red;}
 .ui-resizable-e{cursor: e-resize;border-left: 2px dashed #ffffff}
 .ui-resizable-w{cursor: w-resize;border-right: 2px dashed #ffffff}
+
 .bool-btn-crop{
     position: absolute;
     bottom:-50px;
@@ -590,3 +592,13 @@ Toolbar - WorkType Widget
 .image-container>img {
 
 }
+.bool-clipper-mask{
+    position: absolute;
+    background: gray;
+    opacity: .5;
+
+}
+.bool-clipper-mask-top {top:0;left:0;right:0;}
+.bool-clipper-mask-bottom {bottom: 0;left:0;right:0;}
+.bool-clipper-mask-left {left: 0;top:0;bottom: 0;}
+.bool-clipper-mask-right {right: 0;top:0;bottom: 0;}

@@ -5,7 +5,14 @@ function PictureWidget(){
 
     var layout = "";
     var widget=this;
-    var bar;
+    var masker=$(
+            '<div class="bool-clipper-masker" >' +
+            '<div class="bool-clipper-mask bool-clipper-mask-top" ></div>'+
+            '<div class="bool-clipper-mask bool-clipper-mask-left" ></div>'+
+            '<div class="bool-clipper-mask bool-clipper-mask-right" ></div>'+
+            '<div class="bool-clipper-mask bool-clipper-mask-bottom" ></div>'+
+            '</div>');
+
     var clipper=$(
 
             '<div class="bool-clipper" style="position: absolute;">'+
@@ -20,6 +27,7 @@ function PictureWidget(){
             '<a class="bool-crop-ok bool-btn bool-btn-crop"><i></i></a>'+
             '<a class="bool-crop-cancel bool-btn bool-btn-crop"><i></i></a>'+
             '</div>' );
+    var bar;
     var gettingReady=false;
     var statesAction={
         none:function(){
@@ -54,14 +62,19 @@ function PictureWidget(){
     function showCrop(){
         var container=layout.find('.image-container');
         container.find('.bool-clipper').remove();
+        container.find('.bool-clipper-masker').remove();
         container.append(clipper.clone()
             .resizable({
                     handles: "n,s,e,w,ne,nw,se,sw",
                     containment:'parent',
                     minHeight: 50,
-                    minWidth: 50})
-            .draggable({ containment: "parent" })
-//            .find('.ui-icon-gripsmall-diagonal-se').remove()
+                    minWidth: 50,
+                    resize:function(){
+
+                    }
+                })
+            .draggable({ containment: "parent" }))
+            .append(masker.clone()
         );
 
         container.find('.bool-crop-cancel')
