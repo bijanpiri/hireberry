@@ -117,9 +117,15 @@
     &.candidate-expanded {
       width: 100%;
       height: auto;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+      margin-top: 0;
+
+      .bool-toggle-application {
+        display: none;
+      }
 
       .candidate-summary {
-
 
         .candidate-basicInfo {
           width: auto;
@@ -150,7 +156,6 @@
           }
         }
       }
-
 
       .candidate-details {
         display: inline-block;

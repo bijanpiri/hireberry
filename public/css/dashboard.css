@@ -524,14 +524,35 @@ form{
 a{
     cursor: pointer;
 }
-#application-preview-dialog.modal>.modal-body {
-    max-height: 700px;
-}
-#application-preview-dialog.modal{
-    width: 1024px;
-    margin-left:-512px;
 
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.89);
+    z-index: 1030;
 }
+
+/* Effects */
+.overlay-scale {
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+    -webkit-transition: -webkit-transform 0.2s, opacity 0.2s, visibility 0s 0.2s;
+    transition: transform 0.2s, opacity 0.2s, visibility 0s 0.2s;
+}
+
+.overlay-scale.open {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: -webkit-transform 0.4s, opacity 0.4s;
+    transition: transform 0.4s, opacity 0.4s;
+}
+
 
 
 @media (max-width: 979px) {

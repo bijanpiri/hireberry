@@ -206,8 +206,16 @@
                 Sort by <span class="application-sortType">Date</span><i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation"><a class="sortByDate" role="menuitem" tabindex="-1">Date</a></li>
-                <li role="presentation"><a class="sortByName" role="menuitem" tabindex="-1">Name</a></li>
+                <li role="presentation">
+                    <a class="sortByDate" role="menuitem" tabindex="-1">
+                        <i class="fa fa-calendar"></i>Date
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a class="sortByName" role="menuitem" tabindex="-1">
+                        <i class="fa fa-sort-alpha-asc"></i>Name
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -893,20 +901,24 @@
     </div>
 </form>
 
-<div id="application-preview-dialog"
-     class="modal hide fade" tabindex="-1"
-     role="dialog" aria-labelledby="applicationPreviewLabel"
-     aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close"
-                data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="applicationPreviewLabel">Application Preview</h3>
-    </div>
-    <div class="modal-body ">
-        <div class="grid-layout">
-
+<div id="application-preview-dialog" class="overlay overlay-scale">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <button class="btn btn-mini bool-close-btn pull-right">☓</button>
+                </div>
+            </div>
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="application-preview-container grid-layout">
+                </div>
+            </div>
+            <div class="span3">
+                <div class="bool-application-comments">
+                    <h2>Comments</h2>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>
 
