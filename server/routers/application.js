@@ -2,9 +2,8 @@
  * Created by Bijan on 05/06/2014.
  */
 
-// Return all the submitted form as a data-source
 app.get('/api/applications', function (req,res) {
-    // Data-Source template (for WaTable.js)
+
     var submittedForms = {rows: []};
 
     var teamID = req.user.teamID;
@@ -78,7 +77,7 @@ app.get('/api/applications', function (req,res) {
                 for( var i=0; i<forms.length; i++ ) {
                     var form = forms[i]._doc;
 
-                    form.position = form.flyerID.flyer.description;
+                    form.position = form.flyerID.flyer ? form.flyerID.flyer.description : '';
 
                     // Skills
                     var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );

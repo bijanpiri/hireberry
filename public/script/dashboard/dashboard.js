@@ -55,6 +55,30 @@ $(function(){
         $(e.target).addClass('item-selected');
     })
 
+
+    $(document).delegate('.bool-edit-switch a','click', function() {
+
+        var operation = $(this).attr('op');
+        var editableObjClassName = $(this).parent().attr('edit-switch-of');
+        var editableObj = $(this).closest( '.' + editableObjClassName ).find('.value');
+
+        switch (operation) {
+            case 'edit':
+                editableObj.attr('last-value',editableObj.text());
+                editableObj.attr('contenteditable','true');
+                break;
+            case 'yes':
+                editableObj.attr('contenteditable','false');
+                break;
+            case 'no':
+                editableObj.text(editableObj.attr('last-value'));
+                editableObj.attr('contenteditable','false');
+                break;
+        }
+
+    });
+
+
     refresh();
 });
 
@@ -372,7 +396,7 @@ function showApplicationPreview(applicationID) {
         }
 
         candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
-        candidateObj.find('.candidate-name').text(candidate.name);
+        candidateObj.find('.candidate-name .value').text(candidate.name);
         candidateObj.find('.candidate-job .value').text(candidate.position);
         candidateObj.find('.candidate-time .value').text(candidate.applyTime);
         candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
