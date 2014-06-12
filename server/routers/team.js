@@ -255,11 +255,11 @@ app.post('/api/team/applyByEmail/state', function(req,res) {
 
     if( state==="on" )
         addApplyByEmailRouter(req.user.teamID, function(err,result) {
-            res.send(200,{result:result});
+            res.send(200,{err:err, result:result});
         });
     else if( state==="off" )
         deleteApplyByEmailRouter(req.user.teamID, function(err,result) {
-            res.send(200,{result:result});
+            res.send(200,{err:err, result:result});
         });
     else
         res.send(503);
