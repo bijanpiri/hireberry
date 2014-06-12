@@ -207,7 +207,7 @@ addApplyByEmailRouter=function(teamID,callback){
             callback(null,result);
         });
     }, function(e) {
-        callback(err,{});
+        callback(e,{});
     });
 }
 
