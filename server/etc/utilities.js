@@ -197,6 +197,37 @@ inviteToTeam=function( invitedEmail, teamID, note, callback ) {
         })
 }
 
+addApplyByEmailRouter=function(teamID,callback){
+    var domain = "ats.booltin.com";
+    var pattern = teamID;
+    var url = "http://ats.booltin.com/api/applications/applyByEmail";
+
+    mandrill_client.inbound.addRoute({"domain": domain, "pattern": pattern, "url": url}, function(result) {
+        BFlyers.update({teamID:teamID}, {madrillRouterID:result.id}, function() {
+            callback(null,result);
+        });
+    }, function(e) {
+        callback(err,{});
+    });
+}
+
+deleteApplyByEmailRouter=function(teamID,callback){
+
+    BTeams.findOne({_id:team}, function(err,team) {
+        if( err || !team )
+            callback(err,{});
+        else {
+            mandrill_client.inbound.deleteRoute({"id": team.madrillRouterID}, function(result) {
+                BTeams.update({teamID:teamID}, {madrillRouterID:undefined}, function() {
+                    callback(null,result);
+                });
+            }, function(e) {
+                callback(e,{});
+            });
+        }
+    });
+}
+
 assignForm=function(assigneeUserID,assignedFormID,callback) {
     BFlyers.update( {_id:assignedFormID}, {autoAssignedTo:assigneeUserID}, function(err){
         if(err)

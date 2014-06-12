@@ -83,7 +83,8 @@ BTeams = mongoose.model( 'teams', {
     address:String,
     plan: Number,
     planLastRenewDate: Date,
-    HiringManagerNotified: Boolean
+    HiringManagerNotified: Boolean,
+    madrillRouterID: String
 })
 
 BEvents = mongoose.model( 'events', {
@@ -153,4 +154,8 @@ BNotifications = mongoose.model( 'notifications', {
     type: String,
     notified: Boolean,
     more: {}
+});
+
+BAppliedByEmail = mongoose.model( 'appliedByEmail', {
+    inbound: {}
 });

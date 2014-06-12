@@ -412,17 +412,21 @@ function showApplicationPreview(applicationID) {
         candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
         candidateObj.find('.candidate-name .value').text(candidate.name);
         candidateObj.find('.candidate-job .value').text(candidate.position);
-        candidateObj.find('.candidate-time .value').text(candidate.applyTime);
+        candidateObj.find('.candidate-time .value').text( new Date(candidate.applyTime).toLocaleString() );
         candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
         candidateObj.find('.candidate-skills .value').text(candidate.skills);
-        candidateObj.find('.candidate-conditions .value').text(candidate.workTime + ' @' + candidate.workPlace);
+        candidateObj.find('.candidate-conditions .value').text( (candidate.workTime||'') + (candidate.workPlace?' @' + candidate.workPlace:'') );
         candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
         candidateObj.find('.candidate-email .value').text(candidate.email);
         candidateObj.find('.candidate-tel .value').text(candidate.tel);
         candidateObj.find('.candidate-website .value').text(candidate.website);
         candidateObj.find('.candidate-note .value').html(candidate.note);
-        candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
         candidateObj.find('[name="appID"]').val(candidate._id);
+
+        if( candidate.resumePath!=='-' )
+            candidateObj.find('.candidate-resume').attr('href', '/api/resume?f=' + decodeURI(candidate.resumePath) );
+        else
+            candidateObj.find('.candidate-resume a').hide();
 
         candidateObj.find('.ask-for-comment-form')
             .submit( function() {
@@ -521,6 +525,11 @@ function showApplicationPreview(applicationID) {
                 })
 
             })
+        });
+
+        // minimize-maximize boxes
+        candidateObj.find('.mbox-title').dblclick( function() {
+            $(this).next().toggle();
         });
 
         initWorkflow(candidateObj,candidate);
