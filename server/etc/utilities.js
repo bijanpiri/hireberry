@@ -200,7 +200,7 @@ inviteToTeam=function( invitedEmail, teamID, note, callback ) {
 addApplyByEmailRouter=function(teamID,callback){
     var domain = "ats.booltin.com";
     var pattern = teamID;
-    var url = "http://ats.booltin.com/api/applications/applyByEmail";
+    var url = "http://ats.boolt.in/api/applications/applyByEmail";
 
     mandrill_client.inbound.addRoute({"domain": domain, "pattern": pattern, "url": url}, function(result) {
         BFlyers.update({teamID:teamID}, {madrillRouterID:result.id}, function() {
