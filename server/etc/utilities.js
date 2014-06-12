@@ -203,7 +203,7 @@ addApplyByEmailRouter=function(teamID,callback){
     var url = "http://booltin.herokuapp.com/api/applications/applyByEmail/" + teamID;
 
     mandrill_client.inbound.addRoute({"domain": domain, "pattern": pattern, "url": url}, function(result) {
-        BFlyers.update({teamID:teamID}, {madrillRouterID:result.id}, function() {
+        BTeams.update({_id:teamID}, {mandrillRouterID:result.id}, function() {
             callback(null,result);
         });
     }, function(e) {
@@ -217,8 +217,8 @@ deleteApplyByEmailRouter=function(teamID,callback){
         if( err || !team )
             callback(err,{});
         else {
-            mandrill_client.inbound.deleteRoute({"id": team.madrillRouterID}, function(result) {
-                BTeams.update({teamID:teamID}, {madrillRouterID:undefined}, function() {
+            mandrill_client.inbound.deleteRoute({"id": team.mandrillRouterID}, function(result) {
+                BTeams.update({teamID:teamID}, {mandrillRouterID:undefined}, function() {
                     callback(null,result);
                 });
             }, function(e) {

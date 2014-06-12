@@ -84,7 +84,7 @@ BTeams = mongoose.model( 'teams', {
     plan: Number,
     planLastRenewDate: Date,
     HiringManagerNotified: Boolean,
-    madrillRouterID: String
+    mandrillRouterID: String
 })
 
 BEvents = mongoose.model( 'events', {
