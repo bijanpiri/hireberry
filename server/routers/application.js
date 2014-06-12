@@ -329,16 +329,19 @@ app.post('/api/applications/:applicationID',  function(req,res) {
 
 app.post('/api/applications/applyByEmail',  function(req,res) {
 
-    function updateApplication() {
+    var length = mandrill_events.length;
+    var counter = length;
 
-        for( var i=0; i<mandrill_events.length; i++ ) {
-            BAppliedByEmail({
-                inbound:res.mandrill_events[i]
-            },function(err) {
+    if( length == 0 )
+        return res.send(200);
+
+    for( var i=0; i<length; i++ ) {
+        BAppliedByEmail({ inbound:res.mandrill_events[i] }, function(err) {
+            if( --counter == 0 )
                 res.send(200);
-            });
-        }
+        });
     }
+
 });
 
 app.post('/api/team/application/askForComment', function(req,res){
