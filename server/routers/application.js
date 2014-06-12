@@ -340,7 +340,7 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
         return res.send(200);
 
     for( var i=0; i<length; i++ ) {
-        BAppliedByEmail({ teamID:teamID, inbound:res.mandrill_events[i] }, function(err) {
+        BAppliedByEmail({ teamID: req.params.teamID, inbound:res.mandrill_events[i] }, function(err) {
             if( --counter == 0 )
                 res.send(200);
         });
