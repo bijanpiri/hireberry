@@ -333,9 +333,11 @@ app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
 
 app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
 
-    BAppliedByEmail({ teamID: req.params.teamID, inbound: res.body }).save( function(err) {
+
+    BAppliedByEmail({ teamID: req.params.teamID, inbound: req.body }).save( function(err) {
         res.send(200);
     });
+
 });
 
 app.post('/api/team/application/askForComment', function(req,res){
