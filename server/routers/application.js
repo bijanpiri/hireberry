@@ -333,7 +333,7 @@ app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
 
 app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
 
-    var messagesCount = req.body.length;
+    var messagesCount = req.body.mandrill_events.length;
     var savedCounter = 0;
 
     console.log(util.inspect(req.body));
@@ -345,7 +345,7 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
 
     for( var i=0; i<messagesCount; i++ ) {
 
-        var msg = req.body[i].msg;
+        var msg = req.body.mandrill_events[i].msg;
 
         console.log('APPLY-BY-EMAIL: ' + msg );
 
