@@ -66,9 +66,11 @@ $(function(){
             case 'edit':
                 editableObj.attr('last-value',editableObj.text());
                 editableObj.attr('contenteditable','true');
+                editableObj.focus();
                 break;
             case 'yes':
                 editableObj.attr('contenteditable','false');
+                saveModifiedApplication( editableObj.closest('.candidate') );
                 break;
             case 'no':
                 editableObj.text(editableObj.attr('last-value'));
@@ -76,6 +78,18 @@ $(function(){
                 break;
         }
 
+
+        function saveModifiedApplication(candidateObj) {
+            $.post('/api/applications/' + candidateObj.data('candidate')._id , {
+                name: candidateObj.find('.candidate-name .value').text(),
+                email: candidateObj.find('.candidate-email .value').text(),
+                tel: candidateObj.find('.candidate-tel .value').text(),
+                website: candidateObj.find('.candidate-website .value').text(),
+                note: candidateObj.find('.candidate-note .value').html()
+            }).done( function() {
+                    refresh();
+                });
+        }
     });
 
 
@@ -406,6 +420,7 @@ function showApplicationPreview(applicationID) {
         candidateObj.find('.candidate-email .value').text(candidate.email);
         candidateObj.find('.candidate-tel .value').text(candidate.tel);
         candidateObj.find('.candidate-website .value').text(candidate.website);
+        candidateObj.find('.candidate-note .value').html(candidate.note);
         candidateObj.find('.candidate-resume').attr('href','/api/resume?f=' + decodeURI(candidate.resumePath) );
         candidateObj.find('[name="appID"]').val(candidate._id);
 
