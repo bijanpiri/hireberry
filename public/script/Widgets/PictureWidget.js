@@ -61,22 +61,31 @@ function PictureWidget(){
 
     function showCrop(){
         var container=layout.find('.image-container');
+
         container.find('.bool-clipper').remove();
         container.find('.bool-clipper-masker').remove();
-        container.append(clipper.clone()
+
+
+        var clip=clipper.clone();
+        clip.css('top',container.height()/3+'px');
+        clip.css('left',container.width()/3+'px');
+        clip.css('width',container.width()/3+'px');
+        clip.css('height',container.height()/3+'px');
+
+        container.append(clip
+
             .resizable({
                     handles: "n,s,e,w,ne,nw,se,sw",
                     containment:'parent',
                     minHeight: 50,
-                    minWidth: 50,
-                    resize:function(){
-
-                    }
-                })
-            .draggable({ containment: "parent" }))
-            .append(masker.clone()
-        );
-
+                    minWidth: 120,
+                resize:remask})
+            .draggable({
+                containment: "parent",
+                drag:remask,
+                stop:remask
+            }))
+            .append(masker.clone());
         container.find('.bool-crop-cancel')
             .click(function(){
                 container.find('.bool-clipper').remove();
@@ -180,6 +189,7 @@ function PictureWidget(){
         }
         else {
             this.portlet.find('.imageWidgetInnerContainer').remove();
+
         }
     }
     function save(){
@@ -195,7 +205,7 @@ function PictureWidget(){
     }
 
     this.deserialize=function(content) {
-        hideEditButton();
+
         action=statesAction.none;
         if( content ) {
             this.portlet.find('.imageWidgetInnerContainer').remove();
