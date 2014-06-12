@@ -336,9 +336,14 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
     var messagesCount = req.body.length;
     var savedCounter = 0;
 
+    console.log('APPLY-BY-EMAIL: ' + req.body );
+    console.log('APPLY-BY-EMAIL: ' + req.body.length );
+
     for( var i=0; i<messagesCount; i++ ) {
 
         var msg = req.body[i].msg;
+
+        console.log('APPLY-BY-EMAIL: ' + msg );
 
         /*
          base64: false
@@ -350,12 +355,16 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
         var resumeFileName = '';
 
         //Upload attached files to Parse and save their links as resume
-        for(var filename in msg.attachments) {
-            //msg.attachments[filename].content;
-            //msg.attachments[filename].type;
-            resumeFileName = msg.attachments[filename].filename;
-        }
+        //for(var filename in msg.attachments) {
+        //msg.attachments[filename].content;
+        //msg.attachments[filename].type;
+        //resumeFileName = msg.attachments[filename].filename;
+        //}
 
+        console.log('APPLY-BY-EMAIL: ' + msg["from name"] );
+        console.log('APPLY-BY-EMAIL: ' + msg["from email"] );
+        console.log('APPLY-BY-EMAIL: ' + msg["subject"] );
+        console.log('APPLY-BY-EMAIL: ' + msg["html"] );
 
         BAppliedByEmail({
             teamID: req.params.teamID,
@@ -365,9 +374,10 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
             text:  msg["html"],
             resume: resumeFileName
         }).save( function(err) {
-            if( ++savedCounter == messagesCount )
-                res.send(200);
-        });
+                console.log('APPLY-BY-EMAIL: ' + savedCounter );
+                if( ++savedCounter == messagesCount )
+                    res.send(200);
+            });
 
     }
 
