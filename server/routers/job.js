@@ -180,7 +180,7 @@ app.delete('/api/job/:flyerID', function(req,res){
             return res.send(504);
 
         // Delete ApplyByEmail router from mandrill
-        deleteApplyByEmailRouter(req.user.teamID, function(err,result) {
+        deleteApplyByEmailRouter(req.params.flyerID, function(err,result) {
 
             if( flyer.owner.admin.toString() === req.user._id.toString() ) // Hiring Manager
                 BFlyers.remove({_id:req.params.flyerID}, function(err) {

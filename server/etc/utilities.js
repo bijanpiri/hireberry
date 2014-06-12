@@ -214,7 +214,7 @@ addApplyByEmailRouter=function(flyerID,callback){
 deleteApplyByEmailRouter=function(flyerID,callback){
 
     BFlyers.findOne({_id:flyerID}, function(err,flyer) {
-        if( err || !team )
+        if( err || !flyer )
             callback(err,{});
         else {
             mandrill_client.inbound.deleteRoute({"id": flyer.mandrillRouterID}, function(result) {
