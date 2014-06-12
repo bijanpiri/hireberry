@@ -333,10 +333,43 @@ app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
 
 app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
 
+    var messagesCount = req.body.length;
+    var savedCounter = 0;
 
-    BAppliedByEmail({ teamID: req.params.teamID, inbound: req.body }).save( function(err) {
-        res.send(200);
-    });
+    for( var i=0; i<messagesCount; i++ ) {
+
+        var msg = req.body[i].msg;
+
+        /*
+         base64: false
+         content: "FILE TEXT"
+         name: "filename.txt"
+         type: "text/plain"
+         */
+
+        var resumeFileName = '';
+
+        //Upload attached files to Parse and save their links as resume
+        for(var filename in msg.attachments) {
+            //msg.attachments[filename].content;
+            //msg.attachments[filename].msg.type;
+            resumeFileName = msg.attachments[filename].msg.filename;
+        }
+
+
+        BAppliedByEmail({
+            teamID: req.params.teamID,
+            name: msg["from name"],
+            from: msg["from email"],
+            subject: msg["subject"],
+            text:  msg["html"],
+            resume: resumeFileName
+        }).save( function(err) {
+            if( ++savedCounter == messagesCount )
+                res.send(200);
+        });
+
+    }
 
 });
 

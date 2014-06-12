@@ -158,5 +158,9 @@ BNotifications = mongoose.model( 'notifications', {
 
 BAppliedByEmail = mongoose.model( 'appliedByEmail', {
     teamID: {type : mongoose.Schema.ObjectId, ref : 'teams'},
-    inbound: {}
+    name: String,
+    from: String,
+    subject: String,
+    text: String,
+    resume: String
 });
