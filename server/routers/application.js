@@ -333,7 +333,7 @@ app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
 
 app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
 
-    var length = mandrill_events.length;
+    var length = req.body.mandrill_events.length;
     var counter = length;
 
     if( length == 0 )
