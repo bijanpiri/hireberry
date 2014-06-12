@@ -333,19 +333,19 @@ app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
 
 app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
 
-    var messagesCount = req.body.mandrill_events.length;
+    var messages = JSON.parse(req.body.mandrill_events);
+    var messagesCount = messages.length;
     var savedCounter = 0;
 
-    console.log(util.inspect(req.body));
-    console.log('APPLY-BY-EMAIL: ' + req.body );
-    console.log('APPLY-BY-EMAIL: ' + req.body.length );
+    console.log('APPLY-BY-EMAIL: ' + util.inspect(messages));
+    console.log('APPLY-BY-EMAIL: ' + messagesCount);
 
     if(messagesCount==0)
         return res.send(200);
 
     for( var i=0; i<messagesCount; i++ ) {
 
-        var msg = req.body.mandrill_events[i].msg;
+        var msg = messages[i].msg;
 
         console.log('APPLY-BY-EMAIL: ' + msg );
 
