@@ -331,7 +331,7 @@ app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
     res.send(200);
 });
 
-app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
+app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
 
     var messages = JSON.parse(req.body.mandrill_events);
     var messagesCount = messages.length;
@@ -351,23 +351,24 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
          type: "text/plain"
          */
 
-        var resumeFileName = '';
-
+        //var resumeFileName = '';
         //Upload attached files to Parse and save their links as resume
         //for(var filename in msg.attachments) {
         //msg.attachments[filename].content;
         //msg.attachments[filename].type;
-        //resumeFileName = msg.attachments[filename].filename;
+        //    resumeFileName = msg.attachments[filename].filename;
         //}
 
-        BAppliedByEmail({
-            teamID: req.params.teamID,
+        BApplications({
+            flyerID: req.params.formID,
             name: msg["from_name"],
-            from: msg["from_email"],
-            subject: msg["subject"],
-            text:  msg["html"],
-            resume: resumeFileName
-        }).save( function(err) {
+            email: msg["from_email"],
+            applyTime: new Date(),
+            anythingelse: msg["html"],
+            //resumePath: resumeUrl || resumeFileName,
+            stage: { stage:1, subStage:1 },
+            activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
+        }).save( function(err, application) {
                 if( ++savedCounter == messagesCount )
                     res.send(200);
             });

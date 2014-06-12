@@ -239,28 +239,3 @@ app.get('/api/team',function(req,res){
 
         })
 });
-
-app.get('/api/team/applyByEmail/state', function(req,res) {
-    BTeams.findOne({_id: req.user.teamID}, function(err,team) {
-        if( team.mandrillRouterID )
-            res.send({state:'on'});
-        else
-            res.send({state:'off'});
-    });
-});
-
-app.post('/api/team/applyByEmail/state', function(req,res) {
-
-    var state = req.body.state;
-
-    if( state==="on" )
-        addApplyByEmailRouter(req.user.teamID, function(err,result) {
-            res.send(200,{err:err, result:result});
-        });
-    else if( state==="off" )
-        deleteApplyByEmailRouter(req.user.teamID, function(err,result) {
-            res.send(200,{err:err, result:result});
-        });
-    else
-        res.send(503);
-});

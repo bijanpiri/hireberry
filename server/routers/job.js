@@ -82,7 +82,12 @@ app.get('/flyer/:mode/:tid', function(req,res){
                 }).save(function (err,newflyer) {
                         flyerid = newflyer._id;
                         res.cookie('flyerid',flyerid);
-                        renderNewFlyerView();
+
+                        // Make n new ApplyByEmail router to mandrill
+                        addApplyByEmailRouter(flyerid, function(err,result) {
+                            renderNewFlyerView();
+                        });
+
                     });
 
             } else {        // Cookie isn't empty. So laod it
@@ -164,7 +169,6 @@ app.get('/api/forms',  function(req,res){
 
 // region Flyers
 
-
 app.delete('/api/job/:flyerID', function(req,res){
 
     if( !req.user )
@@ -175,14 +179,19 @@ app.delete('/api/job/:flyerID', function(req,res){
         if( err || !flyer )
             return res.send(504);
 
-        if( flyer.owner.admin.toString() === req.user._id.toString() ) // Hiring Manager
-            BFlyers.remove({_id:req.params.flyerID}, function(err) {
-                res.send(200);
-            });
-        else    // Responder
-            BFlyers.remove({_id:req.params.flyerID, autoAssignedTo:req.user._id}, function(err) {
-                res.send(200);
-            });
+        // Delete ApplyByEmail router from mandrill
+        deleteApplyByEmailRouter(req.user.teamID, function(err,result) {
+
+            if( flyer.owner.admin.toString() === req.user._id.toString() ) // Hiring Manager
+                BFlyers.remove({_id:req.params.flyerID}, function(err) {
+                    res.send(200);
+                });
+            else    // Responder
+                BFlyers.remove({_id:req.params.flyerID, autoAssignedTo:req.user._id}, function(err) {
+                    res.send(200);
+                });
+        });
+
     });
 
 });
@@ -455,3 +464,14 @@ app.get('/api/team/:teamID/positions',function(req,res){
         })
 });
 
+app.get('/api/job/applyByEmail/state', function(req,res) {
+
+    var flyerID = req.query.flyerID;
+
+    BFlyers.findOne({_id: flyerID}, function(err,job) {
+        if( job.mandrillRouterID )
+            res.send({state:'on'});
+        else
+            res.send({state:'off'});
+    });
+});

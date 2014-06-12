@@ -197,13 +197,13 @@ inviteToTeam=function( invitedEmail, teamID, note, callback ) {
         })
 }
 
-addApplyByEmailRouter=function(teamID,callback){
+addApplyByEmailRouter=function(flyerID,callback){
     var domain = "ats.booltin.com";
-    var pattern = teamID;
-    var url = "http://booltin.herokuapp.com/api/applications/applyByEmail/" + teamID;
+    var pattern = flyerID;
+    var url = "http://booltin.herokuapp.com/api/applications/applyByEmail/" + flyerID;
 
     mandrill_client.inbound.addRoute({"domain": domain, "pattern": pattern, "url": url}, function(result) {
-        BTeams.update({_id:teamID}, {mandrillRouterID:result.id}, function() {
+        BFlyers.update({_id:flyerID}, {mandrillRouterID:result.id}, function() {
             callback(null,result);
         });
     }, function(e) {
@@ -211,14 +211,14 @@ addApplyByEmailRouter=function(teamID,callback){
     });
 }
 
-deleteApplyByEmailRouter=function(teamID,callback){
+deleteApplyByEmailRouter=function(flyerID,callback){
 
-    BTeams.findOne({_id:team}, function(err,team) {
+    BFlyers.findOne({_id:flyerID}, function(err,flyer) {
         if( err || !team )
             callback(err,{});
         else {
-            mandrill_client.inbound.deleteRoute({"id": team.mandrillRouterID}, function(result) {
-                BTeams.update({teamID:teamID}, {mandrillRouterID:undefined}, function() {
+            mandrill_client.inbound.deleteRoute({"id": flyer.mandrillRouterID}, function(result) {
+                BFlyers.update({_id:flyerID}, {mandrillRouterID:undefined}, function() {
                     callback(null,result);
                 });
             }, function(e) {

@@ -58,7 +58,8 @@ BFlyers = mongoose.model( 'flyers', {
     disqusShortname: String,
     dbToken:String,
     autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    askedForPublish: Boolean
+    askedForPublish: Boolean,
+    mandrillRouterID: String
 });
 
 BComments = mongoose.model( 'comments', {
@@ -83,8 +84,7 @@ BTeams = mongoose.model( 'teams', {
     address:String,
     plan: Number,
     planLastRenewDate: Date,
-    HiringManagerNotified: Boolean,
-    mandrillRouterID: String
+    HiringManagerNotified: Boolean
 })
 
 BEvents = mongoose.model( 'events', {

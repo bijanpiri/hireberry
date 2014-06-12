@@ -289,6 +289,8 @@ BJobsView = Backbone.View.extend({
                             modal.find('.jobStatus-next').append(askForPublishOption) // Ask For Publish
                     }
 
+                    modal.find('#jobApplyByEmail-address').val(form.formID + '@ats.booltin.com');
+
                     function changeJobMode(mode) {
                         $.post('/flyer/changeMode',{mode:mode,flyerID:form.formID}).done( function() {
                             jobs.fetch();
@@ -301,7 +303,7 @@ BJobsView = Backbone.View.extend({
                         $.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
 
                         flyer.description = modal.find('#jobTitle').val();
-                        flyer.thanksMessage = modal.find('#jobThanksMessage').val();
+                        //flyer.thanksMessage = modal.find('#jobThanksMessage').val();
 
                         $.post('/flyer/save',{flyer:flyer});
 
