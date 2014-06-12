@@ -249,10 +249,6 @@ app.get('/api/team/applyByEmail/state', function(req,res) {
     });
 });
 
-app.head('/api/team/applyByEmail/state', function(req,res) {
-    res.send(200);
-});
-
 app.post('/api/team/applyByEmail/state', function(req,res) {
 
     var state = req.body.state;
