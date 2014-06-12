@@ -338,6 +338,13 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
 
     if( length == 0 )
         return res.send(200);
+    else {
+        BAppliedByEmail({ teamID: req.params.teamID, inbound:res.body.mandrill_events[i] }, function(err) {
+            if( --counter == 0 )
+                res.send(200);
+        });
+    }
+    return;
 
     for( var i=0; i<length; i++ ) {
         BAppliedByEmail({ teamID: req.params.teamID, inbound:res.mandrill_events[i] }, function(err) {
