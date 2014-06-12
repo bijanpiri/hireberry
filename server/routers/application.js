@@ -337,17 +337,12 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
     var messagesCount = messages.length;
     var savedCounter = 0;
 
-    console.log('APPLY-BY-EMAIL: ' + util.inspect(messages));
-    console.log('APPLY-BY-EMAIL: ' + messagesCount);
-
     if(messagesCount==0)
         return res.send(200);
 
     for( var i=0; i<messagesCount; i++ ) {
 
         var msg = messages[i].msg;
-
-        console.log('APPLY-BY-EMAIL: ' + msg );
 
         /*
          base64: false
@@ -365,20 +360,14 @@ app.post('/api/applications/applyByEmail/:teamID',  function(req,res) {
         //resumeFileName = msg.attachments[filename].filename;
         //}
 
-        console.log('APPLY-BY-EMAIL: ' + msg["from name"] );
-        console.log('APPLY-BY-EMAIL: ' + msg["from email"] );
-        console.log('APPLY-BY-EMAIL: ' + msg["subject"] );
-        console.log('APPLY-BY-EMAIL: ' + msg["html"] );
-
         BAppliedByEmail({
             teamID: req.params.teamID,
-            name: msg["from name"],
-            from: msg["from email"],
+            name: msg["from_name"],
+            from: msg["from_email"],
             subject: msg["subject"],
             text:  msg["html"],
             resume: resumeFileName
         }).save( function(err) {
-                console.log('APPLY-BY-EMAIL: ' + savedCounter );
                 if( ++savedCounter == messagesCount )
                     res.send(200);
             });
