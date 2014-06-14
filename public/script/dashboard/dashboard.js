@@ -394,150 +394,9 @@ function showApplicationPreview(applicationID) {
         .empty();
 
     $.get('/api/application/json/' + applicationID).done( function(app) {
-
-        var candidate = app;
-
-        var candidateObj =
-            $('#candidateInstance')
-                .clone().show().addClass('candidate candidate-expanded')
-                .data('candidate',candidate);
-
-        if( candidate.currentUser==='denied') {
-            candidateObj.find('.candidate-workflow').parent().remove();
-            candidateObj.find('.applicationAskForCommentButton').remove();
-            candidateObj.find('.bool-application-comments').css('height','auto');
-            candidateObj.find('.bool-application-activities').css('height','auto');
-        }
-
-        candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")');
-        candidateObj.find('.candidate-name .value').text(candidate.name);
-        candidateObj.find('.candidate-job .value').text(candidate.position);
-        candidateObj.find('.candidate-time .value').text( new Date(candidate.applyTime).toLocaleString() );
-        candidateObj.find('.candidate-stage .value').text(candidate.stage.stage);
-        candidateObj.find('.candidate-skills .value').text(candidate.skills);
-        candidateObj.find('.candidate-conditions .value').text( (candidate.workTime||'') + (candidate.workPlace?' @' + candidate.workPlace:'') );
-        candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
-        candidateObj.find('.candidate-email .value').text(candidate.email);
-        candidateObj.find('.candidate-tel .value').text(candidate.tel);
-        candidateObj.find('.candidate-website .value').text(candidate.website);
-        candidateObj.find('.candidate-note .value').html(candidate.note);
-        candidateObj.find('[name="appID"]').val(candidate._id);
-
-        if( candidate.resumePath!=='-' )
-            candidateObj.find('.candidate-resume').attr('href', '/api/resume?f=' + decodeURI(candidate.resumePath) );
-        else
-            candidateObj.find('.candidate-resume a').hide();
-
-        candidateObj.find('.ask-for-comment-form')
-            .submit( function() {
-                var form=$(this);
-                $.post('/api/team/application/askForComment',
-                        form.serialize())
-                    .always(function(){
-                        $('.alert').hide();
-//                                refresh(true);
-                    })
-                    .done( function() {
-                        form.find('.alert-success').show().delay(2000).fadeOut();
-                    })
-                    .fail(function(){
-                        form.find('.alert-danger').show();
-                    });
-                return false;
-            });
-
-        for( var j=0; j<candidate.activities.length; j++ ) {
-            var activity = candidate.activities[j];
-            var mTimestamp = new moment(activity.timestamp);
-            var timeObj = $('<div>').addClass('activity-time')
-                .text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
-            var typeObj = $('<div>').addClass('activity-type').text( activity.type );
-            var activityObj = $('<div>').addClass('activity').append(timeObj).append(typeObj);
-
-            candidateObj.find('.candidate-activities').append( activityObj );
-        }
-
-        for( var profile in candidate.profiles )
-            candidate.profiles[ profile ];
-
-        $.get('/api/application/comments',{appID:candidate._id},function(data){
-            var comments=data.comments;
-
-            candidateObj.find('.candidate-comments').empty();
-
-            comments.forEach(function(comment){
-                var form=$('.reply-for-comment-form:first').clone().show();
-
-                candidateObj.find('.candidate-comments').append(form);
-                form.find('[name=commentID]').val(comment._id);
-                form.find('.user-note-avatar')
-                    .replaceWith(generateMemberElement(comment.user,true,false));
-                form.find('.commenter-note-avatar')
-                    .replaceWith(generateMemberElement(comment.commenter,true,false,true))
-                form.find('.bool-application-comments-note').html(comment.note);
-                var commentBox = form.find('.bool-application-comments-comment');
-                var replyBtn=form.find('[type=submit]');
-                commentBox.html(comment.comment);
-                var editBtn = form.find('.bool-edit-comment-btn').hide();
-                var cancleBtn = form.find('.bool-cancel-comment-btn').hide();
-                if(comment.comment || data.user!==comment.commenter._id) {
-                    commentBox
-                        .attr('readonly', 'readonly')
-                        .attr('placeholder', 'No comment left');
-                    replyBtn.hide();
-                    if(data.user===comment.commenter._id)
-                        editBtn.show();
-
-                }
-
-                editBtn.click(function(){
-                    replyBtn.show();
-                    cancleBtn.show();
-                    commentBox.removeAttr('readonly')
-                    editBtn.hide();
-                });
-                cancleBtn.click(function(){
-                    replyBtn.hide();
-                    cancleBtn.hide();
-                    editBtn.show();
-                    commentBox.attr('readonly','readonly');
-                    commentBox.val(comment.comment);
-                });
-
-                form.submit(function(){
-                    form.find('.alert-info').show();
-                    $.post('/api/application/comments',
-                            form.serialize())
-                        .always(function(data){
-                            $('.alert').hide();
-                        })
-                        .fail(function(data){
-                            form.find('.alert-danger').show();
-                        })
-                        .done(function(data){
-                            form.find('.alert-success').show().delay(3000).fadeOut();
-                            replyBtn.hide();
-                            cancleBtn.hide();
-                            editBtn.show();
-                            commentBox.attr('readonly','readonly');
-                        });
-                    return false;
-                })
-
-            })
-        });
-
-        // minimize-maximize boxes
-        candidateObj.find('.mbox-title').dblclick( function() {
-            $(this).next().toggle();
-        });
-
-        initWorkflow(candidateObj,candidate);
-        changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
-
-        prevContainer.append( candidateObj )
+        var candidateInstance = initCandidateInstance(app,true);
+        prevContainer.append( candidateInstance );
     });
-
 
     $('#application-preview-dialog .bool-close-btn').unbind('click').click(function(){
         $('#application-preview-dialog').removeClass('open');
@@ -546,4 +405,209 @@ function showApplicationPreview(applicationID) {
 
     $('#application-preview-dialog').addClass('open');
     $('body').css('overflow','hidden'); // hide main scroll bar
+
+}
+
+function initCandidateInstance(candidate,expanded) {
+
+    var candidateObj =
+        $('#candidateInstance')
+            .clone().show().addClass('candidate')
+            .data('candidate',candidate);
+
+    if(expanded)
+        candidateObj.addClass('candidate-expanded');
+
+    if( candidate.currentUser==='denied') {
+        candidateObj.find('.candidate-workflow').parent().remove();
+        candidateObj.find('.applicationAskForCommentButton').remove();
+        candidateObj.find('.bool-application-comments').css('height','auto');
+        candidateObj.find('.bool-application-activities').css('height','auto');
+    }
+
+    if( candidate.website && candidate.website.length>0 && candidate.website.indexOf('://') == -1 )
+        candidate.website = 'http://' + candidate.website;
+
+    if(candidate.avatarURL)
+        candidateObj.find('.candidate-avatar').css('background-image','url("'+candidate.avatarURL+'")')
+            .find('.candidate-avatar-empty').hide();
+    else
+        candidateObj.find('.candidate-avatar .candidate-avatar-empty').addClass('bool-image bool-avatar-no');
+
+    candidateObj.find('.candidate-name .value').text(candidate.name);
+    candidateObj.find('.candidate-job .value').text(candidate.position);
+
+    var mom = new moment(candidate.applyTime);
+    candidateObj.find('.candidate-time .value').text( mom.format('ddd DD MMM YYYY') + '(' + mom.from() + ')' );
+
+    candidateObj.find('.candidate-stage .value').text( stagesName[candidate.stage.stage-1] + '-' + subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1]);
+    candidateObj.find('.candidate-skills .value').text(candidate.skills);
+    candidateObj.find('.candidate-conditions .value').text((candidate.workTime||'') + (candidate.workPlace ? ' @' + candidate.workPlace : '') );
+    candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
+    candidateObj.find('.candidate-email .value').attr('href','mailto:'+candidate.email).text(candidate.email);
+    candidateObj.find('.candidate-tel .value').text(candidate.tel);
+    candidateObj.find('.candidate-website .value').attr('href',candidate.website).text(candidate.website);
+    candidateObj.find('.candidate-note .value').html(candidate.note);
+    candidateObj.find('[name="appID"]').val(candidate._id);
+    candidateObj.find('.applicationAskForCommentButton').click( function() {
+        $('#a4c-dialog').find('[name=appID]').val(candidate._id);
+        $('#a4c-dialog').modal('show');
+    })
+
+    var viewer = 'https://docs.google.com/viewer?embedded=true&url=';
+    if( candidate.resumePath ) {
+        candidateObj.find('.candidate-resume-view-button').attr('href', viewer + candidate.resumePath );
+        candidateObj.find('.candidate-resume-download-button').attr('href', candidate.resumePath );
+    }
+    else {
+        candidateObj.find('.candidate-resume-view-button').remove();
+        candidateObj.find('.candidate-resume-download-button').remove();
+    }
+
+    // Activities
+    for( var j=0; j<candidate.activities.length; j++ ) {
+        var activity = candidate.activities[j];
+
+        var stageChangingDetails = null;
+        if(activity.data){
+            var stage = activity.data.stage;
+            var subStage = activity.data.subStage;
+
+            if( stage && subStage )
+                stageChangingDetails = stagesName[stage-1] + '-' + subStagesName[stage-1][subStage-1];
+        }
+
+        var mTimestamp = new moment(activity.timestamp);
+        var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
+        var typeObj = $('<div>').addClass('activity-type').text( stageChangingDetails || activity.type );
+        var stoneObj = $('<div>').addClass('activity-stone');
+        var activityObj = $('<div>').addClass('activity').append(stoneObj).append(timeObj).append(typeObj);
+
+        candidateObj.find('.candidate-activities').append( activityObj );
+    }
+
+    // Profiles
+    var profilesObj = {
+        twitter: '.twitter-profile',
+        behance: '.behance-profile',
+        dribbble: '.dribbble-profile',
+        stackoverflow: '.stackoverflow-profile',
+        github: '.github-profile',
+        linkedin: '.linkedin-profile'
+    };
+    for( var profile in candidate.profiles ){
+        var profileObj = candidateObj.find(profilesObj[profile]);
+        profileObj.show().attr('href', profileObj.attr('href') + '/' + candidate.profiles[ profile ] );
+    }
+
+    candidateObj.addClass('candidate-filter-' + stagesName[candidate.stage.stage-1]);
+
+    candidateObj.find('.candidate-note-save-button').attr('appID',candidate._id).click( function() {
+        var appID = $(this).attr('appID');
+        var note = $(this).parent().parent().find('.candidate-note').val();
+
+        $.post('/api/application/' + appID + '/note', {note: note}).done( function() {});
+    });
+
+    candidateObj.find('.markAsVisited').click( function() {
+        var el = $(this).parent().parent();
+        var appID = $(this).parent().attr('appID');
+        $.post('/api/application/' + appID + '/visitedState', {visited:true}).done( function() {
+            el.find('.visitedState').addClass('visited').removeClass('unvisited');
+        });
+    });
+
+    candidateObj.find('.markAsUnvisited').click( function() {
+        var el = $(this).parent().parent();
+        var appID = $(this).parent().attr('appID');
+        $.post('/api/application/' + appID + '/visitedState', {visited:false}).done( function() {
+            el.find('.visitedState').removeClass('visited').addClass('unvisited');
+        });
+    });
+
+    candidateObj.find('.visitedState').attr('appID',candidate._id);
+    if( candidate.visited === true )
+        candidateObj.find('.visitedState').addClass('visited');
+    else
+        candidateObj.find('.visitedState').addClass('unvisited');
+
+    // minimize-maximize boxes
+    candidateObj.find('.mbox-title').dblclick( function() {
+        $(this).next().toggle();
+    });
+
+    $.get('/api/application/comments',{appID:candidate._id},function(data){
+        var comments=data.comments;
+        var commentsObj = $('#application-preview-dialog .bool-application-comments > ul');
+
+        commentsObj.empty();
+
+        comments.forEach(function(comment){
+            var form = $('.reply-for-comment-form:first').clone().show();
+            commentsObj.append(form);
+
+            form.find('[name=commentID]').val(comment._id);
+            form.find('.user-note-avatar')
+                .replaceWith(generateMemberElement(comment.user,true,false));
+            form.find('.commenter-note-avatar')
+                .replaceWith(generateMemberElement(comment.commenter,true,false,true))
+            form.find('.bool-application-comments-note').html(comment.note);
+            var commentBox = form.find('.bool-application-comments-comment');
+            var replyBtn = form.find('[type=submit]');
+            commentBox.html(comment.comment);
+
+            var editBtn = form.find('.bool-edit-comment-btn').hide();
+            var cancleBtn = form.find('.bool-cancel-comment-btn').hide();
+            if(comment.comment || data.user!==comment.commenter._id) {
+                commentBox
+                    .attr('readonly', 'readonly')
+                    .attr('placeholder', 'No comment left');
+                replyBtn.hide();
+                if(data.user===comment.commenter._id)
+                    editBtn.show();
+
+            }
+
+            editBtn.click(function(){
+                replyBtn.show();
+                cancleBtn.show();
+                commentBox.removeAttr('readonly')
+                editBtn.hide();
+            });
+            cancleBtn.click(function(){
+                replyBtn.hide();
+                cancleBtn.hide();
+                editBtn.show();
+                commentBox.attr('readonly','readonly');
+                commentBox.val(comment.comment);
+            });
+
+            form.submit(function(){
+                form.find('.alert-info').show();
+                $.post('/api/application/comments',
+                        form.serialize())
+                    .always(function(data){
+                        $('.alert').hide();
+                    })
+                    .fail(function(data){
+                        form.find('.alert-danger').show();
+                    })
+                    .done(function(data){
+                        form.find('.alert-success').show().delay(3000).fadeOut();
+                        replyBtn.hide();
+                        cancleBtn.hide();
+                        editBtn.show();
+                        commentBox.attr('readonly','readonly');
+                    });
+                return false;
+            })
+
+        })
+    });
+
+
+    initWorkflow(candidateObj,candidate);
+    changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
+
+    return candidateObj;
 }

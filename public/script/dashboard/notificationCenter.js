@@ -49,6 +49,10 @@ function initNotificationCenter() {
 
     function showApplications(A4C_applicatinos) {
         A4C_applicatinos.forEach( function(a4c) {
+
+            if( !a4c.applicationID )
+                return;
+
             var objID = 'askedForComment_'+a4c._id;
 
             var dateObj = $('<div>')
@@ -71,6 +75,9 @@ function initNotificationCenter() {
     function showForms(A4C_forms) {
         A4C_forms.forEach( function(a4c) {
             var objID = 'askedForComment_'+a4c._id;
+
+            if( !a4c.formID )
+                return;
 
             var dateObj = $('<div>')
                 .text( 'At ' + (new Date(a4c.askingTime)).toLocaleString() )

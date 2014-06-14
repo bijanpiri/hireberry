@@ -327,56 +327,6 @@ app.post('/api/applications/:applicationID',  function(req,res) {
     }
 });
 
-app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
-    res.send(200);
-});
-
-app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
-
-    var messages = JSON.parse(req.body.mandrill_events);
-    var messagesCount = messages.length;
-    var savedCounter = 0;
-
-    if(messagesCount==0)
-        return res.send(200);
-
-    for( var i=0; i<messagesCount; i++ ) {
-
-        var msg = messages[i].msg;
-
-        /*
-         base64: false
-         content: "FILE TEXT"
-         name: "filename.txt"
-         type: "text/plain"
-         */
-
-        //var resumeFileName = '';
-        //Upload attached files to Parse and save their links as resume
-        //for(var filename in msg.attachments) {
-        //msg.attachments[filename].content;
-        //msg.attachments[filename].type;
-        //    resumeFileName = msg.attachments[filename].filename;
-        //}
-
-        BApplications({
-            flyerID: req.params.formID,
-            name: msg["from_name"],
-            email: msg["from_email"],
-            applyTime: new Date(),
-            anythingelse: msg["html"],
-            //resumePath: resumeUrl || resumeFileName,
-            stage: { stage:1, subStage:1 },
-            activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
-        }).save( function(err, application) {
-                if( ++savedCounter == messagesCount )
-                    res.send(200);
-            });
-
-    }
-
-});
-
 app.post('/api/team/application/askForComment', function(req,res){
 
     if( !checkUser(req,res) )

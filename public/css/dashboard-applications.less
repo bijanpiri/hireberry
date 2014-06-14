@@ -30,6 +30,12 @@
   }
 }
 
+.bool-application-comments {
+  padding: 1em;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
 &.grid-layout, &.list-layout {
 
   .candidate {
@@ -107,6 +113,36 @@
       display: none;
       vertical-align: middle;
     }
+
+    .value {
+      + .bool-edit-switch a[op="edit"] {
+        display: inline-block;
+      }
+      + .bool-edit-switch a[op="yes"],
+      + .bool-edit-switch a[op="no"]{
+        display: none;
+      }
+    }
+
+    .value[contenteditable="true"] {
+      background-color: #e5e5e5;
+      border: 1px solid rgb(180, 180, 180);
+      color: #000;
+      padding: 4px;
+
+      &:hover, &:visited, &:active, &:focus {
+        text-decoration: none;
+      }
+
+      + .bool-edit-switch a[op="edit"] {
+        display: none;
+      }
+      + .bool-edit-switch a[op="yes"],
+      + .bool-edit-switch a[op="no"]{
+        display: inline-block;
+      }
+    }
+
     &.candidate-expanded .fa-compress{
       display: inline-block;
     }
@@ -123,36 +159,6 @@
 
       .bool-toggle-application {
         display: none;
-      }
-
-
-      .value {
-        + .bool-edit-switch a[op="edit"] {
-          display: inline-block;
-        }
-        + .bool-edit-switch a[op="yes"],
-        + .bool-edit-switch a[op="no"]{
-          display: none;
-        }
-      }
-
-      .value[contenteditable="true"] {
-        background-color: #e5e5e5;
-        border: 1px solid rgb(180, 180, 180);
-        color: #000;
-        padding: 4px;
-
-        &:hover, &:visited, &:active, &:focus {
-          text-decoration: none;
-        }
-
-        + .bool-edit-switch a[op="edit"] {
-          display: none;
-        }
-        + .bool-edit-switch a[op="yes"],
-        + .bool-edit-switch a[op="no"]{
-          display: inline-block;
-        }
       }
 
       .candidate-summary {
@@ -240,7 +246,7 @@
             border-right: 1px solid #37B36F;
             border-bottom: 1px solid #37B36F;
 
-            height: 500px;
+            height: 350px;
             overflow: auto;
             &.overflow {
               overflow: visible;
@@ -303,7 +309,6 @@
                   bottom: 0;
                   margin: auto;
                 }
-
 
                 .activity-time {
                   font-size: 1.3em;
@@ -422,6 +427,14 @@
         background-position: center center;
         background-size: contain;
         background-repeat: no-repeat;
+        position: relative;
+
+        .candidate-avatar-empty {
+          width: 64px;
+          height: 60px;
+          background-position: -200px -650px;
+          background-image: url("/images/nflyer-icons@2x.png");
+        }
       }
 
       .candidate-basicInfo {
@@ -502,6 +515,7 @@
       }
 
       .candidate-avatar {
+        display: none;
         display: inline-block;
         height: 30px;
         width: 30px;
@@ -512,7 +526,14 @@
         background-position: center center;
         background-size: contain;
         background-repeat: no-repeat;
+        position: relative;
 
+        .candidate-avatar-empty {
+          width: 30px;
+          height: 30px;
+          background-position: -200px -650px;
+          background-image: url("/images/nflyer-icons@2x.png");
+        }
       }
 
       .candidate-basicInfo {

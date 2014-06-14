@@ -268,6 +268,73 @@ app.get('/api/resume', function(req,res) {
     });
 } );
 
+app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
+    res.send(200);
+});
+
+app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
+
+    var messages = JSON.parse(req.body.mandrill_events);
+    var messagesCount = messages.length;
+    var savedCounter = 0;
+
+    if(messagesCount==0)
+        return res.send(200);
+
+    for( var i=0; i<messagesCount; i++ ) {
+
+        var msg = messages[i].msg;
+
+        /*
+         base64: false
+         content: "FILE TEXT"
+         name: "filename.txt"
+         type: "text/plain"
+         */
+
+        var resumeFileName = '';
+        var resumeContent = '';
+        var resumeType = '';
+        //Upload attached files to Parse and save their links as resume
+        for(var filename in msg.attachments) {
+            resumeContent = msg.attachments[filename].content;
+            resumeType = msg.attachments[filename].type;
+            resumeFileName = msg.attachments[filename].filename;
+        }
+
+        BApplications({
+            flyerID: req.params.formID,
+            name: msg["from_name"],
+            email: msg["from_email"],
+            applyTime: new Date(),
+            anythingelse: msg["html"],
+            //resumePath: resumeUrl || resumeFileName,
+            stage: { stage:1, subStage:1 },
+            activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
+        }).save( function(err, application) {
+
+                uploadResume( application._id, req.params.formID, resumeFileName, resumeContent );
+
+                if( ++savedCounter == messagesCount )
+                    res.send(200);
+            });
+
+        var uploadResume = function( applicationID, flyerID, resumeFilename, resumeContent ) {
+            BFlyers.findOne( {_id:flyerID}, function(err,flyer) {
+
+                console.log('Saving ', resumeFilename, flyerID, resumeContent);
+
+                // ToDo: Implement saving resume
+                if( flyer.dbToken )
+                    ;//saveOnDropbox( flyer.dbToken, resumeContent, resumeFilename, applicationID );
+                else
+                    ;//saveOnParse( resumeContent, resumeFileName, applicationID);
+            });
+        }
+    }
+
+});
+
 // Mark as read
 app.post('/applicant/message/notified/:messageID', function (req,res){
 

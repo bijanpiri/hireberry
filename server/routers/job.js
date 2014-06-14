@@ -182,14 +182,21 @@ app.delete('/api/job/:flyerID', function(req,res){
         // Delete ApplyByEmail router from mandrill
         deleteApplyByEmailRouter(req.params.flyerID, function(err,result) {
 
-            if( flyer.owner.admin.toString() === req.user._id.toString() ) // Hiring Manager
-                BFlyers.remove({_id:req.params.flyerID}, function(err) {
-                    res.send(200);
-                });
-            else    // Responder
-                BFlyers.remove({_id:req.params.flyerID, autoAssignedTo:req.user._id}, function(err) {
-                    res.send(200);
-                });
+            // Delete comments related to form which is deleting
+            BComments.remove({formID:req.params.flyerID}, function(err){
+
+                // ToDo: Delete comments related to form which is deleting
+
+                if( flyer.owner.admin.toString() === req.user._id.toString() ) // Hiring Manager
+                    BFlyers.remove({_id:req.params.flyerID}, function(err) {
+                        res.send(200);
+                    });
+                else    // Responder
+                    BFlyers.remove({_id:req.params.flyerID, autoAssignedTo:req.user._id}, function(err) {
+                        res.send(200);
+                    });
+
+            });
         });
 
     });
