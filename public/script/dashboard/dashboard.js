@@ -487,6 +487,7 @@ function initCandidateInstance(candidate,expanded) {
     }
 
     // Profiles
+    //candidate.profile = JSON.parse(candidate.profiles);
     var profilesObj = {
         twitter: '.twitter-profile',
         behance: '.behance-profile',
@@ -537,7 +538,8 @@ function initCandidateInstance(candidate,expanded) {
     });
 
     $.get('/api/application/comments',{appID:candidate._id},function(data){
-        var comments=data.comments;
+        var comments = data.comments;
+
         var commentsObj = $('#application-preview-dialog .bool-application-comments > ul');
 
         commentsObj.empty();

@@ -75,39 +75,7 @@ app.get('/api/applications', function (req,res) {
                     return res.send(303,{error:err});
 
                 for( var i=0; i<forms.length; i++ ) {
-                    var form = forms[i]._doc;
-
-                    form.position = form.flyerID.flyer ? form.flyerID.flyer.description : '';
-
-                    // Skills
-                    var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
-
-                    // Reason: When skills contains just one item, it convert to string automatically
-                    if( typeof(skills) === 'string' )
-                        skills = [skills];
-                    form.skills = skills;
-
-                    // Profiles
-                    form.profiles = form.profiles || '{}';
-                    var profiles = JSON.parse( form.profiles );
-                    var selectedProfiles = {};
-                    for (var profile in profiles)
-                        if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
-                            selectedProfiles[profile] = profiles[profile];
-                    form.profiles = selectedProfiles;
-
-                    // Apply Date
-                    var date = new Date( form.applyTime );
-                    form.applyTime = date.toLocaleDateString();
-
-                    // Resume
-                    form.resumePath = (form.resumePath==='-') ? '' : form.resumePath;
-
-                    // Last Activity
-                    if( form.activities && form.activities.length > 0 )
-                        form.lastActivity = form.activities[form.activities.length-1]['type'];
-                    else
-                        form.lastActivity = 'NEW'
+                    var form = prepareApplicationForClient( forms[i]._doc );
 
                     // Move stage if it is interview and the date is over
                     // ToDo: This task must be done by a crone job or something like this
@@ -446,6 +414,8 @@ app.get('/api/application/json/:appID', function(req,res) {
         else
             application._doc.currentUser = 'denied';
 
+        application = prepareApplicationForClient(application._doc)
+
         res.send(application);
     });
 })
@@ -466,9 +436,45 @@ app.post('/api/application/:appID/note', function(req,res) {
 
 });
 
+function prepareApplicationForClient(form) {
+    form.position = form.flyerID.flyer ? form.flyerID.flyer.description : '';
+
+    // Skills
+    var skills = form.skills.length==0 ? [] : JSON.parse( form.skills );
+
+    // Reason: When skills contains just one item, it convert to string automatically
+    if( typeof(skills) === 'string' )
+        skills = [skills];
+    form.skills = skills;
+
+    // Profiles
+    form.profiles = form.profiles || '{}';
+    var profiles = JSON.parse( form.profiles );
+    var selectedProfiles = {};
+    for (var profile in profiles)
+        if ( profiles.hasOwnProperty(profile) && profiles[profile]!=='' )
+            selectedProfiles[profile] = profiles[profile];
+    form.profiles = selectedProfiles;
+
+    // Apply Date
+    var date = new Date( form.applyTime );
+    form.applyTime = date.toLocaleDateString();
+
+    // Resume
+    form.resumePath = (form.resumePath==='-') ? '' : form.resumePath;
+
+    // Last Activity
+    if( form.activities && form.activities.length > 0 )
+        form.lastActivity = form.activities[form.activities.length-1]['type'];
+    else
+        form.lastActivity = 'NEW'
+
+    return form;
+}
+
 function canCurrentUserAceessApplciation(userID, appID, callback) {
 
-    BApplications.findOne( {_id:appID}).exec(  function(err,application) {
+    BApplications.findOne( {_id:appID}).populate('flyerID').exec(  function(err,application) {
         if( err )
             return callback(err,false,null);
 
