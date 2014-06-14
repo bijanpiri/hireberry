@@ -71,7 +71,7 @@
 }
 .bool-widget-icon{
     display: inline-block;
-    background-image: url('../images/nflyer-icons@2x.png');
+    background-image: url('../images/NJ-icons@2x.png');
     background-size: 186px 600px;
     width: 20px;
     vertical-align: middle;
@@ -86,7 +86,8 @@
 .bool-widget-icon-skill{background-position: 0 -74px;height: 19px;}
 .bool-widget-icon-profile{background-position: 0 -95px;height: 16px;}
 .bool-widget-icon-condition{background-position: 0 -112px;height: 12px;}
-.bool-widget-icon-cover-letter{background-position: 0 -125px;height: 20px;}
+.bool-widget-icon-cover-letter{background-position: 4px -125px;height: 20px;}
+.bool-widget-icon-resume{background-position: -15px -125px;height: 20px;}
 .bool-widget-icon-separator{background-position: 0 -146px;height: 20px;}
 
 .bool-icon-move{

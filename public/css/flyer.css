@@ -183,7 +183,8 @@ Action Buttons
 .portlet-container .delete-btn-frame { right: -38px;top: 16px; border-radius: 0 6px 6px 0;}
 
 .portlet-container .action-btn {
-    background-image: url("/images/nflyer-icons.png");
+    background-image: url("/images/NJ-icons@2x.png");
+    background-size: 186px 600px;
     display: block;
     position: absolute;
     margin: auto;
@@ -198,14 +199,22 @@ Action Buttons
     height: 22px;
 }
 .portlet-container .widget-move-btn {
-    background-position: 0 -262px;
+    background-position: 0 -503px;
     width: 22px;
-    height: 12px;
+    height: 14px;
 }
+.portlet-container .widget-move-btn:hover {
+    background-position: -22px -503px;
+
+}
+
 .portlet-container .widget-delete-btn {
-    background-position: 0 -275px;
+    background-position: 0 -516px;
     width: 17px;
-    height: 21px;
+    height: 23px;
+}
+.portlet-container .widget-delete-btn:hover {
+    background-position: -18px -516px;
 }
 
 /********
