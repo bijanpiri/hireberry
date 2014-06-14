@@ -16,19 +16,70 @@ function PictureWidget(){
     var clipper=$(
 
             '<div class="bool-clipper" style="position: absolute;">'+
-//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-nw bool-handle-nw"></div>'+
-//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-ne bool-handle-ne"></div>'+
-//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-sw bool-handle-sw"></div>'+
-//            '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-se bool-handle-se"></div>'+
-//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-n bool-handle-n"></div>'+
-//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-s bool-handle-s"></div>'+
-//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-w bool-handle-w"></div>'+
-//   '<div class="bool-clip-handle ui-resizable-handle ui-resizable-handle-e bool-handle-e"></div>'+
             '<a class="bool-crop-ok bool-btn bool-btn-crop"><i></i></a>'+
             '<a class="bool-crop-cancel bool-btn bool-btn-crop"><i></i></a>'+
             '</div>' );
     var bar;
     var gettingReady=false;
+    var undoStack=[];
+    var redoStack=[];
+
+
+    function undo(){
+        if(undoStack.length==0)
+            return false;
+
+        var image=undoStack.pop();
+        var img = widget.portlet.find('img');
+        var redoImg=new Image();
+        redoImg.src=img.attr('src');
+
+        redoStack.push(redoImg);
+        img.attr('src',image.src);
+
+        updateBtn();
+
+        return true;
+    }
+
+    function redo(){
+        if(redoStack.length==0)
+            return false;
+
+        var img = widget.portlet.find('img');
+
+        var undoImg=new Image();
+        undoImg.src=img.attr('src');
+        undoStack.push(undoImg);
+
+        var image=redoStack.pop();
+        img.attr('src', image.src);
+        updateBtn();
+    }
+
+    function change(){
+        var image=new Image();
+        image.src=widget.portlet.find('img').attr('src');
+
+        undoStack.push(image);
+
+        redoStack=[];
+        updateBtn();
+    }
+    function updateBtn(){
+        var undobtn=widget.toolbar.find('[command=undo]');
+        var redobtn=widget.toolbar.find('[command=redo]');
+        if(undoStack.length>0)
+            undobtn.removeClass('bool-disable');
+        else
+            undobtn.addClass('bool-disable');
+
+        if(redoStack.length>0)
+            redobtn.removeClass('bool-disable');
+        else
+            redobtn.addClass('bool-disable');
+    }
+
     var statesAction={
         none:function(){
            widget.prepared();
@@ -58,14 +109,30 @@ function PictureWidget(){
         });
 
     }
-
-    function showCrop(){
+    function remask(){
         var container=layout.find('.image-container');
+        var clip = container.find('.bool-clipper');
+        var top=clip.position().top+'px';
+        var bottom=clip.position().top+clip.height()+'px';
+        container.find('.bool-clipper-mask-top')
+            .height(top);
 
-        container.find('.bool-clipper').remove();
-        container.find('.bool-clipper-masker').remove();
+        container.find('.bool-clipper-mask-bottom')
+            .css('top',bottom);
+
+        container.find('.bool-clipper-mask-left').width(clip.position().left)
+            .css('top',top).height(clip.height());
+
+        container.find('.bool-clipper-mask-right')
+            .css('left',clip.width()+clip.position().left)
+            .css('top',top).height((clip.height()));
 
 
+
+    }
+    function showCrop(){
+
+        var container=layout.find('.image-container');
         var clip=clipper.clone();
         clip.css('top',container.height()/3+'px');
         clip.css('left',container.width()/3+'px');
@@ -73,7 +140,6 @@ function PictureWidget(){
         clip.css('height',container.height()/3+'px');
 
         container.append(clip
-
             .resizable({
                     handles: "n,s,e,w,ne,nw,se,sw",
                     containment:'parent',
@@ -88,17 +154,18 @@ function PictureWidget(){
             .append(masker.clone());
         container.find('.bool-crop-cancel')
             .click(function(){
-                container.find('.bool-clipper').remove();
+                hideCrop();
             });
         container.find('.bool-crop-ok')
             .click(function(){
-
+                crop();
             });
+        remask();
     }
     function hideCrop(){
-        widget.toolbar.find(
-                '[command=accept],' +
-                '[command=cancel]' ).hide();
+        var container=layout.find('.image-container');
+        container.find('.bool-clipper').remove();
+        container.find('.bool-clipper-masker').remove();
     }
     $(window).resize(function(){
         var img=layout.find('img')[0];
@@ -173,17 +240,12 @@ function PictureWidget(){
             });
 
             this.addToolbarCommand('crop',function(){showCrop();
-            }).addToolbarCommand('accept',function(){layout.find('.darkroom-icon-accept').click();hideCrop();
+            }).addToolbarCommand('undo',function(){undo();
                 widget.changed();
-            }).addToolbarCommand('cancel',function(){layout.find('.darkroom-icon-cancel').click();hideCrop();
-            }).addToolbarCommand('undo',function(){layout.find('.darkroom-icon-back').click();
+            }).addToolbarCommand('redo',function(){redo();
                 widget.changed();
-            }).addToolbarCommand('redo',function(){layout.find('.darkroom-icon-forward').click();
-                widget.changed();
-            }).addToolbarCommand('rotate-left',function(){layout.find('.darkroom-icon-rotate-left').click();
-                widget.changed();
-            }).addToolbarCommand('rotate-right',function(){layout.find('.darkroom-icon-rotate-right').click();
-                widget.changed();
+            }).addToolbarCommand('rotate-left',function(){rotate(true);
+            }).addToolbarCommand('rotate-right',function(){rotate(false);
             }).addToolbarCommand('save',function(){save();
             });
         }
@@ -191,18 +253,19 @@ function PictureWidget(){
             this.portlet.find('.imageWidgetInnerContainer').remove();
 
         }
-    }
+    };
     function save(){
-        var data=widget.portlet.find('.lower-canvas')[0].toDataURL('image/jpeg');
-//        layout.find('.image-container').empty().append($('<img>').attr('src',data));
+        var src=widget.portlet.find('img').attr('src');
 
-        var blob=dataURLtoBlob(data);
+        if(src.indexOf('data')==0) {
+            var blob = dataURLtoBlob(src);
         layout.find('input[type=file]').fileupload('add',{files:blob});
+        }
 
     }
     this.serialize=function(){
         return this.portlet.find('.image-widget img').attr('src');
-    }
+    };
 
     this.deserialize=function(content) {
 
@@ -212,38 +275,68 @@ function PictureWidget(){
             var img = layout.find('.image-container').empty().append($('<img>').attr('src',content));
             action=statesAction.uploaded;
         }
-    }
+    };
 
     this.getReady4Save=function(){
         action();
-    }
+    };
     this.changed=function(){
         action=statesAction.add;
-    }
+    };
 
-    function resizeAndUpload() {
+    function rotate(left){
+        change();
+        var img=new Image();
+        img.src=widget.layout.find('img')[0].src;
+        img.onload=function() {
+            var canvas = document.createElement('canvas');
+            canvas.width = img.height;
+            canvas.height = img.width;
+
+            var ctx = canvas.getContext('2d');
+            var x = 0, y = 0;
+            if (left) {
+                x = -img.width;
+                ctx.rotate(-Math.PI / 2);
+    }
+            else {
+                y = -img.height;
+                ctx.rotate(Math.PI / 2);
+            }
+            ctx.drawImage(img, x, y);
+
+            var dataURL = canvas.toDataURL('image/jpeg');
+            widget.layout.find('img').attr('src', dataURL);
+        }
+
+    }
+    function crop(){
+        change();
+        var container=widget.layout.find('.image-container');
+        var img=container.find('img');
+        var clip=container.find('.bool-clipper');
 
             var tempImg = new Image();
-
+        tempImg.src=img.attr('src');
             tempImg.onload = function() {
-
-
                 var canvas = document.createElement('canvas');
-                canvas.width = tempImg.width;
-                canvas.height = tempImg.height;
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(this, 0, 0, tempW, tempH);
-                var dataURL = canvas.toDataURL("image/jpeg");
+                var scale = tempImg.width / img.width();
+                var width = clip.width() * scale;
+                var height = clip.height() * scale;
+                canvas.width = width;
+                canvas.height = height;
+                    var ctx = canvas.getContext("2d");
+                var pos = clip.position();
 
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function(ev){
-                    document.getElementById('filesInfo').innerHTML = 'Done!';
-                };
+                ctx.drawImage(tempImg,
+                        pos.left * scale, pos.top * scale, width, height,
+                    0, 0, width, height
+                );
+                    var dataURL = canvas.toDataURL("image/jpeg");
 
-                xhr.open('POST', 'uploadResized.php', true);
-                xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                var data = 'image=' + dataURL;
-                xhr.send(data);
+                img.attr('src', dataURL);
+
+                hideCrop();
             }
     }
 }

@@ -197,7 +197,7 @@
 }
 .bool-btn>i
 {
-    background-image: url("/images/NJ-icons@2x.png");
+    background-image: url("/images/nflyer-icons@2x.png");
     background-size: 187px 600px;
     position: absolute;
     display: inline-block;
@@ -208,7 +208,7 @@
     bottom: 0;
 }
 .bool-icon{
-    background-image: url("/images/NJ-icons@2x.png");
+    background-image: url("/images/nflyer-icons@2x.png");
     background-size: 187px 600px;
     display: inline-block;
     position: absolute;
@@ -258,6 +258,9 @@
 :hover>.bool-icon-undo{background-position: -52px -262px;width: 25px;height: 17px;}
 :hover>.bool-icon-redo{background-position: -52px -278px;width: 25px;height: 17px;}
 :hover>.bool-icon-crop{background-position: -27px -295px;width: 26px;height: 26px;}
+
+.bool-disable>.bool-icon-undo{background-position: -26px -262px;width: 25px;height: 17px;}
+.bool-disable>.bool-icon-redo{background-position: -26px -278px;width: 25px;height: 17px;}
 
 .bool-icon-size{
     background: url("/images/nflyer-icons.png");
@@ -573,7 +576,6 @@ Toolbar - WorkType Widget
     position: absolute;
     bottom:-31px;
     background: #333;
-
     z-index: 20;
     width: 30px;
     height: 30px;
@@ -592,6 +594,7 @@ Toolbar - WorkType Widget
 }
 .image-container {
     position: relative;
+    display: inline-block;
 }
 .image-container>img {
 
@@ -600,9 +603,9 @@ Toolbar - WorkType Widget
     position: absolute;
     background: #000000;
     opacity: .5;
-
+    z-index: 10;
 }
 .bool-clipper-mask-top {top:0;left:0;right:0;}
 .bool-clipper-mask-bottom {bottom: 0;left:0;right:0;}
-.bool-clipper-mask-left {left: 0;top:0;bottom: 0;}
-.bool-clipper-mask-right {right: 0;top:0;bottom: 0;}
+.bool-clipper-mask-left {left: 0;}
+.bool-clipper-mask-right {right: 0;}
