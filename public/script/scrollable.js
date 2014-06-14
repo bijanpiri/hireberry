@@ -7,7 +7,7 @@
     var opt;
     var scrollable;
     $(document).ready(function(){
-        $('[data-scrollable]').scrollable();
+        $('[data-role="scrollable"]').scrollable();
     });
     $.fn.scrollable = function () {
 

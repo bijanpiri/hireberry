@@ -52,6 +52,7 @@
 <script src="/script/Widgets/common.js"></script>
 <script src="/script/Widgets/ColorPicker.js"></script>
 <script src="/script/scrollable.js"></script>
+<script src="/script/jquery.collapsible.js"></script>
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
 <script src="/script/Widgets/PictureWidget.js"></script>
@@ -782,9 +783,9 @@
 </div>
 
 <div class="toolbars">
-<div class="toolbar-text">
+<div class="toolbar-text"  data-role="collapsible" >
 
-    <ul class="bool-tool-items">
+    <ul class="bool-tool-items" >
         <li>
             <div class="bool-combo">
             <span class="bool-combo-icon">
@@ -1063,6 +1064,11 @@
                 <li class="bool-widget-btn " type="11" >
                     <i class="bool-widget-icon bool-widget-icon-cover-letter"></i>
                     Cover Letter
+                    <i class="bool-widget-icon bool-icon-move"></i>
+                </li>
+                <li class="bool-widget-btn " type="10" >
+                    <i class="bool-widget-icon bool-widget-icon-separator"></i>
+                    Separator
                     <i class="bool-widget-icon bool-icon-move"></i>
                 </li>
                 <li class="bool-widget-btn " type="13" >

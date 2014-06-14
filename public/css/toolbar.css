@@ -11,7 +11,7 @@
 }
 .toolbar{
     position: absolute;
-    height: 60px;
+    min-height: 60px;
     top: -60px;
     left: -14px;
     right: -14px;
@@ -25,6 +25,9 @@
     z-index: 1000;
     display: none;
 }
+.toolbar>div{
+    background: inherit;
+}
 .bool-portlet-active .toolbar{
     display: inline-block;
 }
@@ -34,9 +37,7 @@
 }
 .toolbars{display: none;}
 
-.toolbar-text{
 
-}
 .toolbar-video{
     padding: 2px;
 }
@@ -196,7 +197,7 @@
 }
 .bool-btn>i
 {
-    background-image: url("/images/nflyer-icons@2x.png");
+    background-image: url("/images/NJ-icons@2x.png");
     background-size: 187px 600px;
     position: absolute;
     display: inline-block;
@@ -207,7 +208,7 @@
     bottom: 0;
 }
 .bool-icon{
-    background-image: url("/images/nflyer-icons@2x.png");
+    background-image: url("/images/NJ-icons@2x.png");
     background-size: 187px 600px;
     display: inline-block;
     position: absolute;
