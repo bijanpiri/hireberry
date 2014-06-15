@@ -25,6 +25,9 @@
     z-index: 1000;
     display: none;
 }
+.bool-no-toolbar>.toolbar{
+    display: none;
+}
 .toolbar>div{
     background: inherit;
 }

@@ -100,7 +100,7 @@
 
 <div class="container-fluid bool-flyer-editor " >
 
-<div class="row-fluid flyerRow" hidden>
+<div class="row-fluid flyerRow" >
     <div class="span12" id="portletsBox">
         <form action="/apply" method="POST" id='applyForm' name="applyForm" enctype='multipart/form-data'>
 
@@ -301,7 +301,7 @@
                 <div class="span12" style="height: 100%">
                     <ul class="thumbnails" class="row-fluid">
                         <li>
-                            <input type="radio" hidden name="radio-templates" id="radio-template1">
+                            <input type="radio" hidden name="radio-templates" id="radio-template1" checked>
                             <label for="radio-template1" class="thumbnail" href="#" thumbnailID="0" caption="Blank" description="Create what you link">
                                 <img src="http://placebox.es/100/160/9c9c9c/ffffff/Blank/" alt="...">
                                 <span></span>
@@ -894,57 +894,73 @@
 
 </div>
 
-<div class="toolbar-profileWidget">
+<div class="toolbar-profileWidget ">
 
 
     <span id="toolbar-labelprofile">Profiles : </span>
 
-    <input hidden type="checkbox" id="tool-github"   name="p" value="github" checked>
-    <label  for="tool-github" class="bool-btn" >
-        <i class="bool-icon-github" for="tool-github"></i>
-    </label>
+    <ul class="bool-tool-items">
+        <li>
+            <input hidden type="checkbox" id="tool-github"   name="p" value="github" checked>
+            <label  for="tool-github" class="bool-btn" >
+                <i class="bool-icon-github" for="tool-github"></i>
+            </label>
 
-    <input hidden type="checkbox" id="tool-stackoverflow"   name="p" value="stackoverflow" checked>
-    <label for="tool-stackoverflow"  class="bool-btn" >
-        <i class="bool-icon-stackoverflow"></i>
-    </label>
+        </li>
+        <li>
+            <input hidden type="checkbox" id="tool-stackoverflow"   name="p" value="stackoverflow" checked>
+            <label for="tool-stackoverflow"  class="bool-btn" >
+                <i class="bool-icon-stackoverflow"></i>
+            </label>
+        </li>
+        <li>
+            <input hidden type="checkbox" id="tool-twitter"   name="p" value="twitter" checked>
+            <label for="tool-twitter"  class="bool-btn" >
+                <i  class="bool-icon-twitter"></i>
+            </label>
+        </li>
+        <li>
+            <input hidden type="checkbox" id="tool-linkedin"   name="p" value="linkedin" checked>
+            <label for="tool-linkedin"  class="bool-btn" >
+                <i class="bool-icon-linkedin"></i>
+            </label>
+        </li>
+        <li>
+            <input hidden type="checkbox" id="tool-dribbble"   name="p" value="dribbble" checked>
+            <label for="tool-dribbble"  class="bool-btn" >
+                <i class="bool-icon-dribbble"></i>
+            </label>
+        </li>
+        <li>
+            <input hidden type="checkbox" id="tool-behance"   name="p" value="behance" checked>
+            <label for="tool-behance" class="bool-btn" >
+                <i  class="bool-icon-behance"></i>
+            </label>
+        </li>
+        <li>
+            <div class="bool-separator"></div>
+        </li>
+        <li>
+            <input hidden  type="checkbox" id="tool-email"   name="p" value="email" checked>
+            <label for="tool-email"  class="bool-btn" >
+                <i class="bool-icon-email"></i>
+            </label>
+        </li>
+        <li>
+            <input hidden type="checkbox" id="tool-tel"   name="p" value="tel" checked>
+            <label for="tool-tel"  class="bool-btn" >
+                <i class="bool-icon-tel"></i>
+            </label>
+        </li>
+        <li>
+            <input hidden type="checkbox" id="tool-website"   name="p" value="website" checked>
+            <label for="tool-website"  class="bool-btn" >
+                <i  class="bool-icon-website"></i>
+            </label>
+        </li>
 
-    <input hidden type="checkbox" id="tool-twitter"   name="p" value="twitter" checked>
-    <label for="tool-twitter"  class="bool-btn" >
-        <i  class="bool-icon-twitter"></i>
-    </label>
 
-    <input hidden type="checkbox" id="tool-linkedin"   name="p" value="linkedin" checked>
-    <label for="tool-linkedin"  class="bool-btn" >
-        <i class="bool-icon-linkedin"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-dribbble"   name="p" value="dribbble" checked>
-    <label for="tool-dribbble"  class="bool-btn" >
-        <i class="bool-icon-dribbble"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-behance"   name="p" value="behance" checked>
-    <label for="tool-behance" class="bool-btn" >
-        <i  class="bool-icon-behance"></i>
-    </label>
-
-    <div class="bool-separator"></div>
-
-    <input hidden  type="checkbox" id="tool-email"   name="p" value="email" checked>
-    <label for="tool-email"  class="bool-btn" >
-        <i class="bool-icon-email"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-tel"   name="p" value="tel" checked>
-    <label for="tool-tel"  class="bool-btn" >
-        <i class="bool-icon-tel"></i>
-    </label>
-
-    <input hidden type="checkbox" id="tool-website"   name="p" value="website" checked>
-    <label for="tool-website"  class="bool-btn" >
-        <i  class="bool-icon-website"></i>
-    </label>
+    </ul>
 </div>
 
 <div class="toolbar-workTypeWidget">

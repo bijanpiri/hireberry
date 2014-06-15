@@ -146,6 +146,7 @@ Whole Paper
     -webkit-box-sizing: border-box;
     border-radius: 0 0 7px 7px;
     padding: 10px 0;
+    display: none;
 }
 
 .portlet-container  {
@@ -203,7 +204,7 @@ Action Buttons
     width: 22px;
     height: 14px;
 }
-.portlet-container .widget-move-btn:hover {
+.portlet-container :hover>.widget-move-btn {
     background-position: -22px -503px;
 
 }
@@ -213,7 +214,7 @@ Action Buttons
     width: 17px;
     height: 23px;
 }
-.portlet-container .widget-delete-btn:hover {
+.portlet-container :hover>.widget-delete-btn {
     background-position: -18px -516px;
 }
 
@@ -471,6 +472,9 @@ Map portlet
 .beautifulButton > label > i {
     background-image: url("/images/bltn-hiring-icons@2x.png");
     background-size: 272px 1269px;
+    background-position:  -170px -150px;
+    width: 77px;
+    height: 56px;
     position: absolute;
     margin: auto;
     top: 0;

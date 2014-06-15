@@ -94,6 +94,7 @@ function VideoWidget(){
     }
 
     function initLayout() {
+        this.toolbar.hide();
         layout = this.clone('.video-widget');
         layout.find('.Done').click( (function(widget){
             return function(){

@@ -2,9 +2,10 @@ function PersonalInfoWidget(){
     Widget.call(this);
 
     var layout = '';
-
+    var widget=this;
     function initLayout() {
         layout = $('.widgets .personalInfoWidget').clone();
+        widget.toolbar.hide();
     }
 
     initLayout.call(this);
