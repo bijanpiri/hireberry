@@ -107,7 +107,7 @@ function PictureWidget(){
             fileInput.click();
             e.stopPropagation()
         });
-
+        widget.toolbar.hide();
     }
     function remask(){
         var container=layout.find('.image-container');
@@ -173,12 +173,18 @@ function PictureWidget(){
     });
 
     var image;
+
+    function showToolbar() {
+        widget.toolbar.attr('style', '');
+    }
+
     function readerLoad(progress) {
         try {
             var d=progress.target.result;
             var container=layout.find('.image-container');
             container.append($('<img>').attr('src',d));
             layout.find('.imageWidgetInnerContainer').hide();
+            showToolbar();
             action=statesAction.add;
         } catch (ex) {
             console.log(ex);
@@ -240,10 +246,8 @@ function PictureWidget(){
             });
 
             this.addToolbarCommand('crop',function(){showCrop();
-            }).addToolbarCommand('undo',function(){undo();
-                widget.changed();
-            }).addToolbarCommand('redo',function(){redo();
-                widget.changed();
+            }).addToolbarCommand('undo',function(){undo();widget.changed();
+            }).addToolbarCommand('redo',function(){redo();widget.changed();
             }).addToolbarCommand('rotate-left',function(){rotate(true);
             }).addToolbarCommand('rotate-right',function(){rotate(false);
             }).addToolbarCommand('save',function(){save();
@@ -274,6 +278,8 @@ function PictureWidget(){
             this.portlet.find('.imageWidgetInnerContainer').remove();
             var img = layout.find('.image-container').empty().append($('<img>').attr('src',content));
             action=statesAction.uploaded;
+            if(editMode)
+                showToolbar();
         }
     };
 

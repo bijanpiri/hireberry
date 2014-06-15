@@ -12,7 +12,7 @@
 .toolbar{
     position: absolute;
     min-height: 60px;
-    top: -60px;
+    bottom: 100%;
     left: -14px;
     right: -14px;
     padding: 0 20px 0 10px;

@@ -4,7 +4,7 @@
 (function($){
 
     $(document).ready(function(){
-        $('[data-role="collapsible"]').collapsible();
+//        $('[data-role="collapsible"]').collapsible();
     });
     var list;
     var drop;
