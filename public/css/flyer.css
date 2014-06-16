@@ -146,9 +146,11 @@ Whole Paper
     -webkit-box-sizing: border-box;
     border-radius: 0 0 7px 7px;
     padding: 10px 0;
+    display: block;
+}
+.bool-edit-mode .portletSubmittion {
     display: none;
 }
-
 .portlet-container  {
     position: relative;
     /*overflow: hidden;*/

@@ -28,11 +28,16 @@
     position: absolute;
     left: 0;
 }
+.bool-widget-btn-carousel>.bool-toolbar-options {
 
+    margin: 20px 0;
+    border-top: 1px solid #7F7F80;;
+}
 .bool-more-options {
     position: absolute;
-    /*left: 240px;*/
+    left: 240px;
     top: 0;
+    display: none;
 }
 
 
@@ -211,6 +216,7 @@ Portlet Creator
     padding-left: 10px;
     border-bottom: 1px solid #7F7F80;
     min-height: 32px;
+    width: 100%;
 }
 .bool-toolbar-options>li>.nav{
     margin: 2px;
@@ -361,4 +367,18 @@ input.bool-option-search{
 .dropdown .bool-caret{
     float: right;
     margin: 16px;
+}
+.bool-btn-more-options{
+    text-align: right;
+    cursor: pointer;
+    /*border-bottom: 1px solid #7F7F80;*/
+    /*border-top: 1px solid #7F7F80;*/
+}
+.bool-btn-more-options>i{
+    margin-left: 10px;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
 }

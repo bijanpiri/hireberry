@@ -478,41 +478,6 @@ function hideLoading() {
 function loadPublishPanel() {
 
     flyer.flyer2json(function(flyerJson) {
-//
-//        $('#flyerName2').val(flyer.description);
-//
-//        $('#thanksMessage').val(flyerJson.thanksMessage);
-//
-//
-//        $('#buttonPublishSaveAsDraft').click(function () {
-//            saveAsDraftOrPublish(true);
-//        });
-//
-//
-//        $('#buttonPublishDone').click(function () {
-//            saveAsDraftOrPublish(false);
-//        });
-//
-//        function saveAsDraftOrPublish(saveAsDraft) {
-//            flyerJson.description = $('#flyerName2').val();
-//            flyerJson.thanksMessage = $('#thanksMessage').val();
-//
-//
-//        var askForComment = $('[name=askForComment_userID]').val();
-//        var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
-//
-//        $.post('/api/team/form/assign', {formID: flyerid, userID: autoAssignTo});
-//
-//        if( askForComment.length > 0 ) // It isn't None
-//            $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
-//
-//
-//
-//            $.post('/flyer/publish', {saveAsDraft: saveAsDraft, flyer: flyerJson}).done(function (data) {
-//                $('#publishFinalMessage').text(data.message);
-//                loadSharePanel();
-//            });
-//        }
 
         publish();
 
