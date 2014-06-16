@@ -11,7 +11,7 @@ $.fn.populateUserCombo = function(members,selectedMember, inputName){
             inputName = 'name';
 
         var contents =
-            $('<div class="btn-group">' +
+            $('<div class="btn-group bool-option-field ">' +
                 '<a class="bool-combo-selected dropdown"> </a>' +
                 '<ul class="dropdown-menu bool-team-members">  </ul>' +
                 '<input type="hidden"></div>');
@@ -49,7 +49,7 @@ function showSelected(admin,contents){
                     .addClass('bool-combo-selected')
                     .addClass('dropdown')
                     .attr('data-toggle', 'dropdown')
-                    .prepend('<span class="caret"></span>')
+                    .prepend('<span class="caret bool-caret"></span>')
             );
         contents.find('input').val(admin._id);
     }
@@ -69,8 +69,10 @@ function generateMemberElement(member,showDisplayName,showEmail,alightRight){
 
     var avatarObj = $('<img>').attr('src',imgurl).addClass( alightRight ? 'pull-right' : '' );
     var titleObj =  $('<ul>')
-        .append($('<li>').append(showDisplayName? member.displayName:""))
-        .append($('<li>').append(showEmail ? member.email:""));
+        .append($('<li>').append(showDisplayName? member.displayName:""));
+//        .append(
+//        $('<li>').append(showEmail ? member.email:"")
+//    );
 
     return $('<a>')
         .addClass( showDisplayName && showEmail ? 'bool-user-item':'bool-single-user-item' )

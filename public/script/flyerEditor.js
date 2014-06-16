@@ -323,43 +323,41 @@ function toggleCommentView(callback) {
     }
 }
 
+var admin=false;
+
 function loadEditor() {
 
     $('.templateRow').hide();
     $('.flyerRow').show();
     $('#fixToolbar').show();
     $('#buttonEditview').hide();
-    $('#ThanksMessaageEditor').wysiwyg({
+    $('#ThanksMessageEditor').wysiwyg({
         activeToolbarClass:'bool-active',
-        toolbarSelector: '[data-target="#ThanksMessaageEditor"]'
-    });
-    $('.bool-color-chooser').ColorPicker(
+        toolbarSelector: '[data-target="#ThanksMessageEditor"]'
+    }).on('mouseup keyup mouseout',
+        function(){
+            var size=document.queryCommandValue('fontSize');
+            var sizeText={'4':'Small','6':'Medium','7':'Large'};
+            $('.bool-thanks-message .bool-combo-text').html(sizeText[size] );
+            flyer.thanksMessage=this.outerHTML;
+        });
+    $('.bool-thanks-message  .bool-color-chooser').ColorPicker(
         function(color){
-            $('#ThanksMessaageEditor').css('color',color);
+            $('#ThanksMessageEditor').css('color',color);
         }
     );
     $.get('/api/team').done( function(res) {
+        admin=res.admin._id===res.user;
+
         var members = res.members;
         var membersAndNone = JSON.parse(JSON.stringify(res.members));
-        membersAndNone.unshift({displayName:'None'});
-        var list=$('ul.bool-flyer-responder');
-        list.empty();
-        $(members).each(function(i,member){
-           list.append(
-              $('<li>').append($('<a>').append(member.displayName))
-                  .data('member',member).click(
-                  function(){
-                      list.parent()
-                          .find('.bool-flyer-responder-user')
-                          .html(member.displayName).data('member',$(this).data('member'));
-                  }
-              )
-           );
-        });
+        membersAndNone.unshift({displayName:'None',email:null,_id:null});
+        $('.bool-user-responder').populateUserCombo(membersAndNone,null,'autoAssignedTo_userID');
 
-        $('#askForComment').populateUserCombo(membersAndNone,null,'askForComment_userID');
-        $('#autoAssignTo').populateUserCombo(members,null,'autoAssignedTo_userID');
-        $('.askForComment-user').populateUserCombo(members,null,'askForComment-selected-user');
+
+//        $('#askForComment').populateUserCombo(membersAndNone,null,'askForComment_userID');
+//        $('#autoAssignTo').populateUserCombo(members,null,'autoAssignedTo_userID');
+//        $('.askForComment-user').populateUserCombo(members,null,'askForComment-selected-user');
         //$('#job-responder').populateUserCombo(members,null,'job-selected-responder');
     });
 
@@ -367,8 +365,7 @@ function loadEditor() {
 
     $('.bool-toolbar-btn-publish').click( function() {
         loadPublishPanel();
-        $('#publishModal').modal();
-    })
+    });
 
     $('#plusButton').click(function(){
         $('#plusButton').hide();
@@ -481,41 +478,73 @@ function hideLoading() {
 function loadPublishPanel() {
 
     flyer.flyer2json(function(flyerJson) {
+//
+//        $('#flyerName2').val(flyer.description);
+//
+//        $('#thanksMessage').val(flyerJson.thanksMessage);
+//
+//
+//        $('#buttonPublishSaveAsDraft').click(function () {
+//            saveAsDraftOrPublish(true);
+//        });
+//
+//
+//        $('#buttonPublishDone').click(function () {
+//            saveAsDraftOrPublish(false);
+//        });
+//
+//        function saveAsDraftOrPublish(saveAsDraft) {
+//            flyerJson.description = $('#flyerName2').val();
+//            flyerJson.thanksMessage = $('#thanksMessage').val();
+//
+//
+//        var askForComment = $('[name=askForComment_userID]').val();
+//        var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
+//
+//        $.post('/api/team/form/assign', {formID: flyerid, userID: autoAssignTo});
+//
+//        if( askForComment.length > 0 ) // It isn't None
+//            $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
+//
+//
+//
+//            $.post('/flyer/publish', {saveAsDraft: saveAsDraft, flyer: flyerJson}).done(function (data) {
+//                $('#publishFinalMessage').text(data.message);
+//                loadSharePanel();
+//            });
+//        }
 
-        $('#flyerName2').val(flyer.description);
-
-        $('#thanksMessage').val(flyerJson.thanksMessage);
+        publish();
 
 
-        $('#buttonPublishSaveAsDraft').click(function () {
-            saveAsDraftOrPublish(true);
-        });
+        function publish() {
+            flyerJson.description = $('[name="position-title"]').val();
+            flyerJson.thanksMessage = flyer.thanksMessage;
+            $('.bool-flyer-published-link')
+                .html(flyerJson.description)
+                .attr('href','/flyer/embeded/'+flyerid);
 
+            var askForComment = $('[name=askForComment_userID]').val();
+            var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
 
-        $('#buttonPublishDone').click(function () {
-            saveAsDraftOrPublish(false);
-        });
+            $.post('/api/team/form/assign', {formID: flyerid, userID: autoAssignTo});
 
-        function saveAsDraftOrPublish(saveAsDraft) {
-            flyerJson.description = $('#flyerName2').val();
-            flyerJson.thanksMessage = $('#thanksMessage').val();
+//            if( askForComment.length > 0 ) // It isn't None
+//                $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
 
+            $.post('/flyer/publish', {flyer: flyerJson})
+                .done(function (data) {
+//                    $('#publishFinalMessage').text(data.message);
+//                    loadSharePanel();
 
-        var askForComment = $('[name=askForComment_userID]').val();
-        var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
+                    if(admin)
+                        $('#publishModalAdmin').modal();
+                    else
+                        $('#publishModal').modal();
 
-        $.post('/api/team/form/assign', {formID: flyerid, userID: autoAssignTo});
-
-        if( askForComment.length > 0 ) // It isn't None
-            $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
-
-
-
-            $.post('/flyer/publish', {saveAsDraft: saveAsDraft, flyer: flyerJson}).done(function (data) {
-                $('#publishFinalMessage').text(data.message);
-                loadSharePanel();
-            });
+                });
         }
+
     });
 }
 

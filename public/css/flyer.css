@@ -664,11 +664,13 @@ Map portlet
     width: 700px;
     overflow: visible;
 }
-#ThanksMessageEditor{
+#ThanksMessageEditor {
     min-height: 200px;
     border: 2px solid #b3b3b3;
     border-radius: 4px;
     margin-top: 61px;
-
+    overflow-y: scroll;
+    max-height: 258px;
 }
+
 

@@ -338,7 +338,7 @@ Modals
     padding: 3px 10px;
     text-decoration: none;
     color: #4C4C4C;
-
+    width: 100%;
 }
 .bool-combo-selected{
 
@@ -379,6 +379,10 @@ Modals
     display: inline-block;
     margin-right: 1em;
 }
+.bool-team-members{
+    width: 100%;
+    z-index: 22000;
+}
 .bool-team-members>li>a {
     padding: 3px 10px;
 }
@@ -392,9 +396,13 @@ Modals
     vertical-align: top;
 }
 .bool-single-user-item>img{
-    border-radius: 50%;
+    border-radius: 4px;
     height: 30px;
     border: 1px solid #9c9c9c;
+    min-height: 28px;
+    min-width: 28px;
+    margin-right: 10px;
+    margin-bottom: 6px;
 }
 .bool-single-user-item>ul{
     padding: 0;
