@@ -185,7 +185,7 @@ Action Buttons
 
 .portlet-container .action-btn {
     background-image: url("/images/NJ-icons@2x.png");
-    background-size: 186px 600px;
+    background-size: 186px 625px;
     display: block;
     position: absolute;
     margin: auto;
@@ -660,3 +660,15 @@ Map portlet
 .portletThanksMessage{
     background: inherit;
 }
+.bool-thanks-message{
+    width: 700px;
+    overflow: visible;
+}
+#ThanksMessageEditor{
+    min-height: 200px;
+    border: 2px solid #b3b3b3;
+    border-radius: 4px;
+    margin-top: 61px;
+
+}
+

@@ -185,7 +185,7 @@ function loadTemplateChooser() {
     $('#templateModal').modal();
     $('#GoToEditor').click( function() {
 
-        newFlyerName = $('#flyerName1').val();
+        $('[name="position-title"]').val($('#flyerName1').val());
 
         $('#templateModal').modal('hide');
 
@@ -329,16 +329,38 @@ function loadEditor() {
     $('.flyerRow').show();
     $('#fixToolbar').show();
     $('#buttonEditview').hide();
-
+    $('#ThanksMessaageEditor').wysiwyg({
+        activeToolbarClass:'bool-active',
+        toolbarSelector: '[data-target="#ThanksMessaageEditor"]'
+    });
+    $('.bool-color-chooser').ColorPicker(
+        function(color){
+            $('#ThanksMessaageEditor').css('color',color);
+        }
+    );
     $.get('/api/team').done( function(res) {
-        var teamMembers = res.members;
-        var teamMembersWithNone = JSON.parse(JSON.stringify(res.members));
-        teamMembersWithNone.unshift({displayName:'None'});
+        var members = res.members;
+        var membersAndNone = JSON.parse(JSON.stringify(res.members));
+        membersAndNone.unshift({displayName:'None'});
+        var list=$('ul.bool-flyer-responder');
+        list.empty();
+        $(members).each(function(i,member){
+           list.append(
+              $('<li>').append($('<a>').append(member.displayName))
+                  .data('member',member).click(
+                  function(){
+                      list.parent()
+                          .find('.bool-flyer-responder-user')
+                          .html(member.displayName).data('member',$(this).data('member'));
+                  }
+              )
+           );
+        });
 
-        $('#askForComment').populateUserCombo(teamMembersWithNone,null,'askForComment_userID');
-        $('#autoAssignTo').populateUserCombo(teamMembers,null,'autoAssignedTo_userID');
-        $('.askForComment-user').populateUserCombo(teamMembers,null,'askForComment-selected-user');
-        //$('#job-responder').populateUserCombo(teamMembers,null,'job-selected-responder');
+        $('#askForComment').populateUserCombo(membersAndNone,null,'askForComment_userID');
+        $('#autoAssignTo').populateUserCombo(members,null,'autoAssignedTo_userID');
+        $('.askForComment-user').populateUserCombo(members,null,'askForComment-selected-user');
+        //$('#job-responder').populateUserCombo(members,null,'job-selected-responder');
     });
 
     loadFlyer();
@@ -460,10 +482,7 @@ function loadPublishPanel() {
 
     flyer.flyer2json(function(flyerJson) {
 
-        if (existFlyer)
-            $('#flyerName2').val(flyer.description);
-        else
-            $('#flyerName2').val(newFlyerName);
+        $('#flyerName2').val(flyer.description);
 
         $('#thanksMessage').val(flyerJson.thanksMessage);
 
@@ -543,8 +562,8 @@ function saveFlyer(callback) {
         function(flyerjson){
             flyerjson.thumbnail = '';
 
-            if( !existFlyer )
-                flyerjson.description = newFlyerName;
+
+            flyerjson.description = $('[name="position-title"]').val();
 
             $.post( '/flyer/save', {flyer:flyerjson} )
                 .done(function(data){
