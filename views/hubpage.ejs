@@ -28,7 +28,7 @@
 
                 // ToDo:
                 var positionLocationObj = $('<div>').addClass('position-location');
-                if( position.flyer.widgets ) {
+                if( position.flyer && position.flyer.widgets ) {
                     var mapWidgets = position.flyer.widgets.filter( function(widget) {return widget.type==='6'});
                     if( mapWidgets.length > 0 )
                         positionLocationObj.text(mapWidgets[0].Contents.address);

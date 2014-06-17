@@ -431,7 +431,7 @@ app.get('/api/form/comments',function(req,res){
     if( !checkUser(req,res) )
         return;
 
-    // ToDo: (Security) Check wheter user can access this applicationID or no.
+    // ToDo: (Security) Check whether user can access this applicationID or no.
     var userID = req.user._id;
     var formID = req.query.formID;
 
@@ -454,7 +454,8 @@ app.get('/api/team/:teamID/positions',function(req,res){
             var positionsList = positions.map( function(position) {
                 return {
                     id: position._id,
-                    title: position.flyer.description,
+                    title: position.flyer ?
+                        position.flyer.description:'No Description',
                     flyer: position.flyer
                 }
             })

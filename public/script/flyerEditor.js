@@ -143,6 +143,11 @@ $(function() {
                         $('.portlet-container').hide();
                         $('.portletSubmittion').hide();
                         $('.portletThanksMessage').show();
+                        $('.thanksMessageContent')
+                            .html(
+                            $(flyer.thanksMessage)
+                                .attr('id','')
+                                .attr('contenteditable','false'));
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
 
