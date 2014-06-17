@@ -17,7 +17,7 @@
 
         this.find('[data-scroll=down]').click(scrollDown);
 
-        this.find('ul').bind('mousewheel DOMMouseScroll',function(event){
+        this.find('ul[data-list]').bind('mousewheel DOMMouseScroll',function(event){
             var deltaY = event.originalEvent.deltaY;
 
             if(deltaY>0)
