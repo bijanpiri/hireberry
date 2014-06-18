@@ -431,3 +431,105 @@ textarea.bool-textarea {
     padding: 10px;
     resize: none;
 }
+
+/**
+Comments
+**/
+
+.portlet-commentsView-container {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 300px;
+}
+
+.portlet-commentsView {
+    position: relative;
+    background: #BFBCAA;
+    color: #6A685E;
+    width: 300px;
+    height: 100%;
+    font-size: 1.4em;
+}
+
+.portlet-commentsView #buttonComment {
+    position: absolute;
+    left: -34px;
+    top: 0;
+    background-color: #BFBCAA;
+    padding: 10px;
+    border-radius: 4px 0 0 4px;
+}
+
+.portlet-commentsView #buttonComment i {
+    color: #000;
+}
+
+.bool-comments-header {
+    text-align: center;
+    font-size: 1.4em;
+    border-bottom: 2px solid #6A685E;
+    padding: 10px;
+    font-weight: 700;
+    margin: 0 14px;
+}
+
+.bool-comment-form {
+    margin: 16px 0;
+    color: #000;
+}
+
+.bool-comment-form textarea {
+    background-color: #FFFBEB;
+    border: 2px solid #B3AE92;
+}
+
+.bool-comment-form .bool-comment-button {
+    margin: 4px;
+    line-height: 34px;
+    height: 34px;
+    padding: 0 15px;
+}
+
+.bool-comment-form .bool-comment-button[op="send"] {
+    background: #E86C43;
+}
+
+.bool-comment-form .bool-comment-button[op="clear"] {
+    background: #999688
+}
+
+.bool-comments {
+    clear: both;
+    list-style: none;
+    background-color: #FFFAE3;
+    margin: 0 8px;
+}
+
+.bool-comments li {
+    padding: 16px;
+}
+
+.bool-comments li .bool-comment-header {
+    border-bottom: 1px solid #6A685E;
+    border-top: 1px solid #6A685E;
+    padding: 4px;
+    font-weight: 700;
+}
+
+.bool-comments li .bool-comment-header img {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.bool-comments li .bool-comment-header i {
+    font-size: 1.3em;
+    line-height: 22px;
+    color: #D6D2BF;
+}
+
+.bool-comments li .bool-comment-body {
+    padding: 12px 0;
+}

@@ -396,6 +396,23 @@ app.post('/api/team/form/assign', function(req,res){
 
 });
 
+
+app.post('/api/job/:jobID/commenter', function(req,res) {
+    // Save list of users who can comment on this job
+});
+
+app.get('/api/job/:jobID/commenter', function(req,res) {
+    // Get list of users who can comment on this job
+});
+
+app.post('/api/job/:jobID/comment', function(req,res) {
+    // Add a new comment on this job
+});
+
+app.get('/api/job/:jobID/comments', function(req,res) {
+    // Get all comments on this job
+});
+
 app.post('/api/team/form/askForComment', function(req,res){
 
     if( !checkUser(req,res) )
@@ -439,6 +456,7 @@ app.get('/api/form/comments',function(req,res){
         res.send(200,{comments:comments});
     })
 });
+
 
 app.get('/api/team/:teamID/positions',function(req,res){
 

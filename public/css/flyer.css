@@ -76,63 +76,6 @@ Whole Paper
     display: block;
 }
 
-.portlet-commentsView-container {
-    position: fixed;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 300px;
-}
-
-.portlet-commentsView {
-    position: relative;
-    background: #b1b1b1;
-    width: 300px;
-    height: 100%;
-    font-size: 1.4em;
-}
-
-.portlet-commentsView #buttonComment {
-    position: absolute;
-    left: -34px;
-    top: 0;
-    background-color: #b0b0b0;
-    padding: 10px;
-}
-
-.portlet-commentsView #ask-for-comment-btn {
-    background: rgb(207, 79, 79);
-    color: #fff;
-    padding: 2px 6px;
-    cursor: pointer;
-}
-
-.portlet-commentsView .portlet-comments {
-    list-style: none;
-}
-
-.portlet-commentsView .portlet-comments .portlet-comment {
-    padding: 1em;
-    border-left: 3px solid #8c8c8c;
-    text-align: left;
-}
-
-.portlet-commentsView .comment-body {
-    font-size: 1.2em;
-    margin: 1em 0;
-}
-
-.portlet-commentsView .comment-date {
-    font-size: 0.8em;
-    color: #707070;
-}
-
-.portlet-commentsView .portlet-askedForComment-list {
-    padding: 2em 0;
-    border-bottom: 1px solid #8c8c8c;
-    list-style: none;
-}
-
 
 .portletStack {
     margin: 0;

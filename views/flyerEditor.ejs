@@ -162,25 +162,62 @@
     </div>
 </div>
 
+<script src="/script/jquery-commentbox.js"></script>
+<script>
+$(function() {
+  $('.portlet-commentsView-container').commentBox();
+});
+</script>
+
 <% if(everyauth.user && viewMode!=='embeded') { %>
 <div class="portlet-commentsView-container" hidden>
-        <div class="portlet-commentsView">
-        <a id="buttonComment" isOpen="1">
-            <i class="fa fa-comments"></i>
-        </a>
-        <a class="pull-right" id="ask-for-comment-btn">Ask For Comment</a>
-        <div class="askForComment-form" style="padding: 1em;" hidden>
-            <div class="askForComment-user"></div>
-            <textarea class="bool-textarea askForComment-note" placeholder="Leave a note for him ..." style="width: 100%"></textarea>
-            <a class="askForComment-send btn btn-mini pull-right">Send Request</a>
-            </div>
-        <ul class="portlet-askedForComment-list">
-        </ul>
-        <ul class="portlet-comments">
-        </ul>
-            </div>
+
+    <div class="portlet-commentsView">
+
+        <a id="buttonComment" isOpen="1"><i class="fa fa-comments"></i></a>
+
+        <div class="bool-comments-header">Comments</div>
+
+        <div class="bool-comment-form" style="padding: 0 1em;">
+            <p>Leave you comment here:</p>
+            <textarea class="bool-textarea askForComment-note" rows="4" style="width: 100%"></textarea>
+            <a op="send" class="askForComment-send bool-toolbar-btn bool-toolbar-btn-save bool-comment-button pull-right">Send</a>
+            <a op="clear" class="askForComment-clear bool-toolbar-btn bool-toolbar-btn-publish bool-comment-button pull-right">Clear</a>
         </div>
-        <% } %>
+
+        <ul class="bool-comments">
+            <li>
+                <div class="bool-comment-header">
+                    <img>
+                    <span>Alexander</span>
+                    <i class="fa fa-clock-o pull-right"></i>
+                </div>
+                <div class="bool-comment-body">
+                    These may seem like obvious lessons in hindsight,
+                    but it can be hard to look critically at your business
+                    “when you are in the trenches” and have put a colossal
+                    amount of effort into a product that just isn’t sticking.
+                </div>
+            </li>
+
+            <li>
+                <div class="bool-comment-header">
+                    <img>
+                    <span>Alexander</span>
+                    <i class="fa fa-clock-o pull-right"></i>
+                </div>
+                <div class="bool-comment-body">
+                    These may seem like obvious lessons in hindsight,
+                    but it can be hard to look critically at your business
+                    “when you are in the trenches” and have put a colossal
+                    amount of effort into a product that just isn’t sticking.
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>
+<% } %>
 
 <div class="row-fluid shareRow" hidden>
     <div class="span6 offset3">
