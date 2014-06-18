@@ -1,0 +1,275 @@
+<% layout('layout') -%>
+<style>
+
+
+    .job-title {
+        position: relative;
+        bottom: -120px;
+        left: 10px;
+        display: block;
+        margin: 20px 20px;
+        min-width: 100px;
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        border-radius: 8px;
+        border: 4px 4px;
+        border-color: #006dcc;
+        border: solid;
+        background: #b0b0b0;
+        font-weight: 700;
+        border-radius: 7px;
+        font-size: 3em;
+        font-weight: 700;
+        color: #002a80;
+    }
+    .social-network {
+        position: relative;
+        bottom: -160px;
+        left: 10px;
+        right: 0;
+        display: block;
+        margin: 20px 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+        min-width: 100px;
+        height: 130px;
+        line-height: 60px;
+        text-align: center;
+        background: #c3c3c3;
+        font-weight: 700;
+        border-radius: 7px;
+        font-size: 2.5em;
+    }
+
+    .social-network input{
+        height: 48px;
+        width: 48px;
+        border-radius: 8px;
+        border: 2px ;
+        border-color: #2d6987;
+        border-style: solid;
+        margin-right: 20px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #e3e3e3;
+    }
+
+        .social-network input:hover{
+            height: 48px;
+            width: 48px;
+            border-radius: 8px;
+            border: 2px ;
+            border-color: #B3B3B3;
+            border-style: solid;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #fcfcfc;
+        }
+
+    .social-network input:active{
+        height: 48px;
+        width: 48px;
+        border-radius: 8px;
+        border: 2px ;
+        border-color: #f8f8f8;
+        border-style: solid;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #fcfcfc;
+
+    }
+    .job-boards {
+        position: relative;
+        bottom: -120px;
+        left: 10px;
+        right: 0;
+        display: block;
+        margin: 20px 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+        min-width: 100px;
+        height: 200px;
+        line-height: 60px;
+        text-align: center;
+        background: #c3c3c3;
+        font-weight: 700;
+        border-radius: 7px;
+        font-size: 2.5em;
+    }
+
+    .job-boards input[type=checkbox]{
+        height: 24px;
+        width: 24px;
+        border-radius: 8px;
+        border: 2px;
+        border-color: #2d6987;
+        border-style: solid;
+        margin-right: 60px;
+        background-color: #e3e3e3;
+    }
+
+    .job-boards input[type=button]{
+        height: 64px;
+        width: 64px;
+        border-radius: 8px;
+        border: 2px;
+        border-color: #2d6987;
+        border-style: solid;
+        margin-right: 20px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #e3e3e3;
+    }
+
+    .job-boards input[type=button]:hover{
+        height: 64px;
+        width: 64px;
+        border-radius: 8px;
+        border: 2px ;
+        border-color: #B3B3B3;
+        border-style: solid;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #fcfcfc;
+    }
+
+    .job-boards input[type=button]:active{
+        height: 64px;
+        width: 64px;
+        border-radius: 8px;
+        border: 2px ;
+        border-color: #f8f8f8;
+        border-style: solid;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #fcfcfc;
+
+    }
+
+    #btn-promote-payment{
+        position: relative;
+        bottom: -160px;
+        height: 50px;
+        width: 140px;
+        border-radius: 8px;
+        border: 2px;
+        border-color: #f8f8f8;
+        border-style: solid;
+        margin: 20px;
+        margin-left: 20px;
+        float: right;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #0000FF;
+        font-weight: 500 ;
+        color: #fcfcfc;
+        font-size: 1.8em
+
+    }
+    #btn-promote-payment:hover{
+        position: relative;
+        bottom: -160px;
+        height: 50px;
+        width: 140px;
+        border-radius: 8px;
+        border: 2px;
+        border-color: #f8f8f8;
+        border-style: solid;
+        margin: 20px;
+        margin-left: 20px;
+        float: right;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #0044cc;
+        font-weight: 500 ;
+        color: #fcfcfc;
+        font-size:1.8em
+    }
+    #btn-promote-payment:active{
+        position: relative;
+        bottom: -160px;
+        height: 50px;
+        width: 140px;
+        border-radius: 8px;
+        border: 2px;
+        border-color: #f8f8f8;
+        border-style: solid;
+        margin: 20px;
+        margin-left: 20px;
+        float: right;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #006dcc;
+        font-weight: 500 ;
+        color: #fcfcfc;
+        font-size: 1.8em
+    }
+
+
+
+
+</style>
+
+<script>
+
+    $(document).ready( function() {
+
+   $(".job-boards").find(":input[type=button]").click(function() {
+        var ml = $('#job-borad-preview-dialog');
+       ml.find("#invitationSetLabel").text($(this).attr("title"));
+         ml.modal();
+    });
+    });
+</script>
+
+<div class="job-title"> <%=PositionTitle%> </div>
+<div class="social-network">
+    <span>Social Networks </span>
+<br>
+    <input id="fb-promote" type="button"  value=" " style="background-image: url('/fb.png')">
+    <input id="tw-promote" type="button"  value=" " style="background-image: url('/tw.png')">
+    <input id="gp-promote" type="button"  value=" " style="background-image: url('/gp.png');margin-right: 0">
+
+</div>
+<br>
+<div class="job-boards">
+    <span>Job Boards </span>
+    <br>
+    <input id="git-promote"     title="GitHub" type="button" value=" " style="background-image: url('/fb.png')">
+    <input id="stackof-promote" title="Stack Overflow" type="button" value=" " style="background-image: url('/fb.png')">
+    <input id="dribble-promote" title="Dribble" type="button" value=" " style="background-image: url('/fb.png')">
+    <input id="behance-promote" title="Behance" type="button" value=" " style="background-image: url('/fb.png')">
+    <input id="linkedin-promote" title="LinkedIn" type="button" value=" " style="background-image: url('/fb.png')">
+    <input id="indeed-promote" title="Indeed" type="button" value=" " style="background-image: url('/fb.png');margin-right: 0">
+    <br>
+    <input id="ch-git-promote"     title="GitHub" type="checkbox" value=" ">
+    <input id="ch-stackof-promote" title="Stack Overflow" type="checkbox" value=" " >
+    <input id="ch-dribble-promote" title="Dribble" type="checkbox" value=" ">
+    <input id="ch-behance-promote" title="Behance" type="checkbox" value=" " >
+    <input id="ch-linkedin-promote" title="LinkedIn" type="checkbox" value=" " >
+    <input id="ch-indeed-promote" title="Indeed" type="checkbox" value=" " style="margin-right: 0">
+
+</div>
+
+
+<input id="btn-promote-payment" type="button" value="Payment" >
+
+
+
+<div id="job-borad-preview-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="invitationSetLabel">Job Settings</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+
+    </div>
+</div>

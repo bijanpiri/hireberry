@@ -9,6 +9,26 @@ app.get('/flyer/new',function(req,res){
     res.redirect('/flyer/editor/0');
 });
 
+app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
+
+    var flyerid = req.params.flyerID;
+    var templateID = req.params.templateID;
+
+     getJsonFlyer(flyerid,templateID,function(err,flyer,data){
+
+         if(err)
+             res.send(err);
+         else if(flyer)
+             res.render('promote.ejs',
+                 {title:'Promote',
+                     PositionTitle:flyer.description
+             });
+         else
+            res.send(data);
+
+     });
+});
+
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
     console.log( "In: " + req.headers['referer'] )
@@ -204,23 +224,30 @@ app.delete('/api/job/:flyerID', function(req,res){
 
 });
 
-app.get('/flyer/:templateID/json/:id', function(req,res){
-
+var getJsonFlyer= function(flyerid,templateID,callback){
     //if(!checkUser(req,res))
     //    return;
 
-    var flyerid = req.params.id;
-    var templateID = req.params.templateID;
+    /*var flyerid = req.params.id;
+    var templateID = req.params.templateID;*/
 
     if( templateID==0 ) { // Load stored flyer
         BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}}, function(err,flyer){
             if(err)
-                res.send('Oh oh error');
-
+                return  callback('Oh oh error',null,null);
+                //res.send('Oh oh error');
             if(flyer)
-                res.send(flyer.flyer);
+            {
+                callback(null,flyer.flyer,null);
+
+                /*if(req.isPromoteReq)
+                    res.render('promote.ejs', {title:'test'});
+                else
+                res.send(flyer.flyer);*/
+            }
             else
-                res.send('404, Not Found! Yah!');
+                callback( null,null,'404, Not Found! Yah!');
+                //res.send('404, Not Found! Yah!');
         });
     }
     else { // Load a pre-built template
@@ -228,11 +255,37 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
         var templates = require('../etc/templates.js');
 
         if( 0 < templateID && templateID < 10)
-            res.send( templates.FlyerTemplates[ templateID ] );
+        {
+            callback( null,  templates.FlyerTemplates[ templateID ],null);
+
+            /*if(req.isPromoteReq)
+                res.render('promote.ejs', {title:'test'});
+            else
+                res.send( templates.FlyerTemplates[ templateID ] );*/
+        }
         else
-            res.send(200)
+            callback( null,null,200);
+            //res.send(200)
     }
+}
+
+app.get('/flyer/:templateID/json/:id', function(req,res)
+{
+    var flyerid = req.params.flyerID;
+    var templateID = req.params.templateID;
+
+    getJsonFlyer(flyerid,templateID,function(err,flyer,data){
+
+        if(err)
+            res.send(err);
+        else if(flyer)
+            res.render('promote.ejs', {title:'test'});
+        else
+            res.send(data);
+
+    });
 });
+
 
 app.post('/flyer/publish', function(req,res){
 
