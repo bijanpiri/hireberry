@@ -315,6 +315,32 @@ isResponderOfApplication = function(appID,userID,callback) {
     });
 }
 
+canCurrentUserLeaveComment = function(userID,teamID,jobID,callback) {
+
+    BFlyers.findOne({_id:jobID}, function(err,flyer) {
+        if(err || !flyer)
+            return callback(err,false);
+
+        var currentUserCanLeaveComment = false;
+
+        isHiringManager( teamID, userID, function(err,isHiringManager) {
+
+            if(err)
+                callback(err,false);
+
+            if( flyer.autoAssignedTo === userID || isHiringManager ) {
+                currentUserCanLeaveComment = true;
+            } else {
+                for(var i=0; i<flyer.commenters.length; i++)
+                    if( flyer.commenters[i] === userID )
+                        currentUserCanLeaveComment = true;
+            }
+
+            callback(null,currentUserCanLeaveComment);
+        });
+    });
+};
+
 isResponderOfJob = function(jobID,userID,callback) {
     BFlyers.count({_id:jobID,autoAssignedTo:userID}, function(err,count){
         if( err || count==0 )
@@ -322,6 +348,15 @@ isResponderOfJob = function(jobID,userID,callback) {
         else
             callback(true);
     })
+}
+
+isHiringManager = function(teamID,userID,callback) {
+    BTeams.count( {_id:teamID,admin:userID}, function(err,count) {
+       if( err || count==0 )
+            callback(err,false);
+        else
+            callback(null,true);
+    });
 }
 
 markCommentAsRead=function(userID, teamID, commentID, callback) {

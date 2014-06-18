@@ -485,6 +485,11 @@ Comments
     border: 2px solid #B3AE92;
 }
 
+.bool-comment-form textarea:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 .bool-comment-form .bool-comment-button {
     margin: 4px;
     line-height: 34px;
@@ -522,6 +527,7 @@ Comments
     width: 20px;
     height: 20px;
     border-radius: 4px;
+    margin-right: 4px;
 }
 
 .bool-comments li .bool-comment-header i {

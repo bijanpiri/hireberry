@@ -59,7 +59,8 @@ BFlyers = mongoose.model( 'flyers', {
     dbToken:String,
     autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'},
     askedForPublish: Boolean,
-    mandrillRouterID: String
+    mandrillRouterID: String,
+    commenter: [{type : mongoose.Schema.ObjectId, ref : 'teams'}]
 });
 
 BComments = mongoose.model( 'comments', {
@@ -73,6 +74,14 @@ BComments = mongoose.model( 'comments', {
     commentTime: String,
     askingTime: String,
     askerNotified: Boolean,
+    team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
+})
+
+BJobComments = mongoose.model( 'job-comments', {
+    user: {type : mongoose.Schema.ObjectId, ref : 'users'},
+    text: String,
+    date: Date,
+    job: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
 })
 

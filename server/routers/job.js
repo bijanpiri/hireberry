@@ -56,7 +56,8 @@ app.get('/flyer/:mode/:tid', function(req,res){
             templateID:templateID,
             editMode: editMode,
             viewMode: "fullpage",
-            existFlyer: existFlyer
+            existFlyer: existFlyer,
+            userCanLeaveComment: true
         });
     }
 
@@ -397,20 +398,34 @@ app.post('/api/team/form/assign', function(req,res){
 });
 
 
-app.post('/api/job/:jobID/commenter', function(req,res) {
-    // Save list of users who can comment on this job
-});
-
-app.get('/api/job/:jobID/commenter', function(req,res) {
-    // Get list of users who can comment on this job
-});
-
 app.post('/api/job/:jobID/comment', function(req,res) {
     // Add a new comment on this job
+    canCurrentUserLeaveComment(req.user._id,req.user.teamID,req.params.jobID,function(err,can){
+        if(!err && can) {
+            BJobComments({
+                team: req.user.teamID,
+                user: req.user._id,
+                job: req.params.jobID,
+                text: req.body.text,
+                date: new Date()
+            }).save( function(err,newComment) {
+                    res.send(200,newComment);
+                });
+        }
+    });
 });
 
 app.get('/api/job/:jobID/comments', function(req,res) {
     // Get all comments on this job
+    canCurrentUserLeaveComment(req.user._id,req.user.teamID,req.params.jobID,function(err,can){
+        if(!err && can) {
+            BJobComments.find({job: req.params.jobID})
+                .populate('user','displayName email')
+                .exec(function(err,comments) {
+                    res.send(200,{comments:comments});
+                });
+        }
+    });
 });
 
 app.post('/api/team/form/askForComment', function(req,res){

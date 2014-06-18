@@ -169,7 +169,7 @@ $(function() {
 });
 </script>
 
-<% if(everyauth.user && viewMode!=='embeded') { %>
+<% if(everyauth.user && viewMode!=='embeded' && userCanLeaveComment) { %>
 <div class="portlet-commentsView-container" hidden>
 
     <div class="portlet-commentsView">
@@ -181,39 +181,11 @@ $(function() {
         <div class="bool-comment-form" style="padding: 0 1em;">
             <p>Leave you comment here:</p>
             <textarea class="bool-textarea askForComment-note" rows="4" style="width: 100%"></textarea>
-            <a op="send" class="askForComment-send bool-toolbar-btn bool-toolbar-btn-save bool-comment-button pull-right">Send</a>
-            <a op="clear" class="askForComment-clear bool-toolbar-btn bool-toolbar-btn-publish bool-comment-button pull-right">Clear</a>
+            <a op="send" class="bool-toolbar-btn bool-comment-button pull-right">Send</a>
+            <a op="clear" class="bool-toolbar-btn bool-comment-button pull-right">Clear</a>
         </div>
 
-        <ul class="bool-comments">
-            <li>
-                <div class="bool-comment-header">
-                    <img>
-                    <span>Alexander</span>
-                    <i class="fa fa-clock-o pull-right"></i>
-                </div>
-                <div class="bool-comment-body">
-                    These may seem like obvious lessons in hindsight,
-                    but it can be hard to look critically at your business
-                    “when you are in the trenches” and have put a colossal
-                    amount of effort into a product that just isn’t sticking.
-                </div>
-            </li>
-
-            <li>
-                <div class="bool-comment-header">
-                    <img>
-                    <span>Alexander</span>
-                    <i class="fa fa-clock-o pull-right"></i>
-                </div>
-                <div class="bool-comment-body">
-                    These may seem like obvious lessons in hindsight,
-                    but it can be hard to look critically at your business
-                    “when you are in the trenches” and have put a colossal
-                    amount of effort into a product that just isn’t sticking.
-                </div>
-            </li>
-        </ul>
+        <ul class="bool-comments"></ul>
 
     </div>
 </div>
