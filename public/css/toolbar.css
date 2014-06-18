@@ -242,10 +242,10 @@
 .bool-icon-website{background-position:-100px -401px;width: 27px;height: 27px;}
 .bool-icon-tel{background-position:-100px -372px;width: 21px;height: 30px;}
 
-.bool-icon-map-align-right{background-position: 0 -371px;height: 25px;width: 75px;}
-:hover>.bool-icon-map-align-right{background-position: 0 -396px;height: 25px;width: 75px;}
-.bool-icon-map-align-left{background-position: 0 -421px;height: 25px;width: 75px;}
-:hover>.bool-icon-map-align-left{background-position: 0 -446px;height: 25px;width: 75px;}
+.bool-icon-map-align-left{background-position: 0 -371px;height: 25px;width: 75px;}
+:hover>.bool-icon-map-align-left{background-position: 0 -396px;height: 25px;width: 75px;}
+.bool-icon-map-align-right{background-position: 0 -421px;height: 25px;width: 75px;}
+:hover>.bool-icon-map-align-right{background-position: 0 -446px;height: 25px;width: 75px;}
 
 .bool-icon-rotate-right{background-position: 0 -321px;width: 25px;height: 25px;}
 .bool-icon-rotate-left{background-position: 0 -347px;width: 25px;height: 25px;}

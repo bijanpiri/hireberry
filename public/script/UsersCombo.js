@@ -55,9 +55,9 @@ function showSelected(admin,contents){
     }
 }
 
-function getAvatar(email) {
+function getAvatar(email,size) {
     var hash = CryptoJS.MD5( email.trim().toLowerCase() );
-    return 'http://www.gravatar.com/avatar/' + hash;
+    return 'http://www.gravatar.com/avatar/' + hash+ (size?'?size='+size:'');
 }
 
 function generateMemberElement(member,showDisplayName,showEmail,alightRight){

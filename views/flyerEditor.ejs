@@ -316,7 +316,9 @@ $(function() {
             </div>
             <div class="portlet">
                 <div class="textWidget">
-                    <div id="ThanksMessageEditor" class="text-widget" contenteditable="true"></div>
+                    <div id="ThanksMessageEditor" class="text-widget" contenteditable="true">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -324,7 +326,8 @@ $(function() {
 
     </div>
     <div class="modal-footer">
-        <a  class="bool-toolbar-btn btn-success pull-right" data-dismiss="modal" >Save & Close</a>
+        <a  class="btn btn-success btn-large pull-right bool-thanks-message-save" data-dismiss="modal" >Save </a>
+        <a  class="btn btn-danger  btn-large pull-right bool-thanks-message-close" data-dismiss="modal" >Close</a>
     </div>
 </div>
 
@@ -1213,28 +1216,15 @@ $(function() {
                 </p>
 
                 <div class="bool-user-responder">
-                    <!--<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">-->
-                        <!--<span class="bool-flyer-responder-user"> None</span>-->
-                        <!--<span class="caret pull-right"></span>-->
-                    <!--</a>-->
-                    <!--<ul class="dropdown-menu bool-flyer-responder">-->
-                        <!--<li>-->
-                            <!--<a>Bijan Piri</a>-->
-                        <!--</li>-->
-
-                    <!--</ul>-->
                 </div>
 
             </li>
-            <li hidden="hidden">
+            <li>
                 <p class="bool-option-label">
                     Select who can comment:
                 </p>
                 <input type="text" placeholder="Search" class="bool-option-field bool-option-search">
-                <ul class="bool-commenter-users">
-                    <li><a>Jone Doe</a> <a class="pull-right bool-remove">&times;</a></li>
-                    <li><a>Jone Doe</a> <a class="pull-right bool-remove">&times;</a></li>
-                    <li><a>Jone Doe</a> <a class="pull-right bool-remove">&times;</a></li>
+                <ul class="bool-commentator-users">
 
                 </ul>
             </li>
@@ -1276,7 +1266,9 @@ $(function() {
                 </a></li>
             <li><a class="bool-toolbar-btn bool-toolbar-btn-save"
 
-                   data-loading-text="Saving...">Save & Exit</a></li>
+                   data-loading-text="Saving...">
+                    <i class="bool-widget-icon bool-toolbar-icon-save"></i>
+                    Save & Exit</a></li>
             <li><a class="bool-toolbar-btn bool-toolbar-btn-publish">
                     <i class="bool-widget-icon bool-toolbar-icon-publish"></i>
                     Publish

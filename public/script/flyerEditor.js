@@ -46,6 +46,7 @@ $(function() {
         });
     });
 
+
     $('.bool-portlet-font-item').click( function() {
         var fontFamily = $(this).css('font-family');
 
@@ -56,8 +57,19 @@ $(function() {
            .find('.bool-current-font-name')
            .text( $(this).attr('data-font') );
     });
-
-    $('form').submit(false);
+    $('.bool-thanks-message-save').click(function(){
+        flyer.thanksMessage=document.getElementById('ThanksMessageEditor').outerHTML;
+        saveFlyer();
+    });
+    $('.bool-thanks-message-close').click(function() {
+        if(flyer.thanksMessage) {
+            $('#ThanksMessageEditor').replaceWith(flyer.thanksMessage);
+            prepareThanksMessage();
+        }
+        else
+            $('#ThanksMessageEditor').empty();
+    });
+        $('form').submit(false);
     if( viewMode=='embeded') {
         // Hidden bars
         $('nav').remove();
@@ -330,35 +342,86 @@ function toggleCommentView(callback) {
 
 var admin=false;
 
+function prepareThanksMessage() {
+    $('#ThanksMessageEditor').wysiwyg({
+        activeToolbarClass: 'bool-active',
+        toolbarSelector: '[data-target="#ThanksMessageEditor"]'
+    }).on('mouseup keyup mouseout',
+        function () {
+            var size = document.queryCommandValue('fontSize');
+            var sizeText = {'4': 'Small', '6': 'Medium', '7': 'Large'};
+            $('.bool-thanks-message .bool-combo-text').html(sizeText[size]);
+        });
+    $('.bool-thanks-message  .bool-color-chooser').ColorPicker(
+        function (color) {
+            $('#ThanksMessageEditor').css('color', color);
+        }
+    );
+}
 function loadEditor() {
 
     $('.templateRow').hide();
     $('.flyerRow').show();
     $('#fixToolbar').show();
     $('#buttonEditview').hide();
-    $('#ThanksMessageEditor').wysiwyg({
-        activeToolbarClass:'bool-active',
-        toolbarSelector: '[data-target="#ThanksMessageEditor"]'
-    }).on('mouseup keyup mouseout',
-        function(){
-            var size=document.queryCommandValue('fontSize');
-            var sizeText={'4':'Small','6':'Medium','7':'Large'};
-            $('.bool-thanks-message .bool-combo-text').html(sizeText[size] );
-            flyer.thanksMessage=this.outerHTML;
-        });
-    $('.bool-thanks-message  .bool-color-chooser').ColorPicker(
-        function(color){
-            $('#ThanksMessageEditor').css('color',color);
-        }
-    );
+    prepareThanksMessage();
     $.get('/api/team').done( function(res) {
         admin=res.admin._id===res.user;
 
-        var members = res.members;
+        teamMembers= res.members;
         var membersAndNone = JSON.parse(JSON.stringify(res.members));
         membersAndNone.unshift({displayName:'None',email:null,_id:null});
         $('.bool-user-responder').populateUserCombo(membersAndNone,null,'autoAssignedTo_userID');
+        var memNames=teamMembers.map(function(member){
+            return {
+                id:member._id,
+                label:member.displayName,
+                value:'',
+                email:member.email
+            };
+        });
 
+        $('.bool-option-search').autocomplete({
+            source:memNames,
+            select:function(event,ui){
+                var exist= $.grep($('.bool-commentator-users>li'),
+                    function(item,index){
+                          return ui.item.id===$(item).data('commentator').id;
+                    }
+                );
+                if(exist.length>0) {
+                    $(exist).fadeTo('fast',.2).delay(100).fadeTo('fast',1);
+                    return;
+                }
+                $('.bool-commentator-users').append(
+                    $('<li>')
+                        .append($('<a>')
+                            .append($('<img>').attr('src',getAvatar(ui.item.email,20)))
+                            .append(ui.item.label))
+                        .append(
+                        $('<a>')
+                            .addClass('pull-right bool-remove')
+                            .append('&times;')
+                            .click(function(){
+                                $(this).closest('li').remove();
+                            })).data('commentator',ui.item)
+                );
+
+            },
+
+            minLength:0,
+            autoFocus:true
+        })
+            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            return $('<li>').append(
+                $('<a>')
+                    .addClass('bool-user-item')
+                    .append(
+                    $('<img>')
+                        .attr('src', getAvatar(item.email)))
+                    .append(item.label))
+                .appendTo(ul);
+        };
 
 //        $('#askForComment').populateUserCombo(membersAndNone,null,'askForComment_userID');
 //        $('#autoAssignTo').populateUserCombo(members,null,'autoAssignedTo_userID');
@@ -497,15 +560,15 @@ function loadPublishPanel() {
             var askForComment = $('[name=askForComment_userID]').val();
             var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
 
-            $.post('/api/team/form/assign', {formID: flyerid, userID: autoAssignTo});
+            var commentators=[];
 
-//            if( askForComment.length > 0 ) // It isn't None
-//                $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment});
+            $('.bool-commentator-users>li').each(function(){
+               commentators.push($(this).data('commentator')._id);
+            });
 
+            flyerJson.commentators=commentators;
             $.post('/flyer/publish', {flyer: flyerJson})
                 .done(function (data) {
-//                    $('#publishFinalMessage').text(data.message);
-//                    loadSharePanel();
 
                     if(admin)
                         $('#publishModalAdmin').modal();

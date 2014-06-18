@@ -66,8 +66,8 @@ function Flyer(options) {
 
         var widgetType = Widgets[wData.type];
 
-        if(widgetType.instances) {
-            if (widgetType.instances == 0) {
+        if(widgetType.instances!==undefined) {
+            if (widgetType.instances <= 0) {
                 alert("You can not use more widget of this type.");
                 return;
             }
@@ -233,14 +233,9 @@ function Flyer(options) {
                 handle: ".move-btn-frame",
                 start: function() {
                     $('.bool-flyer-empty').hide();
-                },
-//                drag: function() {
-//                    alert('drag')
-//                },
-                stop: function() {
-//                    alert('stop')
                 }
-            })//.disableSelection();
+
+            }).disableSelection();
 
             $('.bool-widget-btn').draggable({
                 connectToSortable: ".portletStack",
