@@ -170,12 +170,13 @@ $(function() {
         });
     }
 
-    initCommentView();
+//    initCommentView();
 });
 
 function loadFlyer() {
 
     flyerid = $('input[name=flyerid]').val();
+    $('.portlet-commentsView-container').commentBox(flyerid);
     flyer = $('.portletStack').Flyer({
         editMode: editMode,
         flyerid: flyerid,
@@ -408,11 +409,9 @@ function loadEditor() {
                 );
 
             },
-
             minLength:0,
             autoFocus:true
-        })
-            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
             return $('<li>').append(
                 $('<a>')
                     .addClass('bool-user-item')
@@ -422,6 +421,15 @@ function loadEditor() {
                     .append(item.label))
                 .appendTo(ul);
         };
+        $('.bool-option-search')
+            .data('ui-autocomplete')._renderMenu=function(ul,items){
+                var that = this;
+                $.each( items, function( index, item ) {
+                    that._renderItemData( ul, item );
+                });
+                $( ul ).addClass( "bool-commentator-list" );
+
+            };
 
 //        $('#askForComment').populateUserCombo(membersAndNone,null,'askForComment_userID');
 //        $('#autoAssignTo').populateUserCombo(members,null,'autoAssignedTo_userID');
@@ -557,16 +565,6 @@ function loadPublishPanel() {
                 .html(flyerJson.description)
                 .attr('href','/flyer/embeded/'+flyerid);
 
-            var askForComment = $('[name=askForComment_userID]').val();
-            var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
-
-            var commentators=[];
-
-            $('.bool-commentator-users>li').each(function(){
-               commentators.push($(this).data('commentator')._id);
-            });
-
-            flyerJson.commentators=commentators;
             $.post('/flyer/publish', {flyer: flyerJson})
                 .done(function (data) {
 
@@ -627,7 +625,18 @@ function saveFlyer(callback) {
 
             flyerjson.description = $('[name="position-title"]').val();
 
-            $.post( '/flyer/save', {flyer:flyerjson} )
+
+            var autoAssignTo = $('[name=autoAssignedTo_userID]').val();
+
+            var commentators=[];
+
+            $('.bool-commentator-users>li').each(function(){
+                commentators.push($(this).data('commentator').id);
+            });
+
+
+            $.post( '/flyer/save',
+                {flyer:flyerjson,commentators:commentators,responder:autoAssignTo} )
                 .done(function(data){
                     callback(true);
                     btn.button('reset');

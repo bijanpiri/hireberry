@@ -386,3 +386,7 @@ input.bool-option-search{
     height: 100%;
     min-height: 250px;
 }
+.bool-commentator-list{
+    background: #e5e5e5;
+
+}

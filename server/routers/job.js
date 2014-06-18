@@ -24,15 +24,15 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
                 visitorIP: req.ip, //OR req.headers['x-forwarded-for'] || req.connection.remoteAddress,
                 flyerID: req.params.flyerID
             }).save( function(err) {
-                    res.render('flyerEditor.ejs',{
-                        title:'Job',
-                        flyerid: req.params.flyerID,
-                        templateID: 0,
-                        editMode: false,
-                        viewMode: "embeded",
-                        existFlyer: true
-                    });
+                res.render('flyerEditor.ejs',{
+                    title:'Job',
+                    flyerid: req.params.flyerID,
+                    templateID: 0,
+                    editMode: false,
+                    viewMode: "embeded",
+                    existFlyer: true
                 });
+            });
     });
 
 });
@@ -81,15 +81,15 @@ app.get('/flyer/:mode/:tid', function(req,res){
                     creator: req.user._id,
                     autoAssignedTo: req.user._id
                 }).save(function (err,newflyer) {
-                        flyerid = newflyer._id;
-                        res.cookie('flyerid',flyerid);
+                    flyerid = newflyer._id;
+                    res.cookie('flyerid',flyerid);
 
-                        // Make n new ApplyByEmail router to mandrill
-                        addApplyByEmailRouter(flyerid, function(err,result) {
-                            renderNewFlyerView();
-                        });
-
+                    // Make n new ApplyByEmail router to mandrill
+                    addApplyByEmailRouter(flyerid, function(err,result) {
+                        renderNewFlyerView();
                     });
+
+                });
 
             } else {        // Cookie isn't empty. So laod it
                 BFlyers.count({_id:flyerid}, function(err,count){
@@ -349,15 +349,18 @@ app.post('/flyer/save', function(req,res){
         return;
     }
     var flyer = req.body.flyer;
+    var responder=req.body.responder;
+    var commentators=req.body.commentators;
 
     if( !flyer.description || flyer.description.length == 0 )
         flyer.description = "Untitled" + (new Date()).toDateString();
 
-    BFlyers.update({_id:flyer.flyerid}, {$set:{flyer:flyer}}, function(err){
-        if(err) return res.send(401,{});
+    BFlyers.update({_id:flyer.flyerid},
+        {flyer:flyer,autoAssignedTo:responder,commentators:commentators}, function(err){
+            if(err) return res.send(401,{});
 
-        res.send(200,{});
-    });
+            res.send(200,{});
+        });
 });
 
 app.get('/flyer/remove/:id', function(req,res){
@@ -409,8 +412,13 @@ app.post('/api/job/:jobID/comment', function(req,res) {
                 text: req.body.text,
                 date: new Date()
             }).save( function(err,newComment) {
-                    res.send(200,newComment);
-                });
+
+                BJobComments.findOne({_id:newComment._id})
+                    .populate('user','displayName email')
+                    .exec(function(err,newComment) {
+                        res.send(200, newComment);
+                    });
+            });
         }
     });
 });

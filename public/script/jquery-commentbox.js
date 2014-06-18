@@ -2,7 +2,7 @@
  * Created by coybit on 6/18/14.
  */
 
-$.fn.commentBox = function(user_options){
+$.fn.commentBox = function(flyerid){
 
     //var default_options = {};
     // var options = default_options.extend(user_options);
@@ -20,13 +20,14 @@ $.fn.commentBox = function(user_options){
     // Send button
     $(this).find('.bool-comment-form .bool-comment-button[op="send"]').click( function() {
 
-        $.post('/api/job/539bf2085e8dffc41e000004/comment',{
+        $.post('/api/job/'+flyerid+'/comment',{
             text: commentboxObj.find('.bool-comment-form textarea').val()
         }).done( function(comment) {
                 addCommentToView(
                     commentboxObj,
-                    'coybit',
-                    'Today',
+                    comment.user.email,
+                    comment.user.displayName,
+                    comment.date,
                     commentboxObj.find('.bool-comment-form textarea').val());
             });
 
@@ -34,7 +35,7 @@ $.fn.commentBox = function(user_options){
     });
 
     // Get comments from server and show them
-    $.get('/api/job/539bf2085e8dffc41e000004/comments').done( function(res) {
+    $.get('/api/job/'+flyerid+'/comments').done( function(res) {
         res.comments.forEach( function(comment){
             addCommentToView(
                 commentboxObj,

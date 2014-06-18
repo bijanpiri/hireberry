@@ -331,8 +331,8 @@ canCurrentUserLeaveComment = function(userID,teamID,jobID,callback) {
             if( flyer.autoAssignedTo === userID || isHiringManager ) {
                 currentUserCanLeaveComment = true;
             } else {
-                for(var i=0; i<flyer.commenters.length; i++)
-                    if( flyer.commenters[i] === userID )
+                for(var i=0; i<flyer.commentators.length; i++)
+                    if( flyer.commentators[i].toString() === userID.toString() )
                         currentUserCanLeaveComment = true;
             }
 

@@ -121,9 +121,9 @@ function Flyer(options) {
                 $('.bool-portlet').css('font-family', data.font ),
                 $('body').css('background', data.background);
                 $('.bool-color-chooser-background .bool-current-color')
-                    .css('background',data.background);
+                    .css('background',data.background ||'#E2DECA');
                 $('.bool-color-chooser-canvas .bool-current-color')
-                    .css('background',data.canvasColor);
+                    .css('background',data.canvasColor ||'#f1f1f1');
                 $('.bool-portlet').css('background',data.canvasColor);
                 setLogo(data.logo);
                 flyer.thanksMessage = data.thanksMessage;

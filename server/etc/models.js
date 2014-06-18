@@ -60,7 +60,7 @@ BFlyers = mongoose.model( 'flyers', {
     autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'},
     askedForPublish: Boolean,
     mandrillRouterID: String,
-    commenter: [{type : mongoose.Schema.ObjectId, ref : 'teams'}]
+    commentators: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
 });
 
 BComments = mongoose.model( 'comments', {
