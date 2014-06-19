@@ -352,6 +352,8 @@ app.post('/api/application/:appID/comment', function(req,res) {
                     date: new Date()
                 }).save( function(err,newComment) {
 
+                        // ToDo: Implement Notification Strategy Here
+
                         BApplicationComments.findOne({_id:newComment._id})
                             .populate('user','displayName email')
                             .exec(function(err,newComment) {

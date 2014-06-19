@@ -99,15 +99,15 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
                 visitorIP: req.ip, //OR req.headers['x-forwarded-for'] || req.connection.remoteAddress,
                 flyerID: req.params.flyerID
             }).save( function(err) {
-                res.render('flyerEditor.ejs',{
-                    title:'Job',
-                    flyerid: req.params.flyerID,
-                    templateID: 0,
-                    editMode: false,
-                    viewMode: "embeded",
-                    existFlyer: true
+                    res.render('flyerEditor.ejs',{
+                        title:'Job',
+                        flyerid: req.params.flyerID,
+                        templateID: 0,
+                        editMode: false,
+                        viewMode: "embeded",
+                        existFlyer: true
+                    });
                 });
-            });
     });
 
 });
@@ -156,15 +156,15 @@ app.get('/flyer/:mode/:tid', function(req,res){
                     creator: req.user._id,
                     autoAssignedTo: req.user._id
                 }).save(function (err,newflyer) {
-                    flyerid = newflyer._id;
-                    res.cookie('flyerid',flyerid);
+                        flyerid = newflyer._id;
+                        res.cookie('flyerid',flyerid);
 
-                    // Make n new ApplyByEmail router to mandrill
-                    addApplyByEmailRouter(flyerid, function(err,result) {
-                        renderNewFlyerView();
+                        // Make n new ApplyByEmail router to mandrill
+                        addApplyByEmailRouter(flyerid, function(err,result) {
+                            renderNewFlyerView();
+                        });
+
                     });
-
-                });
 
             } else {        // Cookie isn't empty. So laod it
                 BFlyers.count({_id:flyerid}, function(err,count){
@@ -521,12 +521,14 @@ app.post('/api/job/:jobID/comment', function(req,res) {
                 date: new Date()
             }).save( function(err,newComment) {
 
-                BJobComments.findOne({_id:newComment._id})
-                    .populate('user','displayName email')
-                    .exec(function(err,newComment) {
-                        res.send(200, newComment);
-                    });
-            });
+                    // ToDo: Implement Notification Strategy Here
+
+                    BJobComments.findOne({_id:newComment._id})
+                        .populate('user','displayName email')
+                        .exec(function(err,newComment) {
+                            res.send(200, newComment);
+                        });
+                });
         }
     });
 });
