@@ -118,16 +118,8 @@ function Flyer(options) {
                 var flyer=job.flyer;
 
                 if( callback ){
-                    callback(flyer);
+                    callback(job);
                 }
-                var commentators=job.commentators;
-                var responder=job.responder;
-
-                commentators.forEach(function(com){
-                    $('.bool-commentator-users').append(createCommentatorItem(com));
-                });
-                $('.bool-user-responder').setCurrentUser(responder);
-
                 var background = flyer.background || '#E2DECA';
                 var canvas = flyer.canvasColor || '#f1f1f1';
 
