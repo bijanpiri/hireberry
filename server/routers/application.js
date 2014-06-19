@@ -295,37 +295,6 @@ app.post('/api/applications/:applicationID',  function(req,res) {
     }
 });
 
-app.post('/api/team/application/askForComment', function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    //var userID = req.user._id;
-    var userID = req.body.userID;
-    var appID = req.body.appID;
-    var note = req.body.note;
-    var teamID = req.user.teamID;
-
-    // Check whether current user is admin or not
-    askForCommentOnApplication(note,userID,req.user._id, appID, teamID, function(err) {
-        res.send(200)
-    } );
-
-});
-
-app.get('/api/user/application/askedForComment',function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    var userID = req.user._id;
-    var teamID = req.user.teamID;
-
-    getAskedForCommentApplications(userID, teamID, function(err,applications) {
-        res.send(200,{applications:applications});
-    })
-});
-
 app.post('/api/application/:appID/visitedState',function(req,res){
 
     if(!checkUser(req,res))
@@ -365,39 +334,55 @@ app.post('/api/comments/mark-as-read',function(req,res){
     });
 });
 
-app.get('/api/application/comments',function(req,res){
-    if(!checkUser(req,res))
-        return;
-    var appID=req.query.appID;
-    getApplicationComments(appID,function(err,comments){
-        res.send(200,
-            {
-                comments:comments,
-                user:req.user._id
-            });
+app.post('/api/application/:appID/comment', function(req,res) {
+    // Add a new comment on this application
+
+    BApplications.findOne({_id:req.params.appID}, function(err,application) {
+        if( err || !application )
+            return res.send(404);
+
+        canCurrentUserLeaveComment(req.user._id, req.user.teamID, application.flyerID, function(err,can){
+
+            if(!err && can) {
+                BApplicationComments({
+                    team: req.user.teamID,
+                    user: req.user._id,
+                    application: req.params.appID,
+                    text: req.body.text,
+                    date: new Date()
+                }).save( function(err,newComment) {
+
+                        BApplicationComments.findOne({_id:newComment._id})
+                            .populate('user','displayName email')
+                            .exec(function(err,newComment) {
+                                res.send(200, newComment);
+                            });
+                    });
+            }
+        });
     });
+
 });
 
-app.post('/api/application/comments',function(req,res) {
-    if(!checkUser(req,res))
-        return;
+app.get('/api/application/:appID/comments', function(req,res) {
+    // Get all comments on this application
 
-    var commentID=req.body.commentID;
-    var comment=req.body.comment;
-    BComments.update(
-        {_id:commentID,commenter:req.user._id},
-        {comment:comment,commentTime:new Date()},
-        function(err,affected){
-            if(affected==0)
-                res.send(401)
-            else if(err)
-                res.send(500);
-            else
-                addNotification('commentOnApplication',{commentID:commentID}, function(){
-                    res.send(200);
-                })
-        }
-    )
+    BApplications.findOne({_id:req.params.appID}, function(err,application) {
+
+        if( err || !application )
+            return res.send(404);
+
+        canCurrentUserLeaveComment(req.user._id,req.user.teamID,application.flyerID,function(err,can){
+            if(!err && can) {
+                BApplicationComments.find({application: req.params.appID})
+                    .populate('user','displayName email')
+                    .exec(function(err,comments) {
+                        res.send(200,{comments:comments});
+                    });
+            }
+        });
+
+    });
 });
 
 app.get('/api/application/json/:appID', function(req,res) {

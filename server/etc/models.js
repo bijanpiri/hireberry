@@ -83,7 +83,15 @@ BJobComments = mongoose.model( 'job-comments', {
     date: Date,
     job: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
-})
+});
+
+BApplicationComments = mongoose.model( 'application-comments', {
+    user: {type : mongoose.Schema.ObjectId, ref : 'users'},
+    text: String,
+    date: Date,
+    application: {type : mongoose.Schema.ObjectId, ref : 'applications'},
+    team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
+});
 
 BTeams = mongoose.model( 'teams', {
     name: String,

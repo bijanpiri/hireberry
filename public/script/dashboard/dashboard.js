@@ -537,6 +537,7 @@ function initCandidateInstance(candidate,expanded) {
         $(this).next().toggle();
     });
 
+/*
     $.get('/api/application/comments',{appID:candidate._id},function(data){
         var comments = data.comments;
 
@@ -606,7 +607,13 @@ function initCandidateInstance(candidate,expanded) {
 
         })
     });
+*/
 
+    $('.bool-application-comments').commentBox({
+        postURL: '/api/application/' + candidate._id + '/comment',
+        getURL: '/api/application/' + candidate._id + '/comments',
+        togglable: false
+    });
 
     initWorkflow(candidateObj,candidate);
     changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );

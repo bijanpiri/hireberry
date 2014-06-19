@@ -478,6 +478,7 @@ Comments
 .bool-comment-form {
     margin: 16px 0;
     color: #000;
+    padding: 0 1em;
 }
 
 .bool-comment-form textarea {
@@ -534,6 +535,10 @@ Comments
     font-size: 1.3em;
     line-height: 22px;
     color: #D6D2BF;
+}
+
+.bool-comments li .bool-comment-header i:hover {
+    color: #757366;
 }
 
 .bool-comments li .bool-comment-body {
