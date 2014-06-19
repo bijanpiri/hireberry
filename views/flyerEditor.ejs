@@ -28,6 +28,7 @@
 <link href="/css/font-awesome.css" rel="stylesheet">
 
 <script src="/script/UsersCombo.js"></script>
+<script src="/script/jquery-commentbox.js"></script>
 
 <script src="/chosen/chosen.jquery.js"></script>
 <link href="/chosen/chosen.css" rel="stylesheet">
@@ -162,33 +163,8 @@
     </div>
 </div>
 
-<script src="/script/jquery-commentbox.js"></script>
-<script>
-$(function() {
-
-});
-</script>
-
 <% if(everyauth.user && viewMode!=='embeded' && userCanLeaveComment) { %>
-<div class="portlet-commentsView-container" hidden>
-
-    <div class="portlet-commentsView">
-
-        <a id="buttonComment" isOpen="1"><i class="fa fa-comments"></i></a>
-
-        <div class="bool-comments-header">Comments</div>
-
-        <div class="bool-comment-form" style="padding: 0 1em;">
-            <p>Leave you comment here:</p>
-            <textarea class="bool-textarea askForComment-note" rows="4" style="width: 100%"></textarea>
-            <a op="send" class="bool-toolbar-btn bool-comment-button pull-right">Send</a>
-            <a op="clear" class="bool-toolbar-btn bool-comment-button pull-right">Clear</a>
-        </div>
-
-        <ul class="bool-comments"></ul>
-
-    </div>
-</div>
+<div class="comments-sidebar"></div>
 <% } %>
 
 <div class="row-fluid shareRow" hidden>

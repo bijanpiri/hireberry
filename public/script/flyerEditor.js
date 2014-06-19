@@ -13,6 +13,8 @@ var teamMembers = [];
 
 $(function() {
 
+    //$(document).tooltip();
+
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
         $('.bool-portlet').css('background',c);
     });
@@ -169,14 +171,18 @@ $(function() {
             })
         });
     }
-
-//    initCommentView();
 });
 
 function loadFlyer() {
 
     flyerid = $('input[name=flyerid]').val();
-    $('.portlet-commentsView-container').commentBox(flyerid);
+
+    $('.comments-sidebar').commentBox({
+        postURL: '/api/job/' + flyerid + '/comment',
+        getURL: '/api/job/' + flyerid + '/comments',
+        togglable: true
+    });
+
     flyer = $('.portletStack').Flyer({
         editMode: editMode,
         flyerid: flyerid,
@@ -210,135 +216,6 @@ function loadTemplateChooser() {
         loadEditor();
     })
 
-}
-
-function initCommentView() {
-
-    // ToDo: Manage comment view permission
-    var canViewComments = true;
-
-    // Get Comments
-    if( canViewComments ) {
-        $.get('/api/form/comments', {formID:flyerid}).done( function(res){
-
-            $('.portlet-comments').html('');
-
-            if( res.comments.length == 0 )
-                $('.portlet-comments').text('There is no comments.')
-            else {
-                res.comments.forEach( function(comment) {
-
-                    if( comment.commentTime && comment.commentTime.length > 0 ) {
-
-                        var commentObj = $('<div>').addClass('portlet-comment');
-                        commentObj.append( $('<div>').addClass('commentNote').text('Asked: ' +  comment.note) );
-                        commentObj.append( $('<div>').addClass('comment-date').text( 'At ' + (new Date(comment.askingTime)).toLocaleString()) );
-                        commentObj.append( $('<div>').addClass('commenter').text(comment.commenter.email + "'s replied:") );
-                        commentObj.append( $('<div>').addClass('comment-body').text(comment.comment) );
-                        commentObj.append( $('<div>').addClass('comment-date').text( 'At ' + (new Date(comment.commentTime)).toLocaleString()) );
-
-                        $('.portlet-comments').append( commentObj );
-                    }
-                });
-            }
-        });
-    }
-
-    $.get('/api/user/form/askedForComment').done( function(resForm){
-
-        $('.portlet-askedForComment-list').html('');
-
-        if( resForm.forms.length == 0 )
-            $('.portlet-askedForComment-list').text('There is no "Asked For Comment" request.');
-        else {
-            resForm.forms.forEach( function(a4c) {
-
-                if( a4c.formID._id == flyerid ) {
-                    var objID = 'askedForComment_'+a4c._id;
-
-                    var dateObj = $('<div>')
-                        .text( 'At ' + (new Date(a4c.askingTime)).toLocaleString() )
-                        .addClass('comment-date');
-
-                    var titleObj = $('<div>')
-                        .text('You are asked to put your comment about this form');
-
-                    var textAreaObj = $('<textarea>')
-                        .attr('id','comment_form_' + a4c.formID._id)
-                        .css('display','block')
-                        .addClass('bool-textarea')
-                        .attr('placeholder','Your comment ...');
-
-                    var sendBtnObj = $('<button>')
-                        .text('Reply')
-                        .click( function() {
-                            $.post('/api/user/comment', {
-                                askForCommentID:a4c._id,
-                                comment:$('#comment_form_' + a4c.formID._id).val()
-                            }).done( function() {
-                                    $('#' + objID).remove();
-                                });
-                        });
-
-                    $('.portlet-askedForComment-list').append( $('<li>').attr('id',objID)
-                        .append(dateObj)
-                        .append(titleObj)
-                        .append(textAreaObj)
-                        .append(sendBtnObj) );
-                }
-            });
-        }
-
-    });
-
-    // Putting comment view in initialization mode
-    toggleCommentView.call( $('#buttonComment'), function() {
-        $('.portlet-commentsView-container').show();
-    });
-
-    $('#ask-for-comment-btn').click( function() {
-
-        $('.askForComment-form').toggle();
-        var isHidden = $('.askForComment-form').css('display')==='none';
-
-        $('.portlet-askedForComment-list').toggle();
-        $('.portlet-comments').toggle();
-
-        if( !isHidden )
-            $(this).text('x');
-        else
-            $(this).text('Ask For Comment');
-    });
-
-    $('.askForComment-send').click( function() {
-
-        var askForComment = $('[name=askForComment-selected-user]').val();
-
-        if( askForComment.length > 0 ) {// It isn't None
-            $.post('/api/team/form/askForComment', {formID: flyerid, userID: askForComment}).done( function() {
-                // Back to comments list
-                $('#ask-for-comment-btn').click();
-            });
-
-        }
-    });
-
-    $('#buttonComment').click(toggleCommentView);
-}
-
-function toggleCommentView(callback) {
-    var isOpen = $(this).attr('isOpen')==='1';
-    var callback = typeof(callback)==='function' ? callback : function(){};
-
-    if( isOpen ) {
-        $('.portlet-commentsView-container').animate( {width:0}, 500, callback );
-        $(this).attr('isOpen','0');
-    }
-    else {
-        var width = $('.portlet-commentsView').width();
-        $('.portlet-commentsView-container').animate( {width:width}, 500 , callback );
-        $(this).attr('isOpen','1');
-    }
 }
 
 var admin=false;

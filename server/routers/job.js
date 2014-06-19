@@ -544,51 +544,6 @@ app.get('/api/job/:jobID/comments', function(req,res) {
     });
 });
 
-app.post('/api/team/form/askForComment', function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    var reqUserID = req.user._id;
-    var userID = req.body.userID;
-    var formID = req.body.formID;
-    var teamID = req.user.teamID;
-
-    // Check whether current user is admin or not
-    askForCommentOnForm('',userID, reqUserID, formID, teamID, function(err) {
-        res.send(200)
-    } );
-
-});
-
-app.get('/api/user/form/askedForComment',function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    var userID = req.user._id;
-    var teamID = req.user.teamID;
-
-    getAskedForCommentForms(userID, teamID, function(err,forms) {
-        res.send(200,{forms:forms});
-    })
-});
-
-app.get('/api/form/comments',function(req,res){
-
-    if( !checkUser(req,res) )
-        return;
-
-    // ToDo: (Security) Check whether user can access this applicationID or no.
-    var userID = req.user._id;
-    var formID = req.query.formID;
-
-    getComments(formID, 'form', function(err,comments) {
-        res.send(200,{comments:comments});
-    })
-});
-
-
 app.get('/api/team/:teamID/positions',function(req,res){
 
     var teamID = req.params.teamID;
