@@ -298,11 +298,15 @@ var getFlyerInfo= function(flyerid,templateID,callback){
     var templateID = req.params.templateID;*/
 
     if( templateID==0 ) { // Load stored flyer
-        BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}}, function(err,flyer){
+        BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
+            .populate('commentators','_id displayName email')
+            .populate('autoAssignedTo','_id displayName email')
+            .exec( function(err,flyer){
             if(err)
                 return  callback('Oh oh error',null,null);
                 //res.send('Oh oh error');
             if(flyer)
+<<<<<<< HEAD
             {
                 callback(null,flyer.flyer,null);
 
@@ -311,6 +315,14 @@ var getFlyerInfo= function(flyerid,templateID,callback){
                 else
                 res.send(flyer.flyer);*/
             }
+=======
+                res.send(
+                    {
+                        flyer:flyer.flyer,
+                        responder:flyer.autoAssignedTo,
+                        commentators:flyer.commentators
+                    });
+>>>>>>> Added responder and commentator
             else
                 callback( null,null,'404, Not Found! Yah!');
                 //res.send('404, Not Found! Yah!');

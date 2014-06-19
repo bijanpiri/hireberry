@@ -145,8 +145,11 @@ function SkillWidget(){
 
         if( this.editMode)
         {
-            $('.skillsButtons').sortable();
-
+            $('.skillsButtons').sortable({
+                    items:'.beautifulButton'
+//                        ,
+//                    handle:'.beautifulButton>label'
+            });
         }
         else{
             this.portlet.find('.skillAddButton').hide();
