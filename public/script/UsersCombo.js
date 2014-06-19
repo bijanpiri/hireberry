@@ -6,7 +6,6 @@ function getAvatar(email,size) {
     return 'http://www.gravatar.com/avatar/' + hash+ (size?'?size='+size:'');
 }
 (function($){
-    var contents;
     $.fn.populateUserCombo = function(members,selectedMember, inputName){
 
         $(this).each(function(){
@@ -16,7 +15,7 @@ function getAvatar(email,size) {
             if(!inputName)
                 inputName = 'name';
 
-            contents =
+            var contents =
                 $('<div class="btn-group bool-option-field ">' +
                     '<a class="bool-combo-selected dropdown"> </a>' +
                     '<ul class="dropdown-menu bool-team-members">  </ul>' +
@@ -40,16 +39,16 @@ function getAvatar(email,size) {
             });
 
             if(selectedMember._id)
-                showSelected(selectedMember);
+                showSelected(selectedMember,contents);
             else
-                showSelected(members[selectedMember]);
+                showSelected(members[selectedMember],contents);
 
         });
     };
-    $.fn.setCurrentUser=function(user) {
-        showSelected(user)
-    };
-    function showSelected(admin){
+//    $.fn.setCurrentUser=function(user) {
+//        showSelected(user)
+//    };
+    function showSelected(admin,contents){
         if(admin) {
             contents.find('.bool-combo-selected')
                 .replaceWith(
