@@ -481,7 +481,7 @@ app.post('/flyer/save', function(req,res){
     }
     var flyer = req.body.flyer;
     var responder=req.body.responder;
-    var commentators=req.body.commentators;
+    var commentators=req.body.commentators||[];
 
     if( !flyer.description || flyer.description.length == 0 )
         flyer.description = "Untitled" + (new Date()).toDateString();
