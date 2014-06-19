@@ -124,6 +124,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
         return;
 
     var renderNewFlyerView = function() {
+
         res.render('flyerEditor.ejs',{
             title:'Flyer Editor',
             boards:[],
@@ -144,7 +145,17 @@ app.get('/flyer/:mode/:tid', function(req,res){
             if(editMode)
                 res.cookie('flyerid',flyerid);
             existFlyer = true;
-            renderNewFlyerView();
+
+            isHiringManager( req.user.teamID, req.user._id, function(err, isHM) {
+                isResponderOfJob( flyerid, req.user._id, function(err,isRes){
+                    if( !isHM && !isRes && editMode )
+                        res.redirect('/flyer/view/0?flyerid='+flyerid);
+                    else
+                        renderNewFlyerView();
+                });
+            });
+
+
         }
         else {          // Query String is empty
             flyerid = req.cookies.flyerid;
