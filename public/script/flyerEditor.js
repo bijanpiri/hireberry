@@ -236,6 +236,20 @@ function prepareThanksMessage() {
         }
     );
 }
+function createCommentatorItem(user) {
+
+    return $('<li>')
+        .append($('<a>')
+            .append($('<img>').attr('src', getAvatar(user.email, 20)))
+            .append(user.label || user.displayName))
+        .append(
+        $('<a>')
+            .addClass('pull-right bool-remove')
+            .append('&times;')
+            .click(function () {
+                $(this).closest('li').remove();
+            })).data('commentator', user);
+}
 function loadEditor() {
 
     $('.templateRow').hide();
@@ -249,10 +263,11 @@ function loadEditor() {
         teamMembers= res.members;
         var membersAndNone = JSON.parse(JSON.stringify(res.members));
         membersAndNone.unshift({displayName:'None',email:null,_id:null});
-        $('.bool-user-responder').populateUserCombo(membersAndNone,null,'autoAssignedTo_userID');
+        $('.bool-user-responder')
+            .populateUserCombo(membersAndNone,null,'autoAssignedTo_userID');
         var memNames=teamMembers.map(function(member){
             return {
-                id:member._id,
+                _id:member._id,
                 label:member.displayName,
                 value:'',
                 email:member.email
@@ -264,26 +279,14 @@ function loadEditor() {
             select:function(event,ui){
                 var exist= $.grep($('.bool-commentator-users>li'),
                     function(item,index){
-                          return ui.item.id===$(item).data('commentator').id;
+                          return ui.item.id===$(item).data('commentator')._id;
                     }
                 );
                 if(exist.length>0) {
                     $(exist).fadeTo('fast',.2).delay(100).fadeTo('fast',1);
                     return;
                 }
-                $('.bool-commentator-users').append(
-                    $('<li>')
-                        .append($('<a>')
-                            .append($('<img>').attr('src',getAvatar(ui.item.email,20)))
-                            .append(ui.item.label))
-                        .append(
-                        $('<a>')
-                            .addClass('pull-right bool-remove')
-                            .append('&times;')
-                            .click(function(){
-                                $(this).closest('li').remove();
-                            })).data('commentator',ui.item)
-                );
+                $('.bool-commentator-users').append(createCommentatorItem(ui.item));
 
             },
             minLength:0,
@@ -309,11 +312,6 @@ function loadEditor() {
                 $( ul ).addClass( "bool-commentator-list" );
                 list=ul;
             };
-
-//        $('#askForComment').populateUserCombo(membersAndNone,null,'askForComment_userID');
-//        $('#autoAssignTo').populateUserCombo(members,null,'autoAssignedTo_userID');
-//        $('.askForComment-user').populateUserCombo(members,null,'askForComment-selected-user');
-        //$('#job-responder').populateUserCombo(members,null,'job-selected-responder');
     });
 
     loadFlyer();
@@ -510,7 +508,7 @@ function saveFlyer(callback) {
             var commentators=[];
 
             $('.bool-commentator-users>li').each(function(){
-                commentators.push($(this).data('commentator').id);
+                commentators.push($(this).data('commentator')._id);
             });
 
 

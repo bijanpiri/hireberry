@@ -213,12 +213,20 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
     var templateID = req.params.templateID;
 
     if( templateID==0 ) { // Load stored flyer
-        BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}}, function(err,flyer){
+        BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
+            .populate('commentators','_id displayName email')
+            .populate('autoAssignedTo','_id displayName email')
+            .exec( function(err,flyer){
             if(err)
                 res.send('Oh oh error');
 
             if(flyer)
-                res.send(flyer.flyer);
+                res.send(
+                    {
+                        flyer:flyer.flyer,
+                        responder:flyer.autoAssignedTo,
+                        commentators:flyer.commentators
+                    });
             else
                 res.send('404, Not Found! Yah!');
         });

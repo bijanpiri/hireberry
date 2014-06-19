@@ -8,6 +8,7 @@ var Widgets = [
     ProfilesWidget, SeperatorWidget, SkillWidget
 ];
 var editMode;
+
 function Flyer(options) {
 
     editMode = options.editMode;
@@ -112,23 +113,36 @@ function Flyer(options) {
         var flyer = this;
 
         $.get('/flyer/' + templateID + '/json/'+flyerid)
-            .done(function(data){
+            .done(function(job){
+
+                var flyer=job.flyer;
+
                 if( callback ){
-                    callback(data);
+                    callback(flyer);
                 }
+                var commentators=job.commentators;
+                var responder=job.responder;
 
-                flyer.description = data.description;
-                $('.bool-portlet').css('font-family', data.font ),
-                $('body').css('background', data.background);
+                commentators.forEach(function(com){
+                    $('.bool-commentator-users').append(createCommentatorItem(com));
+                });
+                $('.bool-user-responder').setCurrentUser(responder);
+
+                var background = flyer.background || '#E2DECA';
+                var canvas = flyer.canvasColor || '#f1f1f1';
+
+                flyer.description = flyer.description;
+                $('.bool-portlet').css('font-family', flyer.font ),
+                $('body').css('background', background);
                 $('.bool-color-chooser-background .bool-current-color')
-                    .css('background',data.background ||'#E2DECA');
+                    .css('background', background);
                 $('.bool-color-chooser-canvas .bool-current-color')
-                    .css('background',data.canvasColor ||'#f1f1f1');
-                $('.bool-portlet').css('background',data.canvasColor);
-                setLogo(data.logo);
-                flyer.thanksMessage = data.thanksMessage;
+                    .css('background', canvas);
+                $('.bool-portlet').css('background',canvas);
+                setLogo(flyer.logo);
+                flyer.thanksMessage = flyer.thanksMessage;
 
-                var widgetData = data.widgets;
+                var widgetData = flyer.widgets;
                 var nWidgets = widgetData ? widgetData.length : 0;
 
                 for( var i=0; i<nWidgets; i++ ){
