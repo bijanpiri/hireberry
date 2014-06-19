@@ -235,7 +235,7 @@ function Flyer(options) {
                     $('.bool-flyer-empty').hide();
                 }
 
-            }).disableSelection();
+            })
 
             $('.bool-widget-btn').draggable({
                 connectToSortable: ".portletStack",

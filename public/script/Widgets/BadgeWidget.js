@@ -17,6 +17,7 @@ function BadgeWidget(){
 
     function initLayout() {
         layout = this.clone('.badgeWidget');
+//        layout.find('.perks-container').sortable();
     }
 
     initLayout.call(this);
