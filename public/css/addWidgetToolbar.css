@@ -317,6 +317,8 @@ input.bool-option-search{
     background: none;
     width: 220px;
     margin-bottom: 16px;
+    min-height: 100px;
+    max-height: 200px;
 }
 .bool-commentator-users >li {
     background:#7F7F80 ;
@@ -389,4 +391,27 @@ input.bool-option-search{
 .bool-commentator-list{
     background: #e5e5e5;
 
+}
+.bool-commentator-list>li {
+    overflow: hidden;
+}
+.bool-commentator-list>li>a {
+    border-radius: 0;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+}
+.bool-commentator-list>li>a>img {
+    vertical-align: middle;
+}
+.bool-commentator-list>li>a.ui-state-focus {
+    border: none;
+    background: #a5a5a5;
+    font-weight: bold;
+    color: #4d4d4d;
+
+}
+.ui-menu .ui-menu-item a.ui-state-focus, .ui-menu .ui-menu-item a.ui-state-active {
+    font-weight: normal;
+    margin: -1px;
 }

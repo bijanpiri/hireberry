@@ -258,7 +258,7 @@ function loadEditor() {
                 email:member.email
             };
         });
-
+        var list;
         $('.bool-option-search').autocomplete({
             source:memNames,
             select:function(event,ui){
@@ -288,6 +288,8 @@ function loadEditor() {
             },
             minLength:0,
             autoFocus:true
+        }).click(function(){
+            list.toggle();
         }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
             return $('<li>').append(
                 $('<a>')
@@ -305,7 +307,7 @@ function loadEditor() {
                     that._renderItemData( ul, item );
                 });
                 $( ul ).addClass( "bool-commentator-list" );
-
+                list=ul;
             };
 
 //        $('#askForComment').populateUserCombo(membersAndNone,null,'askForComment_userID');
