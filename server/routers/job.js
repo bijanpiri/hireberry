@@ -14,20 +14,75 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
     var flyerid = req.params.flyerID;
     var templateID = req.params.templateID;
 
-     getJsonFlyer(flyerid,templateID,function(err,flyer,data){
+     getFlyerInfo(flyerid,templateID,function(err,flyer,data){
 
          if(err)
              res.send(err);
          else if(flyer)
-             res.render('promote.ejs',
-                 {title:'Promote',
-                     PositionTitle:flyer.description
+         {
+
+             extractPromoteInfo(flyer,function(PromoteInfo)
+             {
+                 res.render('promote.ejs',
+                  {title:'Promote',
+                        PositionTitle:PromoteInfo.positionTitle,
+                        Logo:PromoteInfo.logo,
+                        Address:PromoteInfo.address,
+                        Skills:PromoteInfo.skills,
+                        Description:PromoteInfo.description,
+                         WorkCondition :PromoteInfo.workCondition,
+                        JobLink: "http://localhost:5000/flyer/embeded/"+flyerid
+                  });
              });
+
+             /*res.render('promote.ejs',
+                 {title:'Promote',
+                     PositionTitle:flyer.description,
+                     fl:flyer
+             });*/
+         }
          else
             res.send(data);
 
      });
 });
+
+var extractPromoteInfo= function (flyer,callback)
+{
+
+    var PromoteInfo=new Object();
+    PromoteInfo.positionTitle=flyer.description;
+    PromoteInfo.logo=flyer.logo;
+    PromoteInfo.address="";
+    PromoteInfo.skills="";
+    PromoteInfo.description="";
+    PromoteInfo.workCondition="";
+
+if(flyer.widgets)
+{
+    for(var i=0;i<flyer.widgets.length;i++)
+    {
+        switch(flyer.widgets[i].type) {
+            case "1":  //text
+                PromoteInfo.description=flyer.widgets[i].Contents.text;
+                break;
+            case "6":  //map
+                PromoteInfo.address=flyer.widgets[i].Contents.address;
+                break;
+            case "8":  //text
+                PromoteInfo.workCondition=flyer.widgets[i].Contents.work;
+                break;
+            case "14":  //skill
+                PromoteInfo.skills=flyer.widgets[i].Contents;
+                break;
+
+            default:
+            break;
+        }
+    }
+}
+    callback(PromoteInfo);
+}
 
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
@@ -224,7 +279,7 @@ app.delete('/api/job/:flyerID', function(req,res){
 
 });
 
-var getJsonFlyer= function(flyerid,templateID,callback){
+var getFlyerInfo= function(flyerid,templateID,callback){
     //if(!checkUser(req,res))
     //    return;
 
@@ -274,7 +329,7 @@ app.get('/flyer/:templateID/json/:id', function(req,res)
     var flyerid = req.params.flyerID;
     var templateID = req.params.templateID;
 
-    getJsonFlyer(flyerid,templateID,function(err,flyer,data){
+    getFlyerInfo(flyerid,templateID,function(err,flyer,data){
 
         if(err)
             res.send(err);

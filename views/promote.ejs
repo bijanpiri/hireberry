@@ -206,19 +206,160 @@
         font-size: 1.8em
     }
 
+    .modal-body {
 
+    }
+    .modal-body span{
+        font-size: 1.2em;
+        font-weight: bold;
+        font-family: "Roboto", cursive;
+        color: #0000FF;
+       /* display: inline-block;*/
 
+    }
+    .modal-body p{
+
+        margin-top: 0px;
+        font-size: 1.3em;
+        font-weight: bold;
+        font-family: "Roboto", cursive;
+        /* display: inline-block;*/
+        /* margin-left: 20px;*/
+
+ }
+
+ .modal-body hr{
+
+     margin-top: 10px;
+     margin-bottom: 10px;
+
+ }
+
+ .modal-body img{
+     border-radius: 8px;
+ }
 
 </style>
 
 <script>
 
+    var jobLink='<%= JobLink %>';
+    var address='<%= Address %>';
+    var workCondition='<%= WorkCondition %>';
+    var skills='<%= Skills %>';
+    var logo='<%= Logo %>';
+    var positionTitle='<%=PositionTitle%>';
+    var description='<%=Description%>';
+    var companyName='';
+
     $(document).ready( function() {
 
+        $.ajax({
+            url:'/api/team/settings',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                companyName=data.name;
+            }
+        });
+
    $(".job-boards").find(":input[type=button]").click(function() {
-        var ml = $('#job-borad-preview-dialog');
-       ml.find("#invitationSetLabel").text($(this).attr("title"));
-         ml.modal();
+
+
+       var boardName=$(this).attr("title");
+
+       var ml = $('#job-borad-preview-dialog');
+       ml.find("#invitationSetLabel").text(boardName);
+       ml.find("#job-address").text(address);
+       ml.find("#job-title").text(positionTitle);
+       ml.find("#company-name").text(companyName);
+       ml.find("#job-description").text(description);
+       //ml.find("#job-workPlaceTime").text(workCondition);
+       //ml.find("#job-skills").text(skills);
+       //ml.find("#company-logo").attr('src',logo);
+       ml.modal();
+
+
+
+       // ------------ Show-Hide job link ----------------
+        if( boardName=="Indeed" || boardName=="Stack Overflow" )
+       {
+           ml.find("#job-link").text("");
+           ml.find("#div-joblink").hide();
+           ml.find("#job-description").append('<br>'+"Job Url : "+'<br>'+jobLink);
+       }
+       else
+       {
+           ml.find("#job-link").text(jobLink);
+           ml.find("#div-joblink").show();
+       }
+
+        // ------------ Show-Hide work condition ----------------
+       if(!workCondition && workCondition=='')
+       {
+           ml.find("#job-workPlaceTime").text("");
+           ml.find("#div-workPlaceTime").hide();
+       }
+       else if( boardName=="Indeed" || boardName=="Stack Overflow" || boardName=="Dribble" || boardName=="Behance")
+       {
+           ml.find("#job-workPlaceTime").text("");
+           ml.find("#div-workPlaceTime").hide();
+           var place=  workCondition.split('&')[0].split('=')[1];
+           var time=  workCondition.split('&')[1].split('=')[1];
+           ml.find("#job-description").append('<br>'+"Work Place/Time : "+'<br>'+place+'/'+time);
+       }
+       else
+       {
+           var place=  workCondition.split('&')[0].split('=')[1];
+           var time=  workCondition.split('&')[1].split('=')[1];
+           ml.find("#job-workPlaceTime").text(place+'/'+time);
+           ml.find("#div-workPlaceTime").show();
+       }
+
+
+       // ------------ Show-Hide skills ----------------
+       if(!skills || skills=='')
+       {
+           ml.find("#job-skills").text("");
+           ml.find("#div-skills").hide();
+       }
+       else if( boardName=="Indeed" || boardName=="GitHub" || boardName=="Dribble")
+       {
+           ml.find("#job-skills").text("");
+           ml.find("#div-skills").hide();
+           ml.find("#job-description").append('<br>'+"Requirements : "+'<br>'+skills);
+       }
+       else
+       {
+           ml.find("#job-skills").text(skills);
+           ml.find("#div-skills").show();
+       }
+
+
+       // ------------ Show-Hide company logo ----------------
+       if(logo=='http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/' ||
+               boardName=="Behance" || boardName=="Dribble"  || boardName=="Indeed"   )
+       {
+            ml.find("#company-logo").attr('src','');
+            ml.find("#div-logo").hide();
+       }
+       else
+       {
+           ml.find("#company-logo").attr('src',logo);
+           ml.find("#div-logo").show();
+       }
+
+       // ------------ Show-Hide description ----------------
+       if( boardName=="Dribble")
+       {
+           ml.find("#job-description").text("");
+           ml.find("#div-description").hide();
+       }
+       else
+       {
+           ml.find("#div-description").show();
+       }
+
     });
     });
 </script>
@@ -236,12 +377,12 @@
 <div class="job-boards">
     <span>Job Boards </span>
     <br>
-    <input id="git-promote"     title="GitHub" type="button" value=" " style="background-image: url('/fb.png')">
-    <input id="stackof-promote" title="Stack Overflow" type="button" value=" " style="background-image: url('/fb.png')">
-    <input id="dribble-promote" title="Dribble" type="button" value=" " style="background-image: url('/fb.png')">
-    <input id="behance-promote" title="Behance" type="button" value=" " style="background-image: url('/fb.png')">
-    <input id="linkedin-promote" title="LinkedIn" type="button" value=" " style="background-image: url('/fb.png')">
-    <input id="indeed-promote" title="Indeed" type="button" value=" " style="background-image: url('/fb.png');margin-right: 0">
+    <input id="git-promote"     title="GitHub" type="button" value="GitHub" >
+    <input id="stackof-promote" title="Stack Overflow" type="button" value="Stack Overflow" >
+    <input id="dribble-promote" title="Dribble" type="button" value="Dribble" >
+    <input id="behance-promote" title="Behance" type="button" value="Behance">
+    <input id="linkedin-promote" title="LinkedIn" type="button" value="LinkedIn" >
+    <input id="indeed-promote" title="Indeed" type="button" value="Indeed" style="margin-right: 0">
     <br>
     <input id="ch-git-promote"     title="GitHub" type="checkbox" value=" ">
     <input id="ch-stackof-promote" title="Stack Overflow" type="checkbox" value=" " >
@@ -265,6 +406,36 @@
     </div>
     <div class="modal-body">
         <div class="container-fluid">
+            <span id="sp-company-name" >Company Name</span><p id="company-name"> -- </p>
+            <div id="div-logo" >
+                <hr>
+                <span>Company Logo</span>
+                <br>
+                <img id="company-logo"  src="">
+            </div>
+
+            <hr>
+            <span >Job Title</span> <p id="job-title"> -- </p>
+            <div id="div-description" >
+            <hr>
+            <span >Job Description</span> <p id="job-description"> -- </p>
+            </div>
+            <hr>
+            <span >Address</span> <p id="job-address"> -- </p>
+
+            <div id="div-skills" >
+                <hr>
+                <span >Skills</span> <p id="job-skills"> -- </p>
+            </div >
+
+            <div id="div-workPlaceTime" >
+                <hr>
+                <span >Work Place/Time</span> <p id="job-workPlaceTime"> -- </p>
+            </div >
+            <div id="div-joblink" >
+                <hr>
+                <span >Job URL</span> <p id="job-link"> -- </p>
+            </div >
         </div>
     </div>
     <div class="modal-footer">
