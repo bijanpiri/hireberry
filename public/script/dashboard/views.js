@@ -247,6 +247,11 @@ BTeamsView = Backbone.View.extend({
         this.model.get('teams').forEach( function(team) {
             $('#userTeams').append( $('<option>').text(team.name).attr('name',team._id) );
         });
+
+        if( this.model.get('teams').length <= 1 )
+            $('#switchButton').hide();
+        else
+            $('#switchButton').show();
     }
 })
 teamsView = new BTeamsView({model:teams});
