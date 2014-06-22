@@ -331,6 +331,15 @@ BTeamView = Backbone.View.extend({
         $('.teamAddress').html(info.address)
         $('.teamPhone').html(info.tel);
         $('.bool-ask-4-comment-users').populateUserCombo(teamMembers,0,'userID');
+
+        if(userAdmin) {
+            $('label[for="radio-item-billing"]').show();
+        }
+        else {
+            $('label[for="radio-item-billing"]').remove();
+            $('input#radio-item-billing').remove();
+            $('#billingp').remove();
+        }
     }
 })
 teamView = new BTeamView({model:team});
