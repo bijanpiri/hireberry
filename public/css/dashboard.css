@@ -438,10 +438,10 @@
 
 #askedForCommentList li .comment_date {
     color: #8A8A8A;
-    font-size: 1em;
+    font-size: 0.7em;
 }
 
-#askedForCommentList li div {
+#askedForCommentList > li > div {
     font-size: 1.5em;
 }
 
@@ -452,6 +452,15 @@
 }
 
 #askedForCommentList li button {
+}
+
+#askedForCommentList li a {
+    font-size: 1em;
+}
+
+#askedForCommentList li a.btn {
+    display: inline-block;
+    margin: 8px 4px
 }
 
 .applicationsPreview {
