@@ -484,8 +484,9 @@
 }
 
 .application-searchButton {
-    height: 2.4em;
+    height: 2.8em;
 }
+
 .modal-body{
 
 }
@@ -555,7 +556,16 @@ a{
     transition: transform 0.4s, opacity 0.4s;
 }
 
-
+/* Jobs */
+.publicLinkOpener {
+    background-color: #666;
+    display: inline-block;
+    margin: 4px;
+    padding: 0 8px;
+    line-height: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
 
 @media (max-width: 979px) {
 
