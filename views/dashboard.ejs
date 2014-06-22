@@ -202,7 +202,10 @@
         </div>
     </div>
     <div class="span2">
-        <button class="application-searchButton">Search</button>
+        <button class="application-searchButton">
+            Search
+            <i class="fa fa-search"></i>
+        </button>
     </div>
     <div class="span2">
         <a class="btn btn-mini pull-right" id="candidatesGridButton"><i class="fa fa-th-large"></i></a>
@@ -231,8 +234,10 @@
 <div class="row-fluid tableRow">
     <div class="span12">
         <div id="applications-filters">
+            Job:
             <select class="applications-filter-job"></select>
 
+            | Stage:
             <input type="radio" id="application-filter-all" name="application-filter" hidden checked>
             <label for="application-filter-all">All</label>
 
@@ -731,9 +736,9 @@
     <div class="modal-body">
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span7">
+                <div class="span12 form-horizontal no-border-box">
                     <div class="control-group">
-                        <label class="control-label" for="invitationEmail">Title:</label>
+                        <label class="control-label" for="invitationEmail">Title</label>
                         <div class="controls">
                             <input type="text" id="jobTitle" style="cursor: text">
                         </div>
@@ -748,7 +753,7 @@
                         <label class="control-label" for="invitationEmail">Public Link</label>
                         <div class="controls">
                             <input type="URL" class="publicLink" readonly style="cursor: text">
-                            <a class="publicLinkOpener" target="_blank">Open</a>
+                            <a class="publicLinkOpener bool-toolbar-btn" target="_blank">Open</a>
                         </div>
                     </div>
                     <div class="control-group">
@@ -760,52 +765,12 @@
                     <div class="control-group">
                         <label class="control-label" for="invitationEmail">State</label>
                         <div class="controls">
-                            This job is in <span class="jobStatus-current">-</span>. You can <span class="jobStatus-next"></span> it.
+                            <div style="font-size: 1.5em;line-height: 2em;">
+                             <span class="jobStatus-current">-</span> now |
+                             <span class="jobStatus-next"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="span5">
-                    <div id="placeholder" style="width: 200px;height: 200px"></div>
-                    <script>
-                        $(function() {
-                            var data = [
-                                { label: "Series1",  data: [[1,10]]},
-                                { label: "Series2",  data: [[1,30]]},
-                                { label: "Series3",  data: [[1,90]]},
-                                { label: "Series4",  data: [[1,70]]},
-                                { label: "Series5",  data: [[1,80]]},
-                                { label: "Series6",  data: [[1,0]]}
-                            ];
-
-                            function labelFormatter(label, series) {
-                                return "<div style='font-size:8pt; text-align:center; padding:2px; color:#000;'>"
-                                        + label
-                                        + "<br/>" + Math.round(series.percent) + "%</div>";
-                            }
-
-                            $.plot('#placeholder', data, {
-                                series: {
-                                    pie: {
-                                        show: true,
-                                        radius: 1,
-                                        label: {
-                                            show: true,
-                                            /*radius: 1,*/
-                                            formatter: labelFormatter,
-                                            background: {
-                                                opacity: 0.5,
-                                                color: "#000"
-                                            }
-                                        }
-                                    }
-                                },
-                                legend: {
-                                    show: false
-                                }
-                            });
-                        })
-
-                    </script>
                 </div>
             </div>
         </div>

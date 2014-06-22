@@ -138,10 +138,9 @@ BJobsView = Backbone.View.extend({
 
                     $.get('/flyer/0/json/'+form.formID)
                         .done(function(data){
-                            flyer = data;
+                            flyer = data.flyer;
 
-                            modal.find('#jobTitle').val( data.description );
-                            modal.find('#jobThanksMessage').val( data.thanksMessage );
+                            modal.find('#jobTitle').val( flyer.description );
                         });
 
                     // Responder
@@ -207,7 +206,6 @@ BJobsView = Backbone.View.extend({
                         $.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
 
                         flyer.description = modal.find('#jobTitle').val();
-                        //flyer.thanksMessage = modal.find('#jobThanksMessage').val();
 
                         $.post('/flyer/save',{flyer:flyer});
 
