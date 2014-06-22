@@ -118,6 +118,10 @@ nav li a {
 /****
 Login & Register
 ****/
+.loginForm-container {
+    margin-top: 10em;
+}
+
 .loginForm {
     margin: 20px  0 0 0;
     color: #949079
@@ -194,6 +198,30 @@ Login & Register
     height: 240px;
     width: 2px;
     background-color: #949079;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .loginForm-container {
+        margin-top: 0;
+    }
+
+    .verticalLoginSeparator {
+        display: none;
+    }
+
+    .login-button-container {
+        clear: both;
+    }
+
+    .linkedIn-button {
+        margin-top: 20px;
+    }
+
+    .loginPanel {
+        float: none;
+    }
 }
 
 .registerBox {
@@ -431,6 +459,28 @@ textarea.bool-textarea {
     padding: 10px;
     resize: none;
 }
+
+
+/**
+Buttons
+**/
+.bool-toolbar-btn{
+    display: block;
+    margin: 10px 20px;
+    padding: 0 20px;
+    text-decoration: none;
+    cursor: pointer;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    font-family:  Arial,sans-serif;
+    border-radius: 4px;
+    color: #fff;
+    box-sizing: content-box;
+}
+.bool-toolbar-btn:hover {text-decoration: none;color: #fff;}
 
 /**
 Comments
