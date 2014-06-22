@@ -169,23 +169,22 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                     var messageText = 'Dear ' + req.body.data.invitedName + ', <br>' +
                         'You are invited for interviewing at <b>' + req.body.data.interviewDate + '</b><br/>' +
                         'Let we know whether you will come or not.<br/><br/>' +
-                        'Sincerely<br/>' +
-                        team.name;
+                        'Sincerely<br/>' + team.name;
 
-
+                    var emailBody = req.body.data.invitationMessage || '';
                     var message = {
-                        "html": req.body.data.invitationMessage,
-                        "text": req.body.data.invitationMessage ,
+                        "html": emailBody.replace('\n','<br/>'),
+                        "text": emailBody.replace('\n','\r\n') ,
                         "subject": "Interview Invitation",
-                        "from_email": "message.from_email@example.com",
-                        "from_name": "Booltin",
+                        "from_email": emailConfig.fromAddress,
+                        "from_name": team.name,
                         "to": [{
                             "email": req.body.data.invitedEmail,
-                            "name": "Recipient Name",
+                            "name": req.body.data.invitedName,
                             "type": "to"
                         }],
                         "headers": {
-                            "Reply-To": "message.reply@example.com"
+                            "Reply-To": emailConfig.replyAddress
                         }
                     };
 
@@ -194,7 +193,7 @@ app.post('/api/applications/:applicationID',  function(req,res) {
 
                         // 2- Send invitation email
                         // ToDo: Change base url
-                        message.html += '<a href="http://localhost:5000/applicant/message/view/1/' + invitation._id + '">Response to invitation</a>';
+                        message.html += '<br/></br><a href="'+ req.headers.origin +'/applicant/message/view/1/' + invitation._id + '">Click here to response to invitation</a>';
                         mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
 
                         // 3- Save new stage
@@ -227,22 +226,22 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                     var messageText = 'Dear ' + req.body.data.offeredName + ', <br>' +
                         'You are offered a job.<br/>' +
                         'Let we know whether you will accept or not.<br/><br/>' +
-                        'Sincerely<br/>' +
-                        team.name;
+                        'Sincerely<br/>' + team.name;
 
+                    var emailBody = req.body.data.invitationMessage || '';
                     var message = {
-                        "html": req.body.data.offerMessage,
-                        "text": req.body.data.offerMessage,
-                        "subject": "Job Offer",
-                        "from_email": "message.from_email@example.com",
-                        "from_name": "Booltin",
+                        "html": emailBody.replace('\n','<br/>'),
+                        "text": emailBody.replace('\n','\r\n') ,
+                        "subject": "Interview Invitation",
+                        "from_email": emailConfig.fromAddress,
+                        "from_name": team.name,
                         "to": [{
-                            "email": req.body.data.offeredEmail,
-                            "name": "Recipient Name",
+                            "email": req.body.data.invitedEmail,
+                            "name": req.body.data.invitedName,
                             "type": "to"
                         }],
                         "headers": {
-                            "Reply-To": "message.reply@example.com"
+                            "Reply-To": emailConfig.replyAddress
                         }
                     };
 
@@ -251,7 +250,7 @@ app.post('/api/applications/:applicationID',  function(req,res) {
 
                         // 2- Send invitation email
                         // ToDo: Change base url
-                        message.html += '<a href="http://localhost:5000/applicant/message/view/2/' + invitation._id + '">Response to the offer</a>';
+                        message.html += '<a href="' + req.headers.origin + '/applicant/message/view/2/' + invitation._id + '">Response to the offer</a>';
                         mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
 
                         // 3- Save new stage

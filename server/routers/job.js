@@ -480,7 +480,7 @@ app.post('/flyer/save', function(req,res){
         return;
     }
     var flyer = req.body.flyer;
-    var responder=req.body.responder;
+    var responder=req.body.responder||null;
     var commentators=req.body.commentators||[];
 
     if( !flyer.description || flyer.description.length == 0 )

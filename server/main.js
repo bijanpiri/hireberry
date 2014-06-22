@@ -14,6 +14,12 @@ dbclient.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
 var APP_ID = '4Femn58dGqOY09K6Mj7QjlhnqViEquBSRhf9N8LA';
 var MASTER_KEY = 'YhTSUbxy54XmnPfE3YqT0vc0tS0FCwO3IYtLPi4r';
 
+emailConfig = {
+    from: "Hireberry",
+    fromAddress: "job@hireberry.com",
+    replyAddress: "reply@hireberry.com"
+};
+
 Parse = require('parse').Parse;
 Parse.initialize(APP_ID,MASTER_KEY);
 
