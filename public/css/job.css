@@ -494,11 +494,11 @@ input[type='checkbox']:checked + .b-label-nodejs:hover {
     vertical-align: middle;
 }
 .applyNowButton {
-    margin: 30px auto;
-    display: block;
+    margin: 30px;
+    display: inline-block;
     font-family: "Roboto", 700;
-    font-size: 3em;
-    width: 60%;
+
+    width: 200px;
 }
 
 .btn3d {
@@ -1232,9 +1232,6 @@ Map & Address
 }
 
 @media (max-width: 480px) {
-    .applyNowButton {
-        font-size: 1.5em;
-    }
     .jobDescription h1 { font-size: 4em;}
     .jobDescription h3 { font-size: 2em;}
 }

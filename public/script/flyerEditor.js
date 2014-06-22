@@ -60,18 +60,17 @@ $(function() {
            .text( $(this).attr('data-font') );
     });
     $('.bool-thanks-message-save').click(function(){
-        flyer.thanksMessage=document.getElementById('ThanksMessageEditor').outerHTML;
         saveFlyer();
     });
     $('.bool-thanks-message-close').click(function() {
-        if(flyer.thanksMessage) {
-            $('#ThanksMessageEditor').replaceWith(flyer.thanksMessage);
+        if(thanksMessage) {
+            $('#ThanksMessageEditor').replaceWith(thanksMessage);
             prepareThanksMessage();
         }
         else
             $('#ThanksMessageEditor').empty();
     });
-        $('form').submit(false);
+    $('form').submit(false);
     if( viewMode=='embeded') {
         // Hidden bars
         $('nav').remove();
@@ -159,7 +158,7 @@ $(function() {
                         $('.portletThanksMessage').show();
                         $('.thanksMessageContent')
                             .html(
-                            $(flyer.thanksMessage)
+                            $(thanksMessage)
                                 .attr('id','')
                                 .attr('contenteditable','false'));
                     },
@@ -172,7 +171,7 @@ $(function() {
         });
     }
 });
-
+var thanksMessage;
 function loadFlyer() {
 
     flyerid = $('input[name=flyerid]').val();
@@ -193,9 +192,15 @@ function loadFlyer() {
                 document.title = flyer.description;
             else
                 document.title = 'Editor - ' + flyer.description;
+            $('[name="position-title"]').val(flyer.description);
             job.commentators.forEach(function(com){
                 $('.bool-commentator-users').append(createCommentatorItem(com));
             });
+            if(flyer.thanksMessage) {
+                document.getElementById('ThanksMessageEditor').outerHTML = flyer.thanksMessage;
+                thanksMessage=flyer.thanksMessage;
+                prepareThanksMessage();
+            }
 
             // Set current font
             $('.bool-portlet-dropdown-fonts .dropdown-menu [data-font-family="' + flyer.font + '"]').click();
@@ -234,7 +239,8 @@ function loadFlyer() {
                     minLength:0,
                     autoFocus:true
                 }).click(function(){
-                    list.toggle();
+                    if(list)
+                        list.toggle();
                 }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
                     return $('<li>').append(
                         $('<a>')
@@ -270,12 +276,10 @@ function loadTemplateChooser() {
 
     $('#templateModal').modal();
     $('#GoToEditor').click( function() {
-
         $('[name="position-title"]').val($('#flyerName1').val());
-
-        $('#templateModal').modal('hide');
-
         loadEditor();
+        $('#templateModal').modal('hide');
+        saveFlyer(function(){});
     })
 
 }
@@ -396,7 +400,7 @@ function GoToViewMode() {
             .attr('frameborder','0')
             .attr('width','100%')
             .attr('scrolling','no')
-            .attr('height', height )
+            .attr('height', height +100)
             .attr('hidden','hidden')
             .load( function() {
 
@@ -501,10 +505,11 @@ function saveFlyer(callback) {
     var btn=$('.bool-toolbar-btn-save');
     btn.button('loading');
 
+
     flyer.flyer2json(
         function(flyerjson){
             flyerjson.thumbnail = '';
-
+            thanksMessage=flyerjson.thanksMessage = document.getElementById('ThanksMessageEditor').outerHTML;
 
             flyerjson.description = $('[name="position-title"]').val();
 

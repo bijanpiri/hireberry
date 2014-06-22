@@ -135,7 +135,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
             existFlyer: existFlyer,
             userCanLeaveComment: true
         });
-    }
+    };
 
     var getLastFlyer = function() {
 
@@ -165,7 +165,8 @@ app.get('/flyer/:mode/:tid', function(req,res){
                 BFlyers({
                     owner: req.user.teamID,
                     creator: req.user._id,
-                    autoAssignedTo: req.user._id
+                    autoAssignedTo: req.user._id,
+                    flyer: {count:0}
                 }).save(function (err,newflyer) {
                         flyerid = newflyer._id;
                         res.cookie('flyerid',flyerid);

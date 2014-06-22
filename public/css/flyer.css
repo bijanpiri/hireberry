@@ -90,6 +90,7 @@ Whole Paper
     border-radius: 0 0 7px 7px;
     padding: 10px 0;
     display: block;
+    text-align: center;
 }
 .bool-edit-mode .portletSubmittion {
     display: none;
