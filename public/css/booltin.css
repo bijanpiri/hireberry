@@ -367,6 +367,7 @@ Modals
     text-decoration: none;
     color: #4C4C4C;
     width: 100%;
+    box-sizing: border-box;
 }
 .bool-combo-selected{
 
