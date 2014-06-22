@@ -65,11 +65,21 @@ BApplicationsView = Backbone.View.extend({
 
         $('#candidatesCollection .candidate').remove();
 
+        var stagesCounter = [0,0,0,0,0]; // total, pending, interview, offered, archived
+
         for( var i=0; i<candidates.length; i++ ) {
             var candidate = candidates[i];
             var candidateInstance = initCandidateInstance(candidate);
             $('#candidatesCollection').append( candidateInstance );
+
+            stagesCounter[0]++;
+            stagesCounter[candidate.stage.stage]++;
         }
+
+        // Show number of applications in each stage
+        $('#applications-filters label').each( function(i,e){
+            $(e).text( $(e).text() + '(' + stagesCounter[i] + ')' );
+        });
 
         return this;
     }

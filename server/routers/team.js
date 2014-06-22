@@ -82,9 +82,36 @@ app.post('/api/team/invite', function(req,res){
 
     var teamID = req.user.teamID;
     var invitedEmail = req.body.email;
-    var note=req.body.note;
+    var note = req.body.note;
     inviteToTeam( invitedEmail, teamID, note, function() {
-        res.send(200);
+
+        BTeams.findOne({_id:teamID}, function(err,team){
+
+            var emailBody = 'You are invited to join to ' + team.name + '<br/>' +
+                'Hiring manager of ' + team.name + ' has written this note for you:<br/>' +
+                '<br><div style="font-weight:700; border-left: 3px solid rgb(80, 162, 65);padding: 10px;margin: 10px; ">' + note.replace('\n','<br/>') + '</div>' +
+                '<br/><a href="' + req.headers.origin + '">Responde to this invitation</a>';
+
+            var message = {
+                "html": emailBody,
+                "text": emailBody ,
+                "subject": "Team Invitation",
+                "from_email": emailConfig.fromAddress,
+                "from_name": team.name,
+                "to": [{
+                    "email": invitedEmail,
+                    "name": '',
+                    "type": "to"
+                }],
+                "headers": {
+                    "Reply-To": emailConfig.replyAddress
+                }
+            };
+
+            mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
+
+            res.send(200);
+        });
     });
 
 });
