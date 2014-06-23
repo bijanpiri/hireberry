@@ -30,7 +30,8 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
                         templateID: 0,
                         editMode: false,
                         viewMode: "embeded",
-                        existFlyer: true
+                        existFlyer: true,
+                        userCanLeaveComment: false
                     });
                 });
     });
@@ -50,17 +51,19 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
     var renderNewFlyerView = function() {
 
-        res.render('flyerEditor.ejs',{
-            title:'Flyer Editor',
-            boards:[],
-            flyerid:flyerid,
-            templateID:templateID,
-            editMode: editMode,
-            viewMode: "fullpage",
-            existFlyer: existFlyer,
-            userCanLeaveComment: true
+        canCurrentUserLeaveComment( req.user._id, req.user.teamID, flyerid, function(err,canLeaveComment) {
+            res.render('flyerEditor.ejs',{
+                title:'Flyer Editor',
+                boards:[],
+                flyerid:flyerid,
+                templateID:templateID,
+                editMode: editMode,
+                viewMode: "fullpage",
+                existFlyer: existFlyer,
+                userCanLeaveComment: canLeaveComment
+            });
         });
-    };
+    }
 
     var getLastFlyer = function() {
 
@@ -79,14 +82,11 @@ app.get('/flyer/:mode/:tid', function(req,res){
                         renderNewFlyerView();
                 });
             });
-
-
         }
         else {          // Query String is empty
             flyerid = req.cookies.flyerid;
 
             if( !flyerid ) {        // Cookie is empty. So make a new flyer
-
                 BFlyers({
                     owner: req.user.teamID,
                     creator: req.user._id,
@@ -126,6 +126,10 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
 // Return all the created forms (template)
 app.get('/api/forms',  function(req,res){
+
+    if( !checkUser(req,res) )
+        return res.send(301);
+
     var teamID = req.user.teamID;
     var userID = req.user._id;
 
@@ -133,21 +137,31 @@ app.get('/api/forms',  function(req,res){
         if( err )
             return res.send(204);
 
-        if( count > 0 ) // Admin
-        // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
-            findFlyers({
-                owner: teamID,
-                $or:[
-                    {publishTime:{$ne:''}},
-                    {creator: userID},
-                    {askedForPublish:true}
-                ]
-            });
-        else    // Team member
-            findFlyers({owner: teamID, $or:[{autoAssignedTo:userID}]});
+        var isHM = ( count > 0 );
+
+        findFlyers({owner: teamID},isHM);
+        /*
+         if( count > 0 ) // Admin
+         // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
+         findFlyers({
+         owner: teamID,
+         $or:[
+         {publishTime:{$ne:''}}, // Published
+         {creator: userID},  // His-owned job
+         {askedForPublish:true} // Asked-for-Publish
+         ]
+         });
+         else    // Team member
+         findFlyers({owner: teamID, autoAssignedTo:userID});
+         */
     });
 
-    function findFlyers(query) {
+    /*
+     About Permission
+
+     */
+
+    function findFlyers(query,isHiringManager) {
 
         BFlyers.find(query).populate('creator owner autoAssignedTo').exec( function(err,flyers) {
             if( err )
@@ -164,12 +178,33 @@ app.get('/api/forms',  function(req,res){
                 else
                     currentMode = flyer.publishTime ? "published" : "drafted";
 
+                // Can current user leave a comment
+                var commentPermission = false;
+                var editPermission = false;
+                if(isHiringManager) {
+                    commentPermission = true;
+                    editPermission = true;
+                }
+                else if(flyer.autoAssignedTo && req.user._id.toString()===flyer.autoAssignedTo.toString() ) {
+                    commentPermission = true;
+                    editPermission = true;
+                }
+                else {
+                    var commentatorCount = flyer.commentators ? flyer.commentators.length : 0 ;
+                    for( var i=0; i<commentatorCount; i++ ) {
+                        if( flyer.commentators[i].toString() === req.user._id.toString() )
+                            commentPermission = true;
+                    }
+                }
+
                 return {
-                    formName:description,
-                    formID:flyer._id,
+                    formName: description,
+                    formID: flyer._id,
                     autoAssignedTo: flyer.autoAssignedTo,
                     creator: flyer.creator,
-                    mode: currentMode
+                    mode: currentMode,
+                    comment: commentPermission,
+                    edit: editPermission
                 }
             } );
 
@@ -229,19 +264,20 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
             .populate('commentators','_id displayName email')
             .populate('autoAssignedTo','_id displayName email')
             .exec( function(err,flyer){
-            if(err)
-                res.send('Oh oh error');
+                if(err)
+                    res.send('Oh oh error');
 
-            if(flyer)
-                res.send(
-                    {
-                        flyer:flyer.flyer,
-                        responder:flyer.autoAssignedTo,
-                        commentators:flyer.commentators
-                    });
-            else
-                res.send('404, Not Found! Yah!');
-        });
+                if(flyer)
+                    res.send(
+                        {
+                            flyer: flyer.flyer,
+                            responder: flyer.autoAssignedTo,
+                            commentators: flyer.commentators
+
+                        });
+                else
+                    res.send('404, Not Found! Yah!');
+            });
     }
     else { // Load a pre-built template
 
