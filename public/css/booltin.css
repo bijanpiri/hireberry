@@ -497,12 +497,18 @@ Comments
 }
 
 .portlet-commentsView {
-    position: relative;
     background: #BFBCAA;
     color: #6A685E;
     width: 300px;
-    height: 100%;
     font-size: 1.4em;
+    position: fixed;
+    bottom: 0;
+    top: 30px;
+}
+.bool-edit-mode .portlet-commentsView {
+    position: fixed;
+    top: 0;
+
 }
 
 .portlet-commentsView #buttonComment {
@@ -561,12 +567,18 @@ Comments
 .bool-comments {
     clear: both;
     list-style: none;
-    background-color: #FFFAE3;
     margin: 0 8px;
+    position: absolute;
+    overflow: auto;
+    bottom: 20px;
+    top: 250px;
+    left: 0;
+    right: 0;
 }
 
 .bool-comments li {
     padding: 16px;
+    background-color: #FFFAE3;
 }
 
 .bool-comments li .bool-comment-header {

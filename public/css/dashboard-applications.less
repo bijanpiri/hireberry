@@ -154,11 +154,16 @@
     }
 
     &.candidate-expanded {
-      width: 100%;
-      height: auto;
       box-shadow: none;
       -webkit-box-shadow: none;
-      margin-top: 0;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      right: 300px;
+      bottom: 0;
+      overflow: auto;
+      width:auto;
+      margin: 0;
 
       .bool-toggle-application {
         display: none;
