@@ -359,6 +359,8 @@ isHiringManager = function(teamID,userID,callback) {
     });
 }
 
+
+
 markCommentAsRead=function(userID, teamID, commentID, callback) {
 
     BComments.findOne({_id:commentID}, function(err,comment) {
