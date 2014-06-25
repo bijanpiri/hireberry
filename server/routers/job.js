@@ -432,18 +432,33 @@ app.post('/api/job/:jobID/comment', function(req,res) {
                 text: req.body.text,
                 date: new Date()
             }).save( function(err,newComment) {
-
-                    // ToDo: Implement Notification Strategy Here
-
-                    BJobComments.findOne({_id:newComment._id})
-                        .populate('user','displayName email')
-                        .exec(function(err,newComment) {
-                            res.send(200, newComment);
-                        });
-                });
+                // ToDo: Implement Notification Strategy Here
+                BJobComments.findOne({_id:newComment._id})
+                    .populate('user','displayName email')
+                    .exec(function(err,newComment) {
+                        res.send(200, newComment);
+                    });
+                notifyAllForJobComment(req.params.jobID,req.user._id);
+            });
         }
     });
 });
+function notifyAllForJobComment(jobID,commentator){
+    BFlyers.findOne({_id:jobID})
+        .exec(function(err,job){
+            var users={};
+            job.commentators.forEach(function(c){users[c]=true;});
+            users[job.autoAssignedTo]=true;
+            delete users[commentator];
+
+            var now=Date.now();
+            var notifs=Object.keys(users).map(
+                function(userId){
+                    return{time:now,visited:false,user:userId,job:jobID};});
+
+            notifs.forEach(function(not){BJobNotification(not).save();});
+        });
+}
 
 app.get('/api/job/:jobID/comments', function(req,res) {
     // Get all comments on this job
