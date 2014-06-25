@@ -98,20 +98,26 @@ checkUser=function(req,res){
     return req.user!=null;
 }
 
-gettingReady=function(userID,callback) {
+gettingReady=function(userID,promoCode,callback) {
 
     getUserTeam( userID, function(err,team) {
 
         if( !team ) {
             createTeam('MyTeam', function(err,team){
 
-                joinToTeam(userID,team._id, function() {
+                // Add credit if a promo code is existed
+                usePromoCode( team._id, promoCode, function() {
 
-                    changeRoleInTeam(userID,team._id,'admin', function(){
-                        callback();
+                    joinToTeam(userID,team._id, function() {
+
+                        changeRoleInTeam(userID,team._id,'admin', function(){
+                            callback();
+                        });
+
                     });
 
                 });
+
             });
         }
     })
@@ -352,14 +358,12 @@ isResponderOfJob = function(jobID,userID,callback) {
 
 isHiringManager = function(teamID,userID,callback) {
     BTeams.count( {_id:teamID,admin:userID}, function(err,count) {
-       if( err || count==0 )
+        if( err || count==0 )
             callback(err,false);
         else
             callback(null,true);
     });
 }
-
-
 
 markCommentAsRead=function(userID, teamID, commentID, callback) {
 
@@ -445,4 +449,149 @@ addEvent=function(what,when,who,by,callback) {
         contributors: who}).save( function(err) {
             callback();
         });
+}
+
+/** Promo Codes **/
+publicRegisterIsAllowed = function() {
+    return false;
+}
+
+checkPromoCode = function( code, callback ) {
+    // ToDo
+    BPromoCode.findOne({code:code}, function(err,promoCode) {
+        if( err || !promoCode )
+            return callback( {error:'There is not this promo code.'}, null );
+
+        if( promoCode.amount <= 0 )
+            return callback( {error:'All the promoCodes are used.'}, null );
+        else
+            return callback( null, promoCode );
+    });
+}
+
+usePromoCode = function( teamID, code, callback ) {
+    BPromoCode.update( { code:code, amount:{$gt:0} }, {$inc:{amount:-1}}, function(err) {
+        BPromoCode.findOne({code:code}, function(err,promoCode) {
+            addCredit( teamID, promoCode.credit, callback );
+        });
+    });
+}
+
+addPromoCode = function( code, credit, amount, permissionForResgiter, callback ) {
+    BPromoCode({
+        code: code,
+        credit: credit,
+        amount: amount,
+        permissionForRegister: permissionForResgiter
+    }).save( callback );
+}
+
+
+/*** Payments ***/
+plansCost = [0,1.00];
+
+function pay( teamID, amount, callback ) {
+
+    BTransactions( {teamID: teamID, state: 'init', method:'paypal' }).save( function(err,transaction) {
+
+        var create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:5000/paypal?success=true&tid=" + transaction._id,
+                "cancel_url": "http://localhost:5000/paypal?success=false&tid=" + transaction._id
+            },
+            "transactions": [{
+                "amount": {
+                    "currency": "USD",
+                    "total": amount
+                },
+                "description": "Increasing credit for {Team} in Booltin"
+            }]
+        };
+
+        paypal_api.payment.create(create_payment_json, paypal_config_opts, function (err, res) {
+            if (err)
+                callback(err);
+
+            if (res) {
+                BTransactions.update({_id:transaction._id},{state:'created',amount:amount,PAYToken:res.id}, function(err){
+                    for( var i=0; i<res.links.length; i++ )
+                        if( res.links[i].rel==='approval_url' )
+                            callback(null,res.links[i].href);
+                })
+
+            }
+        });
+    });
+}
+
+function generateInvoice(teamID, callback) {
+
+    BTeams.findOne({_id:teamID}, function(err,team) {
+
+        var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+        var today = new Date();
+        var lastRenew = new Date( team.planLastRenewDate );
+        var diffDays = Math.round(Math.abs((today.getTime() - lastRenew.getTime())/(oneDay)));
+        var plan = team.plan;
+
+        var amount = -1 * parseInt(100*( plansCost[plan]*(diffDays/31)))/100
+
+        BTransactions( {
+            teamID: teamID,
+            method: 'invoice',
+            amount: amount,
+            paymentTime: new Date()
+        }).save( function(err) {
+                BTeams.update({_id:teamID},{planLastRenewDate:new Date()}, function(err) {
+                    callback({error:err});
+                });
+            });
+
+    });
+}
+
+function changePlan( newPlan, teamID, callback ) {
+
+    generateInvoice(teamID, function() {
+
+        checkBalance( teamID, plansCost[newPlan] ,function(err, isOK) {
+            if(!err.error && isOK ) {
+                BTeams.update({_id:teamID},{plan:newPlan}, function(err) {
+                    callback({error:err});
+                });
+            } else {
+
+            }
+        })
+    });
+}
+
+function addCredit(teamID,value,callback) {
+
+    BTransactions( {
+        teamID: teamID,
+        method: 'promo',
+        amount: value,
+        paymentTime: new Date()
+    }).save( callback );
+
+}
+
+function checkBalance(teamID, minBalance, callback) {
+    BTransactions.find( {teamID: teamID, $or:[
+        {$and:[{method:'paypal'},{state:'sold'}]},
+        {method:'invoice'},
+        {method:'promo'}
+    ]}, function(err,transactions) {
+        var balance = 0;
+
+        for( var i=0; i<transactions.length; i++ )
+            balance += parseFloat(transactions[i].amount);
+
+        callback({error:null}, (balance >= minBalance) );
+    });
 }

@@ -31,6 +31,32 @@ twitter = new twitterAPI({
     callback: 'http://localhost:5000/'
 });
 
+/*
+About PromoCode:
+PromoCode must be sent by query string in login or register, like these:
+    /register?code=XXX
+    /login?code=XXX
+
+In register page, promoCode will be validate and then saved in cookie.
+If it isn't valid, page will be redirected to '/'.
+
+In login page, promoCode will be saved in cookie and just if user use 'Login with linkedIn'
+and it was the first time that user is logging in (user must be created in database), then
+promoCode will be validate and use.
+
+So:
+
+-Register page
+    --Have PromoCode (validate promoCode and save in cookie)
+        ---Register with password (use PromoCode)
+        ---Register with linkedIn (validate and use PromoCode)
+    --Not have PromoCode
+
+-Login page (save PromoCode)
+    --Have PromoCode
+        
+    --Not have PromoCode
+ */
 
 //region Configure every modules in everyauth
 everyauth.everymodule
@@ -60,7 +86,6 @@ everyauth.everymodule.handleLogout(function (req, res) {
     // res.send(200);
 });
 
-
 //region LinkedIn Authentication Configuration
 everyauth.linkedin
     .consumerKey(LINKEDIN_CONSUMER_KEY)
@@ -88,8 +113,21 @@ everyauth.linkedin
                 return promise.fail([err]);
 
             if(!user){
-                console.log("User Not Exist ... Creating ");
-                var newUser = BUsers({
+
+                // PromoCode
+                if( publicRegisterIsAllowed() == false ) { // Register just with code is allowed
+                    var code = session.req.cookies['promocode'];
+
+                    checkPromoCode(code, function(err,promoCode){
+                        if( err )
+                            return promise.fail([err]);
+                        else
+                            createNewUser();
+                    });
+                }
+
+                function createNewUser() {
+                    var newUser = BUsers({
                     email: linkedinUserMetadata.emailAddress,
                     displayName: linkedinUserMetadata.firstName + ' ' + linkedinUserMetadata.lastName,
                     linkedinname:linkedinUserMetadata.lastName,
@@ -97,15 +135,17 @@ everyauth.linkedin
                     linkedinAccessToken:accessToken,
                     linkedinAccessSecretToken:accessTokenSecret
                 });
-                newUser.save(function(err){
+                    newUser.save(function(err){
                     if(err)
                         promise.fail([err]);
                     else
-                        gettingReady( newUser._id, function() {
+                        gettingReady( newUser._id, session.req.cookies['promocode'], function() {
+                            session.req.res.cookie('promocode','');
                             promise.fulfill(newUser);
                         });
 
                 });
+                }
             } else {
                 promise.fulfill(user);
             }
@@ -123,17 +163,16 @@ everyauth.password
     .postLoginPath('/login')
     .loginView('login.ejs')
     .loginLocals( function (req, res, done) {
-        setTimeout( function () {
-            done(null, {
-                title: 'Login'
-            });
-        }, 200);
+        res.cookie('promocode',req.query.code);
+        setTimeout( function () { done(null, { title: 'Login'}); }, 200);
     })
     .respondToLoginSucceed( function (res, user) {
         if (user)
         {
             if(!res.req.cookies['bltn.persistent.login'] && res.req.body['RememberMe']=='on')
             {
+                // ToDo: Check this section again. I don't believe it !
+
                 //create token and save it in cookie;
                 var token = crypto.randomBytes(128).toString('base64');
 
@@ -147,9 +186,9 @@ everyauth.password
                         lastRequestDate: currentDate.toString(),
                         token:token
                     }).save(function(err,user){
-                        gettingReady( user._id, function() {
-                            console.log(user);
-                        });
+                        //gettingReady( user._id, function() {
+                        //    console.log(user);
+                        //});
                     });
                 res.setHeader('Set-Cookie', 'bltn.persistent.login='+user._doc.email+"&"+token+'; expires='+lastRequestDate.toString());
             }
@@ -275,16 +314,32 @@ everyauth.password
     .postRegisterPath('/register')
     .registerView('register.ejs')
     .registerLocals( function (req, res, done) {
-        setTimeout( function () {
-            done(null, {
-                title: 'Register'
+
+        //addPromoCode('test',100,20,true,function(){});
+
+        if( publicRegisterIsAllowed() == false ) { // Register just with code is allowed
+            var code = req.query.code;
+            if( !code )
+                return res.redirect('/');
+
+            checkPromoCode(code, function(err,promoCode){
+                if( err )
+                    return res.redirect('/');
+                else
+                    setTimeout( function () {
+                        res.cookie('promocode',code);
+                        done(null, { title: 'Register'});
+                    }, 200);
             });
-        }, 200);
+        }
+        else {
+            setTimeout( function () { done(null, { title: 'Register'}); }, 200);
+        }
     })
     .validateRegistration( function (newUserAttributes) {
         return null;
     })
-    .registerUser( function (newUserAttributes) {
+    .registerUser( function (newUserAttributes,extra) {
         var promise = this.Promise(),
             password=newUserAttributes.password;
 
@@ -308,7 +363,8 @@ everyauth.password
                                 password: dk,
                                 salt:salt
                             }).save(function(err,user){
-                                gettingReady( user._id, function() {
+                                gettingReady( user._id, extra.req.cookies['promocode'], function() {
+                                    extra.req.res.cookie('promocode','');
                                     promise.fulfill(user);
                                 });
                             });

@@ -147,7 +147,8 @@ BTransactions = mongoose.model( 'transactions', {
     state: String,
     PAYToken: String,
     ECToken: String,
-    payer: {}
+    payer: {},
+    method: String
 });
 
 BApplicantsResponses = mongoose.model( 'applicantsResponses', {
@@ -180,4 +181,11 @@ BAppliedByEmail = mongoose.model( 'appliedByEmail', {
     subject: String,
     text: String,
     resume: String
+});
+
+BPromoCode = mongoose.model( 'promoCodes', {
+    code: String,
+    credit: Number,
+    amount: Number,
+    permissionForRegister: Boolean
 });
