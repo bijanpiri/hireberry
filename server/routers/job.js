@@ -273,7 +273,6 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
                             flyer: flyer.flyer,
                             responder: flyer.autoAssignedTo,
                             commentators: flyer.commentators
-
                         });
                 else
                     res.send('404, Not Found! Yah!');
@@ -284,7 +283,11 @@ app.get('/flyer/:templateID/json/:id', function(req,res){
         var templates = require('../etc/templates.js');
 
         if( 0 < templateID && templateID < 10)
-            res.send( templates.FlyerTemplates[ templateID ] );
+            res.send({
+                flyer: templates.FlyerTemplates[ templateID ],
+                responder: undefined,
+                commentators: []
+            });
         else
             res.send(200)
     }

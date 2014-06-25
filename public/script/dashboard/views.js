@@ -7,10 +7,10 @@ BStatView = Backbone.View.extend({
         this.model.on('change', this.render, this);
     },
     render: function() {
-        $('.statisticsRow #numForms').text( this.model.get("numForms") )
-        $('.statisticsRow #numApplications').text( this.model.get("numApplications") )
-        $('.statisticsRow #numNewApplications').text( this.model.get("numNewApplications") )
-        $('.statisticsRow #numTodayApplications').text( this.model.get("numTodayApplications") )
+        $('.statisticsRow #statValue1').text( this.model.get("numForms") )
+        $('.statisticsRow #statValue4').text( this.model.get("numTeamMembers") )
+        $('.statisticsRow #statValue2').text( this.model.get("numPublished") )
+        $('.statisticsRow #statValue3').text( this.model.get("numApplications") )
         return this;
     }
 });

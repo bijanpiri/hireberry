@@ -21,35 +21,53 @@ app.get('/dashboard', function (req,res) {
 
 app.get('/api/applications/stat', function(req,res) {
 
-    var userID = req.user.teamID;
+    var teamID = req.user.teamID;
 
-    BFlyers.find({owner:userID}, function(err,flyers) {
+    BTeams.findOne({_id:teamID}, function(err,team) {
+        var membersCount = team.members.length;
 
-        var flyerIDList = flyers.map( function(flyer){return flyer._id});
+        BFlyers.find({owner:teamID}, function(err,flyers) {
 
-        BApplications.find( {flyerID:{$in:flyerIDList}}, function(err,applications) {
+            var flyerIDList = [];
+            var publishedCount = 0;
 
-            var numNewApplications = 0;
-            var numTodayApplication = 0;
+            for( var i=0; i<flyers.length; i++ ) {
 
-            for(var i=0; i<applications.length; i++ ) {
-                var activities = applications[i].activities;
-                if( activities && activities.length==1 )
-                    numNewApplications++
+                if( team.admin.toString()===req.user._id.toString() ||
+                    (flyers[i].autoAssignedTo && flyers[i].autoAssignedTo.toString() === req.user._id.toString()) )
+                    flyerIDList.push( flyers[i]._id );
 
-                var applicationDate = new Date( applications[i].applyTime );
-                var today = new Date();
-                if( today.toLocaleDateString() == applicationDate.toLocaleDateString() )
-                    numTodayApplication++;
+                if( !flyers[i].publishTime )
+                    publishedCount++;
             }
 
-            res.send({
-                numForms: flyers.length,
-                numApplications: applications.length,
-                numTodayApplications: numTodayApplication,
-                numNewApplications: numNewApplications
-            });
+            BApplications.find( {flyerID:{$in:flyerIDList}}, function(err,applications) {
 
-        })
-    });
+                var numNewApplications = 0;
+                var numTodayApplication = 0;
+
+                for( var i=0; i<applications.length; i++ ) {
+                    var activities = applications[i].activities;
+                    if( activities && activities.length==1 )
+                        numNewApplications++;
+
+                    var applicationDate = new Date( applications[i].applyTime );
+                    var today = new Date();
+                    if( today.toLocaleDateString() == applicationDate.toLocaleDateString() )
+                        numTodayApplication++;
+                }
+
+                res.send({
+                    numForms: flyers.length,
+                    numTeamMembers: membersCount,
+                    numPublished: publishedCount,
+                    numApplications: applications.length,
+                    numTodayApplications: numTodayApplication,
+                    numNewApplications: numNewApplications
+                });
+
+            })
+        });
+
+    })
 } )

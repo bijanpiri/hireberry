@@ -212,11 +212,11 @@
 }
 
 .statBox {
-    border-radius: 7px;
-    border: 3px solid green;
-    background-color: #fff;
+    border-left: 3px solid green;
+    background-color: #FFF;
     margin-bottom: 40px;
     padding: 0.5em;
+    box-shadow: 1px 1px 3px #BFBFBF;
 }
 
 .statBox .number {
