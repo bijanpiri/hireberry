@@ -172,10 +172,10 @@ BJobsView = Backbone.View.extend({
                     });
                     var draftOption = $('<button>').attr('name','draft').text('Draft').click( function() {
                         changeJobMode('draft')
-                    });;
+                    });
                     var askForPublishOption = $('<button>').attr('name','askForPublish').text('Ask for publish').click( function() {
                         changeJobMode('ask for publish')
-                    });;
+                    });
 
                     // ToDo: Use enumeration instead of string for comparing
                     var mode = form.mode.toLocaleLowerCase();
@@ -219,10 +219,17 @@ BJobsView = Backbone.View.extend({
                     e.stopPropagation();
                 });
 
+            var commentBtnObj = $('<i>')
+                .addClass('fa fa-comments');
+
             row.find('.colTitle').empty().append(titleObj);
             row.find('.colStatus').empty().append(stateObj);
             row.find('.colAssignedTo').empty().append(assigneeObj);
-            row.find('.colOperations').empty().append(settingBtnObj);
+
+            if( form.edit )
+                row.find('.colOperations').empty().append(settingBtnObj);
+            else if( form.comment )
+                row.find('.colOperations').empty().append(commentBtnObj);
 
             row.addClass('position').attr('id',form.formID).click( function() {
                 window.open('/flyer/edit/0?flyerid=' + form.formID);

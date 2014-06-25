@@ -132,7 +132,8 @@ BTransactions = mongoose.model( 'transactions', {
     state: String,
     PAYToken: String,
     ECToken: String,
-    payer: {}
+    payer: {},
+    method: String
 });
 
 BApplicantsResponses = mongoose.model( 'applicantsResponses', {
@@ -167,6 +168,7 @@ BAppliedByEmail = mongoose.model( 'appliedByEmail', {
     resume: String
 });
 
+
 function BNotificationSchema() {
     mongoose.Schema.apply(this, arguments);
 
@@ -191,4 +193,12 @@ BNotification=mongoose.model('notifs',new BNotificationSchema());
 
 BJobNotification=BNotification.discriminator('jobNotification',BJobNotificationSchema);
 BAppNotification=BNotification.discriminator('appNotification',BAppNotificationSchema);
+
+
+BPromoCode = mongoose.model( 'promoCodes', {
+    code: String,
+    credit: Number,
+    amount: Number,
+    permissionForRegister: Boolean
+});
 
