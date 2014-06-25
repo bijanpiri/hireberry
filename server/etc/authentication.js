@@ -53,9 +53,8 @@ So:
     --Not have PromoCode
 
 -Login page (save PromoCode)
-    --Have PromoCode
-        
-    --Not have PromoCode
+    --Have PromoCode ()
+    --Not have PromoCode ()
  */
 
 //region Configure every modules in everyauth

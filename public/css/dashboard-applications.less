@@ -117,6 +117,10 @@
       vertical-align: middle;
     }
 
+    .bool-edit-switch {
+      display: none;
+    }
+
     .value {
       + .bool-edit-switch a[op="edit"] {
         display: inline-block;
@@ -164,6 +168,11 @@
       overflow: auto;
       width:auto;
       margin: 0;
+
+      /* Edit buttons */
+      .bool-edit-switch {
+        display: inline-block;
+      }
 
       .bool-toggle-application {
         display: none;

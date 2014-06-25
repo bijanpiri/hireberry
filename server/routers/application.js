@@ -97,7 +97,7 @@ app.get('/api/applications', function (req,res) {
     }
 
     function fetchAssignedFlyers(callback) {
-        BFlyers.find({autoAssignedTo:userID}, function(err,flyers) {
+        BFlyers.find({ $or:[{autoAssignedTo:userID},{commentators:userID}] }, function(err,flyers) {
             var userFlyersID = flyers.map( function(flyer) { return flyer._id } );
             var teamFlyersName = flyers.map( function(flyer) { return flyer.name } );
             callback(userFlyersID,teamFlyersName)

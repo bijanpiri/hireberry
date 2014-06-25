@@ -419,7 +419,15 @@ function initCandidateInstance(candidate,expanded) {
         candidateObj.addClass('candidate-expanded');
 
     if( candidate.currentUser==='denied') {
-        candidateObj.find('.candidate-workflow').parent().remove();
+        var workflow_mbox = candidateObj.find('.candidate-workflow').parent();
+
+        workflow_mbox.empty().append('You do not have enough permission.');
+        workflow_mbox.css('text-align','center')
+            .css('font-size','1.8em')
+            .css('padding','1em 0')
+            .css('height','auto');
+
+        candidateObj.find('[op="edit"]').remove();
         candidateObj.find('.applicationAskForCommentButton').remove();
         candidateObj.find('.bool-application-comments').css('height','auto');
         candidateObj.find('.bool-application-activities').css('height','auto');
