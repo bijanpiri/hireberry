@@ -334,7 +334,7 @@ canCurrentUserLeaveComment = function(userID,teamID,jobID,callback) {
             if(err)
                 callback(err,false);
 
-            if( flyer.autoAssignedTo === userID || isHiringManager ) {
+            if( flyer.autoAssignedTo.toString() === userID.toString() || isHiringManager ) {
                 currentUserCanLeaveComment = true;
             } else {
                 for(var i=0; i<flyer.commentators.length; i++)
@@ -350,9 +350,9 @@ canCurrentUserLeaveComment = function(userID,teamID,jobID,callback) {
 isResponderOfJob = function(jobID,userID,callback) {
     BFlyers.count({_id:jobID,autoAssignedTo:userID}, function(err,count){
         if( err || count==0 )
-            callback(false);
+            callback(err,false);
         else
-            callback(true);
+            callback(null,true);
     })
 }
 

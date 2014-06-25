@@ -156,21 +156,22 @@ function initNotificationCenter() {
 
             var closeButtonObj = $('<button>')
                 .addClass('close')
-                .text('×')
+                .html('&times;')
                 .click(markAsReadCommentHandler);
 
-            if( newComment.applicationID ) {
+            if( newComment.app ) {
                 titleObj = $('<div>')
-                    .text(newComment.commenter.displayName + ' has left a new comment on ')
-                    .append( $('<a>').attr('applicationID',newComment.applicationID._id).text('this application')
+                    .text(newComment.user.displayName + ' has left a new comment on ')
+                    .append( $('<a>').attr('applicationID',newComment.app).text('this application')
+                    //ToDo: replace link references with real one
                         .click( function() {
                             showApplicationPreview( $(this).attr('applicationID') );
                         }));
             }
-            else {
+            else if(newComment.job ) {
                 titleObj = $('<div>')
-                    .text(newComment.commenter.displayName + ' has left a new comment on ')
-                    .append( $('<a>').attr('href','/flyer/embeded/' + newComment.formID._id).text('this form') );
+                    .text(newComment.user.displayName + ' has left a new comment on ')
+                    .append( $('<a>').attr('href','/flyer/view/0?flyerid=' + newComment.job).text('this form') );
             }
 
             var notifObj = $('<div>').attr('commentID',objID)

@@ -248,7 +248,7 @@
 :hover>.bool-icon-map-align-right{background-position: 0 -446px;height: 25px;width: 75px;}
 
 .bool-icon-rotate-right{background-position: 0 -321px;width: 25px;height: 25px;}
-.bool-icon-rotate-left{background-position: 0 -347px;width: 25px;height: 25px;}
+.bool-icon-rotate-left{background-position: 0 -346px;width: 25px;height: 25px;}
 .bool-icon-undo{background-position: 0 -262px;width: 25px;height: 17px;}
 .bool-icon-redo{background-position: 0 -278px;width: 25px;height: 17px;}
 .bool-icon-crop{background-position: 0 -295px;width: 26px;height: 26px;}
@@ -268,7 +268,7 @@
 :hover>.bool-icon-crop{background-position: -27px -295px;width: 26px;height: 26px;}
 
 .bool-disable>.bool-icon-undo{background-position: -26px -262px;width: 25px;height: 17px;}
-.bool-disable>.bool-icon-redo{background-position: -26px -278px;width: 25px;height: 17px;}
+.bool-disable>.bool-icon-redo{background-position: -25px -278px;width: 25px;height: 17px;}
 
 .bool-icon-size{
     background: url("/images/nflyer-icons.png");

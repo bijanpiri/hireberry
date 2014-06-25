@@ -190,19 +190,6 @@ app.get('/api/notifications', function(req,res) {
                     callback([]);
             });
     }
-
-    function getAksedForCommentOnForm(callback) {
-        getAskedForCommentForms(userID, teamID, function(err,forms) {
-            callback({forms:forms});
-        })
-    }
-
-    function getAskedForCommentOnApplication(callback) {
-        getAskedForCommentApplications(userID, teamID, function(err,applications) {
-            callback({applications:applications});
-        })
-    }
-
     function getNewMemberNotifications(callback) {
 
         // Are you hiring manager?
@@ -225,6 +212,17 @@ app.get('/api/notifications', function(req,res) {
                 callback(notifications)
             })
         });
+
+    }
+
+    function getCommentNotifications(callback){
+        BNotification
+            .find({visited:false,user:userID})
+            .sort('-time')
+            .populate('user','displayName email')
+            .exec(function(err,nots){
+                callback(nots);
+            })
 
     }
 
@@ -275,26 +273,20 @@ app.get('/api/notifications', function(req,res) {
             getAskedForPublishNotificatinos( function(notif) {
                 notifications.askedForPublish = notif;
 
-                getAksedForCommentOnForm( function(notif) {
-                    notifications.askedForCommentOnForms = notif;
+                getNewApplicantResponses( function(notif) {
+                    notifications.newResponses = notif;
 
-                    getAskedForCommentOnApplication( function(notif) {
-                        notifications.askedForCommentOnApplication = notif;
+                    getCommentNotifications(function(notif){
 
-                        getNewApplicantResponses( function(notif) {
-                            notifications.newResponses = notif;
+                        notifications.newComments=notif;
 
-                            getTeamInvitations( function(notif) {
-                                notifications.teamInvitations = notif;
-
-                                getNewFormCommentsNotifications( function(notif) {
-                                    notifications.newComments = notif;
-
-                                    res.send(200,notifications);
-                                })
-                            })
+                        getTeamInvitations( function(notif) {
+                            notifications.teamInvitations = notif;
+                            res.send(200,notifications);
                         })
+
                     })
+
                 })
             })
         })

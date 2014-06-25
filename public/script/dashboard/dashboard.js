@@ -400,7 +400,7 @@ function showApplicationPreview(applicationID) {
 
     $('#application-preview-dialog .bool-close-btn').unbind('click').click(function(){
         $('#application-preview-dialog').removeClass('open');
-        $('body').css('overflow','scroll'); // Retrieval main scroll bar
+
     });
 
     $('#application-preview-dialog').addClass('open');
