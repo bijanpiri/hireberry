@@ -314,7 +314,7 @@ everyauth.password
     .registerView('register.ejs')
     .registerLocals( function (req, res, done) {
 
-        //addPromoCode('test',100,20,true,function(){});
+        //addPromoCode('test',60,20,true,function(){});
 
         if( publicRegisterIsAllowed() == false ) { // Register just with code is allowed
             var code = req.query.code;

@@ -219,6 +219,13 @@
     box-shadow: 1px 1px 3px #BFBFBF;
 }
 
+.statBox a,
+.statBox a:hover,
+.statBox a:active {
+    display: block;
+    text-decoration: none;
+}
+
 .statBox .number {
     font-size: 2.5em;
     line-height: 1.6em;
