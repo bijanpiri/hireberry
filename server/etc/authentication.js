@@ -53,9 +53,8 @@ So:
     --Not have PromoCode
 
 -Login page (save PromoCode)
-    --Have PromoCode
-        
-    --Not have PromoCode
+    --Have PromoCode ()
+    --Not have PromoCode ()
  */
 
 //region Configure every modules in everyauth
@@ -115,16 +114,17 @@ everyauth.linkedin
             if(!user){
 
                 // PromoCode
-                if( publicRegisterIsAllowed() == false ) { // Register just with code is allowed
-                    var code = session.req.cookies['promocode'];
+                var code = session.req.cookies['promocode'];
 
-                    checkPromoCode(code, function(err,promoCode){
-                        if( err )
-                            return promise.fail([err]);
-                        else
-                            createNewUser();
-                    });
-                }
+                checkPromoCode(code, function(err,promoCode){
+                    if( publicRegisterIsAllowed() == false && err )
+                        return promise.fail([err]);
+                    else if(publicRegisterIsAllowed() == false && promoCode.permissionForRegister==true)
+                        createNewUser();
+                    else if(publicRegisterIsAllowed() == true)
+                        createNewUser();
+                });
+
 
                 function createNewUser() {
                     var newUser = BUsers({
@@ -140,7 +140,6 @@ everyauth.linkedin
                         promise.fail([err]);
                     else
                         gettingReady( newUser._id, session.req.cookies['promocode'], function() {
-                            session.req.res.cookie('promocode','');
                             promise.fulfill(newUser);
                         });
 
@@ -315,26 +314,22 @@ everyauth.password
     .registerView('register.ejs')
     .registerLocals( function (req, res, done) {
 
-        //addPromoCode('test',100,20,true,function(){});
+        //addPromoCode('test',60,20,true,function(){});
+        var code = req.query.code;
 
-        if( publicRegisterIsAllowed() == false ) { // Register just with code is allowed
-            var code = req.query.code;
-            if( !code )
+        if( publicRegisterIsAllowed() == false && !code)  // Register just with code is allowed
+            return res.redirect('/');
+
+        checkPromoCode(code, function(err,promoCode){
+            if( publicRegisterIsAllowed() == false && err )
                 return res.redirect('/');
-
-            checkPromoCode(code, function(err,promoCode){
-                if( err )
-                    return res.redirect('/');
-                else
-                    setTimeout( function () {
-                        res.cookie('promocode',code);
-                        done(null, { title: 'Register'});
-                    }, 200);
-            });
-        }
-        else {
-            setTimeout( function () { done(null, { title: 'Register'}); }, 200);
-        }
+            else if( publicRegisterIsAllowed() || ( !publicRegisterIsAllowed() && promoCode.permissionForRegister) ) {
+                setTimeout( function () {
+                    res.cookie('promocode',code);
+                    done(null, { title: 'Register'});
+                }, 200);
+            }
+        });
     })
     .validateRegistration( function (newUserAttributes) {
         return null;
@@ -364,7 +359,6 @@ everyauth.password
                                 salt:salt
                             }).save(function(err,user){
                                 gettingReady( user._id, extra.req.cookies['promocode'], function() {
-                                    extra.req.res.cookie('promocode','');
                                     promise.fulfill(user);
                                 });
                             });

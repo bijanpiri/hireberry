@@ -109,11 +109,7 @@ gettingReady=function(userID,promoCode,callback) {
                 usePromoCode( team._id, promoCode, function() {
 
                     joinToTeam(userID,team._id, function() {
-
-                        changeRoleInTeam(userID,team._id,'admin', function(){
-                            callback();
-                        });
-
+                        changeRoleInTeam(userID,team._id,'admin', callback);
                     });
 
                 });
@@ -198,8 +194,10 @@ inviteToTeam=function( invitedEmail, teamID, note, callback ) {
         team: teamID,
         note: note,
         time: new Date()})
-        .save( function(err) {
-            callback(err);
+        .save( function(err,invitation) {
+            addPromoCode(invitation._id, 0, 1, true, function() {
+                callback(err,invitation);
+            });
         })
 }
 
@@ -472,7 +470,10 @@ checkPromoCode = function( code, callback ) {
 usePromoCode = function( teamID, code, callback ) {
     BPromoCode.update( { code:code, amount:{$gt:0} }, {$inc:{amount:-1}}, function(err) {
         BPromoCode.findOne({code:code}, function(err,promoCode) {
-            addCredit( teamID, promoCode.credit, callback );
+            if( err || !promoCode)
+                callback(err,null);
+            else
+                addCredit( teamID, promoCode.credit, callback );
         });
     });
 }
@@ -490,7 +491,7 @@ addPromoCode = function( code, credit, amount, permissionForResgiter, callback )
 /*** Payments ***/
 plansCost = [0,1.00];
 
-function pay( teamID, amount, callback ) {
+pay = function( teamID, amount, callback ) {
 
     BTransactions( {teamID: teamID, state: 'init', method:'paypal' }).save( function(err,transaction) {
 
@@ -528,7 +529,7 @@ function pay( teamID, amount, callback ) {
     });
 }
 
-function generateInvoice(teamID, callback) {
+generateInvoice = function(teamID, callback) {
 
     BTeams.findOne({_id:teamID}, function(err,team) {
 
@@ -554,7 +555,7 @@ function generateInvoice(teamID, callback) {
     });
 }
 
-function changePlan( newPlan, teamID, callback ) {
+changePlan = function( newPlan, teamID, callback ) {
 
     generateInvoice(teamID, function() {
 
@@ -570,7 +571,7 @@ function changePlan( newPlan, teamID, callback ) {
     });
 }
 
-function addCredit(teamID,value,callback) {
+addCredit = function(teamID,value,callback) {
 
     BTransactions( {
         teamID: teamID,
@@ -581,7 +582,7 @@ function addCredit(teamID,value,callback) {
 
 }
 
-function checkBalance(teamID, minBalance, callback) {
+checkBalance = function(teamID, minBalance, callback) {
     BTransactions.find( {teamID: teamID, $or:[
         {$and:[{method:'paypal'},{state:'sold'}]},
         {method:'invoice'},

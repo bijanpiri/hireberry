@@ -261,7 +261,7 @@ function loadFlyer() {
                 };
             });
 
-
+            saveFlyer(function(){});
         }
     });
 }
@@ -278,7 +278,6 @@ function loadTemplateChooser() {
         $('[name="position-title"]').val($('#flyerName1').val());
         loadEditor();
         $('#templateModal').modal('hide');
-        saveFlyer(function(){});
     })
 
 }

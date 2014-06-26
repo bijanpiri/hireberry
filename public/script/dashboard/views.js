@@ -7,10 +7,10 @@ BStatView = Backbone.View.extend({
         this.model.on('change', this.render, this);
     },
     render: function() {
-        $('.statisticsRow #numForms').text( this.model.get("numForms") )
-        $('.statisticsRow #numApplications').text( this.model.get("numApplications") )
-        $('.statisticsRow #numNewApplications').text( this.model.get("numNewApplications") )
-        $('.statisticsRow #numTodayApplications').text( this.model.get("numTodayApplications") )
+        $('.statisticsRow #statValue1').text( this.model.get("numForms") )
+        $('.statisticsRow #statValue4').text( this.model.get("numTeamMembers") )
+        $('.statisticsRow #statValue2').text( this.model.get("numPublished") )
+        $('.statisticsRow #statValue3').text( this.model.get("numApplications") )
         return this;
     }
 });
@@ -219,6 +219,14 @@ BJobsView = Backbone.View.extend({
                     e.stopPropagation();
                 });
 
+
+            var PromoteBtnObj = $('<a>')
+                .addClass('fa fa-cogs')
+                .click( function(e) {
+                    window.location = '/flyer/promote/0/' + form.formID;
+                    e.stopPropagation();
+                });
+
             var commentBtnObj = $('<i>')
                 .addClass('fa fa-comments');
 
@@ -230,6 +238,9 @@ BJobsView = Backbone.View.extend({
                 row.find('.colOperations').empty().append(settingBtnObj);
             else if( form.comment )
                 row.find('.colOperations').empty().append(commentBtnObj);
+
+            // ToDo: just HM can see it
+            row.find('.colPromote').empty().append(PromoteBtnObj);
 
             row.addClass('position').attr('id',form.formID).click( function() {
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
@@ -374,7 +385,7 @@ BBillingView = Backbone.View.extend({
             var billingRow = $('<div>')
                 .append( $('<span>').text(date.toLocaleDateString()))
                 .append( $('<span>').text(billing.billings[i].amount))
-                .append( $('<span>').text(billing.billings[i].state));
+                .append( $('<span>').text(billing.billings[i].method));
 
             $('#billingsList').append( billingRow );
         }

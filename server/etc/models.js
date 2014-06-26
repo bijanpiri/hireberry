@@ -25,6 +25,12 @@ BPersistLogin= mongoose.model( 'persistentLogins', {
     token:Buffer
 });
 
+BPromoteInfo= mongoose.model( 'promote', {
+    totalPrice: Number,
+    jobBoards:[],
+    fylerID:String
+});
+
 BUsers = mongoose.model( 'users', {
     email: String,
     displayName: String,
@@ -152,7 +158,6 @@ BAppliedByEmail = mongoose.model( 'appliedByEmail', {
     resume: String
 });
 
-
 function BNotificationSchema() {
     mongoose.Schema.apply(this, arguments);
 
@@ -179,7 +184,6 @@ BNotification=mongoose.model('notifs',new BNotificationSchema());
 BJobNotification=BNotification.discriminator('job',BJobNotificationSchema);
 BAppNotification=BNotification.discriminator('app',BAppNotificationSchema);
 
-
 BPromoCode = mongoose.model( 'promoCodes', {
     code: String,
     credit: Number,
@@ -204,4 +208,3 @@ BComments=mongoose.model('comments',new BCommentSchema());
 
 BJobComments=BComments.discriminator('job',BJobCommentsSchema);
 BAppComments=BComments.discriminator('app',BAppCommentsSchema);
-

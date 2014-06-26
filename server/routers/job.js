@@ -9,6 +9,109 @@ app.get('/flyer/new',function(req,res){
     res.redirect('/flyer/editor/0');
 });
 
+var getCash= function(fylerID,callback){
+    callback(500);
+};
+
+app.post('/flyer/submitpromote',function(req,res){
+
+
+    getCash(req.body.fylerID,function(cash){
+        var TotalPayment=req.body.JobBoardInfo.TotalPayment;
+        if(TotalPayment>cash)
+        {
+            res.send(300,"The chash is not enough.");
+        }
+        else
+        {
+            BPromoteInfo(
+                {
+                    totalPrice: req.body.JobBoardInfo.TotalPayment,
+                    jobBoards:req.body.JobBoardInfo.SelectedJobBoards,
+                    fylerID:req.body.fylerID
+                }).save(function(err,data){
+                    if(err)
+                        res.send(502,{error:err});
+                    else
+                        res.send(200,{message:"Process successfully done."});
+                });
+        }
+    });
+
+
+
+});
+
+
+app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
+
+    var flyerid = req.params.flyerID;
+    var templateID = req.params.templateID;
+
+    getFlyerInfo(flyerid,templateID,function(err,flyer,autoAssignedTo,commentators,data){
+
+         if(err)
+             res.send(err);
+         else if(flyer)
+         {
+
+            extractPromoteInfo(flyer,function(PromoteInfo)
+            {
+                res.render('promote.ejs',
+                    {title:'Promote',
+                        FlyerID:flyerid,
+                        PositionTitle:PromoteInfo.positionTitle,
+                        Logo:PromoteInfo.logo,
+                        Address:PromoteInfo.address,
+                        Skills:PromoteInfo.skills,
+                        Description:PromoteInfo.description,
+                        WorkCondition :PromoteInfo.workCondition,
+                        JobLink: "http://localhost:5000/flyer/embeded/"+flyerid
+                    });
+            });
+        }
+        else
+            res.send(data);
+    });
+});
+
+var extractPromoteInfo= function (flyer,callback)
+{
+
+    var PromoteInfo=new Object();
+    PromoteInfo.positionTitle=flyer.description;
+    PromoteInfo.logo=flyer.logo;
+    PromoteInfo.address="";
+    PromoteInfo.skills="";
+    PromoteInfo.description="";
+    PromoteInfo.workCondition="";
+
+    if(flyer.widgets)
+    {
+        for(var i=0;i<flyer.widgets.length;i++)
+        {
+            switch(flyer.widgets[i].type) {
+                case "1":  //text
+                    PromoteInfo.description=flyer.widgets[i].Contents.text;
+                    break;
+                case "6":  //map
+                    PromoteInfo.address=flyer.widgets[i].Contents.address;
+                    break;
+                case "8":  //text
+                    PromoteInfo.workCondition=flyer.widgets[i].Contents.work;
+                    break;
+                case "14":  //skill
+                    PromoteInfo.skills=flyer.widgets[i].Contents;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    callback(PromoteInfo);
+}
+
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
     console.log( "In: " + req.headers['referer'] )
@@ -251,44 +354,72 @@ app.delete('/api/job/:flyerID', function(req,res){
 
 });
 
-app.get('/flyer/:templateID/json/:id', function(req,res){
-
+var getFlyerInfo= function(flyerid,templateID,callback){
     //if(!checkUser(req,res))
     //    return;
 
-    var flyerid = req.params.id;
-    var templateID = req.params.templateID;
+    /*var flyerid = req.params.id;
+    var templateID = req.params.templateID;*/
 
     if( templateID==0 ) { // Load stored flyer
-        BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
+            BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
             .populate('commentators','_id displayName email')
             .populate('autoAssignedTo','_id displayName email')
             .exec( function(err,flyer){
-                if(err)
-                    res.send('Oh oh error');
-
-                if(flyer)
-                    res.send(
-                        {
-                            flyer: flyer.flyer,
-                            responder: flyer.autoAssignedTo,
-                            commentators: flyer.commentators
-
-                        });
-                else
-                    res.send('404, Not Found! Yah!');
-            });
+            if(err)
+                return  callback('Oh oh error',null,null);
+                //res.send('Oh oh error');
+            if(flyer)
+            {
+                callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
+            }
+            else
+                callback( null,null,undefined,[],'404, Not Found! Yah!');
+        });
     }
     else { // Load a pre-built template
 
         var templates = require('../etc/templates.js');
 
         if( 0 < templateID && templateID < 10)
-            res.send( templates.FlyerTemplates[ templateID ] );
+        {
+            callback( null,  templates.FlyerTemplates[ templateID ],undefined,[],null);
+
+            /*res.send({
+             flyer: templates.FlyerTemplates[ templateID ],
+             responder: undefined,
+             commentators: []
+             });*/
+        }
         else
-            res.send(200)
+            callback( null,null,undefined,[],200);
     }
+}
+
+app.get('/flyer/:templateID/json/:id', function(req,res)
+{
+    var flyerid = req.params.flyerID;
+    var templateID = req.params.templateID;
+
+    getFlyerInfo(flyerid,templateID,function(err,flyer,autoAssignedTo,commentators,data){
+
+        if(err)
+            res.send(err);
+        else if(data)
+            res.send(data);
+        else
+        {
+            res.send(
+                {
+                    flyer: flyer.flyer,
+                    responder: flyer.autoAssignedTo,
+                    commentators: flyer.commentators
+                });
+        }
+
+    });
 });
+
 
 app.post('/flyer/publish', function(req,res){
 
@@ -469,11 +600,13 @@ app.post('/api/job/:jobID/comment', function(req,res) {
                     text: req.body.text,
                     date: new Date()
                 }).save( function(err,newComment) {
+
                     // ToDo: Implement Notification Strategy Here
                     BJobComments.findOne({_id:newComment._id})
                         .populate('user','displayName email')
                         .exec(function(err,newComment) {
                             res.send(200, newComment);
+
                             notifyAllForJobComment(req.params.jobID,newComment);
                         });
                 });

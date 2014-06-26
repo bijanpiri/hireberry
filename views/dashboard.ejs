@@ -79,23 +79,31 @@
 <div id="overviewp" class="container-fluid sectionContainer">
     <div class="row-fluid statisticsRow">
         <div class="span3 statBox">
-            <div class="number" id="numForms"></div>
-            <div class="text">Open Position</div>
+            <a onclick="window.location='#jobsp'">
+                <div class="text">Jobs</div>
+                <div class="number" id="statValue1"></div>
+            </a>
         </div>
 
         <div class="span3 statBox">
-            <div class="number" id="numApplications"></div>
-            <div class="text">Applications</div>
+            <a onclick="window.location='#jobsp'">
+                <div class="text">Open Jobs</div>
+                <div class="number" id="statValue2"></div>
+            </a>
         </div>
 
         <div class="span3 statBox">
-            <div class="number" id="numNewApplications"></div>
-            <div class="text">Unvisited Applications</div>
+            <a onclick="window.location='#applicationsp'">
+                <div class="text">Applications</div>
+                <div class="number" id="statValue3"></div>
+            </a>
         </div>
 
         <div class="span3 statBox">
-            <div class="number" id="numTodayApplications"></div>
-            <div class="text">Today Applications</div>
+            <a onclick="window.location='#teamp'">
+                <div class="text">Team Members</div>
+                <div class="number" id="statValue4"></div>
+            </a>
         </div>
     </div>
     <div class="row-fluid">
@@ -187,6 +195,7 @@
         <div class="span2 colStatus">Status</div>
         <div class="span3 colAssignedTo">Responder</div>
         <div class="span2 colOperations"></div>
+        <div class="span2 colPromote"></div>
     </div>
 
 </div>
