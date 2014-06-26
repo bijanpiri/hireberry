@@ -49,10 +49,11 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
     var templateID = req.params.templateID;
 
     getFlyerInfo(flyerid,templateID,function(err,flyer,autoAssignedTo,commentators,data){
-        if(err)
-            res.send(err);
-        else if(flyer)
-        {
+
+         if(err)
+             res.send(err);
+         else if(flyer)
+         {
 
             extractPromoteInfo(flyer,function(PromoteInfo)
             {
@@ -71,7 +72,6 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
         }
         else
             res.send(data);
-
     });
 });
 
@@ -359,33 +359,31 @@ var getFlyerInfo= function(flyerid,templateID,callback){
     //    return;
 
     /*var flyerid = req.params.id;
-     var templateID = req.params.templateID;*/
+    var templateID = req.params.templateID;*/
 
     if( templateID==0 ) { // Load stored flyer
 
-        BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
+            BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
             .populate('commentators','_id displayName email')
             .populate('autoAssignedTo','_id displayName email')
             .exec( function(err,flyer){
-                if(err)
-                    return  callback('Oh oh error',null,null);
+            if(err)
+                return  callback('Oh oh error',null,null);
                 //res.send('Oh oh error');
-                if(flyer)
-                {
-                    callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
-                    /*res.send(
-                     {
-                     flyer: flyer.flyer,
-                     responder: flyer.autoAssignedTo,
-                     commentators: flyer.commentators
-
+            if(flyer)
+            {
+                callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
+                /*res.send(
+                    {
+                        flyer: flyer.flyer,
+                        responder: flyer.autoAssignedTo,
+                        commentators: flyer.commentators
                      });*/
 
                 }
                 else
                     callback( null,null,undefined,[],'404, Not Found! Yah!');
-                //res.send('404, Not Found! Yah!');
-            });
+        });
     }
     else { // Load a pre-built template
 
@@ -403,7 +401,6 @@ var getFlyerInfo= function(flyerid,templateID,callback){
         }
         else
             callback( null,null,undefined,[],200);
-        //res.send(200)
     }
 }
 

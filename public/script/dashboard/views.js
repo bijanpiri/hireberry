@@ -230,17 +230,22 @@ BJobsView = Backbone.View.extend({
             var commentBtnObj = $('<i>')
                 .addClass('fa fa-comments');
 
+            var PromoteBtnObj = $('<a>')
+                .addClass('fa fa-cogs')
+                .click( function(e) {
+                    window.location = '/flyer/promote/0/' + form.formID;
+                    e.stopPropagation();
+                });
 
-            row.find('.colTitle').empty().append(titleObj);
-            row.find('.colStatus').empty().append(stateObj);
-            row.find('.colAssignedTo').empty().append(assigneeObj);
-
-            row.find('.colPromote').empty().append(PromoteBtnObj);
 
             if( form.edit )
                 row.find('.colOperations').empty().append(settingBtnObj);
             else if( form.comment )
                 row.find('.colOperations').empty().append(commentBtnObj);
+
+            // ToDo: just HM can see it
+            row.find('.colPromote').empty().append(PromoteBtnObj);
+
 
             row.addClass('position').attr('id',form.formID).click( function() {
                 window.open('/flyer/edit/0?flyerid=' + form.formID);

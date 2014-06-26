@@ -25,6 +25,12 @@ BPersistLogin= mongoose.model( 'persistentLogins', {
     token:Buffer
 });
 
+BPromoteInfo= mongoose.model( 'promote', {
+    totalPrice: Number,
+    jobBoards:[],
+    fylerID:String
+});
+
 BUsers = mongoose.model( 'users', {
     email: String,
     displayName: String,
