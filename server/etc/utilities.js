@@ -198,8 +198,10 @@ inviteToTeam=function( invitedEmail, teamID, note, callback ) {
         team: teamID,
         note: note,
         time: new Date()})
-        .save( function(err) {
-            callback(err);
+        .save( function(err,invitation) {
+            addPromoCode(invitation._id, 0, 1, true, function() {
+                callback(err,invitation);
+            });
         })
 }
 
