@@ -362,7 +362,6 @@ var getFlyerInfo= function(flyerid,templateID,callback){
     var templateID = req.params.templateID;*/
 
     if( templateID==0 ) { // Load stored flyer
-
             BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
             .populate('commentators','_id displayName email')
             .populate('autoAssignedTo','_id displayName email')
