@@ -9,25 +9,19 @@ app.get('/flyer/new',function(req,res){
     res.redirect('/flyer/editor/0');
 });
 
-var getCash= function(fylerID,callback){
-    callback(500);
-};
+
 
 app.post('/flyer/submitpromote',function(req,res){
 
+    var TotalPayment=req.body.jobBoardInfo.TotalPayment;
+    checkBalance(req.body.teamID,TotalPayment,function(err,isOk){
 
-    getCash(req.body.fylerID,function(cash){
-        var TotalPayment=req.body.JobBoardInfo.TotalPayment;
-        if(TotalPayment>cash)
-        {
-            res.send(300,"The chash is not enough.");
-        }
-        else
+        if(isOk==true)
         {
             BPromoteInfo(
                 {
-                    totalPrice: req.body.JobBoardInfo.TotalPayment,
-                    jobBoards:req.body.JobBoardInfo.SelectedJobBoards,
+                    totalPrice: req.body.jobBoardInfo.TotalPayment,
+                    jobBoards:req.body.jobBoardInfo.SelectedJobBoards,
                     fylerID:req.body.fylerID
                 }).save(function(err,data){
                     if(err)
@@ -35,6 +29,10 @@ app.post('/flyer/submitpromote',function(req,res){
                     else
                         res.send(200,{message:"Process successfully done."});
                 });
+        }
+        else
+        {
+            res.send(300,"The chash is not enough.");
         }
     });
 
@@ -411,9 +409,9 @@ app.get('/flyer/:templateID/json/:id', function(req,res)
         {
             res.send(
                 {
-                    flyer: flyer.flyer,
-                    responder: flyer.autoAssignedTo,
-                    commentators: flyer.commentators
+                    flyer: flyer,
+                    responder: autoAssignedTo,
+                    commentators:commentators
                 });
         }
 

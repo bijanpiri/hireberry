@@ -346,8 +346,7 @@ var logo='<%= Logo %>';
 var positionTitle='<%=PositionTitle%>';
 var description='<%=Description%>';
 var companyName='';
-
-
+var teamID='';
 
 
 $(document).ready( function() {
@@ -358,8 +357,12 @@ $(document).ready( function() {
         dataType: 'json',
         success: function(data) {
             companyName=data.name;
+            teamID=data._id;
         }
-    });
+    })                .fail(function(data) {
+alert(data);
+            });
+
 
     $("#ln-promote").attr("href","http://www.linkedin.com/shareArticle?mini=true&url="
             +jobLink.replace(' ','%20')+
@@ -397,6 +400,8 @@ $(document).ready( function() {
     }
 
     $("#btn-promote-payment").click(function() {
+        var ml = $('#payment-action-dialog');
+        ml.find("#error-msg").text("");
         var rst=  getSelectedJobBorads();
         $.ajax({
             url:'/flyer/submitpromote',
@@ -404,18 +409,51 @@ $(document).ready( function() {
             dataType: 'json',
             data :
             {
-                fylerID:flyerID,
-                JobBoardInfo:rst
+                flyerID:flyerID,
+                teamID:teamID,
+                jobBoardInfo:rst
             },
             success: function(data) {
-                alert(data.message);
-            }
 
+                var ml = $('#payment-action-dialog');
+                ml.find('.container-fluid').empty();
+                for(var i=0;i<rst.SelectedJobBoards.length;i++)
+                {
+                    ml.find('.container-fluid').append($('<span>').text(rst.SelectedJobBoards[i].Name));
+                    ml.find('.container-fluid').append($('<p>').text("$ "+rst.SelectedJobBoards[i].Price  ));
+                    ml.find('.container-fluid').append( $('<hr>'));
+                }
+                ml.find('.container-fluid').append($('<span>').text("Total"));
+                ml.find('.container-fluid').append($('<p>').text("$ "+rst.TotalPayment ));
+
+                ml.modal();
+                ml.find('.modal-footer').empty();
+                ml.find('.modal-footer').append($('<button>')
+                        .addClass("btn btn-primary")
+                        .attr('data-dismiss','modal')
+                        .attr('aria-hidden','true').text("Cancel"));
+                ml.find('.modal-footer').append($('<button>')
+                        .addClass("btn btn-primary")
+                        .attr('data-dismiss','modal')
+                        .attr('aria-hidden','true').text("Confirm").click(function()
+                        {
+                           alert(data.message);
+                        }));
+            }
         })
                 .fail(function(data) {
-                    alert(data.responseText);
+                    var ml = $('#payment-action-dialog');
+                    ml.find('.container-fluid').empty();
+                    ml.find('.container-fluid').append($('<span>').text("Message"));
+                    ml.find('.container-fluid').append($('<p>').text(data.responseText));
+                    ml.find('.modal-footer').empty();
+                    ml.find('.modal-footer').append($('<button>')
+                            .addClass("btn btn-primary")
+                            .attr('data-dismiss','modal')
+                            .attr('aria-hidden','true').text("Close"));
+                    ml.modal();
                 });
-        //alert(rst.TotalPayment+"\nJob board count : " +rst.SelectedJobBorads.length);
+
     });
 
     $(".job-boards").find(":input[type=checkbox]").click(function() {
@@ -606,6 +644,24 @@ $(document).ready( function() {
 
 <div id="div-total-payment" >
     $ 0.00
+</div>
+
+
+<div id="payment-action-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="header-label">Payment</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+
+        </div>
+    </div>
+    <div class="modal-footer">
+<!--        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button id="btn-confirm" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Confirm</button>-->
+    </div>
 </div>
 
 
