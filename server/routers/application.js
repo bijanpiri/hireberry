@@ -306,7 +306,6 @@ app.post('/api/application/:appID/visitedState',function(req,res){
     BApplications.findOne({_id:appID})
         .populate('flyerID')
         .exec( function(err,application){
-
         // Check whether user is responder of job or not
         if( application.flyerID.autoAssignedTo.toString() === userID.toString() ) {
             BApplications.update({_id:appID},{visited:visitedState}, function(err) {
@@ -335,17 +334,23 @@ app.post('/api/comments/mark-as-read',function(req,res){
     });
 });
 
-function notifyAllForAppComment(app,commentator) {
+function notifyAllForAppComment(app,comment) {
     var job=app.flyerID;
     var users={};
     job.commentators.forEach(function(c){users[c]=true;});
     users[job.autoAssignedTo]=true;
-    delete users[commentator];
+    delete users[comment.user._id];
 
     var now=Date.now();
     var notifs=Object.keys(users).map(
         function(userId){
-            return {time:now,visited:false,user:userId,app:app._id};
+            return {
+                time:now,
+                visited:false,
+                user:userId,
+                comment:comment,
+                editor:comment.user,
+                app:app._id};
         });
 
     notifs.forEach(function(not){BAppNotification(not).save();});
@@ -363,22 +368,22 @@ app.post('/api/application/:appID/comment', function(req,res) {
             function(err,can){
 
                 if(!err && can) {
-                    BApplicationComments({
+                    BAppComments({
                         team: req.user.teamID,
                         user: req.user._id,
-                        application: req.params.appID,
+                        app: req.params.appID,
                         text: req.body.text,
                         date: new Date()
                     }).save( function(err,newComment) {
 
                         // ToDo: Implement Notification Strategy Here
 
-                        BApplicationComments.findOne({_id:newComment._id})
+                        BAppComments.findOne({_id:newComment._id})
                             .populate('user','displayName email')
                             .exec(function(err,newComment) {
                                 res.send(200, newComment);
+                                notifyAllForAppComment(application,newComment);
                             });
-                        notifyAllForAppComment(application,req.user._id);
                     });
                 }
             });
@@ -394,8 +399,10 @@ app.get('/api/application/:appID/comments', function(req,res) {
 
         canCurrentUserLeaveComment(req.user._id,req.user.teamID,application.flyerID,function(err,can){
             if(!err && can) {
-                BApplicationComments.find({application: req.params.appID})
+                BAppComments.find({app: req.params.appID})
                     .populate('user','displayName email')
+                    .populate('comment','user text')
+                    .populate('comment.user','displayName email')
                     .exec(function(err,comments) {
                         res.send(200,{comments:comments});
                     });

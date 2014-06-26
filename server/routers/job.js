@@ -459,38 +459,45 @@ app.post('/api/team/form/assign', function(req,res){
 
 app.post('/api/job/:jobID/comment', function(req,res) {
     // Add a new comment on this job
-    canCurrentUserLeaveComment(req.user._id,req.user.teamID,req.params.jobID,function(err,can){
-        if(!err && can) {
-            BJobComments({
-                team: req.user.teamID,
-                user: req.user._id,
-                job: req.params.jobID,
-                text: req.body.text,
-                date: new Date()
-            }).save( function(err,newComment) {
-                // ToDo: Implement Notification Strategy Here
-                BJobComments.findOne({_id:newComment._id})
-                    .populate('user','displayName email')
-                    .exec(function(err,newComment) {
-                        res.send(200, newComment);
-                    });
-                notifyAllForJobComment(req.params.jobID,req.user._id);
-            });
-        }
+    canCurrentUserLeaveComment(req.user._id,req.user.teamID,req.params.jobID,
+        function(err,can){
+            if(!err && can) {
+                BJobComments({
+                    team: req.user.teamID,
+                    user: req.user._id,
+                    job: req.params.jobID,
+                    text: req.body.text,
+                    date: new Date()
+                }).save( function(err,newComment) {
+                    // ToDo: Implement Notification Strategy Here
+                    BJobComments.findOne({_id:newComment._id})
+                        .populate('user','displayName email')
+                        .exec(function(err,newComment) {
+                            res.send(200, newComment);
+                            notifyAllForJobComment(req.params.jobID,newComment);
+                        });
+                });
+            }
     });
 });
-function notifyAllForJobComment(jobID,commentator){
+function notifyAllForJobComment(jobID,comment){
     BFlyers.findOne({_id:jobID})
         .exec(function(err,job){
             var users={};
             job.commentators.forEach(function(c){users[c]=true;});
             users[job.autoAssignedTo]=true;
-            delete users[commentator];
-
+            delete users[comment.user._id];
             var now=Date.now();
             var notifs=Object.keys(users).map(
                 function(userId){
-                    return{time:now,visited:false,user:userId,job:jobID};});
+                    return {
+                        time:now,
+                        visited:false,
+                        user:userId,
+                        comment:comment._id,
+                        editor:comment.user,
+                        job:jobID};}
+            );
 
             notifs.forEach(function(not){BJobNotification(not).save();});
         });
@@ -502,6 +509,8 @@ app.get('/api/job/:jobID/comments', function(req,res) {
         if(!err && can) {
             BJobComments.find({job: req.params.jobID})
                 .populate('user','displayName email')
+                .populate('comment','user text')
+                .populate('comment.user','displayName email')
                 .exec(function(err,comments) {
                     res.send(200,{comments:comments});
                 });

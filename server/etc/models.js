@@ -62,22 +62,6 @@ BFlyers = mongoose.model( 'flyers', {
     commentators: [{type : mongoose.Schema.ObjectId, ref : 'users'}]
 });
 
-BJobComments = mongoose.model( 'job-comments', {
-    user: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    text: String,
-    date: Date,
-    job: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
-    team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
-});
-
-BApplicationComments = mongoose.model( 'application-comments', {
-    user: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    text: String,
-    date: Date,
-    application: {type : mongoose.Schema.ObjectId, ref : 'applications'},
-    team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
-});
-
 BTeams = mongoose.model( 'teams', {
     name: String,
     admin: {type : mongoose.Schema.ObjectId, ref : 'users'},
@@ -175,8 +159,9 @@ function BNotificationSchema() {
     this.add({
         time: Date,
         visited: Boolean,
-//        comment: {type:mongoose.Schema.ObjectId,ref:''}, //ToDo: add comments to data
-        user:{type:mongoose.Schema.ObjectId,ref:'users'}
+        comment:{type:mongoose.Schema.ObjectId,ref:'comments'},
+        user:{type:mongoose.Schema.ObjectId,ref:'users'},
+        editor:{type:mongoose.Schema.ObjectId,ref:'users'}
     });
 }
 util.inherits(BNotificationSchema, mongoose.Schema);
@@ -191,8 +176,8 @@ var BAppNotificationSchema =
 
 BNotification=mongoose.model('notifs',new BNotificationSchema());
 
-BJobNotification=BNotification.discriminator('jobNotification',BJobNotificationSchema);
-BAppNotification=BNotification.discriminator('appNotification',BAppNotificationSchema);
+BJobNotification=BNotification.discriminator('job',BJobNotificationSchema);
+BAppNotification=BNotification.discriminator('app',BAppNotificationSchema);
 
 
 BPromoCode = mongoose.model( 'promoCodes', {
@@ -201,4 +186,22 @@ BPromoCode = mongoose.model( 'promoCodes', {
     amount: Number,
     permissionForRegister: Boolean
 });
+
+function BCommentSchema(){
+    mongoose.Schema.apply(this,arguments);
+    this.add({
+        user: {type : mongoose.Schema.ObjectId, ref : 'users'},
+        text: String,
+        date: Date,
+        team: {type : mongoose.Schema.ObjectId, ref : 'teams'}
+    });
+}
+util.inherits(BCommentSchema, mongoose.Schema);
+var BJobCommentsSchema=new BCommentSchema({job: {type : mongoose.Schema.ObjectId, ref : 'flyers'}})
+var BAppCommentsSchema=new BCommentSchema({app: {type : mongoose.Schema.ObjectId, ref : 'applications'}});
+
+BComments=mongoose.model('comments',new BCommentSchema());
+
+BJobComments=BComments.discriminator('job',BJobCommentsSchema);
+BAppComments=BComments.discriminator('app',BAppCommentsSchema);
 

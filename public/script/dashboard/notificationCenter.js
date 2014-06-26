@@ -148,9 +148,9 @@ function initNotificationCenter() {
         }
     }
 
-    function showNewComments(newComments) {
-        newComments.forEach( function(newComment) {
-            var objID = newComment._id;
+    function showNewComments(notifs) {
+        notifs.forEach( function(notif) {
+            var objID = notif._id;
 
             var titleObj;
 
@@ -159,19 +159,22 @@ function initNotificationCenter() {
                 .html('&times;')
                 .click(markAsReadCommentHandler);
 
-            if( newComment.app ) {
+            if( notif.app ) {
                 titleObj = $('<div>')
-                    .text(newComment.user.displayName + ' has left a new comment on ')
-                    .append( $('<a>').attr('applicationID',newComment.app).text('this application')
+                    .text(notif.editor.displayName + ' has left a new comment on ')
+                    .append( $('<a>').attr('applicationID',notif.app).text('this application')
+
                     //ToDo: replace link references with real one
                         .click( function() {
                             showApplicationPreview( $(this).attr('applicationID') );
-                        }));
+                        }))
+                    .append(': "'+notif.comment.text+'"');
             }
-            else if(newComment.job ) {
+            else if(notif.job ) {
                 titleObj = $('<div>')
-                    .text(newComment.user.displayName + ' has left a new comment on ')
-                    .append( $('<a>').attr('href','/flyer/view/0?flyerid=' + newComment.job).text('this form') );
+                    .text(notif.editor.displayName + ' has left a new comment on ')
+                    .append($('<a>').attr('href','/flyer/view/0?flyerid=' + notif.job).text('this form'))
+                    .append(': "'+notif.comment.text+'"');
             }
 
             var notifObj = $('<div>').attr('commentID',objID)

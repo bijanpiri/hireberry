@@ -14,7 +14,6 @@ var teamMembers = [];
 $(function() {
 
     //$(document).tooltip();
-
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
         $('.bool-portlet').css('background',c);
     });

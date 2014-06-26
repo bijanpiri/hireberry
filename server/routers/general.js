@@ -219,7 +219,9 @@ app.get('/api/notifications', function(req,res) {
         BNotification
             .find({visited:false,user:userID})
             .sort('-time')
+            .populate('comment','text')
             .populate('user','displayName email')
+            .populate('editor','displayName email')
             .exec(function(err,nots){
                 callback(nots);
             })
