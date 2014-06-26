@@ -4,6 +4,9 @@
 
 // region General
 app.get('/', function(req,res) {
+
+    res.cookie('promocode','');
+
     if( req.user )
         res.redirect('/dashboard#overviewp');
     else

@@ -91,7 +91,7 @@ app.post('/api/team/invite', function(req,res){
                 'Hiring manager of ' + team.name + ' has written this note for you:<br/>' +
                 '<br><div style="font-weight:700; border-left: 3px solid rgb(80, 162, 65);padding: 10px;margin: 10px; ">' + note.replace('\n','<br/>') + '</div>' +
                 '<br/>Your promo code is: <a href="' + req.headers.origin + '/register?code=' + invitation._id + '">' + invitation._id + '</a>' +
-                '<br/><a href="' + req.headers.origin + '">Responde to this invitation</a>';
+                '<br/><a href="' + req.headers.origin + '">Go to Hireberry</a>';
 
             var message = {
                 "html": emailBody,

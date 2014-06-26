@@ -68,8 +68,8 @@ module.exports = app;
 
 models = require('./etc/models');
 dashboardRouters = require('./routers/dashboard');
-billing = require('./routers/billing');
 utilitiesRouters = require('./etc/utilities');
+billing = require('./routers/billing');
 jobRouters = require('./routers/job');
 generalRouters = require('./routers/general');
 teamRouters = require('./routers/team');

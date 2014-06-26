@@ -385,7 +385,7 @@ BBillingView = Backbone.View.extend({
             var billingRow = $('<div>')
                 .append( $('<span>').text(date.toLocaleDateString()))
                 .append( $('<span>').text(billing.billings[i].amount))
-                .append( $('<span>').text(billing.billings[i].state));
+                .append( $('<span>').text(billing.billings[i].method));
 
             $('#billingsList').append( billingRow );
         }

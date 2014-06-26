@@ -13,7 +13,6 @@ paypal_config_opts = {
 paypal_api.configure(paypal_config_opts);
 
 
-
 app.get('/pay', function(req,res) {
     pay( req.user.teamID, req.query.amount, function(err, approval_url) {
         if( !err )
@@ -34,7 +33,7 @@ app.get('/api/billing', function(req,res) {
             balance += parseFloat(transactions[i].amount);
 
             if( Math.abs(transactions[i].amount) > 0 )
-                billings.push( { state:transactions[i].state, time: transactions[i].paymentTime, amount:transactions[i].amount} );
+                billings.push( { method: transactions[i].method, state:transactions[i].state, time: transactions[i].paymentTime, amount:transactions[i].amount} );
         }
 
         BTeams.findOne({_id:req.user.teamID}, function(err,team){
