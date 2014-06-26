@@ -373,16 +373,9 @@ var getFlyerInfo= function(flyerid,templateID,callback){
             if(flyer)
             {
                 callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
-                /*res.send(
-                    {
-                        flyer: flyer.flyer,
-                        responder: flyer.autoAssignedTo,
-                        commentators: flyer.commentators
-                     });*/
-
-                }
-                else
-                    callback( null,null,undefined,[],'404, Not Found! Yah!');
+            }
+            else
+                callback( null,null,undefined,[],'404, Not Found! Yah!');
         });
     }
     else { // Load a pre-built template
