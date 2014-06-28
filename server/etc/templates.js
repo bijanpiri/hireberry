@@ -2,7 +2,7 @@
  * Created by coybit on 3/29/14.
  */
 var template1 = {
-    "description" : "UntitledWed Jun 25 2014",
+    "description" : "Web Developer",
     "background" : "rgb(162, 216, 122) none repeat scroll 0% 0% / auto padding-box border-box",
     "canvasColor" : "rgb(241, 241, 241) none repeat scroll 0% 0% / auto padding-box border-box",
     "logo" : "/uploads/3129858277.png",

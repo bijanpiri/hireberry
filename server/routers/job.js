@@ -45,13 +45,14 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
 
     var flyerid = req.params.flyerID;
     var templateID = req.params.templateID;
+    var userID = req.user._id;
 
-    getFlyerInfo(flyerid,templateID,function(err,flyer,autoAssignedTo,commentators,data){
+    getFlyerInfo(userID,flyerid,templateID,function(err,flyer,autoAssignedTo,commentators,data){
 
-         if(err)
-             res.send(err);
-         else if(flyer)
-         {
+        if(err)
+            res.send(err);
+        else if(flyer)
+        {
 
             extractPromoteInfo(flyer,function(PromoteInfo)
             {
@@ -286,7 +287,7 @@ app.get('/api/forms',  function(req,res){
                     commentPermission = true;
                     editPermission = true;
                 }
-                else if(flyer.autoAssignedTo && req.user._id.toString()===flyer.autoAssignedTo.toString() ) {
+                else if(flyer.autoAssignedTo && req.user._id.toString()===flyer.autoAssignedTo._id.toString() ) {
                     commentPermission = true;
                     editPermission = true;
                 }
@@ -352,54 +353,45 @@ app.delete('/api/job/:flyerID', function(req,res){
 
 });
 
-var getFlyerInfo= function(flyerid,templateID,callback){
+var getFlyerInfo= function(userID,flyerid,templateID,callback){
     //if(!checkUser(req,res))
     //    return;
 
-    /*var flyerid = req.params.id;
-    var templateID = req.params.templateID;*/
 
     if( templateID==0 ) { // Load stored flyer
-            BFlyers.findOne({_id:flyerid,publishTime:{$ne:''}})
+        BFlyers.findOne({_id:flyerid})
             .populate('commentators','_id displayName email')
             .populate('autoAssignedTo','_id displayName email')
             .exec( function(err,flyer){
-            if(err)
-                return  callback('Oh oh error',null,null);
+                if(err)
+                    return  callback('Oh oh error',null,null);
                 //res.send('Oh oh error');
-            if(flyer)
-            {
-                callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
-            }
-            else
-                callback( null,null,undefined,[],'404, Not Found! Yah!');
-        });
+                if(flyer)
+                {
+                    callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
+                }
+                else
+                    callback( null,null,undefined,[],'404, Not Found! Yah!');
+            });
     }
     else { // Load a pre-built template
 
         var templates = require('../etc/templates.js');
 
         if( 0 < templateID && templateID < 10)
-        {
-            callback( null,  templates.FlyerTemplates[ templateID ],undefined,[],null);
-
-            /*res.send({
-             flyer: templates.FlyerTemplates[ templateID ],
-             responder: undefined,
-             commentators: []
-             });*/
-        }
+            callback( null, templates.FlyerTemplates[ templateID ], userID, [], null );
         else
-            callback( null,null,undefined,[],200);
+            callback( null, null, userID, [], 200);
     }
 }
 
-app.get('/flyer/:templateID/json/:id', function(req,res)
+app.get('/flyer/:templateID/json/:flyerID', function(req,res)
 {
+    var userID = req.user._id;
     var flyerid = req.params.flyerID;
     var templateID = req.params.templateID;
 
-    getFlyerInfo(flyerid,templateID,function(err,flyer,autoAssignedTo,commentators,data){
+    getFlyerInfo(userID,flyerid,templateID,function(err,flyer,autoAssignedTo,commentators,data){
 
         if(err)
             res.send(err);
@@ -411,7 +403,11 @@ app.get('/flyer/:templateID/json/:id', function(req,res)
                 {
                     flyer: flyer,
                     responder: autoAssignedTo,
+<<<<<<< HEAD
                     commentators:commentators
+=======
+                    commentators: commentators
+>>>>>>> Bug Fixing
                 });
         }
 

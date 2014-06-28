@@ -20,6 +20,13 @@ BCalendarView = Backbone.View.extend({
     el: $('#full-clndr'),
     initialize: function() {
         this.model.on('change', this.render, this);
+
+        $(function(){
+                $('#full-clndr').clndr({
+                    template: $('#full-clndr-template').html(),
+                    events:  []
+                });
+        });
     },
     render: function() {
         // Event Format: [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
@@ -103,6 +110,10 @@ BJobsView = Backbone.View.extend({
 
             $('.applications-filter-job').append( $('<option>').text(form.formName).attr('formID',form.formID) );
 
+            // Trick
+            if(form.mode==='drafted')
+                form.mode = 'Inactive';
+
             var row = $('#jobsp .positionsHeaderRow')
                 .clone()
                 .removeClass('positionsHeaderRow');
@@ -135,10 +146,12 @@ BJobsView = Backbone.View.extend({
                     // Initializing modal fields
                     var modal = $('#job-setting-dialog');
                     var flyer;
+                    var commentators = [];
 
                     $.get('/flyer/0/json/'+form.formID)
                         .done(function(data){
                             flyer = data.flyer;
+                            commentators = data.commentators.map( function(c){return c._id} );
 
                             modal.find('#jobTitle').val( flyer.description );
                         });
@@ -170,7 +183,7 @@ BJobsView = Backbone.View.extend({
                     var publishOption = $('<button>').attr('name','publish').text('Publish').click( function() {
                         changeJobMode('publish')
                     });
-                    var draftOption = $('<button>').attr('name','draft').text('Draft').click( function() {
+                    var draftOption = $('<button>').attr('name','draft').text('Inactive').click( function() {
                         changeJobMode('draft')
                     });
                     var askForPublishOption = $('<button>').attr('name','askForPublish').text('Ask for publish').click( function() {
@@ -203,11 +216,15 @@ BJobsView = Backbone.View.extend({
 
                     modal.find('.saveButton').click( function() {
                         var responderID = $('[name=jobResponder]').val();
-                        $.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
+                        //$.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
 
                         flyer.description = modal.find('#jobTitle').val();
 
-                        $.post('/flyer/save',{flyer:flyer});
+                        $.post('/flyer/save',{
+                            flyer: flyer,
+                            responder: responderID,
+                            commentators: commentators // Now user can't change commentators in setting modal
+                        });
 
                         modal.modal('hide');
 
@@ -221,7 +238,7 @@ BJobsView = Backbone.View.extend({
 
 
             var PromoteBtnObj = $('<a>')
-                .addClass('fa fa-cogs')
+                .addClass('fa fa-paper-plane')
                 .click( function(e) {
                     window.location = '/flyer/promote/0/' + form.formID;
                     e.stopPropagation();
@@ -234,13 +251,13 @@ BJobsView = Backbone.View.extend({
             row.find('.colStatus').empty().append(stateObj);
             row.find('.colAssignedTo').empty().append(assigneeObj);
 
-            if( form.edit )
+            if( form.edit ) {
                 row.find('.colOperations').empty().append(settingBtnObj);
+                row.find('.colPromote').empty().append(PromoteBtnObj);
+            }
             else if( form.comment )
                 row.find('.colOperations').empty().append(commentBtnObj);
 
-            // ToDo: just HM can see it
-            row.find('.colPromote').empty().append(PromoteBtnObj);
 
             row.addClass('position').attr('id',form.formID).click( function() {
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
