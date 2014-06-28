@@ -84,6 +84,7 @@ $(function() {
             loadEditor();
         else
             loadTemplateChooser();
+
     }
     else {
         $('.flyerRow').show();

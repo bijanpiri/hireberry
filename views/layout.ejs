@@ -12,14 +12,14 @@
     <link href='/css/google.api.font.css' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="/bootstrap/tagsinput/bootstrap-tagsinput.css">
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
 
     <script src="/bootstrap/js/jquery.js"></script>
 
     <script src="/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
 
     <script src="/bootstrap/tagsinput/bootstrap-tagsinput.js"></script>
 
@@ -29,6 +29,9 @@
 
     <script src="/bootstrap/js/typeahead.js"></script>
     <script src="/bootstrap/js/hogan-2.0.0.js"></script>
+
+    <script src="/script/bootstrap-tour.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap-tour.css">
 
     <link rel="stylesheet" href="/css/booltin.css">
     <link rel="stylesheet" href="/css/buttons.css">
@@ -145,8 +148,64 @@
 </head>
 <body>
 
-<nav class="navbar navbar-fixed-top bool-navbar">
-    <div class="navbar-inner">
+<nav class="bool-navbar navbar-inner navbar-wrapper navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'Home']);">
+                <i class="mainSpritImage booltinBrandLogo"></i>
+                <i class="mainSpritImage booltinBrandLogoType"></i>
+            </a>
+
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Link</a></li>
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+    <div class="navbar-inner" style="display: none;">
         <div class="container">
             <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
             <a class="btn-navbar" style="background: none;" data-toggle="collapse" data-target=".nav-collapse">
@@ -199,7 +258,7 @@
                             <i class="fa fa-plus"></i> New Job
                         </a></li>
                     <li class="navbar-dropdown">
-                        <a href="#" class="dropdown-toggle navbar-button" data-toggle="dropdown">
+                        <a href="#" id="userNotifications" class="dropdown-toggle navbar-button" data-toggle="dropdown">
                             Notifications
                             <span id="comments_badge"></span>
                         </a>

@@ -20,6 +20,33 @@ _.templateSettings = {
     evaluate: /\{\%(.+?)\%\}/g
 };
 
+function initTour() {
+
+    var tour = new Tour({
+        steps: [
+            {
+                element: $("#createFlyerButton"),
+                title: "Title of my step",
+                placement: "left",
+                content: "Content of my step"
+            },
+            {
+                element: $("#userNotifications"),
+                title: "Title of my step",
+                placement: "bottom",
+                content: "Content of my step"
+            }
+        ],
+        backdrop:true
+//        template:$('.popovers').html()
+    });
+
+// Initialize the tour
+    tour.init();
+
+// Start the tour
+    tour.start(true);
+}
 $(function(){
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
@@ -28,6 +55,7 @@ $(function(){
     initTeamPage();
     initApplicationPage();
     initBillingPage();
+    initTour();
 
     $('button[data-loading-text]').click(function(){
         var btn=$(this);
