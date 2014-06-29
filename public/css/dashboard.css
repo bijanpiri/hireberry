@@ -213,9 +213,9 @@
 
 .statBox {
     border-left: 3px solid green;
-    background-color: #FFF;
+    background-color: #ebebeb;
     margin-bottom: 40px;
-    padding: 0.5em;
+    padding: 0.5em 1.5em;
     box-shadow: 1px 1px 3px #BFBFBF;
 }
 

@@ -384,12 +384,18 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
                     newStage = ( response==="YES") ? {stage:2,subStage:3} : {stage:2,subStage:2}
 
                 if( response==="YES" ){
-                    addEvent('Interview with ' + message.applicationID.stage.invitedName,
+                    updateEvent(message.event,
+                        'Interview with ' + message.applicationID.stage.invitedName,
                         message.applicationID.stage.interviewDate,
                         message.applicationID.stage.interviewer,
-                        message.applicationID.stage.interviewTeam, function() {})
+                        message.applicationID.stage.interviewTeam,
+                        false,
+                        message.applicationID, function() {});
 
                     // ToDo: Notify responder & HM
+                }
+                else {
+                    deleteEvent(message.event, function(){});
                 }
             }
             else if(messageType==='2' ) { // Job offer

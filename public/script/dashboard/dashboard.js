@@ -407,6 +407,7 @@ function initWorkflow(candidateObj,candidate) {
             data:data
         }).done( function(res) {
                 changeWorkflowStage(candidateObj,candidate,newStage,newSubStage);
+                applications.fetch();
             });
     }
 }
