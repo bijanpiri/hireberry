@@ -23,16 +23,16 @@ function initTour(){
     var tour = new Tour({
         steps: [
             {
-                element: "#createFlyerButton",
-                title: "Title of my step",
-                content: "Content of my step",
-                container:"#navbar-container",
-                backdrop:true
-            },
-            {
                 element: "#switchButton ",
                 title: "Change current team",
                 content: "You can use multiple teams and chage your current team with this button",
+                container:"body",
+                backdrop:true
+            },
+            {
+                element: "#createFlyerButton",
+                title: "Title of my step",
+                content: "Content of my step",
                 container:"#navbar-container",
                 backdrop:true
             },
@@ -49,8 +49,13 @@ function initTour(){
 // Initialize the tour
     tour.init();
 
-// Start the tour
+
     tour.start(true);
+// Start the tour
+    tour.goTo(0);
+    $(window).resize(function(){
+        tour.goTo(tour.getCurrentStep())
+    })
 }
 $(function(){
     $('[data-toggle="tooltip"]').tooltip();
