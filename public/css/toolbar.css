@@ -313,7 +313,7 @@
 .bool-color-dropdown-white{z-index: 2000;}
 
 .nav-pills .bool-color-dropdown{
-    z-index: 21000  ;
+    z-index: 1200  ;
 }
 
 .nav-pills .open>.bool-color-dropdown{
