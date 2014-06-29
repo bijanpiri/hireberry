@@ -191,7 +191,6 @@ Portlet Creator
 }
 .bool-add-widget{
     margin: 0;
-    padding: 0;
     position: relative;
     text-align: center;
 }
@@ -208,7 +207,6 @@ Portlet Creator
     margin: 10px 0 40px 0;
     background: inherit;
     width: 240px;
-    padding: 0;
 }
 .bool-toolbar-options>li {
 
