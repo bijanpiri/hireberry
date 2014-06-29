@@ -176,7 +176,6 @@ BJobsView = Backbone.View.extend({
                         });
                     });
 
-
                     // Current Status
                     modal.find('.jobStatus-current').text(form.mode);
                     modal.find('.jobStatus-next').empty();
@@ -214,9 +213,8 @@ BJobsView = Backbone.View.extend({
                         });
                     }
 
-                    modal.find('.saveButton').click( function() {
+                    modal.find('.saveButton').unbind('click').click( function() {
                         var responderID = $('[name=jobResponder]').val();
-                        //$.post('/api/team/form/assign',{formID:form.formID,userID:responderID}).done( function() {});
 
                         flyer.description = modal.find('#jobTitle').val();
 

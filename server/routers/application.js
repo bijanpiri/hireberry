@@ -496,7 +496,7 @@ function canCurrentUserAceessApplciation(userID, appID, callback) {
                 return callback(err,false,null);
 
             var teamID = flyer.owner.admin;
-            var responderID = flyer.autoAssignedTo;
+            var responderID = flyer.autoAssignedTo || '';
 
             if( userID.toString()===teamID.toString() || userID.toString()===responderID.toString())
                 return callback(null,true,application);

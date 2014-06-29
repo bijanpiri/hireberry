@@ -9,8 +9,6 @@ app.get('/flyer/new',function(req,res){
     res.redirect('/flyer/editor/0');
 });
 
-
-
 app.post('/flyer/submitpromote',function(req,res){
 
     var TotalPayment=req.body.jobBoardInfo.TotalPayment;
@@ -39,7 +37,6 @@ app.post('/flyer/submitpromote',function(req,res){
 
 
 });
-
 
 app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
 
@@ -74,8 +71,7 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
     });
 });
 
-var extractPromoteInfo= function (flyer,callback)
-{
+var extractPromoteInfo= function (flyer,callback) {
 
     var PromoteInfo=new Object();
     PromoteInfo.positionTitle=flyer.description;
@@ -113,12 +109,13 @@ var extractPromoteInfo= function (flyer,callback)
 
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
-    console.log( "In: " + req.headers['referer'] )
+    var userID = req.user ? req.user._id.toString() : undefined;
 
-    BFlyers.count({_id:req.params.flyerID,publishTime:{$ne:''}} , function(err,count) {
-        if( err || count==0 )
+    BFlyers.findOne({_id:req.params.flyerID} , function(err,flyer) {
+        if( err || !flyer  )
             res.send(404);
-        else
+        else if( flyer.publishTime!=='' || (flyer.autoAssignedTo && userID===flyer.autoAssignedTo.toString()) ){ // Published or is owner
+
             BVisitStat({
                 referer: req.headers['referer'],
                 visitedUrl: req.url,
@@ -126,6 +123,7 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
                 visitorIP: req.ip, //OR req.headers['x-forwarded-for'] || req.connection.remoteAddress,
                 flyerID: req.params.flyerID
             }).save( function(err) {
+
                     res.render('flyerEditor.ejs',{
                         title:'Job',
                         flyerid: req.params.flyerID,
@@ -135,7 +133,9 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
                         existFlyer: true,
                         userCanLeaveComment: false
                     });
+
                 });
+        }
     });
 
 });
@@ -365,9 +365,9 @@ var getFlyerInfo= function(userID,flyerid,templateID,callback){
             .exec( function(err,flyer){
                 if(err)
                     return  callback('Oh oh error',null,null);
-                //res.send('Oh oh error');
-                if(flyer)
-                {
+
+                if(flyer){
+                    flyer.flyer.flyerid = flyer._id; // For fixing a problem (when flyer is created recently and just has count:0 field)
                     callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
                 }
                 else
@@ -403,11 +403,7 @@ app.get('/flyer/:templateID/json/:flyerID', function(req,res)
                 {
                     flyer: flyer,
                     responder: autoAssignedTo,
-<<<<<<< HEAD
                     commentators:commentators
-=======
-                    commentators: commentators
->>>>>>> Bug Fixing
                 });
         }
 
@@ -595,17 +591,17 @@ app.post('/api/job/:jobID/comment', function(req,res) {
                     date: new Date()
                 }).save( function(err,newComment) {
 
-                    // ToDo: Implement Notification Strategy Here
-                    BJobComments.findOne({_id:newComment._id})
-                        .populate('user','displayName email')
-                        .exec(function(err,newComment) {
-                            res.send(200, newComment);
+                        // ToDo: Implement Notification Strategy Here
+                        BJobComments.findOne({_id:newComment._id})
+                            .populate('user','displayName email')
+                            .exec(function(err,newComment) {
+                                res.send(200, newComment);
 
-                            notifyAllForJobComment(req.params.jobID,newComment);
-                        });
-                });
+                                notifyAllForJobComment(req.params.jobID,newComment);
+                            });
+                    });
             }
-    });
+        });
 });
 function notifyAllForJobComment(jobID,comment){
     BFlyers.findOne({_id:jobID})
