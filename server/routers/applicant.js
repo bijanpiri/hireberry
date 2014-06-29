@@ -388,7 +388,7 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
                         'Interview with ' + message.applicationID.stage.invitedName,
                         message.applicationID.stage.interviewDate,
                         message.applicationID.stage.interviewer,
-                        message.applicationID.stage.interviewTeam, false, function() {});
+                        message.applicationID.stage.interviewTeam, false, message.applicationID, function() {});
 
                     // ToDo: Notify responder & HM
                 }

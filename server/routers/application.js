@@ -194,7 +194,7 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                     var contributor = [req.user._id];
 
                     // 0- Add a temp event
-                    addEvent( title, time, contributor,  teamID, true, function(err, event) {
+                    addEvent( title, time, contributor,  teamID, true, appID, function(err, event) {
 
                         // 1- Save invitation
                         BApplicantsResponses({applicationID:appID,request:message,text:messageText,event:event}).save( function(err,invitation) {

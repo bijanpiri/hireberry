@@ -38,8 +38,8 @@ BCalendarView = Backbone.View.extend({
 
             return {
                 date: m.format('YYYY-MM-DD'),
-                title: (event.title || 'Event'),
-                location:  m.format('DD MMM[,] ddd')  + ' ( ' + m.fromNow() + ' ) '
+                title: '<a class="eventTitle" href="' + event.application + '">' + (event.title || 'Event') + '</a>',
+                location:  m.format('DD MMM[,] ddd HH:mm ')  + ' ( ' + m.fromNow() + ' ) '
             };
         });
 
@@ -56,7 +56,12 @@ BCalendarView = Backbone.View.extend({
                     console.log('you just went to ' + month.format('MMMM, YYYY'));
                 }
             },
-            doneRendering: function() {}
+            doneRendering: function() {
+                calendarObj.find('.eventTitle').click( function(e) {
+                    showApplicationPreview( $(this).attr('href') );
+                    e.preventDefault();
+                });
+            }
         });
         $('#full-clndr').parent().find('.current-calendar').remove();
         $('#full-clndr').parent().append( calendarObj.show() );

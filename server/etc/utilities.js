@@ -439,24 +439,26 @@ getComments=function(entityID ,entityType, callback) {
         })
 }
 
-addEvent=function(what,when,who,by,temp,callback) {
+addEvent=function(what,when,who,by,temp,applicationID,callback) {
     BEvents({
         time: when,
         title: what,
         team: by,
         temp: temp,
-        contributors: who}).save( function(err,event) {
+        contributors: who,
+        application: applicationID}).save( function(err,event) {
             callback(err,event);
         });
 }
 
-updateEvent=function(eventID, what,when,who,by,temp,callback) {
+updateEvent=function(eventID, what,when,who,by,temp,applicationID,callback) {
     BEvents.update({_id:eventID},{
         time: when,
         title: what,
         team: by,
         temp: temp,
-        contributors: who}, function(err,event) {
+        contributors: who,
+        application: applicationID }, function(err,event) {
             callback(err,event);
         });
 }
