@@ -241,21 +241,21 @@ app.get('/api/forms',  function(req,res){
 
         var isHM = ( count > 0 );
 
-        findFlyers({owner: teamID},isHM);
-        /*
-         if( count > 0 ) // Admin
-         // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
-         findFlyers({
-         owner: teamID,
-         $or:[
-         {publishTime:{$ne:''}}, // Published
-         {creator: userID},  // His-owned job
-         {askedForPublish:true} // Asked-for-Publish
-         ]
-         });
-         else    // Team member
-         findFlyers({owner: teamID, autoAssignedTo:userID});
-         */
+        //findFlyers({owner: teamID},isHM);
+
+        if( count > 0 ) // Admin
+        // About Query: All his-owned flyers + other's published flyers + other's Asked-For-Publish flyers
+            findFlyers({
+                owner: teamID,
+                $or:[
+                    {publishTime:{$ne:''}}, // Published
+                    {creator: userID},  // His-owned job (event not published ones)
+                    {askedForPublish:true} // Asked-for-Publish
+                ]
+            },isHM);
+        else    // Team member
+            findFlyers({owner: teamID, $or:[{autoAssignedTo:userID},{commentators:userID}] },isHM);
+
     });
 
     /*

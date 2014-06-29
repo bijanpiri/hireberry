@@ -85,7 +85,8 @@ BEvents = mongoose.model( 'events', {
     team: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     time: Date,
     temp: Boolean,
-    application: {type : mongoose.Schema.ObjectId, ref : 'applications'}
+    application: {type : mongoose.Schema.ObjectId, ref : 'applications'},
+    job: {type : mongoose.Schema.ObjectId, ref : 'flyers'}
 });
 
 BTeamInvitations = mongoose.model( 'invitations', {

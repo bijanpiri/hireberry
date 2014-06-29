@@ -38,7 +38,7 @@ BCalendarView = Backbone.View.extend({
 
             return {
                 date: m.format('YYYY-MM-DD'),
-                title: '<a class="eventTitle" href="' + event.application + '">' + (event.title || 'Event') + '</a>',
+                title: '<a class="eventTitle" href="' + event.application._id + '">' + (event.title || 'Event') + '</a>',
                 location:  m.format('DD MMM[,] ddd HH:mm ')  + ' ( ' + m.fromNow() + ' ) '
             };
         });

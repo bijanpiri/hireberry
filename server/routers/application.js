@@ -194,37 +194,40 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                     var contributor = [req.user._id];
 
                     // 0- Add a temp event
-                    addEvent( title, time, contributor,  teamID, true, appID, function(err, event) {
+                    BApplications.findOne({_id:appID}, function(err,application){
+                        addEvent( title, time, contributor,  teamID, true, appID, application.flyerID, function(err, event) {
 
-                        // 1- Save invitation
-                        BApplicantsResponses({applicationID:appID,request:message,text:messageText,event:event}).save( function(err,invitation) {
+                            // 1- Save invitation
+                            BApplicantsResponses({applicationID:appID,request:message,text:messageText,event:event}).save( function(err,invitation) {
 
-                        // 2- Send invitation email
-                        // ToDo: Change base url
-                        message.html += '<br/></br><a href="'+ req.headers.origin +'/applicant/message/view/1/' + invitation._id + '">Click here to response to invitation</a>';
-                        mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
+                                // 2- Send invitation email
+                                // ToDo: Change base url
+                                message.html += '<br/></br><a href="'+ req.headers.origin +'/applicant/message/view/1/' + invitation._id + '">Click here to response to invitation</a>';
+                                mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
 
-                        // 3- Save new stage
-                        var newStage = {
-                            stage: req.body.data.stage,
-                            subStage: req.body.data.subStage,
-                            invitation: invitation._id,
-                            invitedName: req.body.data.invitedName,
-                            interviewDate: req.body.data.interviewDate,
-                            interviewTeam: req.user.teamID,
-                            interviewer: req.user._id
-                        };
+                                // 3- Save new stage
+                                var newStage = {
+                                    stage: req.body.data.stage,
+                                    subStage: req.body.data.subStage,
+                                    invitation: invitation._id,
+                                    invitedName: req.body.data.invitedName,
+                                    interviewDate: req.body.data.interviewDate,
+                                    interviewTeam: req.user.teamID,
+                                    interviewer: req.user._id
+                                };
 
-                        BApplications.update({_id:appID}, {stage:newStage}, function(err) {
+                                BApplications.update({_id:appID}, {stage:newStage}, function(err) {
 
-                            // 4- Add new activity
-                            addNewActivity(appID,activity, function() {
-                                res.send(200);
+                                    // 4- Add new activity
+                                    addNewActivity(appID,activity, function() {
+                                        res.send(200);
+                                    });
+                                })
                             });
-                        })
-                    });
 
-                    });
+                        });
+                    })
+
                 });
 
             }

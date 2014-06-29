@@ -26,23 +26,35 @@ app.get('/api/applications/stat', function(req,res) {
     BTeams.findOne({_id:teamID}, function(err,team) {
         var membersCount = team.members.length;
 
-        BFlyers.find({owner:teamID}, function(err,flyers) {
+        var query;
+        if( team.admin.toString()===req.user._id.toString() )
+            query = {owner:teamID};
+        else
+            query = { $or:[
+                {autoAssignedTo:req.user._id},
+                {commentators:req.user._id}
+            ]};
+
+        BFlyers.find(query, function(err,flyers) {
 
             var flyerIDList = [];
             var publishedCount = 0;
 
             for( var i=0; i<flyers.length; i++ ) {
 
-                if( team.admin.toString()===req.user._id.toString() ||
-                    (flyers[i].autoAssignedTo && flyers[i].autoAssignedTo.toString() === req.user._id.toString()) )
-                    flyerIDList.push( flyers[i]._id );
+                //if( team.admin.toString()===req.user._id.toString() ||
+                //    (flyers[i].autoAssignedTo && flyers[i].autoAssignedTo.toString() === req.user._id.toString()) )
+                //    flyerIDList.push( flyers[i]._id );
 
-                if( !flyers[i].publishTime )
+                flyerIDList.push( flyers[i]._id );
+
+                if( flyers[i].publishTime!==undefined && flyers[i].publishTime!=='' )
                     publishedCount++;
             }
 
             BApplications.find( {flyerID:{$in:flyerIDList}}, function(err,applications) {
 
+                var numApplications = 0;
                 var numNewApplications = 0;
                 var numTodayApplication = 0;
 

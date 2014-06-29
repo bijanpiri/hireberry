@@ -439,14 +439,15 @@ getComments=function(entityID ,entityType, callback) {
         })
 }
 
-addEvent=function(what,when,who,by,temp,applicationID,callback) {
+addEvent=function(what,when,who,by,temp,applicationID,jobID,callback) {
     BEvents({
         time: when,
         title: what,
         team: by,
         temp: temp,
         contributors: who,
-        application: applicationID}).save( function(err,event) {
+        application: applicationID,
+        job:jobID}).save( function(err,event) {
             callback(err,event);
         });
 }
@@ -458,7 +459,7 @@ updateEvent=function(eventID, what,when,who,by,temp,applicationID,callback) {
         team: by,
         temp: temp,
         contributors: who,
-        application: applicationID }, function(err,event) {
+        application: applicationID}, function(err,event) {
             callback(err,event);
         });
 }
