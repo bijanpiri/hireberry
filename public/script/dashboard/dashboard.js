@@ -19,7 +19,39 @@ _.templateSettings = {
     escape: /\{\{\-(.+?)\}\}/g,
     evaluate: /\{\%(.+?)\%\}/g
 };
+function initTour(){
+    var tour = new Tour({
+        steps: [
+            {
+                element: "#createFlyerButton",
+                title: "Title of my step",
+                content: "Content of my step",
+                container:"#navbar-container",
+                backdrop:true
+            },
+            {
+                element: "#switchButton ",
+                title: "Change current team",
+                content: "You can use multiple teams and chage your current team with this button",
+                container:"#navbar-container",
+                backdrop:true
+            },
+            {
+                element: "#notifications",
+                title: "Title of my step",
+                content: "Content of my step",
+                container:"#navbar-container",
+                backdrop:true
+            }]
 
+    });
+
+// Initialize the tour
+    tour.init();
+
+// Start the tour
+    tour.start(true);
+}
 $(function(){
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
@@ -28,7 +60,7 @@ $(function(){
     initTeamPage();
     initApplicationPage();
     initBillingPage();
-
+    initTour();
     $('button[data-loading-text]').click(function(){
         var btn=$(this);
         btn.button('loading');
