@@ -85,7 +85,9 @@ BApplicationsView = Backbone.View.extend({
 
         // Show number of applications in each stage
         $('#applications-filters label').each( function(i,e){
-            $(e).text( $(e).text() + '(' + stagesCounter[i] + ')' );
+            var countObj =  $('<span>').text( '(' + stagesCounter[i] + ')' );
+            $(e).find('span').remove();
+            $(e).append( countObj );
         });
 
         return this;
