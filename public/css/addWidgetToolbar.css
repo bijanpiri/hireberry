@@ -257,6 +257,7 @@ Portlet Creator
     left: 0;
     right: 0;
     background: inherit;
+    z-index: 2000;
 }
 input.bool-option-field,
 .bool-option-field {
