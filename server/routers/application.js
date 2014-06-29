@@ -188,33 +188,46 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                         }
                     };
 
-                    // 1- Save invitation
-                    BApplicantsResponses({applicationID:appID,request:message,text:messageText}).save( function(err,invitation) {
+                    var time = new Date(req.body.data.interviewDate);
+                    var title = 'Interview with ' + req.body.data.invitedName + '(Waiting)';
+                    var teamID = req.user.teamID;
+                    var contributor = [req.user._id];
 
-                        // 2- Send invitation email
-                        // ToDo: Change base url
-                        message.html += '<br/></br><a href="'+ req.headers.origin +'/applicant/message/view/1/' + invitation._id + '">Click here to response to invitation</a>';
-                        mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
+                    // 0- Add a temp event
+                    BApplications.findOne({_id:appID}, function(err,application){
+                        addEvent( title, time, contributor,  teamID, true, appID, application.flyerID, function(err, event) {
 
-                        // 3- Save new stage
-                        var newStage = {
-                            stage: req.body.data.stage,
-                            subStage: req.body.data.subStage,
-                            invitation: invitation._id,
-                            invitedName: req.body.data.invitedName,
-                            interviewDate: req.body.data.interviewDate,
-                            interviewTeam: req.user.teamID,
-                            interviewer: req.user._id
-                        };
+                            // 1- Save invitation
+                            BApplicantsResponses({applicationID:appID,request:message,text:messageText,event:event}).save( function(err,invitation) {
 
-                        BApplications.update({_id:appID}, {stage:newStage}, function(err) {
+                                // 2- Send invitation email
+                                // ToDo: Change base url
+                                message.html += '<br/></br><a href="'+ req.headers.origin +'/applicant/message/view/1/' + invitation._id + '">Click here to response to invitation</a>';
+                                mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
 
-                            // 4- Add new activity
-                            addNewActivity(appID,activity, function() {
-                                res.send(200)
+                                // 3- Save new stage
+                                var newStage = {
+                                    stage: req.body.data.stage,
+                                    subStage: req.body.data.subStage,
+                                    invitation: invitation._id,
+                                    invitedName: req.body.data.invitedName,
+                                    interviewDate: req.body.data.interviewDate,
+                                    interviewTeam: req.user.teamID,
+                                    interviewer: req.user._id
+                                };
+
+                                BApplications.update({_id:appID}, {stage:newStage}, function(err) {
+
+                                    // 4- Add new activity
+                                    addNewActivity(appID,activity, function() {
+                                        res.send(200);
+                                    });
+                                })
                             });
-                        })
-                    });
+
+                        });
+                    })
+
                 });
 
             }
@@ -496,7 +509,7 @@ function canCurrentUserAceessApplciation(userID, appID, callback) {
                 return callback(err,false,null);
 
             var teamID = flyer.owner.admin;
-            var responderID = flyer.autoAssignedTo;
+            var responderID = flyer.autoAssignedTo || '';
 
             if( userID.toString()===teamID.toString() || userID.toString()===responderID.toString())
                 return callback(null,true,application);

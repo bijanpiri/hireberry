@@ -115,16 +115,7 @@ app.get('/api/search/users', function(req,res){
 
 // region Event
 app.post('/api/calendar/event', function(req,res) {
-
-    var time = new Date(req.body.time);
-    var title = req.body.title;
-    var teamID = req.user.teamID;
-    var contributor = [req.user._id];
-
-    addEvent( title, time, contributor,  teamID, function() {
-            res.send(200);
-        }
-    )
+    throw "What the HELL";
 });
 
 app.get('/api/calendar', function(req,res) {
@@ -135,13 +126,33 @@ app.get('/api/calendar', function(req,res) {
     var userID = req.user._id;
 
     BTeams.count({ _id:teamID, admin:userID }, function(err,count){
-        if( err || count==0)
-            BEvents.find( { contributors:userID }, function(err,events) {
-                res.send(200,{events:events});
-            })
+        //if( err || count==0)
+           // BEvents.find( { contributors:userID }, function(err,events) {
+           //     res.send(200,{events:events});
+           // })
+        if( err )
+            res.send(503);
         else
-            BEvents.find( {team:teamID}, function(err,events) {
-                res.send(200,{events:events});
+            BEvents.find({team:teamID}).populate('application').exec(function(err,events) {
+
+                var filteredEvents = [];
+                var callbackCount = 0;
+
+                // Who can leave a comment on application can leave interview appointments (HM,Responder,Commentators)
+
+                for( var i=0; i<events.length; i++ ) {
+
+                    canCurrentUserLeaveComment(req.user._id, teamID, events[i].job, (function(event,eventsCount){
+                        return function(err, can) {
+                            if( can )
+                                filteredEvents.push( event );
+
+                            if( ++callbackCount >= eventsCount )
+                                res.send(200,{events:filteredEvents});
+                        };
+                    })(events[i],events.length));
+                }
+
             })
     });
 });

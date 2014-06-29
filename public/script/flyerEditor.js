@@ -171,7 +171,10 @@ $(function() {
         });
     }
 });
+
 var thanksMessage;
+var titleFromTemplateModal = null;
+
 function loadFlyer() {
 
     flyerid = $('input[name=flyerid]').val();
@@ -188,14 +191,19 @@ function loadFlyer() {
         templateID: templateID,
         flyerLoaded: function(job) {
             var flyer=job.flyer;
+
             if( !editMode )
                 document.title = flyer.description;
             else
                 document.title = 'Editor - ' + flyer.description;
-            $('[name="position-title"]').val(flyer.description);
+
+            // If this job is new then title must be gotten from template page
+            $('[name="position-title"]').val( titleFromTemplateModal || flyer.description);
+
             job.commentators.forEach(function(com){
                 $('.bool-commentator-users').append(createCommentatorItem(com));
             });
+
             if(flyer.thanksMessage) {
                 document.getElementById('ThanksMessageEditor').outerHTML = flyer.thanksMessage;
                 thanksMessage=flyer.thanksMessage;
@@ -261,8 +269,6 @@ function loadFlyer() {
                     list=ul;
                 };
             });
-
-            saveFlyer(function(){});
         }
     });
 }
@@ -276,7 +282,7 @@ function loadTemplateChooser() {
 
     $('#templateModal').modal();
     $('#GoToEditor').click( function() {
-        $('[name="position-title"]').val($('#flyerName1').val());
+        titleFromTemplateModal = $('#flyerName1').val();
         loadEditor();
         $('#templateModal').modal('hide');
     })
