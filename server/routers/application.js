@@ -188,8 +188,16 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                         }
                     };
 
-                    // 1- Save invitation
-                    BApplicantsResponses({applicationID:appID,request:message,text:messageText}).save( function(err,invitation) {
+                    var time = new Date(req.body.data.interviewDate);
+                    var title = 'Interview with ' + req.body.data.invitedName + '(Waiting)';
+                    var teamID = req.user.teamID;
+                    var contributor = [req.user._id];
+
+                    // 0- Add a temp event
+                    addEvent( title, time, contributor,  teamID, true, function(err, event) {
+
+                        // 1- Save invitation
+                        BApplicantsResponses({applicationID:appID,request:message,text:messageText,event:event}).save( function(err,invitation) {
 
                         // 2- Send invitation email
                         // ToDo: Change base url
@@ -211,9 +219,11 @@ app.post('/api/applications/:applicationID',  function(req,res) {
 
                             // 4- Add new activity
                             addNewActivity(appID,activity, function() {
-                                res.send(200)
+                                res.send(200);
                             });
                         })
+                    });
+
                     });
                 });
 

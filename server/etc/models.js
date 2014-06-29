@@ -83,7 +83,8 @@ BEvents = mongoose.model( 'events', {
     title: String,
     contributors: [{type : mongoose.Schema.ObjectId, ref : 'users'}],
     team: {type : mongoose.Schema.ObjectId, ref : 'teams'},
-    time: Date
+    time: Date,
+    temp: Boolean
 });
 
 BTeamInvitations = mongoose.model( 'invitations', {
@@ -131,7 +132,8 @@ BApplicantsResponses = mongoose.model( 'applicantsResponses', {
     text: String,
     responderNotified: Boolean,
     request: {},
-    response: {}
+    response: {},
+    event: {type : mongoose.Schema.ObjectId, ref : 'events'}
 });
 
 BVisitStat = mongoose.model( 'visitStat', {

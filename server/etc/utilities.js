@@ -439,14 +439,32 @@ getComments=function(entityID ,entityType, callback) {
         })
 }
 
-addEvent=function(what,when,who,by,callback) {
+addEvent=function(what,when,who,by,temp,callback) {
     BEvents({
         time: when,
         title: what,
         team: by,
-        contributors: who}).save( function(err) {
-            callback();
+        temp: temp,
+        contributors: who}).save( function(err,event) {
+            callback(err,event);
         });
+}
+
+updateEvent=function(eventID, what,when,who,by,temp,callback) {
+    BEvents.update({_id:eventID},{
+        time: when,
+        title: what,
+        team: by,
+        temp: temp,
+        contributors: who}, function(err,event) {
+            callback(err,event);
+        });
+}
+
+deleteEvent=function(eventID,callback) {
+    BEvents.remove({_id:eventID}, function(err,event) {
+        callback(err,event);
+    });
 }
 
 /** Promo Codes **/

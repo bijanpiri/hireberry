@@ -22,11 +22,14 @@ BCalendarView = Backbone.View.extend({
         this.model.on('change', this.render, this);
 
         $(function(){
-                $('#full-clndr').clndr({
-                    template: $('#full-clndr-template').html(),
-                    events:  []
-                });
+            var calendarObj = $('#full-clndr').clone().addClass('current-calendar');
+            calendarObj.clndr({
+                template: $('#full-clndr-template').html(),
+                events:  []
+            });
+            $('#full-clndr').parent().append( calendarObj.show() );
         });
+
     },
     render: function() {
         // Event Format: [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
@@ -40,7 +43,9 @@ BCalendarView = Backbone.View.extend({
             };
         });
 
-        $('#full-clndr').clndr({
+        // Create an instance of clndr and show it
+        var calendarObj = $('#full-clndr').clone().addClass('current-calendar');
+        calendarObj.clndr({
             template: $('#full-clndr-template').html(),
             events:  eventsList,
             clickEvents: {
@@ -51,10 +56,11 @@ BCalendarView = Backbone.View.extend({
                     console.log('you just went to ' + month.format('MMMM, YYYY'));
                 }
             },
-            doneRendering: function() {
-                console.log('this would be a fine place to attach custom event handlers.');
-            }
+            doneRendering: function() {}
         });
+        $('#full-clndr').parent().find('.current-calendar').remove();
+        $('#full-clndr').parent().append( calendarObj.show() );
+
         return this;
     }
 });

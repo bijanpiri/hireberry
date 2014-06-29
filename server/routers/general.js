@@ -121,10 +121,9 @@ app.post('/api/calendar/event', function(req,res) {
     var teamID = req.user.teamID;
     var contributor = [req.user._id];
 
-    addEvent( title, time, contributor,  teamID, function() {
+    addEvent( title, time, contributor, teamID, false, function() {
             res.send(200);
-        }
-    )
+    });
 });
 
 app.get('/api/calendar', function(req,res) {
