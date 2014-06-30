@@ -359,12 +359,17 @@ function initWorkflow(candidateObj,candidate) {
         // Prepare interview invitation modal and show it
         var modal = $('#interview-invitation-dialog');
         modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.interviewLocation').val( $('.teamAddress').text() );
+
         modal.find('.sendButton').unbind('click').click( function() {
+            var interviewDateTime = new Date(modal.find('.interviewDate').val() + ' ' + modal.find('.interviewTime').val());
+
             gotoNewStage(2,1,{
                 invitedName: candidate.name,
                 invitedEmail: modal.find('.emailAddress').val(),
                 invitationMessage: modal.find('.invitationMessage').val(),
-                interviewDate: modal.find('.interviewDate').val() + ' ' + modal.find('.interviewTime').val()
+                interviewDate: interviewDateTime,
+                interviewLocation:  modal.find('.interviewLocation').val()
             });
             modal.modal('hide')
         });
@@ -424,8 +429,10 @@ function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
     var cssSelector = '.candidate-workflow-stage.' + stagesName[stageNo] + ' .candidate-workflow-substage[sub-stage=' + subStageNo + ']';
     candidateObj.find(cssSelector).show();
 
-    if( stageNo==1 )
-        candidateObj.find('.candidate-workflow-stage.' + stagesName[1] +' .interviewDate').text( candidate.stage.interviewDate );
+    if( stageNo==1 ){
+        var dt = dateTimeToJSON( candidate.stage.interviewDate );
+        candidateObj.find('.candidate-workflow-stage.' + stagesName[1] +' .interviewDate').text( dt.fullStyle );
+    }
 }
 
 function showApplicationPreview(applicationID) {
@@ -485,8 +492,8 @@ function initCandidateInstance(candidate,expanded) {
     candidateObj.find('.candidate-name .value').text(candidate.name);
     candidateObj.find('.candidate-job .value').text(candidate.position);
 
-    var mom = new moment(candidate.applyTime);
-    candidateObj.find('.candidate-time .value').text( mom.format('ddd DD MMM YYYY') + '(' + mom.from() + ')' );
+    var dt = dateTimeToJSON(candidate.applyTime);
+    candidateObj.find('.candidate-time .value').text( dt.fullStyle );
 
     candidateObj.find('.candidate-stage .value').text( stagesName[candidate.stage.stage-1] + '-' + subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1]);
     candidateObj.find('.candidate-skills .value').text(candidate.skills);
@@ -525,8 +532,8 @@ function initCandidateInstance(candidate,expanded) {
                 stageChangingDetails = stagesName[stage-1] + '-' + subStagesName[stage-1][subStage-1];
         }
 
-        var mTimestamp = new moment(activity.timestamp);
-        var timeObj = $('<div>').addClass('activity-time').text( mTimestamp.format('YYYY MMM DD') + '-'+ mTimestamp.fromNow() );
+        var activityDT = dateTimeToJSON(activity.timestamp);
+        var timeObj = $('<div>').addClass('activity-time').text( activityDT.fullStyle );
         var typeObj = $('<div>').addClass('activity-type').text( stageChangingDetails || activity.type );
         var stoneObj = $('<div>').addClass('activity-stone');
         var activityObj = $('<div>').addClass('activity').append(stoneObj).append(timeObj).append(typeObj);

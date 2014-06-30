@@ -12,7 +12,7 @@
 
 <script src="/clndr/less.js" type="text/javascript"></script>
 <script src="/script/underscore.js" type="text/javascript"></script>
-<script src="/clndr/moment.js" type="text/javascript"></script>
+
 <script src="/clndr/clndr.js" type="text/javascript"></script>
 <script src="/backbone/backbone-min.js"></script>
 
@@ -464,7 +464,7 @@
 
                         <div class="candidate-workflow-substage" sub-stage="1">
                             <div>Application is in <strong>Interviewing</strong> stage.</div>
-                            You planned an interview on <span class="interviewDate">Date-Time</span>.
+                            You planned an interview on <strong><span class="interviewDate">Date-Time</span></strong>.
                             We're waiting for applicant's response. Although you can:
                             <a class="archiveButton">Archive it</a>
                             <a class="interviewButton">Reschedule an interview</a>
@@ -837,6 +837,12 @@
             </div>
         </div>
         <div class="control-group">
+            <label class="control-label" for="invitationEmail">Location</label>
+            <div class="controls">
+                <input type="text" class="interviewLocation">
+            </div>
+        </div>
+        <div class="control-group">
             <label class="control-label" for="invitationEmail">Email</label>
             <div class="controls">
                 <input type="text" class="emailAddress" placeholder="Enter email address to invite" name="email">
@@ -912,7 +918,7 @@
 
 <div id="application-preview-dialog" class="overlay overlay-scale">
     <button class="btn btn-danger btn-mini bool-close-btn pull-right"
-            style="margin:4px;position: absolute;right: 3px;z-index: 2000;">&times;</button>
+            style="margin:4px;position: absolute;right: 3px;z-index: 2000;padding: 0 6px">&times;</button>
 
     <div class="application-preview-container grid-layout">
     </div>

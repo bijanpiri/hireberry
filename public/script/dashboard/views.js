@@ -35,22 +35,12 @@ BCalendarView = Backbone.View.extend({
         // Event Format: [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
         var eventsList = this.model.get('events').map( function(event) {
             var m = new moment(event.time);
-            var untilInterview;
-            var d1 = new Date();
-            var d2 = new Date(event.time);
-
-            var timeDiff = Math.abs(d2.getTime() - d1.getTime());
-            var diffDays = timeDiff / (1000 * 3600 * 24);
-
-            if( diffDays<1 && d1.getDay()!==d2.getDay() )
-                untilInterview = 'Tomorrow';
-            else
-                untilInterview = m.fromNow();;
+            var dt = dateTimeToJSON(event.time);
 
             return {
                 date: m.format('YYYY-MM-DD'),
                 title: '<a class="eventTitle" href="' + event.application._id + '">' + (event.title || 'Event') + '</a>',
-                location:  m.format('DD MMM[,] ddd HH:mm ')  + ' ( ' + untilInterview + ' ) '
+                location:  dt.shortStyle
             };
         });
 
@@ -420,9 +410,10 @@ BBillingView = Backbone.View.extend({
 
         for( var i=0; i<billing.billings.length; i++ ) {
             var date = new Date(billing.billings[i].time);
+            var dt = dateTimeToJSON(date);
 
             var billingRow = $('<div>')
-                .append( $('<span>').text(date.toLocaleDateString()))
+                .append( $('<span>').text(dt.fullStyle))
                 .append( $('<span>').text(billing.billings[i].amount))
                 .append( $('<span>').text(billing.billings[i].method));
 
