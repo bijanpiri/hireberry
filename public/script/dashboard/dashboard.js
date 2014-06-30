@@ -78,7 +78,7 @@ $(function(){
     initTeamPage();
     initApplicationPage();
     initBillingPage();
-    initTour();
+//    initTour();
     $('button[data-loading-text]').click(function(){
         var btn=$(this);
         btn.button('loading');

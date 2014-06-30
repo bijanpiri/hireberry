@@ -33,10 +33,10 @@ $(function() {
                 container:".portletCreator"
             },
             {
-                element: ".bool-toolbar-commands",
-                title: "New Job Position",
-                content: "Create new job position with this button",
-                container:".portletCreator"
+                element: "#publishButton",
+                title: "Publish",
+                content: "When you done job editing use this button to Publish it.",
+                container:".bool-dock-bottom"
             },
             {
                 element: "#buttonComment",
@@ -61,8 +61,9 @@ $(function() {
 
 // Initialize the tour
         tour.init();
+        tour.setCurrentStep(0);
         tour.start(true);
-        tour.goTo(0);
+
 // Start the tour
 
 
