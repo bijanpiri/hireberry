@@ -22,6 +22,12 @@ _.templateSettings = {
 function initTour(){
     var tour = new Tour({
         steps: [
+//            {
+//                title: "Welcome to Hireberry",
+//                content: "Hireberry is an Application Tracking System(ATS). You can manage everythings from here.Let's see how.",
+//                container:"body",
+//                backdrop:true
+//            },
             {
                 element: "#switchButton ",
                 title: "Change current team",
@@ -42,17 +48,25 @@ function initTour(){
                 content: "Content of my step",
                 container:"#navbar-container",
                 backdrop:true
-            }]
+            }],
+        onEnd:function(tour){
+            $.post('/api/cert',{dashLevel:3});
+        }
 
     });
 
+    $.get('/api/cert',function(data){
+        if(data && data.dash)
+            return;
+
 // Initialize the tour
-    tour.init();
-
-
-    tour.start(true);
+        tour.init();
+        tour.start(true);
 // Start the tour
-    tour.goTo(0);
+        tour.goTo(0);
+
+
+    });
     $(window).resize(function(){
         tour.goTo(tour.getCurrentStep())
     })

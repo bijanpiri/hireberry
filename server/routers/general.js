@@ -22,7 +22,33 @@ app.get('/setting', function(req,res){
 
     res.render('setting.ejs',{title:'Setting'});
 });
+app.post('/api/cert',function(req,res){
+    var cert=req.body.cert;
 
+    var levels={};
+    if(req.body.dashLevel) levels.dash=parseInt(req.body.dashLevel);
+    if(req.body.appLevel) levels.application=rparseInt(eq.body.appLevel);
+    if(req.body.editorLevel) levels.editor=parseInt(req.body.editorLevel);
+    var userID=req.user._id;
+
+    BCertificates.update({user:userID},
+        {$set:levels},
+        { upsert: true },
+        function(err,rowAffected,raw){
+            res.send(200,rowAffected);
+    });
+});
+app.get('/api/cert',function(req,res){
+    var userId=req.user._id;
+    BCertificates
+        .findOne({user:userId}).lean()
+        .exec(function(err,cert){
+            if(err)
+                res.send(401,'Error fetching data');
+            else
+                res.send(200,cert);
+    });
+});
 app.post('/api/setting/password', function(req,res) {
     var userID = req.user._id;
     var oldpassword = req.body.oldpassword;

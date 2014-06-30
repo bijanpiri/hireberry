@@ -53,14 +53,19 @@ BUsers = mongoose.model( 'users', {
     linkedinAccessToken:String,
     linkedinAccessSecretToken:String,
     tempToken:String,
-    teamID: String
+    teamID: {type:mongoose.Schema.ObjectId,ref:'teams'},
 });
-
+BCertificates=mongoose.model('certificates',{
+    user:{type:mongoose.Schema.ObjectId,ref:'users'},
+    dash:Number,
+    editor:Number,
+    application:Number
+});
 BFlyers = mongoose.model( 'flyers', {
     flyer: Object,
     owner: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     creator: {type : mongoose.Schema.ObjectId, ref : 'users'},
-    publishTime: String,
+    publishTime: Date,
     dbToken:String,
     autoAssignedTo: {type : mongoose.Schema.ObjectId, ref : 'users'},
     askedForPublish: Boolean,
@@ -92,7 +97,7 @@ BEvents = mongoose.model( 'events', {
 BTeamInvitations = mongoose.model( 'invitations', {
     team: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     email: String,
-    time: String,
+    time: Date,
     note:String
 });
 
