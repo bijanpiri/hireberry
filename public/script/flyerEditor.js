@@ -27,6 +27,14 @@ $(function() {
                 container:".portletCreator"
             },
             {
+                element: ".portletStack",
+                title: "Flyer Stack",
+                content: "You can edit, remove or replace widgets here.",
+                placement: "bottom",
+                container:"#portletsBox"
+
+            },
+            {
                 element: "#moreOptions",
                 title: "More Settings",
                 content: "Add or change commentators, responder, colors and title of this job position in job setting panel",
