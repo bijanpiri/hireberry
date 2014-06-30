@@ -70,6 +70,53 @@ function initTour(){
         tour.goTo(tour.getCurrentStep())
     })
 }
+function initApplicationTour(app){
+    var tour = new Tour({
+        steps: [
+            {
+                title: "Application tour",
+                content: "Here we are going to show you important parts of application ",
+                container:"body",
+                orphan:true
+            },
+            {
+                element: app.find('.workflowGroup'),
+                title: "Workflow",
+                content: "Use workflow buttons to manage user application.",
+                placement:'top',
+                container:"#application-preview-dialog"
+
+            },
+            {
+                element: ".portlet-commentsView",
+                title: "Application comments",
+                content: "You can leave your comment here or see teammates' comments here",
+                placement:'left',
+                container:".portlet-commentsView-container"
+            }],
+        backdrop:true,
+        onEnd:function(tour){
+            $.post('/api/cert',{appLevel:3});
+        }
+
+    });
+
+    $.get('/api/cert',function(data){
+        if(data && data.appLevel)
+            return;
+
+// Initialize the tour
+        tour.init();
+        tour.start(true);
+// Start the tour
+        tour.goTo(0);
+
+
+    });
+    $(window).resize(function(){
+        tour.goTo(tour.getCurrentStep())
+    })
+}
 $(function(){
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
@@ -79,6 +126,7 @@ $(function(){
     initApplicationPage();
     initBillingPage();
     initTour();
+
     $('button[data-loading-text]').click(function(){
         var btn=$(this);
         btn.button('loading');
@@ -457,6 +505,8 @@ function showApplicationPreview(applicationID) {
     $.get('/api/application/json/' + applicationID).done( function(app) {
         var candidateInstance = initCandidateInstance(app,true);
         prevContainer.append( candidateInstance );
+        initApplicationTour(prevContainer);
+
     });
 
     $('#application-preview-dialog .bool-close-btn').unbind('click').click(function(){

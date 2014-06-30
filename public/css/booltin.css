@@ -494,10 +494,12 @@ Comments
     /*bottom: 0;*/
     height: 100%;
     width: 300px;
+    background: #BFBCAA;
 }
 
 .portlet-commentsView {
-    background: #BFBCAA;
+    display: inline-block;
+    background: inherit;
     color: #6A685E;
     width: 300px;
     font-size: 1.4em;
@@ -574,6 +576,7 @@ Comments
     top: 250px;
     left: 0;
     right: 0;
+    display: inline-block;
 }
 
 .bool-comments li {
