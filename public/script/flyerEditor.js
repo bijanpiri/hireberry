@@ -514,7 +514,8 @@ function loadPublishPanel() {
 
         function publish() {
             flyerJson.description = $('[name="position-title"]').val();
-            flyerJson.thanksMessage = flyer.thanksMessage;
+            flyerJson.thanksMessage = document.getElementById('ThanksMessageEditor').outerHTML;
+            
             $('.bool-flyer-published-link')
                 .html(flyerJson.description)
                 .attr('href','/flyer/embeded/'+flyerid);
@@ -576,7 +577,7 @@ function saveFlyer(callback) {
     flyer.flyer2json(
         function(flyerjson){
             flyerjson.thumbnail = '';
-            thanksMessage=flyerjson.thanksMessage = document.getElementById('ThanksMessageEditor').outerHTML;
+            thanksMessage = flyerjson.thanksMessage = document.getElementById('ThanksMessageEditor').outerHTML;
 
             flyerjson.description = $('[name="position-title"]').val();
 

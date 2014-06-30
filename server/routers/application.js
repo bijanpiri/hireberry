@@ -110,7 +110,7 @@ app.get('/api/applications', function (req,res) {
             if( (new Date())  - (new Date(stage.interviewDate)) > 0 ) { // Date is over
                 BApplications.update({_id:applicationID}, {
                     stage:{stage:2,subStage:4,interviewDate:stage.interviewDate}
-                }, function(err) { res.send(200) })
+                }, function(err) {return;})
             }
         }
 
@@ -166,10 +166,15 @@ app.post('/api/applications/:applicationID',  function(req,res) {
 
                 BTeams.findOne({_id:req.user.teamID}, function(err,team){
 
+                    var dt = req.body.data.interviewDate;
+                    // ToDo: Show interview date and time in better way
+
                     var messageText = 'Dear ' + req.body.data.invitedName + ', <br>' +
-                        'You are invited for interviewing at <b>' + req.body.data.interviewDate + '</b><br/>' +
+                        'You are invited for interviewing at <b id="time">' + dt + '</b><br/><br/>' +
+                        'Location:' + req.body.data.interviewLocation + '<br/><br/>' +
                         'Let we know whether you will come or not.<br/><br/>' +
-                        'Sincerely<br/>' + team.name;
+                        'Sincerely<br/>' + team.name +
+                        '<script>var d="' + dt + '";$("#time").text( (new Date(d)).toLocaleString() )</script>';
 
                     var emailBody = req.body.data.invitationMessage || '';
                     var message = {

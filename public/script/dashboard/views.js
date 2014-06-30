@@ -35,13 +35,16 @@ BCalendarView = Backbone.View.extend({
         // Event Format: [{ date: '2014-04-01', title: 'Persian Kitten Auction', location: 'Center for Beautiful Cats' } ]
         var eventsList = this.model.get('events').map( function(event) {
             var m = new moment(event.time);
+            var dt = dateTimeToJSON(event.time);
 
             return {
                 date: m.format('YYYY-MM-DD'),
                 title: '<a class="eventTitle" href="' + event.application._id + '">' + (event.title || 'Event') + '</a>',
-                location:  m.format('DD MMM[,] ddd HH:mm ')  + ' ( ' + m.fromNow() + ' ) '
+                location:  dt.shortStyle
             };
-        });
+        }).sort( function(a,b){
+                return (new Date(a.date)).getTime()-(new Date(b.date)).getTime()
+            });
 
         // Create an instance of clndr and show it
         var calendarObj = $('#full-clndr').clone().addClass('current-calendar');
@@ -409,9 +412,10 @@ BBillingView = Backbone.View.extend({
 
         for( var i=0; i<billing.billings.length; i++ ) {
             var date = new Date(billing.billings[i].time);
+            var dt = dateTimeToJSON(date);
 
             var billingRow = $('<div>')
-                .append( $('<span>').text(date.toLocaleDateString()))
+                .append( $('<span>').text(dt.fullStyle))
                 .append( $('<span>').text(billing.billings[i].amount))
                 .append( $('<span>').text(billing.billings[i].method));
 

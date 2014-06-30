@@ -80,7 +80,10 @@ function addCommentToView( commentboxObj, commenterEmail, commenterName, comment
 
     var avatarObj = $('<img>').attr('src',avatarURL);
     var nameObj = $('<span>').text(commenterName);
-    var dateObj = $('<i>').addClass('fa fa-clock-o pull-right').attr('title',commentDate);
+
+    var dt = dateTimeToJSON(commentDate);
+    var dateObj = $('<i>').addClass('fa fa-clock-o pull-right').attr('title',dt.fullStyle);
+
     var commentObj_header = $('<div>').addClass('bool-comment-header').append(avatarObj).append(nameObj).append(dateObj);
     var commentObj_body = $('<div>').addClass('bool-comment-body').text(commentText);
     var commentObj = $('<li>').append(commentObj_header).append(commentObj_body);

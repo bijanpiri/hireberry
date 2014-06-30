@@ -12,7 +12,7 @@
 
 <script src="/clndr/less.js" type="text/javascript"></script>
 <script src="/script/underscore.js" type="text/javascript"></script>
-<script src="/clndr/moment.js" type="text/javascript"></script>
+
 <script src="/clndr/clndr.js" type="text/javascript"></script>
 <script src="/backbone/backbone-min.js"></script>
 
@@ -26,6 +26,8 @@
 
 <script src="/script/flexTextarea.js"></script>
 
+<link rel="stylesheet" href="/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+<script src="/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
 <script src="http://www.flotcharts.org/flot/jquery.flot.js"></script>
 <script src="http://www.flotcharts.org/flot/jquery.flot.pie.js"></script>
@@ -468,7 +470,7 @@
 
                         <div class="candidate-workflow-substage" sub-stage="1">
                             <div>Application is in <strong>Interviewing</strong> stage.</div>
-                            You planned an interview on <span class="interviewDate">Date-Time</span>.
+                            You planned an interview on <strong><span class="interviewDate">Date-Time</span></strong>.
                             We're waiting for applicant's response. Although you can:
                             <a class="archiveButton">Archive it</a>
                             <a class="interviewButton">Reschedule an interview</a>
@@ -831,13 +833,25 @@
         <div class="control-group">
             <label class="control-label" for="invitationEmail">Date of interview</label>
             <div class="controls">
-                <input type="date" class="interviewDate">
+                <div id="interviewDateTime" class="input-append date form_datetime">
+                    <input size="16" type="text" value="" readonly>
+                    <span class="add-on"><i class="icon-remove"></i></span>
+                    <span class="add-on"><i class="icon-th"></i></span>
+                </div>
+                <script type="text/javascript">
+                    $(".form_datetime").datetimepicker({
+                        format: "dd MM yyyy HH:ii P",
+                        showMeridian: true,
+                        autoclose: true,
+                        todayBtn: true
+                    });
+                </script>
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="invitationEmail">Time of interview</label>
+            <label class="control-label" for="invitationEmail">Location</label>
             <div class="controls">
-                <input type="time" class="interviewTime">
+                <input type="text" class="interviewLocation">
             </div>
         </div>
         <div class="control-group">
@@ -916,7 +930,7 @@
 
 <div id="application-preview-dialog" class="overlay overlay-scale">
     <button class="btn btn-danger btn-mini bool-close-btn pull-right"
-            style="margin:4px;position: absolute;right: 3px;z-index: 2000;">&times;</button>
+            style="margin:4px;position: absolute;right: 3px;z-index: 2000;padding: 0 6px">&times;</button>
 
     <div class="application-preview-container grid-layout">
     </div>
