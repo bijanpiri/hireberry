@@ -42,7 +42,9 @@ BCalendarView = Backbone.View.extend({
                 title: '<a class="eventTitle" href="' + event.application._id + '">' + (event.title || 'Event') + '</a>',
                 location:  dt.shortStyle
             };
-        });
+        }).sort( function(a,b){
+                return (new Date(a.date)).getTime()-(new Date(b.date)).getTime()
+            });
 
         // Create an instance of clndr and show it
         var calendarObj = $('#full-clndr').clone().addClass('current-calendar');

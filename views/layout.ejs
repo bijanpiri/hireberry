@@ -99,8 +99,8 @@
             else
                 until = m.from();
 
-            json.fullStyle = json.date + ' ' + json.time +'(' + until + ')';
-            json.shortStyle = m.format('DD MMM[,] ddd HH:mm (' + until + ')');
+            json.fullStyle = json.date + ' ' + json.time + ' (' + until + ')';
+            json.shortStyle = m.format('DD MMM[,] ddd HH:mm') +' (' + until + ')';
 
             return json;
         }

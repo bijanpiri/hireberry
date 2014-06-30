@@ -362,7 +362,8 @@ function initWorkflow(candidateObj,candidate) {
         modal.find('.interviewLocation').val( $('.teamAddress').text() );
 
         modal.find('.sendButton').unbind('click').click( function() {
-            var interviewDateTime = new Date(modal.find('.interviewDate').val() + ' ' + modal.find('.interviewTime').val());
+            var selectedDate = modal.find('#interviewDateTime input').val();
+            var interviewDateTime = new Date(selectedDate);
 
             gotoNewStage(2,1,{
                 invitedName: candidate.name,

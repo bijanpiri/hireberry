@@ -26,6 +26,8 @@
 
 <script src="/script/flexTextarea.js"></script>
 
+<link rel="stylesheet" href="/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+<script src="/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
 <script src="http://www.flotcharts.org/flot/jquery.flot.js"></script>
 <script src="http://www.flotcharts.org/flot/jquery.flot.pie.js"></script>
@@ -827,13 +829,19 @@
         <div class="control-group">
             <label class="control-label" for="invitationEmail">Date of interview</label>
             <div class="controls">
-                <input type="date" class="interviewDate">
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="invitationEmail">Time of interview</label>
-            <div class="controls">
-                <input type="time" class="interviewTime">
+                <div id="interviewDateTime" class="input-append date form_datetime">
+                    <input size="16" type="text" value="" readonly>
+                    <span class="add-on"><i class="icon-remove"></i></span>
+                    <span class="add-on"><i class="icon-th"></i></span>
+                </div>
+                <script type="text/javascript">
+                    $(".form_datetime").datetimepicker({
+                        format: "dd MM yyyy HH:ii P",
+                        showMeridian: true,
+                        autoclose: true,
+                        todayBtn: true
+                    });
+                </script>
             </div>
         </div>
         <div class="control-group">
