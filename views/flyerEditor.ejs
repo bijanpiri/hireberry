@@ -152,7 +152,7 @@
 </div>
 
 <% if(userCanLeaveComment) { %>
-<div class="comments-sidebar"></div>
+<div class="comments-sidebar" id="commentSlidebar"></div>
 <% } %>
 
 <div class="row-fluid shareRow" hidden>
@@ -1086,7 +1086,7 @@
 
     <div class="row-fluid bool-widget-btn-carousel" id="addButtons"  >
         <h2 class="bool-sidebar-header">Content Types</h2>
-        <div data-role="scrollable" class="bool-scrollable" data-margin="40">
+        <div data-role="scrollable" class="bool-scrollable" id='widgetButtons' data-margin="40">
         <!--<div >-->
             <div class="btn icon-arrow-up" data-scroll="up" style="display: block;margin: 0 10px"></div>
             <ul class="bool-add-widget" data-list>
@@ -1152,7 +1152,7 @@
 
             </div>
         </div>
-        <ul class="bool-toolbar-options">
+        <ul class="bool-toolbar-options" id="moreOptions">
             <li class="bool-option-item bool-btn-more-options pull-right">
                 Job Settings
                 <i class="bool-widget-icon bool-toolbar-icon-preview-edit"></i>

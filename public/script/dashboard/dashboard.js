@@ -22,33 +22,32 @@ _.templateSettings = {
 function initTour(){
     var tour = new Tour({
         steps: [
-//            {
-//                title: "Welcome to Hireberry",
-//                content: "Hireberry is an Application Tracking System(ATS). You can manage everythings from here.Let's see how.",
-//                container:"body",
-//                backdrop:true
-//            },
+            {
+                title: "Welcome to Hireberry",
+                content: "Hireberry is an Application Tracking System(ATS). You can manage everything from here(Dashboard). Let's see how.",
+                container:"body",
+                orphan:true
+            },
+            {
+                element: "#dashboardNavigator",
+                title: "Dashboard Navigation Menu",
+                content: "Use this buttons to navigate to different parts of dashboard",
+                container:"body"
+            },
             {
                 element: "#switchButton ",
-                title: "Change current team",
-                content: "You can use multiple teams and chage your current team with this button",
-                container:"body",
-                backdrop:true
+                title: "Switch Team",
+                content: "You can change your current team with this button",
+                container:"body"
             },
             {
                 element: "#createFlyerButton",
-                title: "Title of my step",
-                content: "Content of my step",
-                container:"#navbar-container",
-                backdrop:true
-            },
-            {
-                element: "#notifications",
-                title: "Title of my step",
-                content: "Content of my step",
-                container:"#navbar-container",
-                backdrop:true
+                title: "New Job Position",
+                content: "Create new job position with this button",
+                reflex:true,
+                container:"#navbar-container"
             }],
+        backdrop:true,
         onEnd:function(tour){
             $.post('/api/cert',{dashLevel:3});
         }

@@ -12,7 +12,61 @@ var autosaveInterval = 60*1000;
 var teamMembers = [];
 
 $(function() {
+    var tour = new Tour({
+        steps: [
+            {
+                title: "Welcome to Editor",
+                content: "Here you can create new flyer for your new job position. Let's see how",
+                container:"body",
+                orphan:true
+            },
+            {
+                element: "#widgetButtons",
+                title: "New Widgets",
+                content: "You can add new items to your flyer either by clicking or dragging items. ",
+                container:".portletCreator"
+            },
+            {
+                element: "#moreOptions",
+                title: "More Settings",
+                content: "Add or change commentators, responder, colors and title of this job position in job setting panel",
+                container:".portletCreator"
+            },
+            {
+                element: ".bool-toolbar-commands",
+                title: "New Job Position",
+                content: "Create new job position with this button",
+                container:".portletCreator"
+            },
+            {
+                element: "#buttonComment",
+                title: "Job Comment",
+                content: "press this button to see comments about this job.",
+                placement:'left',
+                reflex:true,
+                container:".portlet-commentsView"
+            }
 
+        ],
+        backdrop:true,
+        onEnd:function(tour){
+            $.post('/api/cert',{editorLevel:3});
+        }
+
+    });
+
+    $.get('/api/cert',function(data){
+        if(data && data.editorLevel)
+            return;
+
+// Initialize the tour
+        tour.init();
+        tour.start(true);
+        tour.goTo(0);
+// Start the tour
+
+
+    });
     //$(document).tooltip();
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
         $('.bool-portlet').css('background',c);

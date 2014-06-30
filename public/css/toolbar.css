@@ -308,12 +308,12 @@
 .bool-icon-behance-gray{background-position:-128px -307px;width: 28px;height: 17px;}
 .bool-icon-behance-white{background-position:-158px -307px;width: 28px;height: 17px;}
 
-.bool-color-dropdown{z-index: 2000;}
-.bool-color-dropdown-gray{z-index: 2000;}
-.bool-color-dropdown-white{z-index: 2000;}
+.bool-color-dropdown{z-index: 1001;}
+.bool-color-dropdown-gray{z-index: 1001;}
+.bool-color-dropdown-white{z-index: 1001;}
 
 .nav-pills .bool-color-dropdown{
-    z-index: 1200  ;
+    z-index: 1001  ;
 }
 
 .nav-pills .open>.bool-color-dropdown{

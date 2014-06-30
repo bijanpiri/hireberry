@@ -29,7 +29,7 @@
     left: 0;
 }
 .bool-widget-btn-carousel>.bool-toolbar-options {
-
+    display: inline-block;
     margin: 10px 0;
     border-top: 1px solid #7F7F80;;
 }
@@ -207,6 +207,7 @@ Portlet Creator
     margin: 10px 0 40px 0;
     background: inherit;
     width: 240px;
+    display: inline-block;
 }
 .bool-toolbar-options>li {
 
@@ -255,7 +256,7 @@ Portlet Creator
     left: 0;
     right: 0;
     background: inherit;
-    z-index: 2000;
+    z-index: 1000;
 }
 input.bool-option-field,
 .bool-option-field {
