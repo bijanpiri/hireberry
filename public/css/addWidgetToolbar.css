@@ -25,6 +25,7 @@
     user-select: none;
 }
 .bool-widget-btn-carousel {
+    background: inherit;
     position: absolute;
     left: 0;
 }
