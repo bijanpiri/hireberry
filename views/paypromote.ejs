@@ -1,0 +1,76 @@
+<% layout('layout') -%>
+
+<script src="layout.ejs"></script>
+
+
+
+    <script>
+        $(document).ready( function() {
+
+            $("#btn-back").click(function()
+            {
+                window.location="/dashboard#jobsp";
+            })
+        });
+    </script>
+
+    <style>
+        .job-title {
+            position: relative;
+            bottom: -150px;
+            left: 10px;
+            display: block;
+            margin: 20px 20px;
+            min-width: 100px;
+            height: 80px;
+            line-height: 80px;
+            text-align: center;
+            border-radius: 8px;
+            border: 4px 4px;
+            border-color: #006dcc;
+            border: solid;
+            background: #b0b0b0;
+            font-weight: 700;
+            border-radius: 7px;
+            font-size: 3em;
+            font-weight: 700;
+            color: #000000;
+        }
+        .pay-info {
+            position: relative;
+            bottom: -200px;
+            left: 10px;
+            display: block;
+            margin: 20px 20px;
+            min-width: 100px;
+            height: 180px;
+            line-height: 80px;
+            text-align: center;
+            border-radius: 8px;
+            border: 4px 4px;
+            border-color: #449d44;
+            border: solid;
+            background: #00ba00;
+            font-weight: 700;
+            border-radius: 7px;
+            font-size: 3em;
+            font-weight: 700;
+            color: #000000;
+        }
+        #btn-back
+        {
+            position: relative;
+            bottom: -200px;
+            display: block;
+            margin-left:auto;
+            margin-right:auto;
+            display:block
+        }
+    </style>
+
+
+<div class="job-title"> <%=PositionTitle%> </div>
+<div class="pay-info"><%=PayInfo%> </div>
+<input id="btn-back" type="button" value="Back to Dashboard" >
+
+

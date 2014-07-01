@@ -9,29 +9,52 @@ app.get('/flyer/new',function(req,res){
     res.redirect('/flyer/editor/0');
 });
 
-app.post('/flyer/submitpromote',function(req,res){
+app.get('/flyer/paypromote/:positionTitle',function(req,res){
 
+    res.render("paypromote.ejs",
+     {
+     title:"Payment report",
+     PositionTitle:req.param.positionTitle,
+     PayInfo:"Payment process successfully done. Your advertisement will be promoted within the next 24 hours."
+     });
+});
+
+app.post('/flyer/submitpromote',function(req,res){
+    //addCredit(req.body.teamID,5000,null);
     var TotalPayment=req.body.jobBoardInfo.TotalPayment;
     checkBalance(req.body.teamID,TotalPayment,function(err,isOk){
 
-        if(isOk==true)
-        {
+        if(err.error)
+            res.send(502,{error:err});
+        else if(isOk==true)
+          res.send(200,{message:"The chash is enough.",OK:isOk});
+        else
+          res.send(300,"The chash is not enough.");
+
+    });
+
+
+
+});
+
+app.post('/flyer/confirmpromote',function(req,res){
+
+    var TotalPayment=req.body.jobBoardInfo.TotalPayment;
+    payCredit(req.body.teamID,TotalPayment,function(){
             BPromoteInfo(
                 {
                     totalPrice: req.body.jobBoardInfo.TotalPayment,
                     jobBoards:req.body.jobBoardInfo.SelectedJobBoards,
-                    fylerID:req.body.fylerID
+                    flyerID:req.body.flyerID
                 }).save(function(err,data){
                     if(err)
                         res.send(502,{error:err});
                     else
+                    {
                         res.send(200,{message:"Process successfully done."});
+                    }
+
                 });
-        }
-        else
-        {
-            res.send(300,"The chash is not enough.");
-        }
     });
 
 

@@ -24,7 +24,8 @@ app.get('/api/billing', function(req,res) {
     BTransactions.find( {teamID: req.user.teamID, $or:[
         {$and:[{method:'paypal'},{state:'sold'}]},
         {method:'invoice'},
-        {method:'promo'}
+        {method:'promo'},
+        {method:'jbpromote'}
     ]}, function(err,transactions) {
         var balance = 0;
         var billings = [];
