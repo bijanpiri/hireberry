@@ -62,6 +62,7 @@ Whole Paper
     font-weight: 700;
     border-radius: 7px;
     font-size: 2em;
+    padding: 0 12px;
 }
 
 .portletFooter {
@@ -573,7 +574,7 @@ Map portlet
     display: none;
 }
 .bool-flyer-editor{
-    margin: 40px;
+    margin-top: 40px;
     padding: 0;
 }
 .bool-edit-mode .bool-flyer-editor{

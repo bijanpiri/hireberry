@@ -271,6 +271,10 @@ function loadFlyer() {
 
             // If this job is new then title must be gotten from template page
             $('[name="position-title"]').val( titleFromTemplateModal || flyer.description);
+            $('[name="position-title"]').unbind('change').change( function() {
+                $('.title').text( $('[name="position-title"]').val() );
+            });
+            $('.title').text(flyer.description);
 
             job.commentators.forEach(function(com){
                 $('.bool-commentator-users').append(createCommentatorItem(com));
@@ -281,6 +285,8 @@ function loadFlyer() {
                 thanksMessage=flyer.thanksMessage;
                 prepareThanksMessage();
             }
+
+
 
             // Set current font
             $('.bool-portlet-dropdown-fonts .dropdown-menu [data-font-family="' + flyer.font + '"]').click();
