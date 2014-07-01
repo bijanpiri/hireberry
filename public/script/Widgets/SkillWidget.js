@@ -34,6 +34,10 @@ function SkillWidget(){
             .attr('id',id)
             .attr('name','skill')
             .val(id);
+
+        if(editMode)
+            inputObj.attr('disabled','disabled');
+
         var labelObj =$('<label>').attr('for',id);
         var iconObj = $('<i>').addClass(id);
         var pObj = $('<p>').text(title);
