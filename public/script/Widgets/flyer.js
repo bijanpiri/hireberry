@@ -241,7 +241,7 @@ function Flyer(options) {
                     $('.bool-flyer-empty').hide();
                 }
 
-            })
+            });
 
             $('.bool-widget-btn').draggable({
                 connectToSortable: ".portletStack",
@@ -259,6 +259,9 @@ function Flyer(options) {
                 }
             );
             $('.portletStack>.bool-widget-btn').remove();
+            if($('.portletStack').children().length==1)
+                $('.bool-flyer-empty').show();
+
         }
         // Set click event
         $(function(){

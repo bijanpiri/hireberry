@@ -102,7 +102,7 @@ function initApplicationTour(app){
     });
 
     $.get('/api/cert',function(data){
-        if(data && data.appLevel)
+        if(data && data.application)
             return;
 
 // Initialize the tour

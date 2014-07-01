@@ -64,7 +64,7 @@ $(function() {
     });
 
     $.get('/api/cert',function(data){
-        if(data && data.editorLevel)
+        if(data && data.editor)
             return;
 
 // Initialize the tour
