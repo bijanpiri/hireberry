@@ -58,8 +58,8 @@
         var up=scrollable.find('[data-scroll=up]');
 
         if(start<=0)
-            up.hide();
-        else up.show();
+            up.css('visibility','hidden');
+        else up.css('visibility','visible');
 
         var sumHeight=0;
 
@@ -89,8 +89,8 @@
         start++;
 
         if(index+1==allItems.length)
-            down.hide();
-        else down.show();
+            down.css('visibility','hidden');
+        else down.css('visibility','visible');
 
         allItems.slice(start,index+1).show();
     }

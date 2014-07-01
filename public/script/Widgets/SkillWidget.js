@@ -36,6 +36,8 @@ function SkillWidget(){
             .attr('name','skill')
             .val(id);
 
+        activeBackColor= activeBackColor || 'rgb(228, 77, 38)';
+        activeShadowColor= activeShadowColor || 'rgb(171, 58, 28)';
         if(editMode)
             inputObj.attr('disabled','disabled');
 

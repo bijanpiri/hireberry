@@ -74,6 +74,7 @@
     cursor: pointer;
     line-height: 22px;
     border: 1px solid #808080;
+    min-height: 48px;
 }
 .bool-widget-icon{
     display: inline-block;
@@ -100,7 +101,7 @@
 .bool-widget-icon-background{background-position: 0 -188px;height: 20px; width: 22px;}
 .bool-icon-thank{background-position: 0 -605px;height: 20px; width: 22px;}
 
-.bool-icon-move{background-position: 0 -208px; height: 15px;float: right;}
+.bool-icon-move{background-position: 0 -208px; height: 15px;float: right;margin-top: 3px;}
 
 /********
 Portlet Creator
