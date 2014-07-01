@@ -174,7 +174,7 @@ function initNotificationCenter() {
                 titleObj = $('<div>')
                     .text(notif.editor.displayName + ' has left a new comment on ')
                     .append($('<a>').attr('href','/flyer/view/0?flyerid=' + notif.job).text('this form'))
-                    .append(': "'+notif.comment.text+'"');
+                    .append(': "'+notif.comment ? notif.comment.text : "" +'"');
             }
 
             var notifObj = $('<div>').attr('commentID',objID)

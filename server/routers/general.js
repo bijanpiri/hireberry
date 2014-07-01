@@ -27,7 +27,7 @@ app.post('/api/cert',function(req,res){
 
     var levels={};
     if(req.body.dashLevel) levels.dash=parseInt(req.body.dashLevel);
-    if(req.body.appLevel) levels.application=rparseInt(eq.body.appLevel);
+    if(req.body.appLevel) levels.application=parseInt(req.body.appLevel);
     if(req.body.editorLevel) levels.editor=parseInt(req.body.editorLevel);
     var userID=req.user._id;
 
