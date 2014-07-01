@@ -83,6 +83,7 @@ function takeEditorTour(callBack) {
 }
 $(function() {
     //$(document).tooltip();
+    $('[data-toggle="popover"]').popover();
 
 
     $('.bool-color-chooser-canvas').ColorPicker(function(c){

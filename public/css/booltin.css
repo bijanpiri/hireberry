@@ -620,4 +620,19 @@ input:-webkit-autofill:focus, textarea:-webkit-autofill:focus, select:-webkit-au
 }
 .popover{
     min-width: 300px;
+    color:#4d4d4d;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.popover-btn{
+    background: none;
+    border: none;
+    float: right;
+    outline: none;
+
+}
+.icon-info-sign{
+    color:floralwhite;
 }

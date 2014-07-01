@@ -387,13 +387,14 @@ Map portlet
     text-align: center;
     font-size: 1.4em;
     color: #808080;
+    min-height: 5px;
 }
 
 .beautifulButton > input[type=checkbox] {  display: none; }
 
 .beautifulButton > label {
     position: relative;
-    width: 100px;
+    min-width: 100px;
     height: 100px;
     background: #999999;
     cursor: pointer;
@@ -405,6 +406,13 @@ Map portlet
     -webkit-border-radius: 4px 4px 4px 4px;
     -moz-border-radius: 4px 4px 4px 4px;
     border-radius: 4px 4px 4px 4px;
+
+    text-align: center;
+    color: ghostwhite;
+    font-size: 38px;
+    font-weight: bolder;
+    line-height: 95px;
+    padding: 0 10px;
 }
 
 .beautifulButton > label:hover {
@@ -458,7 +466,12 @@ Map portlet
     cursor: pointer;
 }
 
-.beautifulButton input[type='checkbox']:checked + label { top: 0; }
+.beautifulButton input[type='checkbox']:checked + label {
+    top: 0;
+    -webkit-box-shadow: rgb(171, 58, 28) 0px 4px;
+    box-shadow: rgb(171, 58, 28) 0px 4px;
+    background-color: rgb(228, 77, 38);
+}
 
 .beautifulButton input[type='checkbox']:checked + label:hover { top: 1px; }
 
@@ -488,14 +501,10 @@ Map portlet
     background-image: url("/images/plus-256-b.png");
 }
 .skillAddButton > input[type=checkbox] ~ input[type=text] {
-    opacity: 0;
     height: 30px;
     width: 100px;
     display: block;
     margin: 10px 0 0 0;
-}
-.skillAddButton > input[type=checkbox]:checked ~ input[type=text] {
-    opacity: 1.0;
 }
 .loading{
     z-index: 30000;
