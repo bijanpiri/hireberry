@@ -81,7 +81,8 @@ BTeams = mongoose.model( 'teams', {
     address:String,
     plan: Number,
     planLastRenewDate: Date,
-    HiringManagerNotified: Boolean
+    HiringManagerNotified: Boolean,
+    careerPage: {}
 });
 
 BEvents = mongoose.model( 'events', {

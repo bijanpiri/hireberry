@@ -267,3 +267,48 @@ app.get('/api/team',function(req,res){
 
         })
 });
+
+app.get('/api/careerpage/:teamID', function(req,res){
+    BTeams.findOne({_id:req.params.teamID}, function(err,team){
+        if( err || !team )
+            return res.send(404);
+       return res.send(200,{flyer:team.careerPage || {}});
+    });
+});
+
+app.post('/api/careerpage/:teamID', function(req,res){
+    BTeams.update({_id:req.params.teamID}, {careerPage: req.body.careerPage}, function(err){
+        if( err )
+            return res.send(404);
+        return res.send(200);
+    });
+});
+
+app.get('/:mode/careerpage/:teamID', function(req,res){
+
+    if(req.params.mode==='editor' && req.user && req.user.teamID.toString() === req.params.teamID ){
+        res.render('careerEditor',{
+            title:'Career Page Editor',
+            editMode: true,
+            teamID: req.params.teamID
+        });
+    }
+    else if(req.params.mode==='view' ){
+
+        BTeams.findOne({_id:req.params.teamID}, function(err,team) {
+            if( err || !team )
+                return res.send(404);
+
+            res.render('careerEditor',{
+                title: team.name + ' | Career Page',
+                editMode: false,
+                teamID: req.params.teamID
+            });
+        })
+
+    }
+    else
+        res.redirect('/view/careerpage/' + req.params.teamID);
+
+
+});

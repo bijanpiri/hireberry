@@ -111,8 +111,9 @@ function Flyer(options) {
     var json2flyer = function(templateID, flyerid, callback) {
 
         var flyer = this;
+        var getURL = options.flyerid ? ('/flyer/' + templateID + '/json/'+flyerid) : ('/api/careerpage/' + flyerid);
 
-        $.get('/flyer/' + templateID + '/json/'+flyerid)
+        $.get( getURL )
             .done(function(job){
 
                 var flyer=job.flyer;
@@ -206,15 +207,7 @@ function Flyer(options) {
 
     }
 
-    var getThumbnail = function (flyerid,callback){
-        $.get('/flyer/json/'+flyerid)
-            .done(function(data){
-                callback(data.thumbnail);
-            })
-            .fail(function(data){
-                callback(-1);
-            });
-    }
+    var getThumbnail = function (flyerid,callback){}
 
     var setLogo = function (url) {
         $('.portletHeader .logo').attr('src',url);
@@ -273,8 +266,8 @@ function Flyer(options) {
         });
 
         // templateID=0 means 'don't use template'
-        if( options.flyerid)
-            this.json2flyer( options.templateID, options.flyerid, flyerLoaded );
+        if( options.flyerid || options.careerid )
+            this.json2flyer( options.templateID, options.flyerid || options.careerid, flyerLoaded );
     };
 
     // Public functions

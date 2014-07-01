@@ -326,7 +326,8 @@ BTeamView = Backbone.View.extend({
         $('.team-admin-combo').populateUserCombo(members, teamAdmin, 'teamAdmin');
 
         // Init team page
-        $('#teamJobsPage').attr('href','/team/' +  info.id + '/jobs')
+        $('#teamJobsPage').attr('href','/editor/careerpage/' +  info.id);
+        $('#teamJobsPagePublic').attr('href','/view/careerpage/' +  info.id);
         $('#teamName').text( info.name);
         $('#teamAdmin').text( teamAdmin.email);
         $('#currentTeamName').text( info.name );
