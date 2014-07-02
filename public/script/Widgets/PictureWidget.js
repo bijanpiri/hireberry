@@ -1,5 +1,7 @@
 //ToDo: When user change a picture it must be deleted in server.
 
+
+
 function PictureWidget(){
     Widget.call(this);
 
@@ -97,6 +99,7 @@ function PictureWidget(){
         }};
     var action=statesAction.none;
 
+
     function initLayout1() {
         layout = this.clone('.image-widget');
 
@@ -190,29 +193,29 @@ function PictureWidget(){
             console.log(ex);
         }
     }
-    var dudata;
-    function add(e,data){
-        dudata=data;
-        var obj=data.files[0];
-        if(obj instanceof File){
-            var reader = new FileReader();
-            reader.onload =readerLoad;
-            reader.readAsDataURL(data.files[0]);
-        }else
-            data.submit();
-    }
-
+//    var dudata;
+//    function add(data){
+//        dudata=data;
+//        var obj=data.files[0];
+//        if(obj instanceof File){
+//            var reader = new FileReader();
+//            reader.onload =readerLoad;
+//            reader.readAsDataURL(data.files[0]);
+//        }else
+//            data.submit();
+//    }
+//
     function send(){
         action=statesAction.uploading;
-        bar.slideDown();
+//        bar.slideDown();
         layout.find('.imageWidgetInnerContainer').hide();
     }
 
-    function done(e,data){
+    function done(url){
         action=statesAction.uploaded;
-        bar.slideUp();
+//        bar.slideUp();
         var img = layout.find('img');
-        img.attr('src', '/uploads/' + data.result.files[0].name).show();
+        img.attr('src', url).show();
         if(gettingReady){
             gettingReady=false;
             widget.prepared();
@@ -234,17 +237,14 @@ function PictureWidget(){
         var widget = this;
 
         if(this.editMode){
-            this.portlet.find('input[type=file]').fileupload({
-                url:'/flyer/upload',
-                dataType: 'json',
-                replaceFileInput:false,
-                add:add,
-                dropZone:layout,
-                send:send,
-                done: done,
-                progressall:progressall
+            widget.portlet.find('input[type=file]').change(function(){
+                var file=this.files[0];
+                if(file instanceof File) {
+                    var reader = new FileReader();
+                    reader.onload = readerLoad;
+                    reader.readAsDataURL(file);
+                }
             });
-
             this.addToolbarCommand('crop',function(){showCrop();
             }).addToolbarCommand('undo',function(){undo();widget.changed();
             }).addToolbarCommand('redo',function(){redo();widget.changed();
@@ -262,8 +262,19 @@ function PictureWidget(){
         var src=widget.portlet.find('img').attr('src');
 
         if(src.indexOf('data')==0) {
-            var blob = dataURLtoBlob(src);
-        layout.find('input[type=file]').fileupload('add',{files:blob});
+            var pic=new Picture();
+
+            var file =new Parse.File('image.jpg',{ base64: src},'image/jpeg');
+
+            pic.set('picfile',file);
+            send();
+            pic.save(null, {
+                success:function(picture){
+                    done(file.url());
+
+                }
+
+            });
         }
 
     }
@@ -323,7 +334,7 @@ function PictureWidget(){
         var clip=container.find('.bool-clipper');
 
             var tempImg = new Image();
-        tempImg.src=img.attr('src');
+            tempImg.src=img.attr('src');
             tempImg.onload = function() {
                 var canvas = document.createElement('canvas');
                 var scale = tempImg.width / img.width();

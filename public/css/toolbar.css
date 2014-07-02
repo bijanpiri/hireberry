@@ -22,7 +22,7 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     color: #f1f1f1;
-    z-index: 1000;
+    /*z-index: 30;*/
     display: none;
 }
 .bool-no-toolbar>.toolbar{

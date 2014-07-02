@@ -10,77 +10,15 @@ dialog_confirm.appendTo('body');
 var autosaveTimer;
 var autosaveInterval = 60*1000;
 var teamMembers = [];
+var Picture;
 
-function takeEditorTour(callBack) {
-    var tour = new Tour({
-        steps: [
-            {
-                title: "Welcome to Editor",
-                content: "Here you can create new flyer for your new job position. Let's see how",
-                container: "body",
-                orphan: true
-            },
-            {
-                element: "#widgetButtons",
-                title: "New Widgets",
-                content: "You can add new items to your flyer either by clicking or dragging items. ",
-                container: ".portletCreator"
-            },
-            {
-                element: ".portletStack",
-                title: "Flyer Stack",
-                content: "You can edit, remove or replace widgets here.",
-                placement: "bottom",
-                container: "#portletsBox"
+(function initParse(){
+    Parse.initialize(
+        "27AiA7lmRwF5xWK2o8tebNIx0Ij49QxQ9aYUAjkS",
+        "Gbk3FdnB5yergbaTGLIC4BRkejQDVBxATZB8O6LI");
+    Picture=Parse.Object.extend("Picture");
+}());
 
-            },
-            {
-                element: "#moreOptions",
-                title: "More Settings",
-                content: "Add or change commentators, responder, colors and title of this job position in job setting panel",
-                container: ".portletCreator"
-            },
-            {
-                element: "#publishButton",
-                title: "Publish",
-                content: "When you done job editing use this button to Publish it.",
-                container: ".bool-dock-bottom"
-            },
-            {
-                element: "#buttonComment",
-                title: "Job Comment",
-                content: "press this button to see comments about this job.",
-                placement: 'left',
-                reflex: true,
-                container: ".portlet-commentsView",
-                onHide:callBack
-            },
-            {
-                element: "#templateModal",
-                title: "Choose a Template",
-                content: "You can start from scratch or one of template that already created",
-                placement: 'top',
-                reflex: true,
-                container: "body"
-//                backdrop:false
-            }
-
-        ],
-        backdrop: true,
-        onEnd: function (tour) {
-            $.post('/api/cert', {editorLevel: 3});
-        }
-
-    });
-
-    $.get('/api/cert', function (data) {
-        if (data && data.editor)
-            return;
-        tour.init();
-        tour.setCurrentStep(0);
-        tour.start(true);
-    });
-}
 $(function() {
     //$(document).tooltip();
     $('[data-toggle="popover"]').popover();
@@ -123,12 +61,12 @@ $(function() {
     $('.bool-portlet-font-item').click( function() {
         var fontFamily = $(this).css('font-family');
 
-       $('.bool-portlet').css( 'font-family', fontFamily );
+        $('.bool-portlet').css( 'font-family', fontFamily );
 
-       $('.bool-portlet-dropdown-fonts .dropdown-toggle')
-           .css( 'font-family', fontFamily )
-           .find('.bool-current-font-name')
-           .text( $(this).attr('data-font') );
+        $('.bool-portlet-dropdown-fonts .dropdown-toggle')
+            .css( 'font-family', fontFamily )
+            .find('.bool-current-font-name')
+            .text( $(this).attr('data-font') );
     });
     $('.bool-thanks-message-save').click(function(){
         saveFlyer();
@@ -249,6 +187,78 @@ $(function() {
         });
     }
 });
+
+function takeEditorTour(callBack) {
+    var tour = new Tour({
+        steps: [
+            {
+                title: "Welcome to Editor",
+                content: "Here you can create new flyer for your new job position. Let's see how",
+                container: "body",
+                orphan: true
+            },
+            {
+                element: "#widgetButtons",
+                title: "New Widgets",
+                content: "You can add new items to your flyer either by clicking or dragging items. ",
+                container: ".portletCreator"
+            },
+            {
+                element: ".portletStack",
+                title: "Flyer Stack",
+                content: "You can edit, remove or replace widgets here.",
+                placement: "bottom",
+                container: "#portletsBox"
+
+            },
+            {
+                element: "#moreOptions",
+                title: "More Settings",
+                content: "Add or change commentators, responder, colors and title of this job position in job setting panel",
+                container: ".portletCreator"
+            },
+            {
+                element: "#publishButton",
+                title: "Publish",
+                content: "When you done job editing use this button to Publish it.",
+                container: ".bool-dock-bottom"
+            },
+            {
+                element: "#buttonComment",
+                title: "Job Comment",
+                content: "press this button to see comments about this job.",
+                placement: 'left',
+                reflex: true,
+                container: ".portlet-commentsView",
+                onHide:callBack
+            },
+            {
+                element: "#templateModal",
+                title: "Choose a Template",
+                content: "You can start from scratch or one of template that already created",
+                placement: 'top',
+                reflex: true,
+                container: "body"
+//                backdrop:false
+            }
+
+        ],
+        backdrop: true,
+        onEnd: function (tour) {
+            $.post('/api/cert', {editorLevel: 3});
+        }
+
+    });
+
+    $.get('/api/cert', function (data) {
+        if (data && data.editor)
+            return;
+        tour.init();
+        tour.setCurrentStep(0);
+        tour.start(true);
+    });
+}
+
 
 var thanksMessage;
 var titleFromTemplateModal = null;
@@ -425,26 +435,38 @@ function loadEditor() {
     // Saving flyer methods
     autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
     $('.bool-toolbar-btn-save').click(function(){
-
         saveFlyer();
     });
 
     // Logo uploading handling
-    var logoInput = $('input.logofile');
+    var logoInput = $('input.logofile').change(function(){
+        var pic=new Picture();
+
+        var file =new Parse.File('logo.jpg',this.files[0]);
+
+        pic.set('picfile',file);
+
+        pic.save(null, {
+            success:function(picture){
+                $('img.logo').attr('src',file.url());
+            }
+        });
+    });
     $(document).delegate('.portletHeader .logo','mousedown',function(){
         if(editMode)
             logoInput.click();
+
     });
 
-    logoInput.fileupload({
-        url:'/flyer/upload',
-        dataType: 'json',
-        replaceFileInput:false,
-        dropZone:$('.portletHeader .logo'),
-        done: function (e, data) {
-            flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
-        }
-    });
+//    logoInput.fileupload({
+//        url:'/flyer/upload',
+//        dataType: 'json',
+//        replaceFileInput:false,
+//        dropZone:$('.portletHeader .logo'),
+//        done: function (e, data) {
+//            flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
+//        }
+//    });
 }
 
 function GoToEditMode() {
