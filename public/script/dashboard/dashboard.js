@@ -7,6 +7,13 @@ teamMembers = [];
 userAdmin = null;
 forms = [];
 badgeNum=0;
+
+Parse.initialize(
+    "qoMkGPujIUWxjrHi28WCcOoSrl755V8CgFYrdC59",
+    "xCzRaCEshLWlg6XGvnBxLdRRcv6BRGNY4MUQhgvn");
+
+var Resume=Parse.Object.extend("Resume");
+
 var stagesName = ['pending', 'interviewing', 'offering', 'archived'];
 var subStagesName =[
     [''],
@@ -611,15 +618,40 @@ function initCandidateInstance(candidate,expanded) {
     })
 
     var viewer = 'https://docs.google.com/viewer?embedded=true&url=';
+    var viewResume = candidateObj.find('.candidate-resume-view-button');
+    var downloadResume = candidateObj.find('.candidate-resume-download-button');
+    var uploadResume = candidateObj.find('.candidate-resume-upload-button');
+
     if( candidate.resumePath ) {
-        candidateObj.find('.candidate-resume-view-button').attr('href', viewer + candidate.resumePath );
-        candidateObj.find('.candidate-resume-download-button').attr('href', candidate.resumePath );
+        viewResume.attr('href', viewer + candidate.resumePath );
+        downloadResume.attr('href', candidate.resumePath );
     }
     else {
-        candidateObj.find('.candidate-resume-view-button').remove();
-        candidateObj.find('.candidate-resume-download-button').remove();
-    }
+        viewResume.hide();
+        downloadResume.hide();
+        uploadResume
+            .unbind('click')
+            .click(function () {
+                candidateObj.find('input.candidate-file')
+                    .click()
+                    .change(function () {
 
+                        var resume = new Resume();
+                        var file = new Parse.File('user-resume', this.files[0]);
+
+                        resume.set('file', file);
+
+                        resume.save(null, {
+                            success: function (resume) {
+                                viewResume.show().attr('href',viewer+file.url());
+                                downloadResume.show().attr('href', file.url());
+                                uploadResume.html('Change');
+                            }
+                        });
+                    });
+
+            });
+    }
     // Activities
     for( var j=0; j<candidate.activities.length; j++ ) {
         var activity = candidate.activities[j];
