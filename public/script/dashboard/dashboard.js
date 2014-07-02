@@ -545,7 +545,7 @@ function showApplicationPreview(applicationID) {
 
     $('#application-preview-dialog .bool-close-btn').unbind('click').click(function(){
         $('#application-preview-dialog').removeClass('open');
-
+        $('body').css('overflow','auto'); // hide main scroll bar
     });
 
     $('#application-preview-dialog').addClass('open');
@@ -565,6 +565,8 @@ function initCandidateInstance(candidate,expanded) {
 
     if( candidate.currentUser==='denied') {
         var workflow_mbox = candidateObj.find('.candidate-workflow').parent();
+
+        candidateObj.find('.visitedState').remove();
 
         workflow_mbox.empty().append('You do not have enough permission.');
         workflow_mbox.css('text-align','center')

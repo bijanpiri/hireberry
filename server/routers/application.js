@@ -4,7 +4,7 @@
 
 app.get('/api/applications', function (req,res) {
 
-    var submittedForms = {rows: []};
+    var submittedForms = [];
 
     var teamID = req.user.teamID;
     var userID = req.user ? req.user._id: '';
@@ -75,16 +75,16 @@ app.get('/api/applications', function (req,res) {
                     return res.send(303,{error:err});
 
                 for( var i=0; i<forms.length; i++ ) {
-                    var form = prepareApplicationForClient( forms[i]._doc );
+                    var form = forms[i]._doc;//prepareApplicationForClient( forms[i]._doc );
 
                     // Move stage if it is interview and the date is over
                     // ToDo: This task must be done by a crone job or something like this
                     checkNeedForChangingStage(form.stage,form._id);
 
-                    submittedForms.rows.push( form );
+                    submittedForms.push( {appID:form._id, stage:form.stage} );
                 }
 
-                return res.send({candidates:submittedForms.rows});
+                return res.send({candidates:submittedForms});
             })
     }
 
@@ -379,6 +379,7 @@ function notifyAllForAppComment(app,comment) {
 
     notifs.forEach(function(not){BAppNotification(not).save();});
 }
+
 app.post('/api/application/:appID/comment', function(req,res) {
     // Add a new comment on this application
 
@@ -413,6 +414,7 @@ app.post('/api/application/:appID/comment', function(req,res) {
             });
         });
 });
+
 app.get('/api/application/:appID/comments', function(req,res) {
     // Get all comments on this application
 
@@ -503,7 +505,7 @@ function prepareApplicationForClient(form) {
     if( form.activities && form.activities.length > 0 )
         form.lastActivity = form.activities[form.activities.length-1]['type'];
     else
-        form.lastActivity = 'NEW'
+        form.lastActivity = 'NEW';
 
     return form;
 }

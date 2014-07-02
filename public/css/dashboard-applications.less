@@ -51,8 +51,8 @@
       position: absolute;
       right: 0;
       top: -1em;
-      background-color: #DCEEA1;
-      border: 1px solid #B5C487;
+      background-color: #F1F1F1;
+      border: 1px solid #C6C6C6;
       padding: 2px 4px;
       border-radius: 0 0 4px 4px;
       font-weight: 700;
@@ -63,6 +63,7 @@
       cursor: pointer;
 
       &.visited {
+
         .visitedStateLabel {
           .visitedText{ display: inline-block; }
           .unvisitedText { display: none; }
@@ -70,6 +71,9 @@
       }
 
       &.unvisited {
+        background-color: #DCEEA1;
+        border: 1px solid #B5C487;
+
         .visitedStateLabel {
           .unvisitedText{ display: inline-block; }
           .visitedText { display: none; }
