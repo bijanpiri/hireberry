@@ -160,32 +160,66 @@ $(function(){
 
         var operation = $(this).attr('op');
         var editableObjClassName = $(this).parent().attr('edit-switch-of');
-        var editableObj = $(this).closest( '.' + editableObjClassName ).find('.value');
+        var fixValues = $(this).parent().attr('fixValues')==="true";
 
-        switch (operation) {
-            case 'edit':
-                editableObj.attr('last-value',editableObj.text());
-                editableObj.attr('contenteditable','true');
-                editableObj.focus();
-                break;
-            case 'yes':
-                editableObj.attr('contenteditable','false');
-                saveModifiedApplication( editableObj.closest('.candidate') );
-                break;
-            case 'no':
-                editableObj.text(editableObj.attr('last-value'));
-                editableObj.attr('contenteditable','false');
-                break;
+        if( fixValues ){
+            var editableObj = $(this).closest( '.' + editableObjClassName ).find('select');
+            var viewableObj =  $(this).closest( '.' + editableObjClassName ).find('.value');;
+
+            switch (operation) {
+                case 'edit':
+                    viewableObj.hide().attr('contenteditable','true');
+                    editableObj.show();
+                    editableObj.find('[val="' + viewableObj.text() + '"]').attr('selected','true')
+                    break;
+                case 'yes':
+                    viewableObj.show().attr('contenteditable','false');
+                    editableObj.hide();
+                    viewableObj.text( editableObj.val() );
+                    saveModifiedApplication( editableObj.closest('.candidate') );
+                    break;
+                case 'no':
+                    viewableObj.show().attr('contenteditable','false');
+                    editableObj.hide();
+                    break;
+            }
+
+
+        }
+        else {
+            var editableObj = $(this).closest( '.' + editableObjClassName ).find('.value');
+
+            switch (operation) {
+                case 'edit':
+                    editableObj.attr('last-value',editableObj.text());
+                    editableObj.attr('contenteditable','true');
+                    editableObj.focus();
+                    break;
+                case 'yes':
+                    editableObj.attr('contenteditable','false');
+                    saveModifiedApplication( editableObj.closest('.candidate') );
+                    break;
+                case 'no':
+                    editableObj.text(editableObj.attr('last-value'));
+                    editableObj.attr('contenteditable','false');
+                    break;
+            }
         }
 
 
         function saveModifiedApplication(candidateObj) {
+
+            var skills = candidateObj.find('.candidate-details .candidate-skills .value').text().split(',');
+
             $.post('/api/applications/' + candidateObj.data('candidate')._id , {
                 name: candidateObj.find('.candidate-name .value').text(),
                 email: candidateObj.find('.candidate-email .value').text(),
                 tel: candidateObj.find('.candidate-tel .value').text(),
                 website: candidateObj.find('.candidate-website .value').text(),
-                note: candidateObj.find('.candidate-note .value').html()
+                note: candidateObj.find('.candidate-note .value').html(),
+                skills: JSON.stringify(skills),
+                workplace: candidateObj.find('.candidate-details .candidate-conditions-place .value').text(),
+                worktime: candidateObj.find('.candidate-details .candidate-conditions-time .value').text()
             }).done( function() {
                     refresh();
                 });
@@ -561,7 +595,8 @@ function initCandidateInstance(candidate,expanded) {
 
     candidateObj.find('.candidate-stage .value').text( stagesName[candidate.stage.stage-1] + '-' + subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1]);
     candidateObj.find('.candidate-skills .value').text(candidate.skills);
-    candidateObj.find('.candidate-conditions .value').text((candidate.workTime||'') + (candidate.workPlace ? ' @' + candidate.workPlace : '') );
+    candidateObj.find('.candidate-conditions-time .value').text( candidate.workTime || 'Not specified' );
+    candidateObj.find('.candidate-conditions-place .value').text( candidate.workPlace || 'Not specified' );
     candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
     candidateObj.find('.candidate-email .value').attr('href','mailto:'+candidate.email).text(candidate.email);
     candidateObj.find('.candidate-tel .value').text(candidate.tel);
@@ -655,78 +690,6 @@ function initCandidateInstance(candidate,expanded) {
     candidateObj.find('.mbox-title').dblclick( function() {
         $(this).next().toggle();
     });
-
-/*
-    $.get('/api/application/comments',{appID:candidate._id},function(data){
-        var comments = data.comments;
-
-        var commentsObj = $('#application-preview-dialog .bool-application-comments > ul');
-
-        commentsObj.empty();
-
-        comments.forEach(function(comment){
-            var form = $('.reply-for-comment-form:first').clone().show();
-            commentsObj.append(form);
-
-            form.find('[name=commentID]').val(comment._id);
-            form.find('.user-note-avatar')
-                .replaceWith(generateMemberElement(comment.user,true,false));
-            form.find('.commenter-note-avatar')
-                .replaceWith(generateMemberElement(comment.commenter,true,false,true))
-            form.find('.bool-application-comments-note').html(comment.note);
-            var commentBox = form.find('.bool-application-comments-comment');
-            var replyBtn = form.find('[type=submit]');
-            commentBox.html(comment.comment);
-
-            var editBtn = form.find('.bool-edit-comment-btn').hide();
-            var cancleBtn = form.find('.bool-cancel-comment-btn').hide();
-            if(comment.comment || data.user!==comment.commenter._id) {
-                commentBox
-                    .attr('readonly', 'readonly')
-                    .attr('placeholder', 'No comment left');
-                replyBtn.hide();
-                if(data.user===comment.commenter._id)
-                    editBtn.show();
-
-            }
-
-            editBtn.click(function(){
-                replyBtn.show();
-                cancleBtn.show();
-                commentBox.removeAttr('readonly')
-                editBtn.hide();
-            });
-            cancleBtn.click(function(){
-                replyBtn.hide();
-                cancleBtn.hide();
-                editBtn.show();
-                commentBox.attr('readonly','readonly');
-                commentBox.val(comment.comment);
-            });
-
-            form.submit(function(){
-                form.find('.alert-info').show();
-                $.post('/api/application/comments',
-                        form.serialize())
-                    .always(function(data){
-                        $('.alert').hide();
-                    })
-                    .fail(function(data){
-                        form.find('.alert-danger').show();
-                    })
-                    .done(function(data){
-                        form.find('.alert-success').show().delay(3000).fadeOut();
-                        replyBtn.hide();
-                        cancleBtn.hide();
-                        editBtn.show();
-                        commentBox.attr('readonly','readonly');
-                    });
-                return false;
-            })
-
-        })
-    });
-*/
 
     $('.bool-application-comments').commentBox({
         postURL: '/api/application/' + candidate._id + '/comment',

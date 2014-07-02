@@ -134,13 +134,19 @@ app.post('/api/applications/:applicationID',  function(req,res) {
         var nTel = req.body.tel;
         var nWebsite = req.body.website;
         var nNote = req.body.note;
+        var nSkills = req.body.skills;
+        var nWorkPlace = req.body.workplace;
+        var nWorkTime = req.body.worktime;
 
         BApplications.update({_id:req.params.applicationID},{
             note: nNote,
             name: nName,
             email: nEmail,
             tel: nTel,
-            website: nWebsite
+            website: nWebsite,
+            skills: nSkills,
+            workPlace: nWorkPlace,
+            workTime: nWorkTime
         },function(err) {
             res.send(200);
         });
