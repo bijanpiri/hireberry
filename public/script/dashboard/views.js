@@ -90,8 +90,11 @@ BApplicationsView = Backbone.View.extend({
 
         for( var i=0; i<candidates.length; i++ ) {
             var candidate = candidates[i];
-            var candidateInstance = initCandidateInstance(candidate);
-            $('#candidatesCollection').append( candidateInstance );
+
+            $.get('/api/application/json/' + candidate.appID).done( function(app) {
+                var candidateInstance = initCandidateInstance(app,false);
+                $('#candidatesCollection').append( candidateInstance );
+            });
 
             stagesCounter[0]++;
             stagesCounter[candidate.stage.stage]++;

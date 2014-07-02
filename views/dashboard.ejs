@@ -281,8 +281,8 @@
 <div class="candidate-summary">
     <div class="visitedState">
         <div class="visitedStateLabel">
-            <span class="visitedText">Read</span>
-            <span class="unvisitedText">Unread</span>
+            <span class="visitedText">Visited</span>
+            <span class="unvisitedText">NEW</span>
         </div>
         <span class="markAsVisited">Mark as Visited</span>
         <span class="markAsUnvisited">Mark as Unvisited</span>
@@ -314,7 +314,12 @@
     </div>
     <div class="candidate-conditions">
         <strong>Conditions:</strong>
-        <span class="value">Part-Time @Home</span>
+        <span class="candidate-conditions-time">
+            <span class="value">FullTime</span>
+        </span>
+        <span class="candidate-conditions-place">
+            @<span class="value">Home</span>
+        </span>
     </div>
     <div class="candidate-skills">
         <strong>Skills:</strong>
@@ -332,18 +337,47 @@
             <i class="fa fa-question-circle"></i> Professional Info.
         </div>
         <div class="mbox" style="height: 130px">
-            <div class="candidate-conditions">
-                <strong>Conditions:</strong>
-                <span class="value">Part-Time @Home</span>
+            <div class="candidate-conditions candidate-conditions-time">
+                <strong>WorkTime:</strong>
+                <select style="display: none">
+                    <option val="fulltime">fulltime</option>
+                    <option val="parttime">parttime</option>
+                </select>
+                <span class="value">Part-Time</span>
+                <span class="bool-edit-switch" edit-switch-of="candidate-conditions-time" fixValues="true">
+                    <a op="edit"><i class="fa fa-edit"></i> </a>
+                    <a op="yes"><i class="fa fa-check"></i></a>
+                    <a op="no"> <i class="fa fa-times"></i></a>
+                </span>
             </div>
+            <div class="candidate-conditions candidate-conditions-place">
+                <strong>WorkPlace:</strong>
+                <select style="display: none">
+                    <option val="home">home</option>
+                    <option val="office">office</option>
+                </select>
+                <span class="value">@Home</span>
+                <span class="bool-edit-switch" edit-switch-of="candidate-conditions-place" fixValues="true">
+                    <a op="edit"><i class="fa fa-edit"></i> </a>
+                    <a op="yes"><i class="fa fa-check"></i></a>
+                    <a op="no"> <i class="fa fa-times"></i></a>
+                </span>
+            </div>
+
             <div class="candidate-skills">
                 <strong>Skills:</strong>
                 <span class="value">CSS, jQuery, Nodejs</span>
+                <span class="bool-edit-switch" edit-switch-of="candidate-skills">
+                    <a op="edit"><i class="fa fa-edit"></i> </a>
+                    <a op="yes"><i class="fa fa-check"></i></a>
+                    <a op="no"> <i class="fa fa-times"></i></a>
+                </span>
             </div>
             <div class="candidate-resume">
                 <strong>Resume:</strong>
                 <a class="btn btn-mini btn-warning candidate-resume-view-button" target="_blank">View</a>
                 <a class="btn btn-mini btn-primary candidate-resume-download-button" target="_blank">Download</a>
+                <a class="btn btn-mini btn-primary candidate-resume-upload-button">Upload</a>
             </div>
         </div>
     </div>

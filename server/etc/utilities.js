@@ -618,11 +618,24 @@ addCredit = function(teamID,value,callback) {
 
 }
 
+
+payCredit = function(teamID,value,callback) {
+
+    BTransactions( {
+        teamID: teamID,
+        method: 'jbpromote',
+        amount: -parseFloat(value),
+        paymentTime: new Date()
+    }).save( callback );
+
+}
+
 checkBalance = function(teamID, minBalance, callback) {
     BTransactions.find( {teamID: teamID, $or:[
         {$and:[{method:'paypal'},{state:'sold'}]},
         {method:'invoice'},
-        {method:'promo'}
+        {method:'promo'},
+        {method: 'jbpromote'}
     ]}, function(err,transactions) {
         var balance = 0;
 

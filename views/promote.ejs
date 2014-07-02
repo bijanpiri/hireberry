@@ -123,13 +123,29 @@
     padding-left: 10px;
     padding-right: 10px;
     min-width: 100px;
-    height: 200px;
+    height: 280px;
     line-height: 60px;
     text-align: center;
     background: #c3c3c3;
     font-weight: 700;
     border-radius: 7px;
     font-size: 2.5em;
+}
+
+.job-boards label{
+    position: relative;
+    height: 35px;
+    font-weight: 300;
+    font-size: 0.6em;
+    top: -7px;
+display: inline-block;
+
+}
+.job-boards input[type=number]{
+height: 35px;
+    width: 100px;
+
+
 }
 
 .job-boards input[type=checkbox]{
@@ -351,6 +367,28 @@ var teamID='';
 
 $(document).ready( function() {
 
+    $("#linkedin-test").click(function(e)
+    {
+        $.ajax({
+            url:'https://www.linkedin.com/job/consumer/commonPost/getPricesByLocationAjax',
+            type: 'POST',
+            dataType: 'json',
+            data:{
+                countryCode:"ir",
+                postalCode:"",
+                productCode:"jobListing",
+                promoCode:"noJobPromoCode"
+            },
+            success: function(data) {
+
+            }
+        })                .fail(function(data) {
+                    alert(data);
+                });
+
+
+    })
+
     $.ajax({
         url:'/api/team/settings',
         type: 'GET',
@@ -363,6 +401,25 @@ $(document).ready( function() {
 alert(data);
             });
 
+
+
+    $("#inputtext-indeed-payment").change(
+
+            function(e)
+            {
+               var value= parseInt ($("#inputtext-indeed-payment").val());
+
+                if(value<50 || value>1000)
+                    $("#inputtext-indeed-payment").css("color",'red');
+                else
+                    $("#inputtext-indeed-payment").css("color",'black');
+
+
+
+           calculateTotalPayment();
+            e.stopPropagation();
+            }
+    );
 
     $("#ln-promote").attr("href","http://www.linkedin.com/shareArticle?mini=true&url="
             +jobLink.replace(' ','%20')+
@@ -403,6 +460,8 @@ alert(data);
         var ml = $('#payment-action-dialog');
         ml.find("#error-msg").text("");
         var rst=  getSelectedJobBorads();
+
+
         $.ajax({
             url:'/flyer/submitpromote',
             type: 'POST',
@@ -437,11 +496,30 @@ alert(data);
                         .attr('data-dismiss','modal')
                         .attr('aria-hidden','true').text("Confirm").click(function()
                         {
-                           alert(data.message);
+                            $.ajax({
+                                url:'/flyer/confirmpromote',
+                                type: 'POST',
+                                dataType: 'json',
+                                data :
+                                {
+                                    flyerID:flyerID,
+                                    teamID:teamID,
+                                    jobBoardInfo:rst
+                                },
+                                success: function(data) {
+
+                                    window.location='/flyer/paypromote/'+positionTitle;
+                                }
+                            })
+                                    .fail(function(data) {
+
+                                    });
+
                         }));
             }
         })
                 .fail(function(data) {
+
                     var ml = $('#payment-action-dialog');
                     ml.find('.container-fluid').empty();
                     ml.find('.container-fluid').append($('<span>').text("Message"));
@@ -456,15 +534,26 @@ alert(data);
 
     });
 
-    $(".job-boards").find(":input[type=checkbox]").click(function() {
+   var calculateTotalPayment=function()
+    {
         var chbxs=$(".job-boards").find(":input[type=checkbox]");
-
 
         $.each(chbxs, function(i)
         {
-            $(chbxs[i]).val( JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]);
+            if($(chbxs[i]).attr("title").toLowerCase()=="indeed")
+            {
+                var value= parseInt ($("#inputtext-indeed-payment").val());
+                if(value<50 )
+                    value=50;
+                else if(value>1000 )
+                    value=1000;
+                else if(isNaN(value) )
+                    value=50;
+                JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]=parseFloat(value);
+            }
+            else
+                $(chbxs[i]).val( JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]);
         });
-
         var sumPayment=0.0;
         $.each(chbxs, function(i)
         {
@@ -474,6 +563,12 @@ alert(data);
             }
         });
         $("#div-total-payment").text("$ " +sumPayment.toFixed(2));
+    }
+
+    $(".job-boards").find(":input[type=checkbox]").click(function() {
+
+        calculateTotalPayment();
+
     });
 
     $(".job-boards").find(":input[type=button]").click(function() {
@@ -637,6 +732,10 @@ alert(data);
     <input id="ch-behance-promote" title="Behance" type="checkbox" value="Behance">
     <input id="ch-linkedin-promote" title="LinkedIn" type="checkbox"  value="linkedIn" >
     <input id="ch-indeed-promote" title="Indeed" type="checkbox"  value="Indeed"  style="margin-right: 0">
+    <br>
+    <label  >Indeed payment ($): </label>
+    <input id="inputtext-indeed-payment" type="number"  value="50" >
+    <label > (Min:$50 - Max:$1000)</label>
 
 </div>
 
@@ -645,7 +744,7 @@ alert(data);
 <div id="div-total-payment" >
     $ 0.00
 </div>
-
+<input id="linkedin-test" title="LinkedIn" type="button"  >
 
 <div id="payment-action-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
      aria-hidden="true">
