@@ -595,7 +595,8 @@ function initCandidateInstance(candidate,expanded) {
     var dt = dateTimeToJSON(candidate.applyTime);
     candidateObj.find('.candidate-time .value').text( dt.fullStyle );
 
-    candidateObj.find('.candidate-stage .value').text( stagesName[candidate.stage.stage-1] + '-' + subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1]);
+    candidateObj.find('.candidate-stage .stage.value').text( stagesName[candidate.stage.stage-1]);
+    candidateObj.find('.candidate-stage .substage.value').text( subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1] );
     candidateObj.find('.candidate-skills .value').text(candidate.skills);
     candidateObj.find('.candidate-conditions-time .value').text( candidate.workTime || 'Not specified' );
     candidateObj.find('.candidate-conditions-place .value').text( candidate.workPlace || 'Not specified' );

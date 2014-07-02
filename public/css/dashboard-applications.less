@@ -9,6 +9,13 @@
   }
 }
 
+.dots {
+  word-spacing: normal;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
 #applications-filters {
   text-align: center;
   font-size: 1.5em;
@@ -46,6 +53,8 @@
     -webkit-box-shadow: 1px 1px 5px #c6c6c6;
     background-color: #fff;
     border-radius: 4px;
+
+
 
     .sticky {
       position: absolute;
@@ -462,6 +471,8 @@
         vertical-align: top;
         line-height: 1.8em;
         margin: 10px 0;
+        width: 250px;
+        .dots();
       }
 
       .candidate-name {
@@ -469,11 +480,15 @@
         line-height: 1.6em;
         color: @head1-color;
         display: inline-block;
+        width: 100%;
+        .dots()
       }
 
       .candidate-job, .candidate-time {
         font-size: 1.5em;
         color: @head2-color;
+        width: 100%;
+        .dots();
 
         .value {
           font-weight: 700;
@@ -489,6 +504,7 @@
         line-height: 2em;
         border-top: 2px solid #eee;
         padding: 0 10px;
+        .dots()
       }
 
       .candidate-conditions {
@@ -496,6 +512,7 @@
         line-height: 2em;
         border-top: 2px solid #eee;
         padding: 0 10px;
+        .dots()
       }
 
       .candidate-skills {
@@ -503,6 +520,7 @@
         line-height: 2em;
         border-top: 2px solid #eee;
         padding: 0 10px;
+        .dots()
       }
     }
 
