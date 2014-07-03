@@ -647,6 +647,11 @@ function initCandidateInstance(candidate,expanded) {
                                 viewResume.show().attr('href',viewer+file.url());
                                 downloadResume.show().attr('href', file.url());
                                 uploadResume.html('Change');
+
+                                $.post('/api/resume',{
+                                    applicationID:candidate._id,
+                                    resume:file.url()
+                                });
                             }
                         });
                     });

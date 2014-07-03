@@ -268,6 +268,28 @@ app.get('/api/resume', function(req,res) {
     });
 } );
 
+app.post('/api/resume', function(req,res) {
+
+    if( !req.user )
+        res.send(304);
+
+    var resumeURI = decodeURI(req.body.resume);
+    var applicationID = req.body.applicationID;
+    var userID = req.user._id;
+
+    canCurrentUserAceessApplciation( userID, applicationID, function(err,can) {
+        if( can ) {
+            BApplications.update({_id:applicationID},{resumePath:resumeURI}, function(err) {
+                res.send(200);
+            });
+        }
+        else {
+            res.send(304);
+        }
+    });
+});
+
+
 app.head('/api/applications/applyByEmail/:teamID', function(req,res) {
     res.send(200);
 });
