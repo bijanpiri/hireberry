@@ -35,7 +35,6 @@ Whole Paper
     left: 0;
     display: inline-block;
     margin: auto 20px;
-    /*min-width: 200px;*/
     height: 60px;
     border: 2px dashed #9c9c9c;
     bottom: 0;
@@ -45,6 +44,7 @@ Whole Paper
     box-sizing: content-box;
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;
+    display: none;
 }
 
 .portletHeader .title {
@@ -600,7 +600,7 @@ Map portlet
     min-width: 500px;
 }
 #previewFrame{
-    margin: 0 0 0 240px;
+    /*margin: 0 0 0 240px;*/
 }
 
 .bgi{

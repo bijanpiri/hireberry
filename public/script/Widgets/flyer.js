@@ -210,12 +210,13 @@ function Flyer(options) {
     var getThumbnail = function (flyerid,callback){}
 
     var setLogo = function (url) {
-        $('.portletHeader .logo').attr('src',url);
 
-        if(editMode==false)
-        {
+        if(editMode==false) {
+            url = (url.indexOf('placebox.es')!=-1) ? '' : url;
             $('.portletHeader .logo').css('border',0);
         }
+
+        $('.portletHeader .logo').show().attr('src',url);
     }
 
     var initPortletsStack = function () {
