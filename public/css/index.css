@@ -1,0 +1,125 @@
+.hb-land-body{
+    padding: 0;
+    font-family: 'Source Sans Pro';
+    /*background-image: url("/images/LP-bp-fonts+colors.jpg") ;*/
+    /*background-image: url("/images/LP-preview.jpg") ;*/
+    /*background-image: url("/images/LP-bp-sizes+distances.jpg") ;*/
+    background-position: -180px -100px;
+}
+.hb-navbar-inner{
+    background: #ffffff;
+    background: none;
+    margin: 0;
+    border: none;
+    padding: 0 20px;
+    height: 60px;
+}
+
+.hb-nav-btn-border{
+    border:1px solid #f8b256;
+    display: inline-block;
+    margin: 11px 0  ;
+    padding: 0;
+    border-radius: 4px;
+}
+
+.navbar .nav > li > a.hb-nav-btn,.hb-nav-btn {
+    color: #8989ce;
+    font-size: 18px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0;
+    line-height: 22px;
+
+    margin:17px 0 0 38px;
+}
+.navbar .nav > li > a.hb-nav-btn:hover{
+    border-bottom: 2px solid;
+    /*text-decoration: underline;*/
+}
+
+.hb-nav-btn-try-now:hover {
+    color: #ffffff;
+    text-decoration: none;
+
+}
+
+.hb-nav-btn-try-now {
+    padding: 10px 20px;
+    border: 2px solid #ffffff;
+    background: #f8b256;
+    color: #ffffff;
+    font-weight: 700;
+    border-radius: 4px;
+    box-shadow: none;
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+    margin: 0;
+    line-height: 12px;
+}
+.navbar .nav.hb-nav-btn-list {
+    margin-right: 20px;
+}
+.hb-nav-btn-bold{font-weight: 600;}
+
+.hb-brand {
+    background: url("/images/LP-logos@2x.png") ;
+    background-size: 180px 112px;
+    background-position: 0 -85px;
+    display: inline-block;
+    width: 140px;
+    height: 28px;
+    margin: 16px 12px 16px 20px;
+    float: left;
+}
+.hb-moto {
+    display: inline-block;
+    font-size: 16px;
+    color:#429985;
+    border-radius: 10px;
+    background: #b1f1e3;
+    margin: 16px 0 16px 10px;
+    padding: 4px 20px;
+    float: left;
+    cursor: pointer;
+    position: relative;
+
+
+
+}
+.hb-moto:hover{
+    text-decoration: none;
+    color: #429985;
+}
+.hb-arrow-left {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    top: 50%;
+    left: -15px;
+    margin-top: -7px;
+    border-right-color: #b1f1e3;
+    border-left-width: 0;
+    border-width: 8px;
+}
+
+.hb-hero{
+
+    height: 340px;
+
+    background: -webkit-linear-gradient(rgba(100, 230, 200, 0.0)
+    ,rgba(137,173,206,1)); /*Safari 5.1-6*/
+    background: -o-linear-gradient(rgba(100, 230, 200, 0.0)
+    ,rgba(137,173,206,1)); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(rgba(100, 230, 200, 0.0)
+    ,rgba(137,173,206,1)); /*Fx 3.6-15*/
+    background: linear-gradient(rgba(100, 230, 200, 0.0)
+    , rgba(137,173,206,1)); /*Standard*/
+
+}
+.hb-hero-img{
+    background-size: 550px 323px ;
+}
