@@ -82,7 +82,6 @@ everyauth.everymodule.handleLogout(function (req, res) {
 
     req.logout();
     everyauth.everymodule.redirect(res, everyauth.everymodule.logoutRedirectPath());;
-    // res.send(200);
 });
 
 //region LinkedIn Authentication Configuration

@@ -158,7 +158,15 @@
             url: '/register',
             type: 'post',
             dataType: 'json',
-            data: datastring
+            data: datastring,
+            error: function(data){
+                if(data.status != 0){
+
+                }
+            },
+            success: function(data){
+                window.location='/';
+            }
         });
         return false;
     }

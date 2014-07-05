@@ -475,22 +475,6 @@
     line-height: 2em;
 }
 
-.plan {
-    padding: 10px;
-    border: 3px solid rgb(98, 128, 100);
-    background: rgb(219, 230, 222);
-    border-radius: 7px;
-}
-
-.planTitle {
-    font-size: 2em;
-    text-align: center;
-}
-
-.planButton {
-}
-
-
 .application-searchBox {
     padding: 8px;
     width: 100%;

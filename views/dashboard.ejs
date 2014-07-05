@@ -587,25 +587,27 @@
 
     #billingsList {
         font-size: 0.8em;
+        width: 100%;
     }
 
-    #billingsList div {
-        padding: 0.5em 0;
-        border-top: 1px solid rgb(209, 222, 238);
+    #billingsList thead tr td {
+        font-weight: 700;
+    }
+
+    #billingsList  tr td {
+       padding: 0.5em 2em;
         background-color: #fff;
-    }
-
-    #billingsList div span {
-        margin: 1em;
+        border-bottom: 2px solid #d9d9d9;
     }
 
     #paypalPay {
-        margin: 2em 0;
+        margin: 1em auto 2em auto;
         background-color: #FFF;
         padding: 1em;
-        font-size: 2em;
-        border: 1px solid rgb(213, 213, 213);
+        font-size: 1em;
+        box-shadow:  1px 1px 5px #C4C4C4;
         border-radius: 4px;
+        width: 550px;
     }
 
     #paymentAmount {
@@ -618,38 +620,97 @@
         color: rgb(213, 82, 82);
         font-weight: 700;
     }
+
+    .plan-table {
+        margin: 1em auto 40px auto;
+        background-color: #fff;
+        box-shadow: 1px 1px 5px #C4C4C4;
+    }
+
+    .plan {
+        vertical-align: top;
+        text-align: center;
+        padding: 20px;
+    }
+    .plan-title {
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        font-weight: 700;
+    }
+
+    .plan-feature {
+        padding: 10px;
+    }
+
+    .plan button {
+        margin: 16px;
+    }
+
+    #current-plan {
+        font-weight: 700;
+    }
 </style>
 
 <div id="billingp" class="container-fluid sectionContainer">
     <div class="row-fluid">
         <div id="billing-plan" style="font-size: 2em;">
-            Your current plan is <span id="billing_plan">...</span>.
-            <button class="btn btn-primary pull-right" id="premiumPlanButton">Go to Premium Plan (1$/mo)</button>
-            <button class="btn btn-primary pull-right" id="freePlanButton">Go to Free Plan</button>
-            <br/><br/>
 
-            Balance:
-            <div id="billing_balance">
-                <span>0.00</span>$
+            <div style="margin: 40px 0 0 0;text-align: center;">
+                You have <div id="billing_balance">$ <span>0.00</span></div> in credits.
             </div>
-        </div>
 
-        <div id="paypalPay">
-            <img class="pull-right" src="images/paypal.png">
-            <p>Make a one time PayPal payment:</p>
-            <select id="paymentAmount">
-                <option name="10">10.00 $</option>
-                <option name="20">20.00 $</option>
-                <option name="30">30.00 $</option>
-                <option name="50">50.00 $</option>
-            </select>
-            <button class="btn btn-success" id="payButton">Pay</button>
+            <div id="paypalPay">
+                <img class="pull-right" src="images/paypal.png">
+                <p>Make a one time PayPal payment:</p>
+                <select id="paymentAmount">
+                    <option name="10">$ 10.00</option>
+                    <option name="20">$ 20.00</option>
+                    <option name="30">$ 30.00</option>
+                    <option name="50">$ 50.00</option>
+                    <option name="50">$ 100.00</option>
+                </select>
+                <button class="btn btn-success" id="payButton">Pay</button>
+            </div>
+
+            <div style="text-align: center;">
+                Your team is on the <span id="current-plan">...</span> plan
+                <span class="plan-age"></span>
+
+                <table class="plan-table">
+                    <tr>
+                        <td class="plan">
+                            <div class="plan-title">Freeberry Plan</div>
+                            <div class="plan-feature">1 Job</div>
+                            <div class="plan-feature">200MB Storage</div>
+                            <div class="plan-feature">200 Applications</div>
+                            <div class="plan-feature">2 Team Members</div>
+                            <button class="btn btn-primary btn-large" id="freePlanButton">Back to Freeberry Plan</button>
+                        </td>
+                        <td class="plan">
+                            <div class="plan-title">Goldberry Plan</div>
+                            <div class="plan-feature">Unlimited Jobs</div>
+                            <div class="plan-feature">10GB Storage</div>
+                            <div class="plan-feature">Unlimited Applications</div>
+                            <div class="plan-feature">Unlimited Team Members</div>
+                            <button class="btn btn-primary btn-large" id="premiumPlanButton">Upgrade to Goldberry Plan</button>
+                        </td>
+                    </tr>
+                </table>
+
+
+                <br/><br/>
+            </div>
+
         </div>
 
         <div id="billingHistory">
-            Billing History:
-            <div id="billingsList">
-            </div>
+            Billing History
+            <table id="billingsList">
+                <thead>
+                    <tr><td>Date</td><td>Amount</td><td>Information</td></tr>
+                </thead>
+                <tbody>
+                </tbody>
         </div>
 
     </div>

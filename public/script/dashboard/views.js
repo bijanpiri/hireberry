@@ -406,10 +406,11 @@ BBillingView = Backbone.View.extend({
     },
     render: function() {
         var billing = this.model.get('billing');
-        var plan = (billing.plan==0) ? 'Free' : 'Premium';
+        var plan = (billing.plan==0) ? 'Freeberry' : 'Goldberry';
 
-        $('#billing_plan').text( plan + '(' + (new moment(billing.lastRenew)).fromNow() + ')' );
+        $('#current-plan').text( plan );
         $('#billing_balance span').text( billing.balance );
+        $('.plan-age').text( '(From ' + dateTimeToJSON(billing.lastRenew).from +')');
 
         if( billing.plan == 0 ) {
             $('#freePlanButton').hide();
@@ -419,18 +420,19 @@ BBillingView = Backbone.View.extend({
             $('#premiumPlanButton').hide();
         }
 
-        $('#billingsList').empty();
+        $('#billingsList tbody').empty();
 
         for( var i=0; i<billing.billings.length; i++ ) {
             var date = new Date(billing.billings[i].time);
             var dt = dateTimeToJSON(date);
+            var amount = billing.billings[i].amount;
 
-            var billingRow = $('<div>')
-                .append( $('<span>').text(dt.fullStyle))
-                .append( $('<span>').text(billing.billings[i].amount))
-                .append( $('<span>').text(billing.billings[i].method));
+            var billingRow = $('<tr>')
+                .append( $('<td>').text(dt.fullStyle))
+                .append( $('<td>').text( (amount<0?'-':'+') + ' $ ' + Math.abs(amount) ))
+                .append( $('<td>').text(billing.billings[i].method));
 
-            $('#billingsList').append( billingRow );
+            $('#billingsList tbody').append( billingRow );
         }
     }
 })
