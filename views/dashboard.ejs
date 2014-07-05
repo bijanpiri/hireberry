@@ -663,11 +663,11 @@
                 <img class="pull-right" src="images/paypal.png">
                 <p>Make a one time PayPal payment:</p>
                 <select id="paymentAmount">
-                    <option name="10">$ 10.00</option>
-                    <option name="20">$ 20.00</option>
-                    <option name="30">$ 30.00</option>
-                    <option name="50">$ 50.00</option>
-                    <option name="50">$ 100.00</option>
+                    <option name="10">$ 10.00 USD</option>
+                    <option name="20">$ 20.00 USD</option>
+                    <option name="30">$ 30.00 USD</option>
+                    <option name="50">$ 50.00 USD</option>
+                    <option name="50">$ 100.00 USD</option>
                 </select>
                 <button class="btn btn-success" id="payButton">Pay</button>
             </div>
@@ -707,10 +707,11 @@
             Billing History
             <table id="billingsList">
                 <thead>
-                    <tr><td>Date</td><td>Amount</td><td>Information</td></tr>
+                    <tr><td>Date</td><td>Amount</td><td>Description</td></tr>
                 </thead>
                 <tbody>
                 </tbody>
+            </table>
         </div>
 
     </div>
@@ -728,26 +729,24 @@
          aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Team Settings Dialog</h3>
+            <h3 id="myModalLabel">Team Settings</h3>
         </div>
         <div class="modal-body">
             <div class="control-group">
-                <label class="control-label" for="teamAdminList">Team Admin</label>
-
+                <label class="control-label" for="teamAdminList">Hiring Manager</label>
                 <div class="controls team-admin-combo">
-
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="teamNameInput">Team Name</label>
+                <label class="control-label" for="teamNameInput">Team name</label>
                 <div class="controls">
                     <input type="text"
-                           placeholder="My Team Name"
+                           placeholder="MyTeam"
                            name="teamName">
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="teamAddress">Team address</label>
+                <label class="control-label" for="teamAddress">Address</label>
                 <div class="controls">
                     <textarea
                             placeholder="eg. 32, Mountain View, California"
@@ -777,7 +776,7 @@
         </div>
         <div class="alert alert-dismissable alert-danger bool-alert-toast hide">
             <a class="close" data-dismiss="alert">&times;</a>
-            <strong>Faield </strong> to update team settings. Retrying in
+            <strong>Failed </strong> to update team settings. Retrying in
             <span class="bool-retry-timeout">10</span>s...
             <button type="submit" class="btn btn-info" data-loading-text="Updating ...">Try now</button>
         </div>
@@ -889,7 +888,7 @@
 
     </div>
     <div class="modal-footer">
-        <button class="btn btn-danger pull-left deleteJobButton">Delete Job</button>
+        <button class="btn btn-danger pull-left deleteJobButton">Delete</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button type="submit" class="btn btn-primary saveButton" data-loading-text="Sending...">Save</button>
     </div>
