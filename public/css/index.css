@@ -6,6 +6,9 @@
     /*background-image: url("/images/LP-bp-sizes+distances.jpg") ;*/
     background-position: -180px -100px;
 }
+.hb-land-body>.navbar{
+    margin: 0;
+}
 .hb-navbar-inner{
     background: #ffffff;
     background: none;
@@ -30,7 +33,6 @@
     display: inline-block;
     padding: 0;
     line-height: 22px;
-
     margin:17px 0 0 38px;
 }
 .navbar .nav > li > a.hb-nav-btn:hover{
@@ -58,7 +60,7 @@
     line-height: 12px;
 }
 .navbar .nav.hb-nav-btn-list {
-    margin-right: 20px;
+    margin-right: 5px;
 }
 .hb-nav-btn-bold{font-weight: 600;}
 
@@ -105,21 +107,50 @@
     border-left-width: 0;
     border-width: 8px;
 }
-
+.hb-land-container{
+    margin: 0;
+    padding: 0;
+}
 .hb-hero{
-
-    height: 340px;
-
-    background: -webkit-linear-gradient(rgba(100, 230, 200, 0.0)
+    height: 333px;
+    background: -webkit-linear-gradient(rgba(100, 230, 200, 0.20)
     ,rgba(137,173,206,1)); /*Safari 5.1-6*/
-    background: -o-linear-gradient(rgba(100, 230, 200, 0.0)
+    background: -o-linear-gradient(rgba(100, 230, 200, 0.20)
     ,rgba(137,173,206,1)); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(rgba(100, 230, 200, 0.0)
+    background: -moz-linear-gradient(rgba(100, 230, 200, 0.20)
     ,rgba(137,173,206,1)); /*Fx 3.6-15*/
-    background: linear-gradient(rgba(100, 230, 200, 0.0)
+    background: linear-gradient(rgba(100, 230, 200, 0.20)
     , rgba(137,173,206,1)); /*Standard*/
+    margin: 0;
+}
+.hb-hero>div:first-child{
+    padding: 120px 0 0 100px;
+    margin-left:0 ;
+}
+
+.hb-hero h2{
+    color:#5d7b95;
+    font-size:36px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+}
+
+.hb-hero p{
+    font-size:24px;
+    color:#3b4f61;
+    font-weight: 300;
+    line-height: 32px;
+    width: 500px;
+}
+
+.hb-hero-img{
+    width: 550px;
+    height:323px ;
+    margin-top: 23px;
+}
+.hb-description-col{
 
 }
-.hb-hero-img{
-    background-size: 550px 323px ;
+.hb-img-col{
+    margin-left: 0;
 }
