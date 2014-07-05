@@ -130,7 +130,7 @@ BJobsView = Backbone.View.extend({
 
         $('#jobsp .position').remove();
         $('.applications-filter-job').empty();
-        $('.applications-filter-job').append( $('<option>').text('All').attr('formID',0) );
+        $('.applications-filter-job').append( $('<option>').text('All Job(s)').attr('formID',0) );
 
         forms.forEach( function(form) {
 
@@ -287,7 +287,7 @@ BJobsView = Backbone.View.extend({
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
             });
 
-            $('#jobsp').append( row );
+            $('.positionsRow').append( row );
         });
     }
 })

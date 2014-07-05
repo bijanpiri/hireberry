@@ -35,52 +35,50 @@
 
 <div id="wrap">
 
-<div class="container-fluid">
-
-<div class="row-fluid" style="background: #f1f1f1">
-
-<div class="span2">
-    <div class="menu">
-        <div class="menu-header">
-            <div id="switchTeamView">
-                <div id="currentTeamName">Current Team</div>
-                <button id="switchButton" class="btn btn-mini">
-                    <i class="fa fa-random fa-lg"></i>
-                    Change Team
-                </button>
-            </div>
-
-
-            <div id="switchTeamEdit" hidden>
-                <select id="userTeams" style="width: 100%;"></select>
-                <a id="changeUserTeam" class="btn btn-mini btn-success">OK</a>
-                <a id="cancelChangeUserTeam" class="btn btn-mini btn-danger">Cancel</a>
-            </div>
+<div class="menu">
+    <div class="menu-header">
+        <div id="switchTeamView">
+            <div id="currentTeamName">Current Team</div>
+            <button id="switchButton" class="btn btn-mini">
+                <i class="fa fa-random fa-lg"></i>
+                Change Team
+            </button>
         </div>
 
-        <div id="dashboardNavigator">
 
-            <input type="radio" id="radio-item-overview" hidden name="menuItems" checked>
-            <label class="item" for="radio-item-overview" onclick="window.location='#overviewp'">Overview</label>
-
-            <input type="radio" id="radio-item-team" hidden name="menuItems">
-            <label class="item" for="radio-item-team" onclick="window.location='#teamp'">Team</label>
-
-            <input type="radio" id="radio-item-jobs" hidden name="menuItems">
-            <label class="item" for="radio-item-jobs" onclick="window.location='#jobsp'">Jobs</label>
-
-            <input type="radio" id="radio-item-applications" hidden name="menuItems">
-            <label class="item" for="radio-item-applications" onclick="window.location='#applicationsp'">Applications</label>
-
-            <input type="radio" id="radio-item-billing" hidden name="menuItems">
-            <label class="item" for="radio-item-billing" onclick="window.location='#billingp'" hidden>Billing</label>
-
+        <div id="switchTeamEdit" hidden>
+            <select id="userTeams" style="width: 100%;"></select>
+            <a id="changeUserTeam" class="btn btn-mini btn-success">OK</a>
+            <a id="cancelChangeUserTeam" class="btn btn-mini btn-danger">Cancel</a>
         </div>
+    </div>
+
+    <div id="dashboardNavigator">
+
+        <input type="radio" id="radio-item-overview" hidden name="menuItems" checked>
+        <label class="item" for="radio-item-overview" onclick="window.location='#overviewp'">Overview</label>
+
+        <input type="radio" id="radio-item-team" hidden name="menuItems">
+        <label class="item" for="radio-item-team" onclick="window.location='#teamp'">Team</label>
+
+        <input type="radio" id="radio-item-jobs" hidden name="menuItems">
+        <label class="item" for="radio-item-jobs" onclick="window.location='#jobsp'">Jobs</label>
+
+        <input type="radio" id="radio-item-applications" hidden name="menuItems">
+        <label class="item" for="radio-item-applications" onclick="window.location='#applicationsp'">Applications</label>
+
+        <input type="radio" id="radio-item-billing" hidden name="menuItems">
+        <label class="item" for="radio-item-billing" onclick="window.location='#billingp'" hidden>Billing</label>
 
     </div>
+
 </div>
 
-<div class="span10 right-panel">
+<div class="container-fluid">
+
+<div class="row-fluid">
+
+<div class="span12 right-panel">
 
 <div id="overviewp" class="container-fluid sectionContainer">
     <div class="row-fluid statisticsRow">
@@ -166,7 +164,7 @@
         </div>
     </div>
 
-    <div class="row-fluid teamHeader">
+    <div class="row-fluid">
         <div class="span6 ">
             <i class="fa fa-home fa-2x"></i>
             <span class="teamAddress" style="font-size: 1.5em;line-height: 2em;"></span>
@@ -177,10 +175,21 @@
         </div>
     </div>
 
+    <div class="row-fluid teamHeader">
+        <div class="span12">
+            <div class="teamMember">
+                <span class="teamMemberName">Name (email)</span>
+                <span class="teamMemberRole">Role</span>
+            </div>
+        </div>
+    </div>
     <div class="row-fluid">
         <div class="span12">
             <div id="teamMembers"></div>
         </div>
+    </div>
+    <div class="row-fluid teamFooter">
+        <div class="span12"></div>
     </div>
 </div>
 
@@ -204,31 +213,39 @@
         <div class="span1 colOperations"></div>
         <div class="span1 colPromote"></div>
     </div>
+    <div class="row-fluid positionsRow"></div>
+    <div class="row-fluid positionsFooterRow">
+        <div class="span12"></div>
+    </div>
 
 </div>
 
 <div id="applicationsp" class="container-fluid sectionContainer">
 <div class="row-fluid tableRow">
-    <div class="offset1 span5">
+    <div class="span4">
         <div>
             <input class="application-searchBox" placeholder="Search through applicants ...">
         </div>
     </div>
     <div class="span2">
-        <button class="application-searchButton">
+        <button class="btn application-searchButton">
             Search
             <i class="fa fa-search"></i>
         </button>
     </div>
+    <!--
     <div class="span2">
-        <!--
+
         <a class="btn btn-mini pull-right" id="candidatesGridButton"><i class="fa fa-th-large"></i></a>
         <a class="btn btn-mini pull-right" id="candidatesListButton"><i class="fa fa-bars"></i></a>
-        -->
+    </div>
+    -->
+    <div class="span4">
+        <select class="applications-filter-job"></select>
     </div>
     <div class="span2">
         <div class="dropdown application-sort">
-            <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+            <a class="btn dropdown-toggle" style="height: 3.3em;line-height: 2.3em;" data-toggle="dropdown" href="#">
                 Sort by <span class="application-sortType">Date</span><i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -249,10 +266,7 @@
 <div class="row-fluid tableRow">
     <div class="span12">
         <div id="applications-filters">
-            Job:
-            <select class="applications-filter-job"></select>
 
-            | Stage:
             <input type="radio" id="application-filter-all" name="application-filter" hidden checked>
             <label for="application-filter-all">All</label>
 
@@ -267,6 +281,7 @@
 
             <input type="radio" id="application-filter-archived" name="application-filter" filter-class="candidate-filter-archived" hidden>
             <label for="application-filter-archived">Archived</label>
+
         </div>
     </div>
 </div>
@@ -602,10 +617,9 @@
 
     #paypalPay {
         margin: 1em auto 2em auto;
-        background-color: #FFF;
+        background-color: #ddd;
         padding: 1em;
         font-size: 1em;
-        box-shadow:  1px 1px 5px #C4C4C4;
         border-radius: 4px;
         width: 550px;
     }
@@ -623,8 +637,8 @@
 
     .plan-table {
         margin: 1em auto 40px auto;
-        background-color: #fff;
-        box-shadow: 1px 1px 5px #C4C4C4;
+        background-color: #ddd;
+        border-radius: 4px;
     }
 
     .plan {
@@ -653,67 +667,68 @@
 
 <div id="billingp" class="container-fluid sectionContainer">
     <div class="row-fluid">
-        <div id="billing-plan" style="font-size: 2em;">
+        <div class="span12">
+            <div id="billing-plan" style="font-size: 2em;">
 
-            <div style="margin: 40px 0 0 0;text-align: center;">
-                You have <div id="billing_balance">$ <span>0.00</span></div> in credits.
+                <div style="text-align: center;">
+                    You have <div id="billing_balance">$ <span>0.00</span></div> in credits.
+                </div>
+
+                <div id="paypalPay">
+                    <img class="pull-right" src="images/paypal.png">
+                    <p>Make a one time PayPal payment:</p>
+                    <select id="paymentAmount">
+                        <option name="10">$ 10.00 USD</option>
+                        <option name="20">$ 20.00 USD</option>
+                        <option name="30">$ 30.00 USD</option>
+                        <option name="50">$ 50.00 USD</option>
+                        <option name="50">$ 100.00 USD</option>
+                    </select>
+                    <button class="btn btn-success" id="payButton">Pay</button>
+                </div>
+
+                <div style="text-align: center;">
+                    Your team is on the <span id="current-plan">...</span> plan
+                    <span class="plan-age"></span>
+
+                    <table class="plan-table">
+                        <tr>
+                            <td class="plan">
+                                <div class="plan-title">Freeberry Plan</div>
+                                <div class="plan-feature">1 Job</div>
+                                <div class="plan-feature">200MB Storage</div>
+                                <div class="plan-feature">200 Applications</div>
+                                <div class="plan-feature">2 Team Members</div>
+                                <button class="btn btn-primary btn-large" id="freePlanButton">Back to Freeberry Plan</button>
+                            </td>
+                            <td class="plan">
+                                <div class="plan-title">Goldberry Plan</div>
+                                <div class="plan-feature">Unlimited Jobs</div>
+                                <div class="plan-feature">10GB Storage</div>
+                                <div class="plan-feature">Unlimited Applications</div>
+                                <div class="plan-feature">Unlimited Team Members</div>
+                                <button class="btn btn-primary btn-large" id="premiumPlanButton">Upgrade to Goldberry Plan</button>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <br/><br/>
+                </div>
+
             </div>
 
-            <div id="paypalPay">
-                <img class="pull-right" src="images/paypal.png">
-                <p>Make a one time PayPal payment:</p>
-                <select id="paymentAmount">
-                    <option name="10">$ 10.00 USD</option>
-                    <option name="20">$ 20.00 USD</option>
-                    <option name="30">$ 30.00 USD</option>
-                    <option name="50">$ 50.00 USD</option>
-                    <option name="50">$ 100.00 USD</option>
-                </select>
-                <button class="btn btn-success" id="payButton">Pay</button>
-            </div>
-
-            <div style="text-align: center;">
-                Your team is on the <span id="current-plan">...</span> plan
-                <span class="plan-age"></span>
-
-                <table class="plan-table">
-                    <tr>
-                        <td class="plan">
-                            <div class="plan-title">Freeberry Plan</div>
-                            <div class="plan-feature">1 Job</div>
-                            <div class="plan-feature">200MB Storage</div>
-                            <div class="plan-feature">200 Applications</div>
-                            <div class="plan-feature">2 Team Members</div>
-                            <button class="btn btn-primary btn-large" id="freePlanButton">Back to Freeberry Plan</button>
-                        </td>
-                        <td class="plan">
-                            <div class="plan-title">Goldberry Plan</div>
-                            <div class="plan-feature">Unlimited Jobs</div>
-                            <div class="plan-feature">10GB Storage</div>
-                            <div class="plan-feature">Unlimited Applications</div>
-                            <div class="plan-feature">Unlimited Team Members</div>
-                            <button class="btn btn-primary btn-large" id="premiumPlanButton">Upgrade to Goldberry Plan</button>
-                        </td>
-                    </tr>
+            <div id="billingHistory">
+                Billing History
+                <table id="billingsList">
+                    <thead>
+                        <tr><td>Date</td><td>Amount</td><td>Description</td></tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
                 </table>
-
-
-                <br/><br/>
             </div>
-
         </div>
-
-        <div id="billingHistory">
-            Billing History
-            <table id="billingsList">
-                <thead>
-                    <tr><td>Date</td><td>Amount</td><td>Description</td></tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-
     </div>
 </div>
 
@@ -722,6 +737,7 @@
 </div>
 
 </div>
+
 </div>
 
 <form id='teamSettingForm' class="form-horizontal no-border-box" method="post">
