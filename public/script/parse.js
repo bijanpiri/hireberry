@@ -1,6 +1,3 @@
-/**
- * Created by Bijan on 05/12/2014.
- */
 /*!
  * Parse JavaScript SDK
  * Version: 1.2.18
@@ -331,14 +328,14 @@
                 criteria : iterator.call(context, value, index, list)
             };
         }).sort(function(left, right) {
-            var a = left.criteria;
-            var b = right.criteria;
-            if (a !== b) {
-                if (a > b || a === void 0) return 1;
-                if (a < b || b === void 0) return -1;
-            }
-            return left.index < right.index ? -1 : 1;
-        }), 'value');
+                var a = left.criteria;
+                var b = right.criteria;
+                if (a !== b) {
+                    if (a > b || a === void 0) return 1;
+                    if (a < b || b === void 0) return -1;
+                }
+                return left.index < right.index ? -1 : 1;
+            }), 'value');
     };
 
     // An internal function used for aggregate "group by" operations.
@@ -1433,10 +1430,10 @@
             };
             Parse._installationId = (
                 hexOctet() + hexOctet() + "-" +
-                hexOctet() + "-" +
-                hexOctet() + "-" +
-                hexOctet() + "-" +
-                hexOctet() + hexOctet() + hexOctet());
+                    hexOctet() + "-" +
+                    hexOctet() + "-" +
+                    hexOctet() + "-" +
+                    hexOctet() + hexOctet() + hexOctet());
             Parse.localStorage.setItem(path, Parse._installationId);
         }
 
@@ -1445,7 +1442,7 @@
 
     Parse._parseDate = function(iso8601) {
         var regexp = new RegExp(
-                "^([0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})" + "T" +
+            "^([0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})" + "T" +
                 "([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})" +
                 "(.([0-9]+))?" + "Z$");
         var match = regexp.exec(iso8601);
@@ -1548,7 +1545,7 @@
         if (Parse._isNode) {
             // Add a special user agent just for request from node.js.
             xhr.setRequestHeader("User-Agent",
-                    "Parse/" + Parse.VERSION +
+                "Parse/" + Parse.VERSION +
                     " (NodeJS " + process.versions.node + ")");
         }
         xhr.send(data);
@@ -1660,13 +1657,13 @@
                     // If we fail to parse the error text, that's okay.
                     error = new Parse.Error(
                         Parse.Error.INVALID_JSON,
-                            "Received an error with invalid JSON from Parse: " +
+                        "Received an error with invalid JSON from Parse: " +
                             response.responseText);
                 }
             } else {
                 error = new Parse.Error(
                     Parse.Error.CONNECTION_FAILED,
-                        "XMLHttpRequest failed: " + JSON.stringify(response));
+                    "XMLHttpRequest failed: " + JSON.stringify(response));
             }
             // By explicitly returning a rejected Promise, this will work with
             // either jQuery or Promises/A semantics.
@@ -3398,10 +3395,10 @@
                             ", but " + this._targetClassName + " was passed in.";
                     }
                     var newAdd = _.union(_.difference(previous.relationsToAdd,
-                            this.relationsToRemove),
+                        this.relationsToRemove),
                         this.relationsToAdd);
                     var newRemove = _.union(_.difference(previous.relationsToRemove,
-                            this.relationsToAdd),
+                        this.relationsToAdd),
                         this.relationsToRemove);
 
                     var newRelation = new Parse.Op.Relation(newAdd, newRemove);
@@ -4178,7 +4175,7 @@
             if (!matches) {
                 promise.reject(new Parse.Error(
                     Parse.ERROR.FILE_READ_ERROR,
-                        "Unable to interpret data URL: " + dataURL));
+                    "Unable to interpret data URL: " + dataURL));
                 return;
             }
 
@@ -4295,10 +4292,10 @@
                     });
 
                 }).then(function(response) {
-                    self._name = response.name;
-                    self._url = response.url;
-                    return self;
-                });
+                        self._name = response.name;
+                        self._url = response.url;
+                        return self;
+                    });
             }
             return self._previousSave._thenRunCallbacks(options);
         }
@@ -4492,18 +4489,18 @@
                         }
                     });
                 }).then(function(responses, status, xhr) {
-                    Parse._arrayEach(batch, function(object, i) {
-                        if (responses[i].success && options.wait) {
-                            triggerDestroy(object);
-                        } else if (responses[i].error) {
-                            var error = new Parse.Error(responses[i].error.code,
-                                responses[i].error.error);
-                            error.object = object;
+                        Parse._arrayEach(batch, function(object, i) {
+                            if (responses[i].success && options.wait) {
+                                triggerDestroy(object);
+                            } else if (responses[i].error) {
+                                var error = new Parse.Error(responses[i].error.code,
+                                    responses[i].error.error);
+                                error.object = object;
 
-                            errors.push(error);
-                        }
+                                errors.push(error);
+                            }
+                        });
                     });
-                });
             }
 
             return promise;
@@ -5401,10 +5398,10 @@
                     return Parse.Object._deepSaveAsync(this.attributes, {
                         useMasterKey: options.useMasterKey
                     }).then(function() {
-                        return model.save(null, options);
-                    }, function(error) {
-                        return Parse.Promise.error(error)._thenRunCallbacks(options, model);
-                    });
+                            return model.save(null, options);
+                        }, function(error) {
+                            return Parse.Promise.error(error)._thenRunCallbacks(options, model);
+                        });
                 }
 
                 this._startSave();
@@ -5822,9 +5819,9 @@
 
         var omitObjectsWithData = !forceFetch;
         return Parse.Object._toObjectIdArray(
-            list,
-            omitObjectsWithData
-        ).then(function(objectIds) {
+                list,
+                omitObjectsWithData
+            ).then(function(objectIds) {
                 var className = list[0].className;
                 var query = new Parse.Query(className);
                 query.containedIn("objectId", objectIds);
@@ -6054,33 +6051,33 @@
                             })
                         }
                     }).then(function(response, status, xhr) {
-                        var error;
-                        Parse._arrayEach(batch, function(object, i) {
-                            if (response[i].success) {
-                                object._finishSave(
-                                    object.parse(response[i].success, status, xhr));
-                            } else {
-                                error = error || response[i].error;
-                                object._cancelSave();
+                            var error;
+                            Parse._arrayEach(batch, function(object, i) {
+                                if (response[i].success) {
+                                    object._finishSave(
+                                        object.parse(response[i].success, status, xhr));
+                                } else {
+                                    error = error || response[i].error;
+                                    object._cancelSave();
+                                }
+                            });
+                            if (error) {
+                                return Parse.Promise.error(
+                                    new Parse.Error(error.code, error.error));
                             }
-                        });
-                        if (error) {
-                            return Parse.Promise.error(
-                                new Parse.Error(error.code, error.error));
-                        }
 
-                    }).then(function(results) {
-                        batchFinished.resolve(results);
-                        return results;
-                    }, function(error) {
-                        batchFinished.reject(error);
-                        return Parse.Promise.error(error);
-                    });
+                        }).then(function(results) {
+                            batchFinished.resolve(results);
+                            return results;
+                        }, function(error) {
+                            batchFinished.reject(error);
+                            return Parse.Promise.error(error);
+                        });
                 });
             });
         }).then(function() {
-            return object;
-        });
+                return object;
+            });
     };
 
 }(this));
@@ -6200,7 +6197,7 @@
                 }
                 if (!(/^[0-9a-zA-Z\-_ ]+$/).test(newName)) {
                     return new Parse.Error(Parse.Error.OTHER_CAUSE,
-                            "A role's name can only contain alphanumeric characters, _," +
+                        "A role's name can only contain alphanumeric characters, _," +
                             " -, and spaces.");
                 }
             }
@@ -6503,13 +6500,13 @@
                 return query.find({
                     useMasterKey: options.useMasterKey
                 }).then(function(results) {
-                    if (options.add) {
-                        collection.add(results, options);
-                    } else {
-                        collection.reset(results, options);
-                    }
-                    return collection;
-                })._thenRunCallbacks(options, this);
+                        if (options.add) {
+                            collection.add(results, options);
+                        } else {
+                            collection.reset(results, options);
+                        }
+                        return collection;
+                    })._thenRunCallbacks(options, this);
             },
 
             /**
@@ -7037,8 +7034,8 @@
                             success: options.success,
                             error: options.error
                         }).then(function() {
-                            promise.resolve(self);
-                        });
+                                promise.resolve(self);
+                            });
                     },
                     error: function(provider, error) {
                         if (options.error) {
@@ -7409,12 +7406,12 @@
                 useMasterKey: options.useMasterKey,
                 sessionToken: sessionToken
             }).then(function(resp, status, xhr) {
-                var serverAttrs = user.parse(resp, status, xhr);
-                user._finishFetch(serverAttrs);
-                user._handleSaveResult(true);
-                return user;
+                    var serverAttrs = user.parse(resp, status, xhr);
+                    user._finishFetch(serverAttrs);
+                    user._handleSaveResult(true);
+                    return user;
 
-            })._thenRunCallbacks(options, user);
+                })._thenRunCallbacks(options, user);
         },
 
         /**
@@ -8757,7 +8754,7 @@
                     loc.hash) {
                     this.fragment = this.getHash().replace(routeStripper, '');
                     window.history.replaceState({}, document.title,
-                            loc.protocol + '//' + loc.host + this.options.root + this.fragment);
+                        loc.protocol + '//' + loc.host + this.options.root + this.fragment);
                 }
 
                 if (!this.options.silent) {
