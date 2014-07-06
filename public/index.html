@@ -3,21 +3,21 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Welcome to HireBerry</title>
-    <script src="bootstrap/js/jquery.js"></script>
+    <script src="/bootstrap/js/jquery.js"></script>
 
-    <script src="bootstrap3/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="bootstrap3/css/bootstrap.css">
+    <script src="/bootstrap3/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/bootstrap3/css/bootstrap.css">
 
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
 </head>
 
-<body >
+<body class="hb-land-body">
 
-<div class="navbar navbar-default hb-navbar-inner " role="navigation">
+<div class="navbar navbar-default hb-navbar " role="navigation">
 
-        <div class="container-fluid">
-            <div class="navbar-header">
+        <div class="container-fluid hb-nav-container">
+            <div class="navbar-header hb-navbar-header">
                 <button type="button" class="navbar-toggle"
                         data-toggle="collapse" data-target="#nav-action-btn">
                     <span class="sr-only">Toggle navigation</span>
@@ -27,44 +27,173 @@
                 </button>
                 <a class="hb-brand" href="#"></a>
                 <a class="hb-moto" >
-                    <!--<div class="hb-arrow-left"> </div>-->
-                    <div class="hb-arrow-left  hidden-xs visible-sm visible-md visible-lg"> </div>
-                    <div class="hb-arrow-up  visible-xs hidden-sm hidden-md hidden-lg"></div>
+                    <div class="hb-arrow-left"> </div>
+                    <!--<div class="hb-arrow-left  hidden-xs visible-sm visible-md visible-lg"> </div>-->
+                    <!--<div class="hb-arrow-up  visible-xs hidden-sm hidden-md hidden-lg"></div>-->
                     It makes sense!
                 </a>
             </div>
-            <!--<div class="hb-nav-btn-border pull-right">-->
-                <!--<a class="hb-nav-btn hb-nav-btn-try-now col-sm-12" href="#">TRY NOW</a>-->
+            <div class="hb-nav-btn-border ">
+                <a class="hb-nav-btn hb-nav-btn-try-now " href="#">TRY NOW</a>
+            </div>
+            <!--<div class="hb-navbar-action-container">-->
+                <div class="collapse navbar-collapse" id="nav-action-btn">
+                    <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
+                        <li class="active ">
+                        </li>
+                        <li><a class='hb-nav-btn ' href="#">Features</a></li>
+                        <li><a class='hb-nav-btn ' href="#">Pricing</a></li>
+                        <li><a class='hb-nav-btn  hb-nav-btn-bold' href="#">Login</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
             <!--</div>-->
-            <div class="collapse navbar-collapse" id="nav-action-btn">
-                <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
-                    <li class="active ">
+            <!--<ul class="nav navbar-nav navbar-right">-->
+                <!--<li>-->
+                    <!--<a class='hb-nav-btn ' href="#">-->
 
-                    </li>
-                    <li><a class='hb-nav-btn col-sm-12' href="#">Features</a></li>
-                    <li><a class='hb-nav-btn col-sm-12' href="#">Pricing</a></li>
-                    <li><a class='hb-nav-btn col-sm-12 hb-nav-btn-bold' href="#">Login</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
+                    <!--</a>-->
+                <!--</li>-->
+            <!--</ul>-->
 
         </div>
 </div>
 
 
 
-<div class="container">
+<div class="container hb-hero-container">
     <div class="row hb-hero">
-        <div class="col-md-6 col-md-push-6" style="background: #ffff00;">
+        <div class="col-md-6 col-md-push-6 hb-hero-img-container" >
             <img
                     class='hb-hero-img'
                     src="images/LP-macbook@2x.png" alt="HireBerry hero unit image"/>
         </div>
 
-        <div class="col-md-6 col-md-pull-6 hb-hero-description" style="background: red;">
-            <h2> What is HireBerry?</h2>
-            <p>
-                HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups & SMEs attract the best talents.
-            </p>
+        <div class="col-md-6 col-md-pull-6 hb-hero-description" >
+            <div class="hb-hero-summary">
+                <h2> What is HireBerry?</h2>
+                <p>
+                    HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups & SMEs attract the best talents.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="background: #ffff00;" >
+
+                <div class="thumbnail">
+                    <img
+                            src="http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail"
+                            data-src=
+                                    "http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail/420x170" alt="...">
+                    <div class="caption hb-caption">
+                        <h3>Thumbnail label</h3>
+                        <p>
+                            Working for a small business means wearing a lot of hats;
+                            there is no extra time to waste. With HireBerry, you can
+                            use your time wisely and speed up the often tedious and time
+                            consuming recruitment process.
+                        </p>
+                    </div>
+
+                </div>
+        </div>
+        <div class="col-md-6" style="background: green;" >
+            <div class="thumbnail">
+                <img
+                        src="http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail"
+                        data-src=
+                                "http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail/420x170" alt="...">
+                <div class="caption hb-caption">
+                    <h3>Thumbnail label</h3>
+                    <p>
+                        Working for a small business means wearing a lot of hats;
+                        there is no extra time to waste. With HireBerry, you can
+                        use your time wisely and speed up the often tedious and time
+                        consuming recruitment process.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="background: violet;" >
+            <div class="thumbnail hb-thumbnail">
+                <img
+                        src="http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail"
+                        data-src=
+                                "http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail/420x170" alt="...">
+                <div class="caption hb-caption">
+                    <h3>Thumbnail label</h3>
+                    <p>
+                        Working for a small business means wearing a lot of hats;
+                        there is no extra time to waste. With HireBerry, you can
+                        use your time wisely and speed up the often tedious and time
+                        consuming recruitment process.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-md-6" style="background: dodgerblue;" >
+            <div class="thumbnail hb-thumbnail">
+                <img
+                        src="http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail"
+                        data-src=
+                                "http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail/420x170" alt="...">
+                <div class="caption hb-caption">
+                    <h3>Thumbnail label</h3>
+                    <p>
+                        Working for a small business means wearing a lot of hats;
+                        there is no extra time to waste. With HireBerry, you can
+                        use your time wisely and speed up the often tedious and time
+                        consuming recruitment process.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="background: paleturquoise;" >
+            <div class="thumbnail">
+                <img
+                        src="http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail"
+                        data-src=
+                                "http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail/420x170" alt="...">
+                <!--<div class="caption hb-caption">-->
+                    <!--<h3>Thumbnail label</h3>-->
+                    <!--<p>-->
+                        <!--Working for a small business means wearing a lot of hats;-->
+                        <!--there is no extra time to waste. With HireBerry, you can-->
+                        <!--use your time wisely and speed up the often tedious and time-->
+                        <!--consuming recruitment process.-->
+                    <!--</p>-->
+                <!--</div>-->
+
+            </div>
+
+        </div>
+        <div class="col-md-6" style="background: skyblue;"   >
+            <div class="thumbnail">
+                <!--<img-->
+                        <!--src="http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail"-->
+                        <!--data-src=-->
+                                <!--"http://placebox.es/420/170/b8b8b8/f1f1f1/tumbnail/420x170" alt="...">-->
+                <div class="caption hb-caption">
+                    <h3>Thumbnail label</h3>
+                    <p>
+                        Working for a small business means wearing a lot of hats;
+                        there is no extra time to waste. With HireBerry, you can
+                        use your time wisely and speed up the often tedious and time
+                        consuming recruitment process.
+                    </p>
+                </div>
+
+            </div>
 
         </div>
     </div>
