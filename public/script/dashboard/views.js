@@ -347,7 +347,7 @@ BTeamView = Backbone.View.extend({
         // Fill members list
         $('#teamMembers').empty();
         for( var i=0; i<members.length; i++ ){
-            var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(members[i].email));
+            var avatarObj = $('<img>').addClass('teamMemberAvatar').width(30).height(30).attr( 'src', getAvatar(members[i].email));
             var nameObj = $('<div>').addClass('teamMemberName').text(members[i].displayName);
             var emailObj = $('<span>').addClass('teamMemberEmail').text('(' + members[i].email + ')');
 

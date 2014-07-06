@@ -20,7 +20,7 @@
         "request":"*",
         "parse":"*",
         "mandrill-api": "*",
-        "mandrill-api": "*",
+        "compression": "*",
         "paypal-rest-sdk": "*"
     }
 }
