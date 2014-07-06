@@ -91,13 +91,20 @@ BApplicationsView = Backbone.View.extend({
         for( var i=0; i<candidates.length; i++ ) {
             var candidate = candidates[i];
 
-            $.get('/api/application/json/' + candidate.appID).done( function(app) {
-                var candidateInstance = initCandidateInstance(app,false);
-                $('#candidatesCollection').append( candidateInstance );
-            });
+            // Because result return back synchronize, so order will not be hold
+            var placeHolderObj = $('<div>');
+            $('#candidatesCollection').append( placeHolderObj )
+            getApplication( candidate.appID, placeHolderObj );
 
             stagesCounter[0]++;
             stagesCounter[candidate.stage.stage]++;
+        }
+
+        function getApplication(appID,placeHolderObj) {
+            $.get('/api/application/json/' + appID).done( function(app) {
+                var candidateInstance = initCandidateInstance(app,false);
+                placeHolderObj.replaceWith(candidateInstance);
+            });
         }
 
         // Show number of applications in each stage

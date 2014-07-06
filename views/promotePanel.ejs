@@ -1,0 +1,67 @@
+<% layout('layout') -%>
+
+<style>
+    .pos{
+        position: relative;
+    }
+</style>
+<script>
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/dashboard/getinfo',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+
+
+               for (var i = 0; i < data.length; i++) {
+
+
+                   var row = $('#flyer-list .positionsHeaderRow')
+                           .clone()
+                           .removeClass('positionsHeaderRow');
+    
+
+                    var TeamObj = $('<span>')
+                            .addClass('pos')
+                            .text(i.toString());
+
+                    var DateObj = $('<span>')
+                            .addClass('pos')
+                            .text(data[i].time);
+
+
+                    var FlyerObj = $('<a>')
+                            .addClass('pos')
+                            .text(data[i].flyerID)
+                            .attr('href',"http://localhost:5000/flyer/edit/0?"+data[i].flyerID);
+
+                   var PaymentObj = $('<span>')
+                           .text(data[i].totalPrice);
+
+                    row.find('.colTeam').empty().append(TeamObj);
+                    row.find('.colDate').empty().append(DateObj);
+                    row.find('.colFlyer').empty().append(FlyerObj);
+                   row.find('.colPayment').empty().append(PaymentObj);
+                    $('#flyer-list').append(row);
+                }
+            }
+        }).fail(function (data) {
+                    alert(data);
+                });
+
+
+    });
+
+</script>
+<div id="flyer-list" style="position: relative;bottom: -180px;background-color: #f8f8f8" class="container-fluid">
+
+    <div class="row-fluid positionsHeaderRow">
+        <div class="span1 colTeam">Team</div>
+        <div class="span3 colDate">Date</div>
+        <div class="span3 colFlyer">Flyer</div>
+        <div class="span1 colPayment">Payment ($)</div>
+    </div>
+</div>

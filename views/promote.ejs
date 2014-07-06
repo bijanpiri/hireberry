@@ -367,26 +367,9 @@ var teamID='';
 
 $(document).ready( function() {
 
-    $("#linkedin-test").click(function(e)
+    $("#ppanel").click(function(e)
     {
-        $.ajax({
-            url:'https://www.linkedin.com/job/consumer/commonPost/getPricesByLocationAjax',
-            type: 'POST',
-            dataType: 'json',
-            data:{
-                countryCode:"ir",
-                postalCode:"",
-                productCode:"jobListing",
-                promoCode:"noJobPromoCode"
-            },
-            success: function(data) {
-
-            }
-        })                .fail(function(data) {
-                    alert(data);
-                });
-
-
+window.location = "/dashboard/promotepanel"
     })
 
     $.ajax({
@@ -508,12 +491,30 @@ alert(data);
                                 },
                                 success: function(data) {
 
-                                    window.location='/flyer/paypromote/'+positionTitle;
+
+
+                                        window.location='/flyer/paypromote/'+flyerID;
+
+
+                                        /*$.ajax({
+                                            url:'/flyer/paypromote',
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            data :
+                                            {
+                                                FlyerID:flyerID,
+                                                TeamID:teamID,
+                                                PositionTitle:positionTitle
+                                            },
+                                            success: function(r) {
+
+                                            }
+                                        }) .fail(function(data) {
+
+                                                });*/
+
                                 }
                             })
-                                    .fail(function(data) {
-
-                                    });
 
                         }));
             }
@@ -744,7 +745,7 @@ alert(data);
 <div id="div-total-payment" >
     $ 0.00
 </div>
-<input id="linkedin-test" title="LinkedIn" type="button"  >
+<input id="ppanel" style="position: relative" value="go to panel" title="Go to panel" type="button"  >
 
 <div id="payment-action-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
      aria-hidden="true">

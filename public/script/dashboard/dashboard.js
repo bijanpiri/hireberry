@@ -607,6 +607,8 @@ function initCandidateInstance(candidate,expanded) {
     candidateObj.find('.candidate-skills .value').text(candidate.skills);
     candidateObj.find('.candidate-conditions-time .value').text( candidate.workTime || 'Not specified' );
     candidateObj.find('.candidate-conditions-place .value').text( candidate.workPlace || 'Not specified' );
+
+
     candidateObj.find('.candidate-coverLetter').text(candidate.anythingelse);
     candidateObj.find('.candidate-email .value').attr('href','mailto:'+candidate.email).text(candidate.email);
     candidateObj.find('.candidate-tel .value').text(candidate.tel);
@@ -647,6 +649,12 @@ function initCandidateInstance(candidate,expanded) {
                                 viewResume.show().attr('href',viewer+file.url());
                                 downloadResume.show().attr('href', file.url());
                                 uploadResume.html('Change');
+
+                                // Save resume URL in database
+                                $.post('/api/resume',{
+                                    applicationID:candidate._id,
+                                    resume:file.url()
+                                });
                             }
                         });
                     });
@@ -726,7 +734,8 @@ function initCandidateInstance(candidate,expanded) {
         $(this).next().toggle();
     });
 
-    $('.bool-application-comments').commentBox({
+    if( expanded )
+        $('.bool-application-comments').commentBox({
         postURL: '/api/application/' + candidate._id + '/comment',
         getURL: '/api/application/' + candidate._id + '/comments',
         togglable: false

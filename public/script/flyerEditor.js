@@ -85,6 +85,7 @@ $(function() {
         $('nav').remove();
         $('#fixToolbar').remove();
         $('body > .container-fluid').css('margin-top','1em');
+        $('img.logo').attr('src','');
     }else{
 
         $('.comments-sidebar').commentBox({
@@ -103,6 +104,9 @@ $(function() {
             takeEditorTour(loadTemplateChooser);
     }
     else {
+
+        $('img.logo').attr('src','');
+
         $('.flyerRow').show();
         loadFlyer();
 

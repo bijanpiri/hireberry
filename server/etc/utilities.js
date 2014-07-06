@@ -345,6 +345,29 @@ canCurrentUserLeaveComment = function(userID,teamID,jobID,callback) {
     });
 };
 
+canCurrentUserAceessApplciation = function(userID, appID, callback) {
+
+    BApplications.findOne( {_id:appID}).populate('flyerID').exec(  function(err,application) {
+        if( err || !application )
+            return callback(err,false,null);
+
+        BFlyers.findOne({_id:application.flyerID}).populate('owner', 'admin').exec( function(err,flyer) {
+
+            if( err || !flyer )
+                return callback(err,false,null);
+
+            var teamID = flyer.owner.admin;
+            var responderID = flyer.autoAssignedTo || '';
+
+            if( userID.toString()===teamID.toString() || userID.toString()===responderID.toString())
+                return callback(null,true,application);
+            else
+                return callback(null,false,application);
+        })
+
+    })
+}
+
 isResponderOfJob = function(jobID,userID,callback) {
     BFlyers.count({_id:jobID,autoAssignedTo:userID}, function(err,count){
         if( err || count==0 )

@@ -28,7 +28,8 @@ BPersistLogin= mongoose.model( 'persistentLogins', {
 BPromoteInfo= mongoose.model( 'promote', {
     totalPrice: Number,
     jobBoards:[],
-    flyerID:String
+    flyerID:String,
+    time: Date
 });
 
 BUsers = mongoose.model( 'users', {
