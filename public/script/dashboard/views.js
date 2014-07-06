@@ -134,7 +134,9 @@ BJobsView = Backbone.View.extend({
 
         forms.forEach( function(form) {
 
-            $('.applications-filter-job').append( $('<option>').text(form.formName).attr('formID',form.formID) );
+            var jobOptionObj = $('<option>').text(form.formName).attr('formID',form.formID);
+            $('.applications-filter-job').append( jobOptionObj.clone() );
+            $('#new-applicant-dialog .jobsList').append( jobOptionObj.clone() );
 
             // Trick
             if(form.mode==='drafted')

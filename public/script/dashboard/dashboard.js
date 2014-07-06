@@ -11,9 +11,7 @@ badgeNum=0;
 Parse.initialize(
     "qoMkGPujIUWxjrHi28WCcOoSrl755V8CgFYrdC59",
     "xCzRaCEshLWlg6XGvnBxLdRRcv6BRGNY4MUQhgvn");
-
 var Resume=Parse.Object.extend("Resume");
-
 var stagesName = ['pending', 'interviewing', 'offering', 'archived'];
 var subStagesName =[
     [''],
@@ -26,6 +24,7 @@ _.templateSettings = {
     escape: /\{\{\-(.+?)\}\}/g,
     evaluate: /\{\%(.+?)\%\}/g
 };
+
 function initTour(){
     var tour = new Tour({
         steps: [
@@ -77,6 +76,7 @@ function initTour(){
         tour.goTo(tour.getCurrentStep())
     })
 }
+
 function initApplicationTour(app){
     var tour = new Tour({
         steps: [
@@ -124,6 +124,7 @@ function initApplicationTour(app){
         tour.goTo(tour.getCurrentStep())
     })
 }
+
 $(function(){
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
@@ -233,6 +234,20 @@ $(function(){
         }
     });
 
+
+    $('#createApplicantButton').click( function() {
+        $('#new-applicant-dialog').modal();
+        $('#new-applicant-dialog .sendButton').click( function(){
+            $.post('/apply',{
+                flyerid: $('#new-applicant-dialog .jobsList :selected').attr('formid'),
+                name: $('#new-applicant-dialog .applicant-name').val(),
+                isInternalApply: true
+            }).done( function(data) {
+                    $('#new-applicant-dialog').modal('hide');
+                    showApplicationPreview(data.applicationID);
+                });
+        });
+    });
 
     refresh();
 });
