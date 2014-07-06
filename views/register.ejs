@@ -231,10 +231,10 @@
 
     <div style="background-color: #E0DAB7">
         <form class="registerForm" action="/register"  method="post" onsubmit="return registerstate();">
-            <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Email address">
-            <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Password">
+            <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Your Email Address">
+            <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Choose a Password">
             <div id="prog_bar"></div>
-            <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Password (Again)">
+            <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Enter Your Password Again">
             <button type="submit" class="wbtn wbtn-2 wbtn-2a">Register for FREE</button>
 
             <p class="moreOption">Already have an account? <a href="/login">Login</a></p>

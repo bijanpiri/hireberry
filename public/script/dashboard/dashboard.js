@@ -235,7 +235,7 @@ $(function(){
     });
 
 
-    $('#createApplicantButton').click( function() {
+    $('#createApplicantButton').show().click( function() {
         $('#new-applicant-dialog').modal();
         $('#new-applicant-dialog .sendButton').click( function(){
             $.post('/apply',{
