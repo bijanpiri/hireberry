@@ -256,7 +256,7 @@ function takeEditorTour(callBack) {
 
     $.get('/api/cert', function (data) {
         if (data && data.editor)
-            return;
+            return callBack();
         tour.init();
         tour.setCurrentStep(0);
         tour.start(true);
