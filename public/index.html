@@ -12,51 +12,60 @@
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
 </head>
 
-<body class="hb-land-body">
+<body >
 
-<div class="navbar ">
-    <div class="navbar-inner hb-navbar-inner">
-        <div class="container">
-            <a class="hb-brand " href="#"></a>
-            <a class="hb-moto" > <div class="hb-arrow-left"></div> It make's sense!</a>
+<div class="navbar navbar-default hb-navbar-inner " role="navigation">
 
-            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-
-            <!-- Be sure to leave the brand out there if you want it shown -->
-
-            <!-- Everything you want hidden at 940px or less, place within here -->
-            <div class="nav-collapse collapse">
-                <ul class="nav pull-right hb-nav-btn-list">
-                    <li class="active ">
-                        <div class="hb-nav-btn-border">
-                            <a class="hb-nav-btn hb-nav-btn-try-now" href="#">TRY NOW</a>
-                        </div>
-                    </li>
-                    <li><a class='hb-nav-btn' href="#">Features</a></li>
-                    <li><a class='hb-nav-btn' href="#">Pricing</a></li>
-                    <li><a class='hb-nav-btn hb-nav-btn-bold' href="#">Login</a></li>
-                </ul>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle"
+                        data-toggle="collapse" data-target="#nav-action-btn">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="hb-brand" href="#"></a>
+                <a class="hb-moto" >
+                    <!--<div class="hb-arrow-left"> </div>-->
+                    <div class="hb-arrow-left  hidden-xs visible-sm visible-md visible-lg"> </div>
+                    <div class="hb-arrow-up  visible-xs hidden-sm hidden-md hidden-lg"></div>
+                    It makes sense!
+                </a>
             </div>
+            <!--<div class="hb-nav-btn-border pull-right">-->
+                <!--<a class="hb-nav-btn hb-nav-btn-try-now col-sm-12" href="#">TRY NOW</a>-->
+            <!--</div>-->
+            <div class="collapse navbar-collapse" id="nav-action-btn">
+                <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
+                    <li class="active ">
+
+                    </li>
+                    <li><a class='hb-nav-btn col-sm-12' href="#">Features</a></li>
+                    <li><a class='hb-nav-btn col-sm-12' href="#">Pricing</a></li>
+                    <li><a class='hb-nav-btn col-sm-12 hb-nav-btn-bold' href="#">Login</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+
         </div>
-    </div>
 </div>
 
-<div class="container hb-land-container">
+
+
+<div class="container">
     <div class="row hb-hero">
-        <div class="span5 hb-description-col">
+        <div class="col-md-6 col-md-push-6" style="background: #ffff00;">
+            <img
+                    class='hb-hero-img'
+                    src="images/LP-macbook@2x.png" alt="HireBerry hero unit image"/>
+        </div>
+
+        <div class="col-md-6 col-md-pull-6 hb-hero-description" style="background: red;">
             <h2> What is HireBerry?</h2>
             <p>
                 HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups & SMEs attract the best talents.
             </p>
-            
-        </div>
-        <div class="span6 hb-img-col">
-            <img class='hb-hero-img' src="images/LP-macbook@2x.png" alt="HireBerry hero unit image"/>
+
         </div>
     </div>
 </div>

@@ -1,9 +1,6 @@
 .hb-land-body{
     padding: 0;
     font-family: 'Source Sans Pro';
-    /*background-image: url("/images/LP-bp-fonts+colors.jpg") ;*/
-    /*background-image: url("/images/LP-preview.jpg") ;*/
-    /*background-image: url("/images/LP-bp-sizes+distances.jpg") ;*/
     background-position: -180px -100px;
 }
 .hb-land-body>.navbar{
@@ -16,16 +13,16 @@
     border: none;
     padding: 0 20px;
     height: 60px;
+    overflow: hidden;
 }
 
 .hb-nav-btn-border{
     border:1px solid #f8b256;
     display: inline-block;
-    margin: 11px 0  ;
+    margin: 11px 0 0 38px;
     padding: 0;
     border-radius: 4px;
 }
-
 .navbar .nav > li > a.hb-nav-btn,.hb-nav-btn {
     color: #8989ce;
     font-size: 18px;
@@ -43,7 +40,6 @@
 .hb-nav-btn-try-now:hover {
     color: #ffffff;
     text-decoration: none;
-
 }
 
 .hb-nav-btn-try-now {
@@ -60,7 +56,11 @@
     line-height: 12px;
 }
 .navbar .nav.hb-nav-btn-list {
-    margin-right: 5px;
+    margin-right: 10px;
+
+}
+.hb-nav-btn-list>li {
+    text-align: center;
 }
 .hb-nav-btn-bold{font-weight: 600;}
 
@@ -77,7 +77,7 @@
 .hb-moto {
     display: inline-block;
     font-size: 16px;
-    color:#429985;
+    color: #429985;
     border-radius: 10px;
     background: #b1f1e3;
     margin: 16px 0 16px 10px;
@@ -85,9 +85,6 @@
     float: left;
     cursor: pointer;
     position: relative;
-
-
-
 }
 .hb-moto:hover{
     text-decoration: none;
@@ -101,10 +98,23 @@
     border-color: transparent;
     border-style: solid;
     top: 50%;
-    left: -15px;
+    left: -13px;
     margin-top: -7px;
     border-right-color: #b1f1e3;
     border-left-width: 0;
+    border-width: 8px;
+}
+.hb-arrow-up {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    top: -14px;
+    left: 50%;
+    margin-left: -7px;
+    border-bottom-color: #b1f1e3;
     border-width: 8px;
 }
 .hb-land-container{
@@ -123,8 +133,9 @@
     , rgba(137,173,206,1)); /*Standard*/
     margin: 0;
 }
-.hb-hero>div:first-child{
+.hb-hero-description{
     padding: 120px 0 0 100px;
+    /*padding: 120px 0 0 0;*/
     margin-left:0 ;
 }
 
@@ -132,7 +143,7 @@
     color:#5d7b95;
     font-size:36px;
     font-weight: 600;
-    margin: 0 0 20px 0;
+    /*margin: 120px 0 20px 100px;*/
 }
 
 .hb-hero p{
@@ -143,14 +154,8 @@
     width: 500px;
 }
 
-.hb-hero-img{
+.hb-hero-img {
     width: 550px;
-    height:323px ;
+    height: 323px;
     margin-top: 23px;
-}
-.hb-description-col{
-
-}
-.hb-img-col{
-    margin-left: 0;
 }
