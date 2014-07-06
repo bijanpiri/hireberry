@@ -318,11 +318,10 @@ function initTeamPage() {
         var teamID = $('#userTeams :selected').attr('name');
 
         $.post('/api/user/changeTeam', {teamID:teamID}).done( function() {
-
-            refresh();
-
             $('#switchTeamView').show();
             $('#switchTeamEdit').hide();
+
+            window.location = '/#overviewp';
         })
     })
 

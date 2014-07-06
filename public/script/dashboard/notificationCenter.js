@@ -63,10 +63,10 @@ function initNotificationCenter() {
                         teamID:teamID,
                         invitationID: $(this).attr('invitationID')
                     }).done( function(res) {
-                            alert('You\'ve joint.');
                             decreaseBudgeNumber();
                             $('#'+objID).remove();
-                        })
+                            window.location = '/#overviewp';
+                        });
                     $(this).parent().remove();
                 });
 

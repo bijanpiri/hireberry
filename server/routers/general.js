@@ -102,13 +102,23 @@ app.post('/api/setting/basicinfo', function(req,res) {
     var displayName = req.body.displayName;
     var email = req.body.email;
 
-    BUsers.update( { _id: userID },
-        { displayName: displayName, email: email }, function (err) {
-            if (err)
-                res.send(401,{});
-            else
-                res.send(200,{});
-        });
+    BUsers.findOne({email:email}, function(err,user){
+        if( err )
+            return res.send(503);
+        else if( user && user._id.toString()!==userID.toString() ) { // Duplication
+            return res.send(503,{error:'Select another display name and email.'});
+        }
+        else {
+            BUsers.update( { _id: userID },
+                { displayName: displayName, email: email }, function (err) {
+                    if (err)
+                        res.send(401,{});
+                    else
+                        res.send(200,{});
+                });
+        }
+    });
+
 });
 // endregion
 
