@@ -629,4 +629,11 @@ Map portlet
     max-height: 258px;
 }
 
+/****** Cover Letter Widget ******/
+.anythingElseWidget .limit-prompt {
+    float: right;
+}
 
+.anythingElseWidget .limit-prompt label {
+    display: inline-block;
+}

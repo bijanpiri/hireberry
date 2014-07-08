@@ -50,6 +50,9 @@ function WorkTypeWidget(){
             }
         }
 
+        if(editMode)
+            this.portlet.find('label').attr('for','');
+
         this.toolbar.find('input[type=radio]').change( stateChangedHandle(this));
         this.portlet.find('input[value=fulltime]').prop('checked',true);
         this.portlet.find('input[value=office]').prop('checked',true);

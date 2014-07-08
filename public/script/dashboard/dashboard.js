@@ -42,14 +42,14 @@ function initTour(){
             },
             {
                 element: "#switchButton ",
-                title: "Switch Team",
+                title: "Change Team",
                 content: "You can change your current team with this button",
                 container:"body"
             },
             {
                 element: "#createFlyerButton",
-                title: "New Job Position",
-                content: "Create new job position with this button",
+                title: "New Job",
+                content: "Create new job application form with this button",
                 reflex:true,
                 container:"#navbar-container"
             }],
@@ -82,22 +82,22 @@ function initApplicationTour(app){
         steps: [
             {
                 title: "Application tour",
-                content: "Here we are going to show you important parts of application ",
+                content: "Here we are going to show you important parts of application view.",
                 container:"body",
                 orphan:true
             },
             {
                 element: app.find('.workflowGroup'),
                 title: "Workflow",
-                content: "Use workflow buttons to manage user application.",
+                content: "Use workflow buttons to manage application and move it between stages.",
                 placement:'top',
                 container:"#application-preview-dialog"
 
             },
             {
                 element: ".portlet-commentsView",
-                title: "Application comments",
-                content: "You can leave your comment here or see teammates' comments here",
+                title: "Comments",
+                content: "You can leave your comment or see teammates' comments here about this applicant",
                 placement:'left',
                 container:".portlet-commentsView-container"
             }],
