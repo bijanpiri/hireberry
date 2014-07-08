@@ -5,8 +5,6 @@ var flyer;
 var flyerid;
 var newFlyerName;
 var previewWindow = 0;
-var dialog_confirm=$('<div id="dialog-confirm"  title="Remove"> <p id="contentholder"> Are you sure?</p></div>').hide();
-dialog_confirm.appendTo('body');
 var autosaveTimer;
 var autosaveInterval = 60*1000;
 var teamMembers = [];
@@ -22,7 +20,6 @@ var Picture;
 $(function() {
     //$(document).tooltip();
     $('[data-toggle="popover"]').popover();
-
 
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
         $('.bool-portlet').css('background',c);
@@ -197,40 +194,39 @@ function takeEditorTour(callBack) {
         steps: [
             {
                 title: "Welcome to Editor",
-                content: "Here you can create new flyer for your new job position. Let's see how",
+                content: "Here you can create new job application form. Let's see how",
                 container: "body",
                 orphan: true
             },
             {
                 element: "#widgetButtons",
-                title: "New Widgets",
-                content: "You can add new items to your flyer either by clicking or dragging items. ",
+                title: "Widgets",
+                content: "You can add these widgets to your job application form, either by clicking or drag and drop to job canvas.",
                 container: ".portletCreator"
             },
             {
                 element: ".portletStack",
-                title: "Flyer Stack",
-                content: "You can edit, remove or replace widgets here.",
+                title: "Job Canvas",
+                content: "Here is your job application form. You can customize, remove or replace widgets here.",
                 placement: "bottom",
                 container: "#portletsBox"
-
             },
             {
                 element: "#moreOptions",
                 title: "More Settings",
-                content: "Add or change commentators, responder, colors and title of this job position in job setting panel",
+                content: "Add or change commentators, responder, colors and title of this job application form in job setting panel",
                 container: ".portletCreator"
             },
             {
                 element: "#publishButton",
                 title: "Publish",
-                content: "When you done job editing use this button to Publish it.",
+                content: "When you done job editing, use this button to Publish it.",
                 container: ".bool-dock-bottom"
             },
             {
                 element: "#buttonComment",
                 title: "Job Comment",
-                content: "press this button to see comments about this job.",
+                content: "Press this button to see and leave comments about this job application form.",
                 placement: 'left',
                 reflex: true,
                 container: ".portlet-commentsView",
@@ -239,7 +235,7 @@ function takeEditorTour(callBack) {
             {
                 element: "#templateModal",
                 title: "Choose a Template",
-                content: "You can start from scratch or one of template that already created",
+                content: "You can start from scratch or choose one of templates that already created.",
                 placement: 'top',
                 reflex: true,
                 container: "body"

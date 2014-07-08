@@ -262,7 +262,10 @@ app.get('/flyer/:mode/:tid', function(req,res){
                     owner: req.user.teamID,
                     creator: req.user._id,
                     autoAssignedTo: req.user._id,
-                    flyer: {count:0}
+                    flyer: {
+                        count:0,
+                        thanksMessage:'<div id="ThanksMessageEditor" class="text-widget" contenteditable="true"><div style="text-align: center;"><b><font size="6">{ Thanks }</font></b></div><div style="text-align: center;"><br></div><div style="text-align: center;">We\'ve received your application request and will notify you ASAP.</div></div>'
+                    }
                 }).save(function (err,newflyer) {
                         flyerid = newflyer._id;
                         res.cookie('flyerid',flyerid);

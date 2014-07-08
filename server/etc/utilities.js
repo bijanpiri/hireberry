@@ -389,21 +389,6 @@ isHiringManager = function(teamID,userID,callback) {
 markCommentAsRead=function(userID, teamID, commentID, callback) {
 
     BComments.findOne({_id:commentID}, function(err,comment) {
-        //ToDo: fix this bug
-
-//        D:\booltin\booltin\server\etc\utilities.js:371
-//        else if( comment.applicationID )
-//            ^
-//        TypeError: Cannot read property 'applicationID' of null
-//        at Promise.BComments.update._id (D:\booltin\booltin\server\etc\utilities.js:371:25)
-//        at Promise.onResolve (D:\booltin\booltin\node_modules\mongoose\node_modules\mpromise\lib\promise.js:171:8)
-//        at Promise.EventEmitter.emit (events.js:95:17)
-//        at Promise.emit (D:\booltin\booltin\node_modules\mongoose\node_modules\mpromise\lib\promise.js:88:38)
-//        at Promise.fulfill (D:\booltin\booltin\node_modules\mongoose\node_modules\mpromise\lib\promise.js:101:20)
-//        at Object.cb (D:\booltin\booltin\node_modules\mongoose\lib\query.js:1164:30)
-//        at Object.exports.tick (D:\booltin\booltin\node_modules\mongoose\node_modules\mquery\lib\utils.js:126:16)
-//        at processImmediate [as _immediateCallback] (timers.js:330:15)
-
         if( err )
             return callback(err);
         else if( comment.applicationID )

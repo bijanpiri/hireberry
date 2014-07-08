@@ -14,7 +14,7 @@
 <% stylesheet('/css/widget/profile.css') -%>
 <% stylesheet('/css/widget/video.css') -%>
 <% stylesheet('/css/widget/separator.css') -%>
-<% stylesheet('/css/colorPicker.css') -%>/>
+<% stylesheet('/css/colorPicker.css') -%>
 <% stylesheet('/css/flyer.css') -%>
 <% stylesheet('/css/font-awesome.css') -%>
 <% stylesheet('/chosen/chosen.css') -%>
@@ -60,6 +60,7 @@
 <% script('/script/flyerEditor.js') -%>
 
 
+
 <div class="container bool-flyer-editor " >
 
 <div class="row-fluid flyerRow" >
@@ -82,7 +83,7 @@
                 <div class="portletStack">
 
                     <div class="bool-flyer-empty">
-                        Drop your widget here.
+                        Drop a widget from left side here
                     </div>
 
                 </div>
@@ -105,12 +106,7 @@
                              style="font-size: 2em;padding:20px ;text-align: center;line-height: 1.6em;border-radius: 0 0 7px 7px;padding-bottom:3em;">
                             <div class="thanksMessageContent">
                                 { Thanks }<br/><br/>
-                                We've received your application request and will notify you ASAP.<br/>
-                                If you have any question don't hesitate to
-                                <a href="mailto:hello@boolt.in">ask us</a>
-                                <br/>
-                                You can read more about booltin
-                                <a href="http://blog.boolt.in">here<br/></a><br/>
+                                We've received your application request and will notify you ASAP.
                             </div>
                         </div>
                     </div>
@@ -386,9 +382,8 @@
 <div class="video-widget">
     <div class="videoWidgetOuter">
         <div class="videoWidgetInputboxOutter">
-            <input type="text" class="videoWidgetInputboxText" placeholder="Paste your video link here">
+            <input type="text" class="videoWidgetInputboxText" placeholder="Youtube or Vimeo link">
             <a class="videoWidgetInputboxDone Done">Done</a>
-            <div class="videoWidgetInputboxFooter">Youtube and Vimeo are supported</div>
         </div>
     </div>
 
@@ -443,7 +438,7 @@
             <div style="margin-bottom: 5em;">
                 <div class="radioButtonGroup">
 
-                    <p class="radioButtonGroupDescription">You prefer to work as ...</p>
+                    <p class="radioButtonGroupDescription">You prefer to work ...</p>
 
                     <div class="bbtn-group">
                         <input class="bbtn bbtn-radio" id="fullTime" type="radio" name="workTime" value="fulltime" checked>
@@ -486,7 +481,10 @@
 
 <div class="container-fluid anythingElseWidget">
     <div class="offset1 span10" >
-        <textarea placeholder="Anything else?" rows="5" class="textarea" name="anythingElse"></textarea>
+        <textarea placeholder="" rows="5" class="textarea" name="anythingElse" style="margin-bottom: 16px;"></textarea>
+        <div class="limit-prompt">
+            <label class="remaind"></label> <label> left</label>
+        </div>
     </div>
 </div>
 
@@ -652,7 +650,7 @@
                             <i class="bool-iconic-icon bool-icon-linkedin-white"></i>
                         </div>
                     </div>
-                    <div class="bool-iconic-col-label">linkedin.com/in/ </div>
+                    <div class="bool-iconic-col-label">linkedin.com/ </div>
                     <div class="bool-iconic-col-input">
 
                         <input type="text" name="liprofile" id="linkedin">
@@ -1019,12 +1017,11 @@
 </div>
 
 <div class="toolbar-anything">
-    <label for="anything-limit" >Limit:</label>
-
+    <label for="anything-limit" >Limit cover letter to </label>
     <input id="anything-limit" type="number" command='limit' event='change keyup paste keydown' name="limit" value="1000" min="10" max="5000">
-    <label>you have </label>
-    <label class="remaind"></label>
-    <label> left</label>
+    <label>characters</label>
+    <label style="margin-left:48px">Placeholder:</label>
+    <input id="anything-placeholder" type="text" >
 </div>
 
 <div class="toolbar-skillsWidget">
@@ -1091,7 +1088,7 @@
                 </li>
                 <li class="bool-widget-btn " type="12" >
                     <i class="bool-widget-icon bool-widget-icon-profile"></i>
-                    Profile
+                    Profiles
                     <i class="bool-widget-icon bool-icon-move"></i>
                 </li>
                 <li class="bool-widget-btn " type="8" >
@@ -1143,9 +1140,9 @@
             <li>
 
                 <p class="bool-option-label">
-                    Open Position Title:
+                    Job Title:
                 </p>
-                <input type="text" placeholder="Position Title" class="bool-option-field" name="position-title">
+                <input type="text" placeholder="Enter Job Title" class="bool-option-field" name="position-title">
             </li>
 
             <li>
@@ -1250,4 +1247,8 @@
         <div>
         </div>
     </div>
+</div>
+
+<div id="dialog-confirm"  title="Remove" hidden>
+    <p id="contentholder">Are you sure?</p>
 </div>
