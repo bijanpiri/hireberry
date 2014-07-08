@@ -82,7 +82,6 @@ everyauth.everymodule.handleLogout(function (req, res) {
 
     req.logout();
     everyauth.everymodule.redirect(res, everyauth.everymodule.logoutRedirectPath());;
-    // res.send(200);
 });
 
 //region LinkedIn Authentication Configuration
@@ -162,6 +161,10 @@ everyauth.password
     .postLoginPath('/login')
     .loginView('login.ejs')
     .loginLocals( function (req, res, done) {
+
+        if( req.user )
+            return res.redirect('/');
+
         res.cookie('promocode',req.query.code);
         setTimeout( function () { done(null, { title: 'Login'}); }, 200);
     })
@@ -305,14 +308,15 @@ everyauth.password
         return promise;
     })
     .loginSuccessRedirect(function(req,res){
-        console.log(req);
-        console.log(res);
         return res.req.session.lastPage || '/';
     })
     .getRegisterPath('/register')
     .postRegisterPath('/register')
     .registerView('register.ejs')
     .registerLocals( function (req, res, done) {
+
+        if( req.user  )
+            return res.redirect('/');
 
         //addPromoCode('test',60,20,true,function(){});
         var code = req.query.code;

@@ -63,10 +63,10 @@ function initNotificationCenter() {
                         teamID:teamID,
                         invitationID: $(this).attr('invitationID')
                     }).done( function(res) {
-                            alert('You\'ve joint.');
                             decreaseBudgeNumber();
                             $('#'+objID).remove();
-                        })
+                            window.location = '/#overviewp';
+                        });
                     $(this).parent().remove();
                 });
 
@@ -105,7 +105,7 @@ function initNotificationCenter() {
                 .text('You are asked for publish ');
 
             var linkObj = $('<a>')
-                .text('this job')
+                .text('a job')
                 .attr('href','/flyer/edit/0?flyerid=' + formID)
                 .click( function() {
                     // ToDo: Remove this notification from database
@@ -115,7 +115,7 @@ function initNotificationCenter() {
 
             var draftButtonObj = $('<a>')
                 .addClass('btn btn-mini btn-warning')
-                .text('Draft it')
+                .text('Keep inactive')
                 .click( function() {
                     $.post('/flyer/changeMode',{
                         mode:'draft',
@@ -127,7 +127,7 @@ function initNotificationCenter() {
 
             var publishButtonObj = $('<a>')
                 .addClass('btn btn-mini btn-success')
-                .text('Publish it')
+                .text('Publish')
                 .click( function() {
                     $.post('/flyer/changeMode',{
                         mode:'publish',
@@ -213,9 +213,11 @@ function initNotificationCenter() {
                 .text('×')
                 .click(deleteNotificationHandler);
 
+            var jobLinkObj = $('<a>').attr('href', '/flyer/embeded/' + jobChanging.more.flyerID).text('a job');
             var titleObj = $('<div>')
-                .text('Hiring manager has changed state of a job to ' + jobChanging.more.newState)
-                .append( $('<a>').attr('href', '/flyer/embeded/' + jobChanging.more.flyerID).text('(View job)') );
+                .append('Hiring manager has changed state of ')
+                .append(jobLinkObj)
+                .append(' to ' + jobChanging.more.newState);
 
             var notifObj = $('<div>').attr('notificationID',objID)
                 .append(closeButtonObj)
@@ -228,12 +230,15 @@ function initNotificationCenter() {
         responses.forEach( function(response) {
             var objID = response._id;
 
+            var applicantObj = $('<a>').attr('applicationID',response.applicationID._id)
+                .text(response.applicationID.name)
+                .click( function() {
+                showApplicationPreview( $(this).attr('applicationID') );
+            });
+
             var titleObj = $('<div>')
-                .text(response.applicationID.name + ' responded: ' + response.response)
-                .append( $('<a>').attr('applicationID',response.applicationID._id).text('(See application)')
-                    .click( function() {
-                        showApplicationPreview( $(this).attr('applicationID') );
-                    }));
+                .append( applicantObj )
+                .append(' responded: ' + response.response);
 
             var closeButtonObj = $('<button>')
                 .addClass('close')

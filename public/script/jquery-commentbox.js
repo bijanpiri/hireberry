@@ -12,7 +12,7 @@ $.fn.commentBox = function(options){
     commentboxObj.empty();
 
     var commentFormObj = $('<div>').addClass('bool-comment-form')
-        .append(' <p>Leave you comment here:</p>')
+        .append(' <p>Leave your comment here:</p>')
         .append(' <textarea class="bool-textarea askForComment-note" rows="4" style="width: 100%"></textarea>')
         .append(' <a op="send" class="bool-toolbar-btn bool-comment-button pull-right">Send</a>')
         .append(' <a op="clear" class="bool-toolbar-btn bool-comment-button pull-right">Clear</a>');

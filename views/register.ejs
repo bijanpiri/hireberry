@@ -158,7 +158,15 @@
             url: '/register',
             type: 'post',
             dataType: 'json',
-            data: datastring
+            data: datastring,
+            error: function(data){
+                if(data.status != 0){
+
+                }
+            },
+            success: function(data){
+                window.location='/';
+            }
         });
         return false;
     }
@@ -213,165 +221,6 @@
     }
 </style>
 
-<img src="images/cover.jpg">
-<div id="pageNavigation">
-    <a href="#WhatIs">What is Booltin</a>
-    <a href="#Features">Features</a>
-    <a href="#Why">Why Booltin</a>
-    <a href="#Pricing">Pricing</a>
-</div>
-
-<div class="container-fluid" style="margin: 0;">
-    <div id="WhatIs" class="row-fluid" style="background-color: #7ccedb">
-        <div class="span12" style="position: relative">
-            <h2 class="title">What is Booltin</h2>
-            <h3 class="body">
-                Booltin is a web-based applicant tracking system and recruiting software, suitable for Startups and small and medium size businesses in IT industry.
-                <br/>
-                With Booltin you can design easy-to-fill-out application form with D&D, posting it on online job boards and major social networks.
-                <br/>
-                Also you can easily collaborate with your teammate in whole recruiting process and
-                use searching, filtering and consulting mechanism to find the best match to your needs.
-                <br/>
-                Track applicants’ status, schedule an interview and build an organized talent pool over time are other features that Booltin give to you.
-                <br/>
-                There are everything you need to have a successful hiring.
-            </h3>
-
-        </div>
-    </div>
-    <div id="Features" class="row-fluid" style="background-color: #db769b" >
-        <div class="span12" style="position: relative">
-            <h2 class="title">Features</h2>
-            <h3 class="subTitle">Create an elegant career page with easy-to-fill-out application forms</h3>
-            <h4>
-                Making a career page is a time and money consuming task. Beside, the weak ones can cause talents and experts escape. Booltin help you to solve these problems.
-            </h4>
-            <h5>
-                -Design an elegant career page, fast and simple
-                Whether you're using a template or starting from scratch, with Drag & Drop interface, it takes only seconds to design your stylish career page which empower your brand.
-            </h5>
-            <h5>
-                -Easy to fill out application form
-                Don't kill time of yours and applicants by tedious application form. Cut to the chase, give and capture worthwhile information at the same time, and just in time of 1 click.
-            </h5>
-
-            <h3 class="subTitle">Market your job ad</h3>
-            <h4>
-                Just the same way you would advertise your product to attract potential customer, you have to promote your job to attract top talents.
-            </h4>
-
-            <h5>
-                - Let your job ads go viral
-                Twitter, Facebook, Google plus and LinkedIn have more than million active users.  Use the power of the social networks to spread the world of your ad job.
-            </h5>
-            <h5>
-                - Post job ad on online job boards
-                Extend your reach and get more exposure, quickly post your job ad on free and paid (related) online job boards.
-            </h5>
-            <h5>
-                - Measuring your marketing success by referral resources
-                Find out how visitors are discovering your job ad, which channel is generating more traffic and made wiser decision about where to invest your marketing dollars.
-            </h5>
-
-            <h3 class="subTitle">Find the best match’s applicants</h3>
-            <h4>
-                The most important step of recruiting is finding the right person to the right opening jobs. With Booltin you can do it well.
-            </h4>
-            <h5>
-                - A full view of each applicant
-                At a glance, everything you need to know about an applicant and his/her recruiting process history.
-            </h5>
-            <h5>
-                - Sifting through applications
-                Use powerful searching, filtering and sorting tools for sifting through applications and find exactly what you want.
-            </h5>
-            <h5>
-                - Store applicants’ resumes on your Dropbox
-                Connect your Dropbox account to Booltin. After that all the resume will be stored directly on your Dropbox and you can take full advantage of Dropbox features.
-            </h5>
-
-            <h3 class="subTitle">Manage and Track Applicants</h3>
-            <h4>
-                It's never been easier to track applicants and manage recruiting process.
-            </h4>
-
-            <h5>
-                - Simplified Applicant Tracking
-                Manage recruiting process by tracking applicant from receiving their applications to hiring them, whole from one place.
-            </h5>
-            <h5>
-                - Schedule an Interviews and be Reminded
-                Schedule an interview in collaboration with applicant. Pull of being late. Booltin will remind you your interviews.
-            </h5>
-            <h5>
-                - Dynamic Talent Pool
-                Make a dynamic talent pool over time and use it in rainy day.
-            </h5>
-
-            <h3 class="subTitle">Collaborate with your team</h3>
-            <h4>
-                Booltin facilitates collaboration in recruiting process, from ad job creation to hire the best fit.[...]
-            </h4>
-
-            <h5>
-                - Create job opening position in a collaboration
-                Easily ask your teammate idea by notes and get their feedback, during creating career page and application form. It will speed up the design process and fit right into your team needs.
-            </h5>
-            <h5>
-                - Consult over an applicant
-                By inside comment and notification system you can easily discuss and  share your opinion with your teammates about an applicant.
-            </h5>
-            <h5>
-                - Break down recruiting tasks
-                You can break down recruiting tasks and assign responsibility of filling each job opening position to a specific teammate. [...]
-            </h5>
-        </div>
-    </div>
-    <div id="Why" class="row-fluid" style="background-color: #8c8bdb">
-        <div class="span12" style="position: relative">
-            <h2 class="title">Why Booltin</h2>
-            <h3 class="subTitle">To use your valuable time in the best way</h3>
-            <h4>
-                Working for a small business means wearing a lots of hats.  So there is no extra time to waste. By Booltin use your time wisely and pass the tedious(lengthy) recruiting process.
-            </h4>
-            <br/>
-
-            <h3 class="subTitle">To catch the big fish / To attract top talents</h3>
-            <h4>
-                As you face to top talents you have to be quick off the mark. Boring application form and inefficient recruiting process is exactly (what talents hate | what cause lose talents). Booltin solve these problems and make a good hiring experience for your applicants.
-            </h4>
-            <br/>
-
-            <h3 class="subTitle">To avoid the cost of bad hire</h3>
-            <h4>
-                Replacement of an employee can range from 2x to 7x his/her salary. Hiring and training costs can vary from 25% to 200% of annual compensation. Booltin will help you to make a right decision to hire right person, someone who valuable to cost.
-            </h4>
-            <br/>
-
-            <h3 class="subTitle">To empower your brand</h3>
-            <h4>
-                A job ad is not just ad for your job opening but it is also an ad for your company. With Booltin you can create a simple, elegant and visually appealing career page, easily, with D&D.
-            </h4>
-            <br/>
-
-            <h3 class="subTitle">To start a powerful recruiting for free</h3>
-            <h4>
-                The basic plan of Booltin is free. It is suitable for small business or testing purpose. Give it a shot and upgrade to premium plan when you need extra features.
-            </h4>
-            </h3>
-        </div>
-    </div>
-    <div id="Pricing" class="row-fluid" style="background-color: #c0db85">
-        <div class="span12" style="position: relative">
-            <h2 class="title">Pricing</h2>
-            <h3>
-                Booltin is FREE now.
-            </h3>
-        </div>
-    </div>
-</div>
-
 <div class="registerBox">
 
     <div style="text-align: center; background-color: #949079; line-height: 80px;border-radius: 10px 10px 0 0">
@@ -382,10 +231,10 @@
 
     <div style="background-color: #E0DAB7">
         <form class="registerForm" action="/register"  method="post" onsubmit="return registerstate();">
-            <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Email address">
-            <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Password">
+            <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Your Email Address">
+            <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Choose a Password">
             <div id="prog_bar"></div>
-            <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Password (Again)">
+            <input type="password" id="password2" onblur="isPassEqual2();"  placeholder="Enter Your Password Again">
             <button type="submit" class="wbtn wbtn-2 wbtn-2a">Register for FREE</button>
 
             <p class="moreOption">Already have an account? <a href="/login">Login</a></p>

@@ -1,3 +1,5 @@
+var compression = require('compression')
+
 mandrill = require('mandrill-api/mandrill');
 mandrill_client = new mandrill.Mandrill('suHojSqi5KWbijUgT-nzsQ');
 
@@ -41,6 +43,7 @@ app.configure(function() {
     app.engine('ejs',engine);
     app.set('view engine', 'ejs');
     app.set('views', cwd+ '/views');
+    app.use(compression()); // This middleware should be one of the first you "use" to ensure all responses are compressed.
     app.use(express.logger('dev'));
     app.use(express.static(cwd+'/public'));
     app.use(express.logger());

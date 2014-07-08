@@ -1,7 +1,11 @@
 
 #wrap {
-    position: relative;
-    top: 15em;
+    position: absolute;
+    top: 9em;
+    bottom: 0;
+    left: 150px;
+    right: 0;
+    overflow: auto;
     padding: 0 10em;
 }
 
@@ -49,22 +53,29 @@
 }
 
 .menu {
+    position: fixed;
+    top: 90px;
+    left: 8px;
+    width: 250px;
     font-size: 2.0em;
     text-align: center;
     line-height: 1.4em;
 }
 
 .menu .menu-header {
-    color: #419244;
-    background-color: #D5D5D5;
+    color: #000;
     line-height: 2.0em;
     font-weight: 700;
-    border-radius: 0 0 7px 0;
-    padding: 0.5em 0;
+    padding-bottom: 1em;
+    border-bottom: 2px solid #000;
+    margin: 1em;
+}
+
+.menu #dashboardNavigator {
+    padding: 0 50px;
 }
 
 .menu .item {
-    border-left: 4px solid #D5D5D5;
     padding: 1em 0;
     display: block;
     color: #000;
@@ -74,19 +85,15 @@
 
 .menu .item:hover {
     text-decoration: none;
-}
-
-.menu .item:hover {
-    background-color: rgb(200, 230, 200);
     cursor: pointer;
 }
 
-.menu .item-selected:hover {
+.menu input[type=radio]:checked + label {
+    background-color: #ddd;
+    border-radius: 4px;
 }
 
-.menu input[type=radio]:checked + label {
-    background-color: rgb(200, 230, 200);
-    border-left: 4px solid green;
+#wrap .container-fluid {
 }
 
 #wrap .right-panel #overviewp:target,
@@ -98,7 +105,7 @@
 }
 
 #wrap .right-panel .container-fluid {
-    background-color: #f1f1f1;
+    background-color: #fff;
     position: relative;
     left: 0;
     right: 0;
@@ -155,7 +162,7 @@
 .careerPageAddress {
     font-size: 2em;
     background-color: #d6d6d6;
-    padding: 10px 20px;
+    padding: 20px;
     border-radius: 4px;
     margin: 1em 0;
     text-align: center;
@@ -167,17 +174,23 @@
 .positionsHeaderRow {
     font-size: 2em;
     text-align: center;
-    border-left: 3px solid #555555;
     background-color: #d6d6d6;
     padding: 5px 0;
     line-height: 1.3em;
+    border-radius: 4px 4px 0 0;
+}
+
+.positionsFooterRow {
+    border-radius: 0 0 4px 4px;
+    background-color: #ddd;
+    height: 6px;
 }
 
 .position {
-    background: #e6e6e6;
     font-size: 2em;
     padding: 5px 0;
-    border-left: 3px solid rgb(84, 177, 84);
+    border-left: 3px solid #d6d6d6;
+    border-right: 3px solid #d6d6d6;
     text-align: center;
     line-height: 1.3em;
     cursor: pointer;
@@ -212,34 +225,31 @@
 }
 
 .statBox {
-    border-left: 3px solid green;
-    background-color: #ebebeb;
+    border-left: 3px solid #000;
+    background-color: #ddd;
     margin-bottom: 40px;
     padding: 0.5em 1.5em;
     box-shadow: 1px 1px 3px #BFBFBF;
 }
-
 .statBox a,
 .statBox a:hover,
 .statBox a:active {
     display: block;
     text-decoration: none;
 }
-
 .statBox .number {
     font-size: 2.5em;
     line-height: 1.6em;
-    color: green;
+    color: #000;
     text-align: center;
     font-weight: 700;
     display: inline-block;
     margin: 0 0.3em;
     vertical-align: sub;
 }
-
 .statBox .text {
     font-size: 1.5em;
-    color: #1BBD27;
+    color: #000;
     text-align: center;
     font-weight: 700;
     display: inline-block;
@@ -296,10 +306,16 @@
 
 /**** Team Panel *****/
 .teamHeader {
-    border-left: 3px solid rgb(94, 91, 91);
+    border-radius: 4px 4px 0 0;
     padding: 10px 20px;
     background-color: #d6d6d6;
     box-sizing: border-box;
+}
+
+.teamFooter {
+    border-radius: 0 0 4px 4px;
+    background-color: #ddd;
+    height: 6px;
 }
 
 #teamName {
@@ -395,15 +411,21 @@
 }
 
 .teamMember {
-    background-color: #e1e1e1;
     font-size: 1.7em;
     padding: 10px;
-    border-left: 3px solid rgb(84, 177, 84);
+    border-left: 3px solid #d6d6d6;
+    border-right: 3px solid #d6d6d6;
     cursor: default;
     position: relative;
 }
 
-.teamMember:hover {
+.teamMembersFooter {
+    border-radius: 0 0 4px 4px;
+    background-color: #ddd;
+    height: 6px;
+}
+
+#teamMembers .teamMember:hover {
     background-color: #EBE9C3;
 }
 
@@ -475,32 +497,26 @@
     line-height: 2em;
 }
 
-.plan {
-    padding: 10px;
-    border: 3px solid rgb(98, 128, 100);
-    background: rgb(219, 230, 222);
-    border-radius: 7px;
-}
-
-.planTitle {
-    font-size: 2em;
-    text-align: center;
-}
-
-.planButton {
-}
-
-
 .application-searchBox {
-    padding: 8px;
+    padding: 12px;
     width: 100%;
     border-radius: 4px;
-    border: 1px solid gray;
+    border: 2px solid #000;
     font-size: 1.6em;
 }
 
 .application-searchButton {
-    height: 2.8em;
+    height: 3.3em;
+}
+
+.applications-filter-job {
+    background-color: transparent;
+    border: 2px solid #000;
+    color: #000;
+    vertical-align: top;
+    height: 20px;
+    box-sizing: content-box;
+    padding: 12px;
 }
 
 .modal-body{
@@ -672,4 +688,75 @@ a{
         margin: 2em 0;
     }
 
+}
+
+/**
+Billing
+**/
+#billingHistory {
+    font-size: 2em
+}
+
+#billingsList {
+    font-size: 0.8em;
+    width: 100%;
+}
+
+#billingsList thead tr td {
+    font-weight: 700;
+}
+
+#billingsList  tr td {
+    padding: 0.5em 2em;
+    background-color: #fff;
+    border-bottom: 2px solid #d9d9d9;
+}
+
+#paypalPay {
+    margin: 1em auto 2em auto;
+    background-color: #ddd;
+    padding: 1em;
+    font-size: 1em;
+    border-radius: 4px;
+    width: 550px;
+}
+
+#paymentAmount {
+    margin: 0;
+}
+
+#billing_balance {
+    display: inline-block;
+    font-size: 1.5em;
+    color: rgb(213, 82, 82);
+    font-weight: 700;
+}
+
+.plan-table {
+    margin: 1em auto 40px auto;
+    background-color: #ddd;
+    border-radius: 4px;
+}
+
+.plan {
+    vertical-align: top;
+    text-align: center;
+    padding: 20px;
+}
+.plan-title {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.plan-feature {
+    padding: 10px;
+}
+
+.plan button {
+    margin: 16px;
+}
+
+#current-plan {
+    font-weight: 700;
 }

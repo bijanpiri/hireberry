@@ -130,11 +130,13 @@ BJobsView = Backbone.View.extend({
 
         $('#jobsp .position').remove();
         $('.applications-filter-job').empty();
-        $('.applications-filter-job').append( $('<option>').text('All').attr('formID',0) );
+        $('.applications-filter-job').append( $('<option>').text('All Job(s)').attr('formID',0) );
 
         forms.forEach( function(form) {
 
-            $('.applications-filter-job').append( $('<option>').text(form.formName).attr('formID',form.formID) );
+            var jobOptionObj = $('<option>').text(form.formName).attr('formID',form.formID);
+            $('.applications-filter-job').append( jobOptionObj.clone() );
+            $('#new-applicant-dialog .jobsList').append( jobOptionObj.clone() );
 
             // Trick
             if(form.mode==='drafted')
@@ -287,7 +289,7 @@ BJobsView = Backbone.View.extend({
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
             });
 
-            $('#jobsp').append( row );
+            $('.positionsRow').append( row );
         });
     }
 })
@@ -345,22 +347,24 @@ BTeamView = Backbone.View.extend({
         // Fill members list
         $('#teamMembers').empty();
         for( var i=0; i<members.length; i++ ){
-            var avatarObj = $('<img>').addClass('teamMemberAvatar').attr( 'src', getAvatar(members[i].email));
+            var avatarObj = $('<img>').addClass('teamMemberAvatar').width(30).height(30).attr( 'src', getAvatar(members[i].email));
             var nameObj = $('<div>').addClass('teamMemberName').text(members[i].displayName);
             var emailObj = $('<span>').addClass('teamMemberEmail').text('(' + members[i].email + ')');
 
             var roleObj = $('<div>').addClass('teamMemberRole').text(members[i]._id === teamAdmin._id ? 'Hiring Manager': 'Member');
 
-            var disjointButtonObj = '';
+            var removeButtonObj = '';
             if(userAdmin && members[i]._id !== teamAdmin._id) {
-                disjointButtonObj = $('<a>')
+                removeButtonObj = $('<a>')
                     .addClass('btn btn-danger btn-mini team-disjoint-button')
-                    .text('Disjoint')
+                    .text('Remove')
                     .attr('userID',members[i]._id)
                     .click( function() {
-                        $.post('/api/team/member/remove',{ userID: $(this).attr('userID') }).done( function() {
+                        if( confirm('Are you sure?') ){
+                            $.post('/api/team/member/remove',{ userID: $(this).attr('userID') }).done( function() {
                             refresh();
                         })
+                        }
                     });
             }
 
@@ -368,7 +372,7 @@ BTeamView = Backbone.View.extend({
                 .append( avatarObj )
                 .append( nameObj )
                 .append( emailObj )
-                .append( disjointButtonObj )
+                .append( removeButtonObj )
                 .append( roleObj )
                 .mouseenter( function() {
                     memberObj.find('team-disjoint-button').show();
@@ -406,10 +410,11 @@ BBillingView = Backbone.View.extend({
     },
     render: function() {
         var billing = this.model.get('billing');
-        var plan = (billing.plan==0) ? 'Free' : 'Premium';
+        var plan = (billing.plan==0) ? 'Freeberry' : 'Goldberry';
 
-        $('#billing_plan').text( plan + '(' + (new moment(billing.lastRenew)).fromNow() + ')' );
+        $('#current-plan').text( plan );
         $('#billing_balance span').text( billing.balance );
+        $('.plan-age').text( '(From ' + dateTimeToJSON(billing.lastRenew).from +')');
 
         if( billing.plan == 0 ) {
             $('#freePlanButton').hide();
@@ -419,18 +424,19 @@ BBillingView = Backbone.View.extend({
             $('#premiumPlanButton').hide();
         }
 
-        $('#billingsList').empty();
+        $('#billingsList tbody').empty();
 
         for( var i=0; i<billing.billings.length; i++ ) {
             var date = new Date(billing.billings[i].time);
             var dt = dateTimeToJSON(date);
+            var amount = billing.billings[i].amount;
 
-            var billingRow = $('<div>')
-                .append( $('<span>').text(dt.fullStyle))
-                .append( $('<span>').text(billing.billings[i].amount))
-                .append( $('<span>').text(billing.billings[i].method));
+            var billingRow = $('<tr>')
+                .append( $('<td>').text(dt.fullStyle))
+                .append( $('<td>').text( (amount<0?'-':'+') + ' $ ' + Math.abs(amount) ))
+                .append( $('<td>').text(billing.billings[i].method));
 
-            $('#billingsList').append( billingRow );
+            $('#billingsList tbody').append( billingRow );
         }
     }
 })

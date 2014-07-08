@@ -1,94 +1,64 @@
 <% layout('layout') -%>
 
-<!--<script src="/script/jquery.Jcrop.js"></script>-->
-<!--<script src="/script/load-image.min.js"></script>-->
-
-
-<script src="/script/canvas-to-blob.min.js"></script>
-<script src="/jquery-ui/js/file_upload.js"></script>
-<script src="/script/rasterizeHTML.allinone.js"></script>
-
-<script src="/html2canvas.js"></script>
-
-<link href="/css/toolbar.css" rel="stylesheet">
-<link href="/css/addWidgetToolbar.css" rel="stylesheet">
-<link href="/css/widget/profile.css" rel="stylesheet">
-<link href="/css/widget/video.css" rel="stylesheet">
-<link href="/css/widget/separator.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/colorPicker.css"/>
-<link href="/css/flyer.css" rel="stylesheet">
-<link href="/css/font-awesome.css" rel="stylesheet">
-
-<script src="/script/UsersCombo.js"></script>
-<script src="/script/jquery-commentbox.js"></script>
-
-<script src="/chosen/chosen.jquery.js"></script>
-<link href="/chosen/chosen.css" rel="stylesheet">
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
-</script>
-<link href="/css/job.css" rel="stylesheet">
-<link href="/css/toggle-switch.css" rel="stylesheet">
-
 <script>
     var editMode = <%=editMode%>;
     var templateID = '<%=templateID%>';
     var viewMode = '<%=viewMode%>';
     var existFlyer = <%= existFlyer %>
 </script>
-<script src="/script/dropbox.js"></script>
-<!--<script src="/script/parse-1.2.18.min.js"></script>-->
 
-<!--<script src="//www.parsecdn.com/js/parse-1.2.18.min.js"></script>-->
+<% stylesheet('/css/job.css') -%>
+<% stylesheet('/css/toggle-switch.css') -%>
+<% stylesheet('/css/toolbar.css') -%>
+<% stylesheet('/css/addWidgetToolbar.css') -%>
+<% stylesheet('/css/widget/profile.css') -%>
+<% stylesheet('/css/widget/video.css') -%>
+<% stylesheet('/css/widget/separator.css') -%>
+<% stylesheet('/css/colorPicker.css') -%>/>
+<% stylesheet('/css/flyer.css') -%>
+<% stylesheet('/css/font-awesome.css') -%>
+<% stylesheet('/chosen/chosen.css') -%>
 
-<script src="/script/Widgets/common.js"></script>
-<script src="/script/Widgets/ColorPicker.js"></script>
-<script src="/script/scrollable.js"></script>
-<script src="/script/jquery.collapsible.js"></script>
-<script src="/script/Widgets/Widget.js"></script>
-<script src="/script/Widgets/TextWidget.js"></script>
-<script src="/script/Widgets/PictureWidget.js"></script>
-<script src="/script/Widgets/VideoWidget.js"></script>
-<script src="/script/Widgets/VoiceWidget.js"></script>
-<script src="/script/Widgets/WorkTypeWidget.js"></script>
-<script src="/script/Widgets/MapWidget.js"></script>
-<script src="/script/Widgets/ButtonWidget.js"></script>
-<script src="/script/Widgets/AnythingElseWidget.js"></script>
-<script src="/script/Widgets/PersonalInfoWidget.js"></script>
-<script src="/script/Widgets/ProfilesWidget.js"></script>
-<script src="/script/Widgets/ResumeWidget.js"></script>
-<script src="/script/Widgets/SeparatorWidget.js"></script>
-<script src="/script/Widgets/SkillWidget.js"></script>
-<script src="/script/Widgets/WorkTypeWidget.js"></script>
-<script src="/script/Widgets/BadgeWidget.js"></script>
-<script src="/script/toolbar.js"></script>
-<script src="/script/Widgets/flyer.js"></script>
-<script src="/script/jquery.hotkeys.js"></script>
+<% script('/script/canvas-to-blob.min.js') -%>
+<% script('/jquery-ui/js/file_upload.js') -%>
+<% script('/script/rasterizeHTML.allinone.js') -%>
+<% script('/html2canvas.js') -%>
+<% script('/script/UsersCombo.js') -%>
+<% script('/script/jquery-commentbox.js') -%>
+<% script('/chosen/chosen.jquery.js') -%>
+<% script('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false') -%>
+<% script('/script/dropbox.js') -%>
+<% script('/script/Widgets/common.js') -%>
+<% script('/script/Widgets/ColorPicker.js') -%>
+<% script('/script/scrollable.js') -%>
+<% script('/script/jquery.collapsible.js') -%>
+<% script('/script/Widgets/Widget.js ') -%>
+<% script('/script/Widgets/TextWidget.js') -%>
+<% script('/script/Widgets/PictureWidget.js') -%>
+<% script('/script/Widgets/VideoWidget.js') -%>
+<% script('/script/Widgets/VoiceWidget.js') -%>
+<% script('/script/Widgets/WorkTypeWidget.js') -%>
+<% script('/script/Widgets/MapWidget.js') -%>
+<% script('/script/Widgets/ButtonWidget.js') -%>
+<% script('/script/Widgets/AnythingElseWidget.js') -%>
+<% script('/script/Widgets/PersonalInfoWidget.js') -%>
+<% script('/script/Widgets/ProfilesWidget.js') -%>
+<% script('/script/Widgets/ResumeWidget.js') -%>
+<% script('/script/Widgets/SeparatorWidget.js') -%>
+<% script('/script/Widgets/SkillWidget.js') -%>
+<% script('/script/Widgets/WorkTypeWidget.js') -%>
+<% script('/script/Widgets/BadgeWidget.js') -%>
+<% script('/script/toolbar.js') -%>
+<% script('/script/Widgets/flyer.js') -%>
+<% script('/script/jquery.hotkeys.js') -%>
+<% script('/script/bootstrap-wysiwyg.js') -%>
+<% script('/script/VideoTools.js') -%>
+<% script('/script/profileFinder.js') -%>
+<% script('/script/color-thief.js') -%>
+<% script('/script/jribbble.js') -%>
+<% script('/jquery-ui/js/jquery.ui.touch-punch.min.js') -%>
+<% script('/script/flyerEditor.js') -%>
 
-<script src="/script/bootstrap-wysiwyg.js"></script>
-
-<script src="/script/VideoTools.js"></script>
-
-<script src="/script/profileFinder.js"></script>
-<script src="/script/color-thief.js"></script>
-<script src="/script/md5.js"></script>
-<script src="/script/jribbble.js"></script>
-<script src="/jquery-ui/js/jquery.ui.touch-punch.min.js"></script>
-<!--
-<script src="/script/plusone.js"></script>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "/script/facebook.all.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="/script/twitter.widget.min.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
--->
-
-<script src="/script/flyerEditor.js"></script>
 
 <div class="container bool-flyer-editor " >
 

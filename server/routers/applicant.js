@@ -151,10 +151,12 @@ app.get('/twprofile/:q', function (req,res){
 
 app.post('/apply', function (req,res) {
 
+    var incomingSource = req.body.isInternalApply ? 'A teammate added this applicant' : 'Applicant sent application';
+
     var resumeFileName;
     var resumeUrl=req.body.resumeUrl;
 
-    if(  req.files.resume && req.files.resume.size > 0 )
+    if( req.files && req.files.resume && req.files.resume.size > 0 )
         resumeFileName = req.files.resume.path.replace(/^.*[\\\/]/, '') + req.files.resume.name;
     else
         resumeFileName = '-';
@@ -186,7 +188,7 @@ app.post('/apply', function (req,res) {
         anythingelse:req.body.anythingElse,
         resumePath: resumeUrl || resumeFileName,
         stage: { stage:1, subStage:1 },
-        activities:[{type:'Application is sent',timestamp:new Date()}]
+        activities:[{type:incomingSource, timestamp:new Date()}]
     }).save( function(err, application) {
         if(err){
             res.send(404,{});
@@ -196,7 +198,7 @@ app.post('/apply', function (req,res) {
     });
 
     var uploadResume = function( applicationID ) {
-        if( req.files.resume && req.files.resume.size > 0 ) {
+        if( req.files && req.files.resume && req.files.resume.size > 0 ) {
 
             // Read from temp file
             fs.readFile(req.files.resume.path, function (err, data) {
@@ -212,7 +214,7 @@ app.post('/apply', function (req,res) {
             });
         }
         else {
-            res.send(200,{});
+            res.send(200,{applicationID:applicationID});
         }
     }
 
@@ -240,10 +242,10 @@ app.post('/apply', function (req,res) {
 
                 if( !err )
                     BApplications.update({_id:applicationID},{resumePath:data.url}, function() {
-                        res.send(200,{});
+                        res.send(200,{applicationID:applicationID});
                     });
                 else
-                    res.send(200,{});
+                    res.send(200,{applicationID:applicationID});
 
             })
 

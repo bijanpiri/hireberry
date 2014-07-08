@@ -1,8 +1,5 @@
 <% layout('layout') -%>
 
-<style>
-</style>
-
 <script>
     function showMessage(text) {
         $('.alert').find('.msg').text(text);
@@ -70,7 +67,7 @@
                 <div class="alert alert-info hide">
                     <span class="msg"></span>
                 </div>
-                <p style="font-size: 2em;margin-top: 2em">Basic Info.</p>
+                <p style="font-size: 2em;margin-top: 2em">Basic Information</p>
             </div>
         </div>
 
@@ -90,29 +87,29 @@
         <div class="row-fluid">
             <div class="span4 offset4">
                 <div style="background-color: #C7C2A3;color: #949079;width: 260px;">
-                    <input type="text"  name="email" placeholder="Your Name" style="margin: 17px 0;" value="<%=everyauth.user.email%>">
+                    <input type="text"  name="email" placeholder="Your Email" style="margin: 17px 0;" value="<%=everyauth.user.email%>">
                 </div>
             </div>
         </div>
 
         <div class="row-fluid">
             <div class="span2 offset4">
-                <button type="button" id="saveChangesButton" class="btn btn-success">Save changes</button>
+                <button type="button" id="saveChangesButton" class="btn btn-success">Save</button>
             </div>
         </div>
 
         <div class="row-fluid">
             <div class="span4 offset4">
                 <p style="font-size: 2em;margin-top: 2em">Change Password</p>
-                <input type="password"  name="oldpassword" placeholder="Current password">
-                <input type="password"  name="newpassword" placeholder="New password">
-                <input type="password" name="confirmnewpassword" placeholder="New password (again)">
+                <input type="password"  name="oldpassword" placeholder="Current Password">
+                <input type="password"  name="newpassword" placeholder="New Password">
+                <input type="password" name="confirmnewpassword" placeholder="New Password Again">
             </div>
         </div>
 
         <div class="row-fluid">
             <div class="span2 offset4">
-                <button type="button" id="savePasswordButton" class="btn btn-success">Save new password</button>
+                <button type="button" id="savePasswordButton" class="btn btn-success">Save New Password</button>
             </div>
         </div>
 

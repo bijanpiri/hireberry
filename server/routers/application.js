@@ -6,6 +6,9 @@ app.get('/api/applications', function (req,res) {
 
     var submittedForms = [];
 
+    if( !req.user )
+        return res.send(404);
+
     var teamID = req.user.teamID;
     var userID = req.user ? req.user._id: '';
     var query = req.query.q || '';
