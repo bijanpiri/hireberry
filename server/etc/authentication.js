@@ -308,7 +308,7 @@ everyauth.password
         return promise;
     })
     .loginSuccessRedirect(function(req,res){
-        return res.req.session.lastPage || '/';
+        return res.req.session.lastPage || '/dashboard';
     })
     .getRegisterPath('/register')
     .postRegisterPath('/register')

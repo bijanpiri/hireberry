@@ -10,7 +10,7 @@ app.get('/', function(req,res) {
     if( req.user )
         res.redirect('/dashboard#overviewp');
     else
-        res.redirect('/login');
+        res.redirect('/LandingPage.html');
 });
 // endregion
 
