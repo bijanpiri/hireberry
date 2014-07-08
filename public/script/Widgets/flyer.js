@@ -242,7 +242,7 @@ function Flyer(options) {
                 connectToSortable: ".portletStack",
                 helper: "clone",
                 revert: "invalid",
-                stop:replaceWidgets,
+                stop:replaceWidgets
 //                start:showDraggingMouse
             });
         }
@@ -284,10 +284,12 @@ function Flyer(options) {
         function(){
             $('.bool-widget-btn')
                 .css('cursor',
-                "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto");
+                "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto!important");
         }
     );
-    // Public functions
+
+
+        // Public functions
     this.createPortlet = createPortlet;
     this.json2flyer = json2flyer;
     this.flyer2json = flyer2json;
