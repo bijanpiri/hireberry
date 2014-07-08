@@ -233,6 +233,7 @@ function Flyer(options) {
                 handle: ".move-btn-frame",
                 start: function() {
                     $('.bool-flyer-empty').hide();
+//                    showDraggingMouse();
                 }
 
             });
@@ -241,11 +242,19 @@ function Flyer(options) {
                 connectToSortable: ".portletStack",
                 helper: "clone",
                 revert: "invalid",
-                stop:replaceWidgets
+                stop:replaceWidgets,
+//                start:showDraggingMouse
             });
         }
 
+//        function showDraggingMouse(){
+//            $(this).css('cursor',
+//                'url("https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png"), auto');
+//
+//
+//        }
         function replaceWidgets(){
+
             $('.portletStack>.bool-widget-btn').each(
                 function(){
                     var type = parseInt($(this).attr('type'));
@@ -271,6 +280,13 @@ function Flyer(options) {
             this.json2flyer( options.templateID, options.flyerid || options.careerid, flyerLoaded );
     };
 
+    $(document).delegate('.bool-widget-btn','mousedown',
+        function(){
+            $('.bool-widget-btn')
+                .css('cursor',
+                "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto");
+        }
+    );
     // Public functions
     this.createPortlet = createPortlet;
     this.json2flyer = json2flyer;

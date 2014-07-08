@@ -1,5 +1,3 @@
-@import "buttons.css";
-
 form { margin: 0 }
 body { height: 100%; }
 
@@ -636,4 +634,10 @@ Map portlet
 
 .anythingElseWidget .limit-prompt label {
     display: inline-block;
+}
+.hb-mouse-cursor{
+    position: absolute;
+    z-index: 32000;
+
+    /*display: none;*/
 }

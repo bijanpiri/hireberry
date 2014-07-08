@@ -72,10 +72,20 @@
     color:#666;
     margin: 5px 10px 0;
     width: 210px;
-    cursor: pointer;
+    cursor: url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_hand.png'), auto;
     line-height: 22px;
     border: 1px solid #808080;
     min-height: 48px;
+}
+.bool-widget-btn:active{
+    cursor: url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto;
+
+}
+/*bool-widget-btn ui-draggable ui-draggable-dragging ui-sortable-helper*/
+
+/*bool-widget-btn ui-draggable*/
+.ui-draggable{
+    cursor: url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_hand.png'), auto;
 }
 .bool-widget-icon{
     display: inline-block;
@@ -83,8 +93,6 @@
     background-size: 186px 625px;
     width: 20px;
     vertical-align: middle;
-
-
 }
 .bool-widget-icon-text{background-position: 0 0;height: 14px;}
 .bool-widget-icon-picture{background-position: 0 -15px;height: 15px;}

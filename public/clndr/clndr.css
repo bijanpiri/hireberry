@@ -1,14 +1,46 @@
 #full-clndr {
-  background-color: #ebebeb;
+  background-color: #f9f9f9;
   font-weight: 700;
-  -moz-box-shadow: 4px 4px 0 #343434;
-  -webkit-box-shadow: 4px 4px 0 #343434;
-  box-shadow: 4px 4px 0 #343434;
+  border-left: 3px solid #C4C4C4;
+}
+#full-clndr .clndr-controls .month {
+  display: inline-block;
+  width: 70%;
+  float: left;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+}
+#full-clndr .clndr-controls .clndr-previous-button,
+#full-clndr .clndr-controls .clndr-next-button {
+  font-size: 3em;
+  width: 15%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -ms-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+}
+#full-clndr .clndr-controls .clndr-previous-button {
+  float: left;
+}
+#full-clndr .clndr-controls .clndr-next-button {
+  float: left;
 }
 #full-clndr .clndr-grid {
+  clear: both;
   float: left;
   width: 65%;
   border-right: 2px solid white;
+  height: 450px;
 }
 #full-clndr .clndr-grid .days-of-the-week {
   width: 100%;
@@ -32,15 +64,18 @@
   padding: 24px 0;
   text-align: center;
   color: #4f4f4f;
-  background-color: #ebebeb;
+  background-color: #f9f9f9;
   border-bottom: 2px solid white;
-
   background-size: cover;
   background-position: center;
 }
 #full-clndr .clndr-grid .days .day.event,
 #full-clndr .clndr-grid .days .empty.event {
   background-color: #3883a3;
+}
+#full-clndr .clndr-grid .days .day.event.active-event,
+#full-clndr .clndr-grid .days .empty.event.active-event {
+  background-color: #70B5D3;
 }
 #full-clndr .clndr-grid .days .day.event .day-number,
 #full-clndr .clndr-grid .days .empty.event .day-number {
@@ -58,6 +93,8 @@
 #full-clndr .event-listing {
   float: left;
   width: 35%;
+  height: 450px;
+  overflow: auto;
 }
 #full-clndr .event-listing .event-listing-title {
   padding: 14px;
@@ -101,7 +138,7 @@
 }
 #full-clndr a {
   text-decoration: none;
-  background-color: #ebebeb;
+  background-color: #f9f9f9;
   color: #3883a3;
   padding: 0 2px;
   border-radius: 2px;
