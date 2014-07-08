@@ -27,7 +27,7 @@
     <div class="menu-header">
         <div id="switchTeamView">
             <div id="currentTeamName">Current Team</div>
-            <button id="switchButton" class="btn btn-mini">
+            <button id="switchButton" class="btn btn-mini" onclick="GAEvent('Dashboard','Team','Open ChangeTeam')">
                 <i class="fa fa-random fa-lg"></i>
                 Change Team
             </button>
@@ -44,19 +44,19 @@
     <div id="dashboardNavigator">
 
         <input type="radio" id="radio-item-overview" hidden name="menuItems" checked>
-        <label class="item" for="radio-item-overview" onclick="window.location='#overviewp'">Overview</label>
+        <label class="item" for="radio-item-overview" onclick="GAEvent('Dashboard','Menu','Overview');window.location='#overviewp'">Overview</label>
 
         <input type="radio" id="radio-item-team" hidden name="menuItems">
-        <label class="item" for="radio-item-team" onclick="window.location='#teamp'">Team</label>
+        <label class="item" for="radio-item-team" onclick="GAEvent('Dashboard','Menu','Team');window.location='#teamp'">Team</label>
 
         <input type="radio" id="radio-item-jobs" hidden name="menuItems">
-        <label class="item" for="radio-item-jobs" onclick="window.location='#jobsp'">Jobs</label>
+        <label class="item" for="radio-item-jobs" onclick="GAEvent('Dashboard','Menu','Jobs');window.location='#jobsp'">Jobs</label>
 
         <input type="radio" id="radio-item-applications" hidden name="menuItems">
-        <label class="item" for="radio-item-applications" onclick="window.location='#applicationsp'">Applications</label>
+        <label class="item" for="radio-item-applications" onclick="GAEvent('Dashboard','Menu','Applications');window.location='#applicationsp'">Applications</label>
 
         <input type="radio" id="radio-item-billing" hidden name="menuItems">
-        <label class="item" for="radio-item-billing" onclick="window.location='#billingp'" hidden>Billing</label>
+        <label class="item" for="radio-item-billing" onclick="GAEvent('Dashboard','Menu','Billing');window.location='#billingp'" hidden>Billing</label>
 
     </div>
 
@@ -139,11 +139,13 @@
 <div id="teamp" class="container-fluid sectionContainer">
     <div class="row-fluid">
         <div class="span12" style="margin-bottom: 1em">
-            <a href="#team-settings-dialog" role="button" class="btn btn-warning" data-toggle="modal" hidden>
+            <a href="#team-settings-dialog" role="button" class="btn btn-warning"
+               data-toggle="modal" onclick="GAEvent('Dashboard','Team','Open Setting')" hidden>
                 <i class="icon-cog "></i>
                 Team Settings
             </a>
-            <a href="#team-invitation-dialog" role="button" class="btn btn-success" data-toggle="modal" hidden>
+            <a href="#team-invitation-dialog" role="button" class="btn btn-success"
+               data-toggle="modal" onclick="GAEvent('Dashboard','Team','Open Invite')" hidden>
                 <i class="bool-icon bool-icon-email"></i>
                 Invite
             </a>
@@ -185,8 +187,8 @@
         <div class="span12">
             <div class="careerPageAddress">
                 All the published jobs are available on your Career page.
-                <a id="teamJobsPage" target="_blank">Edit</a> |
-                <a id="teamJobsPagePublic" target="_blank">View</a>
+                <a id="teamJobsPage" onclick="GAEvent('Dashboard','Job','Edit Careerpage')" target="_blank">Edit</a> |
+                <a id="teamJobsPagePublic" onclick="GAEvent('Dashboard','Job','View Careerpage')" target="_blank">View</a>
 
             </div>
         </div>
@@ -366,9 +368,9 @@
             </div>
             <div class="candidate-resume">
                 <strong>Resume:</strong>
-                <a class="btn btn-mini btn-warning candidate-resume-view-button" target="_blank">View</a>
-                <a class="btn btn-mini btn-primary candidate-resume-download-button" target="_blank">Download</a>
-                <a class="btn btn-mini btn-primary candidate-resume-upload-button">Upload</a>
+                <a class="btn btn-mini btn-warning candidate-resume-view-button" onclick="GAEvent('Dashboard','ApplicationView','Resume-View')" target="_blank">View</a>
+                <a class="btn btn-mini btn-primary candidate-resume-download-button" onclick="GAEvent('Dashboard','ApplicationView','Resume-Download')" target="_blank">Download</a>
+                <a class="btn btn-mini btn-primary candidate-resume-upload-button"onclick="GAEvent('Dashboard','ApplicationView','Resume-Upload')" >Upload</a>
                 <input type="file" class="candidate-file" hidden="hidden">
             </div>
         </div>
@@ -484,7 +486,7 @@
             <div class="candidate-workflow">
                 <div class="candidate-workflow-stages">
 
-                    <div class="candidate-workflow-stage pending">
+                    <div class="candidate-workflow-stage pending" stage="1">
                         <div class="candidate-workflow-substage" sub-stage="1">
                             <div>Application is in <strong>Pending</strong> stage. You can:</div>
                             <a class="archiveButton">Archive it</a>
@@ -493,7 +495,7 @@
                         </div>
                     </div>
 
-                    <div class="candidate-workflow-stage interviewing">
+                    <div class="candidate-workflow-stage interviewing" stage="2" >
 
                         <div class="candidate-workflow-substage" sub-stage="1">
                             <div>Application is in <strong>Interviewing</strong> stage.</div>
@@ -527,7 +529,7 @@
                         </div>
                     </div>
 
-                    <div class="candidate-workflow-stage offering">
+                    <div class="candidate-workflow-stage offering" stage="3">
                         <div class="candidate-workflow-substage" sub-stage="1">
                             <div>Application is in <strong>Offered</strong> stage.</div>
                             We're waiting for applicant's response.
@@ -551,7 +553,7 @@
                         </div>
                     </div>
 
-                    <div class="candidate-workflow-stage archived">
+                    <div class="candidate-workflow-stage archived" stage="4">
                         <div class="candidate-workflow-substage" sub-stage="1">
                             <div>Application is in <strong>Archived</strong> stage. You can:</div>
                             <a class="interviewButton">Make an interview</a>

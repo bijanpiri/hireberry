@@ -166,9 +166,12 @@ $(function(){
 
     $(document).delegate('.bool-edit-switch a','click', function() {
 
+
         var operation = $(this).attr('op');
         var editableObjClassName = $(this).parent().attr('edit-switch-of');
         var fixValues = $(this).parent().attr('fixValues')==="true";
+
+        GAEvent('Dashboard','ApplicationView','Edit ' + operation + ' ' + editableObjClassName );
 
         if( fixValues ){
             var editableObj = $(this).closest( '.' + editableObjClassName ).find('select');
@@ -285,6 +288,7 @@ function initOverviewPage() {
         var candidate = candidateSection.data('candidate')
 
         var candidateID = $(this).closest('.candidate').data('candidate')._id;
+        GAEvent('Dashboard','ApplicationView','From Applications');
         showApplicationPreview( candidateID );
     });
 }
@@ -374,15 +378,21 @@ function initTeamPage() {
 
 function initBillingPage() {
     $('#payButton').click( function() {
+        GAEvent('Dashboard','Billing','To Pay Page');
+
         var amount = $('#paymentAmount :selected').attr('name')
         document.location =  '/pay?amount=' + amount;
     })
 
     $('#premiumPlanButton').click( function() {
+        GAEvent('Dashboard','Billing','To premium plan');
+
         $.get('/api/plan/change',{new_plan:1}).done(refresh);
     });
 
     $('#freePlanButton').click( function() {
+        GAEvent('Dashboard','Billing','To free plan');
+
         $.get('/api/plan/change',{new_plan:0}).done(refresh);
     });
 }
@@ -397,10 +407,12 @@ function initApplicationPage() {
 
 
     $('.applications-filter-job').unbind('change').change( function() {
+        GAEvent('Dashboard','Applications','Job Filter');
         applications.fetch();
     });
 
     $('.application-searchButton').unbind('click').click( function() {
+        GAEvent('Dashboard','Applications','Search');
         applications.fetch();
     });
 
@@ -408,11 +420,15 @@ function initApplicationPage() {
     $('.application-sort .sortByDate').unbind('click').click( function() {
         $('.application-sort').attr('sortBy','date');
         $('.application-sortType').text('Date');
+
+        GAEvent('Dashboard','Applications','Sort By Date');
         applications.fetch();
     });
     $('.application-sort .sortByName').unbind('click').click( function() {
         $('.application-sort').attr('sortBy','name');
         $('.application-sortType').text('Name');
+
+        GAEvent('Dashboard','Applications','Sort By Name');
         applications.fetch();
     });
 
@@ -534,10 +550,16 @@ function initWorkflow(candidateObj,candidate) {
     }
 }
 
-function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo) {
+function changeWorkflowStage(candidateObj,candidate,stageNo,subStageNo,internalCall) {
 
     stageNo--; // Convert to zero-base index
     subStageNo = subStageNo || 1;
+
+    if( !internalCall ){
+        var cs = $('.candidate-workflow-stages .candidate-workflow-substage:visible').attr('sub-stage');
+        var css = $('.candidate-workflow-stages .candidate-workflow-substage:visible').parent().attr('stage');
+        GAEvent('ApplicationView','Workflow', '('+cs+','+css+') To (' + stageNo +','+subStageNo + ')');
+    }
 
     // Hide all
     candidateObj.find('.candidate-workflow-substage').hide();
@@ -722,6 +744,8 @@ function initCandidateInstance(candidate,expanded) {
     });
 
     candidateObj.find('.markAsVisited').click( function() {
+        GAEvent('Dashboard','Application','Mark As Visited');
+
         var el = $(this).parent().parent();
         var appID = $(this).parent().attr('appID');
         $.post('/api/application/' + appID + '/visitedState', {visited:true}).done( function() {
@@ -730,6 +754,8 @@ function initCandidateInstance(candidate,expanded) {
     });
 
     candidateObj.find('.markAsUnvisited').click( function() {
+        GAEvent('Dashboard','Application','Mark As Unvisited');
+
         var el = $(this).parent().parent();
         var appID = $(this).parent().attr('appID');
         $.post('/api/application/' + appID + '/visitedState', {visited:false}).done( function() {
@@ -756,7 +782,7 @@ function initCandidateInstance(candidate,expanded) {
     });
 
     initWorkflow(candidateObj,candidate);
-    changeWorkflowStage(candidateObj,candidate, candidate.stage.stage, candidate.stage.subStage );
+    changeWorkflowStage(candidateObj, candidate, candidate.stage.stage, candidate.stage.subStage, true );
 
     return candidateObj;
 }

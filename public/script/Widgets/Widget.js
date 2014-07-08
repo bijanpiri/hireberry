@@ -34,12 +34,16 @@ function Widget(options){
             position:'middle',
             buttons: {
                 Yes: function() {
+                    GAEvent('Editor','Remove','YES ' + widget.type);
+
                     $( this ).dialog( "close" );
                     widget.portletContainer.remove();
                     Widgets[widget.type].instances++;
                     checkFlyerEmpty();
                 },
                 No: function() {
+                    GAEvent('Editor','Remove','NO ' + widget.type);
+
                     $( this ).dialog( "close" );
                     checkFlyerEmpty();
                 }
@@ -61,6 +65,7 @@ function Widget(options){
         var deleteButton = $('<div >').addClass('action-btn-frame delete-btn-frame')
             .append($('<i>').addClass('action-btn widget-delete-btn'));
 
+
         deleteButton.click(deleteWidget);
 
         if( this.editMode) {
@@ -79,7 +84,9 @@ function Widget(options){
         return this.portletContainer.append( this.portlet );
     };
 
-    this.widgetDidAdd = function(isNew) {}
+    this.widgetDidAdd = function(isNew) {
+        GAEvent('Editor','Add',widget.type);
+    }
 
     this.widgetFocus=function(){};
 

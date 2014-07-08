@@ -234,6 +234,10 @@ function Flyer(options) {
                 start: function() {
                     $('.bool-flyer-empty').hide();
 //                    showDraggingMouse();
+
+                },
+                update: function() {
+                    GAEvent('Editor','Move','');
                 }
 
             });
@@ -259,12 +263,12 @@ function Flyer(options) {
                 function(){
                     var type = parseInt($(this).attr('type'));
                     createPortlet({type: type,isNew:true,place:$(this)});
+                    GAEvent( 'Editor','Add Widget', 'D&D ' + type );
                 }
             );
             $('.portletStack>.bool-widget-btn').remove();
             if($('.portletStack').children().length==1)
                 $('.bool-flyer-empty').show();
-
         }
         // Set click event
         $(function(){
@@ -272,6 +276,8 @@ function Flyer(options) {
             $(".bool-widget-btn").click(function(e){
                 var itemType = parseInt($(this).attr('type'));
                 createPortlet( {type:itemType,isNew:true});
+
+                GAEvent( 'Editor','Add Widget', 'Click ' + itemType );
             });
         });
 

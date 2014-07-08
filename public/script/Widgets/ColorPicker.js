@@ -56,6 +56,7 @@ $.fn.ColorPicker=function(callback){
                 .find('.bool-current-color')
                 .css('background-color',c);
 
+            GAEvent('Editor','ColorPicker',c);
 
             $('.bool-color-recent>li>span[command="color '+c+'"]').parent().remove();
             $('.bool-color-recent')
