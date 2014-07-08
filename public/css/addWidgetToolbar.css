@@ -77,10 +77,10 @@
     border: 1px solid #808080;
     min-height: 48px;
 }
-.bool-widget-btn:active{
-    cursor: url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto;
+/*.bool-widget-btn:active{*/
+    /*cursor: url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto;*/
 
-}
+/*}*/
 /*bool-widget-btn ui-draggable ui-draggable-dragging ui-sortable-helper*/
 
 /*bool-widget-btn ui-draggable*/

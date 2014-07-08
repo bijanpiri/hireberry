@@ -553,7 +553,7 @@ pay = function( teamID, amount, callback ) {
                     "currency": "USD",
                     "total": amount
                 },
-                "description": "Increasing credit for {Team} in Booltin"
+                "description": "Increasing credit for {Team} in HireBerry"
             }]
         };
 

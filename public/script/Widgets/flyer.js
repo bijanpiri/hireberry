@@ -225,7 +225,6 @@ function Flyer(options) {
 
             pStack.sortable({
 //                connectWith: ".portletStack",
-                cursor: "move",
                 axis: "y",
                 drag: "y",
                 placeholder:'bool-placeholder',
@@ -233,26 +232,23 @@ function Flyer(options) {
                 handle: ".move-btn-frame",
                 start: function() {
                     $('.bool-flyer-empty').hide();
-//                    showDraggingMouse();
-                }
+                },
+                cursor: "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto"
 
             });
 
             $('.bool-widget-btn').draggable({
                 connectToSortable: ".portletStack",
+                cursor: "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto",
                 helper: "clone",
                 revert: "invalid",
-                stop:replaceWidgets
-//                start:showDraggingMouse
+                stop:replaceWidgets,
+                start:function(){
+                    $('.bool-widget-btn').popover('hide');
+                }
             });
         }
 
-//        function showDraggingMouse(){
-//            $(this).css('cursor',
-//                'url("https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png"), auto');
-//
-//
-//        }
         function replaceWidgets(){
 
             $('.portletStack>.bool-widget-btn').each(
@@ -273,6 +269,10 @@ function Flyer(options) {
                 var itemType = parseInt($(this).attr('type'));
                 createPortlet( {type:itemType,isNew:true});
             });
+            $(".popover-btn").click(function(e) {
+                e.stopPropagation();
+            });
+
         });
 
         // templateID=0 means 'don't use template'
@@ -280,13 +280,7 @@ function Flyer(options) {
             this.json2flyer( options.templateID, options.flyerid || options.careerid, flyerLoaded );
     };
 
-    $(document).delegate('.bool-widget-btn','mousedown',
-        function(){
-            $('.bool-widget-btn')
-                .css('cursor',
-                "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto!important");
-        }
-    );
+
 
 
         // Public functions

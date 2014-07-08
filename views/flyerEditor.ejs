@@ -122,54 +122,11 @@
 <div class="comments-sidebar" id="commentSlidebar"></div>
 <% } %>
 
-<div class="row-fluid shareRow" hidden>
-    <div class="span6 offset3">
-
-        <div class="container-fluid" style="background-color: #f1f1f1;border-radius: 4px;padding: 20px;">
-
-            <div class="row-fluid controls-row">
-                <div class="span12" style="font-size: 2em;">
-                    <p id="publishFinalMessage" style="color: #9c9c9c;text-align: center;border: 2px solid #9c9c9c;padding: 10px;margin-bottom: 30px;border-radius: 4px;background-color: #DADADA;"></p>
-                    <p id="flyerName3">Title</p>
-                </div>
-            </div>
-
-            <div class="row-fluid controls-row">
-                <div class="span12">
-                    <input type="url" id="flyerURL" style="width: 90%">
-                </div>
-            </div>
-
-            <div class="row-fluid">
-                <div class="span2">
-                    <b>Share on:</b>
-                </div>
-                <div class="span4">
-                    <g:plus action="share" href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>"></g:plus>
-                </div>
-                <div class="span3">
-                    <div class="fb-share-button" data-href="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-type="button_count"></div>
-                </div>
-                <div class="span3">
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://booltin.herokuapp.com/flyer/embeded/<%=flyerid%>" data-text="We are hiring" >Tweet</a></div>
-            </div>
-
-            <div class="row-fluid">
-                <div class="span12">
-                    <button id="buttonShareDone" class="btn btn-danger pull-right">Close</button>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
 <div id="previewFrame" hidden>
 </div>
 
 <div style="position: absolute;left: 0;right: 0;font-size: 1.5em;margin-bottom: 1em;text-align: center;display: none">
-    Powered by <a href="https://boolt.in">booltin</a>
+    Powered by <a href="https://hireberry.com">HireBerry</a>
 </div>
 
 <div class="modal hide fade bool-thanks-message" >
@@ -1061,57 +1018,126 @@
                 <li class="bool-widget-btn" type="1">
                     <i class="bool-widget-icon bool-widget-icon-text"></i>
                     Text
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Text Widget"
+                            data-content="Suitable for company and job description">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn" type="2">
                     <i class="bool-widget-icon bool-widget-icon-picture"></i>
                     Picture
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Picture Widget"
+                            data-content="e.g. Image of company, workplace or product.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
                 </li>
                 <li class="bool-widget-btn" type="3">
                     <i class="bool-widget-icon bool-widget-icon-video"></i>
                     Video
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Video Widget"
+                            data-content="e.g. Introduce your company, activities, product or team.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
                 </li>
                 <li class="bool-widget-btn " type="6" >
                     <i class="bool-widget-icon bool-widget-icon-map"></i>
                     Map
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                                        <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Map Widget"
+                            data-content="Indicate company or work location.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="7" >
                     <i class="bool-widget-icon bool-widget-icon-perk"></i>
                     Perks
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Perks Widget"
+                            data-content="Encourage talents by perks of working with you.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="14" >
                     <i class="bool-widget-icon bool-widget-icon-skill"></i>
                     Skills
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Skill Widget"
+                            data-content="Required and Desired skills for this job position.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="12" >
                     <i class="bool-widget-icon bool-widget-icon-profile"></i>
                     Profiles
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Profile Widget"
+                            data-content="Ask applicants personal information.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="8" >
                     <i class="bool-widget-icon bool-widget-icon-condition"></i>
                     Conditions
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Condition Widget"
+                            data-content="Ask applicants preference about workplace and work time">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="11" >
                     <i class="bool-widget-icon bool-widget-icon-cover-letter"></i>
                     Cover Letter
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Cover Letter Widget"
+                            data-content="Lets applicants introduce their motivation for this position.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="10" >
                     <i class="bool-widget-icon bool-widget-icon-resume"></i>
                     Resume
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Resume Widget"
+                            data-content="Request applicants to attach their resume.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="13" >
                     <i class="bool-widget-icon bool-widget-icon-separator"></i>
                     Separator
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                                        <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Separator Widget"
+                            data-content="Divides to sections by line or title">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
 
             </ul>
