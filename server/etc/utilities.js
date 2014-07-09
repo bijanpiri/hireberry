@@ -553,11 +553,8 @@ pay = function( teamID, amount, description,PaymentType,callback ) {
                     "currency": "USD",
                     "total": amount
                 },
-<<<<<<< HEAD
-                "description": "Increasing credit for {Team} in HireBerry"
-=======
+
                 "description": description
->>>>>>> 1- Adding preiview data in promote table. 2-Modifying payment process . 3-Showing inforamtion of promoted flyers in promote panel.
             }]
         };
 
