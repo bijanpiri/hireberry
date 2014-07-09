@@ -287,8 +287,8 @@ app.post('/api/careerpage/:teamID', function(req,res){
 app.get('/:mode/careerpage/:teamID', function(req,res){
 
     if(req.params.mode==='editor' && req.user && req.user.teamID.toString() === req.params.teamID ){
-        res.render('careerEditor',{
-            title:'Career Page Editor',
+        res.render('careerEditor.ejs',{
+            title: 'Career Page Editor',
             editMode: true,
             teamID: req.params.teamID
         });
@@ -299,7 +299,7 @@ app.get('/:mode/careerpage/:teamID', function(req,res){
             if( err || !team )
                 return res.send(404);
 
-            res.render('careerEditor',{
+            res.render('careerEditor.ejs',{
                 title: team.name + ' | Career Page',
                 editMode: false,
                 teamID: req.params.teamID

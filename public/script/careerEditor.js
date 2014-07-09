@@ -174,7 +174,7 @@ function GoToViewMode() {
             .attr('frameborder','0')
             .attr('width','100%')
             .attr('scrolling','no')
-            .attr('height', height +100)
+            .attr('height', height +150)
             .attr('hidden','hidden')
             .load( function() {
 

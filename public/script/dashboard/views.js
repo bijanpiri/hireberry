@@ -315,7 +315,7 @@ BJobsView = Backbone.View.extend({
 
         if( forms.length == 0 ){
             $('#jobsp > div').hide();
-            $('.jobs-empty-state').show();
+            $('.jobs-empty-state, .career-info').show();
         }
     }
 })
