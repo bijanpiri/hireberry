@@ -27,9 +27,12 @@ BPersistLogin= mongoose.model( 'persistentLogins', {
 
 BPromoteInfo= mongoose.model( 'promote', {
     totalPrice: Number,
+    flyerID: {type : mongoose.Schema.ObjectId, ref : 'flyers'},
     jobBoards:[],
-    flyerID:String,
+    jobBoardsPreview: [],
     time: Date
+
+
 });
 
 BUsers = mongoose.model( 'users', {
@@ -128,12 +131,14 @@ BApplications = mongoose.model( 'applications', {
 BTransactions = mongoose.model( 'transactions', {
     teamID: {type : mongoose.Schema.ObjectId, ref : 'teams'},
     paymentTime: Date,
+    paymentType:String,
     amount: String,
     state: String,
     PAYToken: String,
     ECToken: String,
     payer: {},
     method: String
+
 });
 
 BApplicantsResponses = mongoose.model( 'applicantsResponses', {

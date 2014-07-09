@@ -535,9 +535,9 @@ addPromoCode = function( code, credit, amount, permissionForResgiter, callback )
 /*** Payments ***/
 plansCost = [0,1.00];
 
-pay = function( teamID, amount, callback ) {
+pay = function( teamID, amount, description,PaymentType,callback ) {
 
-    BTransactions( {teamID: teamID, state: 'init', method:'paypal' }).save( function(err,transaction) {
+    BTransactions( {teamID: teamID, state: 'init', method:'paypal', paymentType:PaymentType }).save( function(err,transaction) {
 
         var create_payment_json = {
             "intent": "sale",
@@ -553,7 +553,11 @@ pay = function( teamID, amount, callback ) {
                     "currency": "USD",
                     "total": amount
                 },
+<<<<<<< HEAD
                 "description": "Increasing credit for {Team} in HireBerry"
+=======
+                "description": description
+>>>>>>> 1- Adding preiview data in promote table. 2-Modifying payment process . 3-Showing inforamtion of promoted flyers in promote panel.
             }]
         };
 

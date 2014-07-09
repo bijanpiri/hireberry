@@ -19,9 +19,53 @@ app.get('/dashboard/promotepanel',function(req,res){
 
 app.get('/dashboard/getinfo',function(req,res){
 
+
+
     BPromoteInfo.find()
-        .exec( function(err, data) {
-            res.send(200,data);
+        .populate('flyerID')
+        .exec( function(err, dataPromote) {
+            //data.flyerID.populate('owner');
+            if(err)
+            {
+                return res.send(502,{error:err});
+            }
+            else
+            {
+                BTeams.find()
+               .exec( function(err, dataTeam) {
+
+                        var result=new Array();
+
+                       for(var i=0;i<dataPromote.length;i++)
+                        {
+
+                            var item=new Object();
+                            item.Date=dataPromote[i].time;
+                            item.JobBoards=dataPromote[i].jobBoards;
+                            item.TotalPrice=dataPromote[i].totalPrice;
+                            item.FlyerId=dataPromote[i].flyerID._id.toString();
+                            item.JobTitle=dataPromote[i].flyerID.flyer.description;
+                            item.Preview=dataPromote[i].jobBoardsPreview;
+                            var TeamID=dataPromote[i].flyerID.owner.toString();
+
+                            item.TeamID="";
+                            item.TeamName="";
+                            for(var j=0;j<dataTeam.length;j++)
+                            {
+                                if(TeamID==dataTeam[j]._id.toString())
+                                {
+                                item.TeamID=TeamID;
+                                item.TeamName=dataTeam[j].name;
+                                    break;
+                                }
+                            }
+                            result.push(item);
+                        };
+                        res.send(200,result);
+                    });
+
+            }
+
         });
 });
 
@@ -38,8 +82,12 @@ app.get('/flyer/paypromote/:flyerID',function(req,res){
 });
 
 app.post('/flyer/submitpromote',function(req,res){
+    //for test
     //addCredit(req.body.teamID,5000,null);
-    var TotalPayment=req.body.jobBoardInfo.TotalPayment;
+
+    res.send(200,{message:"The chash is enough.",OK:true});
+
+   /* var TotalPayment=req.body.jobBoardInfo.TotalPayment;
     checkBalance(req.body.teamID,TotalPayment,function(err,isOk){
 
         if(err.error)
@@ -49,21 +97,19 @@ app.post('/flyer/submitpromote',function(req,res){
         else
             res.send(300,"The chash is not enough.");
 
-    });
-
-
-
+    });*/
 });
 
 app.post('/flyer/confirmpromote',function(req,res){
 
     var TotalPayment=req.body.jobBoardInfo.TotalPayment;
-    payCredit(req.body.teamID,TotalPayment,function(){
+   // payCredit(req.body.teamID,TotalPayment,function(){
         BPromoteInfo(
             {
-                totalPrice: req.body.jobBoardInfo.TotalPayment,
-                jobBoards:req.body.jobBoardInfo.SelectedJobBoards,
+                totalPrice: req.body.jobBoardInfo.PaymentInfo.TotalPayment,
+                jobBoards:req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards,
                 flyerID:req.body.flyerID,
+                jobBoardsPreview:req.body.jobBoardInfo.JobBoardListPreiview,
                 time:new Date()
             }).save(function(err,data){
                 if(err)
@@ -71,6 +117,7 @@ app.post('/flyer/confirmpromote',function(req,res){
                 else
                 {
 
+                    //--------------------- Sending email ---------------------
                     var emailConfig = {
                         from: "Hireberry",
                         fromAddress: "job@hireberry.com",
@@ -96,15 +143,15 @@ app.post('/flyer/confirmpromote',function(req,res){
                     mandrill_client.messages.send({"message": message, "async": false},
                         function(result) {/*Sucess*/},
                         function(e) { /*Error*/});
+                    //---------------------------------------------------------
+
 
                     res.send(200,{message:"Process successfully done."});
+
                 }
 
             });
-    });
-
-
-
+   // });
 });
 
 app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
