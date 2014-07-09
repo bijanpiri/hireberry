@@ -115,6 +115,10 @@
     text-decoration: none;
     color: #429985;
 }
+.hb-moto span {
+    position: relative;
+    top: -1px;
+}
 .hb-arrow-left {
     position: absolute;
     display: block;
@@ -189,7 +193,7 @@
 }
 .hb-hero-container{
     width: 100%;
-    margin: 0;
+    margin: 60px 0 0 0;
     padding: 0;
 }
 .hb-hero-container .row {
@@ -243,7 +247,7 @@
 }
 
 @media (min-width: 990px) {
-    .hb-caption h3 {
+    .hb-thumbnail-top .hb-caption h3 {
         text-align: left;
     }
 }

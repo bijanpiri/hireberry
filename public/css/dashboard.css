@@ -1,12 +1,12 @@
 
 #wrap {
     position: absolute;
-    top: 9em;
+    top: 60px;
     bottom: 0;
-    left: 150px;
+    left: 250px;
     right: 0;
     overflow: auto;
-    padding: 0 10em;
+    padding: 40px 0 0 0;
 }
 
 #notificationCenter {
@@ -54,12 +54,15 @@
 
 .menu {
     position: fixed;
-    top: 90px;
+    top: 0;
+    bottom: 0;
     left: 24px;
     width: 250px;
     font-size: 1.7em;
     text-align: center;
     line-height: 1.4em;
+    margin: auto;
+    height: 370px;
 }
 
 .menu .menu-header {
@@ -502,7 +505,7 @@
     border-radius: 4px;
     border: 2px solid #FFF;
     font-size: 1.6em;
-    background-color: rgb(249, 249, 249);
+    background-color: #eee;
 }
 
 .application-searchBox:focus {
@@ -515,7 +518,7 @@
 }
 
 .applications-filter-job {
-    background-color: rgb(249, 249, 249);
+    background-color: #eee;
     border: 2px solid #FFF;
     color: #000;
     vertical-align: top;
@@ -613,10 +616,6 @@ a{
 @media (max-width: 979px) {
 
     /* General */
-    #wrap {
-        padding: 0;
-        top: 0;
-    }
 
     #notificationCenter {
         top: 6em;
@@ -770,4 +769,18 @@ Billing
 
 #current-plan {
     font-weight: 700;
+}
+
+
+.jobs-empty-state, .applications-empty-state {
+    display: none;
+}
+.empty-state-message {
+    text-align: center;
+    font-size: 2em;
+    background: #ddd;
+    border-radius: 7px;
+    padding: 30px;
+    margin: 0 10%;
+    line-height: 2.5em;
 }

@@ -369,7 +369,7 @@ $(document).ready( function() {
 
     $("#ppanel").click(function(e)
     {
-window.location = "/dashboard/promotepanel"
+        window.location = "/dashboard/promotepanel"
     })
 
     $.ajax({
@@ -380,14 +380,12 @@ window.location = "/dashboard/promotepanel"
             companyName=data.name;
             teamID=data._id;
         }
-    })                .fail(function(data) {
-alert(data);
+    })
+            .fail(function(data) {
+                alert(data);
             });
 
-
-
     $("#inputtext-indeed-payment").change(
-
             function(e)
             {
                var value= parseInt ($("#inputtext-indeed-payment").val());
@@ -419,7 +417,7 @@ alert(data);
 
     $("#fb-promote").attr("href",jobLink.replace(' ','%20'));
 
-    var getSelectedJobBorads=function()
+    var getPaymentInfo=function(callback)
     {
         var chbxs=$(".job-boards").find(":input[type=checkbox]");
         var selectedInfo=new Object();
@@ -436,107 +434,104 @@ alert(data);
                 selectedInfo.TotalPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
             }
         });
-        return selectedInfo;
+        callback(selectedInfo);
     }
 
-    $("#btn-promote-payment").click(function() {
+   $("#btn-promote-payment").click(function() {
         var ml = $('#payment-action-dialog');
         ml.find("#error-msg").text("");
-        var rst=  getSelectedJobBorads();
-
-
-        $.ajax({
-            url:'/flyer/submitpromote',
-            type: 'POST',
-            dataType: 'json',
-            data :
-            {
-                flyerID:flyerID,
-                teamID:teamID,
-                jobBoardInfo:rst
-            },
-            success: function(data) {
-
-                var ml = $('#payment-action-dialog');
-                ml.find('.container-fluid').empty();
-                for(var i=0;i<rst.SelectedJobBoards.length;i++)
+        getSelectedJobBoardInfo(function(info)
+        {
+            var rst=info.PaymentInfo;
+            $.ajax({
+                url:'/flyer/submitpromote',
+                type: 'POST',
+                dataType: 'json',
+                data :
                 {
-                    ml.find('.container-fluid').append($('<span>').text(rst.SelectedJobBoards[i].Name));
-                    ml.find('.container-fluid').append($('<p>').text("$ "+rst.SelectedJobBoards[i].Price  ));
-                    ml.find('.container-fluid').append( $('<hr>'));
-                }
-                ml.find('.container-fluid').append($('<span>').text("Total"));
-                ml.find('.container-fluid').append($('<p>').text("$ "+rst.TotalPayment ));
-
-                ml.modal();
-                ml.find('.modal-footer').empty();
-                ml.find('.modal-footer').append($('<button>')
-                        .addClass("btn btn-primary")
-                        .attr('data-dismiss','modal')
-                        .attr('aria-hidden','true').text("Cancel"));
-                ml.find('.modal-footer').append($('<button>')
-                        .addClass("btn btn-primary")
-                        .attr('data-dismiss','modal')
-                        .attr('aria-hidden','true').text("Confirm").click(function()
-                        {
-                            $.ajax({
-                                url:'/flyer/confirmpromote',
-                                type: 'POST',
-                                dataType: 'json',
-                                data :
-                                {
-                                    flyerID:flyerID,
-                                    teamID:teamID,
-                                    jobBoardInfo:rst
-                                },
-                                success: function(data) {
-
-
-
-                                        window.location='/flyer/paypromote/'+flyerID;
-
-
-                                        /*$.ajax({
-                                            url:'/flyer/paypromote',
-                                            type: 'POST',
-                                            dataType: 'json',
-                                            data :
-                                            {
-                                                FlyerID:flyerID,
-                                                TeamID:teamID,
-                                                PositionTitle:positionTitle
-                                            },
-                                            success: function(r) {
-
-                                            }
-                                        }) .fail(function(data) {
-
-                                                });*/
-
-                                }
-                            })
-
-                        }));
-            }
-        })
-                .fail(function(data) {
+                    flyerID:flyerID,
+                    teamID:teamID,
+                    jobBoardInfo:rst
+                },
+                success: function(data) {
 
                     var ml = $('#payment-action-dialog');
                     ml.find('.container-fluid').empty();
-                    ml.find('.container-fluid').append($('<span>').text("Message"));
-                    ml.find('.container-fluid').append($('<p>').text(data.responseText));
+                    for(var i=0;i<rst.SelectedJobBoards.length;i++)
+                    {
+                        ml.find('.container-fluid').append($('<span>').text(rst.SelectedJobBoards[i].Name));
+                        ml.find('.container-fluid').append($('<p>').text("$ "+rst.SelectedJobBoards[i].Price  ));
+                        ml.find('.container-fluid').append( $('<hr>'));
+                    }
+                    ml.find('.container-fluid').append($('<span>').text("Total"));
+                    ml.find('.container-fluid').append($('<p>').text("$ "+rst.TotalPayment ));
+
+                    ml.modal();
                     ml.find('.modal-footer').empty();
                     ml.find('.modal-footer').append($('<button>')
                             .addClass("btn btn-primary")
                             .attr('data-dismiss','modal')
-                            .attr('aria-hidden','true').text("Close"));
-                    ml.modal();
-                });
+                            .attr('aria-hidden','true').text("Cancel"));
+                    ml.find('.modal-footer').append($('<button>')
+                            .addClass("btn btn-primary")
+                            .attr('data-dismiss','modal')
+                            .attr('aria-hidden','true').text("Confirm").click(function()
+                            {
+                              $.ajax({
+                              url:'/flyer/confirmpromote',
+                                type: 'POST',
+
+                                    dataType: 'json',
+                                    data :
+                                     {
+                                         flyerID:flyerID,
+                                         teamID:teamID,
+                                         jobBoardInfo:info
+                                     },
+                                    success: function(data) {
+
+                                        window.location='/pay?amount='+rst.TotalPayment+"&jbp=1";
+
+                                        //window.location='/flyer/paypromote/'+flyerID;
+
+                                        /*$.ajax({
+                                         url:'/flyer/paypromote',
+                                         type: 'POST',
+                                         dataType: 'json',
+                                         data :
+                                         {
+                                             FlyerID:flyerID,
+                                             TeamID:teamID,
+                                             PositionTitle:positionTitle
+                                         },
+                                         success: function(r) {}
+                                         }) .fail(function(data) { });*/
+                                    }
+                                })
+
+                            }));
+                }
+            })
+                    .fail(function(data) {
+
+                        var ml = $('#payment-action-dialog');
+                        ml.find('.container-fluid').empty();
+                        ml.find('.container-fluid').append($('<span>').text("Message"));
+                        ml.find('.container-fluid').append($('<p>').text(data.responseText));
+                        ml.find('.modal-footer').empty();
+                        ml.find('.modal-footer').append($('<button>')
+                                .addClass("btn btn-primary")
+                                .attr('data-dismiss','modal')
+                                .attr('aria-hidden','true').text("Close"));
+                        ml.modal();
+                    });
+
+        }); //end getSelectedJobBoardInfo
 
     });
 
-   var calculateTotalPayment=function()
-    {
+   var calculateTotalPayment=function(callbak)
+   {
         var chbxs=$(".job-boards").find(":input[type=checkbox]");
 
         $.each(chbxs, function(i)
@@ -567,10 +562,87 @@ alert(data);
     }
 
     $(".job-boards").find(":input[type=checkbox]").click(function() {
-
         calculateTotalPayment();
-
     });
+
+   var getSelectedJobBoardInfo =function(callback){
+       getPaymentInfo(function(rst)
+       {
+            var info=new Object();
+            info.PaymentInfo=rst
+            info.JobBoardListPreiview=new Array();
+            for(var i=0;i<rst.SelectedJobBoards.length;i++)
+            {
+                var item=new Object();
+                var boardName=rst.SelectedJobBoards[i].Name;
+
+                item.boardName=boardName;
+                item.address=address;
+                item.positionTitle=positionTitle;
+                item.companyName=companyName;
+                item.description=description;
+
+                // ------------ Saving job link ----------------
+                item.jobLink="[NA]";
+                if( !(jobLink=="undefined" || !jobLink || jobLink==''))
+                {
+                    if( boardName=="Indeed" || boardName=="Stack Overflow" )
+                    {
+                        item.description+="&Job Url : "+jobLink;
+                    }
+                    else
+                    {
+                        item.jobLink=jobLink;
+                    }
+                }
+
+                // ------------ Saving work condition ----------------
+                item.workCondition="[NA]";
+                if( !(workCondition=="undefined" ||  !workCondition || workCondition==''))
+                {
+                    var place=  workCondition.split('&')[0].split('=')[1];
+                    var time=  workCondition.split('&')[1].split('=')[1];
+                    if( boardName=="Indeed" || boardName=="Stack Overflow" || boardName=="Dribbble" || boardName=="Behance")
+                    {
+                        item.description+="&Work Place/Time : "+place+'/'+time;
+                    }
+                    else
+                    {
+                        item.workCondition=place+'/'+time;
+                    }
+                }
+                // ------------ Saving skills ----------------
+                item.skills="[NA]";
+                if( !(skills=="undefined" || !skills || skills==''))
+                {
+                    if( boardName=="Indeed" || boardName=="GitHub" || boardName=="Dribbble")
+                    {
+                        item.description+="&Requirements : "+skills;
+                    }
+                    else
+                    {
+                        item.skills=skills;
+                    }
+                }
+                // ------------ Saving company logo ----------------
+                item.logo="[NA]";
+                if(    !( logo=='http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/'
+                        ||  boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   ))
+                {
+                    item.logo=logo
+                }
+
+                // ------------ Saving description ----------------
+
+                if( boardName=="Dribbble")
+                {
+                    item.description="[NA]";
+                }
+                info.JobBoardListPreiview.push(item);
+            }
+            callback(info)
+        });
+    };
 
     $(".job-boards").find(":input[type=button]").click(function() {
 
@@ -587,7 +659,6 @@ alert(data);
         //ml.find("#job-skills").text(skills);
         //ml.find("#company-logo").attr('src',logo);
         ml.modal();
-
 
 
         // ------------ Show-Hide job link ----------------
@@ -624,8 +695,6 @@ alert(data);
             ml.find("#job-workPlaceTime").text(place+'/'+time);
             ml.find("#div-workPlaceTime").show();
         }
-
-
         // ------------ Show-Hide skills ----------------
         if(!skills || skills=='')
         {

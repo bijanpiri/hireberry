@@ -101,9 +101,8 @@
             <div class="nav">
                 <ul class="nav">
                     <li>
-                        <a href="/">
-                            <i class="mainSpritImage booltinBrandLogo"></i>
-                            <i class="mainSpritImage booltinBrandLogoType"></i>
+                        <a href="/" class="hireberry-logo">
+                            <img src="images/logo-wg@2x.png" width="138" height="28">
                         </a>
                     </li>
                 </ul>
@@ -114,7 +113,7 @@
                     <% if(everyauth.loggedIn){ %>
                     <li class="navbar-dropdown">
                         <a href="#" class="dropdown-toggle navbar-button" data-toggle="dropdown">
-                            <img class="avatar" style="width: 30px;border-radius: 50%;border:2px solid green" src="#">
+                            <img class="avatar" style="width: 30px;border-radius: 50%;border:2px solid #fff" src="#">
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu">
@@ -145,7 +144,7 @@
                         </a>
                     </li>
                     <li>
-                        <a id="createApplicantButton" class="navbar-button" style="display: none" onclick="GAEvent('Dashboard', 'New Applicant', '')">
+                        <a class="createApplicantButton navbar-button" style="display: none" onclick="GAEvent('Dashboard', 'New Applicant', '')">
                             <i class="fa fa-plus"></i> New Applicant
                         </a>
                     </li>

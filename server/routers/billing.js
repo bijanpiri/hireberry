@@ -14,10 +14,24 @@ paypal_api.configure(paypal_config_opts);
 
 
 app.get('/pay', function(req,res) {
-    pay( req.user.teamID, req.query.amount, function(err, approval_url) {
+
+
+    var invoiceDescription ="Increasing credit for {Team} in Booltin";
+
+  var   PaymentType='accountpay';
+if(req.query.jbp=='1')
+{
+    PaymentType='promotepay';
+    invoiceDescription ="Promoting job board payment";
+}
+
+
+
+    pay( req.user.teamID, req.query.amount,invoiceDescription,PaymentType, function(err, approval_url) {
         if( !err )
             res.redirect(approval_url);
     } );
+
 })
 
 app.get('/api/billing', function(req,res) {
@@ -65,20 +79,82 @@ app.get('/paypal', function(req,res) {
                 // Execute payment
                 var execute_payment_details = { "payer_id": prayerID };
                 paypal_api.payment.execute( transaction.PAYToken, execute_payment_details, function(error, payment){
-                    if(error){
-                        console.error(error);
-                        res.redirect('/dashboard#billing');
-                    } else {
 
-                        BTransactions.update({_id:transactionID},{
-                            state: 'sold',
-                            payer: payment.payer,
-                            paymentTime: payment.update_time
-                        }, function(err){
-                            console.log(payment);
-                            res.redirect('/dashboard#billing');
-                        });
-                    }
+
+                        BTransactions.findOne({_id:transactionID}, function(err,rst){
+
+                        if(rst.paymentType=="promotepay")
+                        {
+                            //redirect promote info
+                            //===============================================
+                            if(error){          //Level 1 error
+                                console.error(error);
+                                res.redirect('/dashboard#billing');
+                                res.render("paypromote.ejs",
+                                    {
+                                        title:"Payment report",
+                                        PositionTitle:"---",
+                                        PayInfo:"Payment process failed"
+                                    });
+
+                            } else if(err)    //Level 2 error
+                            {
+                                console.error(err);
+                                res.redirect('/dashboard#billing');
+                                res.render("paypromote.ejs",
+                                    {
+                                        title:"Payment report",
+                                        PositionTitle:"---",
+                                        PayInfo:"Payment process failed"
+                                    });
+                            }
+                            else {
+                                BTransactions.update({_id:transactionID},{state: 'sold',payer: payment.payer,paymentTime: payment.update_time},
+                                    function(err){
+                                        if(err)
+                                            console.error(err);
+                                        else
+                                        {
+                                            console.log(payment);
+                                            res.render("paypromote.ejs",
+                                                {
+                                                    title:"Payment report",
+                                                    PositionTitle:"---",
+                                                    PayInfo:"Payment process successfully done. Your advertisement will be promoted within the next 24 hours."
+                                                });
+                                        }
+                                });
+                            }
+                            //========================
+
+
+                        }
+                        else
+                        {
+                            //=======================
+                            if(error){
+                                console.error(error);
+                                res.redirect('/dashboard#billing');
+                            } else {
+
+                                BTransactions.update({_id:transactionID},{
+                                    state: 'sold',
+                                    payer: payment.payer,
+                                    paymentTime: payment.update_time
+                                }, function(err){
+                                    if(err)
+                                        console.error(err);
+                                    else
+                                    {
+                                        console.log(payment);
+                                        res.redirect('/dashboard#billing');
+                                    }
+                                });
+                            }
+                            //========================
+                        }
+                    });
+
                 });
             })
         }
