@@ -361,6 +361,11 @@ function loadFlyer() {
         }
     });
 }
+function gotoEditor() {
+    titleFromTemplateModal = $('#flyerName1').val();
+    loadEditor();
+    $('#templateModal').modal('hide');
+}
 
 function loadTemplateChooser() {
 
@@ -369,12 +374,8 @@ function loadTemplateChooser() {
         templateID = $(this).attr('thumbnailID');
     }) ;
 
-    $('#templateModal').modal();
-    $('#GoToEditor').click( function() {
-        titleFromTemplateModal = $('#flyerName1').val();
-        loadEditor();
-        $('#templateModal').modal('hide');
-    });
+    $('#templateModal').modal().on('hidden',gotoEditor );
+    $('#GoToEditor').click(gotoEditor);
 }
 
 var admin=false;

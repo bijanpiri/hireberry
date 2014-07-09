@@ -82,4 +82,4 @@ app.get('/api/applications/stat', function(req,res) {
         });
 
     })
-} )
+} );
