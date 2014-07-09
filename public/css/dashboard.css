@@ -1,12 +1,12 @@
 
 #wrap {
     position: absolute;
-    top: 9em;
+    top: 100px;
     bottom: 0;
-    left: 150px;
+    left: 250px;
     right: 0;
     overflow: auto;
-    padding: 0 10em;
+    padding: 0;
 }
 
 #notificationCenter {
@@ -54,12 +54,15 @@
 
 .menu {
     position: fixed;
-    top: 90px;
+    top: 0;
+    bottom: 0;
     left: 24px;
     width: 250px;
     font-size: 1.7em;
     text-align: center;
     line-height: 1.4em;
+    margin: auto;
+    height: 370px;
 }
 
 .menu .menu-header {
@@ -613,10 +616,6 @@ a{
 @media (max-width: 979px) {
 
     /* General */
-    #wrap {
-        padding: 0;
-        top: 0;
-    }
 
     #notificationCenter {
         top: 6em;
