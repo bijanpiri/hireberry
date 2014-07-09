@@ -68,7 +68,7 @@ $.fn.commentBox = function(options){
     if( togglable ) {
         toggleCommentView.call( $('#buttonComment'), function() {
             $('.portlet-commentsView-container').show();
-        });
+        },true);
 
         $('#buttonComment').click(toggleCommentView);
     }
@@ -91,9 +91,12 @@ function addCommentToView( commentboxObj, commenterEmail, commenterName, comment
     commentboxObj.find('.bool-comments').prepend(commentObj);
 }
 
-function toggleCommentView(callback) {
+function toggleCommentView(callback,internalCall) {
     var isOpen = $(this).attr('isOpen')==='1';
     var callback = typeof(callback)==='function' ? callback : function(){};
+
+    if( !internalCall )
+        GAEvent('Commment','Toggle', window.location.pathname );
 
     if( isOpen ) {
         $('.portlet-commentsView-container').animate( {width:0}, 500, callback );

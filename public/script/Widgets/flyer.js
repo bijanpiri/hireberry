@@ -232,8 +232,14 @@ function Flyer(options) {
                 handle: ".move-btn-frame",
                 start: function() {
                     $('.bool-flyer-empty').hide();
+
                 },
-                cursor: "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto"
+                cursor: "url('https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/32x32/cursor_drag_hand.png'), auto",
+
+                update: function() {
+                    GAEvent('Editor','Move','');
+                }
+
 
             });
 
@@ -255,12 +261,12 @@ function Flyer(options) {
                 function(){
                     var type = parseInt($(this).attr('type'));
                     createPortlet({type: type,isNew:true,place:$(this)});
+                    GAEvent( 'Editor','Add Widget', 'D&D ' + type );
                 }
             );
             $('.portletStack>.bool-widget-btn').remove();
             if($('.portletStack').children().length==1)
                 $('.bool-flyer-empty').show();
-
         }
         // Set click event
         $(function(){
@@ -268,6 +274,8 @@ function Flyer(options) {
             $(".bool-widget-btn").click(function(e){
                 var itemType = parseInt($(this).attr('type'));
                 createPortlet( {type:itemType,isNew:true});
+
+                GAEvent( 'Editor','Add Widget', 'Click ' + itemType );
             });
             $(".popover-btn").click(function(e) {
                 e.stopPropagation();

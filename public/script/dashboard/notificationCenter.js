@@ -164,8 +164,9 @@ function initNotificationCenter() {
                     .text(notif.editor.displayName + ' has left a new comment on ')
                     .append( $('<a>').attr('applicationID',notif.app).text('this application')
 
-                    //ToDo: replace link references with real one
+                        //ToDo: replace link references with real one
                         .click( function() {
+                            GAEvent('Dashboard','ApplicationView','From Notification');
                             showApplicationPreview( $(this).attr('applicationID') );
                         }))
                     .append(': "'+notif.comment.text+'"');
@@ -233,8 +234,9 @@ function initNotificationCenter() {
             var applicantObj = $('<a>').attr('applicationID',response.applicationID._id)
                 .text(response.applicationID.name)
                 .click( function() {
-                showApplicationPreview( $(this).attr('applicationID') );
-            });
+                    GAEvent('Dashboard','ApplicationView','From Notification');
+                    showApplicationPreview( $(this).attr('applicationID') );
+                });
 
             var titleObj = $('<div>')
                 .append( applicantObj )

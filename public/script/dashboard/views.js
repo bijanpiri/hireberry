@@ -61,6 +61,7 @@ BCalendarView = Backbone.View.extend({
             },
             doneRendering: function() {
                 calendarObj.find('.eventTitle').click( function(e) {
+                    GAEvent('Dashboard','ApplicationView','From Calendar');
                     showApplicationPreview( $(this).attr('href') );
                     e.preventDefault();
                 });
@@ -112,7 +113,9 @@ BApplicationsView = Backbone.View.extend({
             var countObj =  $('<span>').text( '(' + stagesCounter[i] + ')' );
             $(e).find('span').remove();
             $(e).append( countObj );
-        });
+        }).click( function() {
+                GAEvent('Dashboard','Applications','Stage Filter - ' + $(this).attr('for') );
+            });
 
         return this;
     }
@@ -171,6 +174,8 @@ BJobsView = Backbone.View.extend({
                 .addClass('fa fa-cogs')
                 .click( function(e) {
 
+                    GAEvent('Dashboard','Job','Open Setting');
+
                     // Initializing modal fields
                     var modal = $('#job-setting-dialog');
                     var flyer;
@@ -190,10 +195,13 @@ BJobsView = Backbone.View.extend({
                     // Public links & Social networks button
                     var publicLink = window.location.origin + '/flyer/embeded/' + form.formID;
                     modal.find('.publicLink').val(publicLink);
-                    modal.find('.publicLinkOpener').attr('href',publicLink);
+                    modal.find('.publicLinkOpener').attr('href',publicLink).click( function() {
+                        GAEvent('Dashboard','Job','Setting - Open');
+                    });
 
                     // Delete
                     modal.find('.deleteJobButton').click( function() {
+                        GAEvent('Dashboard','Job','Setting - Delete');
                         $.ajax({
                             url: '/api/job/' + form.formID,
                             type: 'DELETE',
@@ -208,10 +216,12 @@ BJobsView = Backbone.View.extend({
                     modal.find('.jobStatus-current').text(form.mode);
                     modal.find('.jobStatus-next').empty();
                     var publishOption = $('<button>').attr('name','publish').text('Publish').click( function() {
+                        GAEvent('Dashboard','Job','Setting - To publish');
                         changeJobMode('publish')
                     });
                     var draftOption = $('<button>').attr('name','draft').text('Inactive').click( function() {
-                        changeJobMode('draft')
+                        GAEvent('Dashboard','Job','Setting - To inactive');
+                        changeJobMode('draft');
                     });
                     var askForPublishOption = $('<button>').attr('name','askForPublish').text('Ask for publish').click( function() {
                         changeJobMode('ask for publish')
@@ -266,6 +276,8 @@ BJobsView = Backbone.View.extend({
             var PromoteBtnObj = $('<a>')
                 .addClass('fa fa-paper-plane')
                 .click( function(e) {
+                    GAEvent('Dashboard','Job','Open Promote');
+
                     window.location = '/flyer/promote/0/' + form.formID;
                     e.stopPropagation();
                 });
@@ -286,6 +298,7 @@ BJobsView = Backbone.View.extend({
 
 
             row.addClass('position').attr('id',form.formID).click( function() {
+                GAEvent('Dashboard','Job','Open Editor');
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
             });
 
@@ -360,6 +373,8 @@ BTeamView = Backbone.View.extend({
                     .text('Remove')
                     .attr('userID',members[i]._id)
                     .click( function() {
+                        GAEvent('Dashboard','Team','Remove Member');
+
                         if( confirm('Are you sure?') ){
                             $.post('/api/team/member/remove',{ userID: $(this).attr('userID') }).done( function() {
                             refresh();

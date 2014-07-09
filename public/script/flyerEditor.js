@@ -29,13 +29,17 @@ $(function() {
         $('body').css('background',c);
     })
     $('.bool-toolbar-btn-edit').click(function() {
+        GAEvent('Editor','To Edit Mode','');
         GoToEditMode();
     });
     $('.bool-toolbar-btn-preview').click(function(){
+        GAEvent('Editor','To Preview Mode','');
         GoToViewMode();
     });
 
     $('.bool-btn-more-options').click( function() {
+        GAEvent('Editor','To Job Settings','');
+
         $('.portletCreator').css('overflow','hidden');
         $('.bool-widget-btn-carousel').animate({left:-240}, 300, function() {
             $(this).hide();
@@ -46,6 +50,8 @@ $(function() {
     });
 
     $('.bool-btn-back-to-widgets').click( function() {
+        GAEvent('Editor','To Widgets','');
+
         $('.portletCreator').css('overflow','hidden');
         $('.bool-more-options').animate({left:240}, 300, function() {
             $(this).hide();
@@ -421,6 +427,7 @@ function loadEditor() {
     loadFlyer();
 
     $('.bool-toolbar-btn-publish').click( function() {
+        GAEvent('Editor','Publish','');
         loadPublishPanel();
     });
 
@@ -437,6 +444,7 @@ function loadEditor() {
     // Saving flyer methods
     autosaveTimer = setTimeout(saveFlyer,autosaveInterval);
     $('.bool-toolbar-btn-save').click(function(){
+        GAEvent('Editor','Save & Exit','');
         saveFlyer();
     });
 

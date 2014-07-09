@@ -30,6 +30,17 @@
     <script src="/script/parse.min.js"></script>
 
     <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-52471230-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <script>
         $(document).ready(function() {
             // Set user avatar from Gravatar service
             var email = "<%= (everyauth.user && everyauth.user.email) ? everyauth.user.email : ''%>";
@@ -37,6 +48,10 @@
             $('.avatar').attr('src','http://www.gravatar.com/avatar/' + hash );
             $('#changeAvatar').attr('href','http://www.gravatar.com/' + hash );
         });
+
+        function GAEvent( category, name, moreInfo ) {
+            ga('send', 'event', category, name, moreInfo);
+        }
 
         function dateTimeToJSON(d) {
             var m = new moment(d);
@@ -63,17 +78,6 @@
 
             return json;
         }
-    </script>
-
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-52471230-1', 'auto');
-        ga('send', 'pageview');
-
     </script>
 
     <%-blocks.dashboard_application_less%>
@@ -136,17 +140,18 @@
                 <% if(everyauth.loggedIn){ %>
                 <ul class="nav pull-right">
                     <li>
-                        <a href="/flyer/new" id="createFlyerButton" class="navbar-button" onclick="ga('send', 'event', 'Dashboard', 'New Job', 'Job Link')">
+                        <a href="/flyer/new" id="createFlyerButton" class="navbar-button" onclick="GAEvent('Dashboard', 'New Job', '')">
                             <i class="fa fa-plus"></i> New Job
                         </a>
                     </li>
                     <li>
-                        <a id="createApplicantButton" class="navbar-button" style="display: none" onclick="ga('send', 'event', 'Dashboard', 'New Applicant', 'Job Link')">
+                        <a id="createApplicantButton" class="navbar-button" style="display: none" onclick="GAEvent('Dashboard', 'New Applicant', '')">
                             <i class="fa fa-plus"></i> New Applicant
                         </a>
                     </li>
                     <li class="navbar-dropdown">
-                        <a href="#" class="dropdown-toggle navbar-button" id="notifications" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle navbar-button" id="notifications"
+                           data-toggle="dropdown" onclick="GAEvent('Dashboard','Notifications')">
                             Notifications
                             <span id="comments_badge"></span>
                         </a>
