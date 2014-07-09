@@ -28,6 +28,7 @@
     background: inherit;
     position: absolute;
     left: 0;
+
 }
 .bool-widget-btn-carousel>.bool-toolbar-options {
     display: inline-block;
@@ -52,6 +53,7 @@
     font-weight: bold;
     text-align: center;
     color: #ffffff;
+    display: none;
 }
 
 .bool-pure-btn,
@@ -67,9 +69,6 @@
 .bool-btn-back-to-widgets{
     margin-left: 10px;
     line-height: 46px;
-    border-bottom: 1px solid #7F7F80;
-
-
 }
 .bool-widget-btn{
     text-align: left;
@@ -208,7 +207,9 @@ Portlet Creator
 }
 .bool-add-widget{
     margin: 0;
-    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
     text-align: center;
 }
 
@@ -391,7 +392,6 @@ input.bool-option-search{
 }
 .bool-scrollable{
     height: 100%;
-    min-height: 250px;
 }
 .bool-commentator-list{
     background: #e5e5e5;
@@ -419,4 +419,8 @@ input.bool-option-search{
 .ui-menu .ui-menu-item a.ui-state-focus, .ui-menu .ui-menu-item a.ui-state-active {
     font-weight: normal;
     margin: -1px;
+}
+.bool-color-chooser .btn-group{
+    position: absolute;
+    right: 0;
 }

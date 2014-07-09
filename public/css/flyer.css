@@ -607,7 +607,7 @@ Map portlet
 .bool-widget-btn-carousel{
     position: absolute;
     top: 0;
-    bottom: 320px;
+    bottom: 260px;
     left:0;
     right:0;
 }

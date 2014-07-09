@@ -19,7 +19,15 @@ var Picture;
 
 $(function() {
     //$(document).tooltip();
-    $('.bool-toolbar-container').jScrollPane();
+    $('.bool-toolbar-container')
+        .slimScroll({height: '100%'})
+        .bind('slimscroll', function(e, pos){
+            console.log("Reached " + pos);
+        });
+    $('.bool-add-widget')
+        .slimScroll({height:'100%'});
+    $('.slimScrollDiv').css('position','static');
+
     $('[data-toggle="popover"]').popover();
 
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
@@ -27,7 +35,7 @@ $(function() {
     });
     $('.bool-color-chooser-background').ColorPicker(function(c){
         $('body').css('background',c);
-    })
+    });
     $('.bool-toolbar-btn-edit').click(function() {
         GAEvent('Editor','To Edit Mode','');
         GoToEditMode();
