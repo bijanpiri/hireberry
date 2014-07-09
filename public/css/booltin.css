@@ -61,7 +61,7 @@ body{
 }
 
 .navbar-inner {
-    background-color: #37B36F;
+    background-color: #8989CE;
     background-image: none;
     border: none;
 }
@@ -76,7 +76,7 @@ body{
     line-height: 30px;
 }
 .navbar .nav > li > .navbar-button:hover {
-    background-color: #2F995F;
+    background-color: #6B6BC8;
     color: #fff;
 }
 

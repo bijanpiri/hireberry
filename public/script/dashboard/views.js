@@ -117,6 +117,14 @@ BApplicationsView = Backbone.View.extend({
                 GAEvent('Dashboard','Applications','Stage Filter - ' + $(this).attr('for') );
             });
 
+        if( candidates.length == 0 ){
+            $('#applicationsp > div').hide();
+            $('.applications-empty-state').show();
+        } else {
+            //$('#applicationsp > div').show();
+            //$('.applications-empty-state').hide();
+        }
+
         return this;
     }
 });
@@ -304,6 +312,11 @@ BJobsView = Backbone.View.extend({
 
             $('.positionsRow').append( row );
         });
+
+        if( forms.length == 0 ){
+            $('#jobsp > div').hide();
+            $('.jobs-empty-state').show();
+        }
     }
 })
 jobsView = new BJobsView({model:jobs});

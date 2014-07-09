@@ -166,7 +166,6 @@ $(function(){
 
     $(document).delegate('.bool-edit-switch a','click', function() {
 
-
         var operation = $(this).attr('op');
         var editableObjClassName = $(this).parent().attr('edit-switch-of');
         var fixValues = $(this).parent().attr('fixValues')==="true";
@@ -238,9 +237,12 @@ $(function(){
     });
 
 
-    $('#createApplicantButton').show().click( function() {
+    $('.createApplicantButton').show().click( function() {
         $('#new-applicant-dialog').modal();
-        $('#new-applicant-dialog .sendButton').click( function(){
+        $('#new-applicant-dialog .sendButton').attr('enable','true').click( function(){
+
+            $(this).attr('disabled','true');
+
             $.post('/apply',{
                 flyerid: $('#new-applicant-dialog .jobsList :selected').attr('formid'),
                 name: $('#new-applicant-dialog .applicant-name').val(),
@@ -589,6 +591,7 @@ function showApplicationPreview(applicationID) {
     $('#application-preview-dialog .bool-close-btn').unbind('click').click(function(){
         $('#application-preview-dialog').removeClass('open');
         $('body').css('overflow','auto'); // hide main scroll bar
+        applications.fetch();
     });
 
     $('#application-preview-dialog').addClass('open');

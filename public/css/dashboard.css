@@ -502,7 +502,7 @@
     border-radius: 4px;
     border: 2px solid #FFF;
     font-size: 1.6em;
-    background-color: rgb(249, 249, 249);
+    background-color: #eee;
 }
 
 .application-searchBox:focus {
@@ -515,7 +515,7 @@
 }
 
 .applications-filter-job {
-    background-color: rgb(249, 249, 249);
+    background-color: #eee;
     border: 2px solid #FFF;
     color: #000;
     vertical-align: top;
@@ -770,4 +770,18 @@ Billing
 
 #current-plan {
     font-weight: 700;
+}
+
+
+.jobs-empty-state, .applications-empty-state {
+    display: none;
+}
+.empty-state-message {
+    text-align: center;
+    font-size: 2em;
+    background: #ddd;
+    border-radius: 7px;
+    padding: 30px;
+    margin: 0 10%;
+    line-height: 2.5em;
 }
