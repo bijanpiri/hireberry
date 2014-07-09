@@ -236,7 +236,7 @@ function takeEditorTour(callBack) {
                 content: "Press this button to see and leave comments about this job application form.",
                 placement: 'left',
                 reflex: true,
-                container: ".portlet-commentsView",
+                container: ".portlet-commentsView"
             },
             {
                 element: "#templateModal",
