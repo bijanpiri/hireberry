@@ -33,11 +33,15 @@
     display: inline-block;
     margin: 10px 0;
     border-top: 1px solid #7F7F80;;
+    overflow: auto;
+    height: 100%;
+
 }
 .bool-more-options {
     position: absolute;
     left: 240px;
     top: 0;
+    bottom:220px;
     display: none;
 }
 
@@ -62,7 +66,10 @@
 }
 .bool-btn-back-to-widgets{
     margin-left: 10px;
-    line-height: 20px;
+    line-height: 46px;
+    border-bottom: 1px solid #7F7F80;
+
+
 }
 .bool-widget-btn{
     text-align: left;
@@ -218,6 +225,10 @@ Portlet Creator
     background: inherit;
     width: 240px;
     display: inline-block;
+}
+.bool-toolbar-container{
+    overflow: auto;
+    height: 100%;
 }
 .bool-toolbar-options>li {
 

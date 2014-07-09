@@ -19,7 +19,7 @@ var Picture;
 
 $(function() {
     //$(document).tooltip();
-
+    $('.bool-toolbar-container').jScrollPane();
     $('[data-toggle="popover"]').popover();
 
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
@@ -237,7 +237,6 @@ function takeEditorTour(callBack) {
                 placement: 'left',
                 reflex: true,
                 container: ".portlet-commentsView",
-                onHide:callBack
             },
             {
                 element: "#templateModal",
@@ -252,6 +251,7 @@ function takeEditorTour(callBack) {
         ],
         backdrop: true,
         onEnd: function (tour) {
+            callBack();
             $.post('/api/cert', {editorLevel: 3});
         }
 

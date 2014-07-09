@@ -60,7 +60,14 @@
 <% script('/jquery-ui/js/jquery.ui.touch-punch.min.js') -%>
 <% script('/script/flyerEditor.js') -%>
 
+<link type="text/css" href="/css/jquery.jscrollpane.css" rel="stylesheet" media="all" />
 
+
+<!-- the mousewheel plugin - optional to provide mousewheel support -->
+<script type="text/javascript" src="/script/jquery.mousewheel.js"></script>
+
+<!-- the jScrollPane script -->
+<script type="text/javascript" src="/script/jquery.jscrollpane.min.js"></script>
 
 
 <div class="container bool-flyer-editor " >
@@ -1156,95 +1163,92 @@
     </div>
 
     <div class="bool-more-options">
+        <a class="bool-pure-btn bool-btn-back-to-widgets">
+            <i class="bool-widget-icon bool-toolbar-icon-preview-edit"></i>
+            Back
+        </a>
 
-        <ul class="bool-toolbar-options">
-            <li>
-                <a class="bool-pure-btn bool-btn-back-to-widgets">
-                    <i class="bool-widget-icon bool-toolbar-icon-preview-edit"></i>
-                    Back
-                </a>
+        <div class="bool-toolbar-container">
+            <ul class="bool-toolbar-options">
+                <li>
+                    <p class="bool-option-label">
+                        Job Title:
+                    </p>
+                    <input type="text" placeholder="Enter Job Title" class="bool-option-field" name="position-title">
+                </li>
 
-            </li>
-            <li>
+                <li>
+                    <p class="bool-option-label">
+                        Responder:
+                        <button type="button"
+                                style="color:rgb(51, 51, 51);"
+                                class="popover-btn"
+                                data-toggle="popover"
 
-                <p class="bool-option-label">
-                    Job Title:
-                </p>
-                <input type="text" placeholder="Enter Job Title" class="bool-option-field" name="position-title">
-            </li>
-
-            <li>
-                <p class="bool-option-label">
-                    Responder:
-                    <button type="button"
-                            style="color:rgb(51, 51, 51);"
-                            class="popover-btn"
-                            data-toggle="popover"
-                            data-trigger="focus"
-                            title="Responder"
-                            data-content=
-                            "Responder is responsible for managing applications and interviews">
-                                <i class="icon-info-sign"></i>
+                                title="Responder"
+                                data-content=
+                                "Responder is responsible for managing applications and interviews">
+                            <i class="icon-info-sign"></i>
                         </button>
-                </p>
+                    </p>
 
-                <div class="bool-user-responder">
-                </div>
+                    <div class="bool-user-responder">
+                    </div>
 
-            </li>
-            <li>
-                <p class="bool-option-label">
-                    Select who can comment:
+                </li>
+                <li>
+                    <p class="bool-option-label">
+                        Select who can comment:
+                        <button type="button"
+                                style="color:rgb(51, 51, 51);"
+                                class="popover-btn"
+                                data-toggle="popover"
+                                data-trigger="hover"
+                                title="Commentators"
+                                data-content=
+                                "You can specify whether a team member can
+                            leave a comment or not by adding or removing it from list">
+                            <i class="icon-info-sign"></i>
+                        </button>
+
+                    </p>
+                    <input type="text" placeholder="Search" class="bool-option-field bool-option-search">
+                    <ul class="bool-commentator-users">
+
+                    </ul>
+                </li>
+                <li class="bool-option-item">
+                    <i class="bool-widget-icon bool-widget-icon-canvas"></i>
+                    Canvas
+                    <div class="pull-right bool-color-chooser bool-color-chooser-canvas">
+                    </div>
+                </li>
+                <li class="bool-option-item">
+                    <i class="bool-widget-icon bool-widget-icon-background"></i>
+                    Background
+                    <div class="pull-right bool-color-chooser bool-color-chooser-background">
+                    </div>
+                </li>
+                <li class="bool-option-item">
+                    <i class="bool-widget-icon bool-icon-thank"></i>
+                    <a href="#" data-toggle="modal"
+                       data-target=".bool-thanks-message" onclick="GAEvent('Editor','Open Thanks Message','')">
+                        Edit Thanks Message
+                    </a>
                     <button type="button"
                             style="color:rgb(51, 51, 51);"
                             class="popover-btn"
                             data-toggle="popover"
-                            data-trigger="focus"
-                            title="Commentators"
+                            data-trigger="hover"
+                            title="Thanks Message"
                             data-content=
-                            "You can specify whether a team member can
-                            leave a comment or not by adding or removing it from list">
+                            "When users apply for a this job they will see a message that you can edit it here. ">
                         <i class="icon-info-sign"></i>
                     </button>
 
-                </p>
-                <input type="text" placeholder="Search" class="bool-option-field bool-option-search">
-                <ul class="bool-commentator-users">
-
-                </ul>
-            </li>
-            <li class="bool-option-item">
-                <i class="bool-widget-icon bool-widget-icon-canvas"></i>
-                Canvas
-                <div class="pull-right bool-color-chooser bool-color-chooser-canvas">
-                </div>
-            </li>
-            <li class="bool-option-item">
-                <i class="bool-widget-icon bool-widget-icon-background"></i>
-                Background
-                <div class="pull-right bool-color-chooser bool-color-chooser-background">
-                </div>
-            </li>
-            <li class="bool-option-item">
-                <i class="bool-widget-icon bool-icon-thank"></i>
-                <a href="#" data-toggle="modal"
-                   data-target=".bool-thanks-message" onclick="GAEvent('Editor','Open Thanks Message','')">
-                    Edit Thanks Message
-                </a>
-                <button type="button"
-                        style="color:rgb(51, 51, 51);"
-                        class="popover-btn"
-                        data-toggle="popover"
-                        data-trigger="focus"
-                        title="Thanks Message"
-                        data-content=
-                        "When users apply for a this job they will see a message that you can edit it here. ">
-                    <i class="icon-info-sign"></i>
-                </button>
-
-            </li>
-        </ul>
-
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="bool-dock-bottom">
