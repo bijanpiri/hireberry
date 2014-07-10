@@ -553,7 +553,6 @@ pay = function( teamID, amount, description,PaymentType,callback ) {
                     "currency": "USD",
                     "total": amount
                 },
-
                 "description": description
             }]
         };
@@ -622,18 +621,6 @@ addCredit = function(teamID,value,callback) {
         teamID: teamID,
         method: 'promo',
         amount: value,
-        paymentTime: new Date()
-    }).save( callback );
-
-}
-
-
-payCredit = function(teamID,value,callback) {
-
-    BTransactions( {
-        teamID: teamID,
-        method: 'jbpromote',
-        amount: -parseFloat(value),
         paymentTime: new Date()
     }).save( callback );
 

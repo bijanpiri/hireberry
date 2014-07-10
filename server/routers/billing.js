@@ -79,84 +79,83 @@ app.get('/paypal', function(req,res) {
                 // Execute payment
                 var execute_payment_details = { "payer_id": prayerID };
                 paypal_api.payment.execute( transaction.PAYToken, execute_payment_details, function(error, payment){
+                    BTransactions.findOne({_id:transactionID}, function(er,rst){
+                    if(rst.paymentType=="promotepay")
+                    {
+                        //redirect promote info
+                        if(error){          //Level 1 error
+                            console.error(error);
+                            res.redirect('/paypromote?result=0');
 
-
-                        BTransactions.findOne({_id:transactionID}, function(err,rst){
-
-                        if(rst.paymentType=="promotepay")
+                        }  else if(er)    //Level 2 error
                         {
-                            //redirect promote info
-                            //===============================================
-                            if(error){          //Level 1 error
-                                console.error(error);
-                                res.redirect('/dashboard#billing');
-                                res.render("paypromote.ejs",
-                                    {
-                                        title:"Payment report",
-                                        PositionTitle:"---",
-                                        PayInfo:"Payment process failed"
-                                    });
-
-                            } else if(err)    //Level 2 error
-                            {
-                                console.error(err);
-                                res.redirect('/dashboard#billing');
-                                res.render("paypromote.ejs",
-                                    {
-                                        title:"Payment report",
-                                        PositionTitle:"---",
-                                        PayInfo:"Payment process failed"
-                                    });
-                            }
-                            else {
-                                BTransactions.update({_id:transactionID},{state: 'sold',payer: payment.payer,paymentTime: payment.update_time},
-                                    function(err){
-                                        if(err)
-                                            console.error(err);
-                                        else
-                                        {
-                                            console.log(payment);
-                                            res.render("paypromote.ejs",
-                                                {
-                                                    title:"Payment report",
-                                                    PositionTitle:"---",
-                                                    PayInfo:"Payment process successfully done. Your advertisement will be promoted within the next 24 hours."
-                                                });
-                                        }
-                                });
-                            }
-                            //========================
-
-
+                            console.error(er);
+                            res.redirect('/paypromote?result=0');
                         }
-                        else
-                        {
-                            //=======================
-                            if(error){
-                                console.error(error);
-                                res.redirect('/dashboard#billing');
-                            } else {
-
-                                BTransactions.update({_id:transactionID},{
-                                    state: 'sold',
-                                    payer: payment.payer,
-                                    paymentTime: payment.update_time
-                                }, function(err){
+                        else {
+                            BTransactions.update({_id:transactionID},{state: 'sold',payer: payment.payer,paymentTime: payment.update_time},
+                                function(err){
                                     if(err)
                                         console.error(err);
                                     else
                                     {
-                                        console.log(payment);
-                                        res.redirect('/dashboard#billing');
-                                    }
-                                });
-                            }
-                            //========================
-                        }
-                    });
+                                        //--------------------- Sending email ---------------------
+                                        var emailConfig = {
+                                            from: "Hireberry",
+                                            fromAddress: "job@hireberry.com",
+                                            replyAddress: "reply@hireberry.com"
+                                        };
+                                        var message = {
+                                            "html": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
+                                            "text": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
+                                            "subject": "Promoting Job",
+                                            "from_email": emailConfig.fromAddress,
+                                            "from_name": emailConfig.from,
+                                            "to": [{
+                                                "email": "hossein.pejman@yahoo.com",
+                                                "name": '',
+                                                "type": "to"
+                                            }],
+                                            "headers": {
+                                                "Reply-To": emailConfig.replyAddress
+                                            }
+                                        };
 
-                });
-            })
+                                        mandrill_client.messages.send({"message": message, "async": false},
+                                            function(result) {/*Sucess*/},
+                                            function(e) { /*Error*/});
+                                        //---------------------------------------------------------
+                                        console.log(payment);
+                                        res.redirect('/paypromote?result=1');
+                                    }
+                            });
+                        }  //end if(rst.paymentType=="promotepay")
+                    }
+                    else
+                    {
+                        if(error){
+                            console.error(error);
+                            res.redirect('/dashboard#billing');
+                        } else {
+
+                            BTransactions.update({_id:transactionID},{
+                                state: 'sold',
+                                payer: payment.payer,
+                                paymentTime: payment.update_time
+                            }, function(err){
+                                if(err)
+                                    console.error(err);
+                                else
+                                {
+                                    console.log(payment);
+                                    res.redirect('/dashboard#billing');
+                                }
+                            });
+                        }
+                    }
+                    });  //end BTransactions.findOne({_id:transactionID}, function(er,rst)
+                });  //end Paypal execute
+            }); // BTransactions.update({_id:transactionID},{state:'approved',ECToken:ECToken}
         }
         else {
             BTransactions.update({_id:transaction._id},{state:'canceled',ECToken:ECToken}, function(err){

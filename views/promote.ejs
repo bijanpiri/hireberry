@@ -1,29 +1,20 @@
 <% layout('layout') -%>
 
 <html xmlns:fb="http://ogp.me/ns/fb#">
+
 <style>
-
-
-
 /*    #fb-promote a{
-
-
         text-indent:-9999px;
-
         display: inline-block;
-
         border:0; padding:0; margin:10px auto;
-
         width: 152px; height: 32px;
-
         background:url(http://www.hyperarts.com/facebook/static-fbml-bible/_img/share-btn.png) top left no-repeat;
-
         overflow: hidden;
-
         text-decoration:none !important;
-
     }*/
+</style>
 
+<style>
 .job-title {
     position: relative;
     bottom: -120px;
@@ -47,7 +38,6 @@
 }
 
 
-
 .social-network {
     position: relative;
     bottom: -160px;
@@ -67,12 +57,11 @@
     font-size: 2.5em;
 }
 
-/*for hiding link on   social netwowk images*/
+/*for hiding link on social netwowk images*/
 .social-network a{
     overflow: hidden;
     text-decoration:none !important;
 }
-
 
 .social-network input{
     height: 48px;
@@ -99,8 +88,6 @@
     background-color: #fcfcfc;
 }
 
-
-
 .social-network input:active{
     height: 48px;
     width: 48px;
@@ -123,12 +110,13 @@
     padding-left: 10px;
     padding-right: 10px;
     min-width: 100px;
-    height: 280px;
+    /* height: 280px;*/
     line-height: 60px;
     text-align: center;
     background: #c3c3c3;
     font-weight: 700;
     border-radius: 7px;
+    padding-bottom: 20px;
     font-size: 2.5em;
 }
 
@@ -138,14 +126,11 @@
     font-weight: 300;
     font-size: 0.6em;
     top: -7px;
-display: inline-block;
-
+    display: inline-block;
 }
 .job-boards input[type=number]{
-height: 35px;
+    height: 35px;
     width: 100px;
-
-
 }
 
 .job-boards input[type=checkbox]{
@@ -166,7 +151,7 @@ height: 35px;
     border: 2px;
     border-color: #2d6987;
     border-style: solid;
-    margin-right: 20px;
+    /*margin-right: 20px;*/
     background-position: center;
     background-repeat: no-repeat;
     background-color: #e3e3e3;
@@ -211,7 +196,7 @@ height: 35px;
     float: right;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #0000FF;
+    background-color: #006dcc;
     font-weight: 500 ;
     color: #fcfcfc;
     font-size: 1.8em
@@ -352,7 +337,6 @@ height: 35px;
 <script>
 
 var JobBoardPrice ={ "github":450,"stack overflow":350,"dribbble":325,"behance":199,"indeed":1,"linkedin":195};
-
 var flyerID='<%= FlyerID %>';
 var jobLink='<%= JobLink %>';
 var address='<%= Address %>';
@@ -363,7 +347,6 @@ var positionTitle='<%=PositionTitle%>';
 var description='<%=Description%>';
 var companyName='';
 var teamID='';
-
 
 $(document).ready( function() {
 
@@ -385,20 +368,17 @@ $(document).ready( function() {
                 alert(data);
             });
 
-    $("#inputtext-indeed-payment").change(
-            function(e)
+    $("#inputtext-indeed-payment").change(function(e)
             {
-               var value= parseInt ($("#inputtext-indeed-payment").val());
+                var value= parseInt ($("#inputtext-indeed-payment").val());
 
                 if(value<50 || value>1000)
                     $("#inputtext-indeed-payment").css("color",'red');
                 else
                     $("#inputtext-indeed-payment").css("color",'black');
 
-
-
-           calculateTotalPayment();
-            e.stopPropagation();
+                calculateTotalPayment();
+                e.stopPropagation();
             }
     );
 
@@ -417,235 +397,8 @@ $(document).ready( function() {
 
     $("#fb-promote").attr("href",jobLink.replace(' ','%20'));
 
-    var getPaymentInfo=function(callback)
-    {
-        var chbxs=$(".job-boards").find(":input[type=checkbox]");
-        var selectedInfo=new Object();
-        selectedInfo.TotalPayment=0.0;
-        selectedInfo.SelectedJobBoards=new Array();
-        $.each(chbxs, function(i)
-        {
-            if($(chbxs[i]).prop('checked'))
-            {
-                var jbInfo=new Object();
-                jbInfo.Price=JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
-                jbInfo.Name=$(chbxs[i]).attr("title");
-                selectedInfo.SelectedJobBoards.push(jbInfo);
-                selectedInfo.TotalPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
-            }
-        });
-        callback(selectedInfo);
-    }
-
-   $("#btn-promote-payment").click(function() {
-        var ml = $('#payment-action-dialog');
-        ml.find("#error-msg").text("");
-        getSelectedJobBoardInfo(function(info)
-        {
-            var rst=info.PaymentInfo;
-            $.ajax({
-                url:'/flyer/submitpromote',
-                type: 'POST',
-                dataType: 'json',
-                data :
-                {
-                    flyerID:flyerID,
-                    teamID:teamID,
-                    jobBoardInfo:rst
-                },
-                success: function(data) {
-
-                    var ml = $('#payment-action-dialog');
-                    ml.find('.container-fluid').empty();
-                    for(var i=0;i<rst.SelectedJobBoards.length;i++)
-                    {
-                        ml.find('.container-fluid').append($('<span>').text(rst.SelectedJobBoards[i].Name));
-                        ml.find('.container-fluid').append($('<p>').text("$ "+rst.SelectedJobBoards[i].Price  ));
-                        ml.find('.container-fluid').append( $('<hr>'));
-                    }
-                    ml.find('.container-fluid').append($('<span>').text("Total"));
-                    ml.find('.container-fluid').append($('<p>').text("$ "+rst.TotalPayment ));
-
-                    ml.modal();
-                    ml.find('.modal-footer').empty();
-                    ml.find('.modal-footer').append($('<button>')
-                            .addClass("btn btn-primary")
-                            .attr('data-dismiss','modal')
-                            .attr('aria-hidden','true').text("Cancel"));
-                    ml.find('.modal-footer').append($('<button>')
-                            .addClass("btn btn-primary")
-                            .attr('data-dismiss','modal')
-                            .attr('aria-hidden','true').text("Confirm").click(function()
-                            {
-                              $.ajax({
-                              url:'/flyer/confirmpromote',
-                                type: 'POST',
-
-                                    dataType: 'json',
-                                    data :
-                                     {
-                                         flyerID:flyerID,
-                                         teamID:teamID,
-                                         jobBoardInfo:info
-                                     },
-                                    success: function(data) {
-
-                                        window.location='/pay?amount='+rst.TotalPayment+"&jbp=1";
-
-                                        //window.location='/flyer/paypromote/'+flyerID;
-
-                                        /*$.ajax({
-                                         url:'/flyer/paypromote',
-                                         type: 'POST',
-                                         dataType: 'json',
-                                         data :
-                                         {
-                                             FlyerID:flyerID,
-                                             TeamID:teamID,
-                                             PositionTitle:positionTitle
-                                         },
-                                         success: function(r) {}
-                                         }) .fail(function(data) { });*/
-                                    }
-                                })
-
-                            }));
-                }
-            })
-                    .fail(function(data) {
-
-                        var ml = $('#payment-action-dialog');
-                        ml.find('.container-fluid').empty();
-                        ml.find('.container-fluid').append($('<span>').text("Message"));
-                        ml.find('.container-fluid').append($('<p>').text(data.responseText));
-                        ml.find('.modal-footer').empty();
-                        ml.find('.modal-footer').append($('<button>')
-                                .addClass("btn btn-primary")
-                                .attr('data-dismiss','modal')
-                                .attr('aria-hidden','true').text("Close"));
-                        ml.modal();
-                    });
-
-        }); //end getSelectedJobBoardInfo
-
-    });
-
-   var calculateTotalPayment=function(callbak)
-   {
-        var chbxs=$(".job-boards").find(":input[type=checkbox]");
-
-        $.each(chbxs, function(i)
-        {
-            if($(chbxs[i]).attr("title").toLowerCase()=="indeed")
-            {
-                var value= parseInt ($("#inputtext-indeed-payment").val());
-                if(value<50 )
-                    value=50;
-                else if(value>1000 )
-                    value=1000;
-                else if(isNaN(value) )
-                    value=50;
-                JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]=parseFloat(value);
-            }
-            else
-                $(chbxs[i]).val( JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]);
-        });
-        var sumPayment=0.0;
-        $.each(chbxs, function(i)
-        {
-            if($(chbxs[i]).prop('checked'))
-            {
-                sumPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
-            }
-        });
-        $("#div-total-payment").text("$ " +sumPayment.toFixed(2));
-    }
-
-    $(".job-boards").find(":input[type=checkbox]").click(function() {
-        calculateTotalPayment();
-    });
-
-   var getSelectedJobBoardInfo =function(callback){
-       getPaymentInfo(function(rst)
-       {
-            var info=new Object();
-            info.PaymentInfo=rst
-            info.JobBoardListPreiview=new Array();
-            for(var i=0;i<rst.SelectedJobBoards.length;i++)
-            {
-                var item=new Object();
-                var boardName=rst.SelectedJobBoards[i].Name;
-
-                item.boardName=boardName;
-                item.address=address;
-                item.positionTitle=positionTitle;
-                item.companyName=companyName;
-                item.description=description;
-
-                // ------------ Saving job link ----------------
-                item.jobLink="[NA]";
-                if( !(jobLink=="undefined" || !jobLink || jobLink==''))
-                {
-                    if( boardName=="Indeed" || boardName=="Stack Overflow" )
-                    {
-                        item.description+="&Job Url : "+jobLink;
-                    }
-                    else
-                    {
-                        item.jobLink=jobLink;
-                    }
-                }
-
-                // ------------ Saving work condition ----------------
-                item.workCondition="[NA]";
-                if( !(workCondition=="undefined" ||  !workCondition || workCondition==''))
-                {
-                    var place=  workCondition.split('&')[0].split('=')[1];
-                    var time=  workCondition.split('&')[1].split('=')[1];
-                    if( boardName=="Indeed" || boardName=="Stack Overflow" || boardName=="Dribbble" || boardName=="Behance")
-                    {
-                        item.description+="&Work Place/Time : "+place+'/'+time;
-                    }
-                    else
-                    {
-                        item.workCondition=place+'/'+time;
-                    }
-                }
-                // ------------ Saving skills ----------------
-                item.skills="[NA]";
-                if( !(skills=="undefined" || !skills || skills==''))
-                {
-                    if( boardName=="Indeed" || boardName=="GitHub" || boardName=="Dribbble")
-                    {
-                        item.description+="&Requirements : "+skills;
-                    }
-                    else
-                    {
-                        item.skills=skills;
-                    }
-                }
-                // ------------ Saving company logo ----------------
-                item.logo="[NA]";
-                if(    !( logo=='http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/'
-                        ||  boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   ))
-                {
-                    item.logo=logo
-                }
-
-                // ------------ Saving description ----------------
-
-                if( boardName=="Dribbble")
-                {
-                    item.description="[NA]";
-                }
-                info.JobBoardListPreiview.push(item);
-            }
-            callback(info)
-        });
-    };
 
     $(".job-boards").find(":input[type=button]").click(function() {
-
 
         var boardName=$(this).attr("title");
 
@@ -739,20 +492,236 @@ $(document).ready( function() {
         }
 
     });
+
+    $(".job-boards").find(":input[type=checkbox]").click(function() {
+        calculateTotalPayment();
+    });
+
+    $("#btn-promote-payment").click(function() {
+
+        var ml = $('#payment-action-dialog');
+        ml.find("#error-msg").text("");
+        getSelectedJobBoardInfo(function(info)
+        {
+            var rst=info.PaymentInfo;
+            $.ajax({
+                url:'/flyer/submitpromote',
+                type: 'POST',
+                dataType: 'json',
+                data :
+                {
+                    flyerID:flyerID,
+                    teamID:teamID,
+                    jobBoardInfo:rst
+                },
+                success: function(data) {
+
+                    var ml = $('#payment-action-dialog');
+                    ml.find('.container-fluid').empty();
+                    for(var i=0;i<rst.SelectedJobBoards.length;i++)
+                    {
+                        ml.find('.container-fluid').append($('<span>').text(rst.SelectedJobBoards[i].Name));
+                        ml.find('.container-fluid').append($('<p>').text("$ "+rst.SelectedJobBoards[i].Price  ));
+                        ml.find('.container-fluid').append( $('<hr>'));
+                    }
+                    ml.find('.container-fluid').append($('<span>').text("Total"));
+                    ml.find('.container-fluid').append($('<p>').text("$ "+rst.TotalPayment ));
+
+                    ml.modal();
+                    ml.find('.modal-footer').empty();
+                    ml.find('.modal-footer').append($('<button>')
+                            .addClass("btn btn-primary")
+                            .attr('data-dismiss','modal')
+                            .attr('aria-hidden','true').text("Cancel"));
+                    ml.find('.modal-footer').append($('<button>')
+                            .addClass("btn btn-primary")
+                            .attr('data-dismiss','modal')
+                            .attr('aria-hidden','true').text("Confirm").click(function()
+                            {
+                                // $(this).attr("disabled","disabled");
+                                 $("#btn-promote-payment").attr("disabled", "disabled");
+                                $.ajax({
+                                    url:'/flyer/confirmpromote',
+                                    type: 'POST',
+
+                                    dataType: 'json',
+                                    data :
+                                    {
+                                        flyerID:flyerID,
+                                        teamID:teamID,
+                                        jobBoardInfo:info
+                                    },
+                                    success: function(data) {
+                                        window.location='/pay?amount='+rst.TotalPayment+"&jbp=1";
+                                    }
+                                })
+
+                            }));
+                }
+            })
+                    .fail(function(data) {
+
+                        var ml = $('#payment-action-dialog');
+                        ml.find('.container-fluid').empty();
+                        ml.find('.container-fluid').append($('<span>').text("Message"));
+                        ml.find('.container-fluid').append($('<p>').text(data.responseText));
+                        ml.find('.modal-footer').empty();
+                        ml.find('.modal-footer').append($('<button>')
+                                .addClass("btn btn-primary")
+                                .attr('data-dismiss','modal')
+                                .attr('aria-hidden','true').text("Close"));
+                        ml.modal();
+                    });
+
+        }); //end getSelectedJobBoardInfo
+
+    });
+
+    var getPaymentInfo=function(callback)
+    {
+        var chbxs=$(".job-boards").find(":input[type=checkbox]");
+        var selectedInfo=new Object();
+        selectedInfo.TotalPayment=0.0;
+        selectedInfo.SelectedJobBoards=new Array();
+        $.each(chbxs, function(i)
+        {
+            if($(chbxs[i]).prop('checked'))
+            {
+                var jbInfo=new Object();
+                jbInfo.Price=JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+                jbInfo.Name=$(chbxs[i]).attr("title");
+                selectedInfo.SelectedJobBoards.push(jbInfo);
+                selectedInfo.TotalPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+            }
+        });
+        callback(selectedInfo);
+    }
+
+    var calculateTotalPayment=function(callbak)
+    {
+        var chbxs=$(".job-boards").find(":input[type=checkbox]");
+
+        $.each(chbxs, function(i)
+        {
+
+            if($(chbxs[i]).attr("title").toLowerCase()=="indeed")
+            {
+                var value= parseInt ($("#inputtext-indeed-payment").val());
+                if(value<50 )
+                    value=50;
+                else if(value>1000 )
+                    value=1000;
+                else if(isNaN(value) )
+                    value=50;
+                JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]=parseFloat(value);
+            }
+            else
+                $(chbxs[i]).val( JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]);
+        });
+        var sumPayment=0.0;
+        $.each(chbxs, function(i)
+        {
+            if($(chbxs[i]).prop('checked'))
+            {
+                sumPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+            }
+        });
+        $("#div-total-payment").text("$ " +sumPayment.toFixed(2));
+    }
+
+    var getSelectedJobBoardInfo =function(callback)
+    {
+        getPaymentInfo(function(rst)
+        {
+            var info=new Object();
+            info.PaymentInfo=rst
+            info.JobBoardListPreiview=new Array();
+            for(var i=0;i<rst.SelectedJobBoards.length;i++)
+            {
+                var item=new Object();
+                var boardName=rst.SelectedJobBoards[i].Name;
+
+                item.boardName=boardName;
+                item.address=address;
+                item.positionTitle=positionTitle;
+                item.companyName=companyName;
+                item.description=description;
+
+                // ------------ Saving job link ----------------
+                item.jobLink="[NA]";
+                if( !(jobLink=="undefined" || !jobLink || jobLink==''))
+                {
+                    if( boardName=="Indeed" || boardName=="Stack Overflow" )
+                    {
+                        item.description+="&Job Url : "+jobLink;
+                    }
+                    else
+                    {
+                        item.jobLink=jobLink;
+                    }
+                }
+
+                // ------------ Saving work condition ----------------
+                item.workCondition="[NA]";
+                if( !(workCondition=="undefined" ||  !workCondition || workCondition==''))
+                {
+                    var place=  workCondition.split('&')[0].split('=')[1];
+                    var time=  workCondition.split('&')[1].split('=')[1];
+                    if( boardName=="Indeed" || boardName=="Stack Overflow" || boardName=="Dribbble" || boardName=="Behance")
+                    {
+                        item.description+="&Work Place/Time : "+place+'/'+time;
+                    }
+                    else
+                    {
+                        item.workCondition=place+'/'+time;
+                    }
+                }
+                // ------------ Saving skills ----------------
+                item.skills="[NA]";
+                if( !(skills=="undefined" || !skills || skills==''))
+                {
+                    if( boardName=="Indeed" || boardName=="GitHub" || boardName=="Dribbble")
+                    {
+                        item.description+="&Requirements : "+skills;
+                    }
+                    else
+                    {
+                        item.skills=skills;
+                    }
+                }
+                // ------------ Saving company logo ----------------
+                item.logo="[NA]";
+                if(    !( logo=='http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/'
+                        ||  boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   ))
+                {
+                    item.logo=logo
+                }
+
+                // ------------ Saving description ----------------
+
+                if( boardName=="Dribbble")
+                {
+                    item.description="[NA]";
+                }
+                info.JobBoardListPreiview.push(item);
+            }
+            callback(info)
+        });
+    };
+
 });
 </script>
 
 <div class="job-title"> <%=PositionTitle%> </div>
+
+<!-------------------------------------Social Networks -------------------------------------------------->
+
 <div class="social-network">
     <span>Social Networks </span>
 
     <br>
-    <!--<input id="tw-promote" type="button"  value=" " style="background-image: url('/tw.png')">-->
-    <!--<input id="fb-promote" type="button"  value=" " style="background-image: url('/fb.png')">-->
-    <!--<input id="gp-promote" type="button"  value=" " style="background-image: url('/gp.png');margin-right: 0">-->
 
     <!-- <a id="tw-promote" href="https://twitter.com/share"   class="twitter-share-button" data-url="" data-text=" " data-count="none">Tweet</a>-->
-
     <a id="tw-promote" href="https://twitter.com/intent/tweet?text=Check%20this%20out&url=https%3A%2F%2Fdev.twitter.com%2Fdiscussions%2F2441&related=episod"><img src='/tw.png' title="Tweet" alt="Tweet" /></a>
 
     <a id="ln-promote" href="" rel="nofollow"
@@ -782,39 +751,102 @@ $(document).ready( function() {
     <!-- <div id="fb-promote" class="fb-share-button" data-href="" data-type="button"></div> -->
 
     <fb:share-button  id="fb-promote" href="" type="button" style="bottom=16px" ></fb:share-button>
-
 </div>
 <br>
-<div class="job-boards">
+
+<!-------------------------------------Job Boards ------------------------------------------------------>
+
+<div class="job-boards" >
     <span>Job Boards </span>
     <br>
-    <input id="git-promote"     title="GitHub" type="button" value="GitHub" >
-    <input id="stackof-promote" title="Stack Overflow" type="button" value="Stack Overflow" >
 
-    <input id="dribbble-promote" title="Dribbble" type="button" value="Dribbble" >
-    <input id="behance-promote" title="Behance" type="button" value="Behance">
-    <input id="linkedin-promote" title="LinkedIn" type="button" value="LinkedIn" >
-    <input id="indeed-promote"   title="Indeed" type="button" value="Indeed" style="margin-right: 0">
-    <br>
-    <input id="ch-git-promote"     title="GitHub" type="checkbox" value="GitHub" >
-    <input id="ch-stackof-promote" title="Stack Overflow" type="checkbox" value="Stack Overflow" >
-    <input id="ch-dribbble-promote" title="Dribbble" type="checkbox" value="Dribbble" >
-    <input id="ch-behance-promote" title="Behance" type="checkbox" value="Behance">
-    <input id="ch-linkedin-promote" title="LinkedIn" type="checkbox"  value="linkedIn" >
-    <input id="ch-indeed-promote" title="Indeed" type="checkbox"  value="Indeed"  style="margin-right: 0">
-    <br>
-    <label  >Indeed payment ($): </label>
-    <input id="inputtext-indeed-payment" type="number"  value="50" >
-    <label > (Min:$50 - Max:$1000)</label>
 
+    <div id="flyer-list" style="background-color: #f8f8f8" class="container-fluid">
+
+
+        <div class="row-fluid positionsHeaderRow" style="background-color: #94a0b4">
+            <div class="span3 colPreview" >Preview</div>
+            <div class="span1 colSelect">Select</div>
+            <div class="span2 colOptions">Options</div>
+        </div>
+
+        <div class="row-fluid" style="background-color: palegoldenrod">
+            <div class="span3 colPreview">
+                <input id="stackof-promote" title="Stack Overflow" type="button" value=""  style="background-image: url('/stackoverflow-64.png')" >
+            </div>
+            <div class="span1 colSelect">
+                <input id="ch-stackof-promote" title="Stack Overflow" type="checkbox" value="Stack Overflow" >
+            </div>
+            <div class="span4 colOptions"> - </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span3 colPreview">
+                <input id="git-promote"     title="GitHub" type="button" value="" style="background-image: url('/githup-64.png')"  >
+            </div>
+            <div class="span1 colSelect">
+                <input id="ch-git-promote"     title="GitHub" type="checkbox" value="GitHub" >
+            </div>
+            <div class="span4 colOptions"> - </div>
+        </div>
+
+        <div class="row-fluid" style="background-color: palegoldenrod">
+            <div class="span3 colPreview">
+                <input id="dribbble-promote" title="Dribbble" type="button" value=""  style="background-image: url('/dribbble-64.png')">
+            </div>
+            <div class="span1 colSelect">
+                <input id="ch-dribbble-promote" title="Dribbble" type="checkbox" value="Dribbble" >
+            </div>
+            <div class="span4 colOptions"> - </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span3 colPreview">
+                <input id="behance-promote" title="Behance" type="button" value=""  style="background-image: url('/behance-64.png')">
+            </div>
+            <div class="span1 colSelect">
+                <input id="ch-behance-promote" title="Behance" type="checkbox" value="Behance">
+            </div>
+            <div class="span4 colOptions"> - </div>
+        </div>
+
+        <div class="row-fluid" style="background-color: palegoldenrod">
+            <div class="span3 colPreview">
+                <input id="linkedin-promote" title="LinkedIn" type="button" value=""  style="background-image: url('/linkedin-64.png')" >
+            </div>
+            <div class="span1 colSelect">
+                <input id="ch-linkedin-promote" title="LinkedIn" type="checkbox"  value="LinkedIn"  >
+            </div>
+            <div class="span4 colOptions"> - </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span3 colPreview">
+                <input id="indeed-promote"   title="Indeed" type="button" value="" style="background-image: url('/indeed-64.png')" >
+            </div>
+            <div class="span1 colSelect">
+                <input id="ch-indeed-promote" title="Indeed" type="checkbox"  value="Indeed">
+            </div>
+            <div class="span4 colOptions">
+                <label  >Indeed payment ($): </label>
+                <input id="inputtext-indeed-payment" type="number"  value="50" >
+                <label > (Min:$50 - Max:$1000)</label>
+            </div>
+        </div>
+
+    </div>
 </div>
 
-<input id="btn-promote-payment" type="button" value="Payment" >
+
+<input id="btn-promote-payment" type="button"  value="Payment" >
 
 <div id="div-total-payment" >
     $ 0.00
 </div>
-<input id="ppanel" style="position: relative" value="go to panel" title="Go to panel" type="button"  >
+<input id="ppanel"  style="position: relative; bottom: -120px;left: -200px" value="go to panel" title="Go to panel" type="button"  >
+
+
+<!-------------------------------------Dialogs ------------------------------------------------------>
 
 <div id="payment-action-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
      aria-hidden="true">
@@ -828,8 +860,8 @@ $(document).ready( function() {
         </div>
     </div>
     <div class="modal-footer">
-<!--        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-        <button id="btn-confirm" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Confirm</button>-->
+        <!--    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button id="btn-confirm" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Confirm</button>-->
     </div>
 </div>
 
@@ -875,8 +907,8 @@ $(document).ready( function() {
         </div>
     </div>
     <div class="modal-footer">
-
         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-
     </div>
 </div>
+
+

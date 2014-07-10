@@ -69,41 +69,33 @@ app.get('/dashboard/getinfo',function(req,res){
         });
 });
 
-app.get('/flyer/paypromote/:flyerID',function(req,res){
+app.get('/paypromote',function(req,res){
+
+    var message="";
+    if(req.query.result=="1")
+        message="Payment process successfully done. Your advertisement will be promoted within the next 24 hours.";
+    else
+        message="Payment process failed.";
 
     res.render("paypromote.ejs",
         {
             title:"Payment report",
             PositionTitle:"---",
-            PayInfo:"Payment process successfully done. Your advertisement will be promoted within the next 24 hours."
-                +" [ flyer ID ="+req.params.flyerID+ " ]"
+            PayInfo:message
         });
 
 });
 
 app.post('/flyer/submitpromote',function(req,res){
     //for test
-    //addCredit(req.body.teamID,5000,null);
 
     res.send(200,{message:"The chash is enough.",OK:true});
 
-   /* var TotalPayment=req.body.jobBoardInfo.TotalPayment;
-    checkBalance(req.body.teamID,TotalPayment,function(err,isOk){
-
-        if(err.error)
-            res.send(502,{error:err});
-        else if(isOk==true)
-            res.send(200,{message:"The chash is enough.",OK:isOk});
-        else
-            res.send(300,"The chash is not enough.");
-
-    });*/
 });
 
 app.post('/flyer/confirmpromote',function(req,res){
 
     var TotalPayment=req.body.jobBoardInfo.TotalPayment;
-   // payCredit(req.body.teamID,TotalPayment,function(){
         BPromoteInfo(
             {
                 totalPrice: req.body.jobBoardInfo.PaymentInfo.TotalPayment,
@@ -115,43 +107,9 @@ app.post('/flyer/confirmpromote',function(req,res){
                 if(err)
                     res.send(502,{error:err});
                 else
-                {
-
-                    //--------------------- Sending email ---------------------
-                    var emailConfig = {
-                        from: "Hireberry",
-                        fromAddress: "job@hireberry.com",
-                        replyAddress: "reply@hireberry.com"
-                    };
-
-                    var message = {
-                        "html": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
-                        "text": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
-                        "subject": "Promoting Job",
-                        "from_email": emailConfig.fromAddress,
-                        "from_name": emailConfig.from,
-                        "to": [{
-                            "email": "hossein.pejman@yahoo.com",
-                            "name": '',
-                            "type": "to"
-                        }],
-                        "headers": {
-                            "Reply-To": emailConfig.replyAddress
-                        }
-                    };
-
-                    mandrill_client.messages.send({"message": message, "async": false},
-                        function(result) {/*Sucess*/},
-                        function(e) { /*Error*/});
-                    //---------------------------------------------------------
-
-
                     res.send(200,{message:"Process successfully done."});
 
-                }
-
             });
-   // });
 });
 
 app.get('/flyer/promote/:templateID/:flyerID',function(req,res){

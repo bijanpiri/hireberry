@@ -2,12 +2,12 @@
 <style>
     .tree {
         min-height:20px;
-       /* padding:19px;*/
-       /* margin-bottom:20px;*/
-         padding:4px;
-         margin-bottom:5px;
-        background-color:#fbfbfb;
-       /* border:1px solid #999;*/
+        /* padding:19px;*/
+        /* margin-bottom:20px;*/
+        padding:4px;
+        margin-bottom:5px;
+        /* background-color:#fbfbfb;*/
+        /* border:1px solid #999;*/
         -webkit-border-radius:4px;
         -moz-border-radius:4px;
         border-radius:4px;
@@ -64,6 +64,28 @@
         color:#000
     }
 </style>
+<style>
+    .promote-table {
+        position: relative;
+        bottom: -60px;
+        left: 10px;
+        right: 0;
+        display: block;
+        margin: 20px 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+        min-width: 100px;
+        /* height: 280px;*/
+        line-height: 60px;
+        text-align: center;
+        background: #c3c3c3;
+        font-weight: 700;
+        border-radius: 7px;
+        padding-bottom: 20px;
+        font-size: 1.5em;
+    }
+</style>
+
 <script>
     $(function () {
         $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
@@ -81,15 +103,7 @@
     });
 </script>
 
-<style>
-    .pos{
-        position: relative;
-    }
-</style>
-
 <script>
-
-
     $(document).ready(function () {
         $.ajax({
             url: '/dashboard/getinfo',
@@ -97,15 +111,15 @@
             dataType: 'json',
             success: function (data) {
 
+                for (var i = 0; i < data.length; i++) {
+                    var row = $('#flyer-list .positionsHeaderRow')
+                            .clone()
+                            .removeClass('positionsHeaderRow');
 
-               for (var i = 0; i < data.length; i++) {
-
-
-                   var row = $('#flyer-list .positionsHeaderRow')
-                           .clone()
-                           .removeClass('positionsHeaderRow');
-    
-
+                    if(i%2==0)
+                        row.css("background-color","palegoldenrod");
+                    else
+                        row.css("background-color","#fbfbfb");
                     var TeamObj = $('<span>')
                             .addClass('pos')
                             .text(data[i].TeamName);
@@ -120,74 +134,65 @@
                             .text(job_title)
                             .attr('href',"http://localhost:5000/flyer/edit/0?"+data[i].FlyerId);
 
-                   var PaymentObj = $('<span>')
-                           .text(data[i].TotalPrice);
+                    var PaymentObj = $('<span>')
+                            .text(data[i].TotalPrice);
 
-                   var jobBorads = $('<div>')
-                           .addClass('tree')
-                           .append($('<ul>'))
-                           .append($('<i>'))
-                           .append($('<span>'))
-                           .addClass('badge badge-success')
-                           .text('#2')
-                           .append($('<i>'));
+                    var jobBorads = $('<div>')
+                            .addClass('tree')
+                            .append($('<ul>'))
+                            .append($('<i>'))
+                            .append($('<span>'))
+                            .addClass('badge badge-success')
+                            .text('#2')
+                            .append($('<i>'));
 
-                   var bordcount= '<span class="badge badge-success"><i class="icon-minus-sign"></i>'+  "#" +data[i].JobBoards.length.toString() + '</span>' ;
-                   var boardlist="";
-                   for(var j=0;j<data[i].JobBoards.length;j++)
-                       boardlist+='<li>'+'<span><i class="icon-time"></i>'+ data[i].JobBoards[j].Name + "   ($" + data[i].JobBoards[j].Price + ")"+'</span></li>' ;
+                    //var bordcount= '<span class="badge badge-success"><i class="icon-minus-sign"></i>'+  "#" +data[i].JobBoards.length.toString() + '</span>' ;
+                    var bordcount= "" //'<span class="badge badge-success"><i></i>'+  "#" +data[i].JobBoards.length.toString() + '</span>' ;
 
-                   var jobBorads =  $('<div>')
-                           .addClass('tree')
-                           .append('<ul>' +
-                                   '<li>' +
+                    var boardlist="";
+                    for(var j=0;j<data[i].JobBoards.length;j++)
+                        boardlist+='<li>'+'<span><i></i>'+ data[i].JobBoards[j].Name + "   ($" + data[i].JobBoards[j].Price + ")"+'</span></li>' ;
+                    //boardlist+='<li>'+'<span><i class="icon-time"></i>'+ data[i].JobBoards[j].Name + "   ($" + data[i].JobBoards[j].Price + ")"+'</span></li>' ;
+
+                    var jobBorads =  $('<div>')
+                            .addClass('tree')
+                            .append(
+                                    // '<ul>' +
+                                    // '<li>' +
                                     bordcount +
-                                   '<ul>' +
-                                   boardlist+
-                                   '</ul>' +
-                                   '</li>' +
-                                   '</ul>');
-
-
-
-
-
-
-                   row.find('.colTeam').empty().append(TeamObj);
-                   row.find('.colDate').empty().append(DateObj);
-                   row.find('.colFlyer').empty().append(FlyerObj);
-                   row.find('.colPayment').empty().append(PaymentObj);
-                   row.find('.colJobBoards').empty().append(jobBorads);
-
-
-
+                                            '<ul>' +
+                                            boardlist+
+                                            '</ul>'
+                                    //  +'</li>' +
+                                    ///  '</ul>'
+                            );
 
                     row.find('.colTeam').empty().append(TeamObj);
                     row.find('.colDate').empty().append(DateObj);
                     row.find('.colFlyer').empty().append(FlyerObj);
-                   row.find('.colPayment').empty().append(PaymentObj);
+                    row.find('.colPayment').empty().append(PaymentObj);
+                    row.find('.colJobBoards').empty().append(jobBorads);
                     $('#flyer-list').append(row);
                 }
             }
         }).fail(function (data) {
-                    alert(data);
                 });
-
-
     });
-
 </script>
-<div id="flyer-list" style="position: relative;bottom: -180px;background-color: #f8f8f8" class="container-fluid">
 
-    <div class="row-fluid positionsHeaderRow">
-        <div class="span1 colTeam">Team</div>
-        <div class="span3 colDate">Date</div>
-        <div class="span3 colFlyer">Flyer</div>
+<div class="promote-table">
+    <span>Promoted flyers </span>
 
-        <div class="span3 colJobBoards">Job Boards</div>
-        <div class="span1 colPayment">Payment ($)</div>
+    <div id="flyer-list" style="position: relative;background-color: #f8f8f8" class="container-fluid">
+
+        <div class="row-fluid positionsHeaderRow"  style="background-color: #94a0b4">
+            <div class="span1 colTeam">Team</div>
+            <div class="span2 colDate">Date</div>
+            <div class="span3 colFlyer">Flyer</div>
+            <div class="span3 colJobBoards">Job Boards</div>
+            <div class="span1 colPayment">Payment ($)</div>
+        </div>
+
     </div>
 
 </div>
-
-
