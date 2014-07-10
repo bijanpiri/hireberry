@@ -332,9 +332,10 @@
           var delta = y;
           var maxTop = me.outerHeight() - bar.outerHeight();
 
+          var deltaDelta= wrapper.css('position')==='static' ? bar.parent().position().top:0;
+
           if (isWheel)
           {
-            var deltaDelta= wrapper.css('position')==='static' ? bar.parent().position().top:0;
 
             // move bar with mouse wheel
             delta = parseInt(bar.css('top'))-deltaDelta + y * parseInt(o.wheelStep) / 100 * bar.outerHeight();
@@ -354,7 +355,7 @@
           }
 
           // calculate actual scroll amount
-          percentScroll = parseInt(bar.css('top')) / (me.outerHeight() - bar.outerHeight());
+          percentScroll = (parseInt(bar.css('top'))-deltaDelta) / (me.outerHeight() - bar.outerHeight());
           delta = percentScroll * (me[0].scrollHeight - me.outerHeight());
 
           if (isJump)
