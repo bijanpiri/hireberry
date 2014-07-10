@@ -14,7 +14,7 @@ var Picture;
     Parse.initialize(
         "27AiA7lmRwF5xWK2o8tebNIx0Ij49QxQ9aYUAjkS",
         "Gbk3FdnB5yergbaTGLIC4BRkejQDVBxATZB8O6LI");
-    Picture=Parse.Object.extend("Picture");
+    Logo=Parse.Object.extend("Logo");
 }());
 
 $(function() {
@@ -467,11 +467,11 @@ function loadEditor() {
 
     // Logo uploading handling
     var logoInput = $('input.logofile').change(function(){
-        var pic=new Picture();
+        var pic=new Logo();
 
         var file =new Parse.File('logo.jpg',this.files[0]);
 
-        pic.set('picfile',file);
+        pic.set('logo',file);
 
         pic.save(null, {
             success:function(picture){

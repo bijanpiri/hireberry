@@ -99,6 +99,14 @@ function PictureWidget(){
         }};
     var action=statesAction.none;
 
+    var Picture;
+    function initParse(){
+        Parse.initialize(
+            "27AiA7lmRwF5xWK2o8tebNIx0Ij49QxQ9aYUAjkS",
+            "Gbk3FdnB5yergbaTGLIC4BRkejQDVBxATZB8O6LI");
+        Picture=Parse.Object.extend("Picture");
+    }
+    initParse();
 
     function initLayout1() {
         layout = this.clone('.image-widget');

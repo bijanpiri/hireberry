@@ -11,6 +11,13 @@ var autosaveTimer;
 var autosaveInterval = 60*1000;
 var teamMembers = [];
 
+(function initParse(){
+    Parse.initialize(
+        "27AiA7lmRwF5xWK2o8tebNIx0Ij49QxQ9aYUAjkS",
+        "Gbk3FdnB5yergbaTGLIC4BRkejQDVBxATZB8O6LI");
+    Logo=Parse.Object.extend("Logo");
+}());
+
 $(function() {
 
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
@@ -133,14 +140,18 @@ function loadEditor() {
             logoInput.click();
     });
 
-    logoInput.fileupload({
-        url:'/flyer/upload',
-        dataType: 'json',
-        replaceFileInput:false,
-        dropZone:$('.portletHeader .logo'),
-        done: function (e, data) {
-            flyer.setLogo( '/uploads/' + data.result.files[0].name , true );
-        }
+    logoInput.change(function(){
+        var pic=new Logo();
+
+        var file =new Parse.File('logo.jpg',this.files[0]);
+
+        pic.set('logo',file);
+
+        pic.save(null, {
+            success:function(picture){
+                $('img.logo').attr('src',file.url());
+            }
+        });
     });
 }
 

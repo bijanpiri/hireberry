@@ -32,7 +32,7 @@ crypto = require('crypto');
 fs = require('fs');
 http = require('http');
 authentication = require('./etc/authentication');
-fileupload = require('./etc/upload');
+//fileupload = require('./etc/upload');
 express = require('express');
 
 app = express();
@@ -48,7 +48,7 @@ app.configure(function() {
     app.use(express.static(cwd+'/public'));
     app.use(express.logger());
     app.use(express.cookieParser());
-    app.use('/flyer/upload', upload.fileHandler());
+//    app.use('/flyer/upload', upload.fileHandler());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.session({
