@@ -403,7 +403,7 @@ app.get('/applicant/message/:messageType/:messageID', function (req,res){
             return res.send(403);
 
         if(count == 0)
-            return res.render('applicant.ejs');
+            return res.send(200,'You\'ve responded to this request');
 
         // Move application to next stage (response is received)
         BApplicantsResponses.findOne({_id:messageID}).populate('applicationID').exec( function(err,message){
@@ -447,8 +447,7 @@ app.get('/applicant/message/:messageType/:messageID', function (req,res){
                 };
 
                 BApplications.update( {_id:message.applicationID}, {stage:newStage,$push:{activities:activity}}, function(err){
-
-                    res.send(200);
+                    return res.render('applicant.ejs');
                 })
 
             })
