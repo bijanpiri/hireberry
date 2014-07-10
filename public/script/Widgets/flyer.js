@@ -216,7 +216,8 @@ function Flyer(options) {
             $('.portletHeader .logo').css('border',0);
         }
 
-        $('.portletHeader .logo').show().attr('src',url);
+        if( url )
+            $('.portletHeader .logo').show().attr('src',url);
     }
 
     var initPortletsStack = function () {
