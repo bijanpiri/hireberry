@@ -206,6 +206,11 @@ $(function() {
             })
         });
     }
+
+    // if it is in iframe so remove margins of editor mode
+    if(self!=top){
+        $('.bool-flyer-editor').css('margin','0');
+    }
 });
 
 function takeEditorTour(callBack) {

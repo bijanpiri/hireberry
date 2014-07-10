@@ -211,12 +211,15 @@ function Flyer(options) {
 
     var setLogo = function (url) {
 
+        url = url || '';
+
         if(editMode==false) {
             url = (url.indexOf('placebox.es')!=-1) ? '' : url;
             $('.portletHeader .logo').css('border',0);
         }
 
-        $('.portletHeader .logo').show().attr('src',url);
+        if(url!=='')
+            $('.portletHeader .logo').show().attr('src',url);
     }
 
     var initPortletsStack = function () {

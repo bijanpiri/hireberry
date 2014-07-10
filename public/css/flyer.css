@@ -572,10 +572,6 @@ Map portlet
     display: none;
 }
 .bool-flyer-editor{
-    margin-top: 40px;
-    padding: 0;
-}
-.bool-edit-mode .bool-flyer-editor{
     margin: 20px 45px 20px 285px;
     padding: 0;
 }

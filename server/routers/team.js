@@ -312,3 +312,35 @@ app.get('/:mode/careerpage/:teamID', function(req,res){
 
 
 });
+
+app.get('/api/team/:teamID/positions',function(req,res){
+
+    var teamID = req.params.teamID;
+    var teamName = '';
+
+    BFlyers.find({owner:teamID, publishTime:{$ne:''}, askedForPublish:{$ne:true}})
+        .populate('owner')
+        .exec(function(err,positions){
+            if(err)
+                return res.send(305);
+
+            var positionsList = positions.map( function(position) {
+                return {
+                    id: position._id,
+                    title: position.flyer ?
+                        position.flyer.description:'No Description',
+                    flyer: position.flyer
+                }
+            })
+
+            BTeams.findOne({_id:teamID}, function(err,team){
+                res.send(200, {
+                    teamName: team.name,
+                    teamTel: team.tel,
+                    teamAddress: team.address,
+                    positions: positionsList
+                });
+            })
+
+        })
+});
