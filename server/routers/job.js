@@ -136,7 +136,7 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
                         Skills:PromoteInfo.skills,
                         Description:PromoteInfo.description,
                         WorkCondition :PromoteInfo.workCondition,
-                        JobLink: "http://localhost:5000/flyer/embeded/"+flyerid
+                        JobLink: "/flyer/embeded/"+flyerid
                     });
             });
         }
