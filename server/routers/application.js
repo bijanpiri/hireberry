@@ -120,6 +120,89 @@ app.get('/api/applications', function (req,res) {
     }
 });
 
+function sendEmail(userID,teamID,applicationID,metadata,emailType,callback) {
+
+    BTeams.findOne({_id:teamID}, function(err,team){
+        BApplications.findOne({_id:applicationID}).populate('flyerID').exec(function(err,application) {
+
+            var job = application.flyerID.flyer ? application.flyerID.flyer.description : '';
+            var time = new Date(metadata.interviewDate);
+            var message;
+            var applicantName;
+            var applicantEmail;
+            if( emailType==1 ) {
+                message = metadata.invitationMessage
+                applicantName = metadata.invitedName;
+                applicantEmail = metadata.invitedEmail;
+            }
+            else if( emailType==2 ) {
+                message = metadata.offerMessage;
+                applicantName = metadata.offeredName;
+                applicantEmail = metadata.offeredEmail
+            }
+            // ToDo: Show interview date and time in better way
+
+            message = message.replace(/\n/g,'<br/>')
+            message = message.replace(/\{\{interview-date\}\}/g, time);
+            message = message.replace(/\{\{job-title\}\}/g, job );
+            message = message.replace(/\{\{team-name\}\}/g, team.name );
+            if( emailType==1 ) {
+                message = message.replace(/\{\{applicant-name}\}/g, metadata.invitedName);
+                message = message.replace(/\{\{interview-location\}\}/g, metadata.interviewLocation);
+            }
+            else if( emailType==2) {
+                message = message.replace(/\{\{applicant-name}\}/g, metadata.offeredName);
+            }
+
+            var email = {
+                "html": message,
+                "text": message ,
+                "subject": "Interview Invitation",
+                "from_email": emailConfig.fromAddress,
+                "from_name": team.name,
+                "to": [{
+                    "email": applicantEmail,
+                    "name": applicantName,
+                    "type": "to"
+                }],
+                "headers": {
+                    "Reply-To": emailConfig.replyAddress
+                }
+            };
+            var title = 'Interview with ' + metadata.invitedName + '(Waiting)';
+            var contributor = [userID];
+
+            addEvent( title, time, contributor,  teamID, true, applicationID, application.flyerID, function(err, event) {
+
+                    BApplicantsResponses({applicationID:applicationID,request:message,text:message,event:event}).save( function(err,invitation) {
+
+                        /// /applicant/message/:messageType/:messageID
+                        var YESLink = emailConfig.returnBackHost +'/applicant/message/' + emailType + '/' + invitation._id + '?response=1';
+                        var NOLink = emailConfig.returnBackHost +'/applicant/message/' + emailType + '/' + invitation._id + '?response=0';
+                        var redButtonStyle = 'padding: 8px;background: rgb(220, 108, 108); margin: 8px; line-height: 4em;font-weight: 700;color: #fff; text-decoration: none;border-radius: 9px;';
+                        var greenButtonStyle = 'padding: 8px;background: rgb(81, 161, 80); margin: 8px; line-height: 4em;font-weight: 700;color: #fff; text-decoration: none;border-radius: 9px;';
+
+                        email.html += '<br/><br/><hr style="border-color: #000;">Your answer is: '+
+                            '<a style="' + greenButtonStyle + '" href="' + YESLink + '">Yes, I will come</a>'+
+                            '<a style="' + redButtonStyle + '" href="' + NOLink + '">No, I can\'t come</a>';
+
+                        mandrill_client.messages.send({"message": email, "async": false}, function(result) {
+                            /*Succeed*/
+                            callback(result,invitation._id);
+                        }, function(e) {
+                            /*Error*/
+                            callback(e,invitation._id);
+                        });
+
+                    });
+
+                });
+
+        });
+    });
+
+}
+
 app.post('/api/applications/:applicationID',  function(req,res) {
 
     if( !checkUser(req,res) )
@@ -167,155 +250,52 @@ app.post('/api/applications/:applicationID',  function(req,res) {
             data: req.body.data,
             timestamp: new Date()
         };
+        var newStage = {
+            stage: req.body.data.stage,
+            subStage: req.body.data.subStage,
+            invitedName: req.body.data.invitedName,
+            interviewDate: req.body.data.interviewDate,
+            interviewTeam: req.user.teamID,
+            interviewer: req.user._id
+        };
 
         if( req.body.activity == 0 ) { // Changing stage activity;
 
             // Inviting for an interview
             if( req.body.data.stage==2 && req.body.data.subStage==1 ) {
+                sendEmail(req.user._id, req.user.teamID, appID, req.body.data, 1, function(err,invitationID) {
 
-                BTeams.findOne({_id:req.user.teamID}, function(err,team){
+                    newStage.invitation = invitationID;
+                    newStage.invitedName = req.body.data.invitedName;
+                    newStage.interviewDate = req.body.data.interviewDate;
+                    newStage.interviewTeam = req.user.teamID;
+                    newStage.interviewer = req.user._id;
 
-                    var dt = req.body.data.interviewDate;
-                    // ToDo: Show interview date and time in better way
-
-                    var messageText = 'Dear ' + req.body.data.invitedName + ', <br>' +
-                        'You are invited for interviewing at <b id="time">' + dt + '</b><br/><br/>' +
-                        'Location:' + req.body.data.interviewLocation + '<br/><br/>' +
-                        'Let we know whether you will come or not.<br/><br/>' +
-                        'Sincerely<br/>' + team.name +
-                        '<script>var d="' + dt + '";$("#time").text( (new Date(d)).toLocaleString() )</script>';
-
-                    var emailBody = req.body.data.invitationMessage || '';
-                    var message = {
-                        "html": emailBody.replace('\n','<br/>'),
-                        "text": emailBody.replace('\n','\r\n') ,
-                        "subject": "Interview Invitation",
-                        "from_email": emailConfig.fromAddress,
-                        "from_name": team.name,
-                        "to": [{
-                            "email": req.body.data.invitedEmail,
-                            "name": req.body.data.invitedName,
-                            "type": "to"
-                        }],
-                        "headers": {
-                            "Reply-To": emailConfig.replyAddress
-                        }
-                    };
-
-                    var time = new Date(req.body.data.interviewDate);
-                    var title = 'Interview with ' + req.body.data.invitedName + '(Waiting)';
-                    var teamID = req.user.teamID;
-                    var contributor = [req.user._id];
-
-                    // 0- Add a temp event
-                    BApplications.findOne({_id:appID}, function(err,application){
-                        addEvent( title, time, contributor,  teamID, true, appID, application.flyerID, function(err, event) {
-
-                            // 1- Save invitation
-                            BApplicantsResponses({applicationID:appID,request:message,text:messageText,event:event}).save( function(err,invitation) {
-
-                                // 2- Send invitation email
-                                // ToDo: Change base url
-                                message.html += '<br/></br><a href="'+ req.headers.origin +'/applicant/message/view/1/' + invitation._id + '">Click here to response to invitation</a>';
-                                mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
-
-                                // 3- Save new stage
-                                var newStage = {
-                                    stage: req.body.data.stage,
-                                    subStage: req.body.data.subStage,
-                                    invitation: invitation._id,
-                                    invitedName: req.body.data.invitedName,
-                                    interviewDate: req.body.data.interviewDate,
-                                    interviewTeam: req.user.teamID,
-                                    interviewer: req.user._id
-                                };
-
-                                BApplications.update({_id:appID}, {stage:newStage}, function(err) {
-
-                                    // 4- Add new activity
-                                    addNewActivity(appID,activity, function() {
-                                        res.send(200);
-                                    });
-                                })
-                            });
-
-                        });
+                    BApplications.update({_id:appID}, {stage:newStage,$push:{activities:activity}}, function(err) {
+                        res.send(200);
                     })
-
                 });
-
             }
             // Job offer
             else if( req.body.data.stage==3 && req.body.data.subStage==1 ) {
+                sendEmail(req.user._id, req.user.teamID, appID, req.body.data, 2, function(err,invitationID) {
 
-                BTeams.findOne({_id:req.user.teamID}, function(err,team){
+                    newStage.invitation = invitationID;
 
-                    var messageText = 'Dear ' + req.body.data.offeredName + ', <br>' +
-                        'You are offered a job.<br/>' +
-                        'Let we know whether you will accept or not.<br/><br/>' +
-                        'Sincerely<br/>' + team.name;
-
-                    var emailBody = req.body.data.invitationMessage || '';
-                    var message = {
-                        "html": emailBody.replace('\n','<br/>'),
-                        "text": emailBody.replace('\n','\r\n') ,
-                        "subject": "Interview Invitation",
-                        "from_email": emailConfig.fromAddress,
-                        "from_name": team.name,
-                        "to": [{
-                            "email": req.body.data.invitedEmail,
-                            "name": req.body.data.invitedName,
-                            "type": "to"
-                        }],
-                        "headers": {
-                            "Reply-To": emailConfig.replyAddress
-                        }
-                    };
-
-                    // 1- Save invitation
-                    BApplicantsResponses({applicationID:appID,request:message,text:messageText}).save( function(err,invitation) {
-
-                        // 2- Send invitation email
-                        // ToDo: Change base url
-                        message.html += '<a href="' + req.headers.origin + '/applicant/message/view/2/' + invitation._id + '">Response to the offer</a>';
-                        mandrill_client.messages.send({"message": message, "async": false}, function(result) {/*Succeed*/ }, function(e) {/*Error*/});
-
-                        // 3- Save new stage
-                        var newStage = {
-                            stage: req.body.data.stage,
-                            subStage: req.body.data.subStage
-                        };
-
-                        BApplications.update({_id:appID}, {stage:newStage}, function(err) {
-
-                            // 4- Add new activity
-                            addNewActivity(appID,activity, function() {
-                                res.send(200)
-                            });
-                        })
-                    });
-                });
-
+                    BApplications.update({_id:appID}, {stage:newStage,$push:{activities:activity}}, function(err) {
+                        callback(err);
+                    })
+                })
             }
             else {
-                var newStage = {
-                    stage: req.body.data.stage,
-                    subStage: req.body.data.subStage
-                };
-                BApplications.update({_id:appID}, {stage:newStage}, function(err) {
-                    addNewActivity(appID,activity, function() {
-                        res.send(200)
-                    });
+                BApplications.update({_id:appID}, {stage:newStage,$push:{activities:activity}}, function(err) {
+                    res.send(200);
                 })
             }
         }
         else { // General Activities
-            addNewActivity(appID,activity);
-        }
-
-        function addNewActivity(applicationID,activity,callback) {
-            BApplications.update({_id:applicationID}, { $push:{activities:activity} }, function(err) {
-                callback(err);
+            BApplications.update({_id:appID}, {$push:{activities:activity}}, function(err) {
+                res.send(200);
             })
         }
     }

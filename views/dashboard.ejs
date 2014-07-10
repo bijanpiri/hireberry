@@ -850,8 +850,14 @@
         <div class="control-group">
             <label class="control-label" for="invitationNote">Note</label>
             <div class="controls">
-                <textarea class="offerMessage" rows="5" placeholder="Enter message here" name="note"></textarea>
+                <textarea class="offerMessage" rows="10" style="width:320px;placeholder="Enter message here" name="note"></textarea>
             </div>
+        </div>
+        <div style="font-size: 1.2em;">
+            <strong>Tips:</strong> Use this terms in email text and they will be replaced with correct value:<br/>
+            {{applicant-name}} for applicant name<br/>
+            {{job-title}} for job title<br/>
+            {{team-name}} for team name<br/>
         </div>
     </div>
     <div class="modal-footer">
@@ -899,8 +905,16 @@
         <div class="control-group">
             <label class="control-label" for="invitationNote">Note</label>
             <div class="controls">
-                <textarea class="invitationMessage" rows="5" placeholder="Enter message here" name="note"></textarea>
+                <textarea class="invitationMessage" style="width:320px" rows="10" placeholder="Enter message here" name="note"></textarea>
             </div>
+        </div>
+        <div style="font-size: 1.2em;">
+            <strong>Tips:</strong> Use this terms in email text and they will be replaced with correct value:<br/>
+            {{applicant-name}} for applicant name<br/>
+            {{interview-date}} for interview date and time<br/>
+            {{interview-location}} for interview location<br/>
+            {{job-title}} for job title<br/>
+            {{team-name}} for team name<br/>
         </div>
     </div>
     <div class="modal-footer">

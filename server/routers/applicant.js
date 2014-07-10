@@ -391,13 +391,19 @@ app.get('/applicant/message/view/:messageType/:messageID', function (req,res){
 });
 
 // Save response of applicant
-app.post('/applicant/message/:messageType/:messageID', function (req,res){
+app.get('/applicant/message/:messageType/:messageID', function (req,res){
 
     var messageID = req.params.messageID;
     var messageType = req.params.messageType.toLowerCase();
-    var response = req.body.response;
+    var response = req.query.response;
 
-    BApplicantsResponses.update({_id:messageID},{response:response}, function(err){
+    BApplicantsResponses.update({_id:messageID,response:{$exists:false}},{response:response}, function(err,count){
+
+        if( err)
+            return res.send(403);
+
+        if(count == 0)
+            return res.render('applicant.ejs');
 
         // Move application to next stage (response is received)
         BApplicantsResponses.findOne({_id:messageID}).populate('applicationID').exec( function(err,message){
@@ -405,9 +411,9 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
             var newStage = {};
 
             if( messageType==='1' ) { // Interview invitation
-                    newStage = ( response==="YES") ? {stage:2,subStage:3} : {stage:2,subStage:2}
+                    newStage = ( response==="1") ? {stage:2,subStage:3} : {stage:2,subStage:2};
 
-                if( response==="YES" ){
+                if( response==="1" ){
                     updateEvent(message.event,
                         'Interview with ' + message.applicationID.stage.invitedName,
                         message.applicationID.stage.interviewDate,
@@ -423,9 +429,9 @@ app.post('/applicant/message/:messageType/:messageID', function (req,res){
                 }
             }
             else if(messageType==='2' ) { // Job offer
-                newStage = ( response==="YES") ? {stage:3,subStage:2} : {stage:3,subStage:3}
+                newStage = ( response==="1") ? {stage:3,subStage:2} : {stage:3,subStage:3}
 
-                if( response==="YES" ){
+                if( response==="1" ){
                     // ToDo: Notify responder & HM
                 }
             }

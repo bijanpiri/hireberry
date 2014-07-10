@@ -494,6 +494,7 @@ function initWorkflow(candidateObj,candidate) {
         var modal = $('#interview-invitation-dialog');
         modal.find('.emailAddress').val( candidate.email || '' );
         modal.find('.interviewLocation').val( $('.teamAddress').text() );
+        modal.find('.invitationMessage').val('Dear {{applicant-name}}\r\nWe like to schedule an interview on {{interview-date}} with you for "{{job-title}}" position. The location is {{interview-location}}.\r\n\r\nSincerely,\r\n{{team-name}}');
 
         modal.find('.sendButton').unbind('click').click( function() {
             var selectedDate = modal.find('#interviewDateTime input').val();
@@ -517,6 +518,7 @@ function initWorkflow(candidateObj,candidate) {
         // Prepare job offer modal and show it
         var modal = $('#job-offer-dialog');
         modal.find('.emailAddress').val( candidate.email || '' );
+        modal.find('.offerMessage').val('Dear {{applicant-name}}\r\nWe like to offer you "{{job-title}}" position.\r\nLet we know whether you are interested or not.\r\n\r\nSincerely,\r\n{{team-name}}');
         modal.find('.sendButton').unbind('click').click( function() {
             gotoNewStage(3,1,{
                 offeredEmail: modal.find('.emailAddress').val(),
