@@ -46,14 +46,11 @@
     display: none;
 }
 
-
-
 .bool-sidebar-header{
     font-size: 18px;
     font-weight: bold;
     text-align: center;
     color: #ffffff;
-    display: none;
 }
 
 .bool-pure-btn,
@@ -68,7 +65,7 @@
 }
 .bool-btn-back-to-widgets{
     margin-left: 10px;
-    line-height: 46px;
+    line-height: 36px;
 }
 .bool-widget-btn{
     text-align: left;
@@ -323,8 +320,7 @@ input.bool-option-search{
     background: none;
     width: 220px;
     margin-bottom: 16px;
-    min-height: 100px;
-    max-height: 200px;
+
 }
 .bool-commentator-users >li {
     background:#7F7F80 ;

@@ -26,7 +26,7 @@ $(function() {
         .slimScroll({height: '100%'});
 
     $('.slimScrollDiv')
-        .css('position','static')
+//        .css('position','static')
         .bind('mousewheel',
         function(e){
             $(this).find('.bool-color-chooser .btn-group').removeClass('open');
