@@ -12,7 +12,6 @@
 
         .box {
             background-color: #FFFFFF;
-            display: none;
             padding: 20px 40px;
             box-shadow: 1px 1px 5px #B3B3B3;
             border-radius: 7px;
@@ -52,30 +51,18 @@
     </style>
 </head>
 <body>
-<div class="box interview" hidden>
-    <div class="title">Invitation</div>
+<div class="box interview">
+    <div class="title">Thanks</div>
     <div class="body">
         <div class="message">
-            <p class="invitationText" style="text-align: left;line-height: 1.5em;"></p>
+            <p class="invitationText" style="text-align: center;line-height: 1.5em;">
+                Your response is sent.
+            </p>
         </div>
 
     </div>
     <div class="actions">
-        <button class="interview_yesButton btn btn-success">I Will Come</button>
-        <button class="interview_noButton btn btn-danger">I Can't Come</button>
-    </div>
-</div>
-
-<div class="box offer" hidden>
-    <div class="title">Job Offer</div>
-    <div class="body">
-        <div class="message">
-            <p class="invitationText" style="text-align: left;line-height: 1.5em;"></p>
-        </div>
-    </div>
-    <div class="actions">
-        <button class="interview_yesButton btn btn-success">Accept</button>
-        <button class="interview_noButton btn btn-danger">Decline</button>
+        <button class="close-button btn btn-success">Close</button>
     </div>
 </div>
 
@@ -84,30 +71,13 @@
 </div>
 
 <script>
-    var messageType = '<%= messageType %>';
-    var messageID = '<%= messageID %>';
-
     $( function() {
-        if( messageType === '1' )
-            $('.interview').show();
-        else if(messageType === '2' )
-            $('.offer').show();
+        $('.close-button').click( function() {
+            //window.open('', 'mywin','left=20,top=20,width=500,height=300,toolbar=1,resizable=0');
+            close();
+        });
 
-        $('.interview_yesButton').click( function() {
-            $.post('/applicant/message/' + messageType + '/' + messageID,{response:'YES'}).done( function() {
-                window.close();
-            });
-        })
 
-        $('.interview_noButton').click( function() {
-            $.post('/applicant/message/' + messageType + '/' +  messageID,{response:'NO'}).done( function() {
-                window.close();
-            });;
-        })
-
-        var msg = '<%=messageText%>';
-        msg = msg.replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-        $('.invitationText').html(msg);
     })
 
 </script>
