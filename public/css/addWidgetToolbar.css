@@ -42,7 +42,7 @@
     position: absolute;
     left: 240px;
     top: 0;
-    bottom:220px;
+    bottom: 160px;
     display: none;
 }
 
@@ -420,7 +420,7 @@ input.bool-option-search{
     font-weight: normal;
     margin: -1px;
 }
-.bool-color-chooser .btn-group{
-    position: absolute;
-    right: 0;
+.bool-option-item .btn-group{
+    position: static;
+    /*right: 0;*/
 }

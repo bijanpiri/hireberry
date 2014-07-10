@@ -19,14 +19,18 @@ var Picture;
 
 $(function() {
     //$(document).tooltip();
-    $('.bool-toolbar-container')
-        .slimScroll({height: '100%'})
-        .bind('slimscroll', function(e, pos){
-            console.log("Reached " + pos);
-        });
     $('.bool-add-widget')
         .slimScroll({height:'100%'});
-    $('.slimScrollDiv').css('position','static');
+
+    $('.bool-toolbar-container')
+        .slimScroll({height: '100%'});
+
+    $('.slimScrollDiv')
+        .css('position','static')
+        .bind('mousewheel',
+        function(e){
+            $(this).find('.bool-color-chooser .btn-group').removeClass('open');
+    });
 
     $('[data-toggle="popover"]').popover();
 

@@ -32,6 +32,13 @@ $.fn.ColorPicker=function(callback){
 
         var cp=part.find('.bool-color-list');
         $(this).empty().append(part);
+        part.find('.bool-btn').click(function(){
+            var $parent=$(this).parent();
+            var offset = $parent.css('position')==='static' ? $parent.offset().top :  0;
+            part.find('.bool-color-list').css('top',offset);
+
+        });
+
         colors.forEach(function(c){
             $(cp).addClass('bool-color-picker')
                 .append(
@@ -45,7 +52,7 @@ $.fn.ColorPicker=function(callback){
 
                 );
 
-        })
+        });
         function colorSelected(){
             var c=$(this)
                 .children('.bool-color-item')
