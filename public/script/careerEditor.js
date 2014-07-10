@@ -57,6 +57,11 @@ $(function() {
         loadFlyer();
     }
 
+    // if it is in iframe so remove margins of editor mode
+    if(self!=top){
+        $('.bool-flyer-editor').css('margin','0');
+    }
+
     loadingPositions();
 });
 
@@ -170,7 +175,7 @@ function GoToViewMode() {
     saveFlyer( function(saveSuccessfuly) {
         var flyerid = $('input[name=flyerid]').val();
         var iframe = $('<iframe>')
-            .attr('src','/viwe/careerpage/' + teamID)
+            .attr('src','/view/careerpage/' + teamID)
             .attr('frameborder','0')
             .attr('width','100%')
             .attr('scrolling','no')
