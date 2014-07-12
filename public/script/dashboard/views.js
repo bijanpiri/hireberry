@@ -117,7 +117,7 @@ BApplicationsView = Backbone.View.extend({
                 GAEvent('Dashboard','Applications','Stage Filter - ' + $(this).attr('for') );
             });
 
-        if( candidates.length == 0 ){
+        if( this.model.get('noneFilterCandidatesCount') == 0 ){
             $('#applicationsp > div').hide();
             $('.applications-empty-state').show();
         } else {
