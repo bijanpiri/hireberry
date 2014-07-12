@@ -240,7 +240,7 @@ function initNotificationCenter() {
 
             var titleObj = $('<div>')
                 .append( applicantObj )
-                .append(' responded: ' + response.response);
+                .append(' responded: ' + (response.response==1?'Yes':'No'));
 
             var closeButtonObj = $('<button>')
                 .addClass('close')

@@ -16,7 +16,7 @@ app.get('/api/applications', function (req,res) {
 
     if( query ) {
         query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
-        query = query ? '(' + req.query.q.trim().replace(/ +/g,')|(') + ')' : ''; // Ask bijan about this line!
+        query = query ? '(' + req.query.q.trim().replace(/ +/g,')|(') + ')' : ''; // Do you have any question about this line? Ask bijan!
     }
 
     var sortBy = {applyTime:+1};
@@ -87,7 +87,12 @@ app.get('/api/applications', function (req,res) {
                     submittedForms.push( {appID:form._id, stage:form.stage} );
                 }
 
-                return res.send({candidates:submittedForms});
+                BApplications.count({flyerID:{$in:flyersID}}, function(err,count) {
+                    return res.send({
+                        noneFilterCandidatesCount: count,
+                        candidates:submittedForms
+                    });
+                });
             })
     }
 
