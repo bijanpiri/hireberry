@@ -46,7 +46,7 @@ $(function() {
     });
     $('.bool-toolbar-btn-preview').click(function(){
         GAEvent('Editor','To Preview Mode','');
-        GoToViewMode();
+        GoToViewMode(true);
     });
 
     $('.bool-btn-more-options').click( function() {
@@ -512,11 +512,12 @@ function GoToEditMode() {
 
 };
 
-function GoToViewMode() {
+function GoToViewMode(preview) {
 
-    var height = $('#portletsBox').height();
+    var height = $('.flyerRow').height();
 
-    $(document.body).removeClass('bool-edit-mode')
+    $(document.body).removeClass('bool-edit-mode');
+    $(document.body).addClass('hb-preview-mode');
 
     showLoading();
 
@@ -531,7 +532,7 @@ function GoToViewMode() {
             .attr('frameborder','0')
             .attr('width','100%')
             .attr('scrolling','no')
-            .attr('height', height +100)
+            .attr('height', height +400)
             .attr('hidden','hidden')
             .load( function() {
 

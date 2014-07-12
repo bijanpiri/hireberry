@@ -175,7 +175,7 @@ function GoToEditMode() {
 
 function GoToViewMode() {
 
-    var height = $('#portletsBox').height();
+    var height = $('.flyerRow').height();
 
     $(document.body).removeClass('bool-edit-mode')
 
@@ -192,7 +192,7 @@ function GoToViewMode() {
             .attr('frameborder','0')
             .attr('width','100%')
             .attr('scrolling','no')
-            .attr('height', height +150)
+            .attr('height', height +300)
             .attr('hidden','hidden')
             .load( function() {
 
