@@ -346,7 +346,7 @@ function loadFlyer() {
                     select:function(event,ui){
                         var exist= $.grep($('.bool-commentator-users>li'),
                             function(item,index){
-                                return ui.item.id===$(item).data('commentator')._id;
+                                return ui.item._id===$(item).data('commentator')._id;
                             }
                         );
                         if(exist.length>0) {
