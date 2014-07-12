@@ -25,8 +25,8 @@ $(function() {
     $('.bool-toolbar-container')
         .slimScroll({height: '100%'});
 
+    //because color picker remain open when user scroll in page, we close it when user start scroll
     $('.slimScrollDiv')
-//        .css('position','static')
         .bind('mousewheel',
         function(e){
             $(this).find('.bool-color-chooser .btn-group').removeClass('open');

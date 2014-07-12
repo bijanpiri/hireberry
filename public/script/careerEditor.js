@@ -19,7 +19,9 @@ var teamMembers = [];
 }());
 
 $(function() {
-
+    $('.bool-add-widget')
+        .slimScroll({height:'100%'});
+    $('[data-toggle="popover"]').popover();
     $('.bool-color-chooser-canvas').ColorPicker(function(c){
         $('.bool-portlet').css('background',c);
     });

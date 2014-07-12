@@ -39,7 +39,6 @@
 
 <script src="/script/Widgets/common.js"></script>
 <script src="/script/Widgets/ColorPicker.js"></script>
-<script src="/script/scrollable.js"></script>
 <script src="/script/jquery.collapsible.js"></script>
 <script src="/script/Widgets/Widget.js"></script>
 <script src="/script/Widgets/TextWidget.js"></script>
@@ -68,6 +67,7 @@
 <script src="/script/jribbble.js"></script>
 <script src="/jquery-ui/js/jquery.ui.touch-punch.min.js"></script>
 <script src="/script/careerEditor.js"></script>
+<script type="text/javascript" src="/script/jquery.slimscroll.js"></script>
 
 <style>
     .header {
@@ -883,43 +883,76 @@
         <h2 class="bool-sidebar-header">Content Types</h2>
         <div data-role="scrollable" class="bool-scrollable" id='widgetButtons' data-margin="40">
         <!--<div >-->
-            <div class="btn icon-arrow-up" data-scroll="up" style="display: block;margin: 0 10px"></div>
             <ul class="bool-add-widget" data-list>
                 <li class="bool-widget-btn" type="1">
                     <i class="bool-widget-icon bool-widget-icon-text"></i>
                     Text
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Text Widget"
+                            data-content="Suitable for company and job description">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn" type="2">
                     <i class="bool-widget-icon bool-widget-icon-picture"></i>
                     Picture
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Picture Widget"
+                            data-content="e.g. Image of company, workplace or product.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
                 </li>
                 <li class="bool-widget-btn" type="3">
                     <i class="bool-widget-icon bool-widget-icon-video"></i>
                     Video
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Video Widget"
+                            data-content="e.g. Introduce your company, activities, product or team.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
                 </li>
                 <li class="bool-widget-btn " type="6" >
                     <i class="bool-widget-icon bool-widget-icon-map"></i>
                     Map
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Map Widget"
+                            data-content="Indicate company or work location.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="7" >
                     <i class="bool-widget-icon bool-widget-icon-perk"></i>
                     Perks
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Perks Widget"
+                            data-content="Encourage talents by perks of working with you.">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
                 <li class="bool-widget-btn " type="13" >
                     <i class="bool-widget-icon bool-widget-icon-separator"></i>
                     Separator
-                    <i class="bool-widget-icon bool-icon-move"></i>
+                    <button type="button"
+
+                            class="popover-btn" data-toggle="popover"
+                            data-trigger="hover" title="Separator Widget"
+                            data-content="Divides to sections by line or title">
+                        <i style="color:black;" class="icon-info-sign"></i>
+                    </button>
+
                 </li>
 
             </ul>
-            <div class="btn icon-arrow-down" data-scroll="down"
-                 style="display: block;margin: 5px 10px 0;">
-            </div>
 
             <ul class="bool-toolbar-options">
             <li class="bool-option-item">
