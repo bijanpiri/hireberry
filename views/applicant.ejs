@@ -19,10 +19,10 @@
             margin: auto;
             left: 0;
             right: 0;
-            width: 40%;
+            width: 300px;
             top: 0;
             bottom: 0;
-            height: 80%;
+            height: 200px;
             text-align: center;
             font-size: 1.5em;
         }
@@ -74,7 +74,7 @@
     $( function() {
         $('.close-button').click( function() {
             //window.open('', 'mywin','left=20,top=20,width=500,height=300,toolbar=1,resizable=0');
-            close();
+            open(location, '_self').close();
         });
 
 

@@ -130,15 +130,18 @@ function sendEmail(userID,teamID,applicationID,metadata,emailType,callback) {
             var message;
             var applicantName;
             var applicantEmail;
+            var answersText = [];
             if( emailType==1 ) {
                 message = metadata.invitationMessage
                 applicantName = metadata.invitedName;
                 applicantEmail = metadata.invitedEmail;
+                answersText = ['Yes, I will com', 'No, I can\'t come'];
             }
             else if( emailType==2 ) {
                 message = metadata.offerMessage;
                 applicantName = metadata.offeredName;
                 applicantEmail = metadata.offeredEmail
+                answersText = ['Yes, I am', 'No, I am not'];
             }
             // ToDo: Show interview date and time in better way
 
@@ -183,8 +186,8 @@ function sendEmail(userID,teamID,applicationID,metadata,emailType,callback) {
                         var greenButtonStyle = 'padding: 8px;background: rgb(81, 161, 80); margin: 8px; line-height: 4em;font-weight: 700;color: #fff; text-decoration: none;border-radius: 9px;';
 
                         email.html += '<br/><br/><hr style="border-color: #000;">Your answer is: '+
-                            '<a style="' + greenButtonStyle + '" href="' + YESLink + '">Yes, I will come</a>'+
-                            '<a style="' + redButtonStyle + '" href="' + NOLink + '">No, I can\'t come</a>';
+                            '<a style="' + greenButtonStyle + '" href="' + YESLink + '">' + answersText[0] + '</a>'+
+                            '<a style="' + redButtonStyle + '" href="' + NOLink + '">' + answersText[1] + '</a>';
 
                         mandrill_client.messages.send({"message": email, "async": false}, function(result) {
                             /*Succeed*/
@@ -272,7 +275,7 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                     newStage.interviewer = req.user._id;
 
                     BApplications.update({_id:appID}, {stage:newStage,$push:{activities:activity}}, function(err) {
-                        res.send(200);
+                        return res.send(200);
                     })
                 });
             }
@@ -283,19 +286,19 @@ app.post('/api/applications/:applicationID',  function(req,res) {
                     newStage.invitation = invitationID;
 
                     BApplications.update({_id:appID}, {stage:newStage,$push:{activities:activity}}, function(err) {
-                        callback(err);
+                        return res.send(200);
                     })
                 })
             }
             else {
                 BApplications.update({_id:appID}, {stage:newStage,$push:{activities:activity}}, function(err) {
-                    res.send(200);
+                    return res.send(200);
                 })
             }
         }
         else { // General Activities
             BApplications.update({_id:appID}, {$push:{activities:activity}}, function(err) {
-                res.send(200);
+                return res.send(200);
             })
         }
     }
