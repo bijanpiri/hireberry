@@ -202,7 +202,7 @@ inviteToTeam=function( invitedEmail, teamID, note, callback ) {
 }
 
 addApplyByEmailRouter=function(flyerID,callback){
-    var domain = "ats.booltin.com";
+    var domain = "mail.hireberry.com";
     var pattern = flyerID;
     var url = "http://booltin.herokuapp.com/api/applications/applyByEmail/" + flyerID;
 
