@@ -12,6 +12,53 @@ app.get('/', function(req,res) {
     else
         res.redirect('/LandingPage.html');
 });
+
+app.get('/adminlogin', function(req,res) {
+        res.redirect('/AdminLoginPage.html');
+});
+app.post('/admin', function(req,res) {
+
+
+
+        //res.redirect('/dashboard/promotepanel',{username:req.body.username},{password:req.body.password});
+         var salt = crypto.randomBytes(128).toString('base64');
+         var keySize=512;
+         var hashIteration=1;
+         var pwd="123456"
+         crypto.pbkdf2( pwd, salt, hashIteration, keySize,
+         function(err, dk) {
+
+
+         });
+
+       /* var JobBoardPrice ={ "github":450,"stack overflow":350,"dribbble":325,"behance":199,"indeed":1,"linkedin":195};
+        for (var key in JobBoardPrice) {
+            BJobBoardPrice(
+                {
+                    name: key,
+                    price:JobBoardPrice[key]
+                }).save(function(err,data){
+
+                });
+        }*/
+
+        if( req.body.username=="hope" && req.body.password=="123456")
+        {
+            res.render("promotePanel.ejs",{
+                title:"Promote Panel"
+            });
+
+        }
+        else
+        {
+            res.send(400,"Login faild.");
+        }
+
+
+
+
+});
+
 // endregion
 
 // region Setting

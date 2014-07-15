@@ -335,8 +335,7 @@
 </script>
 
 <script>
-
-var JobBoardPrice ={ "github":450,"stack overflow":350,"dribbble":325,"behance":199,"indeed":1,"linkedin":195};
+var JobBoardPrice =undefined;
 var flyerID='<%= FlyerID %>';
 var jobLink='<%= JobLink %>';
 var address='<%= Address %>';
@@ -349,6 +348,19 @@ var companyName='';
 var teamID='';
 
 $(document).ready( function() {
+
+    $.ajax({
+        url:'/jbprice',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            JobBoardPrice=data;
+        }
+    })
+            .fail(function(data) {
+                alert(data);
+            });
+
 
     $("#ppanel").click(function(e)
     {
@@ -499,80 +511,90 @@ $(document).ready( function() {
 
     $("#btn-promote-payment").click(function() {
 
-        var ml = $('#payment-action-dialog');
-        ml.find("#error-msg").text("");
+
         getSelectedJobBoardInfo(function(info)
         {
             var rst=info.PaymentInfo;
-            $.ajax({
-                url:'/flyer/submitpromote',
-                type: 'POST',
-                dataType: 'json',
-                data :
-                {
-                    flyerID:flyerID,
-                    teamID:teamID,
-                    jobBoardInfo:rst
-                },
-                success: function(data) {
+            var ml = $('#payment-action-dialog');
+            ml.find("#error-msg").text("");
 
-                    var ml = $('#payment-action-dialog');
-                    ml.find('.container-fluid').empty();
-                    for(var i=0;i<rst.SelectedJobBoards.length;i++)
+            if(rst.SelectedJobBoards.length>0)
+            {
+                $.ajax({
+                    url:'/flyer/submitpromote',
+                    type: 'POST',
+                    dataType: 'json',
+                    data :
                     {
-                        ml.find('.container-fluid').append($('<span>').text(rst.SelectedJobBoards[i].Name));
-                        ml.find('.container-fluid').append($('<p>').text("$ "+rst.SelectedJobBoards[i].Price  ));
-                        ml.find('.container-fluid').append( $('<hr>'));
-                    }
-                    ml.find('.container-fluid').append($('<span>').text("Total"));
-                    ml.find('.container-fluid').append($('<p>').text("$ "+rst.TotalPayment ));
+                        flyerID:flyerID,
+                        teamID:teamID,
+                        jobBoardInfo:rst
+                    },
+                    success: function(data) {
 
-                    ml.modal();
-                    ml.find('.modal-footer').empty();
-                    ml.find('.modal-footer').append($('<button>')
-                            .addClass("btn btn-primary")
-                            .attr('data-dismiss','modal')
-                            .attr('aria-hidden','true').text("Cancel"));
-                    ml.find('.modal-footer').append($('<button>')
-                            .addClass("btn btn-primary")
-                            .attr('data-dismiss','modal')
-                            .attr('aria-hidden','true').text("Confirm").click(function()
-                            {
-                                // $(this).attr("disabled","disabled");
-                                 $("#btn-promote-payment").attr("disabled", "disabled");
-                                $.ajax({
-                                    url:'/flyer/confirmpromote',
-                                    type: 'POST',
-
-                                    dataType: 'json',
-                                    data :
-                                    {
-                                        flyerID:flyerID,
-                                        teamID:teamID,
-                                        jobBoardInfo:info
-                                    },
-                                    success: function(data) {
-                                        window.location='/pay?amount='+rst.TotalPayment+"&jbp=1";
-                                    }
-                                })
-
-                            }));
-                }
-            })
-                    .fail(function(data) {
 
                         var ml = $('#payment-action-dialog');
                         ml.find('.container-fluid').empty();
-                        ml.find('.container-fluid').append($('<span>').text("Message"));
-                        ml.find('.container-fluid').append($('<p>').text(data.responseText));
+                        for(var i=0;i<data.SelectedJobBoards.length;i++)
+                        {
+                            ml.find('.container-fluid').append($('<span>').text(data.SelectedJobBoards[i].Name));
+                            ml.find('.container-fluid').append($('<p>').text("$ "+data.SelectedJobBoards[i].Price  ));
+                            ml.find('.container-fluid').append( $('<hr>'));
+                        }
+                        ml.find('.container-fluid').append($('<span>').text("Total"));
+                        ml.find('.container-fluid').append($('<p>').text("$ "+data.TotalPayment ));
+
+                        ml.modal();
                         ml.find('.modal-footer').empty();
                         ml.find('.modal-footer').append($('<button>')
                                 .addClass("btn btn-primary")
                                 .attr('data-dismiss','modal')
-                                .attr('aria-hidden','true').text("Close"));
-                        ml.modal();
-                    });
+                                .attr('aria-hidden','true').text("Cancel"));
+                        ml.find('.modal-footer').append($('<button>')
+                                .addClass("btn btn-primary")
+                                .attr('data-dismiss','modal')
+                                .attr('aria-hidden','true').text("Confirm").click(function()
+                                {
+                                    // $(this).attr("disabled","disabled");
+                                     $("#btn-promote-payment").attr("disabled", "disabled");
+                                    $.ajax({
+                                        url:'/flyer/confirmpromote',
+                                        type: 'POST',
 
+                                        dataType: 'json',
+                                        data :
+                                        {
+                                            flyerID:flyerID,
+                                            teamID:teamID,
+                                            jobBoardInfo:info
+                                        },
+                                        success: function(result) {
+                                            window.location='/pay?amount='+result.TotalPayment+"&jbp=1";
+                                        }
+                                    })
+
+                                }));
+                    }
+                })
+                        .fail(function(data) {
+
+                            var ml = $('#payment-action-dialog');
+                            ml.find('.container-fluid').empty();
+                            ml.find('.container-fluid').append($('<span>').text("Message"));
+                            ml.find('.container-fluid').append($('<p>').text(data.responseText));
+                            ml.find('.modal-footer').empty();
+                            ml.find('.modal-footer').append($('<button>')
+                                    .addClass("btn btn-primary")
+                                    .attr('data-dismiss','modal')
+                                    .attr('aria-hidden','true').text("Close"));
+                            ml.modal();
+                        });
+            }
+            else
+            {
+                var ml = $('#alert-payment-dialog');
+                ml.modal();
+            }
         }); //end getSelectedJobBoardInfo
 
     });
@@ -581,7 +603,7 @@ $(document).ready( function() {
     {
         var chbxs=$(".job-boards").find(":input[type=checkbox]");
         var selectedInfo=new Object();
-        selectedInfo.TotalPayment=0.0;
+        //selectedInfo.TotalPayment=0.0;
         selectedInfo.SelectedJobBoards=new Array();
         $.each(chbxs, function(i)
         {
@@ -591,7 +613,7 @@ $(document).ready( function() {
                 jbInfo.Price=JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
                 jbInfo.Name=$(chbxs[i]).attr("title");
                 selectedInfo.SelectedJobBoards.push(jbInfo);
-                selectedInfo.TotalPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+                //selectedInfo.TotalPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
             }
         });
         callback(selectedInfo);
@@ -847,6 +869,23 @@ $(document).ready( function() {
 
 
 <!-------------------------------------Dialogs ------------------------------------------------------>
+
+<div id="alert-payment-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="header-label">Error</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <p style="font-size: 1.3em"> You must be select at least one job board. </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+           <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
 
 <div id="payment-action-dialog" class="modal hide fade no-border-box" tabindex="-1" role="dialog" aria-labelledby="invitationSetLabel"
      aria-hidden="true">

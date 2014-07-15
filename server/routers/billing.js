@@ -68,7 +68,7 @@ app.get('/api/billing', function(req,res) {
 app.get('/paypal', function(req,res) {
     var transactionID = req.query.tid;
     var ECToken = req.query.token;
-    var success = req.query.success;
+    var success = req.query.success;//todo success remove from query
     var prayerID = req.query.PayerID;
 
     BTransactions.findOne({_id:transactionID}, function(err,transaction) {
@@ -80,78 +80,78 @@ app.get('/paypal', function(req,res) {
                 var execute_payment_details = { "payer_id": prayerID };
                 paypal_api.payment.execute( transaction.PAYToken, execute_payment_details, function(error, payment){
                     BTransactions.findOne({_id:transactionID}, function(er,rst){
-                    if(rst.paymentType=="promotepay")
-                    {
-                        //redirect promote info
-                        if(error){          //Level 1 error
-                            console.error(error);
-                            res.redirect('/paypromote?result=0');
-
-                        }  else if(er)    //Level 2 error
+                        if(rst.paymentType=="promotepay")
                         {
-                            console.error(er);
-                            res.redirect('/paypromote?result=0');
+                            //redirect promote info
+                            if(error){          //Level 1 error
+                                console.error(error);
+                                res.redirect('/paypromote?result=0');
+
+                            }  else if(er)    //Level 2 error
+                            {
+                                console.error(er);
+                                res.redirect('/paypromote?result=0');
+                            }
+                            else {
+                                BTransactions.update({_id:transactionID},{state: 'sold',payer: payment.payer,paymentTime: payment.update_time},
+                                    function(err){
+                                        if(err)
+                                            console.error(err); //toDo transaction (rollback)
+                                        else
+                                        {
+                                            //--------------------- Sending email ---------------------
+                                            var emailConfig = {
+                                                from: "Hireberry",
+                                                fromAddress: "job@hireberry.com",
+                                                replyAddress: "reply@hireberry.com"
+                                            };
+                                            var message = {
+                                                "html": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
+                                                "text": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
+                                                "subject": "Promoting Job",
+                                                "from_email": emailConfig.fromAddress,
+                                                "from_name": emailConfig.from,
+                                                "to": [{
+                                                    "email": "hossein.pejman@yahoo.com",
+                                                    "name": '',
+                                                    "type": "to"
+                                                }],
+                                                "headers": {
+                                                    "Reply-To": emailConfig.replyAddress
+                                                }
+                                            };
+
+                                            mandrill_client.messages.send({"message": message, "async": false},
+                                                function(result) {/*Sucess*/},
+                                                function(e) { /*Error*/});
+                                            //---------------------------------------------------------
+                                            console.log(payment);
+                                            res.redirect('/paypromote?result=1');
+                                        }
+                                });
+                            }  //end if(rst.paymentType=="promotepay")
                         }
-                        else {
-                            BTransactions.update({_id:transactionID},{state: 'sold',payer: payment.payer,paymentTime: payment.update_time},
-                                function(err){
+                        else
+                        {
+                            if(error){
+                                console.error(error);
+                                res.redirect('/dashboard#billing');
+                            } else {
+
+                                BTransactions.update({_id:transactionID},{
+                                    state: 'sold',
+                                    payer: payment.payer,
+                                    paymentTime: payment.update_time
+                                }, function(err){
                                     if(err)
                                         console.error(err);
                                     else
                                     {
-                                        //--------------------- Sending email ---------------------
-                                        var emailConfig = {
-                                            from: "Hireberry",
-                                            fromAddress: "job@hireberry.com",
-                                            replyAddress: "reply@hireberry.com"
-                                        };
-                                        var message = {
-                                            "html": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
-                                            "text": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
-                                            "subject": "Promoting Job",
-                                            "from_email": emailConfig.fromAddress,
-                                            "from_name": emailConfig.from,
-                                            "to": [{
-                                                "email": "hossein.pejman@yahoo.com",
-                                                "name": '',
-                                                "type": "to"
-                                            }],
-                                            "headers": {
-                                                "Reply-To": emailConfig.replyAddress
-                                            }
-                                        };
-
-                                        mandrill_client.messages.send({"message": message, "async": false},
-                                            function(result) {/*Sucess*/},
-                                            function(e) { /*Error*/});
-                                        //---------------------------------------------------------
                                         console.log(payment);
-                                        res.redirect('/paypromote?result=1');
+                                        res.redirect('/dashboard#billing');
                                     }
-                            });
-                        }  //end if(rst.paymentType=="promotepay")
-                    }
-                    else
-                    {
-                        if(error){
-                            console.error(error);
-                            res.redirect('/dashboard#billing');
-                        } else {
-
-                            BTransactions.update({_id:transactionID},{
-                                state: 'sold',
-                                payer: payment.payer,
-                                paymentTime: payment.update_time
-                            }, function(err){
-                                if(err)
-                                    console.error(err);
-                                else
-                                {
-                                    console.log(payment);
-                                    res.redirect('/dashboard#billing');
-                                }
-                            });
-                        }
+                                });
+                            }
                     }
                     });  //end BTransactions.findOne({_id:transactionID}, function(er,rst)
                 });  //end Paypal execute

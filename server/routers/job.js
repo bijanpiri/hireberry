@@ -2,6 +2,72 @@
  * Created by Bijan on 04/29/2014.
  */
 
+var addJobBoardPrice=function(name,price)
+{
+    BJobBoardPrice(
+        {
+            name: name,
+            price:price
+        }).save(function(err,data){
+            if(err)
+                res.send(502,{error:err});
+            else
+                res.send(200,{message:"Process successfully done."});
+
+        });
+}
+
+var getJobBoardPrice=function(name,callback)
+{
+    if(name)
+    {
+        BJobBoardPrice.findOne({name:name},function(er,rst)
+        {
+            var joboardlist={};
+            for(var i=0;i<rst.length;i++)
+            {
+                joboardlist[rst[i]._doc.name]=rst[i]._doc.price;
+                //var item={};
+                //item[rst[i]._doc.name]=rst[i]._doc.price;
+                //joboardlist.push(item);
+            }
+            callback(err,joboardlist);
+        });
+    }
+    else
+    {
+        BJobBoardPrice.find()
+            .exec(function(err, rst)
+            {
+
+
+                var joboardlist={};
+                for(var i=0;i<rst.length;i++)
+                {
+                    joboardlist[rst[i]._doc.name]=rst[i]._doc.price;
+                    //var item={};
+                    //item[rst[i]._doc.name]=rst[i]._doc.price;
+                    //joboardlist.push(item);
+                }
+                callback(err,joboardlist);
+            });
+
+    }
+
+}
+
+app.get('/jbprice',function(req, res)
+{
+    getJobBoardPrice(null,function(err,rst)
+    {
+        if(err)
+            res.send(400,{data:"Job board price list can not load."});
+
+        res.send(200,rst);
+    });
+});
+
+
 
 // region Views
 app.get('/flyer/new',function(req,res){
@@ -11,9 +77,13 @@ app.get('/flyer/new',function(req,res){
 
 app.get('/dashboard/promotepanel',function(req,res){
 
-    res.render("promotePanel.ejs",{
-        title:"Promote Panel"
-    });
+
+
+
+        res.render("promotePanel.ejs",{
+            title:"Promote Panel"
+        });
+
 });
 
 
@@ -87,19 +157,71 @@ app.get('/paypromote',function(req,res){
 });
 
 app.post('/flyer/submitpromote',function(req,res){
-    //for test
 
-    res.send(200,{message:"The chash is enough.",OK:true});
+    if(req.body.jobBoardInfo)
+    {
+    var SelectedJobBoards=req.body.jobBoardInfo.SelectedJobBoards;
 
+
+    var TotalPayment=0.0;
+    getJobBoardPrice(null,function(err,jblist)
+    {
+
+        if(err)
+            res.send(400,{data:"Job board price list can not load."});
+
+        var joboardlist=new Array();;
+        for(var i=0;i<SelectedJobBoards.length;i++)
+        {
+            var item=new Object();
+            item.Name=SelectedJobBoards[i].Name;
+            item.Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
+
+            if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
+            {
+                item.Price=SelectedJobBoards[i].Price;
+                TotalPayment+=parseFloat(SelectedJobBoards[i].Price);
+            }
+            else
+            {
+                item.Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
+                TotalPayment+=  parseFloat (jblist[SelectedJobBoards[i].Name.toLowerCase()]);
+            }
+            joboardlist.push(item);
+        }
+
+     res.send(200,{TotalPayment:TotalPayment,SelectedJobBoards:joboardlist});
+    });
+    }
+    else
+        res.send(200,{TotalPayment:0.0,SelectedJobBoards:new Array()});
 });
 
 app.post('/flyer/confirmpromote',function(req,res){
 
-    var TotalPayment=req.body.jobBoardInfo.TotalPayment;
+var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards
+    var TotalPayment=0.0;
+    getJobBoardPrice(null,function(err,jblist)
+    {
+
+        if(err)
+            res.send(400,{data:"Job board price list can not load."});
+
+
+        for(var i=0;i<SelectedJobBoards.length;i++)
+        {
+            if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
+                TotalPayment+=parseFloat(SelectedJobBoards[i].Price);
+            else
+                TotalPayment+=  parseFloat (jblist[SelectedJobBoards[i].Name.toLowerCase()]);
+        }
+
+
+
         BPromoteInfo(
             {
-                totalPrice: req.body.jobBoardInfo.PaymentInfo.TotalPayment,
-                jobBoards:req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards,
+                totalPrice: TotalPayment,
+                jobBoards:SelectedJobBoards,
                 flyerID:req.body.flyerID,
                 jobBoardsPreview:req.body.jobBoardInfo.JobBoardListPreiview,
                 time:new Date()
@@ -107,9 +229,14 @@ app.post('/flyer/confirmpromote',function(req,res){
                 if(err)
                     res.send(502,{error:err});
                 else
-                    res.send(200,{message:"Process successfully done."});
+                {
+                    res.redirect('/pay?amount='+TotalPayment+"&jbp=1");
+                   // res.send(200,{TotalPayment:TotalPayment});
+                }
 
             });
+
+    });
 });
 
 app.get('/flyer/promote/:templateID/:flyerID',function(req,res){

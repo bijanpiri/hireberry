@@ -18,6 +18,11 @@ var options = {
 
 mongoose.connect(mongoHQConenctionString,options);
 
+BJobBoardPrice= mongoose.model( 'jobBoardPrice', {
+    name: String,
+    price:Number
+});
+
 BPersistLogin= mongoose.model( 'persistentLogins', {
     username: String,
     expireDate:String,
@@ -31,8 +36,6 @@ BPromoteInfo= mongoose.model( 'promote', {
     jobBoards:[],
     jobBoardsPreview: [],
     time: Date
-
-
 });
 
 BUsers = mongoose.model( 'users', {
