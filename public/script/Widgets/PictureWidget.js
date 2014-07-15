@@ -65,6 +65,7 @@ function PictureWidget(){
         redoStack=[];
         updateBtn();
     }
+
     function updateBtn(){
         var undobtn=widget.toolbar.find('[command=undo]');
         var redobtn=widget.toolbar.find('[command=redo]');
@@ -218,9 +219,8 @@ function PictureWidget(){
 
     function done(url){
         action=statesAction.uploaded;
-//        bar.slideUp();
         var img = layout.find('img');
-        img.attr('src', url).show();
+        img.attr('org-src', url).show();
         if(gettingReady){
             gettingReady=false;
             widget.prepared();
@@ -266,6 +266,22 @@ function PictureWidget(){
     function save(){
         var src=widget.portlet.find('img').attr('src');
 
+        // Fake progressbar
+        widget.portlet.find('.progress').show();
+        widget.portlet.find('.progress .bar').width('0%');
+        var progressCounter = 1;
+        var progress = function() {
+            var percent = Math.log(progressCounter)*15;
+            console.log( percent );
+            progressCounter++;
+
+            if( percent < 100 || widget.portlet.find('.progress').width() === '100' )
+                setTimeout( progress ,100);
+
+            widget.portlet.find('.progress .bar').width( percent + '%');
+        };
+        setTimeout( progress ,100);
+
         if(src.indexOf('data')==0) {
             var pic=new Picture();
 
@@ -276,7 +292,8 @@ function PictureWidget(){
             pic.save(null, {
                 success:function(picture){
                     done(file.url());
-
+                    widget.portlet.find('.progress .bar').width('100%');
+                    widget.portlet.find('.progress').hide();
                 }
 
             });
@@ -284,7 +301,7 @@ function PictureWidget(){
 
     }
     this.serialize=function(){
-        return this.portlet.find('.image-widget img').attr('src');
+        return this.portlet.find('.image-widget img').attr('org-src');
     };
 
     this.deserialize=function(content) {
@@ -292,10 +309,30 @@ function PictureWidget(){
         action=statesAction.none;
         if( content ) {
             this.portlet.find('.imageWidgetInnerContainer').remove();
-            var img = layout.find('.image-container').empty().append($('<img>').attr('src',content));
+            var loadingObj = $('<i>').addClass('img-loading fa fa-spinner fa-spin');
+            var imgObj = $('<img>').attr('org-src',content);
+
+            imageToBlob(content,imgObj,loadingObj);
+            var img = layout.find('.image-container').empty().append(imgObj).append(loadingObj);
             action=statesAction.uploaded;
             if(editMode)
                 showToolbar();
+        }
+
+        function imageToBlob(url,imgObj,loadingObj) {
+            var xhr = new XMLHttpRequest();
+            xhr.open( "GET", url, true );
+            xhr.responseType = "arraybuffer";
+            xhr.onload = function( e ) {
+                // Obtain a blob: URL for the image data.
+                var arrayBufferView = new Uint8Array( this.response );
+                var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+                var urlCreator = window.URL || window.webkitURL;
+                var imageUrl = urlCreator.createObjectURL( blob );
+                loadingObj.remove();
+                imgObj.attr('src', imageUrl);
+            };
+            xhr.send();
         }
     };
 
