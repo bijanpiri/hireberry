@@ -18,6 +18,8 @@ var Picture;
 }());
 
 $(function() {
+    flyerid = $('input[name=flyerid]').val();
+
     //$(document).tooltip();
     $('.bool-add-widget')
         .slimScroll({height:'100%'});
@@ -289,8 +291,6 @@ var thanksMessage;
 var titleFromTemplateModal = null;
 
 function loadFlyer() {
-
-    flyerid = $('input[name=flyerid]').val();
 
     flyer = $('.portletStack').Flyer({
         editMode: editMode,

@@ -38,7 +38,7 @@ function initTour(){
                 element: "#dashboardNavigator",
                 title: "Dashboard Navigation Menu",
                 content: "Use this buttons to navigate to different parts of dashboard",
-                container:"body"
+                container:"#dashboardNavigator"
             },
             {
                 element: "#switchButton ",

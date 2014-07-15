@@ -524,13 +524,10 @@ Comments
     color: #6A685E;
     width: 300px;
     font-size: 1.4em;
-    position: fixed;
     bottom: 0;
     top: 30px;
 }
 .bool-edit-mode .portlet-commentsView {
-    position: fixed;
-    top: 0;
 
 }
 
