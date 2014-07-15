@@ -250,7 +250,7 @@ BJobsView = Backbone.View.extend({
                             modal.find('.jobStatus-next').append(askForPublishOption) // Ask For Publish
                     }
 
-                    modal.find('#jobApplyByEmail-address').val(form.formID + '@ats.booltin.com');
+                    modal.find('#jobApplyByEmail-address').val(form.formID + '@mail.hireberry.com');
 
                     function changeJobMode(mode) {
                         $.post('/flyer/changeMode',{mode:mode,flyerID:form.formID}).done( function() {
