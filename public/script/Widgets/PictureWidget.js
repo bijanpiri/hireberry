@@ -1,7 +1,5 @@
 //ToDo: When user change a picture it must be deleted in server.
 
-
-
 function PictureWidget(){
     Widget.call(this);
 
@@ -25,7 +23,6 @@ function PictureWidget(){
     var gettingReady=false;
     var undoStack=[];
     var redoStack=[];
-
 
     function undo(){
         if(undoStack.length==0)
@@ -323,7 +320,7 @@ function PictureWidget(){
             if (left) {
                 x = -img.width;
                 ctx.rotate(-Math.PI / 2);
-    }
+            }
             else {
                 y = -img.height;
                 ctx.rotate(Math.PI / 2);
@@ -335,34 +332,74 @@ function PictureWidget(){
         }
 
     }
+    function loadImage(src,callback){
+        $.get(src,function(data){
+            callback(data);
+        })
+    }
     function crop(){
         change();
         var container=widget.layout.find('.image-container');
         var img=container.find('img');
         var clip=container.find('.bool-clipper');
 
-            var tempImg = new Image();
-            tempImg.src=img.attr('src');
-            tempImg.onload = function() {
-                var canvas = document.createElement('canvas');
-                var scale = tempImg.width / img.width();
-                var width = clip.width() * scale;
-                var height = clip.height() * scale;
-                canvas.width = width;
-                canvas.height = height;
-                    var ctx = canvas.getContext("2d");
-                var pos = clip.position();
+        var tempImg = new Image();
+        tempImg.src=img.attr('src');
+//        loadImage(img.attr('src'),function(data){
+//            console.log(data);
+//        });
+        //Access-Control-Allow-Origin
 
-                ctx.drawImage(tempImg,
-                        pos.left * scale, pos.top * scale, width, height,
-                    0, 0, width, height
-                );
-                    var dataURL = canvas.toDataURL("image/jpeg");
-
-                img.attr('src', dataURL);
-
-                hideCrop();
+        $.ajax({
+            type: 'GET',
+            url: img.attr('src'),
+            async: false,
+            jsonpCallback: 'jsonCallback',
+            contentType: "application/json",
+            //dataType:'blob',
+            //dataType: 'jsonp',
+            jsonp: false,
+            processData:false,
+            success: function(json) {
+                console.dir(json.sites);
+            },
+            error: function(e) {
+                console.log(e.message);
+            },
+            always: function(e) {
+                console.log(e);
             }
+        }).done( function(d){
+            console.log(d);
+        });
+        tempImg.crossOrigin = "Anonymous";
+        tempImg.onload = function() {
+            var canvas = document.createElement('canvas');
+            var scale = tempImg.width / img.width();
+            var width = clip.width() * scale;
+            var height = clip.height() * scale;
+            canvas.width = width;
+            canvas.height = height;
+                var ctx = canvas.getContext("2d");
+            var pos = clip.position();
+
+            ctx.drawImage(tempImg,
+                    pos.left * scale, pos.top * scale, width, height,
+                0, 0, width, height
+            );
+                var dataURL = canvas.toDataURL("image/jpeg");
+
+            img.attr('src', dataURL);
+
+            hideCrop();
+        }
+
+        //resets cache on src of img if it comes back undefined, using a 1x1 blank gif dataURI
+        if ( tempImg.complete || tempImg.complete === undefined ) {
+            tempImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+            tempImg.src = img.attr('src');;
+        }
+
     }
 }
 PictureWidget.prototype=new Widget();

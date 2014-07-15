@@ -233,10 +233,10 @@ function takeEditorTour(callBack) {
                 title: "Job Canvas",
                 content: "Here is your job application form. You can customize, remove or replace widgets here.",
                 placement: "bottom",
-                container: "#portletsBox"
+                container: ".flyerRow"
             },
             {
-                element: "#moreOptions",
+                element: ".bool-btn-more-options",
                 title: "More Settings",
                 content: "Add or change commentators, responder, colors and title of this job application form in job setting panel",
                 container: ".portletCreator"
@@ -254,16 +254,17 @@ function takeEditorTour(callBack) {
                 placement: 'left',
                 reflex: true,
                 container: ".portlet-commentsView"
-            },
-            {
-                element: "#templateModal",
-                title: "Choose a Template",
-                content: "You can start from scratch or choose one of templates that already created.",
-                placement: 'top',
-                reflex: true,
-                container: "body"
-//                backdrop:false
             }
+//            ,
+//            {
+//                element: "#templateModal",
+//                title: "Choose a Template",
+//                content: "You can start from scratch or choose one of templates that already created.",
+//                placement: 'top',
+//                reflex: true,
+//                container: "body"
+//                backdrop:false
+//            }
 
         ],
         backdrop: true,
