@@ -2,6 +2,8 @@
  * Created by Bijan on 04/29/2014.
  */
 
+
+
 var addJobBoardPrice=function(name,price)
 {
     BJobBoardPrice(
@@ -39,8 +41,6 @@ var getJobBoardPrice=function(name,callback)
         BJobBoardPrice.find()
             .exec(function(err, rst)
             {
-
-
                 var joboardlist={};
                 for(var i=0;i<rst.length;i++)
                 {
@@ -230,8 +230,8 @@ var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards
                     res.send(502,{error:err});
                 else
                 {
-                    res.redirect('/pay?amount='+TotalPayment+"&jbp=1");
-                   // res.send(200,{TotalPayment:TotalPayment});
+                    //res.redirect('/pay?amount='+TotalPayment+"&jbp=1");
+                    res.send(200,{PromoteId:data._doc._id.toString()});
                 }
 
             });

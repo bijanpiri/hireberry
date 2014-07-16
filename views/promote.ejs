@@ -362,11 +362,6 @@ $(document).ready( function() {
             });
 
 
-    $("#ppanel").click(function(e)
-    {
-        window.location = "/dashboard/promotepanel"
-    })
-
     $.ajax({
         url:'/api/team/settings',
         type: 'GET',
@@ -569,7 +564,7 @@ $(document).ready( function() {
                                             jobBoardInfo:info
                                         },
                                         success: function(result) {
-                                            window.location='/pay?amount='+result.TotalPayment+"&jbp=1";
+                                            window.location='/pay?promoteId='+result.PromoteId+"&jbp=1";
                                         }
                                     })
 
@@ -865,7 +860,6 @@ $(document).ready( function() {
 <div id="div-total-payment" >
     $ 0.00
 </div>
-<input id="ppanel"  style="position: relative; bottom: -120px;left: -200px" value="go to panel" title="Go to panel" type="button"  >
 
 
 <!-------------------------------------Dialogs ------------------------------------------------------>

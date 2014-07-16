@@ -15,24 +15,38 @@ paypal_api.configure(paypal_config_opts);
 
 app.get('/pay', function(req,res) {
 
-
-    var invoiceDescription ="Increasing credit for {Team} in Booltin";
-
-  var   PaymentType='accountpay';
-if(req.query.jbp=='1')
-{
-    PaymentType='promotepay';
-    invoiceDescription ="Promoting job board payment";
-}
-
-
-
-    pay( req.user.teamID, req.query.amount,invoiceDescription,PaymentType, function(err, approval_url) {
-        if( !err )
-            res.redirect(approval_url);
-    } );
-
-})
+    if(req.query.jbp=='1')
+    {
+        var PaymentType='promotepay';
+        var invoiceDescription ="Promoting job board payment";
+        BPromoteInfo
+            .findOne({_id:req.query.promoteId}).lean()
+            .exec(function(err,data){
+                if(err)
+                    res.send(401,'Error fetching data');
+                else
+                {
+                    if(data)
+                    {
+                        pay ( req.user.teamID,data.totalPrice,invoiceDescription,PaymentType, function(err, approval_url) {
+                            if( !err )
+                                res.redirect(approval_url);
+                        } );
+                    }
+                    else
+                        res.send(401,'Error fetching data');
+                }
+            });
+    }
+    else{
+        var invoiceDescription ="Increasing credit for {Team} in Booltin";
+        var PaymentType='accountpay'
+        pay( req.user.teamID,  req.query.amount,invoiceDescription,PaymentType, function(err, approval_url) {
+            if( !err )
+                res.redirect(approval_url);
+        } );
+    }
+});
 
 app.get('/api/billing', function(req,res) {
     BTransactions.find( {teamID: req.user.teamID, $or:[
