@@ -133,6 +133,15 @@
     border-radius: 4px;
 }
 
+.interview-conflicts {
+    font-size: 1.5em;
+    margin: 1em;
+    line-height: 1.6em;
+    background: rgb(250, 222, 222);
+    padding: 0.5em;
+    border-radius: 7px;
+}
+
 .spanBox {
     display: inline;
     float: none;

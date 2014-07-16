@@ -495,6 +495,33 @@ function initWorkflow(candidateObj,candidate) {
         modal.find('.emailAddress').val( candidate.email || '' );
         modal.find('.interviewLocation').val( $('.teamAddress').text() );
         modal.find('.invitationMessage').val('Dear {{applicant-name}}\r\nWe like to schedule an interview on {{interview-date}} with you for "{{job-title}}" position. The location is {{interview-location}}.\r\n\r\nSincerely,\r\n{{team-name}}');
+        modal.find('#interviewDateTime input').change( function() {
+            var selectedDate = modal.find('#interviewDateTime input').val();
+            var d = new Date(selectedDate);
+
+            $.get('/api/calendar').done( function(res) {
+                var events = res.events;
+
+                var sortedEvents = events.sort( function(a,b) {
+                    return Math.abs(d-(new Date(a.time))) - Math.abs(d-(new Date(b.time)))
+                });
+
+                var filteredEvents = sortedEvents.filter( function(e) {
+                    return (Math.abs(d-(new Date(e.time))) / (1000*60*60)) < 2; // With less that 2 hours distance
+                });
+
+                var modifiedEvents = filteredEvents.map( function(e) {
+                    var dt = dateTimeToJSON(e.time);
+                    return e.title + ': ' + dt.date + ' ' + dt.time + '(' + (new moment(d)).from(e.time) + ')';
+                });
+
+                //console.log( modifiedEvents.splice(0,5) );
+                modal.find('.interview-conflicts ul').empty();
+                modifiedEvents.forEach( function(e) {
+                    modal.find('.interview-conflicts ul').append( $('<li>').text(e) );
+                })
+            })
+        });
 
         modal.find('.sendButton').unbind('click').click( function() {
             var selectedDate = modal.find('#interviewDateTime input').val();
