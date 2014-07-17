@@ -382,33 +382,7 @@ function PictureWidget(){
 
         var tempImg = new Image();
         tempImg.src=img.attr('src');
-//        loadImage(img.attr('src'),function(data){
-//            console.log(data);
-//        });
-        //Access-Control-Allow-Origin
 
-        $.ajax({
-            type: 'GET',
-            url: img.attr('src'),
-            async: false,
-            jsonpCallback: 'jsonCallback',
-            contentType: "application/json",
-            //dataType:'blob',
-            //dataType: 'jsonp',
-            jsonp: false,
-            processData:false,
-            success: function(json) {
-                console.dir(json.sites);
-            },
-            error: function(e) {
-                console.log(e.message);
-            },
-            always: function(e) {
-                console.log(e);
-            }
-        }).done( function(d){
-            console.log(d);
-        });
         tempImg.crossOrigin = "Anonymous";
         tempImg.onload = function() {
             var canvas = document.createElement('canvas');
