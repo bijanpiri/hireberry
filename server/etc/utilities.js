@@ -495,17 +495,17 @@ deleteEvent=function(eventID,callback) {
 
 /** Promo Codes **/
 publicRegisterIsAllowed = function() {
-    return true;
+    return false;
 }
 
 checkPromoCode = function( code, callback ) {
     // ToDo
     BPromoCode.findOne({code:code}, function(err,promoCode) {
         if( err || !promoCode )
-            return callback( {error:'There is not this promo code.'}, null );
+            return callback( {error:'Registering is possible just with Access Code.'}, null );
 
         if( promoCode.amount <= 0 )
-            return callback( {error:'All the promoCodes are used.'}, null );
+            return callback( {error:'This access code isn\'t valid anymore.'}, null );
         else
             return callback( null, promoCode );
     });

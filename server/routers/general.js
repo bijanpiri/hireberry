@@ -2,15 +2,20 @@
  * Created by Bijan on 04/29/2014.
  */
 
+var NA = require("nodealytics");
+NA.initialize('UA-52471230-1', 'hireberry.com', function () {
+    //MORE GOOGLE ANALYTICS CODE HERE
+});
+
 // region General
 app.get('/', function(req,res) {
 
-    res.cookie('promocode','');
+    res.cookie('promocode', '' );
 
     if( req.user )
         res.redirect('/dashboard#overviewp');
     else
-        res.redirect('/LandingPage.html');
+        res.render('LandingPage.ejs',{code:req.query.code||''});
 });
 
 app.get('/adminlogin', function(req,res) {
@@ -267,6 +272,15 @@ app.get('/api/calendar', function(req,res) {
     });
 });
 // endregion
+
+app.get('/email/:fileName', function(req,res) {
+    NA.trackEvent('Email', 'Image Request', req.query.q, function (err, resp) {
+        if (!err && resp.statusCode === 200) {
+            res.redirect( req.params.fileName );
+            console.log('Event has been tracked with Google Analytics');
+        }
+    });
+});
 
 app.delete('/api/notifications/:notificationID', function(req,res) {
     var notificationID = req.params.notificationID;

@@ -117,7 +117,7 @@ everyauth.linkedin
 
                 checkPromoCode(code, function(err,promoCode){
                     if( publicRegisterIsAllowed() == false && err )
-                        return promise.fail([err]);
+                        return promise.fail(err.error);
                     else if(publicRegisterIsAllowed() == false && promoCode.permissionForRegister==true)
                         createNewUser();
                     else if(publicRegisterIsAllowed() == true)
