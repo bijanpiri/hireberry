@@ -407,7 +407,7 @@ function PictureWidget(){
                 console.log(e);
             }
         }).done( function(d){
-            console.log(d);
+//            console.log(d);
         });
         tempImg.crossOrigin = "Anonymous";
         tempImg.onload = function() {
