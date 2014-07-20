@@ -1,0 +1,280 @@
+.job-title {
+    position: relative;
+    bottom: -120px;
+    left: 10px;
+    display: block;
+    margin: 20px 20px;
+    min-width: 100px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    border-radius: 8px;
+    border: 4px 4px;
+    border-color: #006dcc;
+    border: solid;
+    background: #b0b0b0;
+    font-weight: 700;
+    border-radius: 7px;
+    font-size: 3em;
+    font-weight: 700;
+    color: #002a80;
+}
+
+
+.social-network {
+    position: relative;
+    bottom: -160px;
+    left: 10px;
+    right: 0;
+    display: block;
+    margin: 20px 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 100px;
+    height: 130px;
+    line-height: 60px;
+    text-align: center;
+    background: #c3c3c3;
+    font-weight: 700;
+    border-radius: 7px;
+    font-size: 2.5em;
+}
+
+/*for hiding link on social netwowk images*/
+.social-network a{
+    overflow: hidden;
+    text-decoration:none !important;
+}
+
+.social-network input{
+    height: 48px;
+    width: 48px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #2d6987;
+    border-style: solid;
+    margin-right: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #e3e3e3;
+}
+
+.social-network input:hover{
+    height: 48px;
+    width: 48px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #B3B3B3;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+}
+
+.social-network input:active{
+    height: 48px;
+    width: 48px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #f8f8f8;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+
+}
+.job-boards {
+    position: relative;
+    bottom: -120px;
+    left: 10px;
+    right: 0;
+    display: block;
+    margin: 20px 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 100px;
+    /* height: 280px;*/
+    line-height: 60px;
+    text-align: center;
+    background: #c3c3c3;
+    font-weight: 700;
+    border-radius: 7px;
+    padding-bottom: 20px;
+    font-size: 2.5em;
+}
+
+.job-boards label{
+    position: relative;
+    height: 35px;
+    font-weight: 300;
+    font-size: 0.6em;
+    top: -7px;
+    display: inline-block;
+}
+.job-boards input[type=number]{
+    height: 35px;
+    width: 100px;
+}
+
+.job-boards input[type=checkbox]{
+    height: 24px;
+    width: 24px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #2d6987;
+    border-style: solid;
+    margin-right: 60px;
+    background-color: #e3e3e3;
+}
+
+.job-boards input[type=button]{
+    height: 64px;
+    width: 64px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #2d6987;
+    border-style: solid;
+    /*margin-right: 20px;*/
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #e3e3e3;
+}
+
+.job-boards input[type=button]:hover{
+    height: 64px;
+    width: 64px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #B3B3B3;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+}
+
+.job-boards input[type=button]:active{
+    height: 64px;
+    width: 64px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #f8f8f8;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+
+}
+
+#btn-promote-payment{
+    position: relative;
+    bottom: -160px;
+    height: 50px;
+    width: 140px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #f8f8f8;
+    border-style: solid;
+    margin: 20px;
+    margin-left: 20px;
+    float: right;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #006dcc;
+    font-weight: 500 ;
+    color: #fcfcfc;
+    font-size: 1.8em
+
+}
+#btn-promote-payment:hover{
+    position: relative;
+    bottom: -160px;
+    height: 50px;
+    width: 140px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #f8f8f8;
+    border-style: solid;
+    margin: 20px;
+    margin-left: 20px;
+    float: right;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #0044cc;
+    font-weight: 500 ;
+    color: #fcfcfc;
+    font-size:1.8em
+}
+#btn-promote-payment:active{
+    position: relative;
+    bottom: -160px;
+    height: 50px;
+    width: 140px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #f8f8f8;
+    border-style: solid;
+    margin: 20px;
+    margin-left: 20px;
+    float: right;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #006dcc;
+    font-weight: 500 ;
+    color: #fcfcfc;
+    font-size: 1.8em
+}
+
+.modal-body {
+
+}
+.modal-body span{
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: "Roboto", cursive;
+    color: #0000FF;
+    /* display: inline-block;*/
+
+}
+.modal-body p{
+
+    margin-top: 0px;
+    font-size: 1.3em;
+    font-weight: bold;
+    font-family: "Roboto", cursive;
+    /* display: inline-block;*/
+    /* margin-left: 20px;*/
+
+}
+
+.modal-body hr{
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.modal-body img{
+    border-radius: 8px;
+}
+
+#div-total-payment{
+
+
+    position: relative;
+    bottom: -160px;
+    left: 10px;
+    right: 0;
+    float: left;
+    display: block;
+    margin: 20px;
+    margin-left: 20px;
+    min-width: 200px;
+    height:50px;
+    line-height: 50px;
+    text-align: center;
+    background: #c3c3c3;
+    font-weight: 700;
+    border-radius: 7px;
+    font-size: 2.5em;
+
+}
