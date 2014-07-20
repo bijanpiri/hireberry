@@ -273,6 +273,7 @@ app.get('/api/calendar', function(req,res) {
 });
 // endregion
 
+// Save request for accessing to a file on server (For email opening detection)
 app.get('/email/:fileName', function(req,res) {
     NA.trackEvent('Email', 'Image Request', req.query.q, function (err, resp) {
         if (!err && resp.statusCode === 200) {
