@@ -76,21 +76,13 @@ app.get('/flyer/new',function(req,res){
 });
 
 app.get('/dashboard/promotepanel',function(req,res){
-
-
-
-
         res.render("promotePanel.ejs",{
             title:"Promote Panel"
         });
-
 });
 
 
 app.get('/dashboard/getinfo',function(req,res){
-
-
-
     BPromoteInfo.find()
         .populate('flyerID')
         .exec( function(err, dataPromote) {
@@ -356,7 +348,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
         canCurrentUserLeaveComment( req.user._id, req.user.teamID, flyerid, function(err,canLeaveComment) {
             res.render('flyerEditor.ejs',{
-                title:'Flyer Editor',
+                title:'Editor',
                 boards:[],
                 flyerid:flyerid,
                 templateID:templateID,
