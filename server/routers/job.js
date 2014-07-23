@@ -554,7 +554,7 @@ var getFlyerInfo= function(userID,flyerid,templateID,callback){
     //    return;
 
 
-    if( templateID==0 ) { // Load stored flyer
+    if( templateID==='0' ) { // Load stored flyer
         BFlyers.findOne({_id:flyerid})
             .populate('commentators','_id displayName email')
             .populate('autoAssignedTo','_id displayName email')

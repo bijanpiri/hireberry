@@ -67,7 +67,7 @@ function initNotificationCenter() {
                             $('#'+objID).remove();
                             window.location = '/#overviewp';
                         });
-                    $(this).parent().remove();
+                    $(this).closest('li').remove();
                 });
 
             var declineBtnObj = $('<a>').addClass('btn btn-danger btn-mini')
@@ -82,7 +82,7 @@ function initNotificationCenter() {
                             $('#'+objID).remove();
                             decreaseBudgeNumber();
                         })
-                    $(this).parent().remove();
+                    $(this).closest('li').remove();
                 });
 
             var notifObj = $('<div>').attr('id','#'+objID)
@@ -122,7 +122,7 @@ function initNotificationCenter() {
                         flyerID: $(this).parent().attr('formID')
                     });
                     decreaseBudgeNumber();
-                    $(this).parent().remove();
+                    $(this).closest('li').remove();
                 });
 
             var publishButtonObj = $('<a>')
@@ -134,7 +134,7 @@ function initNotificationCenter() {
                         flyerID: $(this).parent().attr('formID')
                     });
                     decreaseBudgeNumber();
-                    $(this).parent().remove();
+                    $(this).closest('li').remove();
                 });
 
             var notifObj = $('<div>').attr('formID',formID)
@@ -278,7 +278,7 @@ function markAsReadCommentHandler() {
 
 function deleteNotificationHandler() {
     var notificationID = $(this).parent().attr('notificationID');
-    $(this).parent().remove();
+    $(this).closest('li').remove();
     decreaseBudgeNumber();
 
     $.ajax({
