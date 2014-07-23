@@ -48,7 +48,7 @@ app.get('/api/applications/stat', function(req,res) {
 
                 flyerIDList.push( flyers[i]._id );
 
-                if( flyers[i].publishTime!==undefined && flyers[i].publishTime!=='' )
+                if( flyers[i].publishTime!==undefined && flyers[i].publishTime!=='' &&  flyers[i].publishTime!==null )
                     publishedCount++;
             }
 
