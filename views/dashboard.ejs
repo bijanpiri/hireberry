@@ -793,32 +793,40 @@
             <div class="row-fluid">
                 <div class="span12 form-horizontal no-border-box">
                     <div class="control-group">
-                        <label class="control-label" for="invitationEmail">Title</label>
+                        <label class="control-label" for="invitationEmail">Job title</label>
                         <div class="controls">
                             <input type="text" id="jobTitle" style="cursor: text">
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="invitationEmail">Apply-By-Email address</label>
+                        <label class="control-label" for="invitationEmail">Job email inbox</label>
                         <div class="controls">
                             <input type="text" id="jobApplyByEmail-address" readonly style="cursor: text">
+
+                            <button type="button" class="popover-btn" data-placement="left" data-toggle="popover" data-trigger="hover"
+                                    style="float: none;" title="" data-original-title="Job email inbox"
+                                    data-content="As another way for applying, applicants can send their resume or CV to this address.
+                                    The inbound email will be consider as a application for its sender and with attached resume/CV,
+                                    will be added to this job application list.">
+                                <i class="icon-info-sign" style="color:#000"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="invitationEmail">Public Link</label>
+                        <label class="control-label" for="invitationEmail">Job page public link</label>
                         <div class="controls">
                             <input type="URL" class="publicLink" readonly style="cursor: text">
                             <a class="publicLinkOpener bool-toolbar-btn" target="_blank">Open</a>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="invitationNote">Responder</label>
+                        <label class="control-label" for="invitationNote">Job responder</label>
                         <div class="controls">
                             <div id="jobResponderList"></div>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="invitationEmail">State</label>
+                        <label class="control-label" for="invitationEmail">Job page state</label>
                         <div class="controls">
                             <div style="font-size: 1.5em;line-height: 2em;">
                                 <span class="jobStatus-current">-</span> now |
@@ -832,7 +840,7 @@
 
     </div>
     <div class="modal-footer">
-        <button class="btn btn-danger pull-left deleteJobButton">Delete</button>
+        <button class="btn btn-danger pull-left deleteJobButton">Delete Job</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button type="submit" class="btn btn-primary saveButton" data-loading-text="Sending...">Save</button>
     </div>
