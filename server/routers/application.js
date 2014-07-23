@@ -140,13 +140,13 @@ function sendEmail(userID,teamID,applicationID,metadata,emailType,callback) {
                 message = metadata.invitationMessage
                 applicantName = metadata.invitedName;
                 applicantEmail = metadata.invitedEmail;
-                answersText = ['Yes, I will com', 'No, I can\'t come'];
+                answersText = ['Accept', 'Decline'];
             }
             else if( emailType==2 ) {
                 message = metadata.offerMessage;
                 applicantName = metadata.offeredName;
                 applicantEmail = metadata.offeredEmail
-                answersText = ['Yes, I am', 'No, I am not'];
+                answersText = ['Accept', 'Decline'];
             }
             // ToDo: Show interview date and time in better way
 

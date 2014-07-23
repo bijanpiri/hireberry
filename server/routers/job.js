@@ -4,8 +4,7 @@
 
 
 
-var addJobBoardPrice=function(name,price)
-{
+var addJobBoardPrice=function(name,price) {
     BJobBoardPrice(
         {
             name: name,
@@ -19,8 +18,7 @@ var addJobBoardPrice=function(name,price)
         });
 }
 
-var getJobBoardPrice=function(name,callback)
-{
+var getJobBoardPrice=function(name,callback) {
     if(name)
     {
         BJobBoardPrice.findOne({name:name},function(er,rst)
@@ -56,8 +54,114 @@ var getJobBoardPrice=function(name,callback)
 
 }
 
-app.get('/jbprice',function(req, res)
-{
+var extractPromoteInfo= function (flyer,callback) {
+
+    var PromoteInfo=new Object();
+    PromoteInfo.positionTitle=flyer.description;
+    PromoteInfo.logo=flyer.logo;
+    PromoteInfo.address="";
+    PromoteInfo.skills="";
+    PromoteInfo.description="";
+    PromoteInfo.workCondition="";
+
+    if(flyer.widgets)
+    {
+        for(var i=0;i<flyer.widgets.length;i++)
+        {
+            switch(flyer.widgets[i].type) {
+                case "1":  //text
+                    PromoteInfo.description=flyer.widgets[i].Contents.text;
+                    break;
+                case "6":  //map
+                    PromoteInfo.address=flyer.widgets[i].Contents.address;
+                    break;
+                case "8":  //text
+                    PromoteInfo.workCondition=flyer.widgets[i].Contents.work;
+                    break;
+                case "14":  //skill
+                    PromoteInfo.skills=flyer.widgets[i].Contents;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    callback(PromoteInfo);
+}
+
+var getFlyerInfo= function(userID,flyerid,templateID,callback){
+    //if(!checkUser(req,res))
+    //    return;
+
+
+    if( templateID==='0' ) { // Load stored flyer
+        BFlyers.findOne({_id:flyerid})
+            .populate('commentators','_id displayName email')
+            .populate('autoAssignedTo','_id displayName email')
+            .exec( function(err,flyer){
+                if(err)
+                    return  callback('Oh oh error',null,null);
+
+                if(flyer){
+                    flyer.flyer.flyerid = flyer._id; // For fixing a problem (when flyer is created recently and just has count:0 field)
+                    callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
+                }
+                else
+                    callback( null,null,undefined,[],'404, Not Found! Yah!');
+            });
+    }
+    else { // Load a pre-built template
+
+        var templates = require('../etc/templates.js');
+
+        if( 0 < templateID && templateID < 10)
+            callback( null, templates.FlyerTemplates[ templateID ], userID, [], null );
+        else
+            callback( null, null, userID, [], 200);
+    }
+}
+
+function notifyResponder(newState, flyerID, userID, callback) {
+    BFlyers.count({_id:flyerID,autoAssignedTo:userID}, function(err,count) {
+
+        if( !err && count==0 ) {// Current user isn't job responder, so notify its responder about publishing job
+
+            addNotification('jobStateChanging',{flyerID:flyerID,newState:newState}, function() {
+                callback()
+            })
+        } else {
+            callback();
+        }
+
+    })
+}
+
+function notifyAllForJobComment(jobID,comment){
+    BFlyers.findOne({_id:jobID})
+        .exec(function(err,job){
+            var users={};
+            job.commentators.forEach(function(c){users[c]=true;});
+            users[job.autoAssignedTo]=true;
+            delete users[comment.user._id];
+            var now=Date.now();
+            var notifs=Object.keys(users).map(
+                function(userId){
+                    return {
+                        time:now,
+                        visited:false,
+                        user:userId,
+                        comment:comment._id,
+                        editor:comment.user,
+                        job:jobID};}
+            );
+
+            notifs.forEach(function(not){BJobNotification(not).save();});
+        });
+}
+
+
+app.get('/jbprice',function(req, res) {
     getJobBoardPrice(null,function(err,rst)
     {
         if(err)
@@ -66,8 +170,6 @@ app.get('/jbprice',function(req, res)
         res.send(200,rst);
     });
 });
-
-
 
 // region Views
 app.get('/flyer/new',function(req,res){
@@ -80,7 +182,6 @@ app.get('/dashboard/promotepanel',function(req,res){
             title:"Promote Panel"
         });
 });
-
 
 app.get('/dashboard/getinfo',function(req,res){
     BPromoteInfo.find()
@@ -135,7 +236,7 @@ app.get('/paypromote',function(req,res){
 
     var message="";
     if(req.query.result=="1")
-        message="Payment process successfully done. Your advertisement will be promoted within the next 24 hours.";
+        message="Payment process successfully done. Your advertisement will be promoted within the next 48 hours.";
     else
         message="Payment process failed.";
 
@@ -225,7 +326,6 @@ var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards
                     //res.redirect('/pay?amount='+TotalPayment+"&jbp=1");
                     res.send(200,{PromoteId:data._doc._id.toString()});
                 }
-
             });
 
     });
@@ -263,42 +363,6 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
             res.send(data);
     });
 });
-
-var extractPromoteInfo= function (flyer,callback) {
-
-    var PromoteInfo=new Object();
-    PromoteInfo.positionTitle=flyer.description;
-    PromoteInfo.logo=flyer.logo;
-    PromoteInfo.address="";
-    PromoteInfo.skills="";
-    PromoteInfo.description="";
-    PromoteInfo.workCondition="";
-
-    if(flyer.widgets)
-    {
-        for(var i=0;i<flyer.widgets.length;i++)
-        {
-            switch(flyer.widgets[i].type) {
-                case "1":  //text
-                    PromoteInfo.description=flyer.widgets[i].Contents.text;
-                    break;
-                case "6":  //map
-                    PromoteInfo.address=flyer.widgets[i].Contents.address;
-                    break;
-                case "8":  //text
-                    PromoteInfo.workCondition=flyer.widgets[i].Contents.work;
-                    break;
-                case "14":  //skill
-                    PromoteInfo.skills=flyer.widgets[i].Contents;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
-    callback(PromoteInfo);
-}
 
 app.get('/flyer/embeded/:flyerID', function(req,res){
 
@@ -513,7 +577,7 @@ app.get('/api/forms',  function(req,res){
 
 });
 
-// region Flyers
+// region API
 
 app.delete('/api/job/:flyerID', function(req,res){
 
@@ -549,40 +613,7 @@ app.delete('/api/job/:flyerID', function(req,res){
 
 });
 
-var getFlyerInfo= function(userID,flyerid,templateID,callback){
-    //if(!checkUser(req,res))
-    //    return;
-
-
-    if( templateID==='0' ) { // Load stored flyer
-        BFlyers.findOne({_id:flyerid})
-            .populate('commentators','_id displayName email')
-            .populate('autoAssignedTo','_id displayName email')
-            .exec( function(err,flyer){
-                if(err)
-                    return  callback('Oh oh error',null,null);
-
-                if(flyer){
-                    flyer.flyer.flyerid = flyer._id; // For fixing a problem (when flyer is created recently and just has count:0 field)
-                    callback(null,flyer.flyer,flyer.autoAssignedTo,flyer.commentators,null);
-                }
-                else
-                    callback( null,null,undefined,[],'404, Not Found! Yah!');
-            });
-    }
-    else { // Load a pre-built template
-
-        var templates = require('../etc/templates.js');
-
-        if( 0 < templateID && templateID < 10)
-            callback( null, templates.FlyerTemplates[ templateID ], userID, [], null );
-        else
-            callback( null, null, userID, [], 200);
-    }
-}
-
-app.get('/flyer/:templateID/json/:flyerID', function(req,res)
-{
+app.get('/flyer/:templateID/json/:flyerID', function(req,res) {
     var userID = req.user._id;
     var flyerid = req.params.flyerID;
     var templateID = req.params.templateID;
@@ -605,7 +636,6 @@ app.get('/flyer/:templateID/json/:flyerID', function(req,res)
 
     });
 });
-
 
 app.post('/flyer/publish', function(req,res){
 
@@ -690,21 +720,6 @@ app.post('/flyer/changeMode', function(req,res){
     }
 });
 
-function notifyResponder(newState, flyerID, userID, callback) {
-    BFlyers.count({_id:flyerID,autoAssignedTo:userID}, function(err,count) {
-
-        if( !err && count==0 ) {// Current user isn't job responder, so notify its responder about publishing job
-
-            addNotification('jobStateChanging',{flyerID:flyerID,newState:newState}, function() {
-                callback()
-            })
-        } else {
-            callback();
-        }
-
-    })
-}
-
 app.post('/flyer/inactive', function(req,res){
 
     var flyerID = req.body.flyerID;
@@ -773,7 +788,6 @@ app.post('/api/team/form/assign', function(req,res){
 
 });
 
-
 app.post('/api/job/:jobID/comment', function(req,res) {
     // Add a new comment on this job
     canCurrentUserLeaveComment(req.user._id,req.user.teamID,req.params.jobID,
@@ -799,28 +813,6 @@ app.post('/api/job/:jobID/comment', function(req,res) {
             }
         });
 });
-function notifyAllForJobComment(jobID,comment){
-    BFlyers.findOne({_id:jobID})
-        .exec(function(err,job){
-            var users={};
-            job.commentators.forEach(function(c){users[c]=true;});
-            users[job.autoAssignedTo]=true;
-            delete users[comment.user._id];
-            var now=Date.now();
-            var notifs=Object.keys(users).map(
-                function(userId){
-                    return {
-                        time:now,
-                        visited:false,
-                        user:userId,
-                        comment:comment._id,
-                        editor:comment.user,
-                        job:jobID};}
-            );
-
-            notifs.forEach(function(not){BJobNotification(not).save();});
-        });
-}
 
 app.get('/api/job/:jobID/comments', function(req,res) {
     // Get all comments on this job
@@ -848,3 +840,5 @@ app.get('/api/job/applyByEmail/state', function(req,res) {
             res.send({state:'off'});
     });
 });
+
+// endregion

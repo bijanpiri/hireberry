@@ -19,7 +19,7 @@ var MASTER_KEY = 'YhTSUbxy54XmnPfE3YqT0vc0tS0FCwO3IYtLPi4r';
 emailConfig = {
     from: "Hireberry",
     fromAddress: "job@hireberry.com",
-    replyAddress: "reply@hireberry.com",
+    replyAddress: "no-reply@hireberry.com",
     returnBackHost: 'www.hireberry.com'
 };
 

@@ -15,6 +15,9 @@ paypal_api.configure(paypal_config_opts);
 
 app.get('/pay', function(req,res) {
 
+    if( !checkUser(req,res) )
+        return;
+
     if(req.query.jbp=='1')
     {
         var PaymentType='promotepay';
@@ -28,7 +31,7 @@ app.get('/pay', function(req,res) {
                 {
                     if(data)
                     {
-                        pay ( req.user.teamID,data.totalPrice,invoiceDescription,PaymentType, function(err, approval_url) {
+                        pay ( req.headers.host, req.user.teamID,data.totalPrice,invoiceDescription,PaymentType, function(err, approval_url) {
                             if( !err )
                                 res.redirect(approval_url);
                         } );
@@ -39,12 +42,20 @@ app.get('/pay', function(req,res) {
             });
     }
     else{
-        var invoiceDescription ="Increasing credit for {Team} in Booltin";
-        var PaymentType='accountpay'
-        pay( req.user.teamID,  req.query.amount,invoiceDescription,PaymentType, function(err, approval_url) {
-            if( !err )
-                res.redirect(approval_url);
-        } );
+        var teamID = req.user.teamID;
+
+        BTeams.findOne({_id:teamID}, function(err,team) {
+
+            if( err || !team )
+                return res.send(503);
+
+            var invoiceDescription ="Increasing credit for " + team.name + " on Hireberry";
+            var PaymentType='accountpay'
+            pay( req.headers.host , req.user.teamID,  req.query.amount,invoiceDescription,PaymentType, function(err, approval_url) {
+                if( !err )
+                    res.redirect(approval_url);
+            });
+        });
     }
 });
 
