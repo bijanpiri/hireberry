@@ -1,8 +1,64 @@
-/**
- * Created by Bijan on 7/20/2014.
- */
-
 $(document).ready( function() {
+
+
+    var updateLinkedinPrice=function()
+    {
+        var cn=$("#field-country").find(":selected").val();
+        if(LinkedinPrice[cn])
+        {
+            if( LinkedinPrice[cn]['-1'])
+            {
+                $("#div-postalcode").hide();
+                $("#ld-price").text(LinkedinPrice[cn]['-1'].slice(2))
+                $("#ld-area").text("").hide();
+
+            }
+            else
+            {
+                $("#div-postalcode").show();
+                $("#ld-price").text("Please, select a postal code")
+                $("#ld-area").text("").hide();
+
+            }
+        }
+        else
+        {
+            $("#div-postalcode").show();
+            $("#ld-price").text("Please, select a country")
+            $("#ld-area").text("").hide();
+        }
+    }
+
+
+
+
+    $("#field-country").change(function()
+    {
+        updateLinkedinPrice();
+        calculateTotalPayment();
+    });
+
+
+
+    $("#field-postal-code").blur(function()
+    {
+        var cn=$("#field-country").find(":selected").val();
+        var postal=$("#field-postal-code").val();
+
+        if(LinkedinPrice[cn][postal])
+        {
+            $("#ld-price").text(LinkedinPrice[cn][postal]['Price'].slice(2));
+            $("#ld-area").text('[ ' +LinkedinPrice[cn][postal]['Area']+' ]').show();
+        }
+        else
+        {
+            $("#ld-price").text( "The postal code is wrong");
+            $("#ld-area").text('').hide();
+        }
+        calculateTotalPayment();
+    });
+
+
 
     $.ajax({
         url:'/jbprice',
@@ -10,6 +66,19 @@ $(document).ready( function() {
         dataType: 'json',
         success: function(data) {
             JobBoardPrice=data;
+        }
+    })
+        .fail(function(data) {
+            alert(data);
+        });
+
+    $.ajax({
+        url:'/linkedinprice',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            LinkedinPrice=data;
+            updateLinkedinPrice();
         }
     })
         .fail(function(data) {
@@ -43,7 +112,7 @@ $(document).ready( function() {
             e.stopPropagation();
         }
     );
-//Todo: replace other symboles like & ?
+
     $("#ln-promote").attr("href","http://www.linkedin.com/shareArticle?mini=true&url="
         +jobLink.replace(' ','%20')+
         "&title="+positionTitle.replace(' ','%20')+
@@ -77,7 +146,6 @@ $(document).ready( function() {
 
 
         // ------------ Show-Hide job link ----------------
-        //todo: Fix job links
         if( boardName=="Indeed" || boardName=="Stack Overflow" )
         {
             ml.find("#job-link").text("");
@@ -157,6 +225,24 @@ $(document).ready( function() {
     });
 
     $(".job-boards").find(":input[type=checkbox]").click(function() {
+
+        /*title="LinkedIn"
+
+         if(this.prop('checked'))
+         {
+         if(this.attr("title").toLowerCase()=="indeed" || this.attr("title").toLowerCase()=="linkedin")
+         {
+
+         }
+         else if (this.attr("title").toLowerCase()=="linkedin")
+         {
+
+         }
+         }
+         else
+         {
+
+         }*/
         calculateTotalPayment();
     });
 
@@ -256,6 +342,7 @@ $(document).ready( function() {
         var selectedInfo=new Object();
         //selectedInfo.TotalPayment=0.0;
         selectedInfo.SelectedJobBoards=new Array();
+
         $.each(chbxs, function(i)
         {
             if($(chbxs[i]).prop('checked'))
@@ -263,14 +350,38 @@ $(document).ready( function() {
                 var jbInfo=new Object();
                 jbInfo.Price=JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
                 jbInfo.Name=$(chbxs[i]).attr("title");
-                selectedInfo.SelectedJobBoards.push(jbInfo);
+                //selectedInfo.SelectedJobBoards.push(jbInfo);
                 //selectedInfo.TotalPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+                if(jbInfo.Name.toLowerCase()=="linkedin")
+                {
+                    var cn=$("#field-country").find(":selected").val();
+                    jbInfo.Country=cn
+                    jbInfo.CountryName=$("#field-country").find(":selected").text();
+                    jbInfo.Location="";
+                    if(LinkedinPrice[cn])
+                    {
+                        if( LinkedinPrice[cn]['-1'])
+                        {
+                            jbInfo.PostalCode="-1";
+                        }
+                        else
+                        {
+                            var postal=$("#field-postal-code").val();
+                            jbInfo.PostalCode=postal;
+                            jbInfo.Location=LinkedinPrice[cn][postal]['Area'];
+                        }
+                    }
+
+                }
+                selectedInfo.SelectedJobBoards.push(jbInfo);
             }
         });
         callback(selectedInfo);
     }
 
-    var calculateTotalPayment=function(callbak)
+
+
+    var calculateTotalPayment=function()
     {
         var chbxs=$(".job-boards").find(":input[type=checkbox]");
 
@@ -287,6 +398,13 @@ $(document).ready( function() {
                 else if(isNaN(value) )
                     value=50;
                 JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]=parseFloat(value);
+            }
+            else if($(chbxs[i]).attr("title").toLowerCase()=="linkedin")
+            {
+                var value= parseFloat($("#ld-price").text().slice(1));
+                if(isNaN(value) )
+                    value=195.0;
+                JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]=value;
             }
             else
                 $(chbxs[i]).val( JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]);
