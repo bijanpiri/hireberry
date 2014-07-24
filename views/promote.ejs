@@ -1,7 +1,324 @@
 <% layout('layout') -%>
 
 <html xmlns:fb="http://ogp.me/ns/fb#">
+<<<<<<< HEAD
 <link rel="stylesheet" href="/css/promote.css"/>
+=======
+
+<style>
+/*    #fb-promote a{
+        text-indent:-9999px;
+        display: inline-block;
+        border:0; padding:0; margin:10px auto;
+        width: 152px; height: 32px;
+        background:url(http://www.hyperarts.com/facebook/static-fbml-bible/_img/share-btn.png) top left no-repeat;
+        overflow: hidden;
+        text-decoration:none !important;
+    }*/
+</style>
+
+<style>
+
+.form-row.inline
+{
+    position: relative;
+    bottom: -120px;
+   /* left: -200px;*/
+}
+
+.job-title {
+    position: relative;
+    bottom: -120px;
+    left: 10px;
+    display: block;
+    margin: 20px 20px;
+    min-width: 100px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    border-radius: 8px;
+    border: 4px 4px;
+    border-color: #006dcc;
+    border: solid;
+    background: #b0b0b0;
+    font-weight: 700;
+    border-radius: 7px;
+    font-size: 3em;
+    font-weight: 700;
+    color: #002a80;
+}
+
+
+.social-network {
+    position: relative;
+    bottom: -160px;
+    left: 10px;
+    right: 0;
+    display: block;
+    margin: 20px 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 100px;
+    height: 130px;
+    line-height: 60px;
+    text-align: center;
+    background: #c3c3c3;
+    font-weight: 700;
+    border-radius: 7px;
+    font-size: 2.5em;
+}
+
+/*for hiding link on social netwowk images*/
+.social-network a{
+    overflow: hidden;
+    text-decoration:none !important;
+}
+
+.social-network input{
+    height: 48px;
+    width: 48px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #2d6987;
+    border-style: solid;
+    margin-right: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #e3e3e3;
+}
+
+.social-network input:hover{
+    height: 48px;
+    width: 48px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #B3B3B3;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+}
+
+.social-network input:active{
+    height: 48px;
+    width: 48px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #f8f8f8;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+
+}
+.job-boards {
+    position: relative;
+    bottom: -120px;
+    left: 10px;
+    right: 0;
+    display: block;
+    margin: 20px 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 100px;
+    /* height: 280px;*/
+    line-height: 60px;
+    text-align: center;
+    background: #c3c3c3;
+    font-weight: 700;
+    border-radius: 7px;
+    padding-bottom: 20px;
+    font-size: 2.5em;
+}
+
+.job-boards label{
+    position: relative;
+    height: 35px;
+    font-weight: 300;
+    font-size: 0.6em;
+    top: -7px;
+    display: inline-block;
+}
+.job-boards input[type=number]{
+    height: 35px;
+    width: 100px;
+}
+
+.job-boards input[type=checkbox]{
+    height: 24px;
+    width: 24px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #2d6987;
+    border-style: solid;
+    margin-right: 60px;
+    background-color: #e3e3e3;
+}
+
+.job-boards input[type=button]{
+    height: 64px;
+    width: 64px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #2d6987;
+    border-style: solid;
+    /*margin-right: 20px;*/
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #e3e3e3;
+}
+
+.job-boards input[type=button]:hover{
+    height: 64px;
+    width: 64px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #B3B3B3;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+}
+
+.job-boards input[type=button]:active{
+    height: 64px;
+    width: 64px;
+    border-radius: 8px;
+    border: 2px ;
+    border-color: #f8f8f8;
+    border-style: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fcfcfc;
+
+}
+
+#find-postal-code
+{
+    position: relative;
+    height: 35px;
+    font-weight: 200;
+    font-size: 0.5em;
+    top: -7px;
+    display: inline-block;
+}
+
+#btn-promote-payment{
+    position: relative;
+    bottom: -160px;
+    height: 50px;
+    width: 140px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #f8f8f8;
+    border-style: solid;
+    margin: 20px;
+    margin-left: 20px;
+    float: right;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #006dcc;
+    font-weight: 500 ;
+    color: #fcfcfc;
+    font-size: 1.8em
+
+}
+#btn-promote-payment:hover{
+    position: relative;
+    bottom: -160px;
+    height: 50px;
+    width: 140px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #f8f8f8;
+    border-style: solid;
+    margin: 20px;
+    margin-left: 20px;
+    float: right;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #0044cc;
+    font-weight: 500 ;
+    color: #fcfcfc;
+    font-size:1.8em
+}
+#btn-promote-payment:active{
+    position: relative;
+    bottom: -160px;
+    height: 50px;
+    width: 140px;
+    border-radius: 8px;
+    border: 2px;
+    border-color: #f8f8f8;
+    border-style: solid;
+    margin: 20px;
+    margin-left: 20px;
+    float: right;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #006dcc;
+    font-weight: 500 ;
+    color: #fcfcfc;
+    font-size: 1.8em
+}
+
+.modal-body {
+
+}
+.modal-body span{
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: "Roboto", cursive;
+    color: #0000FF;
+    /* display: inline-block;*/
+
+}
+.modal-body p{
+
+    margin-top: 0px;
+    font-size: 1.3em;
+    font-weight: bold;
+    font-family: "Roboto", cursive;
+    /* display: inline-block;*/
+    /* margin-left: 20px;*/
+
+}
+
+.modal-body hr{
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.modal-body img{
+    border-radius: 8px;
+}
+
+#div-total-payment{
+
+
+    position: relative;
+    bottom: -160px;
+    left: 10px;
+    right: 0;
+    float: left;
+    display: block;
+    margin: 20px;
+    margin-left: 20px;
+    min-width: 200px;
+    height:50px;
+    line-height: 50px;
+    text-align: center;
+    background: #c3c3c3;
+    font-weight: 700;
+    border-radius: 7px;
+    font-size: 2.5em;
+
+}
+
+</style>
+>>>>>>> 1-Addnig linkedin price;2-sending flyerid instead of totalpaymet from client to server in promote page.
 
 <!-- Facebook -->
 <script>
@@ -41,6 +358,7 @@
 
 <script>
 var JobBoardPrice =undefined;
+var LinkedinPrice =undefined;
 var flyerID='<%= FlyerID %>';
 var jobLink='<%= JobLink %>';
 var address='<%= Address %>';
@@ -51,6 +369,513 @@ var positionTitle='<%=PositionTitle%>';
 var description='<%=Description%>';
 var companyName='';
 var teamID='';
+<<<<<<< HEAD
+=======
+
+$(document).ready( function() {
+
+
+    var updateLinkedinPrice=function()
+    {
+        var cn=$("#field-country").find(":selected").val();
+        if(LinkedinPrice[cn])
+        {
+            if( LinkedinPrice[cn]['-1'])
+            {
+                $("#div-postalcode").hide();
+                $("#ld-price").text(LinkedinPrice[cn]['-1'].slice(2))
+                $("#ld-area").text("").hide();
+
+            }
+            else
+            {
+                $("#div-postalcode").show();
+                $("#ld-price").text("Please, select a postal code")
+                $("#ld-area").text("").hide();
+
+            }
+        }
+        else
+        {
+            $("#div-postalcode").show();
+            $("#ld-price").text("Please, select a country")
+            $("#ld-area").text("").hide();
+        }
+    }
+
+
+
+
+    $("#field-country").change(function()
+    {
+        updateLinkedinPrice();
+        calculateTotalPayment();
+    });
+
+
+
+    $("#field-postal-code").blur(function()
+    {
+        var cn=$("#field-country").find(":selected").val();
+        var postal=$("#field-postal-code").val();
+
+        if(LinkedinPrice[cn][postal])
+        {
+            $("#ld-price").text(LinkedinPrice[cn][postal]['Price'].slice(2));
+            $("#ld-area").text('[ ' +LinkedinPrice[cn][postal]['Area']+' ]').show();
+        }
+        else
+        {
+            $("#ld-price").text( "The postal code is wrong");
+            $("#ld-area").text('').hide();
+        }
+        calculateTotalPayment();
+    });
+
+
+
+    $.ajax({
+        url:'/jbprice',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            JobBoardPrice=data;
+        }
+    })
+            .fail(function(data) {
+                alert(data);
+            });
+
+    $.ajax({
+        url:'/linkedinprice',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            LinkedinPrice=data;
+            updateLinkedinPrice();
+        }
+    })
+            .fail(function(data) {
+                alert(data);
+            });
+
+
+    $.ajax({
+        url:'/api/team/settings',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            companyName=data.name;
+            teamID=data._id;
+        }
+    })
+            .fail(function(data) {
+                alert(data);
+            });
+
+    $("#inputtext-indeed-payment").change(function(e)
+            {
+                var value= parseInt ($("#inputtext-indeed-payment").val());
+
+                if(value<50 || value>1000)
+                    $("#inputtext-indeed-payment").css("color",'red');
+                else
+                    $("#inputtext-indeed-payment").css("color",'black');
+
+                calculateTotalPayment();
+                e.stopPropagation();
+            }
+    );
+
+    $("#ln-promote").attr("href","http://www.linkedin.com/shareArticle?mini=true&url="
+            +jobLink.replace(' ','%20')+
+            "&title="+positionTitle.replace(' ','%20')+
+            "&summary="+description.replace(' ','%20')+"&source=");
+
+    //$("#tw-promote").attr("data-url",jobLink);
+    $("#tw-promote").attr("href", "https://twitter.com/intent/tweet?text=&url="+jobLink.replace(' ','%20')+"&related=episod");
+
+
+    //$("#gp-promote").attr("data-href",jobLink);
+    $("#gp-promote").attr("href","https://plus.google.com/share?url="+jobLink.replace(' ','%20'));
+
+
+    $("#fb-promote").attr("href",jobLink.replace(' ','%20'));
+
+
+    $(".job-boards").find(":input[type=button]").click(function() {
+
+        var boardName=$(this).attr("title");
+
+        var ml = $('#job-borad-preview-dialog');
+        ml.find("#invitationSetLabel").text(boardName);
+        ml.find("#job-address").text(address);
+        ml.find("#job-title").text(positionTitle);
+        ml.find("#company-name").text(companyName);
+        ml.find("#job-description").text(description);
+        //ml.find("#job-workPlaceTime").text(workCondition);
+        //ml.find("#job-skills").text(skills);
+        //ml.find("#company-logo").attr('src',logo);
+        ml.modal();
+
+
+        // ------------ Show-Hide job link ----------------
+        if( boardName=="Indeed" || boardName=="Stack Overflow" )
+        {
+            ml.find("#job-link").text("");
+            ml.find("#div-joblink").hide();
+            ml.find("#job-description").append('<br>'+"Job Url : "+'<br>'+jobLink);
+        }
+        else
+        {
+            ml.find("#job-link").text(jobLink);
+            ml.find("#div-joblink").show();
+        }
+
+        // ------------ Show-Hide work condition ----------------
+        if(!workCondition && workCondition=='')
+        {
+            ml.find("#job-workPlaceTime").text("");
+            ml.find("#div-workPlaceTime").hide();
+        }
+        else if( boardName=="Indeed" || boardName=="Stack Overflow" || boardName=="Dribbble" || boardName=="Behance")
+        {
+            ml.find("#job-workPlaceTime").text("");
+            ml.find("#div-workPlaceTime").hide();
+            var place=  workCondition.split('&')[0].split('=')[1];
+            var time=  workCondition.split('&')[1].split('=')[1];
+            ml.find("#job-description").append('<br>'+"Work Place/Time : "+'<br>'+place+'/'+time);
+        }
+        else
+        {
+            var place=  workCondition.split('&')[0].split('=')[1];
+            var time=  workCondition.split('&')[1].split('=')[1];
+            ml.find("#job-workPlaceTime").text(place+'/'+time);
+            ml.find("#div-workPlaceTime").show();
+        }
+        // ------------ Show-Hide skills ----------------
+        if(!skills || skills=='')
+        {
+            ml.find("#job-skills").text("");
+            ml.find("#div-skills").hide();
+        }
+        else if( boardName=="Indeed" || boardName=="GitHub" || boardName=="Dribbble")
+        {
+            ml.find("#job-skills").text("");
+            ml.find("#div-skills").hide();
+            ml.find("#job-description").append('<br>'+"Requirements : "+'<br>'+skills);
+        }
+        else
+        {
+            ml.find("#job-skills").text(skills);
+            ml.find("#div-skills").show();
+        }
+
+
+        // ------------ Show-Hide company logo ----------------
+        if(logo=='http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/' ||
+                boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   )
+        {
+            ml.find("#company-logo").attr('src','');
+            ml.find("#div-logo").hide();
+        }
+        else
+        {
+            ml.find("#company-logo").attr('src',logo);
+            ml.find("#div-logo").show();
+        }
+
+        // ------------ Show-Hide description ----------------
+        if( boardName=="Dribbble")
+        {
+            ml.find("#job-description").text("");
+            ml.find("#div-description").hide();
+        }
+        else
+        {
+            ml.find("#div-description").show();
+        }
+
+    });
+
+    $(".job-boards").find(":input[type=checkbox]").click(function() {
+
+        /*title="LinkedIn"
+
+        if(this.prop('checked'))
+        {
+            if(this.attr("title").toLowerCase()=="indeed" || this.attr("title").toLowerCase()=="linkedin")
+            {
+
+            }
+            else if (this.attr("title").toLowerCase()=="linkedin")
+            {
+
+            }
+        }
+        else
+        {
+
+        }*/
+        calculateTotalPayment();
+    });
+
+    $("#btn-promote-payment").click(function() {
+
+
+        getSelectedJobBoardInfo(function(info)
+        {
+            var rst=info.PaymentInfo;
+            var ml = $('#payment-action-dialog');
+            ml.find("#error-msg").text("");
+
+            if(rst.SelectedJobBoards.length>0)
+            {
+                $.ajax({
+                    url:'/flyer/submitpromote',
+                    type: 'POST',
+                    dataType: 'json',
+                    data :
+                    {
+                        flyerID:flyerID,
+                        teamID:teamID,
+                        jobBoardInfo:rst
+                    },
+                    success: function(data) {
+
+
+                        var ml = $('#payment-action-dialog');
+                        ml.find('.container-fluid').empty();
+                        for(var i=0;i<data.SelectedJobBoards.length;i++)
+                        {
+                            ml.find('.container-fluid').append($('<span>').text(data.SelectedJobBoards[i].Name));
+                            ml.find('.container-fluid').append($('<p>').text("$ "+data.SelectedJobBoards[i].Price  ));
+                            ml.find('.container-fluid').append( $('<hr>'));
+                        }
+                        ml.find('.container-fluid').append($('<span>').text("Total"));
+                        ml.find('.container-fluid').append($('<p>').text("$ "+data.TotalPayment ));
+
+                        ml.modal();
+                        ml.find('.modal-footer').empty();
+                        ml.find('.modal-footer').append($('<button>')
+                                .addClass("btn btn-primary")
+                                .attr('data-dismiss','modal')
+                                .attr('aria-hidden','true').text("Cancel"));
+                        ml.find('.modal-footer').append($('<button>')
+                                .addClass("btn btn-primary")
+                                .attr('data-dismiss','modal')
+                                .attr('aria-hidden','true').text("Confirm").click(function()
+                                {
+                                    // $(this).attr("disabled","disabled");
+                                     $("#btn-promote-payment").attr("disabled", "disabled");
+                                    $.ajax({
+                                        url:'/flyer/confirmpromote',
+                                        type: 'POST',
+
+                                        dataType: 'json',
+                                        data :
+                                        {
+                                            flyerID:flyerID,
+                                            teamID:teamID,
+                                            jobBoardInfo:info
+                                        },
+                                        success: function(result) {
+                                            window.location='/pay?promoteId='+result.PromoteId+"&jbp=1";
+                                        }
+                                    })
+
+                                }));
+                    }
+                })
+                        .fail(function(data) {
+
+                            var ml = $('#payment-action-dialog');
+                            ml.find('.container-fluid').empty();
+                            ml.find('.container-fluid').append($('<span>').text("Message"));
+                            ml.find('.container-fluid').append($('<p>').text(data.responseText));
+                            ml.find('.modal-footer').empty();
+                            ml.find('.modal-footer').append($('<button>')
+                                    .addClass("btn btn-primary")
+                                    .attr('data-dismiss','modal')
+                                    .attr('aria-hidden','true').text("Close"));
+                            ml.modal();
+                        });
+            }
+            else
+            {
+                var ml = $('#alert-payment-dialog');
+                ml.modal();
+            }
+        }); //end getSelectedJobBoardInfo
+
+    });
+
+    var getPaymentInfo=function(callback)
+    {
+        var chbxs=$(".job-boards").find(":input[type=checkbox]");
+        var selectedInfo=new Object();
+        //selectedInfo.TotalPayment=0.0;
+        selectedInfo.SelectedJobBoards=new Array();
+
+        $.each(chbxs, function(i)
+        {
+            if($(chbxs[i]).prop('checked'))
+            {
+                var jbInfo=new Object();
+                jbInfo.Price=JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+                jbInfo.Name=$(chbxs[i]).attr("title");
+                //selectedInfo.SelectedJobBoards.push(jbInfo);
+                //selectedInfo.TotalPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+                if(jbInfo.Name.toLowerCase()=="linkedin")
+                {
+                    var cn=$("#field-country").find(":selected").val();
+                    jbInfo.Country=cn
+                    jbInfo.CountryName=$("#field-country").find(":selected").text();
+                    jbInfo.Location="";
+                    if(LinkedinPrice[cn])
+                    {
+                        if( LinkedinPrice[cn]['-1'])
+                        {
+                            jbInfo.PostalCode="-1";
+                        }
+                        else
+                        {
+                            var postal=$("#field-postal-code").val();
+                            jbInfo.PostalCode=postal;
+                            jbInfo.Location=LinkedinPrice[cn][postal]['Area'];
+                        }
+                    }
+
+                }
+                selectedInfo.SelectedJobBoards.push(jbInfo);
+            }
+        });
+        callback(selectedInfo);
+    }
+
+
+
+    var calculateTotalPayment=function()
+    {
+        var chbxs=$(".job-boards").find(":input[type=checkbox]");
+
+        $.each(chbxs, function(i)
+        {
+
+            if($(chbxs[i]).attr("title").toLowerCase()=="indeed")
+            {
+                var value= parseInt ($("#inputtext-indeed-payment").val());
+                if(value<50 )
+                    value=50;
+                else if(value>1000 )
+                    value=1000;
+                else if(isNaN(value) )
+                    value=50;
+                JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]=parseFloat(value);
+            }
+            else if($(chbxs[i]).attr("title").toLowerCase()=="linkedin")
+            {
+                var value= parseFloat($("#ld-price").text().slice(1));
+                 if(isNaN(value) )
+                    value=195.0;
+                JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]=value;
+            }
+            else
+                $(chbxs[i]).val( JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()]);
+        });
+        var sumPayment=0.0;
+        $.each(chbxs, function(i)
+        {
+            if($(chbxs[i]).prop('checked'))
+            {
+                sumPayment+=  JobBoardPrice[$(chbxs[i]).attr("title").toLowerCase()];
+            }
+        });
+        $("#div-total-payment").text("$ " +sumPayment.toFixed(2));
+    }
+
+    var getSelectedJobBoardInfo =function(callback)
+    {
+        getPaymentInfo(function(rst)
+        {
+            var info=new Object();
+            info.PaymentInfo=rst
+            info.JobBoardListPreiview=new Array();
+            for(var i=0;i<rst.SelectedJobBoards.length;i++)
+            {
+                var item=new Object();
+                var boardName=rst.SelectedJobBoards[i].Name;
+
+                item.boardName=boardName;
+                item.address=address;
+                item.positionTitle=positionTitle;
+                item.companyName=companyName;
+                item.description=description;
+
+                // ------------ Saving job link ----------------
+                item.jobLink="[NA]";
+                if( !(jobLink=="undefined" || !jobLink || jobLink==''))
+                {
+                    if( boardName=="Indeed" || boardName=="Stack Overflow" )
+                    {
+                        item.description+="&Job Url : "+jobLink;
+                    }
+                    else
+                    {
+                        item.jobLink=jobLink;
+                    }
+                }
+
+                // ------------ Saving work condition ----------------
+                item.workCondition="[NA]";
+                if( !(workCondition=="undefined" ||  !workCondition || workCondition==''))
+                {
+                    var place=  workCondition.split('&')[0].split('=')[1];
+                    var time=  workCondition.split('&')[1].split('=')[1];
+                    if( boardName=="Indeed" || boardName=="Stack Overflow" || boardName=="Dribbble" || boardName=="Behance")
+                    {
+                        item.description+="&Work Place/Time : "+place+'/'+time;
+                    }
+                    else
+                    {
+                        item.workCondition=place+'/'+time;
+                    }
+                }
+                // ------------ Saving skills ----------------
+                item.skills="[NA]";
+                if( !(skills=="undefined" || !skills || skills==''))
+                {
+                    if( boardName=="Indeed" || boardName=="GitHub" || boardName=="Dribbble")
+                    {
+                        item.description+="&Requirements : "+skills;
+                    }
+                    else
+                    {
+                        item.skills=skills;
+                    }
+                }
+                // ------------ Saving company logo ----------------
+                item.logo="[NA]";
+                if(    !( logo=='http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/'
+                        ||  boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   ))
+                {
+                    item.logo=logo
+                }
+
+                // ------------ Saving description ----------------
+
+                if( boardName=="Dribbble")
+                {
+                    item.description="[NA]";
+                }
+                info.JobBoardListPreiview.push(item);
+            }
+            callback(info)
+        });
+    };
+
+});
+>>>>>>> 1-Addnig linkedin price;2-sending flyerid instead of totalpaymet from client to server in promote page.
 </script>
 <script src="/script/promote.js"></script>
 <div class="job-title"> <%=PositionTitle%> </div>
@@ -158,7 +983,269 @@ var teamID='';
             <div class="span1 colSelect">
                 <input id="ch-linkedin-promote" title="LinkedIn" type="checkbox"  value="LinkedIn"  >
             </div>
-            <div class="span4 colOptions"> - </div>
+
+            <div class="span4 colOptions" >
+
+
+            <div style="float: left">
+            <select style="margin-right: 10px" name="countryCode" size="1" id="field-country" class="country">
+            <option value="us">United States</option>
+            <option value="af">Afghanistan</option>
+            <option value="ax">Aland Islands</option>
+            <option value="al">Albania</option>
+            <option value="dz">Algeria</option>
+            <option value="as">American Samoa</option>
+            <option value="ad">Andorra</option>
+            <option value="ao">Angola</option>
+            <option value="ai">Anguilla</option>
+            <option value="aq">Antarctica</option>
+            <option value="ag">Antigua and Barbuda</option>
+            <option value="ar">Argentina</option>
+            <option value="am">Armenia</option>
+            <option value="aw">Aruba</option>
+            <option value="au">Australia</option>
+            <option value="at">Austria</option>
+            <option value="az">Azerbaijan</option>
+            <option value="bs">Bahamas</option>
+            <option value="bh">Bahrain</option>
+            <option value="bd">Bangladesh</option>
+            <option value="bb">Barbados</option>
+            <option value="by">Belarus</option>
+            <option value="be">Belgium</option>
+            <option value="bz">Belize</option>
+            <option value="bj">Benin</option>
+            <option value="bm">Bermuda</option>
+            <option value="bt">Bhutan</option>
+            <option value="bo">Bolivia</option>
+            <option value="ba">Bosnia and Herzegovina</option>
+            <option value="bw">Botswana</option>
+            <option value="br">Brazil</option>
+            <option value="io">British Indian Ocean Territory</option>
+            <option value="bn">Brunei Darussalam</option>
+            <option value="bg">Bulgaria</option>
+            <option value="bf">Burkina Faso</option>
+            <option value="bi">Burundi</option>
+            <option value="kh">Cambodia</option>
+            <option value="cm">Cameroon</option>
+            <option value="ca">Canada</option>
+            <option value="cv">Cape Verde</option>
+            <option value="cb">Caribbean Nations</option>
+            <option value="ky">Cayman Islands</option>
+            <option value="cf">Central African Republic</option>
+            <option value="td">Chad</option>
+            <option value="cl">Chile</option>
+            <option value="cn">China</option>
+            <option value="cx">Christmas Island</option>
+            <option value="cc">Cocos (Keeling) Islands</option>
+            <option value="co">Colombia</option>
+            <option value="km">Comoros</option>
+            <option value="cg">Congo</option>
+            <option value="ck">Cook Islands</option>
+            <option value="cr">Costa Rica</option>
+            <option value="ci">Cote D'Ivoire (Ivory Coast)</option>
+            <option value="hr">Croatia</option>
+            <option value="cu">Cuba</option>
+            <option value="cy">Cyprus</option>
+            <option value="cz">Czech Republic</option>
+            <option value="cd">Democratic Republic of the Congo</option>
+            <option value="dk">Denmark</option>
+            <option value="dj">Djibouti</option>
+            <option value="dm">Dominica</option>
+            <option value="do">Dominican Republic</option>
+            <option value="tp">East Timor</option>
+            <option value="ec">Ecuador</option>
+            <option value="eg">Egypt</option>
+            <option value="sv">El Salvador</option>
+            <option value="gq">Equatorial Guinea</option>
+            <option value="er">Eritrea</option>
+            <option value="ee">Estonia</option>
+            <option value="et">Ethiopia</option>
+            <option value="fk">Falkland Islands (Malvinas)</option>
+            <option value="fo">Faroe Islands</option>
+            <option value="fm">Federated States of Micronesia</option>
+            <option value="fj">Fiji</option>
+            <option value="fi">Finland</option>
+            <option value="fr">France</option>
+            <option value="gf">French Guiana</option>
+            <option value="pf">French Polynesia</option>
+            <option value="tf">French Southern Territories</option>
+            <option value="ga">Gabon</option>
+            <option value="gm">Gambia</option>
+            <option value="ge">Georgia</option>
+            <option value="de">Germany</option>
+            <option value="gh">Ghana</option>
+            <option value="gi">Gibraltar</option>
+            <option value="gr">Greece</option>
+            <option value="gl">Greenland</option>
+            <option value="gd">Grenada</option>
+            <option value="gp">Guadeloupe</option>
+            <option value="gu">Guam</option>
+            <option value="gt">Guatemala</option>
+            <option value="gg">Guernsey</option>
+            <option value="gn">Guinea</option>
+            <option value="gw">Guinea-Bissau</option>
+            <option value="gy">Guyana</option>
+            <option value="ht">Haiti</option>
+            <option value="hn">Honduras</option>
+            <option value="hk">Hong Kong</option>
+            <option value="hu">Hungary</option>
+            <option value="is">Iceland</option>
+            <option value="in">India</option>
+            <option value="id">Indonesia</option>
+            <option value="ir" selected="selected">Iran</option>
+            <option value="iq">Iraq</option>
+            <option value="ie">Ireland</option>
+            <option value="im">Isle of Man</option>
+            <option value="il">Israel</option>
+            <option value="it">Italy</option>
+            <option value="jm">Jamaica</option>
+            <option value="jp">Japan</option>
+            <option value="je">Jersey</option>
+            <option value="jo">Jordan</option>
+            <option value="kz">Kazakhstan</option>
+            <option value="ke">Kenya</option>
+            <option value="ki">Kiribati</option>
+            <option value="kr">Korea</option>
+            <option value="kp">Korea (North)</option>
+            <option value="ko">Kosovo</option>
+            <option value="kw">Kuwait</option>
+            <option value="kg">Kyrgyzstan</option>
+            <option value="la">Laos</option>
+            <option value="lv">Latvia</option>
+            <option value="lb">Lebanon</option>
+            <option value="ls">Lesotho</option>
+            <option value="lr">Liberia</option>
+            <option value="ly">Libya</option>
+            <option value="li">Liechtenstein</option>
+            <option value="lt">Lithuania</option>
+            <option value="lu">Luxembourg</option>
+            <option value="mo">Macao</option>
+            <option value="mk">Macedonia</option>
+            <option value="mg">Madagascar</option>
+            <option value="mw">Malawi</option>
+            <option value="my">Malaysia</option>
+            <option value="mv">Maldives</option>
+            <option value="ml">Mali</option>
+            <option value="mt">Malta</option>
+            <option value="mh">Marshall Islands</option>
+            <option value="mq">Martinique</option>
+            <option value="mr">Mauritania</option>
+            <option value="mu">Mauritius</option>
+            <option value="yt">Mayotte</option>
+            <option value="mx">Mexico</option>
+            <option value="md">Moldova</option>
+            <option value="mc">Monaco</option>
+            <option value="mn">Mongolia</option>
+            <option value="me">Montenegro</option>
+            <option value="ms">Montserrat</option>
+            <option value="ma">Morocco</option>
+            <option value="mz">Mozambique</option>
+            <option value="mm">Myanmar</option>
+            <option value="na">Namibia</option>
+            <option value="nr">Nauru</option>
+            <option value="np">Nepal</option>
+            <option value="nl">Netherlands</option>
+            <option value="an">Netherlands Antilles</option>
+            <option value="nc">New Caledonia</option>
+            <option value="nz">New Zealand</option>
+            <option value="ni">Nicaragua</option>
+            <option value="ne">Niger</option>
+            <option value="ng">Nigeria</option>
+            <option value="nu">Niue</option>
+            <option value="nf">Norfolk Island</option>
+            <option value="mp">Northern Mariana Islands</option>
+            <option value="no">Norway</option>
+            <option value="om">Sultanate of Oman</option>
+            <option value="pk">Pakistan</option>
+            <option value="pw">Palau</option>
+            <option value="ps">Palestinian Territory</option>
+            <option value="pa">Panama</option>
+            <option value="pg">Papua New Guinea</option>
+            <option value="py">Paraguay</option>
+            <option value="pe">Peru</option>
+            <option value="ph">Philippines</option>
+            <option value="pn">Pitcairn</option>
+            <option value="pl">Poland</option>
+            <option value="pt">Portugal</option>
+            <option value="pr">Puerto Rico</option>
+            <option value="qa">Qatar</option>
+            <option value="re">Reunion</option>
+            <option value="ro">Romania</option>
+            <option value="ru">Russian Federation</option>
+            <option value="rw">Rwanda</option>
+            <option value="sh">Saint Helena</option>
+            <option value="kn">Saint Kitts and Nevis</option>
+            <option value="lc">Saint Lucia</option>
+            <option value="pm">Saint Pierre and Miquelon</option>
+            <option value="vc">Saint Vincent and the Grenadines</option>
+            <option value="ws">Samoa</option>
+            <option value="sm">San Marino</option>
+            <option value="st">Sao Tome and Principe</option>
+            <option value="sa">Saudi Arabia</option>
+            <option value="sn">Senegal</option>
+            <option value="rs">Serbia</option>
+            <option value="sc">Seychelles</option>
+            <option value="sl">Sierra Leone</option>
+            <option value="sg">Singapore</option>
+            <option value="sk">Slovak Republic</option>
+            <option value="si">Slovenia</option>
+            <option value="sb">Solomon Islands</option>
+            <option value="so">Somalia</option>
+            <option value="za">South Africa</option>
+            <option value="ss">South Sudan</option>
+            <option value="es">Spain</option>
+            <option value="lk">Sri Lanka</option>
+            <option value="sd">Sudan</option>
+            <option value="sr">Suriname</option>
+            <option value="sj">Svalbard and Jan Mayen</option>
+            <option value="sz">Swaziland</option>
+            <option value="se">Sweden</option>
+            <option value="ch">Switzerland</option>
+            <option value="sy">Syria</option>
+            <option value="tw">Taiwan</option>
+            <option value="tj">Tajikistan</option>
+            <option value="tz">Tanzania</option>
+            <option value="th">Thailand</option>
+            <option value="tl">Timor-Leste</option>
+            <option value="tg">Togo</option>
+            <option value="tk">Tokelau</option>
+            <option value="to">Tonga</option>
+            <option value="tt">Trinidad and Tobago</option>
+            <option value="tn">Tunisia</option>
+            <option value="tr">Turkey</option>
+            <option value="tm">Turkmenistan</option>
+            <option value="tc">Turks and Caicos Islands</option>
+            <option value="tv">Tuvalu</option>
+            <option value="ug">Uganda</option>
+            <option value="ua">Ukraine</option>
+            <option value="ae">United Arab Emirates</option>
+            <option value="gb">United Kingdom</option>
+            <option value="uy">Uruguay</option>
+            <option value="uz">Uzbekistan</option>
+            <option value="vu">Vanuatu</option>
+            <option value="va">Vatican City State (Holy See)</option>
+            <option value="ve">Venezuela</option>
+            <option value="vn">Vietnam</option>
+            <option value="vg">Virgin Islands (British)</option>
+            <option value="vi">Virgin Islands (U.S.)</option>
+            <option value="wf">Wallis and Futuna</option>
+            <option value="eh">Western Sahara</option>
+            <option value="ye">Yemen</option>
+            <option value="zm">Zambia</option>
+            <option value="zw">Zimbabwe</option>
+            <option value="oo">Other</option>
+            </select>
+            <label  id="ld-price" >$0.0</label>
+            <label  id="ld-area"  ></label>
+            </div>
+
+
+           <div  id="div-postalcode" style="float: left;line-height:20px">
+            <label > Postal Code </label>
+            <input type="text" id="field-postal-code" name="postalCode" maxlength="10" autocomplete="off" value="">
+            <a  href="http://www.geonames.org/postalcode-search.html?q=&amp;country=us" id="find-postal-code" target="_blank">Find Postal Code</a>
+           </div>
+        </div>
         </div>
 
         <div class="row-fluid">
@@ -168,7 +1255,7 @@ var teamID='';
             <div class="span1 colSelect">
                 <input id="ch-indeed-promote" title="Indeed" type="checkbox"  value="Indeed">
             </div>
-            <div class="span4 colOptions">
+            <div class="span4 colOptions" >
                 <label  >Indeed payment ($): </label>
                 <input id="inputtext-indeed-payment" type="number"  value="50" >
                 <label > (Min:$50 - Max:$1000)</label>
@@ -267,5 +1354,6 @@ var teamID='';
         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
     </div>
 </div>
+
 
 

@@ -2,9 +2,14 @@
  * Created by Bijan on 04/29/2014.
  */
 
+<<<<<<< HEAD
 
 
 var addJobBoardPrice=function(name,price) {
+=======
+var addJobBoardPrice=function(name,price)
+{
+>>>>>>> 1-Addnig linkedin price;2-sending flyerid instead of totalpaymet from client to server in promote page.
     BJobBoardPrice(
         {
             name: name,
@@ -171,6 +176,20 @@ app.get('/jbprice',function(req, res) {
     });
 });
 
+<<<<<<< HEAD
+=======
+app.get('/linkedinprice',function(req, res)
+{
+
+    require('fs').readFile('public/linkedin.json', 'utf8', function (err,data) {
+        if (err) {
+            return console.log(err);
+        }
+        res.send(200,JSON.parse(   data));
+    });
+});
+
+>>>>>>> 1-Addnig linkedin price;2-sending flyerid instead of totalpaymet from client to server in promote page.
 // region Views
 app.get('/flyer/new',function(req,res){
     res.cookie('flyerid','');
@@ -184,6 +203,10 @@ app.get('/dashboard/promotepanel',function(req,res){
 });
 
 app.get('/dashboard/getinfo',function(req,res){
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1-Addnig linkedin price;2-sending flyerid instead of totalpaymet from client to server in promote page.
     BPromoteInfo.find()
         .populate('flyerID')
         .exec( function(err, dataPromote) {
@@ -201,7 +224,6 @@ app.get('/dashboard/getinfo',function(req,res){
 
                        for(var i=0;i<dataPromote.length;i++)
                         {
-
                             var item=new Object();
                             item.Date=dataPromote[i].time;
                             item.JobBoards=dataPromote[i].jobBoards;
@@ -226,9 +248,7 @@ app.get('/dashboard/getinfo',function(req,res){
                         };
                         res.send(200,result);
                     });
-
             }
-
         });
 });
 
@@ -264,13 +284,32 @@ app.post('/flyer/submitpromote',function(req,res){
             res.send(400,{data:"Job board price list can not load."});
 
         var joboardlist=new Array();;
+
+
+        require('fs').readFile('public/linkedin.json', 'utf8', function (err,data) {
+            if (err)
+                return console.log(err);
+
+
+
         for(var i=0;i<SelectedJobBoards.length;i++)
         {
             var item=new Object();
             item.Name=SelectedJobBoards[i].Name;
             item.Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
 
-            if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
+            if( SelectedJobBoards[i].Name.toLowerCase()=="linkedin")
+            {
+                    var linkedinPrice=JSON.parse(data);
+                if(linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode])
+                {  item.Price=linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode]['Price'].slice(3);
+                    TotalPayment+=parseFloat(item.Price);
+                }
+                else
+                    res.send(400,{data:"Job board price list can not load."});
+
+            }
+            else if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
             {
                 item.Price=SelectedJobBoards[i].Price;
                 TotalPayment+=parseFloat(SelectedJobBoards[i].Price);
@@ -283,7 +322,9 @@ app.post('/flyer/submitpromote',function(req,res){
             joboardlist.push(item);
         }
 
+
      res.send(200,{TotalPayment:TotalPayment,SelectedJobBoards:joboardlist});
+    });
     });
     }
     else
@@ -292,7 +333,8 @@ app.post('/flyer/submitpromote',function(req,res){
 
 app.post('/flyer/confirmpromote',function(req,res){
 
-var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards
+var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards;
+
     var TotalPayment=0.0;
     getJobBoardPrice(null,function(err,jblist)
     {
@@ -301,9 +343,25 @@ var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards
             res.send(400,{data:"Job board price list can not load."});
 
 
+
+        require('fs').readFile('public/linkedin.json', 'utf8', function (err,data) {
+            if (err)
+                return console.log(err);
+
         for(var i=0;i<SelectedJobBoards.length;i++)
         {
-            if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
+            if( SelectedJobBoards[i].Name.toLowerCase()=="linkedin")
+            {
+                 var linkedinPrice=JSON.parse(data);
+
+                if(linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode])
+                    TotalPayment+=parseFloat(linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode]['Price'].slice(3));
+                else
+                    res.send(400,{data:"Job board price list can not load."});
+
+
+            }
+            else if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
                 TotalPayment+=parseFloat(SelectedJobBoards[i].Price);
             else
                 TotalPayment+=  parseFloat (jblist[SelectedJobBoards[i].Name.toLowerCase()]);
@@ -327,7 +385,7 @@ var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards
                     res.send(200,{PromoteId:data._doc._id.toString()});
                 }
             });
-
+        });
     });
 });
 
@@ -577,8 +635,12 @@ app.get('/api/forms',  function(req,res){
 
 });
 
+<<<<<<< HEAD
 // region API
 
+=======
+// region Flyers
+>>>>>>> 1-Addnig linkedin price;2-sending flyerid instead of totalpaymet from client to server in promote page.
 app.delete('/api/job/:flyerID', function(req,res){
 
     if( !req.user )
@@ -813,6 +875,32 @@ app.post('/api/job/:jobID/comment', function(req,res) {
             }
         });
 });
+<<<<<<< HEAD
+=======
+
+function notifyAllForJobComment(jobID,comment){
+    BFlyers.findOne({_id:jobID})
+        .exec(function(err,job){
+            var users={};
+            job.commentators.forEach(function(c){users[c]=true;});
+            users[job.autoAssignedTo]=true;
+            delete users[comment.user._id];
+            var now=Date.now();
+            var notifs=Object.keys(users).map(
+                function(userId){
+                    return {
+                        time:now,
+                        visited:false,
+                        user:userId,
+                        comment:comment._id,
+                        editor:comment.user,
+                        job:jobID};}
+            );
+
+            notifs.forEach(function(not){BJobNotification(not).save();});
+        });
+}
+>>>>>>> 1-Addnig linkedin price;2-sending flyerid instead of totalpaymet from client to server in promote page.
 
 app.get('/api/job/:jobID/comments', function(req,res) {
     // Get all comments on this job
