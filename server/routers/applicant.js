@@ -276,7 +276,7 @@ function saveOnParse( data, filename, callback ) {
 
     file.save().then(function() {
 
-        console.log(file.url);
+        console.log('+++++++++++'+file.url);
 
         callback( null, file.url );
     }, function(error) {
@@ -337,7 +337,15 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
 
     for( var i=0; i<messagesCount; i++ ) {
 
+
         var msg = messages[i].msg;
+
+        BAppliedByEmail({email:msg}).save( function(err) {
+            saveApplication();
+        });
+    }
+
+    function saveApplication() {
 
         /*
          base64: false

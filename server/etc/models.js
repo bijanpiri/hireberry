@@ -174,7 +174,8 @@ BAppliedByEmail = mongoose.model( 'appliedByEmail', {
     from: String,
     subject: String,
     text: String,
-    resume: String
+    resume: String,
+    email: {}
 });
 
 function BNotificationSchema() {
