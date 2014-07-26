@@ -338,9 +338,18 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
     for( var i=0; i<messagesCount; i++ ) {
 
 
-        var msg = messages[i].msg;
+        var resumeFileName = '';
+        var resumeContent = '';
+        var resumeType = '';
+        
+        //Upload attached files to Parse and save their links as resume
+        for(var filename in msg.attachments) {
+            resumeContent = msg.attachments[filename].content;
+            resumeType = msg.attachments[filename].type;
+            resumeFileName = msg.attachments[filename].filename;
+        }
 
-        BAppliedByEmail({email:msg}).save( function(err) {
+        BAppliedByEmail({email:resumeContent}).save( function(err) {
             saveApplication();
         });
     }
@@ -354,15 +363,7 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
          type: "text/plain"
          */
 
-        var resumeFileName = '';
-        var resumeContent = '';
-        var resumeType = '';
-        //Upload attached files to Parse and save their links as resume
-        for(var filename in msg.attachments) {
-            resumeContent = msg.attachments[filename].content;
-            resumeType = msg.attachments[filename].type;
-            resumeFileName = msg.attachments[filename].filename;
-        }
+
 
         BApplications({
             flyerID: req.params.formID,
