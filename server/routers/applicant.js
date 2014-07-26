@@ -207,7 +207,11 @@ app.post('/apply', function (req,res) {
                 BFlyers.findOne( {_id:req.body.flyerid}, function(err,flyer) {
 
                     if( flyer.dbToken )
-                        saveOnDropbox( flyer.dbToken, data, resumeFileName, applicationID );
+                        saveOnDropbox( flyer.dbToken, data, resumeFileName, function(err,fileUrl) {
+                            BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
+                                res.send(200,{applicationID:applicationID});
+                            });
+                        });
 //                    else
 //                        saveOnParse( data, resumeFileName, applicationID);
                 })
@@ -217,42 +221,64 @@ app.post('/apply', function (req,res) {
             res.send(200,{applicationID:applicationID});
         }
     }
-
-
-    var saveOnDropbox = function( dbToken, data, resumeFileName, applicationID ) {
-
-        var dbclient = new Dropbox.Client({
-            key: "7bdvs2t8zrdqdw8",
-            secret: "5y37uqs64t0f3gc",
-            sandbox     : false,
-            token       : dbToken,
-            tokenSecret : '5y37uqs64t0f3gc'
-        });
-
-        // ToDo: Choose Unique Name
-        dbclient.writeFile(resumeFileName, data, function(error, stat) {
-            if (error) {
-                return showError(error);  // Something went wrong.
-            }
-
-            fs.unlink( req.files.resume.path );
-
-            // Create Share Link
-            dbclient.makeUrl(resumeFileName,{}, function(err,data) {
-
-                if( !err )
-                    BApplications.update({_id:applicationID},{resumePath:data.url}, function() {
-                        res.send(200,{applicationID:applicationID});
-                    });
-                else
-                    res.send(200,{applicationID:applicationID});
-
-            })
-
-        });
-
-    }
 } );
+
+function saveOnDropbox( dbToken, data, resumeFileName, applicationID ) {
+
+    var dbclient = new Dropbox.Client({
+        key: "7bdvs2t8zrdqdw8",
+        secret: "5y37uqs64t0f3gc",
+        sandbox     : false,
+        token       : dbToken,
+        tokenSecret : '5y37uqs64t0f3gc'
+    });
+
+    // ToDo: Choose Unique Name
+    dbclient.writeFile(resumeFileName, data, function(error, stat) {
+        if (error) {
+            return showError(error);  // Something went wrong.
+        }
+
+        fs.unlink( req.files.resume.path );
+
+        // Create Share Link
+        dbclient.makeUrl(resumeFileName,{}, function(err,data) {
+            if( !err )
+                callback( null, data.url );
+            else
+                callback( err, null );
+        })
+
+    });
+
+}
+
+app.post('/parse/upload', function(req,res){
+    if( req.files && req.files.resume && req.files.resume.size > 0 ) {
+
+        Buffer.prototype.toByteArray = function () {
+            return Array.prototype.slice.call(this, 0)
+        }
+
+
+
+        // Read from temp file
+        fs.readFile(req.files.resume.path, function (err, data) {
+            var byteArray = data.toByteArray();
+            saveOnParse( byteArray, 'testfile.txt', 'test');
+        });
+    }
+});
+
+function saveOnParse( data, filename, callback ) {
+    var file = new Parse.File( filename, data );
+
+    file.save().then(function() {
+        callback( null, file.url() );
+    }, function(error) {
+        callback( error, null);
+    });
+}
 
 app.get('/api/resume', function(req,res) {
 
@@ -337,10 +363,10 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
             activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
         }).save( function(err, application) {
 
-                uploadResume( application._id, req.params.formID, resumeFileName, resumeContent );
-
-                if( ++savedCounter == messagesCount )
-                    res.send(200);
+                uploadResume( application._id, req.params.formID, resumeFileName, resumeContent, function() {
+                    if( ++savedCounter == messagesCount )
+                        res.send(200);
+                });
             });
 
         var uploadResume = function( applicationID, flyerID, resumeFilename, resumeContent ) {
@@ -350,13 +376,20 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
 
                 // ToDo: Implement saving resume
                 if( flyer.dbToken )
-                    ;//saveOnDropbox( flyer.dbToken, resumeContent, resumeFilename, applicationID );
+                    saveOnDropbox( flyer.dbToken, resumeContent, resumeFilename, function(err,fileUrl) {
+                        BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
+                            callback();
+                        });
+                    });
                 else
-                    ;//saveOnParse( resumeContent, resumeFileName, applicationID);
+                    saveOnParse( resumeContent, resumeFileName, function(err,fileUrl) {
+                        BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
+                            callback();
+                        })
+                    });
             });
         }
     }
-
 });
 
 // Mark as read

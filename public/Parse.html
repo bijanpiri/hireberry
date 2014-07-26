@@ -15,6 +15,7 @@
     <button id='upload' > Upload Resume</button>
     <a hidden> Download</a>
     <script>
+        /*
         $('#upload').click( function(){
 
             Parse.initialize(
@@ -36,7 +37,13 @@
             }
         });
 
+    */
     </script>
+
+    <form action="/parse/upload" method="post" enctype="multipart/form-data">
+        <input type="submit">
+        <input type="file" name="resume" id="resumeID">
+    </form>
 
 </body>
 </html>
