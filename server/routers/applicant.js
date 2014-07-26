@@ -352,6 +352,8 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
             resumeFileName = msg.attachments[filename].filename;
         }
 
+        console.log(resumeContent);
+
         BApplications({
             flyerID: req.params.formID,
             name: msg["from_name"],
