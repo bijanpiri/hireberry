@@ -260,12 +260,13 @@ app.post('/parse/upload', function(req,res){
             return Array.prototype.slice.call(this, 0)
         }
 
-
-
         // Read from temp file
         fs.readFile(req.files.resume.path, function (err, data) {
             var byteArray = data.toByteArray();
-            saveOnParse( byteArray, 'testfile.txt', 'test');
+            byteArray = {base64:tbase64};
+            saveOnParse( byteArray, 'testfile.txt', 'test', function(err, fileUrl) {
+                console.log(fileUrl);
+            });
         });
     }
 });
@@ -274,7 +275,7 @@ function saveOnParse( data, filename, callback ) {
     var file = new Parse.File( filename, data );
 
     file.save().then(function() {
-        callback( null, file.url() );
+        callback( null, file.url );
     }, function(error) {
         callback( error, null);
     });
@@ -352,8 +353,6 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
             resumeFileName = msg.attachments[filename].filename;
         }
 
-        console.log(resumeContent);
-
         BApplications({
             flyerID: req.params.formID,
             name: msg["from_name"],
@@ -371,7 +370,7 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
                 });
             });
 
-        var uploadResume = function( applicationID, flyerID, resumeFilename, resumeContent ) {
+        var uploadResume = function( applicationID, flyerID, resumeFilename, resumeContent, callback ) {
             BFlyers.findOne( {_id:flyerID}, function(err,flyer) {
 
                 //console.log('Saving ', resumeFilename, flyerID, resumeContent);
