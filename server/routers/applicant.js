@@ -374,7 +374,7 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
         var uploadResume = function( applicationID, flyerID, resumeFilename, resumeContent ) {
             BFlyers.findOne( {_id:flyerID}, function(err,flyer) {
 
-                console.log('Saving ', resumeFilename, flyerID, resumeContent);
+                //console.log('Saving ', resumeFilename, flyerID, resumeContent);
 
                 // ToDo: Implement saving resume
                 if( flyer.dbToken )
@@ -384,7 +384,7 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
                         });
                     });
                 else
-                    saveOnParse( resumeContent, resumeFileName, function(err,fileUrl) {
+                    saveOnParse( {base64:resumeContent}, resumeFileName, function(err,fileUrl) {
                         BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
                             callback();
                         })
