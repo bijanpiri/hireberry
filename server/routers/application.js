@@ -322,7 +322,7 @@ app.post('/api/application/:appID/visitedState',function(req,res){
         .populate('flyerID')
         .exec( function(err,application){
         // Check whether user is responder of job or not
-        if( application.flyerID.autoAssignedTo.toString() === userID.toString() ) {
+        if( application.flyerID.autoAssignedTo && application.flyerID.autoAssignedTo.toString() === userID.toString() ) {
             BApplications.update({_id:appID},{visited:visitedState}, function(err) {
                 if( err )
                     res.send(504);

@@ -275,6 +275,9 @@ function saveOnParse( data, filename, callback ) {
     var file = new Parse.File( filename, data );
 
     file.save().then(function() {
+
+        console.log(file.url);
+
         callback( null, file.url );
     }, function(error) {
         callback( error, null);
