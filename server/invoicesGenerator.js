@@ -1,7 +1,7 @@
 /**
  * Created by coybit on 5/15/14.
  */
-
+util = require('util');
 models = require('./etc/models');
 
 console.log('#### INVOICE GENERATOR STARTED ####');
