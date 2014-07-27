@@ -353,7 +353,7 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
         console.log('++++ content' + resumeContent );
         console.log('++++ type' + resumeType );
         console.log('++++ filename' + resumeFileName );
-        console.log('++++ length' + msg.attachments.length );
+        //console.log('++++ length' + msg.attachments );
 
         BAppliedByEmail({email:resumeContent}).save( function(err) {
             BApplications({
