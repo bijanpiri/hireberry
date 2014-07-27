@@ -350,6 +350,11 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
             resumeFileName = msg.attachments[filename].filename;
         }
 
+        console.log('++++ content' + resumeContent );
+        console.log('++++ type' + resumeType );
+        console.log('++++ filename' + resumeFileName );
+        console.log('++++ length' + msg.attachments.length );
+
         BAppliedByEmail({email:resumeContent}).save( function(err) {
             BApplications({
                 flyerID: req.params.formID,
