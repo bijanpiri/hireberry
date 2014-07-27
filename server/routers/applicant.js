@@ -390,11 +390,12 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
                     });
                 });
             else
-                saveOnParse( {base64:resumeContent}, resumeFileName, function(err,fileUrl) {
-                    BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
-                        callback();
-                    })
-                });
+                callback();
+                //saveOnParse( {base64:resumeContent}, resumeFileName, function(err,fileUrl) {
+                //    BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
+                //        callback();
+                //    })
+                //});
         });
     }
 });
