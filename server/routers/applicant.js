@@ -341,7 +341,8 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
         var resumeFileName = '';
         var resumeContent = '';
         var resumeType = '';
-        
+        var msg = messages[i];
+
         //Upload attached files to Parse and save their links as resume
         for(var filename in msg.attachments) {
             resumeContent = msg.attachments[filename].content;
@@ -350,58 +351,51 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
         }
 
         BAppliedByEmail({email:resumeContent}).save( function(err) {
-            saveApplication();
+            BApplications({
+                flyerID: req.params.formID,
+                name: msg["from_name"],
+                email: msg["from_email"],
+                applyTime: new Date(),
+                anythingelse: msg["html"],
+                //resumePath: resumeUrl || resumeFileName,
+                stage: { stage:1, subStage:1 },
+                activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
+            }).save( function(err, application) {
+                    uploadResume( application._id, req.params.formID, resumeFileName, resumeContent, function() {
+                        if( ++savedCounter == messagesCount )
+                            res.send(200);
+                    });
+                });
         });
     }
 
-    function saveApplication() {
 
-        /*
-         base64: false
-         content: "FILE TEXT"
-         name: "filename.txt"
-         type: "text/plain"
-         */
+    /*
+     base64: false
+     content: "FILE TEXT"
+     name: "filename.txt"
+     type: "text/plain"
+     */
 
+    var uploadResume = function( applicationID, flyerID, resumeFilename, resumeContent, callback ) {
+        BFlyers.findOne( {_id:flyerID}, function(err,flyer) {
 
+            //console.log('Saving ', resumeFilename, flyerID, resumeContent);
 
-        BApplications({
-            flyerID: req.params.formID,
-            name: msg["from_name"],
-            email: msg["from_email"],
-            applyTime: new Date(),
-            anythingelse: msg["html"],
-            //resumePath: resumeUrl || resumeFileName,
-            stage: { stage:1, subStage:1 },
-            activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
-        }).save( function(err, application) {
-
-                uploadResume( application._id, req.params.formID, resumeFileName, resumeContent, function() {
-                    if( ++savedCounter == messagesCount )
-                        res.send(200);
+            // ToDo: Implement saving resume
+            if( flyer.dbToken )
+                saveOnDropbox( flyer.dbToken, resumeContent, resumeFilename, function(err,fileUrl) {
+                    BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
+                        callback();
+                    });
                 });
-            });
-
-        var uploadResume = function( applicationID, flyerID, resumeFilename, resumeContent, callback ) {
-            BFlyers.findOne( {_id:flyerID}, function(err,flyer) {
-
-                //console.log('Saving ', resumeFilename, flyerID, resumeContent);
-
-                // ToDo: Implement saving resume
-                if( flyer.dbToken )
-                    saveOnDropbox( flyer.dbToken, resumeContent, resumeFilename, function(err,fileUrl) {
-                        BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
-                            callback();
-                        });
-                    });
-                else
-                    saveOnParse( {base64:resumeContent}, resumeFileName, function(err,fileUrl) {
-                        BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
-                            callback();
-                        })
-                    });
-            });
-        }
+            else
+                saveOnParse( {base64:resumeContent}, resumeFileName, function(err,fileUrl) {
+                    BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
+                        callback();
+                    })
+                });
+        });
     }
 });
 
