@@ -397,10 +397,14 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
 
                 console.log('++++ saving ...' );
 
-                saveOnParse( {base64:resumeContent}, resumeFileName, function(err,fileUrl) {
+                saveOnParse( {base64:resumeContent}, resumeFileName || 'no-name', function(err,fileUrl) {
+
+                    console.log('++++ saved ' + fileUrl );
+
                     BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
                       callback();
-                   })
+                   });
+
                 });
         });
     }
