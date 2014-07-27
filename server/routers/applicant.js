@@ -341,7 +341,7 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
         var resumeFileName = '';
         var resumeContent = '';
         var resumeType = '';
-        var msg = messages[i];
+        var msg = messages[i].msg;
 
         //Upload attached files to Parse and save their links as resume
         for(var filename in msg.attachments) {
