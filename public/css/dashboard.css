@@ -74,8 +74,13 @@
     margin: 1em;
 }
 
+.menu .menu-header #switchButton {
+    background-color: #fff;
+}
+
 .menu #dashboardNavigator {
     padding: 0 50px;
+    background-color: #fff;
 }
 
 .menu .item {
@@ -792,4 +797,15 @@ Billing
     padding: 30px;
     margin: 0 10%;
     line-height: 2.5em;
+}
+
+/**** For Fixing Bootstrap tour plugin in dashboard ****/
+.menu {
+    z-index: 1;
+    /*z-index: 1101;
+    background-color: #fff;*/
+}
+
+.popover[class*="tour-"] {
+    /*z-index: 1101;*/
 }

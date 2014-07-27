@@ -25,8 +25,28 @@ _.templateSettings = {
     evaluate: /\{\%(.+?)\%\}/g
 };
 
+function getTourElement(tour){
+    return tour._options.steps[tour._current].element
+}
+
 function initTour(){
     var tour = new Tour({
+        onStart: function() {
+            $('.menu').css('z-index',1100);
+        },
+        onEnd: function() {
+            $('.menu').css('z-index',0);
+        },
+        onShown: function(tour) {
+            var stepElement = getTourElement(tour);
+
+            console.log(tour._current,stepElement)
+
+            if( stepElement === '#createFlyerButton' )
+                $('.menu').css('z-index',0);
+            else
+                $('.menu').css('z-index',1100);
+        },
         steps: [
             {
                 title: "Welcome to Hireberry",
@@ -38,13 +58,13 @@ function initTour(){
                 element: "#dashboardNavigator",
                 title: "Dashboard Navigation Menu",
                 content: "Use this buttons to navigate to different parts of dashboard",
-                container:"#dashboardNavigator"
+                container:".menu"
             },
             {
                 element: "#switchButton ",
                 title: "Change Team",
                 content: "You can change your current team with this button",
-                container:"body"
+                container:".menu-header"
             },
             {
                 element: "#createFlyerButton",
@@ -53,10 +73,10 @@ function initTour(){
                 reflex:true,
                 container:"#navbar-container"
             }],
-        backdrop:true,
-        onEnd:function(tour){
-            $.post('/api/cert',{dashLevel:3});
-        }
+        backdrop:true
+        //onEnd:function(tour){
+            //$.post('/api/cert',{dashLevel:3});
+        //}
 
     });
 

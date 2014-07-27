@@ -358,8 +358,8 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
             name: msg["from_name"],
             email: msg["from_email"],
             applyTime: new Date(),
-            anythingelse: msg["html"],
-            //resumePath: resumeUrl || resumeFileName,
+            anythingelse: msg["text"], // or msg["html"]
+            //resumePath: resumeUrl || resumeFileName, // Set it later
             stage: { stage:1, subStage:1 },
             activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
         }).save( function(err, application) {
