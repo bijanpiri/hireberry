@@ -91,6 +91,10 @@ app.post('/admin', function(req,res) {
         });
 });
 
+app.get('/privacy-policy', function(req,res){
+    res.render('privacy.ejs');
+})
+
 // endregion
 
 // region Setting

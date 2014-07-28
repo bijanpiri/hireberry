@@ -13,6 +13,7 @@ app.get('/api/applications', function (req,res) {
     var userID = req.user ? req.user._id: '';
     var query = req.query.q || '';
     var jobFilter = req.query.j || '0';
+    var filtered = query!=undefined || jobFilter!=undefined;
 
     if( query ) {
         query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape
@@ -89,7 +90,7 @@ app.get('/api/applications', function (req,res) {
 
                 BApplications.count({flyerID:{$in:flyersID}}, function(err,count) {
                     return res.send({
-                        noneFilterCandidatesCount: count,
+                        allowToShowEmptyState: !filtered, // Don't show empty state for filtered mode
                         candidates:submittedForms
                     });
                 });
