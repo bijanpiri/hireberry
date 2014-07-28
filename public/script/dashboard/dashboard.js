@@ -483,6 +483,30 @@ function initApplicationPage() {
         });
     });
 
+    // Layout view mode checkbox
+    $('#layout-view-mode').change( function() {
+        if( $('#layout-view-mode').prop('checked')==false ) { // grid
+            $('#candidatesCollection').animate({'opacity':0},300, function() {
+
+                $('#candidatesCollection')
+                    .removeClass('list-layout')
+                    .addClass('grid-layout')
+                    .animate({'opacity':1},300);
+
+            });
+        }
+        else {
+            $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
+
+                $('#candidatesCollection')
+                    .removeClass('grid-layout')
+                    .addClass('list-layout')
+                    .animate({'opacity':1},300);
+
+            });
+        }
+    })
+
     $('.ask-for-comment-form')
         .submit( function() {
             var form=$(this);
