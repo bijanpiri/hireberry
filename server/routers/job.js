@@ -2,52 +2,34 @@
  * Created by Bijan on 04/29/2014.
  */
 
-var addJobBoardPrice=function(name,price) {
-    BJobBoardPrice(
-        {
-            name: name,
-            price:price
-        }).save(function(err,data){
-            if(err)
-                res.send(502,{error:err});
-            else
-                res.send(200,{message:"Process successfully done."});
 
-        });
-}
 
+//Get price of job boards. The returned prices for Linkedin and Indeed are always $195 and $50 respectively.
+//This function use to initialize of price array when promote.ejs load.
+//If name==null then list of prices is returned.
 var getJobBoardPrice=function(name,callback) {
+
     if(name)
     {
         BJobBoardPrice.findOne({name:name},function(er,rst)
         {
             var joboardlist={};
             for(var i=0;i<rst.length;i++)
-            {
                 joboardlist[rst[i]._doc.name]=rst[i]._doc.price;
-                //var item={};
-                //item[rst[i]._doc.name]=rst[i]._doc.price;
-                //joboardlist.push(item);
-            }
             callback(err,joboardlist);
         });
     }
     else
     {
-        BJobBoardPrice.find()
+        BJobBoardPrice.find({ name: { $in: [ 'behance', 'github','indeed','dribbble','linkedin' ,'stack overflow'] } })
             .exec(function(err, rst)
             {
                 var joboardlist={};
                 for(var i=0;i<rst.length;i++)
-                {
                     joboardlist[rst[i]._doc.name]=rst[i]._doc.price;
-                    //var item={};
-                    //item[rst[i]._doc.name]=rst[i]._doc.price;
-                    //joboardlist.push(item);
-                }
+
                 callback(err,joboardlist);
             });
-
     }
 
 }
@@ -159,28 +141,6 @@ function notifyAllForJobComment(jobID,comment){
 }
 
 
-app.get('/jbprice',function(req, res) {
-    getJobBoardPrice(null,function(err,rst)
-    {
-        if(err)
-            res.send(400,{data:"Job board price list can not load."});
-
-        res.send(200,rst);
-    });
-});
-
-
-app.get('/linkedinprice',function(req, res)
-{
-
-    require('fs').readFile('public/linkedin.json', 'utf8', function (err,data) {
-        if (err) {
-            return console.log(err);
-        }
-        res.send(200,JSON.parse(   data));
-    });
-});
-
 // region Views
 app.get('/flyer/new',function(req,res){
     res.cookie('flyerid','');
@@ -188,54 +148,9 @@ app.get('/flyer/new',function(req,res){
 });
 
 app.get('/dashboard/promotepanel',function(req,res){
+
         res.render("promotePanel.ejs",{
             title:"Promote Panel"
-        });
-});
-
-app.get('/dashboard/getinfo',function(req,res){
-    BPromoteInfo.find()
-        .populate('flyerID')
-        .exec( function(err, dataPromote) {
-            //data.flyerID.populate('owner');
-            if(err)
-            {
-                return res.send(502,{error:err});
-            }
-            else
-            {
-                BTeams.find()
-               .exec( function(err, dataTeam) {
-
-                        var result=new Array();
-
-                       for(var i=0;i<dataPromote.length;i++)
-                        {
-                            var item=new Object();
-                            item.Date=dataPromote[i].time;
-                            item.JobBoards=dataPromote[i].jobBoards;
-                            item.TotalPrice=dataPromote[i].totalPrice;
-                            item.FlyerId=dataPromote[i].flyerID._id.toString();
-                            item.JobTitle=dataPromote[i].flyerID.flyer.description;
-                            item.Preview=dataPromote[i].jobBoardsPreview;
-                            var TeamID=dataPromote[i].flyerID.owner.toString();
-
-                            item.TeamID="";
-                            item.TeamName="";
-                            for(var j=0;j<dataTeam.length;j++)
-                            {
-                                if(TeamID==dataTeam[j]._id.toString())
-                                {
-                                item.TeamID=TeamID;
-                                item.TeamName=dataTeam[j].name;
-                                    break;
-                                }
-                            }
-                            result.push(item);
-                        };
-                        res.send(200,result);
-                    });
-            }
         });
 });
 
@@ -256,126 +171,6 @@ app.get('/paypromote',function(req,res){
 
 });
 
-app.post('/flyer/submitpromote',function(req,res){
-
-    if(req.body.jobBoardInfo)
-    {
-    var SelectedJobBoards=req.body.jobBoardInfo.SelectedJobBoards;
-
-
-    var TotalPayment=0.0;
-    getJobBoardPrice(null,function(err,jblist)
-    {
-
-        if(err)
-            res.send(400,{data:"Job board price list can not load."});
-
-        var joboardlist=new Array();;
-
-
-        require('fs').readFile('public/linkedin.json', 'utf8', function (err,data) {
-            if (err)
-                return console.log(err);
-
-
-
-        for(var i=0;i<SelectedJobBoards.length;i++)
-        {
-            var item=new Object();
-            item.Name=SelectedJobBoards[i].Name;
-            item.Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
-
-            if( SelectedJobBoards[i].Name.toLowerCase()=="linkedin")
-            {
-                    var linkedinPrice=JSON.parse(data);
-                if(linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode])
-                {  item.Price=linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode]['Price'].slice(3);
-                    TotalPayment+=parseFloat(item.Price);
-                }
-                else
-                    res.send(400,{data:"Job board price list can not load."});
-
-            }
-            else if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
-            {
-                item.Price=SelectedJobBoards[i].Price;
-                TotalPayment+=parseFloat(SelectedJobBoards[i].Price);
-            }
-            else
-            {
-                item.Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
-                TotalPayment+=  parseFloat (jblist[SelectedJobBoards[i].Name.toLowerCase()]);
-            }
-            joboardlist.push(item);
-        }
-
-
-     res.send(200,{TotalPayment:TotalPayment,SelectedJobBoards:joboardlist});
-    });
-    });
-    }
-    else
-        res.send(200,{TotalPayment:0.0,SelectedJobBoards:new Array()});
-});
-
-app.post('/flyer/confirmpromote',function(req,res){
-
-var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards;
-
-    var TotalPayment=0.0;
-    getJobBoardPrice(null,function(err,jblist)
-    {
-
-        if(err)
-            res.send(400,{data:"Job board price list can not load."});
-
-
-
-        require('fs').readFile('public/linkedin.json', 'utf8', function (err,data) {
-            if (err)
-                return console.log(err);
-
-        for(var i=0;i<SelectedJobBoards.length;i++)
-        {
-            if( SelectedJobBoards[i].Name.toLowerCase()=="linkedin")
-            {
-                 var linkedinPrice=JSON.parse(data);
-
-                if(linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode])
-                    TotalPayment+=parseFloat(linkedinPrice[SelectedJobBoards[i].Country][SelectedJobBoards[i].PostalCode]['Price'].slice(3));
-                else
-                    res.send(400,{data:"Job board price list can not load."});
-
-
-            }
-            else if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
-                TotalPayment+=parseFloat(SelectedJobBoards[i].Price);
-            else
-                TotalPayment+=  parseFloat (jblist[SelectedJobBoards[i].Name.toLowerCase()]);
-        }
-
-
-
-        BPromoteInfo(
-            {
-                totalPrice: TotalPayment,
-                jobBoards:SelectedJobBoards,
-                flyerID:req.body.flyerID,
-                jobBoardsPreview:req.body.jobBoardInfo.JobBoardListPreiview,
-                time:new Date()
-            }).save(function(err,data){
-                if(err)
-                    res.send(502,{error:err});
-                else
-                {
-                    //res.redirect('/pay?amount='+TotalPayment+"&jbp=1");
-                    res.send(200,{PromoteId:data._doc._id.toString()});
-                }
-            });
-        });
-    });
-});
-
 app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
 
     var flyerid = req.params.flyerID;
@@ -388,7 +183,6 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
             res.send(err);
         else if(flyer)
         {
-
             extractPromoteInfo(flyer,function(PromoteInfo)
             {
                 res.render('promote.ejs',
@@ -530,6 +324,55 @@ app.get('/flyer/:mode/:tid', function(req,res){
 });
 // endregion
 
+// region API
+
+//Call when loading promotePanel.ejs
+app.get('/api/dashboard/getinfo',function(req,res){
+    BPromoteInfo.find()
+        .populate('flyerID')
+        .exec( function(err, dataPromote) {
+            //data.flyerID.populate('owner');
+            if(err)
+            {
+                return res.send(502,{error:err});
+            }
+            else
+            {
+                BTeams.find()
+                    .exec( function(err, dataTeam) {
+
+                        var result=new Array();
+
+                        for(var i=0;i<dataPromote.length;i++)
+                        {
+                            var item=new Object();
+                            item.Date=dataPromote[i].time;
+                            item.JobBoards=dataPromote[i].jobBoards;
+                            item.TotalPrice=dataPromote[i].totalPrice;
+                            item.FlyerId=dataPromote[i].flyerID._id.toString();
+                            item.JobTitle=dataPromote[i].flyerID.flyer.description;
+                            item.Preview=dataPromote[i].jobBoardsPreview;
+                            var TeamID=dataPromote[i].flyerID.owner.toString();
+
+                            item.TeamID="";
+                            item.TeamName="";
+                            for(var j=0;j<dataTeam.length;j++)
+                            {
+                                if(TeamID==dataTeam[j]._id.toString())
+                                {
+                                    item.TeamID=TeamID;
+                                    item.TeamName=dataTeam[j].name;
+                                    break;
+                                }
+                            }
+                            result.push(item);
+                        };
+                        res.send(200,result);
+                    });
+            }
+        });
+});
+
 
 // Return all the created forms (template)
 app.get('/api/forms',  function(req,res){
@@ -622,7 +465,202 @@ app.get('/api/forms',  function(req,res){
 
 });
 
-// region API
+app.post('/api/flyer/confirmpromote',function(req,res){
+
+    var SelectedJobBoards=req.body.jobBoardInfo.PaymentInfo.SelectedJobBoards;
+
+    var TotalPayment=0.0;
+    getJobBoardPrice(null,function(err,jblist)
+    {
+
+        if(err)
+            res.send(400,{data:"Job board price list can not load."});
+        else
+        {
+            var LinkedindIdx=-1;
+            for(var i=0;i<SelectedJobBoards.length;i++)
+            {
+                if( SelectedJobBoards[i].Name.toLowerCase()=="linkedin")
+                {
+                    LinkedindIdx=i;
+                    continue;
+                }
+                else if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
+                {
+                    var Price=SelectedJobBoards[i].Price;
+                    TotalPayment+=parseFloat(Price);
+                }
+                else
+                {
+                    var Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
+                    TotalPayment+=  parseFloat (Price);
+                }
+            }
+            if(LinkedindIdx>=0)
+            {
+                var name ='linkedin-'+SelectedJobBoards[LinkedindIdx].Country;
+                BJobBoardPrice.findOne({name:name},function(err,rst)
+                {
+                    var result=rst._doc.postalCodePrice;
+                    if(rst==null || err!=null)
+                        res.send(400,"Country or postal code not found");
+                    else
+                    {
+                        if(result['-1'])
+                        {
+                            TotalPayment+=parseFloat(result['-1'].Price.slice(3));
+                        }
+                        else
+                        {
+                            TotalPayment+=parseFloat(result[SelectedJobBoards[LinkedindIdx].PostalCode].Price.slice(3));
+                        }
+
+                        BPromoteInfo(
+                            {
+                                totalPrice: TotalPayment,
+                                jobBoards:SelectedJobBoards,
+                                flyerID:req.body.flyerID,
+                                jobBoardsPreview:req.body.jobBoardInfo.JobBoardListPreiview,
+                                time:new Date()
+                            }).save(function(err,data){
+                                if(err)
+                                    res.send(502,{error:err});
+                                else
+                                {
+                                    //res.redirect('/pay?amount='+TotalPayment+"&jbp=1");
+                                    res.send(200,{PromoteId:data._doc._id.toString()});
+                                }
+                            });
+                    }
+                });
+
+            }
+            else
+            {
+                BPromoteInfo(
+                    {
+                        totalPrice: TotalPayment,
+                        jobBoards:SelectedJobBoards,
+                        flyerID:req.body.flyerID,
+                        jobBoardsPreview:req.body.jobBoardInfo.JobBoardListPreiview,
+                        time:new Date()
+                    }).save(function(err,data){
+                        if(err)
+                            res.send(502,{error:err});
+                        else
+                        {
+                            //res.redirect('/pay?amount='+TotalPayment+"&jbp=1");
+                            res.send(200,{PromoteId:data._doc._id.toString()});
+                        }
+                    });
+            }
+        }
+    });
+
+});
+
+app.post('/api/flyer/submitpromote',function(req,res){
+
+    if(req.body.jobBoardInfo)
+    {
+        var SelectedJobBoards=req.body.jobBoardInfo.SelectedJobBoards;
+
+
+        var TotalPayment=0.0;
+        getJobBoardPrice(null,function(err,jblist)
+        {
+
+            if(err)
+                res.send(400,{data:"Job board price list can not load."});
+
+            var joboardlist=new Array();;
+            var LinkedindIdx=-1;
+            for(var i=0;i<SelectedJobBoards.length;i++)
+            {
+                var item=new Object();
+                item.Name=SelectedJobBoards[i].Name;
+                item.Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
+
+                if( SelectedJobBoards[i].Name.toLowerCase()=="linkedin")
+                {
+                    LinkedindIdx=i;
+                    continue;
+                }
+                else if(SelectedJobBoards[i].Name.toLowerCase()=="indeed")
+                {
+                    item.Price=SelectedJobBoards[i].Price;
+                    TotalPayment+=parseFloat(SelectedJobBoards[i].Price);
+                }
+                else
+                {
+                    item.Price=jblist[SelectedJobBoards[i].Name.toLowerCase()];
+                    TotalPayment+=  parseFloat (jblist[SelectedJobBoards[i].Name.toLowerCase()]);
+                }
+                joboardlist.push(item);
+            }
+            if(LinkedindIdx>=0)
+            {
+                var item=new Object();
+                item.Name=SelectedJobBoards[LinkedindIdx].Name;
+                var name ='linkedin-'+SelectedJobBoards[LinkedindIdx].Country;
+                item.Price=jblist[SelectedJobBoards[LinkedindIdx].Name.toLowerCase()]
+                BJobBoardPrice.findOne({name:name},function(err,rst)
+                {
+                    var result=rst._doc.postalCodePrice;
+                    if(rst==null || err!=null)
+                        res.send(400,"Country or postal code not found");
+                    else
+                    {
+                        if(result['-1'])
+                        {
+                            item.Price=result['-1'].Price.slice(3);
+                            TotalPayment+=parseFloat(item.Price);
+                        }
+                        else
+                        {
+                            item.Price=result[SelectedJobBoards[LinkedindIdx].PostalCode].Price.slice(3);
+                            TotalPayment+=parseFloat(item.Price);
+                        }
+                    }
+                    joboardlist.push(item);
+                    res.send(200,{TotalPayment:TotalPayment,SelectedJobBoards:joboardlist});
+
+                });
+            }
+            else
+                res.send(200,{TotalPayment:TotalPayment,SelectedJobBoards:joboardlist});
+
+        });
+    }
+    else
+        res.send(200,{TotalPayment:0.0,SelectedJobBoards:new Array()});
+});
+
+//Get price of job boards. (see getJobBoardPrice function description)
+app.get('/api/jbprice',function(req, res) {
+    getJobBoardPrice(null,function(err,rst)
+    {
+        if(err)
+            res.send(400,{data:"Job board price list can not load."});
+
+        res.send(200,rst);
+    });
+});
+
+//Return list of price of selected country for linkedin
+app.get('/api/flyer/promote/ldprice/:country' ,function(req,res)
+{
+    var country = req.params.country;
+    var name ='linkedin-'+country;
+    BJobBoardPrice.findOne({name:name},function(err,rst)
+    {
+        if(rst==null || err!=null)
+            res.send(400,"Country or postal code not found");
+        else
+            res.send(200,rst.postalCodePrice);
+    });
+});
+
 app.delete('/api/job/:flyerID', function(req,res){
 
     if( !req.user )
