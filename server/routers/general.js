@@ -132,7 +132,7 @@ var addJobBoardPrice=function() {
     addLinkedInPrice();
 }
 
-var InitJobBoardPriceCollection = function()
+function InitJobBoardPriceCollection()
 {
     BJobBoardPrice.find().exec(function(err, rst)
     {
@@ -156,6 +156,7 @@ var InitJobBoardPriceCollection = function()
         }
     });
 };
+
 
 // endregion
 
