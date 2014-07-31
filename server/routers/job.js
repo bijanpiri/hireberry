@@ -508,7 +508,7 @@ app.post('/api/flyer/confirmpromote',function(req,res){
                     {
                         if(result['-1'])
                         {
-                            TotalPayment+=parseFloat(result['-1'].Price.slice(3));
+                            TotalPayment+=parseFloat(result['-1'].slice(3));
                         }
                         else
                         {
@@ -613,7 +613,7 @@ app.post('/api/flyer/submitpromote',function(req,res){
                     {
                         if(result['-1'])
                         {
-                            item.Price=result['-1'].Price.slice(3);
+                            item.Price=result['-1'].slice(3);
                             TotalPayment+=parseFloat(item.Price);
                         }
                         else
