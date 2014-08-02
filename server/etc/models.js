@@ -62,12 +62,14 @@ BUsers = mongoose.model( 'users', {
     tempToken:String,
     teamID: {type:mongoose.Schema.ObjectId,ref:'teams'},
 });
+
 BCertificates=mongoose.model('certificates',{
     user:{type:mongoose.Schema.ObjectId,ref:'users'},
     dash:Number,
     editor:Number,
     application:Number
 });
+
 BFlyers = mongoose.model( 'flyers', {
     flyer: Object,
     owner: {type : mongoose.Schema.ObjectId, ref : 'teams'},
@@ -88,6 +90,7 @@ BTeams = mongoose.model( 'teams', {
     address:String,
     plan: Number,
     planLastRenewDate: Date,
+    planNotification: String,
     HiringManagerNotified: Boolean,
     careerPage: {}
 });

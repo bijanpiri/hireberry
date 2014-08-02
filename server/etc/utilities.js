@@ -495,7 +495,7 @@ deleteEvent=function(eventID,callback) {
 
 /** Promo Codes **/
 publicRegisterIsAllowed = function() {
-    return false;
+    return true;
 }
 
 checkPromoCode = function( code, callback ) {
@@ -603,16 +603,12 @@ changePlan = function( newPlan, teamID, callback ) {
 
     generateInvoice(teamID, function() {
 
-        checkBalance( teamID, plansCost[newPlan] ,function(err, isOK) {
-            if(!err.error && isOK ) {
-                BTeams.update({_id:teamID},{plan:newPlan}, function(err) {
-                    callback({error:err});
-                });
-            } else {
+        BTeams.update({_id:teamID},{plan:newPlan}, function(err) {
+                callback({error:err});
+        });
 
-            }
-        })
     });
+
 }
 
 addCredit = function(teamID,value,callback) {
@@ -638,6 +634,6 @@ checkBalance = function(teamID, minBalance, callback) {
         for( var i=0; i<transactions.length; i++ )
             balance += parseFloat(transactions[i].amount);
 
-        callback({error:null}, (balance >= minBalance) );
+        callback({error:null}, (balance >= minBalance), balance );
     });
 }

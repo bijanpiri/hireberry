@@ -22,6 +22,7 @@
         "mandrill-api": "*",
         "compression": "*",
         "paypal-rest-sdk": "*",
-        "nodealytics": "*"
+        "nodealytics": "*",
+        "async": "*"
     }
 }

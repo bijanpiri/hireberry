@@ -13,7 +13,7 @@ app.get('/api/applications', function (req,res) {
     var userID = req.user ? req.user._id: '';
     var query = req.query.q || '';
     var jobFilter = req.query.j || '0';
-    var filtered = query!=undefined || jobFilter!=undefined;
+    var filtered = (query!='' || jobFilter!='0') ? true : false;
 
     if( query ) {
         query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"); // Regex escape

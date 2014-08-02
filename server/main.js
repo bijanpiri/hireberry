@@ -78,5 +78,3 @@ generalRouters = require('./routers/general');
 teamRouters = require('./routers/team');
 applicationRouters = require('./routers/application');
 applicantRelationshipRouters = require('./routers/applicant');
-
-

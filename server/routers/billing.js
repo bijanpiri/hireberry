@@ -72,7 +72,7 @@ app.get('/api/billing', function(req,res) {
         for( var i=0; i<transactions.length; i++ ) {
             balance += parseFloat(transactions[i].amount);
 
-            if( Math.abs(transactions[i].amount) > 0 )
+            if( Math.abs(transactions[i].amount) > 0 ) // Don't show zero invoices
                 billings.push( { method: transactions[i].method, state:transactions[i].state, time: transactions[i].paymentTime, amount:transactions[i].amount} );
         }
 
