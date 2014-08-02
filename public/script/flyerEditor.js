@@ -594,6 +594,8 @@ function loadPublishPanel() {
                     else
                         $('#publishModal').modal();
 
+                }).fail( function(res) {
+                    alert(res.responseText);
                 });
         }
 

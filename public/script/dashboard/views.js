@@ -253,10 +253,12 @@ BJobsView = Backbone.View.extend({
                     modal.find('#jobApplyByEmail-address').val(form.formID + '@mail.hireberry.com');
 
                     function changeJobMode(mode) {
-                        $.post('/flyer/changeMode',{mode:mode,flyerID:form.formID}).done( function() {
+                        $.post('/flyer/changeMode',{mode:mode,flyerID:form.formID}).done( function(res) {
                             jobs.fetch();
                             modal.modal('hide');
-                        });
+                        }).fail( function(res){
+                                alert(res.responseText);
+                            });
                     }
 
                     modal.find('.saveButton').unbind('click').click( function() {

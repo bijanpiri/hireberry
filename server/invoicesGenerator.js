@@ -48,7 +48,7 @@ function teamBalanceCheckerBuilder(teamID,teamPlan) {
                     changePlan( 0, teamID, function() {
                         // Add a notification and inactive all jobs
 
-                        BFlyers.update({owner:teamID},{publishTime:null}, function(err) {
+                        BFlyers.update({owner:teamID},{publishTime:''}, function(err) {
 
                             BTeams.update({_id:teamID},{autoDowngraded: true}, function(err) {
 

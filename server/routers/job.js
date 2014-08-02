@@ -140,6 +140,19 @@ function notifyAllForJobComment(jobID,comment){
         });
 }
 
+function checkForPublish( teamID, newMode, callback ) {
+
+    BTeams.findOne({_id:teamID}, function(err,team) {
+        BFlyers.count({publishTime:{$ne:''}}, function(err,publishedCount) {
+
+            if( (newMode==='publish' || newMode==='askedForPublish') && team.plan == 0 && publishedCount>=1)
+                callback(false);
+            else
+                callback(true);
+        });
+    });
+
+}
 
 // region Views
 app.get('/flyer/new',function(req,res){
@@ -730,36 +743,42 @@ app.post('/flyer/publish', function(req,res){
     var teamID = req.user.teamID;
     var saveAsDraft = Boolean( req.body.saveAsDraft );
 
-    if(saveAsDraft==='true') {
-        notifyResponder('drafted', flyerID, userID, function() {
-            saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:''}, 'Position is saved as draft.')
-        })
-    }
-    else {
-        res.cookie('flyerid','');
+    checkForPublish( teamID, 'publish', function(allowed) {
+        if(allowed==false)
+            return res.send(503,'Free plan limitation');
 
-        BTeams.count({_id:teamID,admin:userID}, function(err,count) {
-            if(count>0) { // User is admin
-                notifyResponder('published', flyerID, userID, function() {
-                    saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:new Date()}, 'Position is published.')
-                })
-            }
-            else {
-                addNotification( 'askForPublish', {flyerID: flyerID}, function() {
-                    saveInDatabase({flyer:flyer, askedForPublish:true, publishTime:''}, 'Ask For Publish request is sent.');
-                });
-            }
-        });
-    }
+        if(saveAsDraft==='true') {
+            notifyResponder('drafted', flyerID, userID, function() {
+                saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:''}, 'Position is saved as draft.')
+            })
+        }
+        else {
+            res.cookie('flyerid','');
 
-    function saveInDatabase(param,successMessage) {
-        BFlyers.update({_id:flyer.flyerid}, param,{upsert:true}, function(err){
-            if(!err)
-                res.send(200,{message:successMessage});
-            else
-                res.send(500,{result:'DB Error'});
-        });
-    }
+            BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+                if(count>0) { // User is admin
+                    notifyResponder('published', flyerID, userID, function() {
+                        saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:new Date()}, 'Position is published.')
+                    })
+                }
+                else {
+                    addNotification( 'askForPublish', {flyerID: flyerID}, function() {
+                        saveInDatabase({flyer:flyer, askedForPublish:true, publishTime:''}, 'Ask For Publish request is sent.');
+                    });
+                }
+            });
+        }
+
+        function saveInDatabase(param,successMessage) {
+            BFlyers.update({_id:flyer.flyerid}, param,{upsert:true}, function(err){
+                if(!err)
+                    res.send(200,{message:successMessage});
+                else
+                    res.send(500,{result:'DB Error'});
+            });
+        }
+
+    });
 });
 
 app.post('/flyer/changeMode', function(req,res){
@@ -772,34 +791,43 @@ app.post('/flyer/changeMode', function(req,res){
     var teamID = req.user.teamID;
     var newMode = req.body.mode.toLowerCase();
 
-    if(newMode==='draft') {
 
-        notifyResponder('drafted', flyerID, userID, function() {
-            saveInDatabase({askedForPublish:false, publishTime:''})
-        })
-    }
-    else {
-        BTeams.count({_id:teamID,admin:userID}, function(err,count) {
-            if(count>0 && newMode==='publish') { // User is admin
+    // Check for current plan active job limitation
+    checkForPublish( teamID, newMode, function(allowed) {
+        if(allowed==false)
+            return res.send(503,'On Free plan you can have just one active (published) job. ' +
+                'Upgrade to Goldberry for having more active job page.');
 
-                notifyResponder('published', flyerID, userID, function() {
-                    saveInDatabase({askedForPublish:false, publishTime:new Date()})
-                })
-            }
-            else if(newMode==='ask for publish') {
-                saveInDatabase({askedForPublish:true, publishTime:''});
-            }
-        });
-    }
+        if(newMode==='draft') {
 
-    function saveInDatabase(param,successMessage) {
-        BFlyers.update({_id:flyerID}, param, function(err){
-            if(!err){
-                res.send(200,{message:'Changed'});
-            }else
-                res.send(500,{result:'DB Error'});
-        });
-    }
+            notifyResponder('drafted', flyerID, userID, function() {
+                saveInDatabase({askedForPublish:false, publishTime:''})
+            })
+        }
+        else {
+            BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+                if(count>0 && newMode==='publish') { // User is admin
+
+                    notifyResponder('published', flyerID, userID, function() {
+                        saveInDatabase({askedForPublish:false, publishTime:new Date()})
+                    })
+                }
+                else if(newMode==='ask for publish') {
+                    saveInDatabase({askedForPublish:true, publishTime:''});
+                }
+            });
+        }
+
+        function saveInDatabase(param,successMessage) {
+            BFlyers.update({_id:flyerID}, param, function(err){
+                if(!err){
+                    res.send(200,{message:'Changed'});
+                }else
+                    res.send(500,{result:'DB Error'});
+            });
+        }
+    });
+
 });
 
 app.post('/flyer/inactive', function(req,res){
