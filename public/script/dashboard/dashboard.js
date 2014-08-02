@@ -73,10 +73,10 @@ function initTour(){
                 reflex:true,
                 container:"#navbar-container"
             }],
-        backdrop:true
-        //onEnd:function(tour){
-            //$.post('/api/cert',{dashLevel:3});
-        //}
+        backdrop:true,
+        onEnd:function(tour){
+            $.post('/api/cert',{dashLevel:3});
+        }
 
     });
 

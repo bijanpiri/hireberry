@@ -368,7 +368,7 @@ BTeamView = Backbone.View.extend({
         $('#teamJobsPagePublic').attr('href','/view/careerpage/' +  info.id);
         $('#teamName').text( info.name);
         $('#teamAdmin').text( teamAdmin.email);
-        $('#currentTeamName').text( info.name );
+        $('.currentTeamName').text( info.name );
 
         // Fill members list
         $('#teamMembers').empty();

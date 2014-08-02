@@ -25,7 +25,7 @@
 <div class="menu">
     <div class="menu-header">
         <div id="switchTeamView">
-            <div id="currentTeamName">Current Team</div>
+            <div class="currentTeamName">Current Team</div>
             <button id="switchButton" class="btn btn-mini" onclick="GAEvent('Dashboard','Team','Open ChangeTeam')">
                 <i class="fa fa-random fa-lg"></i>
                 Change Team
@@ -70,6 +70,11 @@
 <div class="span12 right-panel">
 
 <div id="overviewp" class="container-fluid sectionContainer">
+    <div class="row-fluid">
+        <div style="font-size: 2em;line-height: 3em;">
+            <span class="currentTeamName"></span>'s statistics:
+        </div>
+    </div>
     <div class="row-fluid statisticsRow">
         <div class="span3 statBox">
             <a onclick="window.location='#jobsp'">
@@ -101,6 +106,9 @@
     </div>
     <div class="row-fluid">
         <div class="span12">
+            <div style="font-size: 2em;line-height: 3em;">
+                <span class="currentTeamName"></span>'s calendar:
+            </div>
 
             <div id="full-clndr" class="clearfix" hidden>
                 <script type="text/template" id="full-clndr-template">
