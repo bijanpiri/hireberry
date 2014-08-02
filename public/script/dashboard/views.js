@@ -440,6 +440,20 @@ BBillingView = Backbone.View.extend({
         var billing = this.model.get('billing');
         var plan = (billing.plan==0) ? 'Freeberry' : 'Goldberry';
 
+        if( billing.autoDowngraded ){
+            $('.billing-notification').show();
+            $('.billing-notification button').unbind('click').click( function() {
+
+                $.post('/api/billing/turnoff-alert').done( function() {
+                    $('.billing-notification').hide();
+                });
+
+            });
+        }
+        else {
+            $('.billing-notification').hide();
+        }
+
         $('#current-plan').text( plan );
         $('#billing_balance span').text( billing.balance );
         $('.plan-age').text( '(From ' + dateTimeToJSON(billing.lastRenew).from +')');

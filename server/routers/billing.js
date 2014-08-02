@@ -81,6 +81,7 @@ app.get('/api/billing', function(req,res) {
                 billing: {
                     plan: team.plan,
                     lastRenew: team.planLastRenewDate,
+                    autoDowngraded: team.autoDowngraded,
                     balance: balance,
                     billings: billings
                 }
@@ -195,3 +196,13 @@ app.get('/api/plan/change', function(req,res) {
         res.send(200);
     })
 })
+
+app.post('/api/billing/turnoff-alert', function(req,res) {
+
+    var teamID = req.user.teamID;
+
+    BTeams.update({_id:teamID},{autoDowngraded:false}, function(err){
+       res.send( err ? 503 : 200 );
+    });
+
+});

@@ -19,11 +19,8 @@ function checkTeamsCredit() {
 
             var teamID = teams[i]._id;
             var teamPlan = teams[i].plan;
-            var autoDowngradeMessage = teams[i].name + '\'s credit is not enough.'+
-                'Your plan is downgraded to Free automatically.' +
-                'Please recharge team account and upgrade to proper plan.';
 
-            teamBalanceCheckers.push( teamBalanceCheckerBuilder(teamID,teamPlan,autoDowngradeMessage) );
+            teamBalanceCheckers.push( teamBalanceCheckerBuilder(teamID,teamPlan) );
             teamBalanceCheckers.push( teamMonthlyInvoiceGeneratorBuilder(teams[i]) );
         }
 
@@ -36,7 +33,7 @@ function checkTeamsCredit() {
 
 }
 
-function teamBalanceCheckerBuilder(teamID,teamPlan,autoDowngradeMessage) {
+function teamBalanceCheckerBuilder(teamID,teamPlan) {
 
     return function(callback) {
 
@@ -53,9 +50,7 @@ function teamBalanceCheckerBuilder(teamID,teamPlan,autoDowngradeMessage) {
 
                         BFlyers.update({owner:teamID},{publishTime:null}, function(err) {
 
-                            BTeams.update({_id:teamID},{
-                                planNotification: autoDowngradeMessage
-                            }, function(err) {
+                            BTeams.update({_id:teamID},{autoDowngraded: true}, function(err) {
 
                                 console.log( '## Instantly-Checks finished (downgraded) ... ' + teamID, teamPlan, cost  );
                                 callback(null);

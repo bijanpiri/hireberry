@@ -91,7 +91,7 @@ BTeams = mongoose.model( 'teams', {
     address:String,
     plan: Number,
     planLastRenewDate: Date,
-    planNotification: String,
+    autoDowngraded: Boolean,
     HiringManagerNotified: Boolean,
     careerPage: {}
 });
