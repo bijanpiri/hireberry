@@ -1,67 +1,37 @@
-/*<style>*/
-    /*    #fb-promote a{
-            text-indent:-9999px;
-            display: inline-block;
-            border:0; padding:0; margin:10px auto;
-            width: 152px; height: 32px;
-            background:url(http://www.hyperarts.com/facebook/static-fbml-bible/_img/share-btn.png) top left no-repeat;
-            overflow: hidden;
-            text-decoration:none !important;
-        }*/
-/*</style>*/
 
-/*  <style>*/
+.promote-container {
+    font-size: 1.5em;
+    margin-top: 60px;
+    width: 60%;
+    margin: 60px auto;
+}
 
-  .form-row.inline
-  {
-      position: relative;
-      bottom: -120px;
-      /* left: -200px;*/
-  }
+.form-row.inline {
+  position: relative;
+  bottom: -120px;
+  /* left: -200px;*/
+}
 
 .job-title {
-    position: relative;
-    bottom: -120px;
-    left: 10px;
     display: block;
-    margin: 20px 20px;
-    min-width: 100px;
-    height: 80px;
-    line-height: 80px;
+    margin: 20px 0;
     text-align: center;
-    border-radius: 8px;
-    border: 4px 4px;
-    border-color: #006dcc;
-    border: solid;
-    background: #b0b0b0;
-    font-weight: 700;
-    border-radius: 7px;
-    font-size: 3em;
-    font-weight: 700;
+    font-size: 2em;
     color: #002a80;
 }
 
-
 .social-network {
-    position: relative;
-    bottom: -160px;
-    left: 10px;
-    right: 0;
     display: block;
-    margin: 20px 20px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
     min-width: 100px;
-    height: 130px;
     line-height: 60px;
     text-align: center;
-    background: #c3c3c3;
     font-weight: 700;
     border-radius: 7px;
-    font-size: 2.5em;
+    border: 2px solid #E4E4E4;
 }
 
-/*for hiding link on social netwowk images*/
+/*for hiding link on social network images*/
 .social-network a{
     overflow: hidden;
     text-decoration:none !important;
@@ -104,37 +74,26 @@
     background-color: #fcfcfc;
 
 }
+
 .job-boards {
-    position: relative;
-    bottom: -120px;
-    left: 10px;
-    right: 0;
     display: block;
-    margin: 20px 20px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
     min-width: 100px;
-    /* height: 280px;*/
-    line-height: 60px;
+    line-height: 50px;
     text-align: center;
-    background: #c3c3c3;
     font-weight: 700;
     border-radius: 7px;
-    padding-bottom: 20px;
-    font-size: 2.5em;
+    border: 2px solid #E4E4E4;
 }
 
 .job-boards label{
-    position: relative;
-    height: 35px;
-    font-weight: 300;
-    font-size: 0.6em;
-    top: -7px;
     display: inline-block;
 }
+
 .job-boards input[type=number]{
     height: 35px;
     width: 100px;
+    margin: 0;
 }
 
 .job-boards input[type=checkbox]{
@@ -148,46 +107,34 @@
     background-color: #e3e3e3;
 }
 
-.job-boards input[type=button]{
-    height: 64px;
-    width: 64px;
-    border-radius: 8px;
-    border: 2px;
-    border-color: #2d6987;
-    border-style: solid;
-    /*margin-right: 20px;*/
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #e3e3e3;
+.job-boards select {
+    margin: 0;
+    height: 30px;
 }
 
-.job-boards input[type=button]:hover{
-    height: 64px;
-    width: 64px;
-    border-radius: 8px;
-    border: 2px ;
-    border-color: #B3B3B3;
-    border-style: solid;
-    background-position: center;
+.job-boards .colPreview input[type=button]{
+    height: 28px;
+    width: 28px;
+    border-radius: 4px;
+    border: solid 1px #C9C9C9;
+    background-color: #D9D9D9;
+    background-size: 32px 32px;
+    box-sizing: content-box;
     background-repeat: no-repeat;
-    background-color: #fcfcfc;
+    padding: 2px;
 }
 
-.job-boards input[type=button]:active{
-    height: 64px;
-    width: 64px;
-    border-radius: 8px;
-    border: 2px ;
-    border-color: #f8f8f8;
-    border-style: solid;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #fcfcfc;
-
+.job-boards .colPreview  input[type=button]:hover{
 }
 
-#find-postal-code
-{
+.job-boards .colPreview  input[type=button]:active{
+}
+
+.job-boards #flyer-list {
+    padding: 0;
+}
+
+#find-postal-code {
     position: relative;
     height: 35px;
     font-weight: 200;
@@ -196,63 +143,10 @@
     display: inline-block;
 }
 
-#btn-promote-payment{
-    position: relative;
-    bottom: -160px;
-    height: 50px;
-    width: 140px;
-    border-radius: 8px;
-    border: 2px;
-    border-color: #f8f8f8;
-    border-style: solid;
-    margin: 20px;
-    margin-left: 20px;
+.job-boards #btn-promote-payment{
+    width: auto;
     float: right;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #006dcc;
-    font-weight: 500 ;
-    color: #fcfcfc;
-    font-size: 1.8em
-
-}
-#btn-promote-payment:hover{
-    position: relative;
-    bottom: -160px;
-    height: 50px;
-    width: 140px;
-    border-radius: 8px;
-    border: 2px;
-    border-color: #f8f8f8;
-    border-style: solid;
-    margin: 20px;
-    margin-left: 20px;
-    float: right;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #0044cc;
-    font-weight: 500 ;
-    color: #fcfcfc;
-    font-size:1.8em
-}
-#btn-promote-payment:active{
-    position: relative;
-    bottom: -160px;
-    height: 50px;
-    width: 140px;
-    border-radius: 8px;
-    border: 2px;
-    border-color: #f8f8f8;
-    border-style: solid;
-    margin: 20px;
-    margin-left: 20px;
-    float: right;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #006dcc;
-    font-weight: 500 ;
-    color: #fcfcfc;
-    font-size: 1.8em
+    margin: 4px 0px;
 }
 
 .modal-body {
@@ -288,25 +182,15 @@
     border-radius: 8px;
 }
 
-#div-total-payment{
-
-
-    position: relative;
-    bottom: -160px;
-    left: 10px;
-    right: 0;
-    float: left;
-    display: block;
-    margin: 20px;
-    margin-left: 20px;
-    min-width: 200px;
-    height:50px;
-    line-height: 50px;
-    text-align: center;
-    background: #c3c3c3;
-    font-weight: 700;
-    border-radius: 7px;
-    font-size: 2.5em;
-
+.overall-cost {
+    text-align: left;
 }
-/*</style>*/
+
+.overall-cost span {
+    display: inline-block;
+    line-height: 36px;
+    font-weight: 700;
+    font-size: 1.5em;
+    margin-right: 8px;
+}
+
