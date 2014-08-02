@@ -4,42 +4,81 @@ $(document).ready( function() {
     var updateLinkedinPrice=function()
     {
         var cn=$("#field-country").find(":selected").val();
-        if(LinkedinPrice[cn])
-        {
-            if( LinkedinPrice[cn]['-1'])
-            {
+        $("#find-postal-code").attr('href',"http://www.geonames.org/postalcode-search.html?q=&country="+cn);
+
+        if($("#field-postalCode").length>0)
+            $("#field-postalCode").remove();
+
+        $.ajax({
+            url:'/api/flyer/promote/ldprice/'+cn,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+
+                LinkedinPrice=data;
+                if(data[-1]!=undefined)
+                {
+                    $("#div-postalcode").hide();
+                    $("#ld-price").text(data[-1].slice(2))
+                    $("#ld-area").text("").hide();
+                }
+                else
+                {
+                    $("#div-postalcode").show();
+                    $("#ld-area").text("").show();
+                    var select=$('<select>')
+                        .attr("name","postalCode")
+                        .attr('size','1')
+                        .attr('id','field-postalCode')
+
+                        .change(function()
+                        {
+                            var price=$("#field-postalCode").find(":selected").val();
+                            $("#ld-price").text(price);
+                            calculateTotalPayment();
+                        });
+
+
+
+                    var divPostalcode= $("#div-postalcode");
+                    var keys=Object.keys(data);
+                    for(var i=0;i<keys.length;i++)
+                    {
+                        var opt=$('<option>').
+                            attr("value",data[keys[i]].Price.slice(2))
+                            .attr('area',data[keys[i]].Area)
+                            .attr('postalCode',keys[i])
+                            .text(keys[i] + "  [ "+data[keys[i]].Area +" ]");
+                        select.append(opt);
+                    }
+                    $("#find-postal-code").before(select);
+                    //divPostalcode.append(select);
+                    select.show();
+                    var price=$("#field-postalCode").find(":selected").val();
+                    $("#ld-price").text(price);
+                }
+
+                calculateTotalPayment();
+            }
+        })
+            .fail(function(data) {
+
                 $("#div-postalcode").hide();
-                $("#ld-price").text(LinkedinPrice[cn]['-1'].slice(2))
+                $("#ld-price").text("$195.0")
                 $("#ld-area").text("").hide();
-
-            }
-            else
-            {
-                $("#div-postalcode").show();
-                $("#ld-price").text("Please, select a postal code")
-                $("#ld-area").text("").hide();
-
-            }
-        }
-        else
-        {
-            $("#div-postalcode").show();
-            $("#ld-price").text("Please, select a country")
-            $("#ld-area").text("").hide();
-        }
+                alert(data.responseText);
+            });
     }
-
 
 
 
     $("#field-country").change(function()
     {
         updateLinkedinPrice();
-        calculateTotalPayment();
     });
 
 
-
+    /*
     $("#field-postal-code").blur(function()
     {
         var cn=$("#field-country").find(":selected").val();
@@ -57,33 +96,36 @@ $(document).ready( function() {
         }
         calculateTotalPayment();
     });
+    */
 
 
 
     $.ajax({
-        url:'/jbprice',
+        url:'/api/jbprice',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
             JobBoardPrice=data;
+            updateLinkedinPrice();
         }
     })
         .fail(function(data) {
-            alert(data);
+            alert(data.responseText);
         });
 
-    $.ajax({
+   /* $.ajax({
         url:'/linkedinprice',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
             LinkedinPrice=data;
+
             updateLinkedinPrice();
         }
     })
         .fail(function(data) {
             alert(data);
-        });
+        });*/
 
 
     $.ajax({
@@ -258,7 +300,7 @@ $(document).ready( function() {
             if(rst.SelectedJobBoards.length>0)
             {
                 $.ajax({
-                    url:'/flyer/submitpromote',
+                    url:'/api/flyer/submitpromote',
                     type: 'POST',
                     dataType: 'json',
                     data :
@@ -295,7 +337,7 @@ $(document).ready( function() {
                                 // $(this).attr("disabled","disabled");
                                 $("#btn-promote-payment").attr("disabled", "disabled");
                                 $.ajax({
-                                    url:'/flyer/confirmpromote',
+                                    url:'/api/flyer/confirmpromote',
                                     type: 'POST',
 
                                     dataType: 'json',
@@ -358,19 +400,18 @@ $(document).ready( function() {
                     jbInfo.Country=cn
                     jbInfo.CountryName=$("#field-country").find(":selected").text();
                     jbInfo.Location="";
-                    if(LinkedinPrice[cn])
+                    if(LinkedinPrice['-1'])
                     {
-                        if( LinkedinPrice[cn]['-1'])
-                        {
-                            jbInfo.PostalCode="-1";
-                        }
-                        else
-                        {
-                            var postal=$("#field-postal-code").val();
-                            jbInfo.PostalCode=postal;
-                            jbInfo.Location=LinkedinPrice[cn][postal]['Area'];
-                        }
+                        jbInfo.PostalCode="-1";
                     }
+                    else
+                    {
+                        var postal=$("#field-postalCode").find(":selected").attr("postalCode");
+                        var area=$("#field-postalCode").find(":selected").attr("area");
+                        jbInfo.PostalCode=postal;
+                        jbInfo.Location=LinkedinPrice[postal][area];
+                    }
+
 
                 }
                 selectedInfo.SelectedJobBoards.push(jbInfo);

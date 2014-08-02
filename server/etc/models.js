@@ -20,7 +20,8 @@ mongoose.connect(mongoHQConenctionString,options);
 
 BJobBoardPrice= mongoose.model( 'jobBoardPrice', {
     name: String,
-    price:Number
+    price:Object,
+    postalCodePrice:Object
 });
 
 BPersistLogin= mongoose.model( 'persistentLogins', {

@@ -1,3 +1,24 @@
+/*<style>*/
+    /*    #fb-promote a{
+            text-indent:-9999px;
+            display: inline-block;
+            border:0; padding:0; margin:10px auto;
+            width: 152px; height: 32px;
+            background:url(http://www.hyperarts.com/facebook/static-fbml-bible/_img/share-btn.png) top left no-repeat;
+            overflow: hidden;
+            text-decoration:none !important;
+        }*/
+/*</style>*/
+
+/*  <style>*/
+
+  .form-row.inline
+  {
+      position: relative;
+      bottom: -120px;
+      /* left: -200px;*/
+  }
+
 .job-title {
     position: relative;
     bottom: -120px;
@@ -165,6 +186,16 @@
 
 }
 
+#find-postal-code
+{
+    position: relative;
+    height: 35px;
+    font-weight: 200;
+    font-size: 0.5em;
+    top: -7px;
+    display: inline-block;
+}
+
 #btn-promote-payment{
     position: relative;
     bottom: -160px;
@@ -278,3 +309,4 @@
     font-size: 2.5em;
 
 }
+/*</style>*/
