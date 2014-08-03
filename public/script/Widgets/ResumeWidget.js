@@ -15,8 +15,8 @@ function ResumeWidget(){
 
     function initParse(){
         Parse.initialize(
-            "qoMkGPujIUWxjrHi28WCcOoSrl755V8CgFYrdC59",
-            "xCzRaCEshLWlg6XGvnBxLdRRcv6BRGNY4MUQhgvn");
+            "5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ",
+            "Sp6Folp3xhpVlphiJ8MyuEfbhg67iqy8hCESnc3L");
         Resume=Parse.Object.extend("Resume");
     }
 

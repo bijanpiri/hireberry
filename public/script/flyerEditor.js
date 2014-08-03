@@ -12,8 +12,8 @@ var Picture;
 
 (function initParse(){
     Parse.initialize(
-        "27AiA7lmRwF5xWK2o8tebNIx0Ij49QxQ9aYUAjkS",
-        "Gbk3FdnB5yergbaTGLIC4BRkejQDVBxATZB8O6LI");
+        "5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ",
+        "Sp6Folp3xhpVlphiJ8MyuEfbhg67iqy8hCESnc3L");
     Logo=Parse.Object.extend("Logo");
 }());
 

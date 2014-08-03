@@ -230,13 +230,13 @@ var getSelectedJobBoardInfo =function(callback)
 
 $(document).ready( function() {
 
+    // Fix job link & description data
+    description = $("<span />", { html: description }).text();
+    jobLink = window.location.origin + '/' + jobLink;
+
     $('.job-title a').attr('href',jobLink);
 
-    // Fix description data
-    description = $("<span />", { html: description }).text();
-
-    $("#field-country").change(function()
-    {
+    $("#field-country").change(function() {
         updateLinkedinPrice();
     });
 
@@ -315,7 +315,7 @@ $(document).ready( function() {
         {
             ml.find("#job-link").text("");
             ml.find("#div-joblink").hide();
-            ml.find("#job-description").append('<br>'+"Job Url : "+'<br>'+jobLink);
+            ml.find("#job-description").append('<br>'+"For more information and applying: "+'<br>' + jobLink );
         }
         else
         {
@@ -364,8 +364,7 @@ $(document).ready( function() {
 
 
         // ------------ Show-Hide company logo ----------------
-        if(logo=='http://placebox.es/231/40/9c9c9c/ffffff/Drop%20Your%20Logo%20Here/' ||
-            boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   )
+        if(logo.match(/^http:\/\/placebox.es/)!=null || boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   )
         {
             ml.find("#company-logo").attr('src','');
             ml.find("#div-logo").hide();
