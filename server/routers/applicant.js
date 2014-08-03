@@ -256,7 +256,7 @@ app.post('/parse/upload', function(req,res){
         fs.readFile(req.files.resume.path, function (err, data) {
             var byteArray = data.toByteArray();
             byteArray = {base64:tbase64};
-            saveOnParse( byteArray, 'testfile.txt', 'test', function(err, fileUrl) {
+            saveOnParse( byteArray, 'uploadedFile', 'test', function(err, fileUrl) {
                 console.log(fileUrl);
             });
         });
@@ -266,10 +266,8 @@ app.post('/parse/upload', function(req,res){
 function saveOnParse( data, filename, callback ) {
     var file = new Parse.File( filename, data );
 
-    file.save().then(function() {
-
+    file.save().then(function(err) {
         console.log('+++++++++++'+file.url());
-
         callback( null, file.url() );
     }, function(error) {
         callback( error, null);
@@ -389,11 +387,11 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
                 });
             else
 
-                console.log('++++ saving ...' );
+                console.log('++++ saving ...' , resumeContent);
 
                 saveOnParse( {base64:resumeContent}, resumeFileName || 'no-name', function(err,fileUrl) {
 
-                    console.log('++++ saved ' + fileUrl );
+                    console.log('++++ saved ' + fileUrl, err );
 
                     BApplications.update({_id:applicationID},{resumePath:fileUrl}, function() {
                       callback();
