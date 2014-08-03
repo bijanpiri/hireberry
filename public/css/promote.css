@@ -1,9 +1,8 @@
 
 .promote-container {
     font-size: 1.5em;
-    margin-top: 60px;
     width: 60%;
-    margin: 60px auto;
+    margin: 80px auto;
 }
 
 .form-row.inline {
@@ -23,6 +22,7 @@
 .social-network {
     display: block;
     padding: 10px;
+    margin-bottom: 20px;
     min-width: 100px;
     line-height: 60px;
     text-align: center;
@@ -149,9 +149,22 @@
     margin: 4px 0px;
 }
 
+.overall-cost {
+    text-align: left;
+}
+
+.overall-cost span {
+    display: inline-block;
+    line-height: 36px;
+    font-weight: 700;
+    font-size: 1.5em;
+    margin-right: 8px;
+}
+
 .modal-body {
 
 }
+
 .modal-body span{
     font-size: 1.2em;
     font-weight: bold;
@@ -160,6 +173,7 @@
     /* display: inline-block;*/
 
 }
+
 .modal-body p{
 
     margin-top: 0px;
@@ -180,17 +194,5 @@
 
 .modal-body img{
     border-radius: 8px;
-}
-
-.overall-cost {
-    text-align: left;
-}
-
-.overall-cost span {
-    display: inline-block;
-    line-height: 36px;
-    font-weight: 700;
-    font-size: 1.5em;
-    margin-right: 8px;
 }
 

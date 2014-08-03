@@ -23,6 +23,7 @@
         "compression": "*",
         "paypal-rest-sdk": "*",
         "nodealytics": "*",
-        "async": "*"
+        "async": "*",
+        "html-to-text": "*"
     }
 }

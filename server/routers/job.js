@@ -2,7 +2,7 @@
  * Created by Bijan on 04/29/2014.
  */
 
-
+var htmlToText = require('html-to-text');
 
 //Get price of job boards. The returned prices for Linkedin and Indeed are always $195 and $50 respectively.
 //This function use to initialize of price array when promote.ejs load.
@@ -67,6 +67,11 @@ var extractPromoteInfo= function (flyer,callback) {
             }
         }
     }
+
+    PromoteInfo.description = htmlToText.fromString(PromoteInfo.description, {
+        wordwrap: 130
+    }).replace(/\n/g,'<br/>');
+
     callback(PromoteInfo);
 }
 
@@ -196,7 +201,7 @@ app.get('/flyer/promote/:templateID/:flyerID',function(req,res){
             res.send(err);
         else if(flyer)
         {
-            extractPromoteInfo(flyer,function(PromoteInfo)
+            extractPromoteInfo(flyer, function(PromoteInfo)
             {
                 res.render('promote.ejs',
                     {title:'Promote',
