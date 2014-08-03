@@ -349,13 +349,13 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
             resumeFileName = msg.attachments[filename].filename;
         }
 
-        console.log('++++ type: ' + resumeType );
-        console.log('++++ filename: ' + resumeFileName );
-
         BFlyers.count({_id:req.params.formID}, function(err,count){
 
             if( err || count==0 ) // If flyer doesn't exist ...
-                res.send(200);
+                return res.send(200);
+
+            console.log('++++ type: ' + resumeType );
+            console.log('++++ filename: ' + resumeFileName );
 
             BApplications({
                 flyerID: req.params.formID,
