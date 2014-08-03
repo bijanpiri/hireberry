@@ -337,7 +337,6 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
 
     for( var i=0; i<messagesCount; i++ ) {
 
-
         var resumeFileName = '';
         var resumeContent = '';
         var resumeType = '';
@@ -353,21 +352,27 @@ app.post('/api/applications/applyByEmail/:formID',  function(req,res) {
         console.log('++++ type: ' + resumeType );
         console.log('++++ filename: ' + resumeFileName );
 
-        BApplications({
-            flyerID: req.params.formID,
-            name: msg["from_name"],
-            email: msg["from_email"],
-            applyTime: new Date(),
-            anythingelse: msg["text"], // or msg["html"]
-            //resumePath: resumeUrl || resumeFileName, // Set it later
-            stage: { stage:1, subStage:1 },
-            activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
-        }).save( function(err, application) {
-                uploadResume( application._id, req.params.formID, resumeFileName, resumeContent, function() {
-                    if( ++savedCounter == messagesCount )
-                        res.send(200);
+        BFlyers.count({_id:req.params.formID}, function(err,count){
+
+            if( err || count==0 ) // If flyer doesn't exist ...
+                res.send(200);
+
+            BApplications({
+                flyerID: req.params.formID,
+                name: msg["from_name"],
+                email: msg["from_email"],
+                applyTime: new Date(),
+                anythingelse: msg["text"], // or msg["html"]
+                //resumePath: resumeUrl || resumeFileName, // Set it later
+                stage: { stage:1, subStage:1 },
+                activities:[{type:'Application is sent (by email)',timestamp:new Date()}]
+            }).save( function(err, application) {
+                    uploadResume( application._id, req.params.formID, resumeFileName, resumeContent, function() {
+                        if( ++savedCounter == messagesCount )
+                            res.send(200);
+                    });
                 });
-            });
+        });
     }
 
 
