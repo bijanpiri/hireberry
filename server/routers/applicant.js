@@ -3,15 +3,7 @@
  */
 
 var request=require('request');
-var Parse = require('parse').Parse;
 
-//var APP_ID = '5zDqBqs1fKZXlB5LyQf4XAyO8L5IOavBnZ8w03IJ';
-//var MASTER_KEY = 'qM1rJ9yEksZbNAYbY9CXx5hVlLBYuPU29n8v9vwR';
-var APP_ID='qoMkGPujIUWxjrHi28WCcOoSrl755V8CgFYrdC59';
-var JavaScript_Key='xCzRaCEshLWlg6XGvnBxLdRRcv6BRGNY4MUQhgvn';
-
-//Parse.initialize(APP_ID, JavaScript_Key);
-//var Resume=Parse.Object.extend("Resume");
 app.get('/job/dropboxAuth', function (req,res){
 
     var flyerID = req.query.flyerid;
