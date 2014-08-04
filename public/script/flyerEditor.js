@@ -586,6 +586,8 @@ function loadPublishPanel() {
                 .html(flyerJson.description)
                 .attr('href','/flyer/embeded/'+flyerid);
 
+            $('.bool-btn-promote').attr('href','/flyer/promote/0/'+flyerid);
+
             $.post('/flyer/publish', {flyer: flyerJson})
                 .done(function (data) {
 
