@@ -441,11 +441,13 @@ BTeamView = Backbone.View.extend({
 
         if(userAdmin) {
             $('label[for="radio-item-billing"]').show();
+            $('.team-setting-btn, .team-invite-btn').show();
         }
         else {
             $('label[for="radio-item-billing"]').remove();
             $('input#radio-item-billing').remove();
             $('#billingp').remove();
+            $('.team-setting-btn, .team-invite-btn').hide();
         }
 
         $('.fetching-team').hide();

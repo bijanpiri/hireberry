@@ -90,6 +90,7 @@ app.get('/api/applications', function (req,res) {
 
                 BApplications.count({flyerID:{$in:flyersID}}, function(err,count) {
                     return res.send({
+                        timeStamp: (new Date()).getTime(),
                         allowToShowEmptyState: !filtered, // Don't show empty state for filtered mode
                         candidates:submittedForms
                     });

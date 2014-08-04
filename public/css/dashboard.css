@@ -326,6 +326,11 @@
 }
 
 /**** Team Panel *****/
+.team-setting-btn,
+.team-invite-btn {
+    margin-right: 8px;
+}
+
 .teamHeader {
     border-radius: 4px 4px 0 0;
     padding: 10px 20px;
@@ -881,4 +886,12 @@ Billing
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px;
+}
+
+
+/*** Hidden/Visible for teammate/hiring manager ***/
+label[for="radio-item-billing"],
+.team-setting-btn,
+.team-invite-btn {
+    display: none;
 }
