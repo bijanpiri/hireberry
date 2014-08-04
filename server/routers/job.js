@@ -743,15 +743,37 @@ app.post('/flyer/publish', function(req,res){
         return;
 
     var flyer = req.body.flyer;
-    var flyerID = flyer.flyerID;
+    var flyerID = flyer.flyerID || flyer.flyerid;
     var userID = req.user._id;
     var teamID = req.user.teamID;
     var saveAsDraft = Boolean( req.body.saveAsDraft );
 
-    checkForPublish( teamID, 'publish', function(allowed) {
-        if(allowed==false)
-            return res.send(503,'Free plan limitation');
 
+    isPublishedBefore( function(publishedBefore) {
+        if( publishedBefore )
+            publish();
+        else {
+            checkForPublish( teamID, 'publish', function(allowed) {
+                if(allowed==false)
+                    return res.send(503,'Free plan limitation');
+                else
+                    publish();
+            });
+        }
+
+    });
+
+
+    function isPublishedBefore(callback) {
+        BFlyers.count({_id: flyerID, publishTime:{$ne:''}}, function(err,fcount) {
+            if( err || fcount==0 )
+                callback(false);
+            else
+                callback(true);
+        });
+    }
+
+    function publish() {
         if(saveAsDraft==='true') {
             notifyResponder('drafted', flyerID, userID, function() {
                 saveInDatabase({flyer:flyer, askedForPublish:false, publishTime:''}, 'Position is saved as draft.')
@@ -773,17 +795,16 @@ app.post('/flyer/publish', function(req,res){
                 }
             });
         }
+    }
 
-        function saveInDatabase(param,successMessage) {
-            BFlyers.update({_id:flyer.flyerid}, param,{upsert:true}, function(err){
-                if(!err)
-                    res.send(200,{message:successMessage});
-                else
-                    res.send(500,{result:'DB Error'});
-            });
-        }
-
-    });
+    function saveInDatabase(param,successMessage) {
+        BFlyers.update({_id:flyer.flyerid}, param,{upsert:true}, function(err){
+            if(!err)
+                res.send(200,{message:successMessage});
+            else
+                res.send(500,{result:'DB Error'});
+        });
+    }
 });
 
 app.post('/flyer/changeMode', function(req,res){
