@@ -11,6 +11,7 @@
 <% script('/script/underscore.js') -%>
 <% script('/clndr/clndr.js') -%>
 <% script('/backbone/backbone-min.js') -%>
+<% script('/async/async.js') -%>
 <% script('/script/UsersCombo.js') -%>
 <% script('/script/jquery-commentbox.js') -%>
 <% script('/script/dashboard/models.js') -%>
@@ -43,19 +44,34 @@
     <div id="dashboardNavigator">
 
         <input type="radio" id="radio-item-overview" hidden name="menuItems" checked>
-        <label class="item" for="radio-item-overview" onclick="GAEvent('Dashboard','Menu','Overview');window.location='#overviewp'">Overview</label>
+        <label class="item" for="radio-item-overview" onclick="GAEvent('Dashboard','Menu','Overview');window.location='#overviewp'">
+            Overview
+            <i class="fetching-icon fetching-overview fa fa-spinner fa-spin"></i>
+        </label>
 
         <input type="radio" id="radio-item-team" hidden name="menuItems">
-        <label class="item" for="radio-item-team" onclick="GAEvent('Dashboard','Menu','Team');window.location='#teamp'">Team</label>
+        <label class="item" for="radio-item-team" onclick="GAEvent('Dashboard','Menu','Team');window.location='#teamp'">
+            Team
+            <i class="fetching-icon fetching-team fa fa-spinner fa-spin"></i>
+        </label>
 
         <input type="radio" id="radio-item-jobs" hidden name="menuItems">
-        <label class="item" for="radio-item-jobs" onclick="GAEvent('Dashboard','Menu','Jobs');window.location='#jobsp'">Jobs</label>
+        <label class="item" for="radio-item-jobs" onclick="GAEvent('Dashboard','Menu','Jobs');window.location='#jobsp'">
+            Jobs
+            <i class="fetching-icon fetching-jobs fa fa-spinner fa-spin"></i>
+        </label>
 
         <input type="radio" id="radio-item-applications" hidden name="menuItems">
-        <label class="item" for="radio-item-applications" onclick="GAEvent('Dashboard','Menu','Applications');window.location='#applicationsp'">Applications</label>
+        <label class="item" for="radio-item-applications" onclick="GAEvent('Dashboard','Menu','Applications');window.location='#applicationsp'">
+            Applications
+            <i class="fetching-icon fetching-applications fa fa-spinner fa-spin"></i>
+        </label>
 
         <input type="radio" id="radio-item-billing" hidden name="menuItems">
-        <label class="item" for="radio-item-billing" onclick="GAEvent('Dashboard','Menu','Billing');window.location='#billingp'" hidden>Billing</label>
+        <label class="item" for="radio-item-billing" onclick="GAEvent('Dashboard','Menu','Billing');window.location='#billingp'" hidden>
+            Billing
+            <i class="fetching-icon fetching-billing fa fa-spinner fa-spin"></i>
+        </label>
 
     </div>
 

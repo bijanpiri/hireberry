@@ -1,6 +1,13 @@
 /**
  * Created by coybit on 5/17/14.
  */
+
+var fetch = Backbone.Model.prototype.fetch;
+Backbone.Model.prototype.fetch = function() {
+    this.trigger('beforeFetch');
+    return fetch.apply(this, arguments);
+};
+
 BStat = Backbone.Model.extend({
     urlRoot: '/api/applications/stat',
     defaults: {
@@ -12,6 +19,10 @@ BStat = Backbone.Model.extend({
     initialize: function(){}
 });
 stat = new BStat;
+stat.on('beforeFetch', function() {
+    $('.fetching-overview').show();
+});
+
 
 BCalendar = Backbone.Model.extend({
     urlRoot: '/api/calendar',
@@ -21,6 +32,10 @@ BCalendar = Backbone.Model.extend({
     initialize: function(){}
 });
 calendar = new BCalendar;
+calendar.on('beforeFetch', function() {
+    $('.fetching-overview').show();
+});
+
 
 BTeams = Backbone.Model.extend({
     urlRoot: '/api/teams',
@@ -30,6 +45,7 @@ BTeams = Backbone.Model.extend({
 });
 teams = new BTeams;
 
+
 BTeam = Backbone.Model.extend({
     urlRoot: '/api/team',
     defaults: {
@@ -37,6 +53,10 @@ BTeam = Backbone.Model.extend({
     initialize: function(){}
 });
 team = new BTeam;
+team.on('beforeFetch', function() {
+    $('.fetching-team').show();
+});
+
 
 BApplications = Backbone.Model.extend({
     url: function(){
@@ -51,13 +71,25 @@ BApplications = Backbone.Model.extend({
     }
 })
 applications = new BApplications;
+applications.on('beforeFetch', function() {
+    $('#candidatesCollection .candidate').remove();
+    $('.fetching-applications').show();
+});
+
 
 BJobs = Backbone.Model.extend({
     urlRoot: '/api/forms'
 })
 jobs = new BJobs;
+jobs.on('beforeFetch', function() {
+    $('.fetching-jobs').show();
+});
+
 
 BBilling = Backbone.Model.extend({
     urlRoot: '/api/billing'
 })
 billing = new BBilling;
+billing.on('beforeFetch', function() {
+    $('.fetching-billing').show();
+});

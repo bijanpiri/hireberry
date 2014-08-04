@@ -7,10 +7,13 @@ BStatView = Backbone.View.extend({
         this.model.on('change', this.render, this);
     },
     render: function() {
-        $('.statisticsRow #statValue1').text( this.model.get("numForms") )
-        $('.statisticsRow #statValue4').text( this.model.get("numTeamMembers") )
-        $('.statisticsRow #statValue2').text( this.model.get("numPublished") )
-        $('.statisticsRow #statValue3').text( this.model.get("numApplications") )
+        $('.statisticsRow #statValue1').text( this.model.get("numForms") );
+        $('.statisticsRow #statValue4').text( this.model.get("numTeamMembers") );
+        $('.statisticsRow #statValue2').text( this.model.get("numPublished") );
+        $('.statisticsRow #statValue3').text( this.model.get("numApplications") );
+
+        $('.fetching-overview').hide();
+
         return this;
     }
 });
@@ -70,6 +73,8 @@ BCalendarView = Backbone.View.extend({
         $('#full-clndr').parent().find('.current-calendar').remove();
         $('#full-clndr').parent().append( calendarObj.show() );
 
+        $('.fetching-overview').hide();
+
         return this;
     }
 });
@@ -85,27 +90,37 @@ BApplicationsView = Backbone.View.extend({
 
         $('#application-filter-all').prop('checked',true);
 
-        $('#candidatesCollection .candidate').remove();
-
         var stagesCounter = [0,0,0,0,0]; // total, pending, interview, offered, archived
+        var getApplicationFunctions = [];
 
         for( var i=0; i<candidates.length; i++ ) {
             var candidate = candidates[i];
 
             // Because result return back synchronize, so order will not be hold
             var placeHolderObj = $('<div>');
-            $('#candidatesCollection').append( placeHolderObj )
-            getApplication( candidate.appID, placeHolderObj );
+            $('#candidatesCollection').append( placeHolderObj );
 
+            // Make a queue of requests for applicant complete information
+            getApplicationFunctions.push( functionBuilder_getApplication(candidate.appID, placeHolderObj) );
+
+            // Count number of applicant at each stage
             stagesCounter[0]++;
             stagesCounter[candidate.stage.stage]++;
         }
 
-        function getApplication(appID,placeHolderObj) {
-            $.get('/api/application/json/' + appID).done( function(app) {
-                var candidateInstance = initCandidateInstance(app,false);
-                placeHolderObj.replaceWith(candidateInstance);
-            });
+        async.parallel( getApplicationFunctions, function() {
+            $('.fetching-applications').hide();
+        });
+
+        function functionBuilder_getApplication(appID,placeHolderObj) {
+
+            return function(callback) {
+                $.get('/api/application/json/' + appID).done( function(app) {
+                    var candidateInstance = initCandidateInstance(app,false);
+                    placeHolderObj.replaceWith(candidateInstance);
+                    callback(null);
+                });
+            }
         }
 
         // Show number of applications in each stage
@@ -117,6 +132,7 @@ BApplicationsView = Backbone.View.extend({
                 GAEvent('Dashboard','Applications','Stage Filter - ' + $(this).attr('for') );
             });
 
+        // Show Empty State, if it is needed
         if( candidates.length==0 && this.model.get('allowToShowEmptyState') == true ){
             $('#applicationsp > div').hide();
             $('.applications-empty-state').show();
@@ -319,6 +335,8 @@ BJobsView = Backbone.View.extend({
             $('#jobsp > div').hide();
             $('.jobs-empty-state, .career-info').show();
         }
+
+        $('.fetching-jobs').hide();
     }
 })
 jobsView = new BJobsView({model:jobs});
@@ -429,6 +447,8 @@ BTeamView = Backbone.View.extend({
             $('input#radio-item-billing').remove();
             $('#billingp').remove();
         }
+
+        $('.fetching-team').hide();
     }
 })
 teamView = new BTeamView({model:team});
@@ -482,6 +502,8 @@ BBillingView = Backbone.View.extend({
 
             $('#billingsList tbody').append( billingRow );
         }
+
+        $('.fetching-billing').hide();
     }
 })
 billingView = new BBillingView({model:billing});
