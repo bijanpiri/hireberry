@@ -232,7 +232,7 @@ $(document).ready( function() {
 
     // Fix job link & description data
     description = $("<span />", { html: description }).text();
-    jobLink = window.location.origin + '/' + jobLink;
+    jobLink = window.location.origin  + jobLink;
 
     $('.job-title a').attr('href',jobLink);
 
@@ -437,7 +437,7 @@ $(document).ready( function() {
                         ml.find('.modal-footer').append($('<button>')
                             .addClass("btn btn-primary")
                             .attr('data-dismiss','modal')
-                            .attr('aria-hidden','true').text("Confirm").click(function()
+                            .attr('aria-hidden','true').text("Pay").click(function()
                             {
                                 // $(this).attr("disabled","disabled");
                                 $("#btn-promote-payment").attr("disabled", "disabled");
