@@ -31,7 +31,7 @@ app.get('/pay', function(req,res) {
                 {
                     if(data)
                     {
-                        pay ( req.headers.host, req.user.teamID,data.totalPrice,invoiceDescription,PaymentType, function(err, approval_url) {
+                        pay ( req.headers.host, req.user.teamID,data.totalPrice,invoiceDescription,PaymentType,req.query.promoteId, function(err, approval_url) {
                             if( !err )
                                 res.redirect(approval_url);
                         } );
@@ -51,7 +51,7 @@ app.get('/pay', function(req,res) {
 
             var invoiceDescription ="Increasing credit for " + team.name + " on Hireberry";
             var PaymentType='accountpay'
-            pay( req.headers.host , req.user.teamID,  req.query.amount,invoiceDescription,PaymentType, function(err, approval_url) {
+            pay( req.headers.host , req.user.teamID,  req.query.amount,invoiceDescription,PaymentType,null, function(err, approval_url) {
                 if( !err )
                     res.redirect(approval_url);
             });
@@ -96,7 +96,7 @@ app.get('/paypal', function(req,res) {
     var ECToken = req.query.token;
     var success = req.query.success;//todo success remove from query
     var prayerID = req.query.PayerID;
-
+    var PromoteID=req.query.pid;
     BTransactions.findOne({_id:transactionID}, function(err,transaction) {
 
         if( success==='true' ) {
@@ -125,34 +125,64 @@ app.get('/paypal', function(req,res) {
                                             console.error(err); //toDo transaction (rollback)
                                         else
                                         {
-                                            //--------------------- Sending email ---------------------
-                                            var emailConfig = {
-                                                from: "Hireberry",
-                                                fromAddress: "job@hireberry.com",
-                                                replyAddress: "reply@hireberry.com"
-                                            };
-                                            var message = {
-                                                "html": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
-                                                "text": "New flyer added for promoting :"+'<br>'+"  Flyer ID ="+req.body.flyerID+ '<br>'+"  Team ID ="+req.body.teamID,
-                                                "subject": "Promoting Job",
-                                                "from_email": emailConfig.fromAddress,
-                                                "from_name": emailConfig.from,
-                                                "to": [{
-                                                    "email": "hossein.pejman@yahoo.com",
-                                                    "name": '',
-                                                    "type": "to"
-                                                }],
-                                                "headers": {
-                                                    "Reply-To": emailConfig.replyAddress
-                                                }
-                                            };
+                                            BPromoteInfo
+                                                .findOne({_id:PromoteID}).lean()
+                                                .exec(function(err,data){
+                                                    if(err)
+                                                        res.send(401,'Error fetching data');
+                                                    else
+                                                    {
+                                                        //--------------------- Sending email ---------------------
+                                                        var content="========== Job Boards Payment Report ==========";
+                                                        if(data.jobBoardsPreview.length>0)
+                                                        content+='<br>'+"Position title : " +data.jobBoardsPreview[0].positionTitle;
+                                                        content+='<br>'+"Position link : "+"http://localhost:5000/flyer/edit/0?flyerid="+data.flyerID;
+                                                        content+='<br>'+"Date : "+data.time;
+                                                        content+='<br>'+"Selected job boards :"
+                                                        for(var j=0;j<data.jobBoards.length;j++)
+                                                        {
+                                                            content+='<br>'+"   Name : "+data.jobBoards[j].Name+" [Price : $"+data.jobBoards[j].Price+"]";
+                                                            if(data.jobBoards[j].Name.toLowerCase()=="linkedin")
+                                                            {
+                                                                content+="  ( Country : "+data.jobBoards[j].CountryName;
+                                                                if(data.jobBoards[j].PostalCode!='-1')
+                                                                    content+="  ## PostalCode : "+data.jobBoards[j].PostalCode+" )";
+                                                                else
+                                                                    content+= " )";
+                                                            }
+                                                        }
+                                                        content+='<br>'+"Total payment : $"+data.totalPrice;
 
-                                            mandrill_client.messages.send({"message": message, "async": false},
-                                                function(result) {/*Sucess*/},
-                                                function(e) { /*Error*/});
-                                            //---------------------------------------------------------
-                                            console.log(payment);
-                                            res.redirect('/paypromote?result=1');
+                                                        var emailConfig = {
+                                                            from: "Hireberry",
+                                                            fromAddress: "job@hireberry.com",
+                                                            replyAddress: "reply@hireberry.com"
+                                                        };
+                                                        var message = {
+                                                            "html": content,
+                                                            "text": content,
+                                                            "subject": "Promoting Job",
+                                                            "from_email": emailConfig.fromAddress,
+                                                            "from_name": emailConfig.from,
+                                                            "to": [{
+                                                                "email": req.user._doc.email,
+                                                                "name": '',
+                                                                "type": "to"
+                                                            }],
+                                                            "headers": {
+                                                                "Reply-To": emailConfig.replyAddress
+                                                            }
+                                                        };
+
+                                                        mandrill_client.messages.send({"message": message, "async": false},
+                                                            function(result) {/*Sucess*/},
+                                                            function(e) { /*Error*/});
+                                                        //---------------------------------------------------------
+                                                        console.log(payment);
+                                                        res.redirect('/paypromote?result=1');
+                                                    }
+                                                });
+
                                         }
                                 });
                             }  //end if(rst.paymentType=="promotepay")

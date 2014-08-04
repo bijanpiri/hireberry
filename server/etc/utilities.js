@@ -535,18 +535,25 @@ addPromoCode = function( code, credit, amount, permissionForResgiter, callback )
 /*** Payments ***/
 plansCost = [0,1.00];
 
-pay = function( rootURL, teamID, amount, description,PaymentType,callback ) {
+pay = function( rootURL, teamID, amount, description,PaymentType,PromoteID,callback ) {
 
     BTransactions( {teamID: teamID, state: 'init', method:'paypal', paymentType:PaymentType }).save( function(err,transaction) {
 
+        var return_url="http://" + rootURL + "/paypal?success=true&tid=" + transaction._id;
+        var cancel_url="http://" + rootURL + "/paypal?success=false&tid=" + transaction._id;
+        if(PromoteID!=null)
+        {
+            return_url=return_url+"&pid="+PromoteID;
+            cancel_url=cancel_url+"&pid="+PromoteID;
+        }
         var create_payment_json = {
             "intent": "sale",
             "payer": {
                 "payment_method": "paypal"
             },
             "redirect_urls": {
-                "return_url": "http://" + rootURL + "/paypal?success=true&tid=" + transaction._id,
-                "cancel_url": "http://" + rootURL + "/paypal?success=false&tid=" + transaction._id
+                "return_url":return_url,
+                "cancel_url":cancel_url
             },
             "transactions": [{
                 "amount": {
