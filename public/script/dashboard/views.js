@@ -93,6 +93,7 @@ BApplicationsView = Backbone.View.extend({
         var stagesCounter = [0,0,0,0,0]; // total, pending, interview, offered, archived
         var getApplicationFunctions = [];
 
+        /*
         for( var i=0; i<candidates.length; i++ ) {
             var candidate = candidates[i];
 
@@ -113,7 +114,6 @@ BApplicationsView = Backbone.View.extend({
         });
 
         function functionBuilder_getApplication(appID,placeHolderObj) {
-
             return function(callback) {
                 $.get('/api/application/json/' + appID).done( function(app) {
                     var candidateInstance = initCandidateInstance(app,false);
@@ -122,15 +122,41 @@ BApplicationsView = Backbone.View.extend({
                 });
             }
         }
+*/
 
-        // Show number of applications in each stage
-        $('#applications-filters label').each( function(i,e){
-            var countObj =  $('<span>').text( '(' + stagesCounter[i] + ')' );
-            $(e).find('span').remove();
-            $(e).append( countObj );
-        }).click( function() {
-                GAEvent('Dashboard','Applications','Stage Filter - ' + $(this).attr('for') );
-            });
+        $.get('/api/applications?d=true').done( function(res) {
+
+            for( var i=0; i<res.candidates.length; i++ ) {
+                var candidate = res.candidates[i].application;
+
+                // Because result return back synchronize, so order will not be hold
+                var placeHolderObj = $('<div>');
+                $('#candidatesCollection').append( placeHolderObj );
+
+                //
+                var candidateInstance = initCandidateInstance(candidate,false);
+                placeHolderObj.replaceWith(candidateInstance);
+
+                // Count number of applicant at each stage
+                stagesCounter[0]++;
+                stagesCounter[candidate.stage.stage]++;
+            }
+
+            afterFetchingApplciation();
+        });
+
+        function afterFetchingApplciation() {
+            // Show number of applications in each stage
+            $('#applications-filters label').each( function(i,e){
+                var countObj =  $('<span>').text( '(' + stagesCounter[i] + ')' );
+                $(e).find('span').remove();
+                $(e).append( countObj );
+            }).click( function() {
+                    GAEvent('Dashboard','Applications','Stage Filter - ' + $(this).attr('for') );
+                });
+
+            $('.fetching-applications').hide();
+        }
 
         // Show Empty State, if it is needed
         if( candidates.length==0 && this.model.get('allowToShowEmptyState') == true ){

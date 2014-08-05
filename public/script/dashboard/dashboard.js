@@ -684,10 +684,12 @@ function initCandidateInstance(candidate,expanded) {
     if(expanded)
         candidateObj.addClass('candidate-expanded');
 
-    if( candidate.currentUser==='denied') {
-        var workflow_mbox = candidateObj.find('.candidate-workflow').parent();
-
+    if( candidate.permission_mark_as_read==='denied') {
         candidateObj.find('.visitedState').remove();
+    }
+
+    if( candidate.permission_edit==='denied') {
+        var workflow_mbox = candidateObj.find('.candidate-workflow').parent();
 
         workflow_mbox.empty().append('You do not have enough permission.');
         workflow_mbox.css('text-align','center')

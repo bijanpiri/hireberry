@@ -9,6 +9,7 @@ app.get('/api/applications', function (req,res) {
     if( !req.user )
         return res.send(404);
 
+    var details = req.query.d;
     var teamID = req.user.teamID;
     var userID = req.user ? req.user._id: '';
     var query = req.query.q || '';
@@ -30,11 +31,13 @@ app.get('/api/applications', function (req,res) {
 
         if( count > 0 ) {   // User is admin
             if ( jobFilter!=='0' ) // Filter by job
-                fetchApplications([jobFilter]);
-            else
-                fetchTeamFlyers( function(teamFlyersID) {
-                    fetchApplications(teamFlyersID);
+                fetchTeamFlyers( [jobFilter], function(teamFlyersID,teamFlyers) {
+                    fetchApplications(teamFlyersID,teamFlyers);
                 })
+            else
+                fetchTeamFlyers( null, function(teamFlyersID,teamFlyers) {
+                    fetchApplications(teamFlyersID,teamFlyers);
+                });
         }
         else if(userID==='') { // Public Viewer
             return res.send(200)
@@ -42,20 +45,17 @@ app.get('/api/applications', function (req,res) {
         else { // User is member
 
             if ( jobFilter!=='0' ) // Filter by job
-                fetchApplications([jobFilter]);
+                fetchAssignedFlyers( [jobFilter], function(userFlyersID,teamFlyers) {
+                    fetchApplications(userFlyersID,teamFlyers);
+                });
             else
-                fetchAssignedFlyers( function(userFlyersID) {
-                    fetchApplications(userFlyersID);
-                })
+                fetchAssignedFlyers( null, function(userFlyersID,assignedFlyers) {
+                    fetchApplications(userFlyersID,assignedFlyers);
+                });
         }
     });
 
-    function fetchApplications(flyersID,flyersName) {
-//                    {$and:[
-//                        {name : {$type:10}},
-//                        {anythingelse : {$type:10}},
-//                        {workPlace : {$type:10}},
-//                        {skills: {$type:10}}]}
+    function fetchApplications(flyersID,flyersList) {
         BApplications.find( {
                 flyerID:{$in:flyersID},
                 $or:[ {name:new RegExp(query, "i")},
@@ -72,9 +72,7 @@ app.get('/api/applications', function (req,res) {
                         :{}
 
                 ]
-            }
-//                :{}}
-        ).sort(sortBy).populate('flyerID').exec(function(err,forms) {
+            }).sort(sortBy).populate('flyerID').exec(function(err,forms) {
                 if( err )
                     return res.send(303,{error:err});
 
@@ -85,7 +83,17 @@ app.get('/api/applications', function (req,res) {
                     // ToDo: This task must be done by a crone job or something like this
                     checkNeedForChangingStage(form.stage,form._id);
 
-                    submittedForms.push( {appID:form._id, stage:form.stage} );
+                    if( details )
+                        submittedForms.push({
+                            appID:form._id,
+                            stage:form.stage,
+                            application: prepareApplicationForClient( form, flyersList[form.flyerID._id.toString()], req.user._id )
+                        });
+                    else
+                        submittedForms.push({
+                            appID:form._id,
+                            stage:form.stage
+                        });
                 }
 
                 BApplications.count({flyerID:{$in:flyersID}}, function(err,count) {
@@ -98,18 +106,34 @@ app.get('/api/applications', function (req,res) {
             })
     }
 
-    function fetchTeamFlyers(callback) {
-        BFlyers.find({owner:teamID}, function(err,flyers) {
+    function fetchTeamFlyers(flyersIDFilter, callback) {
+
+        var query = flyersIDFilter ? {flyerID:{$in:flyersIDFilter}} : {owner:teamID};
+
+        BFlyers.find(query).populate('owner').exec(function(err,flyers) {
             var teamFlyersID = flyers.map( function(flyer) { return flyer._id } );
-            var teamFlyersName = flyers.map( function(flyer) { return flyer.name } );
-            callback(teamFlyersID,teamFlyersName)
+
+            var teamFlyers = {};
+            flyers.forEach( function(flyer) {
+               teamFlyers[flyer._id.toString()] =  flyer;
+            });
+
+            callback(teamFlyersID,teamFlyers);
         });
     }
 
-    function fetchAssignedFlyers(callback) {
-        BFlyers.find({ $or:[{autoAssignedTo:userID},{commentators:userID}] }, function(err,flyers) {
+    function fetchAssignedFlyers(flyersIDFilter, callback) {
+
+        var query = flyersIDFilter ? {flyerID:{$in:flyersIDFilter}} : {$or:[{autoAssignedTo:userID},{commentators:userID}]};
+
+        BFlyers.find(query, function(err,flyers) {
             var userFlyersID = flyers.map( function(flyer) { return flyer._id } );
-            var teamFlyersName = flyers.map( function(flyer) { return flyer.name } );
+
+            var teamFlyers = {};
+            flyers.forEach( function(flyer) {
+                teamFlyers[flyer._id.toString()] =  flyer;
+            });
+
             callback(userFlyersID,teamFlyersName)
         });
     }
@@ -445,7 +469,7 @@ app.get('/api/application/json/:appID', function(req,res) {
         else
             application._doc.currentUser = 'denied';
 
-        application = prepareApplicationForClient(application._doc)
+        application = prepareApplicationForClient(application._doc);
 
         res.send(application);
     });
@@ -467,7 +491,7 @@ app.post('/api/application/:appID/note', function(req,res) {
 
 });
 
-function prepareApplicationForClient(form) {
+function prepareApplicationForClient(form,flyer,currentUserID) {
     form.position = form.flyerID.flyer ? form.flyerID.flyer.description : '';
 
     // Skills
@@ -499,6 +523,28 @@ function prepareApplicationForClient(form) {
         form.lastActivity = form.activities[form.activities.length-1]['type'];
     else
         form.lastActivity = 'NEW';
+
+    // Removing flyer for decrease data volume
+    form.flyerID = { _id: form.flyerID._id };
+
+    //
+    if( flyer ) {
+        var teamID = flyer.owner.admin;
+        var responderID = flyer.autoAssignedTo || '';
+
+
+        // Permission for Mark-As-Read
+        if( currentUserID.toString()===responderID.toString())
+            form.permission_mark_as_read = 'allowed';
+        else
+            form.permission_mark_as_read = 'denied';
+
+        // Permission for change stage
+        if( currentUserID.toString()===teamID.toString() || currentUserID.toString()===responderID.toString())
+            form.permission_edit = 'allowed';
+        else
+            form.permission_edit = 'denied';
+    }
 
     return form;
 }
