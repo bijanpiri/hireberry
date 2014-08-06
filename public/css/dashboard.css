@@ -755,6 +755,26 @@ Billing
     border-bottom: 2px solid #d9d9d9;
 }
 
+
+#jobBoardPaymentsHistory {
+    font-size: 2em
+}
+
+#jobBoardPaymentsList {
+    font-size: 0.8em;
+    width: 100%;
+}
+
+#jobBoardPaymentsList thead tr td {
+    font-weight: 700;
+}
+
+#jobBoardPaymentsList  tr td {
+    padding: 0.5em 2em;
+    background-color: #fff;
+    border-bottom: 2px solid #d9d9d9;
+}
+
 #paypalPay {
     margin: 1em auto 2em auto;
     background-color: #eee;
