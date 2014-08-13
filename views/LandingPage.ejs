@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="google-site-verification" content="0aO8kYtOOtJAq_igefgnsWHwng6w6GlBCBOmeeFVSA8" />
 
+
     <script src="/script/jquery.min.js"></script>
     <script src="/bootstrap3/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/bootstrap3/css/bootstrap.min.css">
@@ -18,6 +19,13 @@
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet'
           type='text/css'>
     <script>
+
+        function scrollSlowTo() {
+            $( "html, body" ).animate({
+                scrollTop: $('.hb-hero')[0].offsetTop
+            }, "slow" );
+        }
+
         $(function () {
 
             var fixNavbarHeight = $('.navbar').height() + 1;
@@ -36,6 +44,13 @@
 
             $('.navbar-fixed-top').addClass('navbar-hidden').css('top', -fixNavbarHeight);
 
+            // Scroll down arrow
+            var arrowYPos = Math.min( $(window).height(), $('.hb-cover').height() );
+            $('.hb-scroll-arrow').show()
+                    .css('top', arrowYPos - $('.hb-scroll-arrow').height() - 16 )
+                    .click( function() {
+                        scrollSlowTo('.hb-hero');
+                    });
 
             // Vertical alignment
             $('.hb-caption').each( function(i,e) {
@@ -109,6 +124,7 @@
                 <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
                     <li class="active ">
                     </li>
+                    <li><a class="hb-nav-btn hb-nav-btn-try-now " href="/register?code=<%= code %>">TRY NOW</a></li>
                     <li><a class='hb-nav-btn ' href="#">Features</a></li>
                     <li><a class='hb-nav-btn ' href="#">Pricing</a></li>
                     <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
@@ -153,6 +169,7 @@
                 <button id="btn-active-promocode">Have a Promo-Code?</button>
             </div>
         </div>
+        <div class="hb-scroll-arrow"></div>
     </div>
 
     <div class="row hb-hero">
@@ -257,6 +274,16 @@
                     Give it a shot, and if you find you need extra features, you can easily upgrade to our premium
                     plan.
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="footer">
+                <a href="/privacy-policy">Privacy Policy</a>
+                |
+                <a href="mailto: support@hireberry.com">Support</a>
             </div>
         </div>
     </div>

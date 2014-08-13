@@ -109,6 +109,10 @@
 }
 .hb-nav-btn-bold{font-weight: 600;}
 
+.navbar .collapse .nav li a.hb-nav-btn-try-now {
+    display: none;
+}
+
 .hb-brand {
     display: inline-block;
     width: 140px;
@@ -187,17 +191,37 @@
     background-size: cover;
 }
 
+.hb-cover .hb-scroll-arrow {
+    background-image: url("/images/scroll-down.png");
+    width: 70px;
+    height: 20px;
+    background-size: 70px 20px;
+    background-repeat: no-repeat;
+    position: absolute;
+    display: none;
+    left: 0;
+    right: 0;
+    margin: auto;
+    cursor: pointer;
+}
+
 /*** Invite/PromoCode ***/
 .hb-cover .hb-cover-floor {
     margin: 20px 0;
 }
 .hb-cover .hb-cover-floor .input-group .input-group-btn button {
-    height: 40px;
+    height: 45px;
     font-weight: 800;
     background-color: rgb(255, 181, 48);
 }
-.hb-cover .hb-cover-floor .input-group input[type="text"]{
-    height: 40px;
+.hb-cover .hb-cover-floor .input-group input[type="text"],
+.hb-cover .hb-cover-floor .input-group input[type="text"]:focus,
+.hb-cover .hb-cover-floor .input-group input[type="text"]:active{
+    height: 45px;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
 .hb-cover .hb-cover-floor > button {
@@ -296,6 +320,11 @@
 .hb-hero-container .row.hb-why-row {
     margin: 40px 0;
 }
+.hb-hero-container .row.hb-why-row .col-md-3,
+.hb-hero-container .row.hb-why-row .col-md-4{
+    text-align: center;
+}
+
 .hb-caption {
     font-size: 18px;
     font-weight: 300;
@@ -339,6 +368,16 @@
     float:right;
 }
 
+.footer {
+    text-align: center;
+}
+
+.footer a {
+    margin: 10px;
+    color: #9c9c9c;
+    font-size: 18px;
+}
+
 @media (min-width:1090px) {
     .hb-hero-summary{
         float: right;
@@ -355,10 +394,11 @@
         height: auto;
     }
 }
-@media (max-width:990px) {
+@media (max-width: 990px) {
     .hb-hero-summary {
-        margin-top: 50px;
+        margin-top: 100px;
         margin-left: 0;
+        margin-bottom: 50px;
     }
     .hb-hero {
         background: none;
@@ -396,12 +436,16 @@
         right: 0;
         margin: auto;
     }
+    .hb-hero-img-container {
+        background: none;
+    }
     .hb-hero-container .hb-cover .hb-cover-col .input-group {
         width: 90%;
     }
     .hb-land-icon-perk {
         width: 100%;
         height: auto;
+        max-width: 50%;
     }
 }
 @media (max-width: 843px) {
@@ -441,5 +485,22 @@
     }
     .hb-hero-img-container {
         min-height: 230px;
+    }
+    .hb-hero-container .hb-cover .hb-cover-col h1 {
+        font-size: 3em;
+    }
+
+    .hb-nav-btn-border {
+        display: none;
+    }
+    .collapse .hb-nav-btn-try-now {
+        display: inline-block;
+    }
+}
+
+@media (max-height: 500px) {
+    .hb-hero-container .hb-cover .hb-cover-col h1 {
+        font-size: 2.5em;
+        margin: 40px 0;
     }
 }
