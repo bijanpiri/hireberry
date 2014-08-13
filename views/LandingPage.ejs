@@ -8,6 +8,8 @@
           content="HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups & SMEs attract the best talents.">
     <meta name="keywords" content="recruitment software,applicant tracking system, hiring, ATS ">
     <meta name="google-site-verification" content="0aO8kYtOOtJAq_igefgnsWHwng6w6GlBCBOmeeFVSA8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="0aO8kYtOOtJAq_igefgnsWHwng6w6GlBCBOmeeFVSA8" />
 
     <script src="/script/jquery.min.js"></script>
     <script src="/bootstrap3/js/bootstrap.min.js"></script>
@@ -34,6 +36,21 @@
 
             $('.navbar-fixed-top').addClass('navbar-hidden').css('top', -fixNavbarHeight);
 
+
+            // Vertical alignment
+            $('.hb-caption').each( function(i,e) {
+                var h1=$(e).height();
+                var h2=$(e).closest('.row').find('.hb-land-icon-perk').height();
+                var padding = (h2-h1)/2;
+                $(e).css('padding-top',padding);
+                $(e).css('padding-bottom',padding);
+                console.log(padding);
+            });
+
+            $('#btn-active-invite, #btn-active-promocode').click( function() {
+                $('.hb-cover-floor[active="true"]').attr('active','false');
+                $(this).closest('.hb-cover-floor').attr('active','true');
+            });
         });
     </script>
 </head>
@@ -44,21 +61,11 @@
 
     <div class="container-fluid hb-nav-container">
         <div class="navbar-header hb-navbar-header">
-            <button type="button" class="navbar-toggle"
-                    data-toggle="collapse" data-target="#nav-action-btn">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
             <a class="hb-brand hb-brand-white" href="#"></a>
-            </a>
         </div>
         <div class="hb-navbar-action-container">
-            <div class="collapse navbar-collapse" id="nav-action-btn">
-                <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
-                    <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
-                </ul>
+            <div class="hb-nav-btn-no-border ">
+                <a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a>
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -73,7 +80,7 @@
     </div>
 </div>
 
-<div class="navbar navbar-default hb-navbar navbar-fixed-top " role="navigation">
+<div class="navbar navbar-default hb-navbar navbar-fixed-top"  role="navigation">
 
     <div class="container-fluid hb-nav-container">
         <div class="navbar-header hb-navbar-header">
@@ -127,18 +134,23 @@
             <div class="hb-cover-floor hb-tag-line">
                 <h1>HANDPICK YOUR TEAM WISELY</h1>
             </div>
-            <div class="hb-cover-floor hb-promo-code">
-                <div class="input-group" style="width: 40%;margin: auto">
-                    <input type="text" class="form-control" style="height: 40px;">
+            <div class="hb-cover-floor hb-invite-email" active="true">
+                <div class="input-group">
+                    <input type="text" class="form-control">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" style="
-                        height: 40px; font-weight: 800;
-                        background-color: rgb(255, 181, 48);">Invite Me!</button>
+                        <button class="btn btn-default" type="button">Invite Me!</button>
                     </span>
-                </div><!-- /input-group -->
+                </div>
+                <button id="btn-active-invite">Want an invitation?</button>
             </div>
-            <div class="hb-cover-floor hb-invite-email">
-                <button class="inactive">Have a Promo-Code?</button>
+            <div class="hb-cover-floor hb-promo-code">
+                <div class="input-group">
+                    <input type="text" class="form-control">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Try it NOW</button>
+                    </span>
+                </div>
+                <button id="btn-active-promocode">Have a Promo-Code?</button>
             </div>
         </div>
     </div>
@@ -162,14 +174,12 @@
         </div>
     </div>
 
-
-    <div class="row">
-        <div class="col-md-4">
+    <div class="row hb-why-row">
+        <div class="col-md-offset-1 col-md-3">
             <img class="hb-land-icon-perk" width="350" height="230" src="/images/time@2x.png" alt="hireberry - Use your time more effectively">
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="">
-
                 <div class="caption hb-caption">
                     <h3>Use your time more effectively</h3>
 
@@ -179,39 +189,32 @@
                         recruitment process.
                     </p>
                 </div>
-
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="thumbnail hb-thumbnail">
-                <div class="hb-land-icon-perk" style="background-position: 0 -170px;"
-                     src=""
-                     alt="..."></div>
-                <div class="caption hb-caption">
-                    <h3>Attract top talent</h3>
 
-                    <p>
+    <div class="row hb-why-row">
+        <div class="col-md-4 pull-right">
+            <img class="hb-land-icon-perk" width="350" height="230" src="/images/talents@2x.png" alt="hireberry - Attract top talent">
+        </div>
+        <div class="col-md-offset-1 col-md-7 pull-left">
+            <div class="caption hb-caption">
+                <h3>Attract top talent</h3>
+                <p>
 
-                        When contacting top talents for your job, being quick off the mark is key. Boring application
-                        forms and inefficient recruitment processes are exactly what candidates hate. HireBerry has
-                        solved these problems with a streamlined hiring experience for your applicants.
-                    </p>
-                </div>
-
+                    When contacting top talents for your job, being quick off the mark is key. Boring application
+                    forms and inefficient recruitment processes are exactly what candidates hate. HireBerry has
+                    solved these problems with a streamlined hiring experience for your applicants.
+                </p>
             </div>
-
         </div>
     </div>
 
-
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="thumbnail hb-thumbnail hb-thumbnail-left">
-                <div class="hb-land-icon-perk" style="background-position: 0 -340px;"
-                     src=""
-                     alt="..."></div>
+    <div class="row hb-why-row">
+        <div class="col-md-offset-1 col-md-3">
+            <img class="hb-land-icon-perk" width="350" height="230" src="/images/money@2x.png" alt="hireberry - Avoid the cost of a bad hire">
+        </div>
+        <div class="col-md-7">
                 <div class="caption hb-caption">
                     <h3>Avoid the cost of a bad hire</h3>
 
@@ -222,57 +225,41 @@
                         you to make a right decision to hire the right person; someone worth the cost.
                     </p>
                 </div>
-
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="thumbnail hb-thumbnail ">
-                <div class="hb-land-icon-perk" style="background-position: 0 -510px;"
-                     src=""
-                     alt="..."></div>
-                <div class="caption hb-caption">
-                    <h3>Empower your brand</h3>
-
-                    <p>
-                        A job ad is not just an advertisement for your vacancy, it is a promotion for your company too.
-                        With HireBerry, you can create a simple, elegant and visually appealing careers page.
-                    </p>
-                </div>
-
-            </div>
-
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="thumbnail hb-thumbnail hb-thumbnail-top">
-                <div class="hb-land-icon-perk" style="background-position: 0 -680px;"
-                     src=""
-                     alt="..."></div>
-            </div>
-
+    <div class="row hb-why-row">
+        <div class="col-md-4 pull-right">
+            <img class="hb-land-icon-perk" width="350" height="230" src="/images/brand@2x.png" alt="hireberry - Empower your brand">
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="thumbnail hb-thumbnail hb-thumbnail-left hb-thumbnail-top">
-                <div class="caption hb-caption">
-                    <h3>Start a powerful, <br/>FREE recruitment scheme</h3>
+        <div class="col-md-offset-1 col-md-7 pull-left">
+            <div class="caption hb-caption">
+                <h3>Empower your brand</h3>
 
-                    <p>
-                        The basic plan of HireBerry is free, and is suitable for small business or for testing purposes.
-                        Give it a shot, and if you find you need extra features, you can easily upgrade to our premium
-                        plan.
-                    </p>
-                </div>
-
+                <p>
+                    A job ad is not just an advertisement for your vacancy, it is a promotion for your company too.
+                    With HireBerry, you can create a simple, elegant and visually appealing careers page.
+                </p>
             </div>
         </div>
     </div>
 
+    <div class="row hb-why-row">
+        <div class="col-md-offset-1 col-md-3">
+            <img class="hb-land-icon-perk" width="350" height="230" src="/images/cake@2x.png" alt="hireberry - Start a powerful, FREE recruitment scheme">
+        </div>
+        <div class="col-md-7">
+            <div class="caption hb-caption">
+                <h3>Start a powerful, <br/>FREE recruitment scheme</h3>
+
+                <p>
+                    The basic plan of HireBerry is free, and is suitable for small business or for testing purposes.
+                    Give it a shot, and if you find you need extra features, you can easily upgrade to our premium
+                    plan.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
