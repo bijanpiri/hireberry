@@ -91,38 +91,6 @@ BApplicationsView = Backbone.View.extend({
         $('#application-filter-all').prop('checked',true);
 
         var stagesCounter = [0,0,0,0,0]; // total, pending, interview, offered, archived
-        var getApplicationFunctions = [];
-
-        /*
-        for( var i=0; i<candidates.length; i++ ) {
-            var candidate = candidates[i];
-
-            // Because result return back synchronize, so order will not be hold
-            var placeHolderObj = $('<div>');
-            $('#candidatesCollection').append( placeHolderObj );
-
-            // Make a queue of requests for applicant complete information
-            getApplicationFunctions.push( functionBuilder_getApplication(candidate.appID, placeHolderObj) );
-
-            // Count number of applicant at each stage
-            stagesCounter[0]++;
-            stagesCounter[candidate.stage.stage]++;
-        }
-
-        async.parallel( getApplicationFunctions, function() {
-            $('.fetching-applications').hide();
-        });
-
-        function functionBuilder_getApplication(appID,placeHolderObj) {
-            return function(callback) {
-                $.get('/api/application/json/' + appID).done( function(app) {
-                    var candidateInstance = initCandidateInstance(app,false);
-                    placeHolderObj.replaceWith(candidateInstance);
-                    callback(null);
-                });
-            }
-        }
-*/
 
         $.get('/api/applications?d=true').done( function(res) {
 

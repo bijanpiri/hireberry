@@ -4,78 +4,159 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Hireberry - Recruiting Software and Applicant Tracking System </title>
     <meta name="robots" content="index, follow">
-    <meta name="description" content="HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups & SMEs attract the best talents.">
+    <meta name="description"
+          content="HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups & SMEs attract the best talents.">
     <meta name="keywords" content="recruitment software,applicant tracking system, hiring, ATS ">
-    <meta name="google-site-verification" content="0aO8kYtOOtJAq_igefgnsWHwng6w6GlBCBOmeeFVSA8" />
+    <meta name="google-site-verification" content="0aO8kYtOOtJAq_igefgnsWHwng6w6GlBCBOmeeFVSA8"/>
 
     <script src="/script/jquery.min.js"></script>
     <script src="/bootstrap3/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/bootstrap3/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/landingpage.css">
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet'
+          type='text/css'>
+    <script>
+        $(function () {
+
+            var fixNavbarHeight = $('.navbar').height() + 1;
+            var navBarChangeThreshold = 100;
+
+            $(window).scroll(function () {
+
+                var nabBarIsHidden = $('.navbar-fixed-top').hasClass('navbar-hidden');
+
+                if ($(window).scrollTop() >= navBarChangeThreshold && nabBarIsHidden) {
+                    $('.navbar-fixed-top').removeClass('navbar-hidden').animate({top: 0}, 500);
+                } else if ($(window).scrollTop() < navBarChangeThreshold && nabBarIsHidden == false) {
+                    $('.navbar-fixed-top').addClass('navbar-hidden').animate({top: -fixNavbarHeight}, 500);
+                }
+            });
+
+            $('.navbar-fixed-top').addClass('navbar-hidden').css('top', -fixNavbarHeight);
+
+        });
+    </script>
 </head>
 
 <body class="hb-land-body">
 
+<div class="navbar navbar-default hb-navbar navbar-normal-top" role="navigation">
+
+    <div class="container-fluid hb-nav-container">
+        <div class="navbar-header hb-navbar-header">
+            <button type="button" class="navbar-toggle"
+                    data-toggle="collapse" data-target="#nav-action-btn">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="hb-brand hb-brand-white" href="#"></a>
+            </a>
+        </div>
+        <div class="hb-navbar-action-container">
+            <div class="collapse navbar-collapse" id="nav-action-btn">
+                <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
+                    <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!--<ul class="nav navbar-nav navbar-right">-->
+        <!--<li>-->
+        <!--<a class='hb-nav-btn ' href="#">-->
+
+        <!--</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+
+    </div>
+</div>
+
 <div class="navbar navbar-default hb-navbar navbar-fixed-top " role="navigation">
 
-        <div class="container-fluid hb-nav-container">
-            <div class="navbar-header hb-navbar-header">
-                <button type="button" class="navbar-toggle"
-                        data-toggle="collapse" data-target="#nav-action-btn">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="hb-brand" href="#"></a>
-                <a class="hb-moto" >
-                    <div class="hb-arrow-left"> </div>
-                    <!--<div class="hb-arrow-left  hidden-xs visible-sm visible-md visible-lg"> </div>-->
-                    <!--<div class="hb-arrow-up  visible-xs hidden-sm hidden-md hidden-lg"></div>-->
+    <div class="container-fluid hb-nav-container">
+        <div class="navbar-header hb-navbar-header">
+            <button type="button" class="navbar-toggle"
+                    data-toggle="collapse" data-target="#nav-action-btn">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="hb-brand hb-brand-purple" href="#"></a>
+            <a class="hb-moto">
+                <div class="hb-arrow-left"></div>
+                <!--<div class="hb-arrow-left  hidden-xs visible-sm visible-md visible-lg"> </div>-->
+                <!--<div class="hb-arrow-up  visible-xs hidden-sm hidden-md hidden-lg"></div>-->
                     <span>
                         It makes sense!
                     </span>
-                </a>
-            </div>
-            <div class="hb-navbar-action-container">
-                <div class="hb-nav-btn-border ">
-                    <a class="hb-nav-btn hb-nav-btn-try-now " href="/register?code=<%= code %>">TRY NOW</a>
-                </div>
-                <div class="collapse navbar-collapse" id="nav-action-btn">
-                    <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
-                        <li class="active ">
-                        </li>
-                        <li><a class='hb-nav-btn ' href="#">Features</a></li>
-                        <li><a class='hb-nav-btn ' href="#">Pricing</a></li>
-                        <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div>
-            <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li>-->
-                    <!--<a class='hb-nav-btn ' href="#">-->
-
-                    <!--</a>-->
-                <!--</li>-->
-            <!--</ul>-->
-
+            </a>
         </div>
+        <div class="hb-navbar-action-container">
+            <div class="hb-nav-btn-border ">
+                <a class="hb-nav-btn hb-nav-btn-try-now " href="/register?code=<%= code %>">TRY NOW</a>
+            </div>
+            <div class="collapse navbar-collapse" id="nav-action-btn">
+                <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
+                    <li class="active ">
+                    </li>
+                    <li><a class='hb-nav-btn ' href="#">Features</a></li>
+                    <li><a class='hb-nav-btn ' href="#">Pricing</a></li>
+                    <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!--<ul class="nav navbar-nav navbar-right">-->
+        <!--<li>-->
+        <!--<a class='hb-nav-btn ' href="#">-->
+
+        <!--</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+
+    </div>
 </div>
 
 <div class="container hb-hero-container">
+
+    <div class="row hb-cover">
+        <div class="col-md-12 hb-cover-col">
+            <div class="hb-cover-floor hb-tag-line">
+                <h1>HANDPICK YOUR TEAM WISELY</h1>
+            </div>
+            <div class="hb-cover-floor hb-promo-code">
+                <div class="input-group" style="width: 40%;margin: auto">
+                    <input type="text" class="form-control" style="height: 40px;">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" style="
+                        height: 40px; font-weight: 800;
+                        background-color: rgb(255, 181, 48);">Invite Me!</button>
+                    </span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="hb-cover-floor hb-invite-email">
+                <button class="inactive">Have a Promo-Code?</button>
+            </div>
+        </div>
+    </div>
+
     <div class="row hb-hero">
-        <div class="col-md-6 col-md-push-6 hb-hero-img-container" >
+        <div class="col-md-6 col-md-push-6 hb-hero-img-container">
             <img
                     class='hb-hero-img' width="auto" height="auto"
                     src="/images/LP-macbook@2x.png" alt="HireBerry hero unit image"/>
         </div>
 
-        <div class="col-md-6 col-md-pull-6 hb-hero-description" >
+        <div class="col-md-6 col-md-pull-6 hb-hero-description">
             <div class="hb-hero-summary">
                 <h2> What is HireBerry?</h2>
+
                 <p>
-                    HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups & SMEs attract the best talents.
+                    HireBerry is a web-based applicant tracking system and recruitment software helps Tech Startups &
+                    SMEs attract the best talents.
                 </p>
             </div>
         </div>
@@ -83,30 +164,39 @@
 
 
     <div class="row">
-        <div class="col-md-6 col-xs-12"  >
-            <div class="thumbnail hb-thumbnail hb-thumbnail-left">
-                <div    class="hb-land-icon-perk"
-                        src=""
-                        alt=""></div>
+        <div class="col-md-4">
+            <img class="hb-land-icon-perk" width="350" height="230" src="/images/time@2x.png" alt="hireberry - Use your time more effectively">
+        </div>
+        <div class="col-md-8">
+            <div class="">
+
                 <div class="caption hb-caption">
                     <h3>Use your time more effectively</h3>
+
                     <p>
-                        Working for a small business means wearing a lot of hats; there is no extra time to waste. With HireBerry, you can use your time wisely and speed up the often tedious and time consuming recruitment process.
+                        Working for a small business means wearing a lot of hats; there is no extra time to waste. With
+                        HireBerry, you can use your time wisely and speed up the often tedious and time consuming
+                        recruitment process.
                     </p>
                 </div>
 
             </div>
         </div>
-        <div class="col-md-6 col-xs-12"  >
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
             <div class="thumbnail hb-thumbnail">
-                <div    class="hb-land-icon-perk" style="background-position: 0 -170px;"
-                        src=""
-                        alt="..."></div>
+                <div class="hb-land-icon-perk" style="background-position: 0 -170px;"
+                     src=""
+                     alt="..."></div>
                 <div class="caption hb-caption">
                     <h3>Attract top talent</h3>
+
                     <p>
 
-                        When contacting top talents for your job, being quick off the mark is key. Boring application forms and inefficient recruitment processes are exactly what candidates hate. HireBerry has solved these problems with a streamlined hiring experience for your applicants.
+                        When contacting top talents for your job, being quick off the mark is key. Boring application
+                        forms and inefficient recruitment processes are exactly what candidates hate. HireBerry has
+                        solved these problems with a streamlined hiring experience for your applicants.
                     </p>
                 </div>
 
@@ -116,32 +206,38 @@
     </div>
 
 
-
     <div class="row">
-        <div class="col-md-6 col-xs-12"  >
+        <div class="col-md-12 col-xs-12">
             <div class="thumbnail hb-thumbnail hb-thumbnail-left">
-                <div    class="hb-land-icon-perk" style="background-position: 0 -340px;"
-                        src=""
-                        alt="..."></div>
+                <div class="hb-land-icon-perk" style="background-position: 0 -340px;"
+                     src=""
+                     alt="..."></div>
                 <div class="caption hb-caption">
                     <h3>Avoid the cost of a bad hire</h3>
+
                     <p>
 
-                        The cost of replacing an employee can range from two to seven times his or her yearly salary. Hiring and training costs can vary from 25% to 200% of annual compensation. HireBerry will help you to make a right decision to hire the right person; someone worth the cost.
+                        The cost of replacing an employee can range from two to seven times his or her yearly salary.
+                        Hiring and training costs can vary from 25% to 200% of annual compensation. HireBerry will help
+                        you to make a right decision to hire the right person; someone worth the cost.
                     </p>
                 </div>
 
             </div>
         </div>
-        <div class="col-md-6 col-xs-12"  >
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
             <div class="thumbnail hb-thumbnail ">
-                <div  class="hb-land-icon-perk" style="background-position: 0 -510px;"
-                        src=""
-                        alt="..."></div>
+                <div class="hb-land-icon-perk" style="background-position: 0 -510px;"
+                     src=""
+                     alt="..."></div>
                 <div class="caption hb-caption">
                     <h3>Empower your brand</h3>
+
                     <p>
-                        A job ad is not just an advertisement for your vacancy, it is a promotion for your company too. With HireBerry, you can create a simple, elegant and visually appealing careers page.
+                        A job ad is not just an advertisement for your vacancy, it is a promotion for your company too.
+                        With HireBerry, you can create a simple, elegant and visually appealing careers page.
                     </p>
                 </div>
 
@@ -151,20 +247,25 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-xs-12 col-md-push-6 ">
+        <div class="col-md-12 col-xs-12">
             <div class="thumbnail hb-thumbnail hb-thumbnail-top">
-                <div    class="hb-land-icon-perk" style="background-position: 0 -680px;"
-                        src=""
-                        alt="..."></div>
+                <div class="hb-land-icon-perk" style="background-position: 0 -680px;"
+                     src=""
+                     alt="..."></div>
             </div>
 
         </div>
-        <div class="col-md-6 col-xs-12 col-md-pull-6 ">
-            <div class="thumbnail hb-thumbnail hb-thumbnail-left hb-thumbnail-top" >
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="thumbnail hb-thumbnail hb-thumbnail-left hb-thumbnail-top">
                 <div class="caption hb-caption">
                     <h3>Start a powerful, <br/>FREE recruitment scheme</h3>
+
                     <p>
-                        The basic plan of HireBerry is free, and is suitable for small business or for testing purposes. Give it a shot, and if you find you need extra features, you can easily upgrade to our premium plan.
+                        The basic plan of HireBerry is free, and is suitable for small business or for testing purposes.
+                        Give it a shot, and if you find you need extra features, you can easily upgrade to our premium
+                        plan.
                     </p>
                 </div>
 
