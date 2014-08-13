@@ -496,7 +496,10 @@ BBillingView = Backbone.View.extend({
                 .append( $('<td>').text( (amount<0?'-':'+') + ' $ ' + Math.abs(amount) ))
                 .append( $('<td>').text(billing.billings[i].method));
 
-            $('#billingsList tbody').append( billingRow );
+            if(billing.billings[i].paymentType=="promotepay")
+                $('#jobBoardPaymentsList tbody').append( billingRow );
+            else
+                $('#billingsList tbody').append( billingRow );
         }
 
         $('.fetching-billing').hide();
