@@ -20,13 +20,37 @@
           type='text/css'>
     <script>
 
-        function scrollSlowTo() {
+        function scrollSlowTo(element) {
             $( "html, body" ).animate({
-                scrollTop: $('.hb-hero')[0].offsetTop
+                scrollTop: $(element)[0].offsetTop
             }, "slow" );
         }
 
+        var arrowYPos;
+
         $(function () {
+
+            $(window).on('resize', function() {
+               locateElements();
+            });
+
+            function locateElements() {
+                $('.hb-cover').css('min-height', $(window).height() );
+
+                // Vertical alignment
+                $('.hb-caption').each( function(i,e) {
+                    var h1=$(e).height();
+                    var h2=$(e).closest('.row').find('.hb-land-icon-perk').height();
+                    var padding = (h2-h1)/2;
+                    $(e).css('padding-top',padding);
+                    $(e).css('padding-bottom',padding);
+                });
+
+                arrowYPos = Math.min( $(window).height(), $('.hb-cover').height() ) - $('.hb-scroll-arrow').height() - 16;
+                $('.hb-scroll-arrow').css('top', arrowYPos  );
+            }
+
+            locateElements();
 
             var fixNavbarHeight = $('.navbar').height() + 1;
             var navBarChangeThreshold = 100;
@@ -44,27 +68,61 @@
 
             $('.navbar-fixed-top').addClass('navbar-hidden').css('top', -fixNavbarHeight);
 
-            // Scroll down arrow
-            var arrowYPos = Math.min( $(window).height(), $('.hb-cover').height() );
-            $('.hb-scroll-arrow').show()
-                    .css('top', arrowYPos - $('.hb-scroll-arrow').height() - 16 )
-                    .click( function() {
-                        scrollSlowTo('.hb-hero');
-                    });
 
-            // Vertical alignment
-            $('.hb-caption').each( function(i,e) {
-                var h1=$(e).height();
-                var h2=$(e).closest('.row').find('.hb-land-icon-perk').height();
-                var padding = (h2-h1)/2;
-                $(e).css('padding-top',padding);
-                $(e).css('padding-bottom',padding);
-                console.log(padding);
+            // Event Handlers
+
+            $('.hb-scroll-arrow').show().click( function() {
+                scrollSlowTo('.hb-hero');
             });
+            goUp();
+
+            function goUp() {
+                $('.hb-scroll-arrow').animate({top:arrowYPos-16}, 1000, function() {
+                    goDown();
+                });
+            }
+            function goDown() {
+                $('.hb-scroll-arrow').animate({top:arrowYPos}, 800, function() {
+                    goUp();
+                });
+            }
 
             $('#btn-active-invite, #btn-active-promocode').click( function() {
-                $('.hb-cover-floor[active="true"]').attr('active','false');
-                $(this).closest('.hb-cover-floor').attr('active','true');
+
+                var btn = this;
+
+                $('.hb-promo-code, .hb-invite-email').animate({opacity:0.0}, 500, function() {
+
+                    $('.hb-cover-floor[active="true"]').attr('active','false');
+                    $(btn).closest('.hb-cover-floor').attr('active','true');
+
+                    $('.hb-promo-code, .hb-invite-email').animate({opacity:1.0}, 300, function() {
+
+                    });
+                });
+            });
+
+            $('.try-it-btn').click( function() {
+                scrollSlowTo('.hb-cover');
+            });
+
+            $('.hb-invite-email .input-group button').click( function() {
+                var email = $('#email-input').val();
+
+                $(this).attr('disabled',true);
+                $('#email-input').attr('disabled',true);
+
+                // Send
+                $.post('/requestInvitation',{email:email}).done( function() {
+                    $('.hb-invite-email, .hb-promo-code').remove();
+                    $('.hb-invite-message').show();
+                });
+
+            });
+
+            $('.hb-promo-code .input-group button').click( function() {
+                var promoCode = $('#promo-code-input').val();
+                document.location = "/register?code=" + promoCode;
             });
         });
     </script>
@@ -118,13 +176,13 @@
         </div>
         <div class="hb-navbar-action-container">
             <div class="hb-nav-btn-border ">
-                <a class="hb-nav-btn hb-nav-btn-try-now " href="/register?code=<%= code %>">TRY NOW</a>
+                <a class="hb-nav-btn hb-nav-btn-try-now try-it-btn" href="#">TRY NOW</a>
             </div>
             <div class="collapse navbar-collapse" id="nav-action-btn">
                 <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
                     <li class="active ">
                     </li>
-                    <li><a class="hb-nav-btn hb-nav-btn-try-now " href="/register?code=<%= code %>">TRY NOW</a></li>
+                    <li><a class="hb-nav-btn hb-nav-btn-try-now try-it-btn" href="#">TRY NOW</a></li>
                     <li><a class='hb-nav-btn ' href="#">Features</a></li>
                     <li><a class='hb-nav-btn ' href="#">Pricing</a></li>
                     <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
@@ -150,26 +208,30 @@
             <div class="hb-cover-floor hb-tag-line">
                 <h1>HANDPICK YOUR TEAM WISELY</h1>
             </div>
-            <div class="hb-cover-floor hb-invite-email" active="true">
+
+            <div class="hb-cover-floor hb-promo-code" active="true">
                 <div class="input-group">
-                    <input type="text" class="form-control">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Invite Me!</button>
-                    </span>
-                </div>
-                <button id="btn-active-invite">Want an invitation?</button>
-            </div>
-            <div class="hb-cover-floor hb-promo-code">
-                <div class="input-group">
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" id="promo-code-input" placeholder="Enter your Promo-Code here ..." value="<%= code %>">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">Try it NOW</button>
                     </span>
                 </div>
                 <button id="btn-active-promocode">Have a Promo-Code?</button>
             </div>
+            <div class="hb-cover-floor hb-invite-email">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="email-input" placeholder="Enter your email address here ...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Invite Me!</button>
+                    </span>
+                </div>
+                <button id="btn-active-invite">Want an invitation?</button>
+            </div>
+            <div class="hb-cover-floor hb-invite-message" hidden>
+                <h3>Thanks you. We will contact you ASAP.</h3>
+            </div>
         </div>
-        <div class="hb-scroll-arrow"></div>
+        <div class="hb-scroll-arrow bounce"></div>
     </div>
 
     <div class="row hb-hero">

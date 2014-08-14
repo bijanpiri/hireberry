@@ -342,6 +342,19 @@ app.get('/api/calendar', function(req,res) {
 });
 // endregion
 
+app.post('/requestInvitation', function(req,res) {
+
+    var email = req.body.email;
+
+    if( email ) {
+
+    }
+    else {
+        res.send(200);
+    }
+
+});
+
 // Save request for accessing to a file on server (For email opening detection)
 app.get('/email/:fileName', function(req,res) {
     NA.trackEvent('Email', 'Image Request', req.query.q, function (err, resp) {

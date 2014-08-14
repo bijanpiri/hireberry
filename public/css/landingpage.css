@@ -7,6 +7,8 @@
     /*background-image: url("/images/LP-bp-sizes+distances.jpg") ;*/
 
 }
+
+/*** Navbar ***/
 .hb-land-body>.navbar-normal-top{
     background: transparent;
     margin: 0;
@@ -46,7 +48,6 @@
     float:right;
     display: inline-block;
 }
-
 .hb-navbar-header{
     height: 60px;
 }
@@ -81,12 +82,10 @@
 .navbar-normal-top .nav > li > a.hb-nav-btn,.hb-nav-btn {
     color: #fff;
 }
-
 .hb-nav-btn-try-now:hover {
     color: #ffffff;
     text-decoration: none;
 }
-
 .hb-nav-btn-try-now {
     padding: 10px 20px;
     border: 2px solid #ffffff;
@@ -108,7 +107,6 @@
     text-align: center;
 }
 .hb-nav-btn-bold{font-weight: 600;}
-
 .navbar .collapse .nav li a.hb-nav-btn-try-now {
     display: none;
 }
@@ -190,7 +188,6 @@
     min-height: 600px;
     background-size: cover;
 }
-
 .hb-cover .hb-scroll-arrow {
     background-image: url("/images/scroll-down.png");
     width: 70px;
@@ -211,8 +208,11 @@
 }
 .hb-cover .hb-cover-floor .input-group .input-group-btn button {
     height: 45px;
-    font-weight: 800;
     background-color: rgb(255, 181, 48);
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 23px;
+    font-weight: 400;
 }
 .hb-cover .hb-cover-floor .input-group input[type="text"],
 .hb-cover .hb-cover-floor .input-group input[type="text"]:focus,
@@ -222,6 +222,7 @@
     border: none;
     box-shadow: none;
     -webkit-box-shadow: none;
+    font-size: 22px;
 }
 
 .hb-cover .hb-cover-floor > button {
@@ -231,8 +232,17 @@
     border-radius: 4px;
     padding: 8px;
     font-size: 20px;
-    margin: 20px 0;
 }
+.hb-cover .hb-cover-floor > button,
+.hb-cover .hb-cover-floor > button:focus,
+.hb-cover .hb-cover-floor > button:active {
+    outline: none;
+}
+
+.hb-cover .hb-cover-floor > button:hover {
+    background: #999;
+}
+
 .hb-cover .hb-cover-floor .input-group {
     display: none;
 }
@@ -251,14 +261,14 @@
 }
 
 .hb-hero-container .hb-cover .hb-cover-col {
-    padding: 13% 0;
+    padding: 16% 0;
     text-align: center;
     color: #fff
 }
 
 .hb-hero-container .hb-cover .hb-cover-col h1 {
     font-size: 5em;
-    margin: 60px 0;
+    margin: 20px 0 70px 0;
     font-weight: 600;
 }
 
