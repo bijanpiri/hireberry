@@ -124,6 +124,12 @@
                 var promoCode = $('#promo-code-input').val();
                 document.location = "/register?code=" + promoCode;
             });
+
+            $('.hb-vmenu-item').click( function() {
+                $('.hb-vertical-menu').attr('active-item', $(this).attr('item-index'));
+                $('.hb-vmenu-item').removeClass('actived');
+                $(this).addClass('actived');
+            });
         });
     </script>
 </head>
@@ -250,6 +256,30 @@
                     SMEs attract the best talents.
                 </p>
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="hb-vertical-menu" active-item="1">
+                <ul>
+                    <li>
+                        <a class="hb-vmenu-item actived" item-index="1" href="#Why">Why hireberry</a>
+                    </li>
+                    <li>
+                        <a class="hb-vmenu-item" item-index="2" href="#features">Features</a>
+                    </li>
+                    <li>
+                        <a class="hb-vmenu-item" item-index="3" href="#pricing">Pricing</a>
+                    </li>
+                </ul>
+                <div class="active-item-index active-1th">
+                    <div class="outter">
+                        <div class="inner"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
