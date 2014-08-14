@@ -427,9 +427,21 @@
     width: 32%;
     left: 68%;
 }
-.hb-vertical-menu[active-item="1"] .active-item-index { left: 0; }
-.hb-vertical-menu[active-item="2"] .active-item-index { left: 34%; }
-.hb-vertical-menu[active-item="3"] .active-item-index { left: 68%; }
+.hb-vertical-menu[active-item="1"] .active-item-index {
+    -webkit-transition: left 0.5s ease-out; /* Safari */
+    transition: left 0.5s ease-out;
+    left: 0;
+}
+.hb-vertical-menu[active-item="2"] .active-item-index {
+    -webkit-transition: left 0.5s ease-out; /* Safari */
+    transition: left 0.5s ease-out;
+    left: 34%;
+}
+.hb-vertical-menu[active-item="3"] .active-item-index {
+    -webkit-transition: left 0.5s ease-out; /* Safari */
+    transition: left 0.5s ease-out;
+    left: 68%;
+}
 
 .active-item-index .outter {
     border: 10px solid transparent;
