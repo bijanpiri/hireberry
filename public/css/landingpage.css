@@ -331,7 +331,7 @@
     margin: 40px 0;
 }
 .hb-hero-container .row.hb-why-row .col-md-3,
-.hb-hero-container .row.hb-why-row .col-md-4{
+.hb-hero-container .row.hb-why-row .col-md-5{
     text-align: center;
 }
 
@@ -390,7 +390,7 @@
     padding: 0;
 }
 .hb-vertical-menu ul li {
-    width: 33%;
+    width: 32.5%;
     display: inline-block;
     text-align: center;
 }
