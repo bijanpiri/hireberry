@@ -19,7 +19,7 @@
     top: 0;
     color: #fff;
     /*background-image: url("/images/LP-bp-sizes+distances.jpg") ;*/
-
+    z-index: 1;
 }
 .hb-land-body>.navbar-fixed-top{
     background: #ffffff -180px -100px;
