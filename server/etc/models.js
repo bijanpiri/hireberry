@@ -18,6 +18,11 @@ var options = {
 
 mongoose.connect(mongoHQConenctionString,options);
 
+BInvitationRequest = mongoose.model( 'invitationRequest', {
+    requestDate: Date,
+    requestEmail: String
+});
+
 BJobBoardPrice= mongoose.model( 'jobBoardPrice', {
     name: String,
     price:Object,

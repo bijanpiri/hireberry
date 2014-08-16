@@ -30,6 +30,11 @@
     </script>
     <script>
 
+        function validateEmail(email) {
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+
         function scrollSlowTo(element) {
             $( "html, body" ).animate({
                 scrollTop: $(element)[0].offsetTop
@@ -118,6 +123,11 @@
 
             $('.hb-invite-email .input-group button').click( function() {
                 var email = $('#email-input').val();
+
+                if( validateEmail(email) == false ) {
+                    $('#email-input').css('background-color','rgb(255, 219, 219)');
+                    return;
+                }
 
                 $(this).attr('disabled',true);
                 $('#email-input').attr('disabled',true);

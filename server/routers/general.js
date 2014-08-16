@@ -347,7 +347,12 @@ app.post('/requestInvitation', function(req,res) {
     var email = req.body.email;
 
     if( email ) {
-
+        BInvitationRequest({
+            requestDate: new Date(),
+            requestEmail: email
+        }).save( function() {
+               res.send(200);
+            });
     }
     else {
         res.send(200);
