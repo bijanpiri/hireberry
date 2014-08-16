@@ -106,6 +106,18 @@
 
                 var btn = this;
 
+                $(this).animate({width:'40%'}, 500, function() {
+                    $('.hb-cover-floor[active="true"]').attr('active','false');
+
+                    $(btn).closest('.hb-cover-floor').attr('active','true');
+
+                    $('.hb-promo-code, .hb-invite-email').animate({opacity:0.0}, 100, function() {
+                    });
+                    $('.hb-promo-code, .hb-invite-email').animate({opacity:1.0}, 100, function() {
+                    });
+                });
+
+                /*
                 $('.hb-promo-code, .hb-invite-email').animate({opacity:0.0}, 500, function() {
 
                     $('.hb-cover-floor[active="true"]').attr('active','false');
@@ -115,6 +127,7 @@
 
                     });
                 });
+                */
             });
 
             $('.try-it-btn').click( function() {

@@ -251,7 +251,8 @@ Login & Register
     border-radius: 4%;
     width: 350px;
     position: absolute;
-    right: 40px;
+    right: 0;
+    left: 0;
     padding: 10px;
     bottom: 0;
     top: 0;
