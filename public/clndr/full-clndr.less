@@ -1,0 +1,143 @@
+#full-clndr
+{
+  background-color: @light-gray;
+  font-weight: 700;
+  border-left: 3px solid #C4C4C4;
+
+
+  .clndr-controls {
+    .month {
+      display: inline-block;
+      width: 70%;
+      float: left;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+    }
+    .clndr-previous-button, .clndr-next-button {
+      font-size: 3em;
+      display: inline-block;
+      width: 15%;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -webkit-transition: background-color 0.5s;
+      -moz-transition: background-color 0.5s;
+      -ms-transition: background-color 0.5s;
+      -o-transition: background-color 0.5s;
+      transition: background-color 0.5s;
+    }
+    .clndr-previous-button{
+      float: left;
+    }
+    .clndr-next-button {
+      float: left;
+    }
+  }
+
+  .clndr-grid
+  {
+    clear: both;
+    float: left;
+    width: 50%;
+    border-right: 2px solid white;
+    height: 297px;
+
+    .days-of-the-week
+    {
+      width: 100%;
+      background-color: #828CF1;
+
+      .header-day
+      {
+        float: left;
+        width: 14.2857%;
+        padding: 14px;
+        text-align: center;
+        color: white;
+      }
+    }
+
+    .days
+    {
+      width: 100%;
+
+      .day, .empty
+      {
+        float: left;
+        width: 14.2857%;
+        height: 40px;
+        padding: 10px 0;
+
+        text-align: center;
+        color: #4f4f4f;
+        background-color: @light-gray;
+        border-bottom: 2px solid white;
+
+
+        background-size: cover;
+        background-position: center;
+
+        &.event
+        {
+          background-color: @dark-blue;
+
+          &.active-event {
+            background-color: #70B5D3;
+          }
+
+          .day-number
+          {
+            padding-bottom: 4px;
+            border-bottom: 2px solid @dark-blue;
+          }
+        }
+
+        &.adjacent-month
+        {
+          .day-number
+          {
+            opacity: 0.3;
+          }
+        }
+      }
+
+      .today
+      {
+        background-color: white;
+        background-image: none;
+      }
+    }
+  }
+
+  .event-listing
+  {
+    float: left;
+    width: 50%;
+    height: 297px;
+    overflow: auto;
+
+    .event-listing-title
+    {
+      padding: 14px;
+      background-color: #6269AD;
+      text-align: center;
+      color: white;
+      letter-spacing: 1px;
+    }
+    .event-item
+    {
+      padding: 14px;
+      color: #4f4f4f;
+    }
+    .event-item-location
+    {
+      font-weight: 400;
+    }
+  }
+}
