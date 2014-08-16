@@ -204,7 +204,7 @@
 
 /*** Invite/PromoCode ***/
 .hb-cover .hb-cover-floor {
-    margin: 20px 0;
+    margin: 20px auto;
 }
 .hb-cover .hb-cover-floor .input-group .input-group-btn button {
     height: 45px;
@@ -240,23 +240,25 @@
 }
 
 .hb-cover .hb-cover-floor > button:hover {
-    background: #999;
+    background: rgba(185, 185, 185, 0.44);;
 }
 
-.hb-cover .hb-cover-floor .input-group {
+.hb-cover .hb-cover-floor .hb-inline-form-activator {
     display: none;
 }
-
-.hb-cover .hb-cover-floor[active='true'] > button {
+.hb-cover .hb-cover-floor .hb-inline-form-activator[active="true"] {
+    display: inline-block;
+}
+.hb-cover .hb-inline-form  {
     display: none;
 }
-.hb-cover .hb-cover-floor[active='true'] .input-group {
+.hb-cover .hb-inline-form[active='true'] {
     display: table;
     width: 40%;
     margin: auto;
 }
-.hb-cover .hb-cover-floor[active='true'] .input-group button,
-.hb-cover .hb-cover-floor[active='true'] .input-group input {
+.hb-cover .hb-inline-form[active='true'] button,
+.hb-cover .hb-inline-form[active='true'] input {
     border: none;
 }
 

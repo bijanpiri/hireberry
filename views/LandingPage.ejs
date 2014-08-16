@@ -102,32 +102,27 @@
                 });
             }
 
-            $('#btn-active-invite, #btn-active-promocode').click( function() {
+            $('#btn-active-invite, #btn-active-promocode').unbind('click').click( function() {
 
                 var btn = this;
+                var disapearTime = 0;
 
-                $(this).animate({width:'40%'}, 500, function() {
-                    $('.hb-cover-floor[active="true"]').attr('active','false');
+                setTimeout(function() {
+                    var e1 = $('.hb-inline-form[active="true"]').attr('id');
+                    var e2 = $('.hb-inline-form[active="false"]').attr('id');
+                    $('#'+e1).attr('active',false);
+                    $('#'+e2).attr('active',true);
 
-                    $(btn).closest('.hb-cover-floor').attr('active','true');
+                    e1 = $('.hb-inline-form-activator[active="true"]').attr('id');
+                    e2 = $('.hb-inline-form-activator[active="false"]').attr('id');
+                    $('#'+e1).attr('active',false);
+                    $('#'+e2).attr('active',true);
 
-                    $('.hb-promo-code, .hb-invite-email').animate({opacity:0.0}, 100, function() {
-                    });
-                    $('.hb-promo-code, .hb-invite-email').animate({opacity:1.0}, 100, function() {
-                    });
-                });
+                    $('.hb-inline-form,.hb-inline-form-activator').animate({opacity:1.0}, disapearTime *.75 );
+                },disapearTime);
 
-                /*
-                $('.hb-promo-code, .hb-invite-email').animate({opacity:0.0}, 500, function() {
+                $('.hb-inline-form,.hb-inline-form-activator').animate({opacity:0.0}, disapearTime);
 
-                    $('.hb-cover-floor[active="true"]').attr('active','false');
-                    $(btn).closest('.hb-cover-floor').attr('active','true');
-
-                    $('.hb-promo-code, .hb-invite-email').animate({opacity:1.0}, 300, function() {
-
-                    });
-                });
-                */
             });
 
             $('.try-it-btn').click( function() {
@@ -162,6 +157,20 @@
                 $('.hb-vertical-menu').attr('active-item', $(this).attr('item-index'));
                 $('.hb-vmenu-item').removeClass('actived');
                 $(this).addClass('actived');
+
+                $('.hb-why-row, .hb-features-row, .hb-pricing-row').hide();
+
+                switch( parseInt( $(this).attr('item-index') ) ) {
+                    case 1:
+                        $('.hb-why-row').show();
+                        break;
+                    case 2:
+                        $('.hb-features-row').show();
+                        break;
+                    case 3:
+                        $('.hb-pricing-row').show();
+                        break;
+                }
             });
         });
     </script>
@@ -248,23 +257,23 @@
                 <h1>HANDPICK YOUR TEAM WISELY</h1>
             </div>
 
-            <div class="hb-cover-floor hb-promo-code" active="true">
-                <div class="input-group">
+            <div class="hb-cover-floor">
+                <div class="input-group hb-inline-form" id="hb-promo-code" active="true">
                     <input type="text" class="form-control" id="promo-code-input" placeholder="Enter your Promo-Code here ..." value="<%= code %>">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">Try it NOW</button>
                     </span>
                 </div>
-                <button id="btn-active-promocode">Have a Promo-Code?</button>
-            </div>
-            <div class="hb-cover-floor hb-invite-email">
-                <div class="input-group">
+                <div class="input-group hb-inline-form" id="hb-invite-email" active="false">
                     <input type="text" class="form-control" id="email-input" placeholder="Enter your email address here ...">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">Invite Me!</button>
                     </span>
                 </div>
-                <button id="btn-active-invite">Want an invitation?</button>
+            </div>
+            <div class="hb-cover-floor">
+                <button id="btn-active-promocode" class="hb-inline-form-activator" for="hb-promo-code" active="false">Have a Promo-Code?</button>
+                <button id="btn-active-invite" class="hb-inline-form-activator" for="hb-invite-email" active="true">Want an invitation?</button>
             </div>
             <div class="hb-cover-floor hb-invite-message" hidden>
                 <h3>Thanks you. We will contact you ASAP.</h3>
@@ -403,12 +412,24 @@
         </div>
     </div>
 
+    <div class="row hb-features-row">
+        <div class="col-md-12">
+        </div>
+    </div>
+
+    <div class="row hb-pricing-row">
+        <div class="col-md-12">
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="footer">
                 <a href="/privacy-policy">Privacy Policy</a>
                 |
                 <a href="mailto: support@hireberry.com">Support</a>
+                |
+                <a href="https://plus.google.com/115213294114364910052?rel=author">Google+</a>
             </div>
         </div>
     </div>
