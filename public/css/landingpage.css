@@ -106,7 +106,14 @@
 .hb-nav-btn-list>li {
     text-align: center;
 }
-.hb-nav-btn-bold{font-weight: 600;}
+.hb-nav-btn-bold,
+.hb-nav-btn-bold:hover,
+.hb-nav-btn-bold:visited {
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+
+}
 .navbar .collapse .nav li a.hb-nav-btn-try-now {
     display: none;
 }
