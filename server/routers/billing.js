@@ -6,11 +6,12 @@ paypal_api = require('paypal-rest-sdk');
 paypal_config_opts = {
     // SandBox
     //'host': 'api.sandbox.paypal.com',
-    //'port': '',
+    'port': '',
     //'client_id': 'AQ1m3BD1QilgWxOstMw3GuSSsit3W8uoN36NMQxlzDs_iF1m70-XI5cyeQWn',
     //'client_secret': 'EKPO6BB35T7v-u1pS_OGTJZepROWqc1m_gYBhps8dIrrY9979iKFjw8tM0_o'
 
     // Live
+    'mode': 'live',
     'host': 'api.paypal.com',
     'client_id': 'AbB1yRBlOuRfGzluSmaWBsCQdOO724p9BJfwhI3SA0XvalBaoMXqT3TlH4LC',
     'client_secret': 'ELHsXhA5mOkXFtMMUknl879dwDPJVq2gqxL2rfNk5zQk9frH-2yM3-RmqmJF'
@@ -60,6 +61,8 @@ app.get('/pay', function(req,res) {
             pay( req.headers.host , req.user.teamID,  req.query.amount,invoiceDescription,PaymentType,null, function(err, approval_url) {
                 if( !err )
                     res.redirect(approval_url);
+                else
+                    res.send(503);
             });
         });
     }
