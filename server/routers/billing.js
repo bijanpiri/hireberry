@@ -4,11 +4,16 @@
 
 paypal_api = require('paypal-rest-sdk');
 paypal_config_opts = {
+    // SandBox
     //'host': 'api.sandbox.paypal.com',
+    //'port': '',
+    //'client_id': 'AQ1m3BD1QilgWxOstMw3GuSSsit3W8uoN36NMQxlzDs_iF1m70-XI5cyeQWn',
+    //'client_secret': 'EKPO6BB35T7v-u1pS_OGTJZepROWqc1m_gYBhps8dIrrY9979iKFjw8tM0_o'
+
+    // Live
     'host': 'api.paypal.com',
-    'port': '',
-    'client_id': 'AQ1m3BD1QilgWxOstMw3GuSSsit3W8uoN36NMQxlzDs_iF1m70-XI5cyeQWn',
-    'client_secret': 'EKPO6BB35T7v-u1pS_OGTJZepROWqc1m_gYBhps8dIrrY9979iKFjw8tM0_o'
+    'client_id': 'AbB1yRBlOuRfGzluSmaWBsCQdOO724p9BJfwhI3SA0XvalBaoMXqT3TlH4LC',
+    'client_secret': 'ELHsXhA5mOkXFtMMUknl879dwDPJVq2gqxL2rfNk5zQk9frH-2yM3-RmqmJF'
 };
 
 paypal_api.configure(paypal_config_opts);
