@@ -322,11 +322,11 @@ everyauth.password
         var code = req.query.code;
 
         if( publicRegisterIsAllowed() == false && !code)  // Register just with code is allowed
-            return res.redirect('/');
+            return res.redirect('/?error=regCode');
 
         checkPromoCode(code, function(err,promoCode){
             if( publicRegisterIsAllowed() == false && err )
-                return res.redirect('/');
+                return res.redirect('/?error=regCode');
             else if( publicRegisterIsAllowed() || ( !publicRegisterIsAllowed() && promoCode.permissionForRegister) ) {
                 setTimeout( function () {
                     res.cookie('promocode',code);

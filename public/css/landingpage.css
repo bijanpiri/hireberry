@@ -189,6 +189,15 @@
     padding: 0;
 }
 
+.hb-alert {
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 50%;
+}
+
 .hb-cover {
     background: #f1f1f1 url("/images/LP-hero.jpg") top center no-repeat;
     width: 100%;

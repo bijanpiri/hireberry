@@ -30,6 +30,8 @@
     </script>
     <script>
 
+        var errorMsg = '<%= errorMessage %>';
+
         function validateEmail(email) {
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
@@ -44,6 +46,9 @@
         var arrowYPos;
 
         $(function () {
+
+            if( errorMsg || errorMsg.length > 0 )
+                $('.hb-alert').show().find('#alertMsg').html(errorMsg.replace(/\n/g,'<br/>'));
 
             $(window).on('resize', function() {
                locateElements();
@@ -129,7 +134,7 @@
                 scrollSlowTo('.hb-cover');
             });
 
-            $('.hb-invite-email .input-group button').click( function() {
+            $('#hb-invite-email button').click( function() {
                 var email = $('#email-input').val();
 
                 if( validateEmail(email) == false ) {
@@ -148,7 +153,7 @@
 
             });
 
-            $('.hb-promo-code .input-group button').click( function() {
+            $('#hb-promo-code button').click( function() {
                 var promoCode = $('#promo-code-input').val();
                 document.location = "/register?code=" + promoCode;
             });
@@ -249,6 +254,13 @@
     </div>
 </div>
 
+<div class="hb-alert alert alert-danger alert-dismissible" hidden="true" role="alert">
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+    </button>
+    <strong>Error!</strong> <span id="alertMsg"></span>
+</div>
+
 <div class="container hb-hero-container">
 
     <div class="row hb-cover">
@@ -259,6 +271,7 @@
             </div>
 
             <div class="hb-cover-floor">
+
                 <div class="input-group hb-inline-form" id="hb-promo-code" active="true">
                     <input type="text" class="form-control" id="promo-code-input" placeholder="Enter your Promo-Code here ..." value="<%= code %>">
                     <span class="input-group-btn">
