@@ -68,7 +68,7 @@
             locateElements();
 
             var fixNavbarHeight = $('.navbar').height() + 1;
-            var navBarChangeThreshold = 100;
+            var navBarChangeThreshold = $('#btn-active-invite').offset().top;
 
             $(window).scroll(function () {
 
