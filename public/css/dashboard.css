@@ -481,6 +481,7 @@
 #askedForCommentList {
     list-style-type: none;
     margin: 0 10px;
+    min-width: 400px;
 }
 
 #askedForCommentList li {

@@ -138,17 +138,24 @@
                 </ul>
                 <% if(everyauth.loggedIn){ %>
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="/flyer/new" id="createFlyerButton" class="navbar-button" onclick="GAEvent('Dashboard', 'New Job', '')">
-                            <i class="fa fa-plus"></i> New Job
+                    <li class="navbar-dropdown" style="position: relative">
+                        <a href="#" class="dropdown-toggle navbar-button" data-toggle="dropdown">
+                            <i class="fa fa-plus"></i> New
                         </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/flyer/new" id="createFlyerButton" class="navbar-button" onclick="GAEvent('Dashboard', 'New Job', '')">
+                                    New Job
+                                </a>
+                            </li>
+                            <li>
+                                <a class="createApplicantButton navbar-button" style="display: none" onclick="GAEvent('Dashboard', 'New Applicant', '')">
+                                    New Applicant
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li>
-                        <a class="createApplicantButton navbar-button" style="display: none" onclick="GAEvent('Dashboard', 'New Applicant', '')">
-                            <i class="fa fa-plus"></i> New Applicant
-                        </a>
-                    </li>
-                    <li class="navbar-dropdown">
+                    <li class="navbar-dropdown" style="position: relative">
                         <a href="#" class="dropdown-toggle navbar-button" id="notifications"
                            data-toggle="dropdown" onclick="GAEvent('Dashboard','Notifications')">
                             Notifications

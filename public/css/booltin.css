@@ -81,17 +81,6 @@ body{
     color: #fff;
 }
 
-#createFlyerButton {
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    margin-top: 8px;
-    margin-bottom: 8px;
-}
-
-#createFlyerButton:hover {
-    background-color: transparent;
-    border: 2px solid rgba(255, 255, 255, 1);
-}
-
 .navbar .nav > li > a.hireberry-logo {
     padding: 16px 0;
 }
