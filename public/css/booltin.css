@@ -11,9 +11,7 @@
 }
 body {
     background-color: #fff;
-}
-body{
-    font-family: "Roboto",cursive;
+    font-family: "open sans";
     font-weight: 400;
     font-size: 10px;
 }
@@ -71,10 +69,11 @@ body{
 .navbar .nav > li > .navbar-button {
     text-shadow: none;
     color: #fff;
-    margin: 10px 5px;
-    border-radius: 4px;
-    padding: 5px 15px;
+    padding: 15px 20px;
     line-height: 30px;
+}
+.navbar .nav > li > .navbar-button.avatar {
+    padding: 14px 20px;
 }
 .navbar .nav > li > .navbar-button:hover {
     background-color: #6B6BC8;
@@ -103,21 +102,39 @@ nav li a {
 .dropdown-menu {
     top: 58px;
     left: 0;
-    background-color: #eee;
+    background-color: #e6e6e6;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 0px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
+    padding: 0;
 }
 
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
 .dropdown-submenu:hover > a,
 .dropdown-submenu:focus > a {
-    color: #ffffff;
-    background: #bbb none;
+    color: #000;
+    background: #c5c5c5 none;
+}
+
+.dropdown-menu > li > a {
+    line-height: 40px;
+}
+
+/* Little Dropdown triangle */
+.navbar .pull-right>li>.dropdown-menu:before,
+.navbar .nav>li>.dropdown-menu.pull-right:before {
+    right: 28px;
+    left: auto;
+}
+.navbar .pull-right>li>.dropdown-menu:after,
+.navbar .nav>li>.dropdown-menu.pull-right:after {
+    right: 29px;
+    left: auto;
+    border-bottom: 6px solid #e6e6e6;
 }
 
 .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {

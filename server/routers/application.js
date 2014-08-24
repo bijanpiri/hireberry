@@ -134,7 +134,7 @@ app.get('/api/applications', function (req,res) {
                 teamFlyers[flyer._id.toString()] =  flyer;
             });
 
-            callback(userFlyersID,teamFlyersName)
+            callback(userFlyersID,teamFlyers)
         });
     }
 

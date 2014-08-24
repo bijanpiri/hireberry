@@ -22,7 +22,7 @@
 <% stylesheet('/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') -%>
 <% script('/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') -%>
 
-
+<div class="menu-wrap">
 <div class="menu">
     <div class="menu-header">
         <div id="switchTeamView">
@@ -74,7 +74,7 @@
         </label>
 
     </div>
-
+</div>
 </div>
 
 <div id="wrap">
@@ -88,42 +88,54 @@
 <div id="overviewp" class="container-fluid sectionContainer">
     <div class="row-fluid">
         <div style="font-size: 2em;line-height: 3em;">
-            <span class="currentTeamName"></span>'s statistics:
+            <span class="currentTeamName"></span>'s statistics
         </div>
     </div>
     <div class="row-fluid statisticsRow">
-        <div class="span3 statBox">
-            <a onclick="window.location='#jobsp'">
-                <div class="text">Jobs</div>
-                <div class="number" id="statValue1"></div>
-            </a>
+        <div class="span3">
+            <div class="statBox">
+                <a onclick="window.location='#jobsp'">
+                    <div class="number" id="statValue1"></div>
+                    <div class="text">Created Jobs</div>
+
+                </a>
+            </div>
         </div>
 
-        <div class="span3 statBox">
+        <div class="span3">
+            <div class="statBox">
             <a onclick="window.location='#jobsp'">
-                <div class="text">Published Jobs</div>
                 <div class="number" id="statValue2"></div>
+                <div class="text">Published Jobs</div>
+
             </a>
+                </div>
         </div>
 
-        <div class="span3 statBox">
+        <div class="span3">
+            <div class="statBox">
             <a onclick="window.location='#applicationsp'">
-                <div class="text">Applications</div>
                 <div class="number" id="statValue3"></div>
+                <div class="text">Applications</div>
+
             </a>
+                </div>
         </div>
 
-        <div class="span3 statBox">
+        <div class="span3">
+            <div class="statBox">
             <a onclick="window.location='#teamp'">
-                <div class="text">Team Members</div>
                 <div class="number" id="statValue4"></div>
+                <div class="text">Team Members</div>
+
             </a>
+                </div>
         </div>
     </div>
     <div class="row-fluid">
         <div class="span12">
             <div style="font-size: 2em;line-height: 3em;">
-                <span class="currentTeamName"></span>'s calendar:
+                <span class="currentTeamName"></span>'s calendar
             </div>
 
             <div id="full-clndr" class="clearfix" hidden>
@@ -147,7 +159,7 @@
                         </div>
                     </div>
                     <div class="event-listing">
-                        <div class="event-listing-title">EVENTS THIS MONTH</div>
+                        <div class="event-listing-title">Events This Month</div>
                         {% _.each(eventsThisMonth, function(event) { %}
                         <div class="event-item" onmouseover="mouseEnterEvent('{{ event.date }}')" onmouseout="mouseLeaveEvent('{{ event.date }}')">
                             <div class="event-item-name">{{ event.title }}</div>
@@ -188,9 +200,9 @@
         </div>
     </div>
 
-    <div class="row-fluid teamHeader">
+    <div class="row-fluid">
         <div class="span12">
-            <div class="teamMember">
+            <div class="teamMember teamHeader">
                 <span class="teamMemberName">Name (email)</span>
                 <span class="teamMemberRole">Role</span>
             </div>
