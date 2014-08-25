@@ -147,9 +147,12 @@ function notifyAllForJobComment(jobID,comment){
 
 function checkForPublish( teamID, newMode, callback ) {
 
+    // Count published job, except one
     BTeams.findOne({_id:teamID}, function(err,team) {
-        BFlyers.count({publishTime:{$ne:''}}, function(err,publishedCount) {
 
+        // Check team's published job according to its plan limitation
+
+        BFlyers.count({owner:teamID, publishTime:{$ne:''}, publishTime:{$ne:null}}, function(err,publishedCount) {
             if( (newMode==='publish' || newMode==='askedForPublish') && team.plan == 0 && publishedCount>=1)
                 callback(false);
             else
@@ -158,6 +161,16 @@ function checkForPublish( teamID, newMode, callback ) {
     });
 
 }
+
+function isPublishedBefore(flyerID,callback) {
+    BFlyers.count({_id: flyerID, publishTime:{$ne:''}}, function(err,fcount) {
+        if( err || fcount==0 )
+            callback(false);
+        else
+            callback(true);
+    });
+}
+
 
 // region Views
 app.get('/flyer/new',function(req,res){
@@ -749,7 +762,7 @@ app.post('/flyer/publish', function(req,res){
     var saveAsDraft = Boolean( req.body.saveAsDraft );
 
 
-    isPublishedBefore( function(publishedBefore) {
+    isPublishedBefore( flyerID, function(publishedBefore) {
         if( publishedBefore )
             publish();
         else {
@@ -762,16 +775,6 @@ app.post('/flyer/publish', function(req,res){
         }
 
     });
-
-
-    function isPublishedBefore(callback) {
-        BFlyers.count({_id: flyerID, publishTime:{$ne:''}}, function(err,fcount) {
-            if( err || fcount==0 )
-                callback(false);
-            else
-                callback(true);
-        });
-    }
 
     function publish() {
         if(saveAsDraft==='true') {
@@ -819,40 +822,49 @@ app.post('/flyer/changeMode', function(req,res){
 
 
     // Check for current plan active job limitation
-    checkForPublish( teamID, newMode, function(allowed) {
-        if(allowed==false)
-            return res.send(503,'On Free plan you can have just one active (published) job. ' +
-                'Upgrade to Goldberry for having more active job page.');
+    isPublishedBefore( flyerID, function(isPublished) {
 
-        if(newMode==='draft') {
+        checkForPublish( teamID, newMode, function(allowed) {
 
-            notifyResponder('drafted', flyerID, userID, function() {
-                saveInDatabase({askedForPublish:false, publishTime:''})
-            })
-        }
-        else {
-            BTeams.count({_id:teamID,admin:userID}, function(err,count) {
-                if(count>0 && newMode==='publish') { // User is admin
+            if(isPublished==true || allowed==true) {
 
-                    notifyResponder('published', flyerID, userID, function() {
-                        saveInDatabase({askedForPublish:false, publishTime:new Date()})
+                if(newMode==='draft') {
+
+                    notifyResponder('drafted', flyerID, userID, function() {
+                        saveInDatabase({askedForPublish:false, publishTime:''})
                     })
                 }
-                else if(newMode==='ask for publish') {
-                    saveInDatabase({askedForPublish:true, publishTime:''});
-                }
-            });
-        }
+                else {
+                    BTeams.count({_id:teamID,admin:userID}, function(err,count) {
+                        if(count>0 && newMode==='publish') { // User is admin
 
-        function saveInDatabase(param,successMessage) {
-            BFlyers.update({_id:flyerID}, param, function(err){
-                if(!err){
-                    res.send(200,{message:'Changed'});
-                }else
-                    res.send(500,{result:'DB Error'});
-            });
-        }
-    });
+                            notifyResponder('published', flyerID, userID, function() {
+                                saveInDatabase({askedForPublish:false, publishTime:new Date()})
+                            })
+                        }
+                        else if(newMode==='ask for publish') {
+                            saveInDatabase({askedForPublish:true, publishTime:''});
+                        }
+                    });
+                }
+
+            }
+            else {
+                return res.send(503,'On Free plan you can have just one active (published) job. ' +
+                    'Upgrade to Goldberry for having more active job page.');
+            }
+
+            function saveInDatabase(param,successMessage) {
+                BFlyers.update({_id:flyerID}, param, function(err){
+                    if(!err){
+                        res.send(200,{message:'Changed'});
+                    }else
+                        res.send(500,{result:'DB Error'});
+                });
+            }
+        });
+
+    })
 
 });
 
