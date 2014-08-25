@@ -517,6 +517,9 @@
     font-weight: 700;
     text-align: center;
     line-height: 1.8;
+    position: relative;
+    top: -8px;
+    left: -8px;
 }
 
 #askedForCommentList {
@@ -873,8 +876,7 @@ Billing
 .empty-state-message {
     text-align: center;
     font-size: 2em;
-    background: #ddd;
-    border-radius: 7px;
+    background: #d6d6d6;
     padding: 30px;
     margin: 0 10%;
     line-height: 2.5em;

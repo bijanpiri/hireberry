@@ -30,7 +30,7 @@ app.get('/api/applications/stat', function(req,res) {
         if( team.admin.toString()===req.user._id.toString() )
             query = {owner:teamID};
         else
-            query = { $or:[
+            query = { owner:teamID, $or:[
                 {autoAssignedTo:req.user._id},
                 {commentators:req.user._id}
             ]};
