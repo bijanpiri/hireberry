@@ -56,7 +56,7 @@ app.configure(function() {
         maxAge: false, //1 Hour
         expires: false //1 Hour
     }));
-    app.use(autoLogin);
+    //app.use(autoLogin);
     app.use(everyauth.middleware());
 });
 //endregion
@@ -120,7 +120,11 @@ function autoLogin(req, res, next) {
                 if (err || !user)
                     return next();
 
-                req.user = user;
+                everyauth.user = req.user = user;
+                req.session.auth = {
+                    loggedIn: true,
+                    user: user
+                };
                 return next();
             });
         });
