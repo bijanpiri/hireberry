@@ -106,6 +106,7 @@
     font-size: 1em;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    height: 52px;
 }
 
 .menu .item:hover {
@@ -506,20 +507,24 @@
 }
 
 /*** Asked For Comment ***/
+#notifications {
+    position: relative;
+}
+
 #comments_badge {
     background-color: #AC4949;
     border-radius: 50%;
-    font-size: 0.9em;
+    font-size: 13px;
     width: 26px;
     height: 26px;
     display: inline-block;
     color: #fff;
     font-weight: 700;
     text-align: center;
-    line-height: 1.8;
-    position: relative;
-    top: -8px;
-    left: -8px;
+    line-height: 25px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 #askedForCommentList {
@@ -701,7 +706,6 @@ a{
     }
 }
 
-
 @media (max-width: 900px) {
 
     .teamMemberEmail {
@@ -711,21 +715,16 @@ a{
 }
 
 @media (max-width: 767px) {
+    body {
+        font-size: 8px;
+    }
     /* Menu */
-    .menu {
-        border-bottom: 1px solid rgb(179, 179, 179);
+    .menu-wrap {
+        width: 150px;
     }
 
-    .menu .item {
-        border-left: none;
-        display: inline-block;
-        font-size: 0.8em;
-    }
-
-    .menu input[type=radio]:checked + label {
-        background-color: rgb(200, 230, 200);
-        border-left: none;
-        border-bottom: 4px solid green;
+    #wrap {
+        left: 150px;
     }
 
     /* Overview */
@@ -748,6 +747,9 @@ a{
     }
 
     /* Applications */
+    .applications-filter-job {
+        width: 200px;
+    }
     .grid-layout .candidate {
 
     }
@@ -767,6 +769,16 @@ a{
         margin: 2em 0;
     }
 
+    #full-clndr .event-listing {
+        float: none;
+        width: 100%;
+    }
+
+    #full-clndr .clndr-grid {
+        clear: both;
+        float: none;
+        width: 100%;
+    }
 }
 
 /**
@@ -826,7 +838,7 @@ Billing
     padding: 1em;
     font-size: 1em;
     border-radius: 4px;
-    width: 550px;
+    width: 100%;
 }
 
 #paymentAmount {
@@ -841,9 +853,10 @@ Billing
 }
 
 .plan-table {
-    margin: 1em auto 40px auto;
+    margin: 1em 0 40px 0;
     background-color: #eee;
     border-radius: 4px;
+    width: 100%;
 }
 
 .plan {

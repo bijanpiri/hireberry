@@ -124,6 +124,11 @@ nav li a {
     line-height: 40px;
 }
 
+li.navbar-dropdown {
+    width: 70px;
+    text-align: center;
+}
+
 /* Little Dropdown triangle */
 .navbar .pull-right>li>.dropdown-menu:before,
 .navbar .nav>li>.dropdown-menu.pull-right:before {
