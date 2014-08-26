@@ -6,6 +6,21 @@
     text-shadow: none;
 }
 
+.btn:hover {
+    color: #fff;
+}
+
+.btn-link {
+    background-color: transparent;
+    color: #373737;
+}
+.btn-link:hover {
+    background-color: transparent;
+    color: #373737;
+    text-decoration: underline;
+}
+
+
 #wrap {
     position: absolute;
     top: 60px;
@@ -247,18 +262,19 @@
 }
 
 .positionsHeaderRow {
+    height: 50px;
     font-size: 2em;
     text-align: center;
     background-color: #eee;
     padding: 5px 0;
     line-height: 1.3em;
+    font-weight: 600;
     border-bottom: 1px solid #d6d6d6;
 }
 
-.positionsFooterRow {
-}
 
 .position {
+    height: 50px;
     font-size: 2em;
     padding: 5px 0;
     text-align: center;
@@ -268,31 +284,37 @@
 }
 
 .position:hover {
-    background-color: #EBE9C3;
+    background-color: #f8f8f8;
 }
 
-.position .positionTitle {
+.positionsHeaderRow .colTitle,
+.position .colTitle {
+    padding: 7px 0 7px 20px;
     font-size: 0.9em;
+    text-align: left;
 }
 
-.position .positionMode {
-    color: #9c9c9c;
-    font-size: 0.6em;
-    font-weight: 700;
+.positionsHeaderRow .colStatus,
+.position .colStatus {
+    font-size: 0.9em;
+    padding: 7px 0;
+    text-align: left;
 }
 
-.position .positionCreator {
-    font-size: 0.8em;
-    padding: 0 0.5em;
+.positionsHeaderRow .colAssignedTo,
+.position .colAssignedTo {
+    font-size: 0.9em;
+    padding: 7px 0.5em;
+    text-align: left;
 }
 
-.position .positionAssignee {
-    font-size: 0.8em;
-    padding: 0 0.5em;
+.position .colOperations {
+    padding: 7px 0;
 }
 
 .position .colOperations a {
     margin: 0 2px;
+    font-size: 0.9em;
 }
 
 .statisticsRow {
@@ -423,7 +445,7 @@
 }
 
 .teamHeader .teamMemberName {
-    margin-left: 40px;
+    margin-left: 50px;
     position: absolute;
 }
 
@@ -510,6 +532,7 @@
     width: 30px;
     display: inline-block;
     margin-right: 10px;
+    margin-left: 10px;
 }
 
 .teamMemberRole {

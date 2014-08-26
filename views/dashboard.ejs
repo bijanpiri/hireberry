@@ -228,11 +228,13 @@
     </div>
 
     <div class="row-fluid positionsHeaderRow">
-        <div class="span5 colTitle">Title</div>
+        <div class="span4 colTitle">Title</div>
         <div class="span2 colStatus">State</div>
         <div class="span3 colAssignedTo">Responder</div>
-        <div class="span1 colOperations"></div>
-        <div class="span1 colPromote"></div>
+        <div class="span3 colOperations">
+            <span class="colEdit pull-left"></span>
+            <span class="colPromote"></span>
+        </div>
     </div>
     <div class="row-fluid positionsRow"></div>
     <div class="row-fluid positionsFooterRow">
@@ -910,7 +912,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-danger pull-left deleteJobButton">Delete Job</button>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button type="submit" class="btn btn-primary saveButton" data-loading-text="Sending...">Save</button>
     </div>
 </div>

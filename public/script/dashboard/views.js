@@ -189,7 +189,8 @@ BJobsView = Backbone.View.extend({
                 })
 
             var settingBtnObj = $('<a>')
-                .addClass('fa fa-cogs')
+                //.addClass('fa fa-cogs')
+                .text('Settings')
                 .click( function(e) {
 
                     GAEvent('Dashboard','Job','Open Setting');
@@ -233,11 +234,11 @@ BJobsView = Backbone.View.extend({
                     // Current Status
                     modal.find('.jobStatus-current').text(form.mode);
                     modal.find('.jobStatus-next').empty();
-                    var publishOption = $('<button>').attr('name','publish').text('Publish').click( function() {
+                    var publishOption = $('<button>').addClass('btn1').attr('name','publish').text('Publish').click( function() {
                         GAEvent('Dashboard','Job','Setting - To publish');
                         changeJobMode('publish')
                     });
-                    var draftOption = $('<button>').attr('name','draft').text('Inactive').click( function() {
+                    var draftOption = $('<button>').addClass('btn1').attr('name','draft').text('Inactive').click( function() {
                         GAEvent('Dashboard','Job','Setting - To inactive');
                         changeJobMode('draft');
                     });
@@ -294,7 +295,8 @@ BJobsView = Backbone.View.extend({
 
 
             var PromoteBtnObj = $('<a>')
-                .addClass('fa fa-paper-plane')
+                //.addClass('fa fa-paper-plane')
+                .text('Promote')
                 .click( function(e) {
                     GAEvent('Dashboard','Job','Open Promote');
 
@@ -310,11 +312,11 @@ BJobsView = Backbone.View.extend({
             row.find('.colAssignedTo').empty().append(assigneeObj);
 
             if( form.edit ) {
-                row.find('.colOperations').empty().append(settingBtnObj);
+                row.find('.colEdit').empty().append(settingBtnObj);
                 row.find('.colPromote').empty().append(PromoteBtnObj);
             }
             else if( form.comment )
-                row.find('.colOperations').empty().append(commentBtnObj);
+                row.find('.colEdit').empty().append(commentBtnObj);
 
 
             row.addClass('position').attr('id',form.formID).click( function() {
