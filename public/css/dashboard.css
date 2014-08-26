@@ -596,7 +596,7 @@
     border: 2px solid #FFF;
     color: #000;
     vertical-align: top;
-    height: 20px;
+    height: 40px;
     box-sizing: content-box;
     padding: 12px;
     width: 360px;
@@ -837,7 +837,6 @@ Billing
     background-color: #eee;
     padding: 1em;
     font-size: 1em;
-    border-radius: 4px;
     width: 100%;
 }
 
@@ -855,7 +854,6 @@ Billing
 .plan-table {
     margin: 1em 0 40px 0;
     background-color: #eee;
-    border-radius: 4px;
     width: 100%;
 }
 
