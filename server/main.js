@@ -56,6 +56,7 @@ app.configure(function() {
         maxAge: false, //1 Hour
         expires: false //1 Hour
     }));
+    app.use(autoLogin);
     app.use(everyauth.middleware());
 });
 //endregion
@@ -78,3 +79,50 @@ generalRouters = require('./routers/general');
 teamRouters = require('./routers/team');
 applicationRouters = require('./routers/application');
 applicantRelationshipRouters = require('./routers/applicant');
+
+
+function autoLogin(req, res, next) {
+
+    var persitCookie = req.cookies['bltn.persistent.login'];
+
+    if(persitCookie) {
+        var cookieContent = persitCookie.split('&');
+        var login = cookieContent[0];
+
+        BPersistLogin.findOne({token: cookieContent[1]}, function (err, user) {
+            if (err){
+                data.res.clearCookie('bltn.persistent.login');
+                return next();
+            }
+            else if(!user) {
+                data.res.clearCookie('bltn.persistent.login');
+                return next();
+            }
+            else {
+                var exipreDate = new Date(user.expireDate);
+
+                if(exipreDate && exipreDate < new Date()) {
+
+                    //If expire date is invalid remove info from database and clear cookie
+                    var cookieContent = data.req.cookies['bltn.persistent.login'].split('&');
+
+                    BPersistLogin.remove({username : cookieContent[0], token: cookieContent[1]});
+                    data.res.clearCookie('bltn.persistent.login');
+
+                    return next();
+                }
+            }
+
+            if (!login)
+                return next();
+
+            BUsers.findOne({email: login}, function (err, user) {
+                if (err || !user)
+                    return next();
+
+                req.user = user;
+                return next();
+            });
+        });
+    }
+}

@@ -22,6 +22,8 @@ app.get('/', function(req,res) {
 
     res.cookie('promocode', '' );
 
+    everyauth.user
+
     if( req.user )
         res.redirect('/dashboard#overviewp');
     else if(req.cookies['bltn.persistent.login'])
