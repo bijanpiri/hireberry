@@ -136,4 +136,7 @@ function autoLogin(req, res, next) {
             });
         });
     }
+    else {
+        return next();
+    }
 }
