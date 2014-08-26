@@ -92,7 +92,7 @@
         </div>
     </div>
     <div class="row-fluid statisticsRow">
-        <div class="span3">
+        <div class="span12">
             <div class="statBox">
                 <a onclick="window.location='#jobsp'">
                     <div class="number" id="statValue1"></div>
@@ -100,9 +100,7 @@
 
                 </a>
             </div>
-        </div>
 
-        <div class="span3">
             <div class="statBox">
             <a onclick="window.location='#jobsp'">
                 <div class="number" id="statValue2"></div>
@@ -110,9 +108,7 @@
 
             </a>
                 </div>
-        </div>
 
-        <div class="span3">
             <div class="statBox">
             <a onclick="window.location='#applicationsp'">
                 <div class="number" id="statValue3"></div>
@@ -120,9 +116,7 @@
 
             </a>
                 </div>
-        </div>
 
-        <div class="span3">
             <div class="statBox">
             <a onclick="window.location='#teamp'">
                 <div class="number" id="statValue4"></div>
@@ -140,12 +134,12 @@
 
             <div id="full-clndr" class="clearfix" hidden>
                 <script type="text/template" id="full-clndr-template">
-                    <div class="clndr-controls">
-                        <div class="clndr-previous-button">&lsaquo;</div>
-                        <div class="month">{{ year }} - {{ month }}</div>
-                        <div class="clndr-next-button">&rsaquo;</div>
-                    </div>
                     <div class="clndr-grid">
+                        <div class="clndr-controls">
+                            <div class="clndr-previous-button">&lsaquo;</div>
+                            <div class="month">{{ year }} - {{ month }}</div>
+                            <div class="clndr-next-button">&rsaquo;</div>
+                        </div>
                         <div class="days-of-the-week clearfix">
                             {% _.each(daysOfTheWeek, function(day) { %}
                             <div class="header-day">{{ day }}</div>

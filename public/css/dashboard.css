@@ -294,8 +294,8 @@
 }
 
 .statBox {
-    background-color: #f9f9f9;
-    margin-bottom: 40px;
+    background-color: #eee;
+    margin: 0 20px 40px 0;
     display: inline-block;
     padding-right: 18px;
 }
@@ -311,11 +311,11 @@
     line-height: 1.6em;
     color: #fff;
     text-align: center;
-    font-weight: 300;
+    font-weight: 400;
     display: inline-block;
     vertical-align: sub;
     padding: 2px 16px;
-    background-color: #FFBD7B;
+    background-color: #ffa954;
 }
 .statBox .text {
     font-size: 1.6em;
