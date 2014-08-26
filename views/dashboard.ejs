@@ -168,14 +168,27 @@
 </div>
 
 <div id="teamp" class="container-fluid sectionContainer">
-    <div class="row-fluid">
-        <div class="span12" style="margin-bottom: 1em">
-            <a href="#team-settings-dialog" role="button" class="btn btn-warning team-setting-btn"
+    <div class="row-fluid teamInfo">
+        <div class="span4">
+            <div class="">
+                <i class="fa fa-home teamInfo-icon"></i>
+                <span class="teamAddress">
+                    -
+                </span>
+                <i class="teamInfo-separator"></i>
+                <i class="fa fa-phone teamInfo-icon"></i>
+                <span class="teamPhone">
+                    -
+                </span>
+            </div>
+        </div>
+        <div class="span8">
+            <a href="#team-settings-dialog" role="button" class="pull-right btn team-setting-btn"
                data-toggle="modal" onclick="GAEvent('Dashboard','Team','Open Setting')" hidden>
                 <i class="icon-cog "></i>
                 Team Settings
             </a>
-            <a href="#team-invitation-dialog" role="button" class="btn btn-success team-invite-btn"
+            <a href="#team-invitation-dialog" role="button" class="pull-right btn btn-warning team-invite-btn"
                data-toggle="modal" onclick="GAEvent('Dashboard','Team','Open Invite')" hidden>
                 <i class="bool-icon bool-icon-email"></i>
                 Invite
@@ -184,21 +197,10 @@
     </div>
 
     <div class="row-fluid">
-        <div class="span6 ">
-            <i class="fa fa-home fa-2x"></i>
-            <span class="teamAddress" style="font-size: 1.5em;line-height: 2em;"></span>
-        </div>
-        <div class="span3 ">
-            <i class="fa fa-phone fa-2x"></i>
-            <span class="teamPhone" style="font-size: 1.5em;line-height: 2em;"></span>
-        </div>
-    </div>
-
-    <div class="row-fluid">
         <div class="span12">
             <div class="teamMember teamHeader">
-                <span class="teamMemberName">Name (email)</span>
-                <span class="teamMemberRole">Role</span>
+                <span class="teamMemberName team-text-vertical-center">Member</span>
+                <span class="teamMemberRole team-text-vertical-center">Role</span>
             </div>
         </div>
     </div>

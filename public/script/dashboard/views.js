@@ -396,7 +396,7 @@ BTeamView = Backbone.View.extend({
             var removeButtonObj = '';
             if(userAdmin && members[i]._id !== teamAdmin._id) {
                 removeButtonObj = $('<a>')
-                    .addClass('btn btn-danger btn-mini team-disjoint-button')
+                    .addClass('team-disjoint-button')
                     .text('Remove')
                     .attr('userID',members[i]._id)
                     .click( function() {
@@ -414,8 +414,8 @@ BTeamView = Backbone.View.extend({
                 .append( avatarObj )
                 .append( nameObj )
                 .append( emailObj )
-                .append( removeButtonObj )
                 .append( roleObj )
+                .append( removeButtonObj )
                 .mouseenter( function() {
                     memberObj.find('team-disjoint-button').show();
                 })

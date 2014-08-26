@@ -1,3 +1,10 @@
+/* override bootstrap classes */
+.btn {
+    border-radius: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    text-shadow: none;
+}
 
 #wrap {
     position: absolute;
@@ -381,11 +388,43 @@
     margin-right: 8px;
 }
 
+.team-invite-btn {
+    background-color: #faa732;
+    color: #fff;
+}
+.team-invite-btn:hover {
+    background-color: #fa8c1e;
+    color: #fff;
+}
+
+.team-setting-btn {
+    background-color: #dadada;
+    color: #fff;
+}
+.team-setting-btn:hover {
+    background-color: #c6c6c6;
+    color: #fff;
+}
+
+.team-text-vertical-center, .teamMemberRole {
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 18px;
+    position: absolute;
+}
+
 .teamHeader {
+    height: 50px;
     padding: 10px 20px;
     font-weight: 600;
     background-color: #eee;
     box-sizing: border-box;
+}
+
+.teamHeader .teamMemberName {
+    margin-left: 40px;
+    position: absolute;
 }
 
 .teamFooter {
@@ -393,6 +432,22 @@
 
 #teamName {
     font-size: 2.0em;
+}
+
+.teamInfo {
+    margin-bottom: 20px;
+    color: #c6c6c6;
+}
+.teamInfo .teamInfo-separator {
+    padding: 0 12px;
+}
+.teamPhone , .teamAddress {
+    font-size: 1.5em;
+    line-height: 2em;
+}
+.teamInfo-icon {
+    font-size: 1.7em;
+    margin-right: 6px;
 }
 
 #teamNameTitle {
@@ -454,7 +509,7 @@
     height: 30px;
     width: 30px;
     display: inline-block;
-    margin: 0 10px;
+    margin-right: 10px;
 }
 
 .teamMemberRole {
@@ -494,15 +549,28 @@
 }
 
 #teamMembers .teamMember:hover {
-    background-color: #EBE9C3;
+    background-color: #f8f8f8;
 }
 
 .team-disjoint-button {
     display: none;
     margin-left: 8px;
+    color: red;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 18px;
+}
+
+.team-disjoint-button:visited {
+    color: red;
+    text-decoration: none;
 }
 
 .teamMember:hover .team-disjoint-button {
+    color: red;
     display: inline-block;
 }
 
