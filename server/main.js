@@ -56,7 +56,7 @@ app.configure(function() {
         maxAge: false, //1 Hour
         expires: false //1 Hour
     }));
-    //app.use(autoLogin);
+    app.use(autoLogin);
     app.use(everyauth.middleware());
 });
 //endregion
@@ -120,11 +120,18 @@ function autoLogin(req, res, next) {
                 if (err || !user)
                     return next();
 
-                everyauth.user = req.user = user;
-                req.session.auth = {
-                    loggedIn: true,
-                    user: user
-                };
+                req.user = user;
+                var auth = req.session && req.session.auth;
+                var everyauthLocal = auth || {};
+                everyauthLocal.loggedIn = true;
+                everyauthLocal.user = user;
+                everyauthLocal.userId = user._id;
+
+                req.session.auth = everyauthLocal;
+
+                res.locals.everyauth = everyauthLocal;
+                res.locals['user'] = req.user;
+
                 return next();
             });
         });
