@@ -5,7 +5,6 @@
     -webkit-box-shadow: none;
     text-shadow: none;
 }
-
 .btn:hover {
     color: #fff;
 }
@@ -20,7 +19,7 @@
     text-decoration: underline;
 }
 
-
+/*  */
 #wrap {
     position: absolute;
     top: 60px;
@@ -74,6 +73,7 @@
     color: #000;
 }
 
+/* menu */
 .menu-wrap {
     position: fixed;
     top: 0;
@@ -83,7 +83,6 @@
     background-color: #f1f1f1;
     border-right: 1px solid #ddd;
 }
-
 .menu {
     position: absolute;
     top: 5em;
@@ -96,7 +95,6 @@
     height: 370px;
     color: #5f5f5f;
 }
-
 .menu .menu-header {
     line-height: 2.0em;
     font-weight: 700;
@@ -105,21 +103,17 @@
     margin: 0;
     font-size: 1.25em;
 }
-
 .menu .menu-header #switchButton {
     background-color: #fafafa;
     color: #cecece;
 }
-
 .menu .menu-header #switchButton:hover {
     background-color: #fff;
     color: #bbbbbb;
 }
-
 .menu #dashboardNavigator {
     padding: 0;
 }
-
 .menu .item {
     position: relative;
     padding: 1em;
@@ -130,19 +124,14 @@
     border-bottom: 1px solid #ddd;
     height: 52px;
 }
-
 .menu .item:hover {
     text-decoration: none;
     cursor: pointer;
     background-color: #eee;
 }
-
 .menu input[type=radio]:checked + label {
     background-color: #ddd;
 }
-
-
-
 .menu input[type="radio"]:checked + label:before {
     width: 0;
     height: 0;
@@ -169,14 +158,11 @@
      right: -26px;
      top: 0;
 }
-
 .menu .item .fetching {
     padding: 0 4px;
     display: none;
 }
 
-#wrap .container-fluid {
-}
 
 #wrap .right-panel #overviewp:target,
 #wrap .right-panel #teamp:target,
@@ -244,12 +230,10 @@
     font-size: 2em;
     line-height: 1.5em;
 }
-
 .formsListLabel {
     font-size: 2em;
     line-height: 2em;
 }
-
 .careerPageAddress {
     font-size: 2em;
     background-color: #eee;
@@ -257,10 +241,8 @@
     margin: 1em 0;
     text-align: center;
 }
-
 .positionsList {
 }
-
 .positionsHeaderRow {
     height: 50px;
     font-size: 2em;
@@ -271,8 +253,6 @@
     font-weight: 600;
     border-bottom: 1px solid #d6d6d6;
 }
-
-
 .position {
     height: 50px;
     font-size: 2em;
@@ -282,36 +262,30 @@
     cursor: pointer;
     border-bottom: 1px solid #d6d6d6;
 }
-
 .position:hover {
     background-color: #f8f8f8;
 }
-
 .positionsHeaderRow .colTitle,
 .position .colTitle {
     padding: 7px 0 7px 20px;
     font-size: 0.9em;
     text-align: left;
 }
-
 .positionsHeaderRow .colStatus,
 .position .colStatus {
     font-size: 0.9em;
     padding: 7px 0;
     text-align: left;
 }
-
 .positionsHeaderRow .colAssignedTo,
 .position .colAssignedTo {
     font-size: 0.9em;
     padding: 7px 0.5em;
     text-align: left;
 }
-
 .position .colOperations {
     padding: 7px 0;
 }
-
 .position .colOperations a {
     margin: 0 2px;
     font-size: 0.9em;
@@ -321,14 +295,12 @@
     border-bottom: 1px solid #ddd;
     margin-bottom: 20px;
 }
-
 .statBox {
     background-color: #eee;
     margin: 0 20px 40px 0;
     display: inline-block;
     padding-right: 18px;
 }
-
 .statBox a,
 .statBox a:hover,
 .statBox a:active {
@@ -903,7 +875,6 @@ Billing
     border-bottom: 2px solid #d9d9d9;
 }
 
-
 #jobBoardPaymentsHistory {
     font-size: 2em
 }
@@ -953,6 +924,7 @@ Billing
     text-align: center;
     padding: 20px;
 }
+
 .plan-title {
     margin-bottom: 20px;
     font-size: 1.2em;

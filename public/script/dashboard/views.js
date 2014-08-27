@@ -89,10 +89,12 @@ BApplicationsView = Backbone.View.extend({
         var candidates = this.model.get('candidates');
 
         $('#application-filter-all').prop('checked',true);
+        var selectedJobID = $('.applications-filter-job :selected').attr('formid') || "0";
+        var jobFilter = selectedJobID==="0"  ? '' : '&j=' + selectedJobID;
 
         var stagesCounter = [0,0,0,0,0]; // total, pending, interview, offered, archived
 
-        $.get('/api/applications?d=true').done( function(res) {
+        $.get('/api/applications?d=true' + jobFilter).done( function(res) {
 
             for( var i=0; i<res.candidates.length; i++ ) {
                 var candidate = res.candidates[i].application;

@@ -108,7 +108,7 @@ app.get('/api/applications', function (req,res) {
 
     function fetchTeamFlyers(flyersIDFilter, callback) {
 
-        var query = flyersIDFilter ? {flyerID:{$in:flyersIDFilter}} : {owner:teamID};
+        var query = flyersIDFilter ? {owner:teamID, _id:{$in:flyersIDFilter}} : {owner:teamID};
 
         BFlyers.find(query).populate('owner').exec(function(err,flyers) {
             var teamFlyersID = flyers.map( function(flyer) { return flyer._id } );
