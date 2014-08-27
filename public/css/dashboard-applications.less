@@ -1,12 +1,9 @@
-@head1-color: #000;
+@head1-color: #6b6b6b;
 @head2-color: #B8B8B8;
+@orange: #ffa954;
 
-.application-sort {
-  font-size: 1.5em;
-
-  i.fa {
-    margin: 2px;
-  }
+strong {
+  font-weight: 600;
 }
 
 .dots {
@@ -63,10 +60,9 @@
     .sticky {
       position: absolute;
       top: -11px;
-      background-color: #ECECEC;
       border: 1px solid #C6C6C6;
       padding: 2px 4px;
-      border-radius: 0 0 7px 0px;
+      border-radius: 0 0 0 7px;
       font-weight: 700;
       right: initial;
       cursor: pointer;
@@ -76,9 +72,13 @@
     .visitedState {
       .sticky();
       cursor: pointer;
-      right: -11px;
-      border-radius: 0 0 0 7px;
+      right: 30px;
+      border-radius: 0 0 0 0;
       border: none;
+      padding: 1px 10px;
+      font-size: 1.2em;
+      font-weight: 400;
+      color: #fff;
 
       &.visited {
 
@@ -89,7 +89,7 @@
       }
 
       &.unvisited {
-        background-color: #DCEEA1;
+        background-color: @orange;
 
         .visitedStateLabel {
           .unvisitedText{ display: inline-block; }
@@ -121,11 +121,13 @@
 
     .bool-toggle-application{
       .sticky();
-      left: -11px;
-      right: initial;
+      right: -11px;
+      left: initial;
       cursor: pointer;
       display: inline-block;
       border: none;
+      font-size: 16px;
+      color: #adadad;
     }
 
     .fa-expand {
@@ -190,6 +192,7 @@
       overflow: auto;
       width:auto;
       margin: 0;
+      border-radius: 0;
 
       /* Edit buttons */
       .bool-edit-switch {
@@ -200,10 +203,19 @@
         display: none;
       }
 
+      .centeral-expanded {
+        max-width: 900px;
+        margin: auto;
+      }
+
       .candidate-summary {
+
+        .centeral-expanded();
+        display: block;
 
         .candidate-basicInfo {
           width: auto;
+          margin: 0 0 0 10px;
         }
 
         .candidate-conditions, .candidate-skills, .candidate-stage {
@@ -233,7 +245,10 @@
       }
 
       .candidate-details {
-        display: inline-block;
+
+        .centeral-expanded();
+
+        display: block;
         width: 100%;
         padding: 20px;
         min-width: 400px;
@@ -268,12 +283,11 @@
           padding: 4px;
 
           .mbox-title {
-            background-color: #8989CE;
+            background-color: #999;
             color: #FFFFFF;
             text-align: center;
-            font-size: 1.8em;
+            font-size: 1.6em;
             padding: 0.2em;
-            border-radius: 7px 7px 0 0;
             cursor: pointer;
           }
 
@@ -281,11 +295,11 @@
             width: 100%;
             min-height: 100px;
             background-color: #fff;
-            border-left: 1px solid #8989CE;
-            border-right: 1px solid #8989CE;
-            border-bottom: 1px solid #8989CE;
-
-            height: 350px;
+            border-left: 1px solid #999;
+            border-right: 1px solid #999;
+            border-bottom: 1px solid #999;
+            padding: 10px;
+            height: 370px;
             overflow: auto;
             &.overflow {
               overflow: visible;
@@ -340,12 +354,12 @@
                 position: relative;
                 margin: 0 8px;
                 padding: 1em;
-                border-left: 3px solid #343434;
+                border-left: 3px solid #dadada;
 
                 .activity-stone {
-                  width: 16px;
-                  height: 16px;
-                  background-color: #343434;
+                  width: 13px;
+                  height: 13px;
+                  background-color: #dadada;
                   border-radius: 50%;
                   position: absolute;
                   left: -8px;
@@ -405,40 +419,45 @@
             font-size: 2em;
             line-height: 1.5em;
 
-            .candidate-workflow-stage {
+            .candidate-workflow-substage {
               margin: 1em 0;
+
+              div {
+                text-align: left;
+              }
 
               a {
                 display: block;
                 padding: 0.1em 0.1em;
-                border-left: 4px solid #000;
-                width: 300px;
+                width: 150px;
+                font-size: 0.7em;
                 color: #fff;
-                margin: 0.3em 0;
-                border-radius: 0 7px 7px 0;
+                margin: 0.3em auto;
+                text-align: center;
               }
 
               a:hover {
-                width: 350px;
                 text-decoration: none;
-                border-left: 4px solid #000;
                 color: #fff;
+                background-color: @orange;
               }
 
+              @stage-btn-color: #808080;
+
               .offerButton {
-                background-color: #00ba00;
+                background-color: @stage-btn-color;
               }
 
               .interviewButton {
-                background-color: #68a5ba;
+                background-color:@stage-btn-color;
               }
 
               .archiveButton {
-                background-color: #c9c434;
+                background-color: @stage-btn-color;
               }
 
               .askForCommentButton {
-                background-color: #D84E69;
+                background-color: @stage-btn-color;
               }
             }
           }
@@ -459,6 +478,7 @@
 
     .candidate-summary {
       position: relative;
+      padding: 10px 0;
 
       .candidate-avatar {
         display: inline-block;
@@ -486,6 +506,7 @@
 
       .candidate-name {
         font-size: 2em;
+        font-weight: 600;
         line-height: 1.6em;
         color: @head1-color;
         display: inline-block;
@@ -499,8 +520,8 @@
         width: 100%;
         .dots();
 
-        .value {
-          font-weight: 700;
+        strong, .value {
+          font-weight: 400;
         }
       }
 
@@ -508,27 +529,14 @@
         display: none;
       }
 
-      .candidate-stage {
-        font-size: 1.5em;
-        line-height: 2em;
-        border-top: 2px solid #eee;
-        padding: 0 10px;
-        .dots()
-      }
-
-      .candidate-conditions {
-        font-size: 1.5em;
-        line-height: 2em;
-        border-top: 2px solid #eee;
-        padding: 0 10px;
-        .dots()
-      }
-
+      .candidate-stage,
+      .candidate-conditions,
       .candidate-skills {
+        color: #6b6b6b;
         font-size: 1.5em;
         line-height: 2em;
-        border-top: 2px solid #eee;
-        padding: 0 10px;
+        border-top: 1px solid #eee;
+        margin: 0px 10px 0 10px;
         .dots()
       }
     }
@@ -584,11 +592,17 @@
 
         .dots();
 
-        .candidate-job strong {display: none}
+        .candidate-job {
+          .value, strong {
+            font-weight: 400;
+            display: none
+          }
+        }
       }
 
       .candidate-name {
         font-size: 1.8em;
+        font-weight: 600;
         display: inline-block;
         vertical-align: middle;
         color: @head1-color;

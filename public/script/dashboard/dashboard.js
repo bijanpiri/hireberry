@@ -441,19 +441,39 @@ function initApplicationPage() {
     });
 
     // Sorting
-    $('.application-sort .sortByDate').unbind('click').click( function() {
-        $('.application-sort').attr('sortBy','date');
-        $('.application-sortType').text('Date');
+    $('.application-sort').unbind('change').change( function() {
+        var sortBy = $('.application-sort :selected').attr('name');
 
-        GAEvent('Dashboard','Applications','Sort By Date');
+        GAEvent('Dashboard','Applications','Sort By ' + sortBy);
         applications.fetch();
     });
-    $('.application-sort .sortByName').unbind('click').click( function() {
-        $('.application-sort').attr('sortBy','name');
-        $('.application-sortType').text('Name');
+    $('.application-view').unbind('change').change( function() {
+        var viewMode = $('.application-view :selected').attr('name');
 
-        GAEvent('Dashboard','Applications','Sort By Name');
-        applications.fetch();
+        GAEvent('Dashboard','Applications','View by ' + viewMode );
+
+        if( viewMode === "grid" ) { // grid
+            $('#candidatesCollection').animate({'opacity':0},300, function() {
+
+                $('#candidatesCollection')
+                    .removeClass('list-layout')
+                    .addClass('grid-layout')
+                    .animate({'opacity':1},300);
+
+            });
+        }
+        else {
+            $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
+
+                $('#candidatesCollection')
+                    .removeClass('grid-layout')
+                    .addClass('list-layout')
+                    .animate({'opacity':1},300);
+
+            });
+        }
+
+        //applications.fetch();
     });
 
 
@@ -482,30 +502,6 @@ function initApplicationPage() {
 
         });
     });
-
-    // Layout view mode checkbox
-    $('#layout-view-mode').change( function() {
-        if( $('#layout-view-mode').prop('checked')==false ) { // grid
-            $('#candidatesCollection').animate({'opacity':0},300, function() {
-
-                $('#candidatesCollection')
-                    .removeClass('list-layout')
-                    .addClass('grid-layout')
-                    .animate({'opacity':1},300);
-
-            });
-        }
-        else {
-            $('#candidatesCollection.grid-layout').animate({'opacity':0},300, function() {
-
-                $('#candidatesCollection')
-                    .removeClass('grid-layout')
-                    .addClass('list-layout')
-                    .animate({'opacity':1},300);
-
-            });
-        }
-    })
 
     $('.ask-for-comment-form')
         .submit( function() {
@@ -865,4 +861,14 @@ function initCandidateInstance(candidate,expanded) {
     changeWorkflowStage(candidateObj, candidate, candidate.stage.stage, candidate.stage.subStage, true );
 
     return candidateObj;
+}
+
+function toggleSideMenu() {
+
+    var isOpen = parseInt( $('.menu-wrap').css('left') ) != 0;
+    var menuLeft = isOpen ? 0 : -250;
+    var wrapLeft = isOpen ? 0 : 0;
+
+    $('.menu-wrap').animate({left: menuLeft},500);
+    $('#wrap').animate({left: wrapLeft},500);
 }

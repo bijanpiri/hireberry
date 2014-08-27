@@ -82,6 +82,7 @@
     width: 250px;
     background-color: #f1f1f1;
     border-right: 1px solid #ddd;
+    z-index: 1;
 }
 .menu {
     position: absolute;
@@ -637,12 +638,11 @@
 }
 
 .application-searchBox {
-    padding: 12px;
-    width: 360px;
-    border-radius: 4px;
+    padding: 13px;
+    width: 100%;
     border: 2px solid #FFF;
     font-size: 1.6em;
-    background-color: #eee;
+    background-color: #F5F5F5;
 }
 
 .application-searchBox:focus {
@@ -654,15 +654,30 @@
     height: 3.3em;
 }
 
-.applications-filter-job {
-    background-color: #eee;
+.hb-select {
+    background-color: #F5F5F5;
     border: 2px solid #FFF;
     color: #000;
     vertical-align: top;
-    height: 40px;
+    height: 46px;
     box-sizing: content-box;
-    padding: 12px;
-    width: 360px;
+    padding: 13px;
+    font-size: 1.6em;
+    width: 100%;
+    border-radius: 0;
+}
+
+.applications-filter-job {
+    background-color: #F5F5F5;
+    border: 2px solid #FFF;
+    color: #000;
+    vertical-align: top;
+    height: 46px;
+    box-sizing: content-box;
+    padding: 13px;
+    font-size: 1.6em;
+    width: 100%;
+    border-radius: 0;
 }
 
 .applications-filter-job:focus {
@@ -715,7 +730,7 @@ a{
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.89);
+    background-color: #f8f8f8;
     z-index: 1030;
     overflow: auto;
 }
@@ -796,10 +811,6 @@ a{
     }
 
     /* Team */
-    .teamMemberRole {
-        position: relative;
-        right: 0;
-    }
 
     /* Jobs */
     .positionsHeaderRow {

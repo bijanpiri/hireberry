@@ -253,37 +253,39 @@
 
 <div id="applicationsp" class="container-fluid sectionContainer">
 <div class="row-fluid tableRow">
-    <div class="span12" style="text-align: center;">
+
+    <div class="span3" style="text-align: center">
+        <select class="applications-filter-job"></select>
+    </div>
+
+    <div class="span2">
+        <select class="application-sort hb-select">
+            <option name="date">Date</option>
+            <option name="name">Name</option>
+        </select>
+    </div>
+
+    <div class="span2">
+        <select class="hb-select application-view">
+            <option name="grid">Grid</option>
+            <option name="list">List</option>
+        </select>
+    </div>
+
+    <div class="span4" style="text-align: center;">
         <input class="application-searchBox" placeholder="Search on applications">
+    </div>
+    <div class="span1" style="text-align: center;">
         <button class="btn application-searchButton">
             Search
             <i class="fa fa-search"></i>
         </button>
     </div>
+
 </div>
 <div class="row-fluid tableRow">
-    <div class="offset2 span8" style="text-align: center">
-        <select class="applications-filter-job"></select>
-    </div>
-    <div class="span2">
-        <div class="dropdown application-sort">
-            <a class="btn dropdown-toggle" style="height: 3.3em;line-height: 2.3em;" data-toggle="dropdown" href="#">
-                Sort by <span class="application-sortType">Date</span><i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation">
-                    <a class="sortByDate" role="menuitem" tabindex="-1">
-                        <i class="fa fa-calendar"></i>Date
-                    </a>
-                </li>
-                <li role="presentation">
-                    <a class="sortByName" role="menuitem" tabindex="-1">
-                        <i class="fa fa-sort-alpha-asc"></i>Name
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+
+
 </div>
 <div class="row-fluid tableRow">
     <div class="offset2 span8">
@@ -306,15 +308,7 @@
 
         </div>
     </div>
-    <div class="span2">
-        <div class="onoffswitch">
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="layout-view-mode">
-            <label class="onoffswitch-label" for="layout-view-mode">
-                <span class="onoffswitch-inner"></span>
-                <span class="onoffswitch-switch"></span>
-            </label>
-        </div>
-    </div>
+
 </div>
 <div class="row-fluid tableRow">
 <div class="span12" style="position: relative">
@@ -331,8 +325,8 @@
         <span class="markAsUnvisited">Mark as Unvisited</span>
     </div>
     <div class="bool-toggle-application">
-        <i class="fa fa-expand fa-2x"></i>
-        <i class="fa fa-compress fa-2x"></i>
+        <i class="fa fa-expand"></i>
+        <i class="fa fa-compress"></i>
     </div>
     <div class="candidate-avatar">
         <div class="candidate-avatar-empty bool-image"></div>
@@ -380,7 +374,7 @@
         <div class="mbox-title">
             <i class="fa fa-question-circle"></i> Professional Info.
         </div>
-        <div class="mbox" style="height: 130px">
+        <div class="mbox" style="height: 150px">
             <div class="candidate-conditions candidate-conditions-time">
                 <strong>WorkTime:</strong>
                 <select style="display: none">
@@ -432,7 +426,7 @@
         <div class="mbox-title">
             <i class="fa fa-envelope-square"></i> Contact Info.
         </div>
-        <div class="mbox" style="height: 130px">
+        <div class="mbox" style="height: 150px">
             <div class="candidate-email">
                 <strong>Email:</strong>
                 <a class="value"></a>

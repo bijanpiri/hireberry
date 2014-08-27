@@ -62,7 +62,7 @@ BApplications = Backbone.Model.extend({
     url: function(){
         var query = $('.application-searchBox').val();
         var job = $('.applications-filter-job :selected').attr('formID');
-        var sort = $('.application-sort').attr('sortBy');
+        var sort = $('.application-sort :selected').attr('name');
 
         return '/api/applications?' +
             (query ? 'q=' + query : '' ) +

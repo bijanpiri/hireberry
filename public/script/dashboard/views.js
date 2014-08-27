@@ -97,7 +97,11 @@ BApplicationsView = Backbone.View.extend({
         $.get('/api/applications?d=true' + jobFilter).done( function(res) {
 
             for( var i=0; i<res.candidates.length; i++ ) {
+
                 var candidate = res.candidates[i].application;
+
+                if( candidates.filter( function(c) {return c.appID === res.candidates[i].appID}).length == 0 )
+                    continue;
 
                 // Because result return back synchronize, so order will not be hold
                 var placeHolderObj = $('<div>');
