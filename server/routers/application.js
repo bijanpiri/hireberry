@@ -124,7 +124,9 @@ app.get('/api/applications', function (req,res) {
 
     function fetchAssignedFlyers(flyersIDFilter, callback) {
 
-        var query = flyersIDFilter ? {flyerID:{$in:flyersIDFilter}} : {$or:[{autoAssignedTo:userID},{commentators:userID}]};
+        var query = flyersIDFilter ?
+        {owner: teamID, flyerID:{$in:flyersIDFilter}} :
+        {owner: teamID, $or:[{autoAssignedTo:userID},{commentators:userID}]};
 
         BFlyers.find(query).populate('owner').exec( function(err,flyers) {
             var userFlyersID = flyers.map( function(flyer) { return flyer._id } );
