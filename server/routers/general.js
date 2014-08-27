@@ -26,8 +26,10 @@ app.get('/', function(req,res) {
 
     if( req.user )
         res.redirect('/dashboard#overviewp');
-    else if(req.cookies['bltn.persistent.login'])
+    /*else if(req.cookies['bltn.session.login'])
         res.redirect('/login');
+    else if(req.cookies['bltn.persistent.login'])
+        res.redirect('/login');*/
     else
        res.render('LandingPage.ejs',{
            errorMessage: errorMsg,

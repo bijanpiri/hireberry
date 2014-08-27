@@ -67,6 +67,10 @@ everyauth.everymodule
 //endregion
 
 everyauth.everymodule.handleLogout(function (req, res) {
+    if(req.cookies['bltn.session.login'])
+    {
+        res.clearCookie('bltn.session.login');
+    }
     if(req.cookies['bltn.persistent.login'])
     {
         var cookieContent=req.cookies['bltn.persistent.login'].split('&');
@@ -209,8 +213,49 @@ everyauth.password
     .authenticate( function (login, password,data) {
 
         var promise = this.Promise();
-        var persitCookie= data.req.cookies['bltn.persistent.login'];
-        if( data.req.body['LoadingTime']=='1'  && persitCookie)
+
+        /*var persitCookie= data.req.cookies['bltn.persistent.login'];
+        //#################################################################
+        var sessionCookie= data.req.cookies['bltn.session.login'];
+        if(sessionCookie)
+        {
+            var cookieContent=sessionCookie.split('&');
+            login=cookieContent[0];
+            var token=cookieContent[1];
+            BUsers.findOne({ email: login}, function (err, user) {
+                if (err)
+                    return promise.fulfill([err]);
+
+                console.log(user);
+
+                if (!user)
+                {
+                    data.res.clearCookie('bltn.session.login');
+                    return promise.fulfill(['invalid user']);
+                }
+
+                if(!user.password || !user.salt)
+                {
+                    data.res.clearCookie('bltn.session.login');
+                    return promise.fulfill(['Server authentication error.']);
+                }
+                var password_token = user.password.toString('base64');
+
+                var eq=true;
+                var password_token =user.password.toString('base64');
+                if(token!==password_token)
+                    eq=false;
+                if(!eq)
+                {
+                    data.res.clearCookie('bltn.persistent.login');
+                    promise.fulfill(['Invalid password']);
+                }
+                else
+                    promise.fulfill(user);
+            });
+        }
+        //#################################################################
+        else if( data.req.body['LoadingTime']=='1'  && persitCookie)
         {
             //check user & token;
             var cookieContent=persitCookie.split('&');
@@ -249,8 +294,8 @@ everyauth.password
                 var errors = [];
                 if (!login)
                     errors.push('Missing login');
-                /*if (!password)
-                 errors.push('Missing password');*/
+                //if (!password)
+                //errors.push('Missing password');
                 if (errors.length)
                     return errors;
 
@@ -270,7 +315,7 @@ everyauth.password
                 });
             });
         }
-        else{
+        else{*/
             var errors = [];
             if (!login)
                 errors.push('Missing login');
@@ -299,12 +344,17 @@ everyauth.password
                         if(!eq)
                             promise.fulfill(['Invalid password']);
                         else
+                        {
+                            if(data.req.cookies['bltn.session.login'])
+                                data.res.clearCookie('bltn.session.login');
+                            data.res.setHeader('Set-Cookie', 'bltn.session.login='+user._doc.email+"&"+user.password.toString('base64'));
                             promise.fulfill(user);
+                        }
 
                     }
                 );
             });
-        }
+        //}//end else
         return promise;
     })
     .loginSuccessRedirect(function(req,res){
