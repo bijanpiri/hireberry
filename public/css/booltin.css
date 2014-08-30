@@ -554,9 +554,10 @@ Comments
     position: absolute;
     left: -34px;
     top: 0;
-    background-color: #BFBCAA;
+    background-color: #f8f8f8;
     padding: 10px;
     border-radius: 4px 0 0 4px;
+    box-shadow: -1px 1px 1px #D1D1D1;
 }
 
 .portlet-commentsView #buttonComment i {

@@ -11,6 +11,12 @@ body { height: 100%; }
     z-index: 24000;
 }
 
+
+/* Overriding */
+.portlet-commentsView-container {
+    box-shadow: -1px 1px 1px #D1D1D1;
+}
+
 /********
 Whole Paper
 ********/
