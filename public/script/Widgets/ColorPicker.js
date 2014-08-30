@@ -34,7 +34,14 @@ $.fn.ColorPicker=function(callback){
         $(this).empty().append(part);
         part.find('.bool-btn').click(function(){
             var $parent=$(this).parent();
-            var offset = $parent.css('position')==='static' ? $parent.offset().top :  0;
+
+            var a = $('.portletCreator').offset().top;
+            var b = $parent.offset().top;
+            var roffset = b - a;
+
+            //var offset = $parent.css('position')==='static' ? $parent.offset().top :  0;
+            var offset = $parent.css('position')==='static' ? roffset :  0;
+
             part.find('.bool-color-list').css('top',offset);
 
         });

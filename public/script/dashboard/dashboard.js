@@ -175,6 +175,10 @@ $(function(){
         height: 400
     });
 
+    $(window).on('hashchange',function(){
+        console.log( location.hash.slice(1) );
+    });
+
     $('.menu .item').click( function(e) {
         return;
 

@@ -661,32 +661,15 @@
     vertical-align: top;
     height: 46px;
     box-sizing: content-box;
-    padding: 13px;
     font-size: 1.6em;
     width: 100%;
     border-radius: 0;
 }
 
-.applications-filter-job {
-    background-color: #F5F5F5;
-    border: 2px solid #FFF;
-    color: #000;
-    vertical-align: top;
-    height: 46px;
-    box-sizing: content-box;
-    padding: 13px;
-    font-size: 1.6em;
-    width: 100%;
-    border-radius: 0;
-}
-
-.applications-filter-job:focus {
+.hb-select:active {
     outline: none;
-    border: 2px solid #FFF;
-}
-
-.modal-body{
-
+    box-shadow: none;
+    border: 2px solid #666;
 }
 
 .bool-application-comments-note{
