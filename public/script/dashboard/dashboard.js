@@ -175,11 +175,17 @@ $(function(){
         height: 400
     });
 
+    // Change selected menu item according to Hash in Url
     $(window).on('hashchange',function(){
         console.log( location.hash.slice(1) );
+
+        var panelName = location.hash.slice(1);
+        var radioName = '#radio-item-' + panelName.substr(0, panelName.length-1);
+        $(radioName).prop('checked',1)
     });
 
-    $('.menu .item').click( function(e) {
+    // Change selected menu item by
+    $('#dashboardNavigator input[type="radio"]').change( function(e) {
         return;
 
         var sectionContainerClass = '.' + $(e.target).attr('forContainer');
@@ -261,7 +267,6 @@ $(function(){
                 });
         }
     });
-
 
     $('.createApplicantButton').show().click( function() {
         $('#new-applicant-dialog').modal();

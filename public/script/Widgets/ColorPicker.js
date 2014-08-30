@@ -35,6 +35,7 @@ $.fn.ColorPicker=function(callback){
         part.find('.bool-btn').click(function(){
             var $parent=$(this).parent();
 
+            // Calculate real offset (Top of Color Button minus Top of Sidebar menu)
             var a = $('.portletCreator').offset().top;
             var b = $parent.offset().top;
             var roffset = b - a;
