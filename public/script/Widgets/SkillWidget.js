@@ -111,9 +111,11 @@ function SkillWidget(){
 
     function addSkillButton(id,title) {
 
-        if( id.length>0 &&
-            this.portlet
-                .find('.skillsButtons input[name=skill][id="' + id + '"]').length == 0 ) {
+        var results = this.portlet.find('.skillsButtons input[name=skill]').filter( function(i,e) {
+            return $(e).attr('id').toLowerCase() === id.toLocaleString();
+        });
+
+        if( id.length>0 && results.length == 0 ) {
                 // Check for repetition
             var skillButton = $.extend([id,title], skillsButtons[ id ]);
             var btn =  buildButton.apply(this,skillButton);

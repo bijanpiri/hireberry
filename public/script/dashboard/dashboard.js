@@ -727,7 +727,7 @@ function initCandidateInstance(candidate,expanded) {
     candidateObj.find('.candidate-stage .substage.value').text( subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1] );
 
     candidate.skills = candidate.skills.toString() || '';
-    candidateObj.find('.candidate-skills .value').text(candidate.skills.replace(',',', '));
+    candidateObj.find('.candidate-skills .value').text(candidate.skills.replace(/,/g,', '));
     candidateObj.find('.candidate-conditions-time .value').text( candidate.workTime || 'Not specified' );
     candidateObj.find('.candidate-conditions-place .value').text( candidate.workPlace || 'Not specified' );
 
