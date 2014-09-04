@@ -537,6 +537,10 @@ input[type='checkbox']:checked + .b-label-nodejs:hover {
     top: 6px;
 }
 
+.btn3d-2a[disabled] {
+    background-color: #26642c;
+}
+
 /****
 Badge
 ****/

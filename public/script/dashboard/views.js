@@ -158,12 +158,13 @@ BJobsView = Backbone.View.extend({
         $('#jobsp .position').remove();
         $('.applications-filter-job').empty();
         $('.applications-filter-job').append( $('<option>').text('All Job(s)').attr('formID',0) );
+        $('#new-applicant-dialog .jobsList').empty();
 
         forms.forEach( function(form) {
 
             var jobOptionObj = $('<option>').text(form.formName).attr('formID',form.formID);
             $('.applications-filter-job').append( jobOptionObj.clone() );
-            $('#new-applicant-dialog .jobsList').empty().append( jobOptionObj.clone() );
+            $('#new-applicant-dialog .jobsList').append( jobOptionObj.clone() );
 
             // Trick
             if(form.mode==='drafted')

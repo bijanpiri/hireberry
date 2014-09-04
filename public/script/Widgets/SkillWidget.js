@@ -3,15 +3,15 @@ function SkillWidget(){
 
     var layout = '';
     var skillsButtons = {
-        jquery : ['jquery','jQuery', '#1C283B', '#151E2C', '0 -214px', '-58px -214px', 57, 54, 100],
-        html5 : ['html5','HTML5', '#0070BB', '#00548C', '0 -48px', '-51px -48px', 50, 55, 100],
-        css3 : ['css3','CSS3', '#E44D26', '#AB3A1C', '0 -103px', '-61px -103px', 61, 55, 100],
-        javascript : ['javascript','Javascript', '#F8DC3D', '#BAA52E', '0 -158px', '-77px -158px', 77, 56, 100],
-        less : ['less','Less', '#315AA0', '#254378', '0 -269px', '-136px -269px', 136, 60, 150],
-        bootstrap : ['bootstrap','Bootstrap', '#5A4080', '#433060', '-47px -329px', '-47px -329px', 47, 55, 100],
-        git : ['git','Git', '#F05133', '#B43D26', '0 -384px', '-62px -384px', 62, 61, 100],
-        mongodb : ['mongodb','Mongodb', '#5E3E2D', '#462E22', '0 -447px', '-34px -447px', 35, 72, 100],
-        nodejs : ['nodejs','Nodejs', '#8FC440', '#6B9330', '0 -518px', '-57px -518px', 57, 60, 100]
+        jquery : ['jQuery','jQuery', '#1C283B', '#151E2C', '0 -214px', '-58px -214px', 57, 54, 100],
+        html5 : ['HTML5','HTML5', '#0070BB', '#00548C', '0 -48px', '-51px -48px', 50, 55, 100],
+        css3 : ['CSS3','CSS3', '#E44D26', '#AB3A1C', '0 -103px', '-61px -103px', 61, 55, 100],
+        javascript : ['Javascript','Javascript', '#F8DC3D', '#BAA52E', '0 -158px', '-77px -158px', 77, 56, 100],
+        less : ['Less','Less', '#315AA0', '#254378', '0 -269px', '-136px -269px', 136, 60, 150],
+        bootstrap : ['Bootstrap','Bootstrap', '#5A4080', '#433060', '-47px -329px', '-47px -329px', 47, 55, 100],
+        git : ['Git','Git', '#F05133', '#B43D26', '0 -384px', '-62px -384px', 62, 61, 100],
+        mongodb : ['Mongodb','Mongodb', '#5E3E2D', '#462E22', '0 -447px', '-34px -447px', 35, 72, 100],
+        nodejs : ['Nodejs','Nodejs', '#8FC440', '#6B9330', '0 -518px', '-57px -518px', 57, 60, 100]
     };
 
     var notFoundButton=['notfound','not found', '#8FC440', '#6B9330', '-170px -150px;', '-170px -150px;', 57, 60, 100];
@@ -143,7 +143,7 @@ function SkillWidget(){
         function AddNewSkill() {
             var e = $('.skillAddButton>input[name="newSkillTextbox"]');
             var title= e.val();
-            var skill = e.val().trim().replace(' ', '_').toLowerCase();
+            var skill = e.val().trim().replace(' ', '_');
             e.val('');
             addSkillButton.call(widget, skill,title);
         }
