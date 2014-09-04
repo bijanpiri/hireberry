@@ -130,6 +130,10 @@
 .job-boards .colPreview  input[type=button]:active{
 }
 
+.job-boards .colOptions {
+    font-weight: normal;
+}
+
 .job-boards #flyer-list {
     padding: 0;
 }

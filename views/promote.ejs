@@ -1,4 +1,4 @@
-<% layout('layout') -%>
+<% layout('layout') %>
 
 <html xmlns:fb="http://ogp.me/ns/fb#">
 <link rel="stylesheet" href="/css/promote.css"/>
@@ -130,6 +130,7 @@
     <div class="span3 colPreview">Preview</div>
     <div class="span1 colSelect">Select</div>
     <div class="span6 colOptions">Options</div>
+    <div class="span2"></div>
 </div>
 
 <div class="row-fluid" style="background-color: #f4f4f4;">
@@ -141,12 +142,11 @@
     <input id="ch-linkedin-promote" title="LinkedIn" type="checkbox" value="LinkedIn">
 </div>
 
-<div class="span8 colOptions-linkedin">
+<div class="span6 colOptions-linkedin">
 
-
-<div>
+<div style="text-align: left;">
 <label>Country</label>
-<select style="margin-right: 10px" name="countryCode" size="1" id="field-country" class="country">
+<select style="margin-right: 10px;width:200px;" name="countryCode" size="1" id="field-country" class="country">
 <option value="us">United States</option>
 <option value="af">Afghanistan</option>
 <option value="ax">Aland Islands</option>
@@ -393,17 +393,22 @@
 <option value="zw">Zimbabwe</option>
 <option value="oo">Other</option>
 </select>
-<label id="ld-price">$0.0</label><label class="period">(30 Days)</label>
+<label id="ld-price">$0.0</label>
 <label id="ld-area"></label>
 </div>
-
 
 <div id="div-postalcode" style="line-height:20px">
     <label> Postal Code </label>
     <a href="http://www.geonames.org/postalcode-search.html?q=&country=us" id="find-postal-code"
        style="margin-left: 5px" target="_blank">Find Postal Code</a>
 </div>
+
 </div>
+
+<div class="span2">
+    <label class="period">30 Days</label>
+</div>
+
 </div>
 
 <div class="row-fluid">
@@ -414,7 +419,7 @@
     <div class="span1 colSelect">
         <input id="ch-indeed-promote" title="Indeed" type="checkbox" value="Indeed">
     </div>
-    <div class="span6 colOptions">
+    <div class="span6 colOptions"  style="text-align: left;">
         <label>Budget($): </label>
         <input id="inputtext-indeed-payment" type="number" value="50">
         <label> (Min:$50 - Max:$1000)</label>
@@ -430,7 +435,10 @@
         <input id="ch-stackof-promote" title="Stack Overflow" type="checkbox" value="Stack Overflow">
     </div>
     <div class="span6 colOptions">
-        <label class="period">(30 Days)</label>
+        $350
+    </div>
+    <div class="span2">
+        <label class="period">30 Days</label>
     </div>
 </div>
 
@@ -442,7 +450,10 @@
         <input id="ch-git-promote" title="GitHub" type="checkbox" value="GitHub">
     </div>
     <div class="span6 colOptions">
-        <label class="period">(30 Days)</label>
+        $450
+    </div>
+    <div class="span2">
+        <label class="period">30 Days</label>
     </div>
 </div>
 
@@ -455,7 +466,10 @@
         <input id="ch-dribbble-promote" title="Dribbble" type="checkbox" value="Dribbble">
     </div>
     <div class="span6 colOptions">
-        <label class="period">(30 Days)</label>
+        $325
+    </div>
+    <div class="span2">
+        <label class="period">30 Days</label>
     </div>
 </div>
 
@@ -468,7 +482,10 @@
         <input id="ch-behance-promote" title="Behance" type="checkbox" value="Behance">
     </div>
     <div class="span6 colOptions">
-        <label class="period">(30 Days)</label>
+        $199
+    </div>
+    <div class="span2">
+        <label class="period">30 Days</label>
     </div>
 </div>
 
