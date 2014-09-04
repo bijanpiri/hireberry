@@ -163,7 +163,7 @@ BJobsView = Backbone.View.extend({
 
             var jobOptionObj = $('<option>').text(form.formName).attr('formID',form.formID);
             $('.applications-filter-job').append( jobOptionObj.clone() );
-            $('#new-applicant-dialog .jobsList').append( jobOptionObj.clone() );
+            $('#new-applicant-dialog .jobsList').empty().append( jobOptionObj.clone() );
 
             // Trick
             if(form.mode==='drafted')
@@ -225,7 +225,7 @@ BJobsView = Backbone.View.extend({
                     });
 
                     // Delete
-                    modal.find('.deleteJobButton').click( function() {
+                    modal.find('.deleteJobButton').unbind('click').click( function() {
                         GAEvent('Dashboard','Job','Setting - Delete');
                         $.ajax({
                             url: '/api/job/' + form.formID,

@@ -578,8 +578,9 @@ Map portlet
     display: none;
 }
 .bool-flyer-editor{
-    margin: 20px 45px ;
+    margin: 20px auto ;
     padding: 0;
+    max-width: 1024px;
 }
 .bool-edit-mode .bool-flyer-editor,.hb-preview-mode .bool-flyer-editor{
     margin: 20px 45px 20px 285px;
