@@ -251,7 +251,7 @@ $(function(){
 
         function saveModifiedApplication(candidateObj) {
 
-            var skills = candidateObj.find('.candidate-details .candidate-skills .value').text().split(',');
+            var skills = candidateObj.find('.candidate-details .candidate-skills .value').text().split(', ');
 
             $.post('/api/applications/' + candidateObj.data('candidate')._id , {
                 name: candidateObj.find('.candidate-name .value').text(),
@@ -725,7 +725,7 @@ function initCandidateInstance(candidate,expanded) {
 
     candidateObj.find('.candidate-stage .stage.value').text( stagesName[candidate.stage.stage-1]);
     candidateObj.find('.candidate-stage .substage.value').text( subStagesName[candidate.stage.stage-1][candidate.stage.subStage-1] );
-    candidateObj.find('.candidate-skills .value').text(candidate.skills);
+    candidateObj.find('.candidate-skills .value').text(candidate.skills.replace(',',', '));
     candidateObj.find('.candidate-conditions-time .value').text( candidate.workTime || 'Not specified' );
     candidateObj.find('.candidate-conditions-place .value').text( candidate.workPlace || 'Not specified' );
 
