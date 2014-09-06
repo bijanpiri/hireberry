@@ -180,6 +180,17 @@
                         break;
                 }
             });
+
+            changeActiveTabByHash();
+
+            $(window).on('hashchange',function(){
+                changeActiveTabByHash();
+            });
+
+            function changeActiveTabByHash() {
+                var hashStr = location.hash;
+                $('.hb-vmenu-item[href="' + hashStr + '"').click();
+            }
         });
     </script>
 </head>
@@ -239,8 +250,8 @@
                     <li class="active ">
                     </li>
                     <li><a class="hb-nav-btn hb-nav-btn-try-now try-it-btn" href="#">TRY NOW</a></li>
-                    <li><a class='hb-nav-btn ' href="#">Features</a></li>
-                    <li><a class='hb-nav-btn ' href="#">Pricing</a></li>
+                    <li><a class='hb-nav-btn ' href="#features">Features</a></li>
+                    <li><a class='hb-nav-btn ' href="#pricing">Pricing</a></li>
                     <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
                 </ul>
             </div>
@@ -270,7 +281,7 @@
         <div class="col-md-12 hb-cover-col">
 
             <div class="hb-cover-floor hb-tag-line">
-                <h1>HANDPICK YOUR TEAM WISELY</h1>
+                <h1>HANDPICK YOUR TEAM <u>WISELY</u></h1>
             </div>
 
             <div class="hb-cover-floor">

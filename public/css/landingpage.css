@@ -205,10 +205,12 @@
 
 .hb-cover {
     background: url("/images/LP-hero.jpg") no-repeat scroll 50% 0px #f8f8f8;
-    /*background: #f1f1f1 url("/images/LP-hero.jpg") top center no-repeat;*/
+    /*
+    background: #f1f1f1 url("/images/LP-hero.jpg") top center no-repeat;
     width: 100%;
     min-height: 600px;
     background-size: cover;
+    */
 }
 .hb-cover .hb-scroll-arrow {
     background-image: url("/images/scroll-down.png");
@@ -294,6 +296,7 @@
     font-size: 5em;
     margin: 20px 0 70px 0;
     font-weight: 600;
+    text-shadow: 0px 0px 3px #1F1F1F;
 }
 
 
