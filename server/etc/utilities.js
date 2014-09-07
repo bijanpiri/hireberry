@@ -533,7 +533,7 @@ addPromoCode = function( code, credit, amount, permissionForResgiter, callback )
 
 
 /*** Payments ***/
-plansCost = [0,1.00];
+plansCost = [0,30.00];
 
 pay = function( rootURL, teamID, amount, description,PaymentType,PromoteID,callback ) {
 
