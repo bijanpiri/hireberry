@@ -7,9 +7,11 @@ function ResumeWidget(){
     var getReady=false;
     function connectionStateChanged() {
         if( this.dropboxToken )
-            this.toolbar.find('button[name=connectToDropBox]').text('Disconnect from Dropbox');
+            this.toolbar.find('button[name=connectToDropBox]').text('Disconnect from Dropbox ');
         else
-            this.toolbar.find('button[name=connectToDropBox]').text('Connect to Dropbox');
+            this.toolbar.find('button[name=connectToDropBox]').text('Connect to Dropbox ');
+
+        this.toolbar.find('button[name=connectToDropBox]').append('<i class="fa fa-dropbox resume-dropbox-log"></i>');
     }
 
 

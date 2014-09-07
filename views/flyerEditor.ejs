@@ -967,7 +967,6 @@
 
 <div class="toolbar-resumeWidget">
     <button name="connectToDropBox" class="btn">Connect to Dropbox</button>
-
 </div>
 
 <div class="toolbar-anything">
@@ -1005,7 +1004,9 @@
 <div class="container-fluid portletCreator ">
 
     <div class="row-fluid bool-widget-btn-carousel" id="addButtons"  >
-        <h2 class="bool-sidebar-header">Content Types</h2>
+        <a class="bool-sidebar-header" onclick="saveFlyer( function() { document.location = '/dashboard'; } )">
+            Back to Dashboard
+        </a>
         <div  class="bool-scrollable" id='widgetButtons' >
             <ul class="bool-add-widget" data-list>
                 <li class="bool-widget-btn" type="1">

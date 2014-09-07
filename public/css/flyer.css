@@ -650,3 +650,9 @@ Map portlet
 .resumeWidget{
     margin :20px;
 }
+
+.resume-dropbox-log {
+    font-size: 1.5em;
+    vertical-align: middle;
+    color: rgb(0, 122, 255);
+}

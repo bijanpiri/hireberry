@@ -921,13 +921,19 @@ Billing
 }
 
 .plan-title {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     font-size: 1.2em;
     font-weight: 700;
 }
 
 .plan-feature {
     padding: 10px;
+}
+
+.plan-price {
+    font-weight: 700;
+    margin-top: 30px;
+    font-size: 1.1em;
 }
 
 .plan button {

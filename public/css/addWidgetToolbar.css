@@ -47,10 +47,23 @@
 }
 
 .bool-sidebar-header{
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
     color: #ffffff;
+    line-height: 3rem;
+    display: block;
+    text-decoration: underline;
+    border-bottom: 1px solid #7F7F80;
+}
+.bool-sidebar-header:hover {
+    cursor: pointer;
+    color: #bbb;
+}
+.bool-sidebar-header:visited,
+.bool-sidebar-header:active {
+    color: #fff;
+    text-decoration: underline;
 }
 
 .bool-pure-btn,
