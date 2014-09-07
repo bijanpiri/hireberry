@@ -257,6 +257,9 @@ function Flyer(options) {
                 }
             });
         }
+        else {
+            $('.bool-flyer-empty').hide();
+        }
 
         function replaceWidgets(){
 

@@ -10,7 +10,7 @@ app.get('/api/applications', function (req,res) {
         return res.send(404);
 
     var details = req.query.d;
-    var teamID = req.user.teamID;
+    var teamID = req.user.teamID.toString();
     var userID = req.user ? req.user._id: '';
     var query = req.query.q || '';
     var jobFilter = req.query.j || '0';
@@ -125,7 +125,7 @@ app.get('/api/applications', function (req,res) {
     function fetchAssignedFlyers(flyersIDFilter, callback) {
 
         var query = flyersIDFilter ?
-        {owner: teamID, flyerID:{$in:flyersIDFilter}} :
+        {owner: teamID, _id:{$in:flyersIDFilter}} :
         {owner: teamID, $or:[{autoAssignedTo:userID},{commentators:userID}]};
 
         BFlyers.find(query).populate('owner').exec( function(err,flyers) {
