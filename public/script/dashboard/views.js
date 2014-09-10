@@ -174,7 +174,7 @@ BJobsView = Backbone.View.extend({
                 .clone()
                 .removeClass('positionsHeaderRow');
 
-            var titleObj = $('<span>')
+            var titleObj = $('<a>')
                 .addClass('positionTitle')
                 .text(form.formName);
 
@@ -311,8 +311,7 @@ BJobsView = Backbone.View.extend({
                     e.stopPropagation();
                 });
 
-            var commentBtnObj = $('<i>')
-                .addClass('fa fa-comments');
+            var commentBtnObj = $('<a>').text('View Comments');
 
             row.find('.colTitle').empty().append(titleObj);
             row.find('.colStatus').empty().append(stateObj);
@@ -326,7 +325,9 @@ BJobsView = Backbone.View.extend({
                 row.find('.colEdit').empty().append(commentBtnObj);
 
 
-            row.addClass('position').attr('id',form.formID).click( function() {
+            row.addClass('position');
+
+            titleObj.attr('id',form.formID).click( function() {
                 GAEvent('Dashboard','Job','Open Editor');
                 window.open('/flyer/edit/0?flyerid=' + form.formID);
             });
