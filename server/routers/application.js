@@ -462,14 +462,25 @@ app.get('/api/application/json/:appID', function(req,res) {
     if( !checkUser(req,res) )
         return;
 
-    canCurrentUserAceessApplciation( req.user._id, req.params.appID, function(err,allowed,application) {
+    canCurrentUserAceessApplciation( req.user._id, req.params.appID, function(err,allowed,application,isHM, isResponder, isCommentator) {
         if( err )
             return res.send(306);
 
-        if(allowed)
+         if(allowed) {
             application._doc.currentUser = 'allowed';
-        else
+
+             if( isHM || isResponder ) {
+                 application._doc.permission_mark_as_read = isResponder ? 'allowed' : 'denied';
+                 application._doc.permission_edit = 'allowed';
+             }
+             else if(isCommentator) {
+                 application._doc.permission_mark_as_read = 'denied';
+                 application._doc.permission_edit = 'denied';
+             }
+        }
+        else {
             application._doc.currentUser = 'denied';
+        }
 
         application = prepareApplicationForClient(application._doc);
 
@@ -482,8 +493,8 @@ app.post('/api/application/:appID/note', function(req,res) {
     if( !checkUser(req,res) )
         return;
 
-    canCurrentUserAceessApplciation( req.user._id, req.params.appID, function(err,allowed,application) {
-        if( err || allowed==false)
+    canCurrentUserAceessApplciation( req.user._id, req.params.appID, function(err,allowed,application,isHM, isResponder, isCommentator) {
+        if( err || allowed==false || (isHM==false && isResponder==false) )
             return res.send(306);
         else
             BApplications.update({_id:req.params.appID},{note:req.body.note},function(err) {

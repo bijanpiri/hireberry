@@ -358,9 +358,15 @@ canCurrentUserAceessApplciation = function(userID, appID, callback) {
 
             var teamID = flyer.owner.admin;
             var responderID = flyer.autoAssignedTo || '';
+            var isResponder = userID.toString()===responderID.toString();
+            var isHiringManager = userID.toString()===teamID.toString();
+            var isCommentator = flyer.commentators.filter( function(user) {
+                return userID.toString()===user.toString();
+            }).length > 0;
 
-            if( userID.toString()===teamID.toString() || userID.toString()===responderID.toString())
-                return callback(null,true,application);
+            // Is Hiring Manager or Responder or Commentator
+            if( isHiringManager || isResponder || isCommentator)
+                return callback(null,true,application,isHiringManager,isResponder,isCommentator);
             else
                 return callback(null,false,application);
         })
