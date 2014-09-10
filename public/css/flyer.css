@@ -659,3 +659,12 @@ Map portlet
     font-size: 1.5em;
     vertical-align: middle;
 }
+
+.bool-backto-btn {
+    font-size: 1.7em;
+    line-height: 3em;
+    color: #555;
+    text-decoration: underline;
+    cursor: pointer;
+    display: none;
+}

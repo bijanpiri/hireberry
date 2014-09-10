@@ -258,6 +258,7 @@ app.get('/flyer/embeded/:flyerID', function(req,res){
                         editMode: false,
                         viewMode: "embeded",
                         existFlyer: true,
+                        teamID: flyer.owner,
                         userCanLeaveComment: false
                     });
 
@@ -280,7 +281,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
 
     var renderNewFlyerView = function() {
 
-        canCurrentUserLeaveComment( req.user._id, req.user.teamID, flyerid, function(err,canLeaveComment) {
+        canCurrentUserLeaveComment( req.user._id, req.user.teamID, flyerid, function(err,canLeaveComment,flyer) {
             res.render('flyerEditor.ejs',{
                 title:'Editor',
                 boards:[],
@@ -289,6 +290,7 @@ app.get('/flyer/:mode/:tid', function(req,res){
                 editMode: editMode,
                 viewMode: "fullpage",
                 existFlyer: existFlyer,
+                teamID: flyer ? flyer.owner : '',
                 userCanLeaveComment: canLeaveComment
             });
         });

@@ -340,7 +340,7 @@ canCurrentUserLeaveComment = function(userID,teamID,jobID,callback) {
                         currentUserCanLeaveComment = true;
             }
 
-            callback(null,currentUserCanLeaveComment);
+            callback(null,currentUserCanLeaveComment,flyer);
         });
     });
 };

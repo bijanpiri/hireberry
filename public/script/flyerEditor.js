@@ -104,6 +104,7 @@ $(function() {
         $('#fixToolbar').remove();
         $('body > .container-fluid').css('margin-top','1em');
         $('img.logo').attr('src','');
+        $('.bool-backto-btn').show();
     }else{
 
         $('.comments-sidebar').commentBox({
