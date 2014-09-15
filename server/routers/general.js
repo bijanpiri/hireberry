@@ -377,7 +377,7 @@ app.post('/requestInvitation', function(req,res) {
 
 // Save request for accessing to a file on server (For email opening detection)
 app.get('/email/:fileName', function(req,res) {
-    NA.trackEvent('Email', 'Image Request', req.query.q, function (err, resp) {
+    NA.trackEvent('Email', 'Image Request', req.query.q + '-' + (new Date()), function (err, resp) {
         if (!err && resp.statusCode === 200) {
             res.redirect( '/images/' + req.params.fileName );
             console.log('Event has been tracked with Google Analytics');
