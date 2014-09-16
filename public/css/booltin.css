@@ -163,7 +163,7 @@ Login & Register
 
 .loginForm {
     margin: 20px  0 0 0;
-    color: #949079
+    color: #555
 }
 
 .loginForm  span{
@@ -191,14 +191,15 @@ Login & Register
     box-sizing: border-box;
     font-size: 1.6em;
     font-weight: 700;
-    border-color: #B3AE92;
+    border-color: #bbb;
     padding: 0 20px;
     margin: 10px 0px 0px 10px;
     float: left;
 }
 
 .loginForm input:focus {
-    border-color: #807C69;
+    border-color: #878787;
+    border-width: 3px;
     outline: none;
     box-shadow: none;
     -webkit-box-shadow: none;
@@ -264,8 +265,7 @@ Login & Register
 }
 
 .registerBox {
-    color: #949079;
-    background-color: rgba(0, 0, 0, 0.15);
+    color: #555;
     border-radius: 4%;
     width: 350px;
     position: absolute;
@@ -274,7 +274,7 @@ Login & Register
     padding: 10px;
     bottom: 0;
     top: 0;
-    height: 526px;
+    height: 466px;
     margin: auto;
 }
 
@@ -289,7 +289,6 @@ Login & Register
 .registerForm {
     margin: 0;
     padding: 20px;
-    color: #949079
 }
 
 .registerForm button {
@@ -325,12 +324,13 @@ Login & Register
     box-sizing: border-box;
     font-size: 1.6em;
     font-weight: 700;
-    border-color: #B3AE92;
+    border-color: #bbb;
     padding: 0 20px;
 }
 
 .registerForm input:focus {
-    border-color: #807C69;
+    border-color: #878787;
+    border-width: 3px;
     outline: none;
     box-shadow: none;
     -webkit-box-shadow: none;

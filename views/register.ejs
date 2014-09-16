@@ -222,14 +222,8 @@
 </style>
 
 <div class="registerBox">
+    <div style="background-color: #eee; border-radius: 10px 10px 0 0;padding-top: 10px">
 
-    <div style="text-align: center; background-color: #949079; line-height: 80px;border-radius: 10px 10px 0 0">
-        <p class="registerBoxHeader">
-            Get a FREE account NOW
-        </p>
-    </div>
-
-    <div style="background-color: #E0DAB7">
         <form class="registerForm" action="/register"  method="post" onsubmit="return registerstate();">
             <input type="text" id="email" onblur="isEmailAddress();" name=<%=everyauth.password.loginFormFieldName%> placeholder="Enter Your Email Address">
             <input type="password" onblur="errorchcknotepty();" id="password1" onkeyup="check(this.value)"  name=<%=everyauth.password.passwordFormFieldName%> placeholder="Choose a Password">
@@ -241,8 +235,7 @@
 
         </form>
     </div>
-
-    <div style="text-align: center; background-color: #C7C2A3;border-radius: 0 0 10px 10px;height: 120px;">
+    <div style="text-align: center; background-color: #e4e4e4;border-radius: 0 0 10px 10px;height: 120px;">
 
         <div style="display: inline-block;margin: 34px 0;">
             <a href="/auth/linkedin">
@@ -257,4 +250,8 @@
         </div>
 
     </div>
+    <p style="font-size: 1.2em;font-weight: 700;text-align: center;margin: 0;">
+        By registering, I agree to the <a href="/privacy-policy">Privacy Policy</a>
+    </p>
 </div>
+

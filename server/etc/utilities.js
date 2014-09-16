@@ -501,7 +501,7 @@ deleteEvent=function(eventID,callback) {
 
 /** Promo Codes **/
 publicRegisterIsAllowed = function() {
-    return true;
+    return false;
 }
 
 checkPromoCode = function( code, callback ) {
