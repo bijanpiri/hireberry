@@ -32,6 +32,10 @@
 
         var errorMsg = '<%= errorMessage %>';
 
+        function GAEvent( category, name, moreInfo ) {
+            ga('send', 'event', category, name, moreInfo + ' @' + document.location.search );
+        }
+
         function validateEmail(email) {
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
@@ -205,7 +209,10 @@
         </div>
         <div class="hb-navbar-action-container">
             <div class="hb-nav-btn-no-border ">
-                <a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a>
+                <a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>"
+                   onclick="GAEvent('LandingPage','NavBar - 1','Login Clicked')">
+                    Login
+                </a>
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -243,16 +250,31 @@
         </div>
         <div class="hb-navbar-action-container">
             <div class="hb-nav-btn-border ">
-                <a class="hb-nav-btn hb-nav-btn-try-now try-it-btn" href="#">TRY NOW</a>
+                <a class="hb-nav-btn hb-nav-btn-try-now try-it-btn" href="#"
+                   onclick="GAEvent('LandingPage','NavBar - 2','Try Now Clicked')">
+                    TRY NOW
+                </a>
             </div>
             <div class="collapse navbar-collapse" id="nav-action-btn">
                 <ul class="nav navbar-nav navbar-right hb-nav-btn-list">
                     <li class="active ">
                     </li>
-                    <li><a class="hb-nav-btn hb-nav-btn-try-now try-it-btn" href="#">TRY NOW</a></li>
-                    <li><a class='hb-nav-btn ' href="#features">Features</a></li>
-                    <li><a class='hb-nav-btn ' href="#pricing">Pricing</a></li>
-                    <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>">Login</a></li>
+                    <li><a class="hb-nav-btn hb-nav-btn-try-now try-it-btn" href="#"
+                           onclick="GAEvent('LandingPage','NavBar - 2','Try Now Clicked')">
+                            TRY NOW
+                        </a></li>
+                    <li><a class='hb-nav-btn' href="#features"
+                           onclick="GAEvent('LandingPage','NavBar - 2','Features Clicked')">
+                            Features
+                        </a></li>
+                    <li><a class='hb-nav-btn' href="#pricing"
+                           onclick="GAEvent('LandingPage','NavBar - 2','Pricing Clicked')">
+                            Pricing
+                        </a></li>
+                    <li><a class='hb-nav-btn  hb-nav-btn-bold' href="/login?code=<%= code %>"
+                           onclick="GAEvent('LandingPage','NavBar - 2','Login Clicked')">
+                            Login
+                        </a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -289,25 +311,38 @@
                 <div class="input-group hb-inline-form" id="hb-promo-code" active="true">
                     <input type="text" class="form-control" id="promo-code-input" placeholder="Enter your Promo-Code here ..." value="<%= code %>">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Try it NOW</button>
+                        <button class="btn btn-default" type="button"
+                                onclick="GAEvent('LandingPage','Cover','Try it NOW Clicked')">
+                            Try it NOW
+                        </button>
                     </span>
                 </div>
                 <div class="input-group hb-inline-form" id="hb-invite-email" active="false">
                     <input type="text" class="form-control" id="email-input" placeholder="Enter your email address here ...">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Invite Me!</button>
+                        <button class="btn btn-default" type="button"
+                                onclick="GAEvent('LandingPage','Cover','Invite Me! Clicked')">
+                            Invite Me!
+                        </button>
                     </span>
                 </div>
             </div>
             <div class="hb-cover-floor">
-                <button id="btn-active-promocode" class="hb-inline-form-activator" for="hb-promo-code" active="false">Have a Promo-Code?</button>
-                <button id="btn-active-invite" class="hb-inline-form-activator" for="hb-invite-email" active="true">Want an invitation?</button>
+                <button id="btn-active-promocode" class="hb-inline-form-activator" for="hb-promo-code" active="false"
+                        onclick="GAEvent('LandingPage','Cover','Have a PromoCode Clicked')">
+                    Have a Promo-Code?
+
+                </button>
+                <button id="btn-active-invite" class="hb-inline-form-activator" for="hb-invite-email" active="true"
+                        onclick="GAEvent('LandingPage','Cover','Want an invitation Clicked')">
+                    Want an invitation?
+                </button>
             </div>
             <div class="hb-cover-floor hb-invite-message" hidden>
                 <h3>Thanks you. We will contact you ASAP.</h3>
             </div>
         </div>
-        <div class="hb-scroll-arrow bounce"></div>
+        <div class="hb-scroll-arrow bounce" onclick="GAEvent('LandingPage','Cover','Scroll-Down Clicked')"></div>
     </div>
 
     <div class="row hb-hero">
@@ -348,13 +383,19 @@
             <div class="hb-vertical-menu" active-item="1">
                 <ul>
                     <li>
-                        <a class="hb-vmenu-item actived" item-index="1" href="#Why">Why hireberry</a>
+                        <a class="hb-vmenu-item actived" item-index="1" href="#Why" onclick="GAEvent('LandingPage','Tabs','Why Clicked')">
+                            Why HireBerry
+                        </a>
                     </li>
                     <li>
-                        <a class="hb-vmenu-item" item-index="2" href="#features">Features</a>
+                        <a class="hb-vmenu-item" item-index="2" href="#features" onclick="GAEvent('LandingPage','Tabs','Features Clicked')">
+                            Features
+                        </a>
                     </li>
                     <li>
-                        <a class="hb-vmenu-item" item-index="3" href="#pricing">Pricing</a>
+                        <a class="hb-vmenu-item" item-index="3" href="#pricing" onclick="GAEvent('LandingPage','Tabs','Pricing Clicked')">
+                            Pricing
+                        </a>
                     </li>
                 </ul>
                 <div class="active-item-index active-1th">
@@ -743,17 +784,17 @@
     <div class="row">
         <div class="col-md-12">
             <div class="footer">
-                <a href="/privacy-policy">Privacy Policy</a>
+                <a href="/privacy-policy" onclick="GAEvent('LandingPage','Footer','Privacy Policy Clicked')">Privacy Policy</a>
                 |
-                <a href="mailto: contact@hireberry.com">Support</a>
+                <a href="mailto: contact@hireberry.com" onclick="GAEvent('LandingPage','Footer','Support Clicked')">Support</a>
                 |
-                <a href="https://plus.google.com/115213294114364910052?rel=author">Google+</a>
+                <a href="https://plus.google.com/115213294114364910052?rel=author" onclick="GAEvent('LandingPage','Footer','Google+ Clicked')">Google+</a>
                 |
-                <a href="//twitter.com/hireberry">Twitter</a>
+                <a href="//twitter.com/hireberry" onclick="GAEvent('LandingPage','Footer','Twitter Clicked')">Twitter</a>
                 |
-                <a href="//facebook.com/hireberry">Facebook</a>
+                <a href="//facebook.com/hireberry" onclick="GAEvent('LandingPage','Footer','Facebook Clicked')">Facebook</a>
                 |
-                <a href="//www.linkedin.com/company/hireberry">Linkedin</a>
+                <a href="//www.linkedin.com/company/hireberry" onclick="GAEvent('LandingPage','Footer','LinkedIn Clicked')">Linkedin</a>
             </div>
         </div>
     </div>
