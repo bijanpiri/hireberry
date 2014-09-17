@@ -364,7 +364,7 @@ $(document).ready( function() {
 
 
         // ------------ Show-Hide company logo ----------------
-        if(logo.match(/^http:\/\/placebox.es/)!=null || boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   )
+        if(logo.match(/^\/images\/logo.png/)!=null || logo.match(/^http:\/\/placebox.es/)!=null || boardName=="Behance" || boardName=="Dribbble"  || boardName=="Indeed"   )
         {
             ml.find("#company-logo").attr('src','');
             ml.find("#div-logo").hide();
