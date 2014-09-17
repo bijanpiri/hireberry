@@ -55,11 +55,11 @@ var extractPromoteInfo= function (flyer,callback) {
                 case "6":  //map
                     PromoteInfo.address=flyer.widgets[i].Contents.address;
                     break;
-                case "8":  //text
-                    PromoteInfo.workCondition=flyer.widgets[i].Contents.work;
-                    break;
+                //case "8":  //text
+                //    PromoteInfo.workCondition=flyer.widgets[i].Contents.work;
+                //    break;
                 case "14":  //skill
-                    PromoteInfo.skills=flyer.widgets[i].Contents;
+                    PromoteInfo.skills=flyer.widgets[i].Contents.map(function(skill){ return skill.text });
                     break;
 
                 default:
