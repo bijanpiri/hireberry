@@ -529,12 +529,24 @@ usePromoCode = function( teamID, code, callback ) {
 }
 
 addPromoCode = function( code, credit, amount, permissionForResgiter, callback ) {
-    BPromoCode({
-        code: code,
-        credit: credit,
-        amount: amount,
-        permissionForRegister: permissionForResgiter
-    }).save( callback );
+
+    BPromoCode.findOne({code:code}, function(err,promocode){
+
+        if(err)
+            return callback( {error:"An error occured."} );
+
+        if( promocode ) {
+            return callback( {error:"This code is existed already!"} );
+        }
+        else {
+            BPromoCode({
+                code: code,
+                credit: credit,
+                amount: amount,
+                permissionForRegister: permissionForResgiter
+            }).save( callback );
+        }
+    });
 }
 
 

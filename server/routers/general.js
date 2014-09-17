@@ -15,6 +15,12 @@ app.get('/', function(req,res) {
     var errorCode = req.query.error;
     var errorMsg = '';
 
+    //addPromoCode('Quartzy90USD',90,1,true,function(){});
+    //addPromoCode('Inkitt90USD',90,1,true,function(){});
+    //addPromoCode('Seene90USD',90,1,true,function(){});
+    //addPromoCode('Loadimpact90USD',90,1,true,function(){});
+    addPromoCode('sadtaf90USD',90,1,true,function(){});
+
     if(errorCode==='regCode') {
         errorMsg = 'You need a valid promo code to register. Request an invitation on this page.\\n' +
             'Contact us if you have any question: contact@hireberry.com.';

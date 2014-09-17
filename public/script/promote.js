@@ -291,7 +291,7 @@ $(document).ready( function() {
 
     $("#gp-promote").attr("href","https://plus.google.com/share?url="+jobLink.replace(' ','%20'));
 
-    $("#fb-promote").attr("href",jobLink.replace(' ','%20'));
+    $("#fb-promote").attr("href","https://www.facebook.com/sharer.php?display=popup&u=" + encodeURI(jobLink) );
 
 
     $(".job-boards .colPreview").find(":input[type=button]").click(function() {
