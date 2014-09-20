@@ -22,6 +22,9 @@ app.get('/', function(req,res) {
     //addPromoCode('FameBit90USD',90,1,true,function(){});
     //addPromoCode('DaPulse90USD',90,1,true,function(){});
     //addPromoCode('Zesty90USD',90,1,true,function(){});
+    //addPromoCode('colson@HB',0,1,true,function(){});
+    //addPromoCode('nazariha@HB',0,1,true,function(){});
+    //addPromoCode('maggie@HB',0,1,true,function(){});
 
     if(errorCode==='regCode') {
         errorMsg = 'You need a valid promo code to register. Request an invitation on this page.\\n' +

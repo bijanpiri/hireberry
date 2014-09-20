@@ -116,6 +116,10 @@
             if( document.location.search.match(/[?&]code=/)  ) {
                 $('#hb-promo-code').attr('active',true);
                 $('#hb-invite-email').attr('active',false);
+
+                $('#btn-active-promocode').attr('active',false);
+                $('#btn-active-invite').attr('active',true);
+
             }
 
             $('#btn-active-invite, #btn-active-promocode').unbind('click').click( function() {
@@ -316,7 +320,7 @@
             <div class="hb-cover-floor">
 
                 <div class="input-group hb-inline-form" id="hb-promo-code" active="false">
-                    <input type="text" class="form-control" id="promo-code-input" placeholder="Enter your Promo-Code here ..." value="<%= code %>">
+                    <input type="text" class="form-control" id="promo-code-input" placeholder="Enter your access code here..." value="<%= code %>">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"
                                 onclick="GAEvent('LandingPage','Cover','Try it NOW Clicked')">
@@ -325,7 +329,7 @@
                     </span>
                 </div>
                 <div class="input-group hb-inline-form" id="hb-invite-email" active="true">
-                    <input type="text" class="form-control" id="email-input" placeholder="Enter your email address here ...">
+                    <input type="text" class="form-control" id="email-input" placeholder="Enter your email address here...">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"
                                 onclick="GAEvent('LandingPage','Cover','Invite Me! Clicked')">
@@ -335,12 +339,11 @@
                 </div>
             </div>
             <div class="hb-cover-floor">
-                <button id="btn-active-promocode" class="hb-inline-form-activator" for="hb-promo-code" active="false"
+                <button id="btn-active-promocode" class="hb-inline-form-activator" for="hb-promo-code" active="true"
                         onclick="GAEvent('LandingPage','Cover','Have a PromoCode Clicked')">
-                    Have a Promo-Code?
-
+                    Have a Access Code?
                 </button>
-                <button id="btn-active-invite" class="hb-inline-form-activator" for="hb-invite-email" active="true"
+                <button id="btn-active-invite" class="hb-inline-form-activator" for="hb-invite-email" active="false"
                         onclick="GAEvent('LandingPage','Cover','Want an invitation Clicked')">
                     Want an invitation?
                 </button>
