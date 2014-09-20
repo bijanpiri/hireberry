@@ -113,6 +113,11 @@
                 });
             }
 
+            if( document.location.search.match(/[?&]code=/)  ) {
+                $('#hb-promo-code').attr('active',true);
+                $('#hb-invite-email').attr('active',false);
+            }
+
             $('#btn-active-invite, #btn-active-promocode').unbind('click').click( function() {
 
                 var btn = this;
@@ -310,7 +315,7 @@
 
             <div class="hb-cover-floor">
 
-                <div class="input-group hb-inline-form" id="hb-promo-code" active="true">
+                <div class="input-group hb-inline-form" id="hb-promo-code" active="false">
                     <input type="text" class="form-control" id="promo-code-input" placeholder="Enter your Promo-Code here ..." value="<%= code %>">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"
@@ -319,7 +324,7 @@
                         </button>
                     </span>
                 </div>
-                <div class="input-group hb-inline-form" id="hb-invite-email" active="false">
+                <div class="input-group hb-inline-form" id="hb-invite-email" active="true">
                     <input type="text" class="form-control" id="email-input" placeholder="Enter your email address here ...">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"
